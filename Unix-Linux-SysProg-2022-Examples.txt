@@ -7831,7 +7831,7 @@ int main(void)
     o karakteri tampona geri yazar ve işlemini sonlandırır. scanf fonksiyonu başarılı bir biçimde yerleştirilen değerin sayısına geri 
     dönmektedir. Tabii bu değer 0 da olabilir. scanf henüz hiçbir karakter okuyamadan EOF ile kaşılaşırsa EOF değerine geri döner. 
     scanf her zaman baştaki boşluk karakterlerini (leading space) ve girişler arasındaki boşluk karakterlerini atmaktadır. 
-    Ancak sonraki boşluk kaakterlerini ('\n' de dahil olmak üzere) atmamaktadır. 
+    Ancak sonraki boşluk karakterlerini ('\n' de dahil olmak üzere) atmamaktadır. 
 
     Aşağıda scanf kullanımına ilişkin bir örnek verilmiştir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -9509,7 +9509,7 @@ int main(int argc, char *argv[])
     if (waitpid(pid, NULL, 0) == -1)
         exit_sys("waitpid");
 
-    Aalında fork ve exec nadiren tek başına uygulanmaktadır. Genellikle fork ve exec bir arada yukarıdaki kalıp eşiliğinde 
+    Aslında fork ve exec nadiren tek başına uygulanmaktadır. Genellikle fork ve exec bir arada yukarıdaki kalıp eşiliğinde 
     kullanılmaktadır. 
 
     Aşağıdaki örnekte üst proses "/bin/ls" programını çalıştırıp yoluna devam etmiştir.
@@ -31524,11 +31524,11 @@ void exit_sys_errno(const char *msg, int eno)
 
     SORU: sigsuspend fonksiyonuna gereksinim duyulan bir senaryo nasıldır?
 
-    YANIT: Tipik bir senaryo şöyledir: Programcı başka bir prsesten bir sinyal beklemektedir. Ancak o sinyal geldiğinde koduna 
+    YANIT: Tipik bir senaryo şöyledir: Programcı başka bir prosesten bir sinyal beklemektedir. Ancak o sinyal geldiğinde koduna 
     devam etmek istemektedir. Ancak bu sinyali beklemeden önce sinyalleri bloke ederek bazı işlemler yapmak isteyebilir. Dolayısıyla 
-    bu süre zarfında o sinyal oluşrsa pending durumda kalacaktır. Programcı sonra sinyalleri açarak pause işleminde diğer prosesin
+    bu süre zarfında o sinyal oluşursa pending durumda kalacaktır. Programcı sonra sinyalleri açarak pause işleminde diğer prosesin
     sinyalini beklemek ister. Ancak daha önce sinyal oluşmuş da olabilir. Bu durumda sinyali açarak pause işlemi uygularken sinyali 
-    açtığı noktada akış henüz pauase fonksiyonuna gelmeden sinyal prosese teslim edilirse akış pause fonksiyonuna geldiğinde sonsuz
+    açtığı noktada akış henüz pause fonksiyonuna gelmeden sinyal prosese teslim edilirse akış pause fonksiyonuna geldiğinde sonsuz
     bir bekleme oluşmaktadır. İşte sinyallerin açılarak pause beklenmesinin atomik bir biçimde yapılması gerekmektedir. 
 
     SORU: sigsuspend öncesinde sinyallerin bloke edilmesinin nedeni nedir? Çünkü sigsuspend sinyalleri açarak pause uygulamak 
@@ -31538,7 +31538,7 @@ void exit_sys_errno(const char *msg, int eno)
     Bu durumda diğer proses sinyal gönderirse sinyalin boşa gitmemesi için programcı en azından ilgili sinyali bloke ederek 
     sinyal gelmişse bile onun pending durumda kalmasını sağlayabilir. 
 
-    SORU: Bir prosesin bir işi yapmasını beklemek için zaten senkronizasyon nesneleri kullanılmıyor mu? Neden ayrıca bir sinyal yoluyla 
+    SORU: Zaten bir prosesin, bir işi yapmasını beklemek için senkronizasyon nesneleri kullanılmıyor mu? Neden ayrıca bir sinyal yoluyla 
     böyle bir bekleme yapılmak istensin? Yani örneğin prosesler arasında kullanılan bir durum değişkeni nesnesi ile de aynı şeyler yapılamaz mı? 
 
     YANIT: Evet yapılabilir. Ancak bu tür durumlarda sinyal kullanımı oldukça pratiktir. Yani sinyaller bir anlamda proseslerarası 
@@ -31612,9 +31612,9 @@ void exit_sys(const char *msg)
     fonksiyonların listesi "System Interfaces/General Information/Signal Concepts" başlığında listelenmektedir. Bu listede 
     belirtilen asenkron sinyal güvenli fonksiyonlar gönül rahatlığı ile sinyal fonksiyonlarında ve dışarıda aynı anda kullanılabilirler. 
     Pekiyi daha önce görmüş olduğumuz thread güvenli sonu _r ile biten fonksiyonlar da sinyal güvenli midir? Genel olarak asenkron sinyal 
-    güvenli fonksiyonlar thread güvenli fonksiyonlardan biraz daha katı bir güvenliliğe sahiptir. Çünkü asenkron sinyal güvenli
+    güvenli fonksiyonlar, thread güvenli fonksiyonlardan biraz daha katı bir güvenliliğe sahiptir. Çünkü asenkron sinyal güvenli
     fonksiyonlar aynı thread akışı tarafından iç içe çağrılabilecek fonksiyonlardır. Bu nedenle genel olarak asenkron sinyal güvenli
-    fonksiyonlar thread güvenli olma eğilimindeyken asenkron thread güvenli fonksiyonlar asenkron sinyal güvenli olmayabilmektedir.
+    fonksiyonlar thread güvenli olma eğilimindeyken; asenkron thread güvenli fonksiyonlar, asenkron sinyal güvenli olmayabilmektedir.
 
     Aslında bir fonksiyon thread güvenli olduğu halde sinyal güvenli olmayabilir, sinyal güvenli olduğu halde thread güvenli 
     olmayabilir. Örneğin bir fonksiyon TSD (Thread Specific Data) kullanılarak thread güvenli hale getirilmiş olabilir. Ancak
@@ -31640,22 +31640,22 @@ void exit_sys(const char *msg)
     gibi bir POSIX fonksiyonu başarılı olduğu halde errno değişkenini yine de set edebilmektedir.) Buradaki sorunun kaynağını
     şöyle bir örnekle açıklayabiliriz:
 
-    if (some_posix_func() == -1) {		/* Bizim exit_sys fonksiyonumuz zaten bunu yapıyor */
+    if (some_posix_func() == -1) {		// Bizim exit_sys fonksiyonumuz zaten bunu yapıyor
     ---> Bu sırada sinyal gelirse ne olur?
         perror("some_posix_func");
         exit(EXIT_FAILURE);
     }
 
-    Burada ok ile belirtilen noktada bir sinyal gelirse sinyal fonksiyonu errno değişkenini değiştirebileceği için perror ile 
+    Burada ok ile belirtilen noktada bir sinyal gelirse, sinyal fonksiyonu errno değişkenini değiştirebileceği için perror ile 
     rapor edilen mesaj da yanlış bir mesaj olabilecektir. Pekiyi bu sorunu nasıl giderebiliriz? İşte tipik olarak yapılması gereken 
-    şey sinyal fonksiyonun başında errno değişkenini geçici olarak saklayıp sinyal fonksiyonunun sonunda yeniden set etmektir. 
+    şey sinyal fonksiyonunun başında errno değişkenini geçici olarak saklayıp sinyal fonksiyonunun sonunda yeniden set etmektir. 
     Örneğin:
 
     void signal_handler(int sig)
     {
         int errno_temp = errno;
 
-        /* birtakım işlemler */
+        // birtakım işlemler
 
         errno = errno_temp;
     }
@@ -31663,11 +31663,11 @@ void exit_sys(const char *msg)
     Aşağıdaki örnekte yukarıda açıkladığımız problem simüle edilmiştir. Programda önce SIGUSR1 sinyali sigaction fonksiyonu 
     ile set edilmiştir. Sonra olmayan bir dosya açılmak istenmiştir. Olmayan bir dosya open ile açılmak istendiğinde errno 
     değişkeninin ENOENT değeri ile ("No such file or directory") set edilmesi gerekir. Ancak o arada bir sinyal oluşup da
-    sinyal fonksiyonu çalıştırıldığnda sinyal fonksiyonu da errno değişkenini değiştirirse sorun ortaaya çıkacaktır. Biz örneğimizde
+    sinyal fonksiyonu çalıştırıldığında sinyal fonksiyonu da errno değişkenini değiştirirse sorun ortaya çıkacaktır. Biz örneğimizde
     raise fonksiyonu ile bu durumu yapay bir biçimde sağlamaya çalıştık:
 
-    if ((fd = open("file_not_found", O_RDONLY)) == -1) {
-		raise(SIGUSR1);		/* only for example */
+	if ((fd = open("file_not_found", O_RDONLY)) == -1) {
+		raise(SIGUSR1);		// only for example
 		exit_sys("open");
 	}
 
@@ -31677,11 +31677,11 @@ void exit_sys(const char *msg)
     {
         printf("SIGUSR1 handler running...\n");
 
-        kill(1, SIGKILL);		/* kill will fail */
+        kill(1, SIGKILL);		// kill will fail
     }
 
-    Burada kill başarısız olacak ve errno değişkenini EPERM ("Operation not permitted) değeri ile set edecektir. Bu durumda 
-    exit_sys fonksiyonu yanlış mesajı rapor edecektir. Bu durumu düzeltmek için sinyal fonksiyonu şöyle düzeltilemelidir:
+    Burada kill başarısız olacak ve errno değişkenini EPERM ("Operation not permitted") değeri ile set edecektir. Bu durumda 
+    exit_sys fonksiyonu yanlış mesajı rapor edecektir. Bu durumu düzeltmek için sinyal fonksiyonu şöyle düzeltilmelidir:
 
     void sigusr1_handler(int sno)
     {
@@ -31689,7 +31689,7 @@ void exit_sys(const char *msg)
 
         printf("SIGUSR1 handler running...\n");
 
-        kill(1, SIGKILL);		/* kill will fail */
+        kill(1, SIGKILL);		// kill will fail
 
         errno = errno_temp;
     }
@@ -31822,7 +31822,7 @@ int main(void)
 /*--------------------------------------------------------------------------------------------------------------------------
     Klavyeden Ctrl+Z tuşuna basıldığında terminal aygıt sürücüsü oturumun (session) ön plan (foreground) proses grubuna SIGSTOP
     sinyali göndermektedir. Yani biz klavyeden Ctrl+Z tuşlarına basarak da o anda çalışmakta olan programa SIGSTOP sinyalini 
-    göndertebilmekteyiz. Bu biçimde kabuk üzerinden durudulan prosesler "fg (foreground)" kabuk komutuyla kaldığı yerden çalışmaya 
+    göndertebilmekteyiz. Bu biçimde kabuk üzerinden durdurulan prosesler "fg (foreground)" kabuk komutuyla kaldığı yerden çalışmaya 
     devam ettirilebilmektedir. Tabii "fg" kabuk komutu aslında ilgili prosese (ya da proseslere) SIGCONT sinyalini göndermektedir. 
     Biz kabuk üzerinden Ctrl+Z tuşuna basarak bir prosesi durdurduğumuzda ona bir numara verilmektedir. fg komutunda o numara 
     kullanılmalıdır. Örneğin:
@@ -31847,7 +31847,7 @@ int main(void)
     12
     ...
 
-    Eğer "fg" komutu argümansız kullanılırsa en son stop ettirlen proses çalıştırılmaktadır. 
+    Eğer "fg" komutu argümansız kullanılırsa en son stop ettirilen proses çalıştırılmaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
