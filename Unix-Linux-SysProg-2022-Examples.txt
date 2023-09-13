@@ -2874,11 +2874,11 @@ void exit_sys(const char *msg)
 
     struct stat {
         ...
-        struct timespec st_atim;  /* Time of last access */
-        struct timespec st_mtim;  /* Time of last modification */
-        struct timespec st_ctim;  /* Time of last status change */
+        struct timespec st_atim;	/* Time of last access */
+        struct timespec st_mtim;	/* Time of last modification */
+        struct timespec st_ctim;	/* Time of last status change */
 
-    #define st_atime st_atim.tv_sec      /* Backward compatibility */
+    #define st_atime st_atim.tv_sec		/* Backward compatibility */
     #define st_mtime st_mtim.tv_sec
     #define st_ctime st_ctim.tv_sec
     };
@@ -3193,7 +3193,7 @@ char *get_ls(struct stat *finfo, const char *name)
 
     Bir sembolik bağlantı dosyasının gösterdiği dosya silinirse burada tuhaf bir durum oluşur. İşte bu tür durumlarda bu sembolik bağlantı dosyası 
     kullanıldığında (örneğin open fonksiyonuyla açılmaya çalışıldığında) sanki dosya yokmuş gibi bir hata oluşurb (ENOENT). Çünkü bağlantının işaret ettiği 
-    bir dosya bulunmamaktadır. Windows sistemlerinde sembolik bağlantıı dosyalarının bir benzerleri "kısayol (shortcut)" dosyalar biçiminde karşımıza çıkmaktadır. 
+    bir dosya bulunmamaktadır. Windows sistemlerinde sembolik bağlantı dosyalarının bir benzerleri "kısayol (shortcut)" dosyalar biçiminde karşımıza çıkmaktadır. 
 
     lstat fonksiyonu ile stat fonksiyonu arasındaki tek fark eğer stat bilgisi elde edilecek dosya bir sembolik bağlantı dosyası ise 
     stat fonksiyonun bu bağlantının gösterdiği dosyanın bilgisini alması ancak lstat fonksiyonun sembolik bağlantı dosyasının kendi bilgisini almasıdır. 
@@ -3376,7 +3376,7 @@ int main(int argc, char *argv[])
     i-node elemanının içerisindedir. İşte biz bu dosyalardan örneğin "a.txt" dosyasını silersek aslında yalnızca dizin girişini silmiş oluruz. 
     Çünkü işletim sistemi "a.txt" dosyasının işaret ettiği i-node elemanının başka bir giriş tarafından kullanıldığını gördüğü için i-node elemanını 
     ve dosyanın diskteki varlığını silmez. İşte bu durum "har link sayacı" ile kontrol edilmektedir. Yukarıdaki örnekte dosyanın hard link sayacı 2'dir. 
-    Biz bu dizin girişlerinden birini sildiğimizde hard link sayacı 1'e düşer. Dğerini de sildiğimizde hard link sayacı 0'a düşer ve dosya gerçekten silinir. 
+    Biz bu dizin girişlerinden birini sildiğimizde hard link sayacı 1'e düşer. Diğerini de sildiğimizde hard link sayacı 0'a düşer ve dosya gerçekten silinir. 
 
     Bir dosyanın hard link'ini oluşturmak için ln kabuk komutu kullanılmaktadır. Örneğin:
 
@@ -3571,7 +3571,7 @@ void exit_sys(const char *msg)
     chmod 0 a.txt
     chmod ug+rw a.txt
 
-    Komutta octal sayı belirtilirse umask etkili olmaz. Ancak ocatl sayıyerine ugua ve rwx beelirtilirse bu durumda 
+    Komutta octal sayı belirtilirse umask etkili olmaz. Ancak ocatl sayıyerine ugua ve rwx belirtilirse bu durumda 
     kabuğun umask değeri etkili olmaktadır. 
 
     Komutun başka ayrıntıları da vardır. Bunun için ilgili dokimanlara başvurabilirsiniz.
@@ -4057,12 +4057,12 @@ void exit_sys(const char *msg)
 
     Bu fonksiyonlardaki struct group yapısı <grp.h> dosyası içerisinde şöyle bildirilmiştir:
 
-    struct group {
-        char   *gr_name;        /* group name */
-        char   *gr_passwd;      /* group password */
-        gid_t   gr_gid;         /* group ID */
-        char  **gr_mem;         /* NULL-terminated array of pointers to names of group members */
-    };
+	struct group {
+		char   *gr_name;		/* group name */
+		char   *gr_passwd;		/* group password */
+		gid_t   gr_gid;			/* group ID */
+		char  **gr_mem;			/* NULL-terminated array of pointers to names of group members */
+	};
 
     Yapının gr_name elemanı grubun ismini belirtmektedir. gr_passwd elemanı grubun parola bilgisini belirtir. Gruplarda da parola 
     kavramı vardır. Ancak seyrek kullanılmaktadır. gr_gid elemanı grubun numarısını belirtir. Anımsanacağı gibi bir kullanıcı 
@@ -4238,7 +4238,7 @@ char *get_ls(struct stat *finfo, const char *name)
     izin vermiyor olsa da biz açış modu olarak O_RDONLY kullanırız. 
 
     Pekiyi bir dizini O_SEARCH modunda açmak ile O_RDONLY modunda açmak arasında ne fark vardır? O_SEARCH modu POSIX standartlarına bir dizin üzerinde "read", "write"
-    yapmamak ancak başka işlemlerde kullanılmak amacıyla kullanılmak için eklenmiştir. Dolayıısyla bir işletim sistemi örneğin dizin dosyalarından read fonksiyonu ile
+    yapmamak ancak başka işlemlerde kullanılmak amacıyla kullanılmak için eklenmiştir. Dolayısıyla bir işletim sistemi örneğin dizin dosyalarından read fonksiyonu ile
     okuma yapmaya izin veriyorsa bu durumda biz o dizini O_SEARCH modunda açarsak okuma yapamayız. Ancak O_RDONLY modunda açarsak okuma yapabiliriz. 
     Linux ve macOS O_SEARCH modunu desteklememektedir. Ancak BSD türevi sistemler bu modu desteklemektedir. 
 
@@ -4437,7 +4437,7 @@ void exit_sys(const char *msg)
     DT_UNKNOWN  Bilinmeyen bir tür
 
     readdir ile dizin girişleri dosya sistemindeki kayıtlara göre verilmektedir. Halbuki ls komutu default durumda önce dizin girişlerini 
-    isme göre sıraya dizmekte sonra onları göstermektedir. (Liux'ta -f'densonra -l'yi kullanınız, ters sırada çalışmıyor.) Doğal sıranın 
+    isme göre sıraya dizmekte sonra onları göstermektedir. (Linux'ta -f'den sonra -l'yi kullanınız, ters sırada çalışmıyor.) Doğal sıranın 
     ne anlam ifade ettiği dosya sistemlerinin anlatıldığı bölümde ele alımacaktır. 
 
     Dizin girişleri elde edildikten sonra dizin closedir POSIX fonksiyonuyla kapatılmaldır:
@@ -4876,9 +4876,9 @@ void exit_sys(const char *msg)
     5) Genellikle böylesi fonksiyonlar bir fatal error ile programı sonlandırmamalıdır. chdir fonksiyonu ile prosesin çalışma dizini 
     değiştirilemeyebilir. Ya da örneğin opendir ile biz bir dizini açamayabiliriz. Bu tür durumlarda hata stderr dosyasına rapor edilip işlemin 
     devem ettirilmesi uygun olabilir. 
-    6) Özyineleemeli dolaşım bittikten sonra prosesin çalışma dizini orijinal halde bırakılmalıdır. 
+    6) Özyinelemeli dolaşım bittikten sonra prosesin çalışma dizini orijinal halde bırakılmalıdır. 
 
-    Aşağıda tipik bir özyineelemeli "depth-first" dolaşım örneği verilmiştir. Ancak burada prosesin çalışma dizini özyineleme bittikten sonra
+    Aşağıda tipik bir özyinelemeli "depth-first" dolaşım örneği verilmiştir. Ancak burada prosesin çalışma dizini özyineleme bittikten sonra
     orijinal dizin ile yeniden set edilmemiştir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -6012,7 +6012,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Anımsanacağı gibi "dosya betimleyici tablosu (file descriptor table)" proses kontrol blok yoluyla erişilebilen dosy anesnelerinin 
-    adresleerinin tutulduğu bir gösterici dizisi biçimindeydi. İşletim sisteminin çekirdeği ne zaman bir dosya açılsa o dosya için
+    adreslerinin tutulduğu bir gösterici dizisi biçimindeydi. İşletim sisteminin çekirdeği ne zaman bir dosya açılsa o dosya için
     bir dosya nesnesi (Linux'ta "file" yapısı) yaratıp dosya betimleyici tablosunda bir slotun o nesneyi göstermesini sağlıyordu. 
     Zaten "dosya betimleyicisi (file descriptor)" de dosya betimleyici tablosunda bir indeks belirtiyordu. Linux çekirdeklerinde 
     buradak veri yapıları zamanla biraz değiştirilmiştir. Güncel çekirdekte proses kontrol bloktan dosya nesnesine erişim birkaç yapıdan geçilerek 
@@ -6104,7 +6104,7 @@ void exit_sys(const char *msg)
 
     int dup(int fildes);
 
-    Fonksiyon parametre olarak açık bir dosyanın betimleyicisini alır, o betimleycinin gösterdği dosya nesnesini gösteren yeni bir betimleyici 
+    Fonksiyon parametre olarak açık bir dosyanın betimleyicisini alır, o betimleycinin gösterdiği dosya nesnesini gösteren yeni bir betimleyici 
     oluşturup o betimleyiciye geri döner. Fonksiyon başarısızlık durumunda -1'e geri dönmektedir. dup fonksiyonunun en düşük boş betimleyici
     slotunu tahsis etmesi garanti edilmiştir. 
 
@@ -7198,7 +7198,7 @@ int main(void)
     yeterli bir biçimde yapılamayabilir. Fonksiyon FILE yapısının içerisindeki elemana başlangıçta geçersiz bir değer atayıp bu değere
     bakmaktadır. 
 
-    Tabii fileno fonksiyonuyla FILE yapısı içerisindeki dosya betimleyicisini alıp onunla işlem yapınca onun gösteridği dosya göstericisi 
+    Tabii fileno fonksiyonuyla FILE yapısı içerisindeki dosya betimleyicisini alıp onunla işlem yapınca onun gösterdiği dosya göstericisi 
     değiştirilmiş olur. Pek çok gerçekleştirim bu durumda soruna yol açmamaktadır. Ancak bu konuda dikkat etmek gerekir. fileno fonksiyonu
     kısıtlı biçimde bazı zorunlu durumlarda kullanılmalıdır. 
 
@@ -7400,7 +7400,7 @@ int main(void)
     _IOLBF (line buffered)
     _IOFBF (fully buffered)
 
-    İkinci parametre tamponu değiştirmek için kullanılmaktadır. Bu parametre NULL adres geçilirse tamponun yeri dğeiştirilmez. Son 
+    İkinci parametre tamponu değiştirmek için kullanılmaktadır. Bu parametre NULL adres geçilirse tamponun yeri değiştirilmez. Son 
     parametre ise tamponun yeni uzunluğunu belirtmektedir. Programcı ikinci parametreye NULL adres geçip son parametre yoluyla tamponun 
     büyüklüğünü de değiştirebilir. Bu durumda tamponu setvbuf kendisi tahsis edecektir. Eğer tamponlama modu ikinci parametreye 
     _IONBF geçilerek sıfır tamponlamalı mod olarak ayarlanırsa artık ikinci ve dördündü parametrenin bir önemi kalmamaktadır. 
@@ -9060,7 +9060,7 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    UNIX/Linux sistemlerinde genel olarak çevre değişkenleri bir gösterici dizisi yoluyla tutulmaktadır. Her çevre dğeişkeni aslında 
+    UNIX/Linux sistemlerinde genel olarak çevre değişkenleri bir gösterici dizisi yoluyla tutulmaktadır. Her çevre değişkeni aslında 
     "anahtar=değer\0" biçiminde bir yazı olarak oluşturulmakta ve bu yazıların başlangıç adresleri de bir gösterici dizisinde saklanmaktadır. 
     Bu gösterici dizisinin sonunda da NULL adres bulunmaktadır. Bu gösterici dizisinin başlangıç adresi environ isimli bir global 
     göstericiyi gösteren göstericiyle tutulmaktadır. Yani prosesin çevre değişken listesi aşağıdaki gibi bir veri yapısıyla oluşturulmuştur:
@@ -9207,7 +9207,7 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Pekiyi biz programımızı çalıştırdığımızda belli bir çevre dğeişkeninin zatenvar olmasını nasıl sağlayabiliriz? 
+    Pekiyi biz programımızı çalıştırdığımızda belli bir çevre değişkeninin zaten var olmasını nasıl sağlayabiliriz? 
     Çevre değişkenleri fork sırasında alt prosese aktarıldığına göre biz eğer kabul programın (bash) çevre değişken listesine 
     bir ekleme yaparsak kabuk bizim programınızı çalıştırırken fork yapacak ve onun çevre değişkenleri bizim programımıza geçecektir. 
     Pekiyi kabuk programının çevre değişken listesine nasıl ekleme yapabiliriz? İşte bu işlem şöyel yapılabilmektedir:
@@ -9224,7 +9224,7 @@ void exit_sys(const char *msg)
     Bu durumda hem kabuk değişkeni yaratılmış olur hem de bu değişken prosesin çevre değişkeni yapılır. 
 
     Kabuk üzerinde yukarıdaki gibi çevre değişkeni oluşturduğumuzda bunun kalıcılığı olmaz. Yani bu çevre değişkeni o kabuk programının 
-    çevre değişkeni olur. Biz başka terminal açsak o başka bir proses olacağı için bu çevre dğeişkeni orada bulunmayacaktır. Pekiyi bunun kalıcılığını
+    çevre değişkeni olur. Biz başka terminal açsak o başka bir proses olacağı için bu çevre değişkeni orada bulunmayacaktır. Pekiyi bunun kalıcılığını
     nasıl sağlayabiliriz? İşte bunu sağlamak için kabukların "startup" dosyaları kullanılmaktadır. Kabukların startup dosyaları kabuğun nasıl çalıştırıldığına 
     bağlı olarak değişmektedir. Kabuk programları üç biçimde çalıştırılabilmektedir:
 
@@ -9254,7 +9254,7 @@ void exit_sys(const char *msg)
 
     if [ -f ~/.bashrc ]; then . ~/.bashrc; fi
 
-    Eğer bash interactive olmayan bir biçimde (-c seçeneği ile) çalıştırılırsa bu durumda BASH_ENV isimli bir çevre dğeişkenini araştırır. 
+    Eğer bash interactive olmayan bir biçimde (-c seçeneği ile) çalıştırılırsa bu durumda BASH_ENV isimli bir çevre değişkenini araştırır. 
     Eğer bulursa onun değerinin belirttiği script dosyasını çalıştırır. 
 
     Ayrıca UNIX/Linux'ta kullanılan kabuk programlarında bir program çalıştırılırken onun soluna "çevre_değişkeni=değer" 
@@ -9321,7 +9321,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     exec fonksiyonları prosesin yaşamına başka bir kodla devam etmesini sağlamaktadır. exec fonksiyonlarına biz "çalıştırılabilen bir program dosyasını"
     parametre olarak veririz. exec fonksiyonları o anda çalışmakta olan programon kodlarını bellekten atıp onun yerine bizim vediğimiz
-    program dosyasının kodlarını bellee yükler ve o kodu çalıştırır. exec işlemi ile prosesin kontrol bloğunda ciddi bir değişiklik yapılmaz. 
+    program dosyasının kodlarını belleğe yükler ve o kodu çalıştırır. exec işlemi ile prosesin kontrol bloğunda ciddi bir değişiklik yapılmaz. 
     Yani prosesin id'si kullanıcı id'si, grup id'si prosesin çalışma dizini vs. değişmez. Exec işlemleriyle prosesin yalnızca kodu 
     değiştirilmektedir. Örneğin sample programının içerisinde biz exec fonksiyonlarıyla "mample" programını çalıştırmak istediğimizde
     "sample" programının bellekteki kodu kaldırılır onun yerine "mample" programının kodu belleğe yüklenir ve "mample" program kodu 
@@ -11127,7 +11127,7 @@ void exit_sys(const char *msg)
     Aşağıdaki örnekte "sample" programı "mample" programını exec yaparak çalıştırmıştır. Biz bu örnekte mample programını
     derledikten sonra chwon komutuyla sudo ile birlikte kullanıcı id'sini ve group id'sini root olarak değiştirdik.
     Bu mample programı prosesin gerçek ve etkin kullanıcı ve grup id'lerini ekrana isim olarak yazdırmaktadır. Bu deneyi önce
-    mample programının set-user-id bayrağı set edilmeden ve set edildikten sonra yineleyniz. Aşağıda yapılanlar özetlenmiştir:
+    mample programının set-user-id bayrağı set edilmeden ve set edildikten sonra yineleyiniz. Aşağıda yapılanlar özetlenmiştir:
 
     gcc -o sample sample.c
     gcc -o mample mample.c
@@ -11697,7 +11697,7 @@ void exit_sys(const char *msg)
     2) Eğer proses uygun önceliğe sahip değilse fonksiyon etkin grup id'sini değiştirir. Ancak bunu yapılabilmesi için
     prosesin gerçek grup id'sinin ya da saklı grup id'sinin argüman olarak geçilen id ile aynı olması gerekmektedir.
 
-    3) Fonksiyon uygun önceliğe sahip değilse gerçek grup id'sini saklı grup id'si olarak dğeiştirebilmektedir. 
+    3) Fonksiyon uygun önceliğe sahip değilse gerçek grup id'sini saklı grup id'si olarak değiştirebilmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -12069,11 +12069,11 @@ void exit_sys(const char *msg)
     timer kesme periyodunu 10 ms. olarak ayarlamaktaydı. Ancak makineler hızlanınca artık bu periyor uzun süredir 1 ms. biçiminde 
     ayarlanmaktadır. Yani her 1 milisaniyede bir aslında donanım kesmesi yoluyla kernel kodu devreye girmektedir. Bu kesme kodu da
     60 ms. gibi bir zaman dolduğunda threadler arası geçiş (context) switch yapmaktadır. Thread akışının bu biçimde quanta süresi 
-    dolduğunda donanım kesmesi yoluyla zorla ara verilmesine işletim sistemleri dünyasında "preemtive" işletim sistemleri denilmektedir.
+    dolduğunda donanım kesmesi yoluyla zorla ara verilmesine işletim sistemleri dünyasında "preemptive" işletim sistemleri denilmektedir.
     UNIX/Linux, Windows ve macOS sistemleri preemptive işletim sistemleridir. Artık pek çok işlemci ailesi bu biçimdeki donanım 
     kesmeleri oluşturan timer devrelerini CPU'nun içerisine de eklemiştir. Ancak X86 ve X64 sistemlerinde timer sistemi için genel olarak 
     eskiye uyum bakımından Intel 8254 ve onun ileri versiyonları olan ve ismine "PIT (Programmable Interval Timer)" denilen devreler 
-    aktif olarak kullanılmaktadır. Preemtive sistemlere bir alternatif olarak "non-preemptive" ya da "cooperative multitask" da denilen 
+    aktif olarak kullanılmaktadır. Preemptive sistemlere bir alternatif olarak "non-preemptive" ya da "cooperative multitask" da denilen 
     sistemler bulunmaktadır. Bu sistemlerde bir thread çalıştığında kendi rızası ile CPU'yu birakır. Eğer CPU bırakmazsa diğer 
     threadler çalışma fırsatı bulamazlar. Bu patolojik duruma "diğer thread'lerin açlıktab ölmesi (starvation)" denilmektedir. 
     Tabii bu sistemler artık çok kısıtı kullanılmaktadır. PalmOS, eski Windows 3.X sistemleri böyleydi. 
@@ -12112,12 +12112,12 @@ void exit_sys(const char *msg)
     gerçekleştiğinde thread yeniden çalıştıra kuyruğuna yerleştirilir. Böylece çalışma aynıo prensiple devam ettirlir. İşletim sistemi
     bekleme kuyruklarındaki thread'lere ilişkin olayların gerçekleştiğini birkaç biçimde anlayabilmektedir. Örneğin bir soket okuması 
     yapıldığında eğer sokete henüz bilgi gelmemişse işletim sistemi thread'i bloke eder. Sonra network kartına paket geldiğinde network 
-    kartı bir donanım kesmesi oluşturur. İşletim sistemi devreye girer. İşletim sistemi eğer gelen paket soketten okuma yapacak thread'e ilişkinse 
-    bu kesme kodunda (interrupt hanler) aynı zamanda o thread'i blokeden kurtarır. Ya da örneğin wait gibi bir işlemde işletim sistemi wait işlemini 
-    yapan thread'i bloke ederek wait kuyruğuna yerleştirir. Alt proses bittiğinde _exit sistem fonksiyonunda bu wait kuyruklarına bu sistem fonksiyonu bakar
-    ve ilgili thread'lerin blokesini çözer. sleep gibi bir fonksiyonda ise işletim sistemi bekeleme zamanını kendisi hesaplar. Bekleme zamanı dolunca
-    thread'in blokesini çözer. Genel olarak işletim sistemleri her olayın için ayrı bir wait kuyruğu oluşturmaktadır. Örneğin aygıt sürücüler kendi wait kuyruklarını oluşturup bloke 
-    işlemlerini kendileri yapmaktadır. 
+    kartı bir donanım kesmesi oluşturur. İşletim sistemi devreye girer. İşletim sistemi eğer gelen paket soketten okuma yapacak thread'e 
+    ilişkinse bu kesme kodunda (interrupt hanler) aynı zamanda o thread'i blokeden kurtarır. Ya da örneğin wait gibi bir işlemde işletim sistemi 
+    wait işlemini yapan thread'i bloke ederek wait kuyruğuna yerleştirir. Alt proses bittiğinde _exit sistem fonksiyonunda bu wait kuyruklarına 
+    bu sistem fonksiyonu bakar ve ilgili thread'lerin blokesini çözer. sleep gibi bir fonksiyonda ise işletim sistemi bekeleme zamanını kendisi 
+    hesaplar. Bekleme zamanı dolunca thread'in blokesini çözer. Genel olarak işletim sistemleri her olayın için ayrı bir wait kuyruğu oluşturmaktadır. 
+    Örneğin aygıt sürücüler kendi wait kuyruklarını oluşturup bloke işlemlerini kendileri yapmaktadır. 
 
     Thread'in çalıştırma kuyruğundan çıkartılıp wait kuyruğuna alınması nasıl ve kimin tarafından yapılmaktadır? Böyle bir işlem
     user modda sıradan prosesler tarafından yapılamaz. Hemen her zaman kernel modda işletim sisteminin sistem fonksiyonları tarafından yapılmaktadır. 
@@ -12145,7 +12145,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir programda iki nokta arasında geçen zaman sistemin o anki yüküne bağlı olarak dğeişebilmektedir. Örneğin sistemde çok sayıda CPU 
+    Bir programda iki nokta arasında geçen zaman sistemin o anki yüküne bağlı olarak değişebilmektedir. Örneğin sistemde çok sayıda CPU 
     yoğun thread varsa iki nokta arasındaki zaman çok daha uzayabilir. 
 
     Aşağıdaki programı önce bir kez çalıştırınız sonra kabul üzerinden komut satırının sonuna & koyarak çok sayıda çalıştırınız. 
@@ -14408,7 +14408,7 @@ void exit_sys(const char *msg)
         exit_sys("fcntl");
 
     Ayrıca fcntl fonksiyonunun F_DUPFD_CLOEXEC biçiminde bir komut daha vardır. Bu komut kodu hem F_DUPFD hem de close on exec 
-    bayrağıın set edilmesini birlikte yapmaktadır. Yani özetle bu komut kodu hem dosya betimleyicisini çiftler hem de çiftlenmiş olan 
+    bayrağının set edilmesini birlikte yapmaktadır. Yani özetle bu komut kodu hem dosya betimleyicisini çiftler hem de çiftlenmiş olan 
     yeni betimleyicinin close on exec bayrağını set eder. Örneğin:
 
     if ((fd2 = fcntl(fd, F_DUPFD_CLOEXEC, 0)) == -1)
@@ -17687,7 +17687,7 @@ void exit_sys(const char *msg)
     mademki yazılanlar hemen diskteki dosyaya aktarılmıyor o halde başka bir proses tam bu işlemden hemen sonra open fonksiyonu ile dosyayı 
     açıp ilgili yerden okuma yapsa bizim en son yazdıklarımızı okuyabilecek midir? POSIX standartlarına göre write fonksiyonu geri 
     döndüğünde artık aynı dosyadan bir sonraki read işlemi ne olursa olsun write yapılan bilgiyi okumalıdır. İşte işletim sistemleri 
-    zaten bir dosya açıldığında read işleminde de write işleminin kullandığı aynı tamponu kullanmaktadır. u tasarıma "unified file system" 
+    zaten bir dosya açıldığında read işleminde de write işleminin kullandığı aynı tamponu kullanmaktadır. Bu tasarıma "unified file system" 
     de denilmektedir. Bu tasarımdan dolayı zaten ilgili dosya üzerinde işlem yapan herkes aynı işletim sistemi içerisindeki 
     tamponları kullanmaktadır. Dolayısıyla bu tamponların o anda flush edilip edilmediğinin bir önemi kalmamaktadır. (Tabii bir proses 
     işletim sistemini bypass edip doğrudan disk sektörlerine erişirse bu durumda gerçekten henüz write fonksiyonu ile yazılanların 
@@ -30302,7 +30302,7 @@ void thread_proc2()
     Örneğin biz bir borudan read fonksiyonuyla okuma yapmak isteyelim. Ancak boruda okunacak hiç byte olmasın. Bu durumda read 
     fonksiyonu blokeye yol açacaktır. İşte bu sırada prosese bir sinyal gelirse read fonksiyonu başarısızlıkla (yani -1 değeriyle)
     geri döner ve errno değişkeni EINTR değeriyle set edilir. Bu tür durumlarda biz fonksiyonun sinyal dolayısıyla başarısız 
-    olduğunu anlayıp onu yeniden çağrımamız gerekir. Örneğin:
+    olduğunu anlayıp onu yeniden çağırmamız gerekir. Örneğin:
 
 	while ((result = read(...)) == -1 && errno == EINTR)
 		;
@@ -31159,10 +31159,12 @@ void exit_sys(const char *msg)
     sayaç tutmamaktadır. Daha önceden de belirttiğimiz gibi default durumda zaten bir sinyal oluştuğunda, sinyal fonksiyonu 
     çalıştığı sürece aynı numaralı sinyal otomatik bloke edilmekte sinyal fonksiyonu sonlandığında blokesi açılmaktaydı. 
 
-    UNIX türevi işletim sistemleri her proses için bir "signal mask" kümesi tutmaktadır. Prosesin "signal mask" kümesi prosesin
-    o anda hangi sinyallere bloke edilmiş olduğunu belirtmektedir. Thread'ler konusu UNIX sistemlerine sokulduğunda ayrıca 
-    her thread için de bir "signal mask" kümesi söz konusu olmuştur. Yani bir sinyalin, prosesin "signal mask" kümesine eklenmesi 
-    o sinyalin o proseste bloke edilmesi anlamına gelmektedir. 
+    Thread'ler öncesinde UNIX türevi işletim sistemleri her proses için bir "signal mask" kümesi tutuluyordu. Prosesin 
+    "signal mask" kümesi prosesin o anda hangi sinyallere bloke edilmiş olduğunu belirtmekteydi. Thread'ler konusu UNIX sistemlerine 
+    sokulduğunda ayrıca her thread için de bir "signal mask" kümesi söz konusu olmuştur. Maalesef sigprocmask fonksiyonunun 
+    çok thread'li uygulamalardaki davranışı tanımlanmamıştır. POSIX standartları fonksiyonun çok thread'li uygulamalardaki davranışını 
+    "unspecified" olarak belirtmektedir. Linux sistemlerinde sigprocmask yalnızca fonksiyonun çağrıldığı thread'in signal mask kümesini 
+    değiştirmektedir. 
 
     Prosesin "signal mask" kümesini değiştirmek için yani onu belli sinyallere bloke etmek ya da blokesini açmak için sigprocmask
     isimli POSIX fonksiyonu kullanılmaktadır. Fonksiyonun prototipi şöyledir:
@@ -31355,7 +31357,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Sinyaller ilk UNIX sistemlerinden beri var olan bir kavramdır. Ancak thread'ler 90'ların ortalarında işletim sistemlerinde
     yaygınlaşmaya başlamıştır. Dolayısıyla sinyaller eskiden yalnızca proseslerle ilgili bir kavramdı. Yani sinyaller proseslere
-    gönderiliyordu. Zaten eskiden proseslerin tek bir akışı vardı. Ancak 90'lı yılların ortalarına doğru thread'ler işletim 
+    gönderiliyordu. Zaten eskiden proseslerin tek bir akışı (yani thread'i) vardı. Ancak 90'lı yılların ortalarına doğru thread'ler işletim 
     sistemlerine eklenince sinyaller konusu üzerinde thread'lere yönelik bazı revizyonlar yapılmıştır. 
 
     Daha önceden de belirttiğimiz gibi sinyaller kill fonksiyonu ile ya da diğer kaynaklar yolu ile proseslere gönderilmektedir. 
@@ -31449,9 +31451,9 @@ void exit_sys_errno(const char *msg, int eno)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Belli bir thread de sinyallere bloke edilebilir. Yani UNIX/Linux sistemlerinde prosesin signal mask kümesinin yanı sıra
-    her thread'in de signal mask kümesi vardır. Belli bir thread'i belli sinyallere bloke etmek için tamamen sigprocmask 
-    fonksiyonunun benzeri olan pthread_sigmask fonksiyonu kullanılmaktadır:
+    Belli bir thread de sinyallere bloke edilebilir. UNIX türevi sistemlerde her thread'in de ayrıca bir signal mask kümesi 
+    vardır. Belli bir thread'i belli sinyallere bloke etmek için tamamen sigprocmask fonksiyonunun benzeri olan pthread_sigmask 
+    fonksiyonu kullanılmaktadır:
 
     #include <signal.h>
 
@@ -31631,7 +31633,15 @@ void exit_sys(const char *msg)
 
     Biz örneklerimizde sinyal fonksiyonu içerisinde printf fonksiyonunu kullanmıştık. POSIX standartlarına göre C'nin tüm dosya 
     fonksiyonları thread güvenli olduğu halde sinyal güvenli değildir. Biz örneklerimizde kullanmış olsak da printf gibi <stdio.h>
-    fonksiyonlarını sşinyal fonksiyonlarından kullanmayınız.
+    fonksiyonlarını sşinyal fonksiyonlarından kullanmayınız. printf fonksiyonunun thread güvenli (thread safe) olduğu halde 
+    asenkron sinyal güvenli olmadığına dikkat ediniz. Yani printf fonksiyonunu yazanlar onun farklı thread'lerden çağrılmasına karşı
+    önlemler almışlardır ancak onun aynı thread tarafından çağrılmasına karşı herhangi bir önlem almamışlardır. Başka bir deyişle
+    örneğin printf fonksiyonu thread güvenli olduğu halde "reentrant" değildir. Tabii bu yalnızca printf fonksiyonu için değil
+    C'nin tampon kullanan tüm <stdio.h> fonksiyonları için geçerlidir. Pekiyi biz sinyal fonksiyonları içerisinde ekrana bir
+    şeyler yazdırmak istesek bunu sağlayabiliriz? Burada ilk akla gelecek yöntem yazdırılacak şeyleri sprintf ile bir tampona 
+    yazdırıp, onu write fonksiyonu ile 1 numaralı betimleyiciyi kullanarak ekrana yazdırmaktır. Biz sonraki örneklerde printf
+    fonksiyonunun aslında sinyal güvenli olmadığını yalnızca örneklerimizde pratiklik sağladığı için kullandığımızı belirtmek amacıyla
+    onun yanına bir UNSAFE notu da ekleyeceğiz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -31687,7 +31697,7 @@ void exit_sys(const char *msg)
     {
         int errno_temp = errno;
 
-        printf("SIGUSR1 handler running...\n");
+        printf("SIGUSR1 handler running...\n");		// UNSAFE
 
         kill(1, SIGKILL);		// kill will fail
 
@@ -31730,7 +31740,7 @@ void sigusr1_handler(int sno)
 {
 	int errno_temp = errno;
 
-	printf("SIGUSR1 handler running...\n");
+	printf("SIGUSR1 handler running...\n");		/* UNSAFE */
 
 	kill(1, SIGKILL);		/* kill will fail */
 
@@ -31748,27 +31758,26 @@ void exit_sys(const char *msg)
     Bir sinyal fonksiyonu yazılırken global bir değişkenin kullanılması gerekebilmektedir. Bu durumda tıpkı çok thread'li 
     uygulamalarda olduğu gibi bu global değişkenin kararsız durumda kalması engellenmelidir. Tabii bu tür durumlarda nesneyi
     mutex gibi mekanizmalarla korumak uygun değildir. Çünkü bu mekanizmalar farklı thread'ler tarafından erişimde koruma 
-    amaçlı oluşturulmuştur. Eğer bir sinyal fonksiyonu global bir değişkeni kullanacaksa onu atomik bir biriçimde kullanmalıdır.
+    amaçlı oluşturulmuştur. Eğer bir sinyal fonksiyonu global bir değişkeni kullanacaksa onu atomik bir biçimde kullanmalıdır.
     Örneğin:
 
     int g_count;
-    ....
+    ...
 
     void signal_handler(int sig)
     {
         ...
-        ++g_count;		---> Bu artırma tek bir makine komutu ile yapılmak zorunda dğeil
+        ++g_count;		---> Bu artırma tek bir makine komutu ile yapılmak zorunda değil
         ...
     }
 
-    Bu örnekte akış ++g_count işleminde kesilip yeniden aynı fonksiyon çalıştırılırsa g_count değeri uygun biçimde artırılamayabilcektir.
+    Bu örnekte akış ++g_count işleminde kesilip, yeniden aynı fonksiyon çalıştırılırsa g_count değeri uygun biçimde artırılamayabilecektir.
     İşte bu tür durumlarda mutex gibi nesneler bize bir koruma sağlamamaktadır. Burada yapılması gereken bu artırımın atomik bir 
     biçimde yani tek bir makine komutuyla yapılmasıdır. İşte C99 ile birlikte C'ye sig_atomic_t türü de eklenmiştir. Bu türden 
-    global bir nesne tanımlandığında bu nesne üzerinde atama işlemleri atomik bir biçimde yapılmaktadır. Ancak ++, -- gibi 
+    global bir nesne tanımlandığında, bu nesne üzerinde atama işlemleri atomik bir biçimde yapılmaktadır. Ancak ++, -- gibi 
     operatör işlemlerinin atomik yapılmasının bir garantisi yoktur. 
 
     Thread'ler konusunda gördüğümüz gcc ve clang derleyicilerinin built-in fonksiyonlarını bu amaçla kullanabilirsiniz. 
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -31851,16 +31860,16 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Biz komut satırında klavyeden Ctrl+C tuşlarına bastığımızda ya da Ctrl+Z tuşlarına bastığımızda SIGINT sinyali ve SIGSTOP
-    sinyali tek bir prosese değil ön plan proses grubundaki proseslerin hepsine gönderilmektedir. Proses grupları ve oturum (session)
-    kavramı sonraki paragraflarda ele alınacaktır. Ancak burada temel bir açıklamayı da yapmak istiyoruz. Biz programımızda fork 
-    işlemi yaptığımızda bizim üst prosesimiz ve alt prosesimiz aynı proses grubu içerisinde bulunur. Bu durumda Ctrl+C tuşlarına 
+    Biz komut satırında klavyeden Ctrl+C ya da Ctrl+Z tuşlarına bastığımızda SIGINT sinyali ve SIGSTOP sinyali tek bir prosese 
+    değil ön plan proses grubundaki proseslerin hepsine gönderilmektedir. Proses grupları ve oturum (session) kavramı sonraki 
+    paragraflarda ele alınacaktır. Ancak burada temel bir açıklamayı da yapmak istiyoruz. Biz programımızda fork işlemi 
+    yaptığımızda bizim üst prosesimiz ve alt prosesimiz aynı proses grubu içerisinde bulunur. Bu durumda Ctrl+C tuşlarına 
     bastığımızda SIGINT sinyali bu üst prosese de alt prosese de gönderilecek ve iki proses de sonlandırılacaktır (Tabii bu 
-    prosesler SIGINT sinyalini set etmemişlerse). Aynı durum Ctrl+Z tuşlarına basıldığında da söz konusu olmaktadır. Ctrl+z
+    prosesler SIGINT sinyalini set etmemişlerse). Aynı durum Ctrl+Z tuşlarına basıldığında da söz konusu olmaktadır. Ctrl+Z
     tuşlarına basıldığında SIGSTOP sinyali hem üst prosese hem de alt prosese gönderilecektir. Benzer biçimde "fg" komutunu 
     uyguladığımızda SIGCONT sinyali de hem üst prosese hem de alt prosese gönderilmektedir. 
 
-    Aşağıdaki programı çalıştırınız ve sonra Ctrl+C tuşlarına basınız hem üst prosesin hem de alt prosesin sonlandığını göreceksiniz. 
+    Aşağıdaki programı çalıştırınız ve sonra Ctrl+C tuşlarına basınız. Hem üst prosesin hem de alt prosesin sonlandığını göreceksiniz. 
     Sonra programı yeniden çalıştırıp bu kez de Ctrl+Z tuşlarına basınız. Hem üst prosesin hem de alt prosesin durdurulduğunu 
     göreceksiniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -31906,10 +31915,10 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    wait fonksiyonu ile alt proses beklenirken wait fonksiyonu bu beklemeden ancak alt proses sonlandığında çıkabilmektedir. 
+    wait fonksiyonu ile alt proses beklenirken, wait fonksiyonu bu beklemeden ancak alt proses sonlandığında çıkabilmektedir. 
     Alt prosesin sonlanması da iki biçimde olabilmektedir: Normal olarak exit ya da _exit fonksiyonlarının çağrılmasıyla ve 
     bir sinyal dolayısıyla. Anımsanacağı gibi biz wait fonksiyonunun status parametresini WIFEXITED ve WIFSIGNALED makrolarına 
-    sokarak bu durumu anlayabiliyorduk. Zaten anımasanacağı gibi prosesin exit kodunun olulabilmesi için onun normal biçimde
+    sokarak bu durumu anlayabiliyorduk. Zaten anımsanacağı gibi prosesin exit kodunun oluşabilmesi için onun normal biçimde
     sonlanmış olması gerekiyordu. Fakat ayrıca bir de waitpid fonksiyonu vardı. İşte bu fonksiyonun üçüncü parametresine 
     WUNTRACED ve/veya WCONTINUED bayrakları geçilirse bu durumda waitpid fonksiyonu alt proses durdurulduğunda ve yeniden 
     çalıştırıldığında sonlanacaktır. Bu durumda status parametresindeki değer WIFSTOPPED ve WIFCONTINUED makrolarına sokularak 
@@ -31917,10 +31926,10 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir prosesi terminal yoluyla sonladrımanın Ctrl+C tuşlarının dışında diğer bir yolu da Ctrl+\ tuşlarını (ya da bazı sistemlerde
-    bunun yerine Ctrl+Bacspace tuşları da kullanılabilmektedir) kullanmaktır. Bu durumda terminal aygıt sürücüsü oturumun ön plan 
-    proses grubuna SIGQUIT isimli bir sinyal göndermektedir. SIGUIT sinyali prosese gönderildiğinde eğer proses bu sinyali ele 
-    almamışsa proses sonlandırılır ve bir core dosyası oluşturulur. 
+    Bir prosesi terminal yoluyla sonlandırmanın Ctrl+C tuşlarının dışında diğer bir yolu da Ctrl+\ tuşlarını (ya da bazı sistemlerde
+    bunun yerine Ctrl+Backspace tuşları da kullanılabilmektedir) kullanmaktır. Bu durumda terminal aygıt sürücüsü oturumun ön plan 
+    proses grubuna SIGQUIT isimli bir sinyal göndermektedir. SIGQUIT sinyali prosese gönderildiğinde eğer proses bu sinyali ele 
+    almamışsa, proses sonlandırılır ve bir core dosyası oluşturulur. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -31989,24 +31998,25 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    UNIX/Linux sistemlerinde birkaç sinyal işlemci tarafından oluşturulan içsel kesmelerle işletim sistemi tarafından prosese
+    UNIX/Linux sistemlerinde birkaç sinyal, işlemci tarafından oluşturulan içsel kesmelerle işletim sistemi tarafından prosese
     gönderilmektedir. Bunların en çok karşılaşılanı SIGSEGV isimli sinyaldir. Bu sinyal tahsis edilmemiş bir bellek bölgesine 
     erişildiğinde işletim sistemi tarafından prosese gönderilmektedir. Bu sinyalin default eylemi prosesin sonlandırılmasıdır. 
     Bu sinyal bloke edilemez ve ignore edilemez. Programcı nadiren bu sinyalde prosesinin sonlandırılmasını istemeyebilir. 
     Bunun tek yolu "long jump" uygulamaktır. 
 
-    Linux sistemlerinde SIGSEGV sinyali için bir sinyal fonksiyonu set edildiyse sinyal fonksiyonu sinyal oluştuğunda bu sinyal
-    fonksiyonu çalıştırılır ancak sinyal fonksiyonunda proses exit ya da _exit fonksiyonuyla sonlandırılmamışsa aynı sinyal yeniden 
-    oluşturulmaktadır. Bazı UNIX türevi sistemlerde sinyal fonksiyonu sonlandığında proses işletim sistemi tarafından sonlandırılmaktadır.
+    Linux sistemlerinde SIGSEGV sinyali için bir sinyal fonksiyonu set edildiyse, sinyal oluştuğunda bu sinyal fonksiyonu çalıştırılır. 
+    Ancak sinyal fonksiyonunda proses, exit ya da _exit fonksiyonuyla sonlandırılmamışsa aynı sinyal yeniden oluşturulmaktadır. Bazı 
+    UNIX türevi sistemlerde sinyal fonksiyonu sonlandığında proses işletim sistemi tarafından sonlandırılmaktadır.
 
     Aşağıdaki örnekte tahsis edilmemiş bir bellek alanına erişilmesinden dolayı SIGSEGV sinyali oluşturulmuştur. Bu sinyal için 
-    sinyal fonksiyonu set edişmiş ancak sinyal fonksiyonuı içerisinde exit fonksiyonuyla proses sonlandırılmıştır. (Proses exit 
+    sinyal fonksiyonu set edilmiş ancak sinyal fonksiyonu içerisinde exit fonksiyonuyla proses sonlandırılmıştır. (Proses exit 
     fonksiyonu ile sonlandırılmasaydı aynı sinyal oluşturulmaya devam edecekti.)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <unistd.h>
 
 void sigsegv_handler(int sig);
 void exit_sys(const char *msg);
@@ -32032,7 +32042,7 @@ int main(void)
 
 void sigsegv_handler(int sig)
 {
-	printf("SIGSEGV handler\n");
+	printf("SIGSEGV handler\n");		/* UNSAFE */
 
 	exit(EXIT_FAILURE);
 }
@@ -32053,62 +32063,62 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Diğer önemli bir sinyal de SIGCHLD isimli sinyaldir. Aslında biz bu sinyalden proses yaratımı kısmında bahsetmiştik. 
-    UNIX/Linux sistemlerinde bişr alt proses sonlanırken üst prosese SIGCHLD sinyalini göndermektedir. Eskiden bu sinyalin 
+    UNIX/Linux sistemlerinde bir alt proses sonlanırken üst prosese SIGCHLD sinyalini göndermektedir. Eskiden bu sinyalin 
     ismi SIGCLD biçimindeydi. Linux sistemlerinde her iki sinyal eşdeğerdir ve aynı numaraya sahiptir. Ancak POSIX standartlarında
     SIGCLD sinyali yoktur. 
 
-    Anımsanacağı gibi wait fonksiyonları alt prosesi bekleyerek onu zombie olmaktan kurtarıyordu. İşte zombie proses oluşturmanın 
+    Anımsanacağı gibi wait fonksiyonları alt prosesi bekleyerek onu zombie olmaktan kurtarıyordu. İşte zombie proses oluşumunun
     engellenmesinin bir yolu da SIGCHLD sinyalini kullanmaktır. Bu yöntemde üst proses alt prosesleri yaratmadan önce SIGCHLD 
     sinyalini set eder. Böylece alt prosesler sonlandığında programcının set etmiş olduğu sinyal fonksiyonu çalışır. İşte bu 
-    sinyal fonksiyonu ieçrisinde programcı wait fonksiyonlarını uygular. SIGCHLD sinyalinin default eylemi sinyalin "ignore" 
+    sinyal fonksiyonu içerisinde programcı wait fonksiyonlarını uygular. SIGCHLD sinyalinin default eylemi sinyalin "ignore" 
     edilmesidir. Yani biz bu sinyal için herhangi bir şey yapmamışsak alt proses bittiğinde yine bu sinyal oluşur. Ancak 
     işletim sistemi tarafından sinyal "ignore" edilir. 
 
-    Zombie proses oluşumunun wait fonksiyonlarıyla beklemeden engellenmesi için yukarıda da belirttiğimiz gibi wait fonksiyonlarının
-    SIGCHLD sinyalinde uygulanması gerekmektedir. Ancak bu uygulama sırasında dikkat edilmesi gereken bir nokta verdır. SIGCHLD
+    Zombie proses oluşumunun, wait fonksiyonlarıyla beklemeden engellenmesi için yukarıda da belirttiğimiz gibi wait fonksiyonlarının
+    SIGCHLD sinyalinde uygulanması gerekmektedir. Ancak bu uygulama sırasında dikkat edilmesi gereken bir nokta vardır. SIGCHLD
     sinyali geldiğinde sinyal fonksiyonu çalıştırılırken birden fazla alt proses de o sırada sonlanmış olabilir. Sinyaller 
     biriktirilmediği için SIGCHLD için set edilen sinyal fonksiyonundan çıkıldığında askıda (pending) olan SIGCHLD sinyali 
     prosese yalnızca bir kez gönderilecektir. Halbuki birden fazla alt proses o sırada sonlanmış olabilmektedir. İşte bu nedenle 
-    SIGCHLD sinyal fonksiyonunda wait işlemi bir kez değil bir döngü içerisinde uygulanmalıdır. Tabii wait işleminin blokeye 
+    SIGCHLD sinyal fonksiyonunda wait işlemi bir kez değil, bir döngü içerisinde uygulanmalıdır. Tabii wait işleminin blokeye 
     yol açmaması için waitpid fonksiyonu son parametresinde WNOHANG değeriyle çağrılmalıdır. Örneğin:
 
-    while (waitpid(-1, NULL, WNOHANG) > 0)
-        ;
+	while (waitpid(-1, NULL, WNOHANG) > 0)
+		;
 
-    Anımsanacağı gibi waitpid fonksiyonu eğer beklenecek hiç alt proses yoksa -1 değerine, WNOHANG değeri geçildiğinde ancak 
+    Anımsanacağı gibi waitpid fonksiyonu eğer beklenecek herhangi bir alt proses yoksa -1 değerine, WNOHANG değeri geçildiğinde ancak 
     henüz bir alt proses sonlanmamışsa 0 değerine geri dönmektedir. Yukarıdaki döngüde sonlanan bütün altprosesler beklenmiş 
     olacaktır. Tabii bu sırada errno değişkeni değer değiştirebileceği için fonksiyonun başında alınıp çıkışta yeniden set edilmesi 
     uygun olur. Örneğin:
 
-    void sigchld_handler(int sig)
-    {
-        int errno_temp = errno;
+	void sigchld_handler(int sig)
+	{
+		int errno_temp = errno;
 
-        while (waitpid(-1, NULL, WNOHANG) > 0)
-            ;
+		while (waitpid(-1, NULL, WNOHANG) > 0)
+			;
 
-        errno = errno_temp;
-    }
+		errno = errno_temp;
+	}
 
     waitpid fonksiyonu aslında başka nedenlerle de başarısız olabilir. Gerçi bu durumlar programcı her şeyi doğru yapmışsa 
-    söz konusu olmamaktadır. Ancak bazı programcılar waitpid başarısız olmuşsa ve başarısılık nedeni beklenecek alt prosesin 
-    olmayışından dolayı değilse bir hata rapor edebilmektedir. Bu durumda sinyal fonksiyonu şöle de oluşturulabilmektedir:
+    söz konusu olmamaktadır. Ancak bazı programcılar waitpid başarısız olmuşsa ve başarısızlık nedeni beklenecek alt prosesin 
+    olmayışından dolayı değilse bir hata rapor edebilmektedir. Bu durumda sinyal fonksiyonu şöyle de oluşturulabilmektedir:
 
-    void sigchld_handler(int sig)
-    {
-        int errno_temp = errno;
-        int result;
+	void sigchld_handler(int sig)
+	{
+		int errno_temp = errno;
+		int result;
 
-        while ((result = waitpid(-1, NULL, WNOHANG)) > 0)
-            ;
+		while ((result = waitpid(-1, NULL, WNOHANG)) > 0)
+			;
 
-        if (result  == -1 && errno != ECHILD)
-            exit_sys("waitpid");
+		if (result  == -1 && errno != ECHILD)
+			exit_sys("waitpid");
 
-        errno = errno_temp;
-    }
+		errno = errno_temp;
+	}
 
-    Aşağıdaki örnekte üst proses 10 tane alt proses yaratmıştır. Bu alt proseslerin zombie oluşturmasını SIGCHLD sinyal 
+    Aşağıdaki örnekte üst proses 10 tane alt proses yaratmıştır. Bu alt proseslerin zombie oluşturmasını, SIGCHLD sinyal 
     fonksiyonunda yukarıda belirtildiği gibi engellemiştir. Bu programı çalıştırıp başka bir terminalden "ps -u" komutu 
     ile zombie prosesin oluşmadığını gözlemleyiniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -32175,19 +32185,19 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Zombie proses oluşumunun otomatik engellenmesinin bir yolu da SIGCHLD sinyalini "ignore" etmektedir. Her ne kadar bu sinyalin
-    default eylemi zaten "ignore" ise de bu sinyali açıkça "ignore" etmek başka bir anlama gelmektedir. SIGCHLD sinyali signal 
+    Zombie proses oluşumunun otomatik engellenmesinin bir yolu da SIGCHLD sinyalini "ignore" etmektir. Her ne kadar bu sinyalin
+    default eylemi zaten "ignore" ise de bu sinyali açıkça "ignore" etmek başka bir anlama gelmektedir. SIGCHLD sinyali, signal 
     fonksiyonu ile ya da sigaction fonksiyonu ile ignore edilirse bu durumda işletim sistemi alt proses bittiğinde onun kaynaklarını
     hemen boşaltır. Böylece zombie oluşumu engellenmiş olur. Tabii biz SIGCHLD sinyalini açıkça ignore edersek artık wait fonksiyonlarını
     uygulayamayız. Ancak bu sinyalin ignore işlemi bazı alt proseslerin yaratılmasından sonra yapılırsa bu durumda bu alt proseslerin
     otomatik kaynak boşaltımının yapılıp yapılmayacağı işletim sisteminden işletim sistemine farklılık gösterebilmektedir. Linux 
     sistemlerinde daha önce yaratılmış olan alt prosesler için otomatik boşaltım yapılmamaktadır. Ayrıca POSIX standartlarında sigaction 
     fonksiyonunda SA_NOCLDWAIT bayrağı bulundurulmuştur. Bu bayrak yalnızca SIGCHLD sinyali için kullanılabilir. Programcı isterse 
-    bu bayrak yoluyla da aynı şeyi yapabilir. Ancak  bu bayrak kullanıldığında hala SIGCHLD sinyali için set edilmiş olan sinyal 
+    bu bayrak yoluyla da aynı şeyi yapabilir. Ancak bu bayrak kullanıldığında hala SIGCHLD sinyali için set edilmiş olan sinyal 
     fonksiyonunun çalıştırılıp çalıştırılmayacağı işletim sisteminden işletim sistemine farklılık gösterebilmektedir. Linux sistemlerinde
     bu durumda sinyal fonksiyonu çalıştırılmaktadır. 
 
-    Aşağıdaki örnekte yine üst proses 10 tane alt proses yaratmıştır. Ancak üst proses bu işlemlerdne önce SIGCHLD sinyalini
+    Aşağıdaki örnekte yine üst proses 10 tane alt proses yaratmıştır. Ancak üst proses bu işlemlerden önce SIGCHLD sinyalini
     sigaction fonksiyonu ile "ignore" etmiştir. Bu örneği çalıştırıp diğer bir terminalden alt zombie proses oluşmadığını 
     gözlemleyiniz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -32245,13 +32255,13 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-     POSIX'e 90 yılların ortalarında "realtime extensions" başlığı altında "gerçek zamanlı (realtime)" sinyal kavramı da eklenmiştir.
-    Gerçek zamanlı siya ayrı isimler verilmemiştir. Gerçek zamanlı sinyallarin numaraları [SIGRTMIN, SIGRTMAX] değerleri arasındadır. 
+    POSIX'e 90 yılların ortalarında "realtime extensions" başlığı altında "gerçek zamanlı (realtime)" sinyal kavramı da eklenmiştir.
+    Gerçek zamanlı sinyallere ayrı isimler verilmemiştir. Gerçek zamanlı sinyallarin numaraları [SIGRTMIN, SIGRTMAX] değerleri arasındadır. 
     Gerçek zamanlı sinyallerin normal sinyallerden (ilk 32 sinyal numarası normal sinyaller için ayrılmıştır) farkları şunlardır:
 
     1) Gerçek zamanlı sinyaller kuyruklanmaktadır. Yani birden fazla gerçek zamanlı aynı sinyal oluştuğunda kaç tane oluşmuş olduğu tutulur
-    ve o sayıda sinyal prosese teslim edilir. Halbuki normal sinyallerde bir sayaç (biriktirme) mekazizması yoktur. Örneğin biz bir 
-    sinyali bloke etmiş olalım. Bu arada o sinyale 10 kere oluşmuş olsun. Sinyalin blokesini açtığımızda bu askıdaki sinyalden 
+    ve o sayıda sinyal prosese teslim edilir. Halbuki normal sinyallerde bir sayaç (biriktirme) mekanizması yoktur. Örneğin biz bir 
+    sinyali bloke etmiş olalım. Bu arada o sinyal 10 kere oluşmuş olsun. Sinyalin blokesini açtığımızda bu askıdaki sinyalden 
     yalnızca bir tane prosese teslim edilecektir. Halbuki gerçek zamanlı sinyallerde bu 10 kez oluşmuş sinyal için prosese 10 
     sinyal teslim edilecektir.
 
@@ -32260,21 +32270,20 @@ void exit_sys(const char *msg)
     paylaşılan bir bellek alanındaki (shared memory) bir adres olması gerekir. (Tabii paylaşılan bellek alanları farklı proseslerde 
     farklı adreslere map (ya da attach) edilmiş olabilir. Bu durumda bu tür adreslerin göreli bir biçimde oluşturulması uygun olur.)
 
-    3) Gerçek zamanlı sinyallerde bir öncelik ilişkisi (priority) vardır. Birden fazla farklı numaralı gerçek zamanlı sinyal 
-    bloke edildiği durumda bloke açılınca bunların oluşma sırası küçük numaradan büyük numaraya göredir. Yani gerçek zamanlı sinyallerde
-    küçük numara yüksek öncelik belirtmektedir. Gerçi Linux kernel kodları incelendiğinde Linux'un da bu tür durumlarda düşük 
-    numaralı sinyali önce prosese teslim ettiği görülmektedir. Ancak ne olursa olsun bu UNIX türevi sistemlerde standart bir 
-    özellik değildir. 
+    3) Gerçek zamanlı sinyallerde bir öncelik ilişkisi (priority) vardır. Birden fazla farklı numaralı gerçek zamanlı sinyal bloke 
+    edildiği durumda bloke açılınca bunların oluşma sırası küçük numaradan büyük numaraya göredir. Yani gerçek zamanlı sinyallerde
+    küçük numara yüksek öncelik belirtmektedir. Gerçi Linux kernel kodları incelendiğinde Linux'un da bu tür durumlarda önce düşük 
+    numaralı sinyali prosese teslim ettiği görülmektedir. Ancak ne olursa olsun bu UNIX türevi sistemlerde standart bir özellik değildir. 
 
-    Gerçek zamanlı sinyaller kill fonksiyonu ile değil sigqueue isimli fonksiyonla gönderilmektedir. Eğer bu sinyaller kill ile
-    gönderilirse kuyruklama yapılıp yapılmayacağı sistemden işletim sisteme değişebilmektedir. Linux gerçek zamanlı sinyaller için 
-    bu kuyruklamayı yapmaktadır. Ancak gerçek sinyaller kill POSIX fonksiyonu ile değil sigqueue POSIX fonksiyonuyla gönderilmelidir. 
+    Gerçek zamanlı sinyaller kill fonksiyonu ile değil, sigqueue isimli fonksiyonla gönderilmektedir. Eğer bu sinyaller kill ile gönderilirse 
+    kuyruklama yapılıp yapılmayacağı işletim sisteminden işletim sistemine değişebilmektedir. Linux gerçek zamanlı sinyaller için bu 
+    kuyruklamayı yapmaktadır. Ancak gerçek zamanlı sinyaller kill POSIX fonksiyonu ile değil, sigqueue POSIX fonksiyonuyla gönderilmelidir. 
 
-    Gerçek zamanlı sinyaller set edlirken sigaction fonksiyonu kullanılmak zorundadır. Gerçek zamanlı sinyaller dignal fonksiyonu ile 
-    set edilememktedir. Bu fonksiyonda sinyal fonksiyonunun adresi artık sigaction yapısının sa_handler elemanına değil sa_sigaction 
-    elemanına yerleştirilmelidir. Tabii fonksiyonun bunu anlaması için flags parametresine de ayrıca SA_SIGINFO eklenmelidir. 
-    (Yani başka bir deyişle fonkisyon sa_flags parametresinde SA_SIGINFO değerini gördüğünde artık sinyal fonksiyonu için 
-    yapının sa_sigaction elemanı bakar.) Örneğin:
+    Gerçek zamanlı sinyaller set edilirken sigaction fonksiyonu kullanılmak zorundadır. Gerçek zamanlı sinyaller signal fonksiyonu ile 
+    set edilememektedir. Bu fonksiyonda sinyal fonksiyonunun adresi artık sigaction yapısının sa_handler elemanına değil, sa_sigaction 
+    elemanına yerleştirilmelidir. Tabii fonksiyonun bunu anlaması için flags parametresine de ayrıca SA_SIGINFO eklenmelidir. (Yani başka 
+    bir deyişle fonkisyon sa_flags parametresinde SA_SIGINFO değerini gördüğünde artık sinyal fonksiyonu için yapının sa_sigaction elemanına 
+    bakar.) Örneğin:
 
 	struct sigaction sa;
 	...
@@ -32286,13 +32295,114 @@ void exit_sys(const char *msg)
 
     void signal_handler(int signo, siginfo_t *info, void *context);
 
-    Aşağıdaki örnekte proc1 programı n tane gerçek zamanlı sinyal gönderir. proc2 ise bunları almaktadır. Programlaro çalıştırarak
+    Aşağıdaki örnekte proc1 programı n tane gerçek zamanlı sinyal gönderir. proc2 ise bunları almaktadır. Programları çalıştırarak
     kuyruklamanın yapıldığına dikkat ediniz. sigqueue fonksiyonunda iliştirilen sinyal bilgisi siginfo_t yapısının si_value
     elemanından alınmaktadır. 
 
-    sigqueue fonksiyonuyla set edilen inyal fonksiyonundaki siginfo_t yapısının diğer elemanlarını ilgili dokimanlardan inceleyniz.
+    sigqueue fonksiyonuyla set edilen sinyal fonksiyonundaki siginfo_t yapısının diğer elemanlarını ilgili dokümanlardan inceleyıniz.
     (Örneğin burada sinyali gönderen proses id'si, gerçek kullanıcı id'si, sinyalin neden gönderildiği gibi bilgiler vardır.)
 ---------------------------------------------------------------------------------------------------------------------------*/
+
+/* proc1.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+
+void exit_sys(const char *msg);
+
+/* ./prog1 <realtime signal no> <process id> <count> */
+
+int main(int argc, char *argv[])
+{
+	int signo;
+	pid_t pid;
+	int count;
+	int i;
+	union sigval val;
+
+	if (argc != 4) {
+		fprintf(stderr, "wrong number of arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	signo = (int)strtol(argv[1], NULL, 10);
+	pid = (pid_t)strtol(argv[2], NULL, 10);
+	count = (int)strtol(argv[3], NULL, 10);
+
+	for (i = 0; i < count; ++i) {
+		val.sival_int = i;
+		if (sigqueue(pid, SIGRTMIN + signo, val) == -1)
+			exit_sys("sigqueue");
+	}
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+void sigusr1_handler(int sno)
+{
+	printf("sigusr1 occurred...\n");
+}
+
+/* proc1.c */
+
+/* proc2.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <signal.h>
+
+void exit_sys(const char *msg);
+void sigrt_handler(int signo, siginfo_t *info, void *context);
+
+/* ./prog2 <realtime signal no> */
+
+int main(int argc, char *argv[])
+{
+	struct sigaction act;
+	int signo;
+
+	if (argc != 2) {
+		fprintf(stderr, "wrong number of arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	signo = (int)strtol(argv[1], NULL, 10);
+
+	act.sa_sigaction = sigrt_handler;
+	sigemptyset(&act.sa_mask);
+	act.sa_flags = SA_SIGINFO;
+
+	if (sigaction(SIGRTMIN + signo, &act, NULL) == -1)
+		exit_sys("sigaction");
+
+	for(;;)
+		pause();
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+void sigrt_handler(int signo, siginfo_t *info, void *context)
+{
+	printf("SIGRTMIN + 0 occurred with %d code\n", info->si_value.sival_int);
+}
+
+/* proc2.c */
 
 /*--------------------------------------------------------------------------------------------------------------------------
                                             78. Ders 03/09/2023 - Pazar
@@ -32306,8 +32416,8 @@ void exit_sys(const char *msg)
     POSIX standartlarında bir sistemin minimum destekleyeceği gerçek zamanlı sinyal sayısı _POSIX_RTSIG_MAX sembolik sabitiyle 
     belirtilmiştir. Bu sembolik sabit 8'dir. Yani UNIX türevi bir sistem en azından 8 gerçek zamanlı sinyali desteklemelidir. 
     Tabii aslında bu minimum değerdir. Pek çok UNIX türevi sistem bundan daha fazla sayıda gerçek zamanlı sinyali desteklemektedir. 
-    Bir sistemdeki o sistem tarafından desteklenen gerçek zamanlı sinyallerin sayısı ayrıca <limits.h> içerisinde RTSIG_MAX sembolik 
-    sabitiyle belirtilmiştir. Yani RTSIG_MAX aslında _POSIX_RTSIG_MAX sembolik sabitinin ilgili sistemdeki gerçek değerini belirtmektediir. 
+    Bir sistemde, o sistem tarafından desteklenen gerçek zamanlı sinyallerin sayısı ayrıca <limits.h> içerisinde RTSIG_MAX sembolik 
+    sabitiyle belirtilmiştir. Yani RTSIG_MAX aslında _POSIX_RTSIG_MAX sembolik sabitinin ilgili sistemdeki gerçek değerini belirtmektedir. 
     Ancak bu RTSIG_MAX sembolik sabiti aslında define edilmek zorunda değildir. Bu durumda bu değer sysconf fonksiyonuyla 
     argüman olarak _SC_RTSIG_MAX değeri geçirilmek suretiyle elde edilmektedir. (Sistem limitleri biraz karmaşık bir konudur.
     Zaten bu konu ayrı bir başlık altında ileride ele alınacaktır.) Linux sistemlerinde <limits.h> dosyası içerisinde RTSIG_MAX değeri 
@@ -32320,8 +32430,48 @@ void exit_sys(const char *msg)
     uzunluğu toplam kuyruk uzunluğudur. Yani her sinyal için ayrı bir kuyruk düşünülmemelidir. Belli bir sistemdeki gerçek değer 
     SIGQUEUE_MAX sembolik sabitiyle <limits.h> içerisinde belirtilmektedir. Ancak bu sembolik sabit de define edilmek zorunda 
     değildir. Linux sistemlerinde SIGQUEUE_MAX sembolik sabiti define edilmemiştir. Linux'ta bu değer eskiden 1024'tü. 
-    Sonra NPROC sayısına hizalnmıştır. Programcı bunu Linux sistemlerinde en az 1024 olarak düşünebilir.
+    Sonra NPROC sayısına hizalanmıştır. Programcı bunu Linux sistemlerinde en az 1024 olarak düşünebilir.
 ---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <limits.h>
+#include <signal.h>
+
+void exit_sys(const char *msg);
+
+int get_queuemax(void)
+{
+	int queue_max;
+
+#ifdef SIGQUEUE_MAX
+	queue_max = SIGQUEUE_MAX;
+#else
+	queue_max = sysconf(_SC_SIGQUEUE_MAX);
+#endif
+
+	return queue_max;
+}
+
+int main(void)
+{
+
+	printf("%d\n", SIGRTMIN);			/* 34 */
+	printf("%d\n", SIGRTMAX);			/* 64 */
+	printf("%d\n", RTSIG_MAX);			/* 32 */
+	// printf("%d\n", SIGQUEUE_MAX);	/* Undeclared */
+	printf("%d\n", get_queuemax());		/* 30231 */
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Gerçek zamanlı sinyalleri gönderebilmek için sigqueue isimli bir POSIX fonksiyonu kullanılmaktadır. Fonksiyonun prototipi
@@ -32332,8 +32482,8 @@ void exit_sys(const char *msg)
     int sigqueue(pid_t pid, int signo, union sigval value);
 
     Fonksiyonun birinci parametresi sinyalin gönderileceği prosesin id değerini almaktadır. İkinci parametre gönderilecek sinyalin
-    numarasını belirtmektedir. Üçüncü parametre ise sinyale iliştirilecek ekstra bilgiyi belirtmektedir. sigval isimli 
-    birlik şöyle bildirilmiştir:
+    numarasını belirtmektedir. Üçüncü parametre ise sinyale iliştirilecek ekstra bilgiyi belirtmektedir. sigval isimli birlik şöyle 
+    bildirilmiştir:
 
     union sigval {
         int   sival_int;
@@ -32341,7 +32491,7 @@ void exit_sys(const char *msg)
     };
 
     Görüldüğü gibi sinyale int bir bilgi de bir adres bilgisi de iliştirilebilmektedir. Tabii sinyale adres bilgisi iliştirilecekse
-    bu adresin hedef proseste anlamlı olması gerekmektedir. Fonksiyon başarı durumunda 0 başarısızlık -1 değerine geri dönmektedir. 
+    bu adresin hedef proseste anlamlı olması gerekmektedir. Fonksiyon başarı durumunda 0, başarısızlık -1 değerine geri dönmektedir. 
     Bir fonksiyona sigqueue fonksiyonuyla sinyal gönderebilmek için tıpkı kill fonksiyonunda olduğu gibi sinyal gönderen prosesin 
     gerçek ya da etkin kullanıcı id'sinin hedef prosesin gerçek ya da saklı kullanıcı id'si aynı olması ya da prosesin uygun 
     önceliğe sahip olması gerekmektedir.
@@ -32352,17 +32502,17 @@ void exit_sys(const char *msg)
 
     sigqueue fonksiyonunda kill fonksiyonunda olduğu gibi "proses grubuna" sinyal gönderebilme gibi bir özellik yoktur. 
 
-    sigqueue fonksiyonu ile gönderilen sinyalin sigaction fonksiyonunda SA_SIGINFO bayrağı ile üç parametreli fonksiyon 
-    tarafından alınması da zorunlu değildir. Yani sigqueue fonksiyonu ile gönderilen sinyal normal sinyal fonksiyonu ile 
-    de elde edilebilir. Ancak bu durumda sinyale iliştirilen bilgi elde edilemecektir. Özetle:
+    sigqueue fonksiyonu ile gönderilen sinyalin sigaction fonksiyonunda SA_SIGINFO bayrağı ile üç parametreli fonksiyon tarafından 
+    alınması da zorunlu değildir. Yani sigqueue fonksiyonu ile gönderilen sinyal normal sinyal fonksiyonu ile de elde edilebilir. 
+    Ancak bu durumda sinyale iliştirilen bilgi elde edilemeyecektir. Özetle:
 
-    1) sigqueue ile gerçek zamanlı sinyal gödnermek zorunda değiliz. Ancak gerçek zamanlı olmayan sinyaller kuyruklanmaz.
+    1) sigqueue ile gerçek zamanlı sinyal göndermek zorunda değiliz. Ancak gerçek zamanlı olmayan sinyaller kuyruklanmaz.
     2) sigqueue ile gönderilen sinyalin üç parametreli sinyal fonksiyonuyla ele alınması da zorunlu değildir. Ancak bu 
     durumda sinyale iliştirilen bilgi elde edilemektedir. 
     3) Ters bir biçimde kill fonksiyonuyla gönderilen sinyal üç parametreli sinyal fonksiyonu ile de ele alınabilir. Tabii 
     bu durumda bir değer elde edilmeyecektir.
     4) kill fonksiyonuyla gerçek zamanlı sinyal gönderilebilir. Ancak bunun semantiği açıkça belirtilmemiştir. Yani gönderilen 
-    sinyal kuyrukllanmayabilir. kill fonksiyonuyla gerçek zamanlı sinyal gönderme çalışmayınız. 
+    sinyal kuyruklanmayabilir. kill fonksiyonuyla gerçek zamanlı sinyal gönderme çalışmayınız. 
 
     kill kabuk komutu default durumda kill fonksiyonu kullanılarak yazılmıştır. Ancak kill kabuk komutunda -q <değer> seçeneği
     kullanılırsa bu durumda kill kabuk komutu sigqueue fonksiyonunu kullanacaktır. 
@@ -32430,9 +32580,7 @@ void exit_sys(const char *msg)
         int      si_signo;     /* Signal number */
         int      si_errno;     /* An errno value */
         int      si_code;      /* Signal code */
-        int      si_trapno;    /* Trap number that caused
-                                    hardware-generated signal
-                                    (unused on most architectures) */
+        int      si_trapno;    /* Trap number that caused hardware-generated signal (unused on most architectures) */
         pid_t    si_pid;       /* Sending process ID */
         uid_t    si_uid;       /* Real user ID of sending process */
         int      si_status;    /* Exit value or signal */
@@ -32441,37 +32589,32 @@ void exit_sys(const char *msg)
         union sigval si_value; /* Signal value */
         int      si_int;       /* POSIX.1b signal */
         void    *si_ptr;       /* POSIX.1b signal */
-        int      si_overrun;   /* Timer overrun count;
-                                    POSIX.1b timers */
+        int      si_overrun;   /* Timer overrun count; POSIX.1b timers */
         int      si_timerid;   /* Timer ID; POSIX.1b timers */
         void    *si_addr;      /* Memory location which caused fault */
-        long     si_band;      /* Band event (was int in
-                                    glibc 2.3.2 and earlier) */
+        long     si_band;      /* Band event (was int in glibc 2.3.2 and earlier) */
         int      si_fd;        /* File descriptor */
-        short    si_addr_lsb;  /* Least significant bit of address
-                                    (since Linux 2.6.32) */
-        void    *si_lower;     /* Lower bound when address violation
-                                    occurred (since Linux 3.19) */
-        void    *si_upper;     /* Upper bound when address violation
-                                    occurred (since Linux 3.19) */
-        int      si_pkey;      /* Protection key on PTE that caused
-                                    fault (since Linux 4.6) */
-        void    *si_call_addr; /* Address of system call instruction
-                                    (since Linux 3.5) */
-        int      si_syscall;   /* Number of attempted system call
-                                    (since Linux 3.5) */
-        unsigned int si_arch;  /* Architecture of attempted system call
-                                    (since Linux 3.5) */
+        short    si_addr_lsb;  /* Least significant bit of address (since Linux 2.6.32) */
+        void    *si_lower;     /* Lower bound when address violation occurred (since Linux 3.19) */
+        void    *si_upper;     /* Upper bound when address violation occurred (since Linux 3.19) */
+        int      si_pkey;      /* Protection key on PTE that caused fault (since Linux 4.6) */
+        void    *si_call_addr; /* Address of system call instruction (since Linux 3.5) */
+        int      si_syscall;   /* Number of attempted system call (since Linux 3.5) */
+        unsigned int si_arch;  /* Architecture of attempted system call (since Linux 3.5) */
     }
 
     Bu yapının önemli elemanları ve anlamları şunlardır:
 
     int si_signo: Oluşan sinyalin numarası.
     int si_errno: O andaki errno değeri (saklayıp geri yüklemek için gerekebilmektedir).
-    pid_t si_pid: Sinyali gönderen prosesin proses id'sini beelirtmektedir.
+    pid_t si_pid: Sinyali gönderen prosesin proses id'sini belirtmektedir.
     uid_t si_uid: Sinyali gönderen prosesin gerçek kullanıcı id'sini belirtir. 
     int si_int: sigqueue fonksiyonundaki sinyale iliştirilen int değer.
     void *si_ptr: sigqueue fonksiyonundaki sinyale iliştirilen adres bilgisi.
+
+    sinyal fonksiyonunun üçüncü parametresi (context parametresi) sinyal oluşmadan önceki durum bilgisinin bulunduğu yerin 
+    adresini belirtmektedir. Bu parametre Linux sistemlerinde ucontext_t türünden bir yapı nesnesinin adresini tutmaktadır.
+    Bu parametreye çok nadir biçimde gereksinim duyulmaktadır.
 
     Aşağıdaki örnekte "sample" programı üç parametreli sinyal fonksiyonunu kullanmaktadır. Program hangi sinyal için  sinyal 
     fonksiyonunu set edeceğini belirten bir komut satırı argümanı almaktadır. Program sonsuz bir döngüde pause çağrılarıyla 
@@ -32524,7 +32667,7 @@ int main(int argc, char *argv[])
 
 void signal_handler(int signo, siginfo_t *info, void *context)
 {
-	printf("#%d signal handler: %d\n", signo, info->si_int);
+	printf("#%d signal handler: %d\n", signo, info->si_int);		/* UNSAFE */
 }
 
 void exit_sys(const char *msg)
@@ -32536,10 +32679,11 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Aşağıdaki örnekle gerçek zamanlı sinyallerin kuyruklandığını ancak gerçek zamanlı olmayan sinyallerin kuyruklanmadığını 
-    gözlemleyebilirsiniz. Buradaki "sample" programını önce 10 numaralı sinyal ile (SIGUSR1) sonra da 34 numaralı sinyal ile (SIGRTMIN + 0)
-    çalıştırınız. Diğer bir terminalden "sample" programı 30 saniye beklerken birkaç sinyal gönderiniz. "sample" programı 30 saniye 
-    sonra blokeyi açtığında gerçek zamanlı olmayan sinyaller için bunlardan bir tanesinin teslim edildiğini, gerçek zamanlı sinyaller için 
-    hepsinin teslim edildiğini göreceksiniz. Örneğin 10 numaralı sinyal ile (SIGUSR1) şöyle bir durum oluşmuştur:
+    gözlemleyebilirsiniz. Buradaki "sample" programını önce 10 numaralı sinyal ile (SIGUSR1) sonra da 34 numaralı sinyal ile 
+    (SIGRTMIN + 0) çalıştırınız. Diğer bir terminalden "sample" programı 30 saniye beklerken birkaç sinyal gönderiniz. "sample" 
+    programı 30 saniye sonra blokeyi açtığında gerçek zamanlı olmayan sinyaller için bunlardan bir tanesinin teslim edildiğini, 
+    gerçek zamanlı sinyaller için hepsinin teslim edildiğini göreceksiniz. Örneğin 10 numaralı sinyal ile (SIGUSR1) şöyle bir 
+    durum oluşmuştur:
 
     Birinci terminal 
 
@@ -32679,9 +32823,13 @@ void exit_sys(const char *msg)
 /* sq.c */
 
 /*--------------------------------------------------------------------------------------------------------------------------
+                                                        79. Ders 09/09/2023 - Cumartesi
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Senkron biçimde sinyal oluşmasını bekleyen iki ilginç fonksiyon vardır: sigwait ve sigwaitinfo. sigwaitinfo fonksiyonu 
-    POSIX'e "Realtime Extensions" eklemeleri sırasında eklenmiştir. sigwait fonksiyonu uzun süredir bulunmaktadır. Fonksiyonların
-    prototipleri şöyledir:
+    POSIX'e "Realtime Extensions" eklemeleri sırasında dahil edilmiştir. sigwait fonksiyonu uzun süredir zaten bulunmaktadır. 
+    Fonksiyonların prototipleri şöyledir:
 
     #include <signal.h>
 
@@ -32689,9 +32837,975 @@ void exit_sys(const char *msg)
     int sigwaitinfo(const sigset_t *set, siginfo_t *info);
 
     Bu fonksiyonlar birinci parametresiyle belirtilmiş olan sinyal kümesindeki herhangi bir sinyal oluşana kadar thread'i blokede 
-    bekletmektedir. 
+    bekletmektedir. Yani bu fonksiyonlarda biz hangi sinyaller için bekleme yapacağımızı fonksiyonun birinci parametresiyle 
+    fonksiyona veriririz. Fonksiyon da bu sinyallerden biri oluşana kadar çağrıyı yapan thread'i bloke bekletir. Fonksiyonlar 
+    bizim belirttiğimiz kümedeki hangi sinyal dolayısıyla sonlanmışsa o sinyalin bilgilerini bizim ikinci parametreyle verdiğimiz 
+    nesneye yerleştirmektedir. sigwait ile sigwaitinfo arasındaki tek fark sigwait fonksiyonunun yalnızca oluşan sinyalin numarasını 
+    bize vermesi ancak sigwaitinfo fonksiyonunun oluşan sinyalin pek çok bilgisini siginfo_y yapısı eşliğinde bize vermesidir. 
+    Fonksiyonlar başarı durumunda 0 değerine başarısızlık durumunda errno değerinin kendisine geri dönmektedir. Zaten POSIX 
+    standartları başarsızlık durumunda yalnızca EINVAL errno değerini tanımlamıştır.
 
-    <BURADA KALDIK>
+    Bu fonksiyonların sinyal kümelerine biz normal sinyaleri de gerçek zamanlı siyalleri de ekleyebiliriz. Gerçek zamanlı sinyaller 
+    kuyruklandığı için kuyruktaki yalnızca ilk sinyalin bilgisi elde edilecektir. Ancak POSIX standartları pending duruma geçen 
+    birden fazla sinyal olduğunda gerçek zamanlı sinyallerden düşük numarada (yüksek öncelikte) olanın bilgilerinin elde edileceğini
+    belirtmiş olsa da pending durumda olan hem normal sinyal hem de gerçek zamanlı sinyal olduğunda bunların hangisinin bilgilerinin
+    elde edileceği konusunda bir belirlemede bulunmamıştır (unspecified).
+
+    Normal olarak fonksiyonların birinci parametrelerinde belirtilen sinyallerin daha önceden bloke edilmiş olması gerekmektedir. 
+    POSIX standartları eğer bu sinyaller bloke edilmediyse fonksiyon çağrısının tanımsız davranış oluşturacağını belirtmektedir. 
+
+    Görüldüğü gibi biz sinyalleri bloke edip sigwait ya da sigwaitinfo fonksiyonlarıyla bekleyerek işlediğimizde aslında o sinyalleri 
+    asenkron değil senkron bir biçimde işlemiş olmaktayız. 
+
+    Aşağıdaki örnekte önce SIGINT ve SIGUSR1 sinyalleri bloke edilmiş sonra da sigwait fonksiyonu ile bu sinyaller olana kadar
+    bekleme yapılmıştır. Bu sinyallerden biri gerçekleştiğinde gerçekleşen sinyalin numarası da stdout dosyasına yazdırılmıştır.
+    Daha sonra bloke edilen sinyallerin blokelerinin de açıldığına dikkat ediniz.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <signal.h>
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	sigset_t sset;
+    int signo;
+    int result;
+
+    sigaddset(&sset, SIGUSR1);
+    sigaddset(&sset, SIGINT);
+
+    if (sigprocmask(SIG_BLOCK, &sset, NULL) == -1)
+        exit_sys("sigprocmask");
+
+    printf("waiting for signal...\n");
+
+    if ((result = sigwait(&sset, &signo)) != 0) {
+        fprintf(stderr, "sigwait: %s\n", strerror(result));
+        exit(EXIT_FAILURE);
+    }
+
+    printf("%d signal occured and processing...\n", signo
+
+    if (sigprocmask(SIG_UNBLOCK, &sset, NULL) == -1)
+        exit_sys("sigprocmask");
+
+    return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bilindiği gibi C'de goto işlemi aynı fonksiyon içerisinde yapılabilen bir işlemdir. Yani biz C'de bir fonksiyondan başka 
+    bir fonksiyonun bir yerine goto yapamayız. Zaten goto etiketleri de C'de "fonksiyon faaliyet alanına (function scope)"
+    sahiptir. İşte bir fonksiyondan başka bir fonksiyona goto yapmaya C dünyasında "long jump" denilmektedir. Her ne kadar
+    bu "long jump" konsu aslında C Programalama Diline ilişkin bir konu ise de genellikle bu eğitimlerde çok ayrıntı olduğu için
+    bu fonksiyon üzerinde durulmamaktadır. Ancak long jump işlemleri sinyaller söz konusu olduğunda UNIX/Linux sistem programlama
+    faaliyetlerinde kullanılabilmektedir. Biz de burada önce "long jump" işlemini ele alacağız. Sonra da onun sinyaller konusundaki 
+    kullanımları üzerinde duracağız.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir fonksiyondan başka bir fonksiyona goto yapılamamasının temel nedenleri şunlardır:
+
+    1) goto işleminni yapıldığı fonksiyondaki yerel değişkenler stack'tan nasıl boşaltılacaktır? (Bu problem kısmen çözülebilir)
+    2) goto yapılan fonksiyondaki yerel değişkenler goto yapıldığı noktada yaratılmış olmayacağı için bu durumda ne olacaktır?
+    3) goto yapılan fonksiyon return işlemi yaptığında nereye geri dönecektir? Bu fonksiyon çağrılmadığına göre nereye geri 
+    döneceği belli değildir. 
+
+    Ancak program akışının daha önce geçilmiş olan başka bir fonksiyondaki bir noktaya aktarılmasında teknik bir sorun yoktur.
+    Çünkü daha önce geçilen noktadaki CPU yazmaçlarının konumu saklanırsa ve "long jump" sırasında bu yazmaçların konumu o
+    değerlerle yüklenirse adeta akış sanki zamanda geri gitmiş ve geçmişteki o noktaya geri dönülmüş gibi olmaktadır. İşte biz C'de
+    long jump işlemi ile ancak daha önce geçmiş olduğumuz bir noktaya geri dönebiliriz. 
+
+    C'de long jump işlemi oldukça basit olarak iki standart C fonksiyonuyla yapılmaktadır: setjmp ve longjmp. Fonksiyonların 
+    prototipleri şöyledir:
+
+    #include <setjmp.h>
+
+    int setjmp(jmp_buf env);
+    void longjmp(jmp_buf env, int val);
+
+    setjmp fonksiyonu fonksiyonun çağrıldığı noktadaki CPU yazmaçlarının konumunu alarak jmp_buf ile belirtilen alana yerleştirmektedir. 
+    setjmp fonksiyonuna geçirilen jmp_buf nesnesinin global bir biçimde oluşturulmuş olması gerekir. Çünkü bu nesne geriye 
+    dönüşte başka bir fonksiyonda longjmp yaparken de kullanılacaktır. longjmp işleminde geri dönüş aslında setjmp fonksiyonun içerisine
+    yapılmaktadır. Böylece setjmp fonksiyonunun geri dönmesi akışın ilk kez geçişi sırasında olabileceği gibi longjmp ile geri dönüş 
+    sırasında da olabilmektedir. Tabii programcının sonsuz döngüye girmemek için setjmp fonksiyonundan akışın ilk kez geçmesinden 
+    dolayı mı yoksa longjmp işleminden dolayı mı çıkıldığını anlaması gerekir. İşte setjmp fonksiyonundan ilk kez çıkılırken setjmp 
+    fonksiyonu 0 ile geri dönmekte ancak setjmp fonksiyonundan longjmp nedeniyle çıkıldığında setjmp fonksiyonu longjmp fonksiyonunun 
+    ikinci parametresi için girilen argümanla geri dönmektedir. Böylece programcı setjmp fonksiyonundan hangi nedenle çıkıldığını anlayıp 
+    geri dönüşte sonsuz döngü oluşmasını engelleyebilir. Örneğin:
+
+    jmp_buf g_jbuf;
+    ....
+
+    void foo(void)
+    {
+        ....
+
+        if (setjmp(g_jbuf) == 1) {
+            .....
+        }
+        else
+            bar();
+
+        ....
+    }
+
+    void some_func(void)
+    {
+        ....
+        longjmp(g_jbuf, 1);
+        ....
+    }
+
+    Burada foo fonksiyonun içerisinde geri dönüş için geri dönüş noktası setjmp fonksiyonunda kaydedilmiştir. Bu kayıttan sonra 
+    programcı bar fonksiyonunu çağırarak yoluna devam etmiştir. Ancak akış bar tarafından çağrılan fonksiyon zincirinde biri olan 
+    some_func tarafından yeniden longjmp fonksiyonu ile geçmişe yani foo içerisindeki setjmp içerisine aktarılmıştır. Bu durumda
+    artık setjmp'den 1 değeri ile çıkılacak ve tekrar bar fonksiyonu çağrılmayacaktır. 
+
+    Aşağıdaki longjump kullanımına bir örnek verilmiştir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <setjmp.h>
+
+void foo(void);
+void bar(void);
+void tar(void);
+
+jmp_buf g_jbuf;
+
+int main(void)
+{
+    printf("main begins...\n");
+
+    foo();
+
+    printf("main ends....\n");
+
+    return 0;
+}
+
+void foo(void)
+{
+    printf("foo begins...\n");
+
+    if (setjmp(g_jbuf) != 1)
+        bar();
+
+    printf("foo ends...\n");
+}
+
+void bar(void)
+{
+    printf("bar begins...\n");
+
+    tar();
+
+    printf("bar ends...\n");
+}
+
+void tar(void)
+{
+    printf("tar begins...\n");
+
+    longjmp(g_jbuf, 1);
+
+    printf("tar ends...\n");
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Pekiyi biz setjmp yaptığımızda prosesteki bazı sinyaller bloke edilmişse ve daha sonra bu sinyallerin blokesi açılmışsa 
+    biz longjmp ile eski noktaya dönerken sinyallerin bloke durumu ne olacaktır? İşte POSIX standartları setjmp işleminde 
+    kayıt yapılırken prosesin sinyal bloke kümesinin de kaydedilip longjmp sırasında geri yükleneceği konusunda bir garanti 
+    vermemiştir (unspecified). Bu nedenle eğer geri dönüşte aynı sinyal bloke kümesinin de yüklenmesi isteniyorsa setjmp ve longjmp
+    yerine sigsetjmp ve siglongjmp fonksiyonları kullanılmalıdır. Bu fonksiyonların prototipleri şöyledir:
+
+    #include <setjmp.h>
+
+    int sigsetjmp(sigjmp_buf env, int savemask);
+    void siglongjmp(sigjmp_buf env, int val);
+
+    Görüldüğü gibi fonksiyonların genel kullanımı setjmp ve longjmp fonksiyonu ile benzerdir. Ancak sigsetjmp fonksiyonu iki
+    parametre almaktadır. Bu ikinci parametre (savemask parametresi) 0 ise prosesin sinyal bloke kümesi kaydedilip geri yükleme 
+    yapılmaz, sıfır dışı ise kaydedelip geri yükleme yapılır. (Yani ikinci parametre 0 geçilirse fonksiyon setjmp gibi davranmaktadır.)
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Pekiyi "long jump" işlemine neden gereksinim duyulmaktadır? İşte bazı durumlarda programcı bulunan durumdan kaçıp geçmişteki 
+    daha güvenli bir  noktaya dönmek isteyebilir. Örneğin sinyal fonksiyonlarının içerisinde long jump işemine sıkça rastlanmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+                                                        80. Ders 10/09/2023 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Örneğin biz SIGSEGV sinyali oluştuğunda programı sonlandırmayıp başka birtakım işlemlerle programın çalışmasına devam etmesini
+    isteyebiliriz. Bu durumda SIGSEGV sinyali için sinyal fonksiyonu set ederiz, ancak bu sinyal fonksiyonunda daha önceki bir 
+    noktaya "long jum"p yapabiliriz. Aşağıda bu duruma bir örnek verilmiştir. Bu örnekte sigsetjmp ve siglongjmp kullanmanın özellikle
+    bir nedeni yoktur. Yani örneğimizde setjmp ve longjmp fonksiyonlarını da kullanabilirdik.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <setjmp.h>
+#include <unistd.h>
+
+void sigsegv_handler(int sig);
+void exit_sys(const char *msg);
+
+jmp_buf g_jbuf;
+
+int main(void)
+{
+	struct sigaction sa;
+	char *str = (char *)0x12345678;
+
+	sa.sa_handler = sigsegv_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;
+
+	if (sigaction(SIGSEGV, &sa, NULL) == -1)
+		exit_sys("sigaction");
+
+	if (sigsetjmp(g_jbuf, 1) == 1) {
+		printf("SIGSEGV occures, but we continue...\n");            /* UNSAFE */
+		/* ... */
+	} else {
+		*str = 'x';
+		/* .... */
+	}
+
+    return 0;
+}
+
+void sigsegv_handler(int sig)
+{
+	/* .... */
+
+	siglongjmp(g_jbuf, 1);
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Pekiyi biz sinyal fonksiyonları içerisinde yalnızca asenkron sinyal güvenli fonksiyonları kullanabiliyorduk. Sinyal 
+    fonksiyonu içerisinde longjmp yaparsak "long jump" yaptığımız yerde sinyal güvenli fonksiyonlar kullanmak zorunda mıyız? 
+    İşte sinyal fonksiyonu çalıştığında oradan "long jump" yapıldığında da atlanılan yerde sinyal güvenli fonksiyonların 
+    kullanılması gerekir. Çünkü bakımdan "reentancy" durumunda bir değişiklik yoktur.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Sinyal fonksiyonları içerisinde tüm programın sonlandırılması isteniyorsa bu işlem exit standart C fonksiyonu ile yapılmamalıdır.
+    Çünkü exit fonksiyonu stdio dosyalarını kapatıp onların tamponlarını tazelemektedir. Dolayısıyla exit fonksiyonu asenkron sinyal 
+    güvenli bir fonksiyon değildir. Bu tür dudumlarda doğrudan _exit POSIX fonksiyonu ile proses sonlandırılabilir. Anımsanacağı 
+    gibi _exit fonksiyonu aslında doğrudan işletim sisteminin prosesi sonlandıran sistem fonksiyonunu çağırmaktadır. Ayrıca 
+    C99 ile C'ye eklenen _Exit fonksiyonu da POSIX standartlarına göre asenkron sinyal güvenlidir. _Exit standart C fonksiyonun 
+    stdio tamponlarını flush edip etmeyeceği derleyicileri yazanların isteğine bırakılmıştır. POSIX standartlarına göre 
+    bu fonksiyon tamamen _exit fonksiyonu ile eşdeğer işleve sahiptir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Anımanacağı gibi bazı sinyallerdeki default eylem prosesin sonlandırılmasıyla bir likte bir "core" dosyasının oluşturulmasıdır. 
+    Buradaki "core" terimi eski bir terimdir ve ana belliği belirtmektedir. Core dosyasının üretilmesinin amacı onun debugger altında
+    incelenmesine olanak sağlanmasıdır. Böylece çöken bir programda programın neden ve nerede çöktüğüne ilişkin bir analiz 
+    yapılabilmektedir. Core dosyanın incelenemesi çeşitli debugger'larla yapılabilmektedir. Tabii UNIX/Linux dünyasında en yaygın
+    kullanılan debugger "gdb" isimli GNU projesi kapsamında oluşturulmuş olan debugger'dır. Biz izleyen paragraflarda Linux sistemlerinde
+    "core dosyalarına" yönelik bazı açıklamalarda bulunacağız. gdb debugger'ının temel kullanımı başka bölümlerde ele alınacaktır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+    Linux sistemlerinde sinyal yoluyla core dosyası oluşturulması için sistem limitlerinin uygun olması gerekmektedir. 
+    "ulimit -a" komutu ile sistem limitlerine bakılabilir. Eğer burada "core file size" 0 ise bunun artırılması gerekir. 
+    "ulimit -c" ile yalnızca "core file size" bilgisi de  görüntülenebilmektedir. Bu sınırın "unlimited" hale getirilmesi 
+    şöyle yapılabilir:
+
+	ulimit -c unlimited
+
+	Core dosyasının üretildiği yer Linux sistemlerinde kullanılan bazı sistem paketlerine göre değişebilmektedir. Eskiden core 
+    dosyaları prosesin çalışma dizininde yaratılıyordu. Daha sonra "systemd" paketi ile birlikte core dosyalarının yaratılması 
+    biraz daha ayrıntılı hale getirilmiştir. Öncelikle core dosyalarının nasıl isimlendirildiğinin belirlenmesi gerekir. 
+    Bunun için proc dosya sisteminde "/proc/sys/kernel/core_pattern" dosyasına bakılmalıdır. Bu dosya core dosyasının hangi 
+    isimlendirme biçimiyle nerede yaratılacağını belirtmektedir. Örneğin bu dosyanın içeriği şöyle olabilir:
+
+    |/lib/systemd/systemd-coredump %P %u %g %s %t 9223372036854775808 %h
+
+    Burada core dosyasının üretilmesinde "systemd-coredump" programın kullanılacağı belirtilmektedir. Bu programın dokğmantasyonu 
+    SYSTEMD-COREDUMP(8) man sayfasında yapılmıştır. Buradaki core_pattern dosyasının içeriğinde bulunan % formak karakterleri core
+    dosyasının hangi isimler kombine edilerek üretileceğini belirtmektedir. core dosyasının yeri aslında systemd-coredump programının 
+    konfigürasyonunda belirlenmektedir. Default olarak  /var/lib/systemd/coredump dizini kullanılmaktadır. Core dosyaları genellikle 
+    lz4 formatında sıkıştırılmış bir biçimde tutulmaktadır. Bazı sistemlerde "core dump" utility'si olarak apport denilen program da 
+    kullanılmaktadır. Bazı sistemlerde core_pattern dosyasının içeriği aşağıdaki gibi de olabilir: 
+
+    |/usr/share/apport/apport -p%p -s%s -c%c -d%d -P%P -u%u -g%g -- %E
+
+	Burada core dosyasının yaratılma organizasyonu "apport" denilen programa devredilmiştir. Bu program da "core" dosyasını
+    "/var/lib/systemd/coredump" dizininde ya da "/var/lib/apport/coredump" dizininde oluşturmaktadır. 
+
+	Core dosyalarını kolay yüklemek için ayrıca "coredumpctl" isimli bir programdan da faydalanılabilir.  Ancak bu program default olarak 
+    kurulu durumda değildir. Bunun kurulabilmesi için aşağıdaki komut uygulanabilir:
+
+	sudo apt install systemd-coredump
+
+    coredumpctl programı core dosyaları üzerinde işlem yapmayı kolaylaştıran bir programdır. Örneğin üretilmiş olan core dosyalarının listeleri
+    şöyle alınabilir:
+
+    coredumpctl list
+
+    Bu komutla tüm üretilmiş olan core dosyaları listelenecektir. En son üretilen dosya listenin sonunda olacaktır. Ancak ters sırada 
+    görüntüleme için -r seçeneği kullanılabilmektedir. 
+
+	Artık coredumptctl programı yüklendiğine göre ondan faydalanabiliriz. En son sore dosyasını gdb ile yüklemek için şöyle yapılır:
+
+	coredumpctl gdb
+
+	Bu komut ile her zaman son core dosyası yüklenmektedir. Spesifik bir core dosyasının yüklenmesi de sağlanabilir. 
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*-------------------------------------------------------------------------------------------------------------------------
+    Bir grup prosesin oluşturduğu gruba "proses grubu" denilmektedir. Proses grubu kavramı bir grup prosese sinyal gönderebilmek 
+    için uydurulmuştur. Gerçekten de kill sistem fonksiyonunun  birinci parametresi olan pid sıfırdan küçük br sayı olarak girilirse 
+    abs(pid) numaralı proses grubuna sinyal gönderilmektedir. Bir sinyal bir proses grubuna gönderilirse o proses grubunun bütün 
+    üyeleri olan proseslere gönderilmiş olur. Anımsanacağı gibi kill fonksiyonun birinci parametresi 0 girilirse bu durumda sinyal 
+    kill fonksiyonunu uygulayan prosesin içinde bulunduğu proses grubuna gönderilmektedir. Yani proses kendi proses grubuna 
+    sinyali göndermektedir. 
+
+    Her proses grubunun bir id'si vardır. Bir proses grubunun id'si o proses grubundaki bir prosesin proses id'si ile aynıdır. İşte
+    proses id'si proses grup id'sine eşit olan prosese o proses grubunun "proses grup lideri (process group leader)" denilmektedir. 
+    Proses grup lideri genellikle proses grubunu yaratan prosestir. fork işlemi sırasında alt prosesin proses grubu onu yaratan 
+    üst prosesten alınmaktadır. Yani üst proses hangi proses grubundaysa fork işlemi sonucunda yaratılan proses de aynı proses
+    grubunda olur.
+
+    Bir prosesin ilişkin olduğu proses grubunun id'sini alabilmek için getpgrg ya da getpgid POSIX fonksiyonları kullanılır. 
+
+    #include <unistd.h>
+
+    pid_t getpgrp(void);
+    pid_t getpgid(pid_t pid);
+
+    getpgrp fonksiyonu prosesin kendi grup id'sini almakta kullanılmaktadır. getpgid fonksiyonu ise herhangi bir prosesin proses 
+    grup id'sini elde etmekte kullanılmaktadır. getpgid fonksiyonunun parametresi 0 geçilirse fonksiyonu çağıran prosesin proses 
+    grup id'si alınmış olur Yani aşağıdaki çağrı eşdeğerdir:
+
+    pgid = getpgrp();
+    pgid = getpgid(0);
+
+    Proses grup lideri olan proses sonlanmış olsa bile proses grubunun id'si aynı biçimde kalmaya devam eder. Yani işletim sistemi 
+    bu durumda prosesin id'sini o proses grubu bu id ile temsil edildiği için başka proses'te kullanmaz. Proses grubu gruptaki son 
+    prosesin sonlanması ya da grup değiştirmesiyle ömrünü tamamlamaktadır.
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*-------------------------------------------------------------------------------------------------------------------------
+    Kabuk üzerinden bir komut uyguladığımızda kabuk bir ya da birden fazla proses oluşturabilmektedir. Örneğin:
+
+    $ ls -l | grep "sample"
+
+    Burada kabuk "ls" programını çaıştırmak için ve "grep" programını çalıştırmak için fork işlemleri yapacaktır. Bazen kabuktan 
+    tek bir program çalıştırılıyor olsa bile o program kendi içerisinde fork yaparak pek çok prosesin oluşmasına yol açabailmektedir. 
+    İşte kabuktan her komut uygulandığında kabul programı yeni bir proses grubu oluşturur ve çalıştırılan programları o proses
+    grubuna dahil eder. Örneğin pts/0 terminalinden aşağıdaki gibi bir komut çalıştırmış olalım:
+
+    $cat | grep "test"
+
+    Burada kabuk programı bir proses grubu oluşturup "cat" ve "grep" komutlarını aynı proses grubuna atayacaktır. Diğer ternialden
+    durumu inceleyelim:
+
+    $ ps -t pts/0 -o pid,ppid,pgid,cmd
+    PID     PPID    PGID CMD
+    34667   34658   34667 bash
+    49484   34667   49484 cat
+    49485   34667   49484 grep --color=auto test
+
+    Burada "cat" programının yaratılan proses grubunun proses lideri olduğu görülmektedir. "grep" programı da aynı proses 
+    grubuna atabnmıştır. Yani burada kabuk programı bir proses grubu yaratıp "cat" ve "grep" programlarını aynı proses grubuna
+    atamıştır. Tabii burada eğer "cat" ve "grep" programları da kendi içlerinde fork yapsalardı onların alt prosesleri de 
+    aynı proses grubuna dahil olacakardı. Thread'lerin ayrı proses id'leri yoktur. Yalnızca proseslerin proses id'leri vardır. 
+    Dolayısıyla bir prosesin herhangi bir thread'inde biz getpgrp fonksiyonunu uygularsak aynı değeri elde ederiz. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Yeni bir proses grubu yaratmak için ya da bir prosesin proses grubunu değiştirmek için setpgid POSIX fonksiyonu kullanılmaktadır. 
+
+    #include <unistd.h>
+
+    int setpgid(pid_t pid, pid_t pgid);
+
+    Fonskiyonun birinci parametresi proses grup id'si değiştirilecek prosesi ikinci parametresi de hedef proses grup id'sini 
+    belirtmektedir. Eğer bu iki parametre aynı ise yeni bir proses grubu yaratılır ve bu yeni grubun lideri de buradaki proses 
+    olur. Bir proses (uygun önceliğe sahip olsa bile) ancak kendisinin ya da kendi alt proseslerinin proses grup id'lerini 
+    değiştirebilir. Fakat üst proses alt proses exec uyguladıktan sonra artık onun proses grup id'sini değiştirememektedir. 
+    Ayrıca setpgid fonksiyonu ile proses ancak kendisinin ya da alt proseslerinin proses grup id'lerini aynı "oturum (session)" 
+    içerisindeki bir proses grup id'si olarak değiştirebilmektedir. Oturum (session) kavramı izleyen paragraflarda ele alınmaktadır.
+
+    stpgid fonksiyonunun birinci parametresi 0 girilirse bu durumda fonksiyonu çağıran proses anlaşılmaktadır. İkinci parametresi 0 
+    girilirse bu durumda birinci parametresinde belirtilen proses anlaşılmaktadır. Yani aşağıdaki çağrılar eşdeğerdir:
+
+    setpgid(getpid(), getpid());
+    setpgid(getpid(), 0);
+    setpgid(0, getpid());
+    setpgid(0, 0);
+
+    Örneğin kabuk çalıştırdığımız programı yeni proses grubunun grup lideri şöyle yapmaktadır: Kabuk önce fork yapar. Üst ya da 
+    alt proseste setpgid fonskiyonuyla yeni proses grubunu oluşturp alt prosesin bu grubun lideri olmasını sağlar.
+
+    Aşağıdaki örnekte üst proses fork yaparak alt proses oluşturmuştur. Alt proseste de setpgid fonksiyonu ile yeni bir proses 
+    grubu yaratılmıştır. Programın örnek çıktısı şöyledir:
+
+    $./sample
+    Parent process id: 49658
+    Parent process id of the parent: 34667
+    Parent process group id: 49658
+    Child process id: 49659
+    Parent process id of the child: 49658
+    Child process group id: 49659
+
+    Buradan şunlar anlaşılmaktadır:
+
+    - Kabul sample programını çalıştırırken yeni bir proses grubu oluşturup sample programını bu proses grubunun grup lideri 
+    yapmıştır. Alt
+
+    - Alt proseste yeni bir proses grubu yaratılmış alt proses de bu proses grubunun grup lideri olmuştur. 
+
+---------------------------------------------------------------------------------------------------------------------------*/
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+    pid_t pgid;
+    pid_t pid;
+
+    if ((pid = fork()) == -1)
+        exit_sys("fork");
+
+    if (pid != 0) {     /* parent process */
+        printf("Parent process id: %jd\n", (intmax_t)getpid());
+        printf("Parent process id of the parent: %jd\n", (intmax_t)getppid());
+        pgid = getpgrp();
+        printf("Parent process group id: %jd\n", (intmax_t)pgid);
+
+        if (waitpid(pid, NULL, 0) == -1)
+            exit_sys("waitpid");
+    }
+    else {      /* child process */
+        sleep(1);
+        if (setpgid(getpid(), getpid()) == -1)    /* setpgid(0, 0) */
+            exit_sys("setpgid");
+
+        printf("Child process id: %jd\n", (intmax_t)getpid());
+        printf("Parent process id of the child: %jd\n", (intmax_t)getppid());
+        pgid = getpgrp();
+        printf("Child process group id: %jd\n", (intmax_t)pgid);
+    }
+
+    return 0;
+}
+
+void exit_sys(const char *msg)
+{
+    perror(msg);
+
+    exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Yukarıda da belirtildiği gibi kill POSIX fonksiyonuyla (ya da kill komutuyla) bir proses grubuna sinyal gönderildiğinde
+    aslında proses grubundaki tüm proseslere sinyal gönderilmektedir. Bunu aşağıdaki programla test edebilirsiniz. 
+
+    Aşağıdaki progrdamda üst proses SIGSUR1 sinyalini set ederek fork işlemi yapmıştır. Böylece aynı sinyal alt proseste de 
+    set edilmiş durumdadır. Bu programı çalıştırınca üst proses alt rposesi wait fonksiyonunda bekleyecek alt proses de
+    pause ile sinyal oluşana kadar blokede bekleyecektir. Diğer bir terminalden bu proses grubuna kill komutu ile SUGUSR1
+    sinyalini göndermeyi deneyiniz. Bunu yaparken kill komutunda proses grup id'sini nehgati yapmayı unutmayınız. Aşağıda 
+    testin nasıl yapıldığına ilişkin örnek verilmiştir:
+
+    - Terminallerden birinde "sample" programı çalıştırılır:
+
+    $./sample
+    Parent process id: 49792
+    Parent process id of the parent: 34667
+    Parent process group id: 49792
+    Child process id: 49793
+    Parent process id of the child: 49792
+    Child process group id: 49792
+    SIGUSR1 occurred in process 49793
+    SIGUSR1 occurred in process 49792
+    waitpid: Interrupted system call
+
+    - Diğer bir terminalden proses grubuna SIGUSR1 sinyali gönderilir:
+
+   $ kill -USR1 -49792
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+void sigusr1_handler(int sno);
+void exit_sys(const char *msg);
+
+int main(void)
+{
+    pid_t pgid;
+    pid_t pid;
+    struct sigaction sa;
+
+    sa.sa_handler = sigusr1_handler;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+
+	if (sigaction(SIGUSR1, &sa, NULL) == -1)
+        exit_sys("siagaction");
+
+    if ((pid = fork()) == -1)
+        exit_sys("fork");
+
+    if (pid != 0) {     /* parent process */
+        printf("Parent process id: %jd\n", (intmax_t)getpid());
+        printf("Parent process id of the parent: %jd\n", (intmax_t)getppid());
+        pgid = getpgrp();
+        printf("Parent process group id: %jd\n", (intmax_t)pgid);
+
+        if (waitpid(pid, NULL, 0) == -1)
+            exit_sys("waitpid");
+    }
+    else {      /* child process */
+        sleep(1);
+        printf("Child process id: %jd\n", (intmax_t)getpid());
+        printf("Parent process id of the child: %jd\n", (intmax_t)getppid());
+        pgid = getpgrp();
+        printf("Child process group id: %jd\n", (intmax_t)pgid);
+
+		pause();
+    }
+
+    return 0;
+}
+
+void sigusr1_handler(int sno)
+{
+    printf("SIGUSR1 occurred in process %ld\n", (intmax_t)getpid());
+}
+
+void exit_sys(const char *msg)
+{
+    perror(msg);
+
+    exit(EXIT_FAILURE);
+}
+
+<BURADA KALDIK>
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Kabuk ile birden fazla programı boru eşliğinde çalıştırdığımızı düşünelim. Örneğin:
+
+    cat | grep "xxx"
+
+    Burada kabuk cat ve grep için fork işlemi yapar. Bu iki proses kardeştir. Ancak aralarında üstlük-altlık ilişkisi yoktur.
+    Kabuk bu iki prosesi aynı gruba sokar ve birinci prosesi de (burada cat) bu grubun grup lideri yapar. Bu komutu bir terminalden 
+    çalıştırıp diğer bir terminalde aşağıdaki komutla durumu gözlemleyiniz:
+
+    ps -a -o pid,ppid,pgid,cmd
+
+    İşte bu durumda Ctrl+C ve Ctrl + Delete (ya da \) tuşları SIGINTR ve SIGQUT sinyallarini bu proses grubuna yollayacak böylece buradaki 
+    iki proses de (eğer sinyali sinyali işlememişlerse) sonlanacaktır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Oturum (session) arka plan çalışmayı düzene sokmak için uydurulmuş bir kavramdır. Bir oturum proses gruplarından oluşur. 
+    Oturumu oluşturan proses gruplarından yalnızca biri "ön plan (foreground)", diğerlerinin hepsi "arka plan (background)"
+    gruplardır. İşte aslında terminal sürücüsü (tty) klavye sinyallerini oturumun ön plan proses grubuna yollamaktadır.
+
+    Kabuk üzerinden bir komut yazıp komutun sonuna & karakteri getirilirse bu & karakteri "bu komutu arka planda çalıştır" anlamına gelir. 
+    Böylece kabuk çalıştırılan komutu wait fonksiyonlarıyla beklemez. Yeniden prompt'a düşer. Ancak o komut çalışmaya devam etmektedir. 
+    İşte kabuk & ile çalıştırılan her komut için yeni bir proses grubu yaratır ve o proses grubunu oturumun arka plan proses grubu durumuna getirir. 
+    Sonunda & olmadan çalıştırılan prosesler ise ön plan proses grubunu oluşturur. 
+
+    O halde durum özetle şöyledir: Aslında kabuk bir oturum yaratıp kendini oturumun lideri yapmıştır. Sonra kabuk sonu & ile
+    biten komutlar için yarattığı proses guplarını oturumun arka plan proses grupları yapar. Sonunda & olmayan komutları da 
+    oturumun ön plan proses grubu yapmaktadır. Terminal sürücüsü de SIGINT ve SIGQUIT gibi sinyalleri oturumun ön plan proses grubuna 
+    göndermektedir. 
+
+    Oturumların da proses gruplarında olduğu gibi id'leri vardır. Oturumların id'leri oturum içerisindeki bir proses grubunun liderinin 
+    id'si ile aynıdır. Oturum terminal sürücüsüyle ilişkili bir kavram olarak uydurulmuştur. Dolayısıyla oturumların bir 
+    "ilişkin olduğu terminal (controlling terminal)" vardır. Bu terminal gerçek terminal ise tty terminallerinden biridir. Sahte (pseudo)
+    bir terminal ise pts terminallerinden biridir. Pencere yöneticilerinin içerisinde açılan terminaller sahte terminallerdir. Ancak
+    işlev olarak gerçek terminallerden bir farkları yoktur. Klavyeden Ctrl+C ve Ctrl+Backspace (ya da \) tuşlarına basıldığında
+    SIGINT ve SIGQUIT sinyalleri bu terminal tarafından (aslında terminal sürücüsü tarafından) oturumun ön plan proses grubuna gönderilmektedir. 
+
+    Burada aktardığımız bilgiler üzerinde şu anahtar noktalara yeniden dikkatinizi çekmek istiyoruz:
+
+    1) Kabuk programları bir proses grubu ve session yaratmakta ve kendilerini session lideri yapmaktadır. Kabuğun çalıştığı terminal de
+    oturumun "ilişkin olduğu terminali (controlling terminal)" olmaktadır. Kabuk bir komut çalıştırmaz durumdayken kendi proses grubunu 
+    oturumun ön plan proses grubu yapar.
+
+    2) Kabuk sonu & ile bitmeyen her komut için bir proses grubu oluşturur ve onu oturumun ön plan proses gerubu yapar. Terminal sinyalleri
+    bu proses grubuna gönderilmektedir. 
+
+    3) Kabuk sonu & ile biten her komut için ayrı bir proses grubu oluşturur ve o proses grubunu oturumun arkaplan proses grubu haline getirir.
+
+    4) Terminal tuşlarıyla oluşturulan SIGINT ve SIGQUIT gibi sinyaller oturumun önplan proses grubuna gönderilmektedir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir prosesin ilişkin olduğu oturum id'si (session id) getsid POSIX fonksiyonula alınmaktadır:
+
+    pid_t getsid(pid_t pid);
+
+    Aşağıdaki programda bir prosesin ve onun alt prosesinin id bilgileri ekrana yazdırılmıştır. Üst ve alt proseslerin aynı session id'ye
+    sahip olduğuna onun da bash'in session id'si (dolayısıyla proses id'si) olduğuna dikkat ediniz.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+    pid_t pgid;
+    pid_t pid;
+
+    if ((pid = fork()) == -1)
+        exit_sys("fork");
+
+    if (pid != 0) {     /* parent process */
+        printf("Parent process id: %ld\n", (long)getpid());
+        printf("Parent process id of the parent: %ld\n", (long)getppid());
+        pgid = getpgrp();
+        printf("Parent process group id: %ld\n", (long)pgid);
+        printf("Parent process session id: %ld\n", (long)getsid(0));
+
+        if (waitpid(pid, NULL, 0) == -1)
+            exit_sys("waitpid");
+    }
+    else {      /* child process */
+        sleep(1);
+        if (setpgid(getpid(), getpid() /* 0 */ ) == -1)
+            exit_sys("setpgid");
+
+        printf("Child process id: %ld\n", (long)getpid());
+        printf("Parent process id of the child: %ld\n", (long)getppid());
+        pgid = getpgrp();
+        printf("Child process group id: %ld\n", (long)pgid);
+        printf("Child process session id: %ld\n", (long)getsid(0));
+    }
+
+    return 0;
+}
+
+void exit_sys(const char *msg)
+{
+    perror(msg);
+
+    exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Yeni bir oturum (session) yaratmak için setsid fonksiyonu kullanılmaktadır:
+
+    pid_t setsid(void);
+
+    Fonksiyon şunları yapar:
+
+    - Yeni bir oturum (session) oluşturur
+    - Bu oturum içerisinde yeni bir proses grubu oluşturur.
+    - Oluşturulan oturumun ve proses grubunun lideri fonksiyonu çağıran prosestir.
+
+    setsid fonksiyonu tipik olarak kabuk programları tarafından işin başında çağrılmaktadır. Böylece kabuk yeni bir oturumun hem lideri olur
+    hem de o oturum içerisinde yaratılmış olan bir proses grubunun lideri olur. O halde bir komut uygulanmamış durumdaki kabuk ortamında bir oturum 
+    ve bir de proses grubu vardır. Kabuk bu ikisinin de lideri durumundadır. Sonra kabukta sonu & ile bitmeyen bir komut çalıştırıldığında kabuk
+    bu komuta ilişkin proses için yeni bir proses grubu yaratır ve bu grubu oturumun ön plan proses grubu yapar. 
+
+    setsid fonksiyonunu çağıran proses eğer zaten bir proses grubunun grup lideri ise fonksiyon başarısız olmaktadır. Örneğin 
+    biz kabuktan çalıştırdığımız bir programda setsid çağrısı yaparsak başarısız oluruz. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+    if (setsid() == -1)     /* function possibly will fail! */
+        exit_sys("setsid");
+
+    return 0;
+}
+
+void exit_sys(const char *msg)
+{
+    perror(msg);
+
+    exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Eğer yeni bir oturum yaratılmak isteniyorsa programın nasıl çalıştırılacağı bilnmediğine göre önce fork uygulayıp alt proseste 
+    setsid uygulamak gerekir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+    pid_t pid;
+
+    if ((pid = fork()) == -1)
+        exit_sys("fork");
+
+    if (pid != 0)
+        exit(EXIT_SUCCESS);
+
+    if (setsid() == -1)     /* function possibly will fail! */
+        exit_sys("setsid");
+
+    printf("Ok, i am session leader of the new session!\n");
+
+    return 0;
+}
+
+void exit_sys(const char *msg)
+{
+    perror(msg);
+
+    exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Oturum  lideri open fonksiyonuyla O_NOCTTY bayrağı kullanılmadan bir terminal aygıt sürücüsünü açtığında artık o terminal
+    oturumun ilişkin olduğu terminal (controlling terminal) durumuna gelir. Eğer terminal o anda başka bir oturumun terminaliyse oradan kopartılmaktadır.
+    open işlemini yapan prosese ise "terminali kontrol eden proses (controlling proscess)" denilmektedir. Normal olarak kabuk programı (bash)
+    terminali kontrol eden proses (controlling process) durumundadır. Dosyaların betimleyicileri üst prosesten alt prosese aktarıldığına göre
+    bu terminal betimleyicisi her prosete gözükecektir. Buna "ilgili prosese ilişkin terminal (process controlling terminal)" denilmektedir. 
+    Anımsanacağı gibi aslında 0 numaralı betimleyici terminal aygıt sürücüsünün (controlling terminal) O_RDONLY modunda açılmasıyla,
+    1 numaralı betimleyici aynı aygıt sürücünün O_WRONLY moduyla açılmasıyla ve stderr de 1 numaralı betimleyinin dup yapılmasıyla oluşturulmaktadır.
+    Yani aslında 0, 1 ve 2 betimleyiciler aynı dosyaya ilişkindir. Buna terminal ya da bu bağlamda "controlling terminal" denilmektedir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Oturumdaki ön plan proses grubunun hangisi olduğu tcgetpgrp POSIX fonksiyonuyla elde edilebilir. Oturumun ön plan proses grubu da 
+    tcsetpgrp POSIX fonksiyonula değiştirilebilir. 
+
+    pid_t tcgetpgrp(int fildes);
+    int tcsetpgrp(int fildes, pid_t pgid_id);
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Oturumun arka plan bir plan prosesi, prosesin ilşkin olduğu terminalden (controlling terminal) okuma yapmak isterse terminal 
+    sürücüsü o arka plan prosesin içinde bulunduğu proses grubuna SIGTTIN sinyalini göndermektedir. Bu sinyalin default eylemi 
+    (default action)  prosesin durdurulmasıdır. Bu biçimde durdurulmuş olan prosesler SIGCONT sinyali ile yeniden çalıştırılmak 
+    istenebilirler. Ancak yeniden okuma yapılırsa yine proses durdurulur. Bu tür prosesler kabuk üzerinden fg komutuyla ön plana 
+    çekilebilir. Bu durumda kabuk önce prosesin proses grubunu ön plan proses grubu yapar sonra da onu SIGCONT sinyali ile yeniden 
+    çalışır duruma getirir.
+
+    Aşağıdaki programı komut satırında sonuna & getirerek çalıştırınız. Program 10 saniye sonra stdin dosyasından okuma yapmaya
+    çalışacak ve bu nedenden dolayı SIGTTIN sinyali gönderilerek durdurulacaktır. Prosesin durdurulmuş olduğunu ps -l komutu ile ya da 
+    ps -o stat,cmd komutuyla gözleyiniz
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+    sleep(10);
+    fgets(s, 100, stdin);
+    puts(s);
+
+    return 0;
+}
+
+void exit_sys(const char *msg)
+{
+    perror(msg);
+
+    exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Arka plan proses grubundaki proseses SIGTTIN sinyalini işleyebilir. Bu durumda eğer yeniden başlatılabilir olmayan bir sistem fonksiyonu
+    içerisinde bulunuluyorsa bu sistem fonksiyonu EINTR hata koduyla geri döner. 
+
+    Aşağıda programı sonuna & getirerek çalıştırıp log dosyasını inceleyiniz.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <unistd.h>
+#include <signal.h>
+
+void exit_sys(const char *msg);
+void sigttin_handler(int sno);
+
+FILE *g_f;
+
+int main(void)
+{
+    char s[100];
+    struct sigaction sa;
+
+    if ((g_f = fopen("log.txt", "w")) == NULL)
+        exit_sys("fopen");
+
+    sa.sa_handler = sigttin_handler;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+
+    if (sigaction(SIGTTIN, &sa, NULL) == -1)
+        exit_sys("sigaction");
+
+    sleep(10);
+    if (fgets(s, 100, stdin) == NULL && errno == EINTR)
+        fprintf(g_f, "gets terminated by signal!..\n");
+    puts(s);
+
+    return 0;
+}
+
+void exit_sys(const char *msg)
+{
+    perror(msg);
+
+    exit(EXIT_FAILURE);
+}
+
+void sigttin_handler(int sno)
+{
+    fprintf(g_f, "SIGTTIN occurred!..\n");
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Arka plan proses grubundaki bir prosesin ilişkin olduğu terminale (controlling terminal) bir şeyler yazmaya çalışması da uygun değildir. 
+    Bu durumda da terminal sürücüsü prosesin ilişkin olduğu arka plan proses grubuna SIGTTOU sinyalini göndermektedir. Bu sinyalin default 
+    eylemi yine prosesin durdurulmasıdır.  Ancak bu sinyalin aygıt sürücüsü tarafından arka plan proses grubuna gönderilmesi için Linux'ta 
+    terminalin TOSTOP modunda olması gerekir. Eğer terminal bu modda değilse proses durdurulmaz ancak yazılanlar da kaybolur. 
+
+    Aşağıdaki programı sonuna & koyarak çalıştırmayı deneyiniz
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int main(void)
+{
+    sleep(10);
+
+    printf("test\n");
+
+    sleep(10);
+
+    return 0;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir prosesin durdurulması çizelgeden çıkartılıp bloke edilmesi anlamına gelir. Ancak bunun normal bir blokeden farkı vardır. 
+    Bloke olma bir nedene dayalıdır. O neden ortadan kalkınca (ya da sağlanınca) bloke sonlanır. Ancak prosesin durudulması 
+    herhangi bir olayı beklemek biçiminde bi bloke değildir. Durdurulmuş prosesler SIGCONT sinyali ile yeniden normal yaşamlarına 
+    dönerler. Prosesi durdurmak için ona SIGSTOP sinyaliin gönderilmesi gerekir. SIGSTOP sinyali için sinyal fonksiyonu set edilemez ve 
+    bu sinyal ignore da edilemez. Bu anlamda SIGSTOP sinyali SIGKILL sinyaline benzemektedir. SIGSTOP sinyaline benzer diğer bir sinyale de
+    SIGTSTP sinyali denilmektedir. Bu sinyal terminal sürücüsü tarafından klavyeden Ctrl + Z tuşuna basıldığında ön plan porses 
+    grubuna gönderilmektedir. Bu sinyalin de -ismi üzer,nde- default eylemi proseslerin durdurulmasıdır. Ancak SIGTSTP sinyali 
+    ignore edilebilir ya da bu sinyal için sinyal fonksiyonu set edilebilir. (SIGSTOP sinyaliin ignore edilemediğini ve bunun için
+    bir sinyal fonksiyonu set edilemediğine dikkat ediniz.)
+
+    Aşağıdaki programı çalıştırıp Ctrl + Z tuşlarına basmayı deneyiniz.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <unistd.h>
+#include <signal.h>
+
+void exit_sys(const char *msg);
+void sigtstop_handler(int sno);
+
+int main(void)
+{
+    int i;
+    struct sigaction sa;
+
+    sa.sa_handler = sigtstop_handler;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+
+    if (sigaction(SIGTSTP, &sa, NULL) == -1)
+        exit_sys("sigaction");
+
+    for (i = 0;; ++i) {
+        printf("%d\n", i);
+        sleep(1);
+    }
+
+    return 0;
+}
+
+void exit_sys(const char *msg)
+{
+    perror(msg);
+
+    exit(EXIT_FAILURE);
+}
+
+void sigtstop_handler(int sno)
+{
+    printf("SIGTSTOP occurred!..\n");
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -32709,3 +33823,8 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
