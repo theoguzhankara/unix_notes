@@ -32112,7 +32112,7 @@ void exit_sys(const char *msg)
 		while ((result = waitpid(-1, NULL, WNOHANG)) > 0)
 			;
 
-		if (result  == -1 && errno != ECHILD)
+		if (result == -1 && errno != ECHILD)
 			exit_sys("waitpid");
 
 		errno = errno_temp;
@@ -32482,8 +32482,8 @@ void exit_sys(const char *msg)
     int sigqueue(pid_t pid, int signo, union sigval value);
 
     Fonksiyonun birinci parametresi sinyalin gönderileceği prosesin id değerini almaktadır. İkinci parametre gönderilecek sinyalin
-    numarasını belirtmektedir. Üçüncü parametre ise sinyale iliştirilecek ekstra bilgiyi belirtmektedir. sigval isimli birlik şöyle 
-    bildirilmiştir:
+    numarasını belirtmektedir. Üçüncü parametre ise sinyale iliştirilecek ekstra bilgiyi belirtmektedir. sigval isimli birlik (union) 
+    şöyle bildirilmiştir:
 
     union sigval {
         int   sival_int;
@@ -32491,19 +32491,19 @@ void exit_sys(const char *msg)
     };
 
     Görüldüğü gibi sinyale int bir bilgi de bir adres bilgisi de iliştirilebilmektedir. Tabii sinyale adres bilgisi iliştirilecekse
-    bu adresin hedef proseste anlamlı olması gerekmektedir. Fonksiyon başarı durumunda 0, başarısızlık -1 değerine geri dönmektedir. 
-    Bir fonksiyona sigqueue fonksiyonuyla sinyal gönderebilmek için tıpkı kill fonksiyonunda olduğu gibi sinyal gönderen prosesin 
-    gerçek ya da etkin kullanıcı id'sinin hedef prosesin gerçek ya da saklı kullanıcı id'si aynı olması ya da prosesin uygun 
+    bu adresin hedef proseste anlamlı olması gerekmektedir. Fonksiyon başarı durumunda 0, başarısızlık durumunda -1 değerine geri 
+    dönmektedir. Bir fonksiyona sigqueue fonksiyonuyla sinyal gönderebilmek için tıpkı kill fonksiyonunda olduğu gibi sinyal gönderen 
+    prosesin gerçek ya da etkin kullanıcı id'sinin, hedef prosesin gerçek ya da saklı kullanıcı id'si aynı olması ya da prosesin uygun 
     önceliğe sahip olması gerekmektedir.
 
     sigqueue fonksiyonu ile gerçek zamanlı sinyallerin dışında normal sinyaller de gönderilebilmektedir. Ancak normal sinyaller
     sigqueue fonksiyonu ile gönderilse bile kuyruklanmayacaktır. Benzer biçimde kill fonksiyonu ile gerçek zamanlı sinyaller de 
     gönderilebilmektedir. Ancak kill fonksiyonunun bu kuyruklamaya yol açıp açmayacağı sistemden sisteme değişebilmektedir. 
 
-    sigqueue fonksiyonunda kill fonksiyonunda olduğu gibi "proses grubuna" sinyal gönderebilme gibi bir özellik yoktur. 
+    sigqueue fonksiyonunda, kill fonksiyonunda olduğu gibi "proses grubuna" sinyal gönderebilme gibi bir özellik yoktur. 
 
     sigqueue fonksiyonu ile gönderilen sinyalin sigaction fonksiyonunda SA_SIGINFO bayrağı ile üç parametreli fonksiyon tarafından 
-    alınması da zorunlu değildir. Yani sigqueue fonksiyonu ile gönderilen sinyal normal sinyal fonksiyonu ile de elde edilebilir. 
+    alınması da zorunlu değildir. Yani sigqueue fonksiyonu ile gönderilen sinyal, normal sinyal fonksiyonu ile de elde edilebilir. 
     Ancak bu durumda sinyale iliştirilen bilgi elde edilemeyecektir. Özetle:
 
     1) sigqueue ile gerçek zamanlı sinyal göndermek zorunda değiliz. Ancak gerçek zamanlı olmayan sinyaller kuyruklanmaz.
@@ -32512,7 +32512,7 @@ void exit_sys(const char *msg)
     3) Ters bir biçimde kill fonksiyonuyla gönderilen sinyal üç parametreli sinyal fonksiyonu ile de ele alınabilir. Tabii 
     bu durumda bir değer elde edilmeyecektir.
     4) kill fonksiyonuyla gerçek zamanlı sinyal gönderilebilir. Ancak bunun semantiği açıkça belirtilmemiştir. Yani gönderilen 
-    sinyal kuyruklanmayabilir. kill fonksiyonuyla gerçek zamanlı sinyal gönderme çalışmayınız. 
+    sinyal kuyruklanmayabilir. kill fonksiyonuyla gerçek zamanlı sinyal göndermeye çalışmayınız. 
 
     kill kabuk komutu default durumda kill fonksiyonu kullanılarak yazılmıştır. Ancak kill kabuk komutunda -q <değer> seçeneği
     kullanılırsa bu durumda kill kabuk komutu sigqueue fonksiyonunu kullanacaktır. 
@@ -32605,18 +32605,18 @@ void exit_sys(const char *msg)
 
     Bu yapının önemli elemanları ve anlamları şunlardır:
 
-    int si_signo: Oluşan sinyalin numarası.
-    int si_errno: O andaki errno değeri (saklayıp geri yüklemek için gerekebilmektedir).
-    pid_t si_pid: Sinyali gönderen prosesin proses id'sini belirtmektedir.
-    uid_t si_uid: Sinyali gönderen prosesin gerçek kullanıcı id'sini belirtir. 
-    int si_int: sigqueue fonksiyonundaki sinyale iliştirilen int değer.
-    void *si_ptr: sigqueue fonksiyonundaki sinyale iliştirilen adres bilgisi.
+    int si_signo:	Oluşan sinyalin numarası.
+    int si_errno:	O andaki errno değeri (saklayıp geri yüklemek için gerekebilmektedir).
+    pid_t si_pid:	Sinyali gönderen prosesin proses id'sini belirtmektedir.
+    uid_t si_uid:	Sinyali gönderen prosesin gerçek kullanıcı id'sini belirtir. 
+    int si_int:		sigqueue fonksiyonundaki sinyale iliştirilen int değer.
+    void *si_ptr:	sigqueue fonksiyonundaki sinyale iliştirilen adres bilgisi.
 
     sinyal fonksiyonunun üçüncü parametresi (context parametresi) sinyal oluşmadan önceki durum bilgisinin bulunduğu yerin 
     adresini belirtmektedir. Bu parametre Linux sistemlerinde ucontext_t türünden bir yapı nesnesinin adresini tutmaktadır.
     Bu parametreye çok nadir biçimde gereksinim duyulmaktadır.
 
-    Aşağıdaki örnekte "sample" programı üç parametreli sinyal fonksiyonunu kullanmaktadır. Program hangi sinyal için  sinyal 
+    Aşağıdaki örnekte "sample" programı üç parametreli sinyal fonksiyonunu kullanmaktadır. Program hangi sinyal için sinyal 
     fonksiyonunu set edeceğini belirten bir komut satırı argümanı almaktadır. Program sonsuz bir döngüde pause çağrılarıyla 
     beklemektedir. Dolayısıyla programı Ctrl+C tuşları ile sonlandırabilirsiniz. Programın kullanımı şöyledir:
 
@@ -32872,28 +32872,28 @@ void exit_sys(const char *msg);
 int main(void)
 {
 	sigset_t sset;
-    int signo;
-    int result;
+	int signo;
+	int result;
 
-    sigaddset(&sset, SIGUSR1);
-    sigaddset(&sset, SIGINT);
+	sigaddset(&sset, SIGUSR1);
+	sigaddset(&sset, SIGINT);
 
-    if (sigprocmask(SIG_BLOCK, &sset, NULL) == -1)
-        exit_sys("sigprocmask");
+	if (sigprocmask(SIG_BLOCK, &sset, NULL) == -1)
+		exit_sys("sigprocmask");
 
-    printf("waiting for signal...\n");
+	printf("waiting for signal...\n");
 
-    if ((result = sigwait(&sset, &signo)) != 0) {
-        fprintf(stderr, "sigwait: %s\n", strerror(result));
-        exit(EXIT_FAILURE);
-    }
+	if ((result = sigwait(&sset, &signo)) != 0) {
+		fprintf(stderr, "sigwait: %s\n", strerror(result));
+		exit(EXIT_FAILURE);
+	}
 
-    printf("%d signal occured and processing...\n", signo
+	printf("%d signal occured and processing...\n", signo
 
-    if (sigprocmask(SIG_UNBLOCK, &sset, NULL) == -1)
-        exit_sys("sigprocmask");
+	if (sigprocmask(SIG_UNBLOCK, &sset, NULL) == -1)
+		exit_sys("sigprocmask");
 
-    return 0;
+	return 0;
 }
 
 void exit_sys(const char *msg)
@@ -32945,26 +32945,26 @@ void exit_sys(const char *msg)
     geri dönüşte sonsuz döngü oluşmasını engelleyebilir. Örneğin:
 
     jmp_buf g_jbuf;
-    ....
+    ...
 
     void foo(void)
     {
-        ....
+        ...
 
         if (setjmp(g_jbuf) == 1) {
-            .....
+            ...
         }
         else
             bar();
 
-        ....
+        ...
     }
 
     void some_func(void)
     {
-        ....
+        ...
         longjmp(g_jbuf, 1);
-        ....
+        ...
     }
 
     Burada foo fonksiyonun içerisinde geri dönüş için geri dönüş noktası setjmp fonksiyonunda kaydedilmiştir. Bu kayıttan sonra 
@@ -32986,41 +32986,41 @@ jmp_buf g_jbuf;
 
 int main(void)
 {
-    printf("main begins...\n");
+	printf("main begins...\n");
 
-    foo();
+	foo();
 
-    printf("main ends....\n");
+	printf("main ends....\n");
 
-    return 0;
+	return 0;
 }
 
 void foo(void)
 {
-    printf("foo begins...\n");
+	printf("foo begins...\n");
 
-    if (setjmp(g_jbuf) != 1)
-        bar();
+	if (setjmp(g_jbuf) != 1)
+		bar();
 
-    printf("foo ends...\n");
+	printf("foo ends...\n");
 }
 
 void bar(void)
 {
-    printf("bar begins...\n");
+	printf("bar begins...\n");
 
-    tar();
+	tar();
 
-    printf("bar ends...\n");
+	printf("bar ends...\n");
 }
 
 void tar(void)
 {
-    printf("tar begins...\n");
+	printf("tar begins...\n");
 
-    longjmp(g_jbuf, 1);
+	longjmp(g_jbuf, 1);
 
-    printf("tar ends...\n");
+	printf("tar ends...\n");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -33042,7 +33042,7 @@ void tar(void)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi "long jump" işlemine neden gereksinim duyulmaktadır? İşte bazı durumlarda programcı bulunan durumdan kaçıp geçmişteki 
-    daha güvenli bir  noktaya dönmek isteyebilir. Örneğin sinyal fonksiyonlarının içerisinde long jump işemine sıkça rastlanmaktadır.
+    daha güvenli bir noktaya dönmek isteyebilir. Örneğin sinyal fonksiyonlarının içerisinde long jump işemine sıkça rastlanmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -33080,19 +33080,19 @@ int main(void)
 		exit_sys("sigaction");
 
 	if (sigsetjmp(g_jbuf, 1) == 1) {
-		printf("SIGSEGV occures, but we continue...\n");            /* UNSAFE */
+		printf("SIGSEGV occures, but we continue...\n");		/* UNSAFE */
 		/* ... */
 	} else {
 		*str = 'x';
-		/* .... */
+		/* ... */
 	}
 
-    return 0;
+	return 0;
 }
 
 void sigsegv_handler(int sig)
 {
-	/* .... */
+	/* ... */
 
 	siglongjmp(g_jbuf, 1);
 }
@@ -33134,12 +33134,12 @@ void exit_sys(const char *msg)
 
     Linux sistemlerinde sinyal yoluyla core dosyası oluşturulması için sistem limitlerinin uygun olması gerekmektedir. 
     "ulimit -a" komutu ile sistem limitlerine bakılabilir. Eğer burada "core file size" 0 ise bunun artırılması gerekir. 
-    "ulimit -c" ile yalnızca "core file size" bilgisi de  görüntülenebilmektedir. Bu sınırın "unlimited" hale getirilmesi 
+    "ulimit -c" ile yalnızca "core file size" bilgisi de görüntülenebilmektedir. Bu sınırın "unlimited" hale getirilmesi 
     şöyle yapılabilir:
 
-	ulimit -c unlimited
+    ulimit -c unlimited
 
-	Core dosyasının üretildiği yer Linux sistemlerinde kullanılan bazı sistem paketlerine göre değişebilmektedir. Eskiden core 
+    Core dosyasının üretildiği yer Linux sistemlerinde kullanılan bazı sistem paketlerine göre değişebilmektedir. Eskiden core 
     dosyaları prosesin çalışma dizininde yaratılıyordu. Daha sonra "systemd" paketi ile birlikte core dosyalarının yaratılması 
     biraz daha ayrıntılı hale getirilmiştir. Öncelikle core dosyalarının nasıl isimlendirildiğinin belirlenmesi gerekir. 
     Bunun için proc dosya sisteminde "/proc/sys/kernel/core_pattern" dosyasına bakılmalıdır. Bu dosya core dosyasının hangi 
@@ -33150,19 +33150,19 @@ void exit_sys(const char *msg)
     Burada core dosyasının üretilmesinde "systemd-coredump" programın kullanılacağı belirtilmektedir. Bu programın dokğmantasyonu 
     SYSTEMD-COREDUMP(8) man sayfasında yapılmıştır. Buradaki core_pattern dosyasının içeriğinde bulunan % formak karakterleri core
     dosyasının hangi isimler kombine edilerek üretileceğini belirtmektedir. core dosyasının yeri aslında systemd-coredump programının 
-    konfigürasyonunda belirlenmektedir. Default olarak  /var/lib/systemd/coredump dizini kullanılmaktadır. Core dosyaları genellikle 
+    konfigürasyonunda belirlenmektedir. Default olarak /var/lib/systemd/coredump dizini kullanılmaktadır. Core dosyaları genellikle 
     lz4 formatında sıkıştırılmış bir biçimde tutulmaktadır. Bazı sistemlerde "core dump" utility'si olarak apport denilen program da 
     kullanılmaktadır. Bazı sistemlerde core_pattern dosyasının içeriği aşağıdaki gibi de olabilir: 
 
     |/usr/share/apport/apport -p%p -s%s -c%c -d%d -P%P -u%u -g%g -- %E
 
-	Burada core dosyasının yaratılma organizasyonu "apport" denilen programa devredilmiştir. Bu program da "core" dosyasını
+    Burada core dosyasının yaratılma organizasyonu "apport" denilen programa devredilmiştir. Bu program da "core" dosyasını
     "/var/lib/systemd/coredump" dizininde ya da "/var/lib/apport/coredump" dizininde oluşturmaktadır. 
 
-	Core dosyalarını kolay yüklemek için ayrıca "coredumpctl" isimli bir programdan da faydalanılabilir.  Ancak bu program default olarak 
+    Core dosyalarını kolay yüklemek için ayrıca "coredumpctl" isimli bir programdan da faydalanılabilir. Ancak bu program default olarak 
     kurulu durumda değildir. Bunun kurulabilmesi için aşağıdaki komut uygulanabilir:
 
-	sudo apt install systemd-coredump
+    sudo apt install systemd-coredump
 
     coredumpctl programı core dosyaları üzerinde işlem yapmayı kolaylaştıran bir programdır. Örneğin üretilmiş olan core dosyalarının listeleri
     şöyle alınabilir:
@@ -33172,17 +33172,16 @@ void exit_sys(const char *msg)
     Bu komutla tüm üretilmiş olan core dosyaları listelenecektir. En son üretilen dosya listenin sonunda olacaktır. Ancak ters sırada 
     görüntüleme için -r seçeneği kullanılabilmektedir. 
 
-	Artık coredumptctl programı yüklendiğine göre ondan faydalanabiliriz. En son sore dosyasını gdb ile yüklemek için şöyle yapılır:
+    Artık coredumptctl programı yüklendiğine göre ondan faydalanabiliriz. En son sore dosyasını gdb ile yüklemek için şöyle yapılır:
 
-	coredumpctl gdb
+    coredumpctl gdb
 
-	Bu komut ile her zaman son core dosyası yüklenmektedir. Spesifik bir core dosyasının yüklenmesi de sağlanabilir. 
-
+    Bu komut ile her zaman son core dosyası yüklenmektedir. Spesifik bir core dosyasının yüklenmesi de sağlanabilir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*-------------------------------------------------------------------------------------------------------------------------
     Bir grup prosesin oluşturduğu gruba "proses grubu" denilmektedir. Proses grubu kavramı bir grup prosese sinyal gönderebilmek 
-    için uydurulmuştur. Gerçekten de kill sistem fonksiyonunun  birinci parametresi olan pid sıfırdan küçük br sayı olarak girilirse 
+    için uydurulmuştur. Gerçekten de kill sistem fonksiyonunun birinci parametresi olan pid sıfırdan küçük br sayı olarak girilirse 
     abs(pid) numaralı proses grubuna sinyal gönderilmektedir. Bir sinyal bir proses grubuna gönderilirse o proses grubunun bütün 
     üyeleri olan proseslere gönderilmiş olur. Anımsanacağı gibi kill fonksiyonun birinci parametresi 0 girilirse bu durumda sinyal 
     kill fonksiyonunu uygulayan prosesin içinde bulunduğu proses grubuna gönderilmektedir. Yani proses kendi proses grubuna 
@@ -33211,7 +33210,6 @@ void exit_sys(const char *msg)
     Proses grup lideri olan proses sonlanmış olsa bile proses grubunun id'si aynı biçimde kalmaya devam eder. Yani işletim sistemi 
     bu durumda prosesin id'sini o proses grubu bu id ile temsil edildiği için başka proses'te kullanmaz. Proses grubu gruptaki son 
     prosesin sonlanması ya da grup değiştirmesiyle ömrünü tamamlamaktadır.
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -33296,40 +33294,40 @@ void exit_sys(const char *msg);
 
 int main(void)
 {
-    pid_t pgid;
-    pid_t pid;
+	pid_t pgid;
+	pid_t pid;
 
-    if ((pid = fork()) == -1)
-        exit_sys("fork");
+	if ((pid = fork()) == -1)
+		exit_sys("fork");
 
-    if (pid != 0) {     /* parent process */
-        printf("Parent process id: %jd\n", (intmax_t)getpid());
-        printf("Parent process id of the parent: %jd\n", (intmax_t)getppid());
-        pgid = getpgrp();
-        printf("Parent process group id: %jd\n", (intmax_t)pgid);
+	if (pid != 0) {		/* parent process */
+		printf("Parent process id: %jd\n", (intmax_t)getpid());
+		printf("Parent process id of the parent: %jd\n", (intmax_t)getppid());
+		pgid = getpgrp();
+		printf("Parent process group id: %jd\n", (intmax_t)pgid);
 
-        if (waitpid(pid, NULL, 0) == -1)
-            exit_sys("waitpid");
-    }
-    else {      /* child process */
-        sleep(1);
-        if (setpgid(getpid(), getpid()) == -1)    /* setpgid(0, 0) */
-            exit_sys("setpgid");
+		if (waitpid(pid, NULL, 0) == -1)
+			exit_sys("waitpid");
+	}
+	else {		/* child process */
+		sleep(1);
+		if (setpgid(getpid(), getpid()) == -1)		/* setpgid(0, 0) */
+			exit_sys("setpgid");
 
-        printf("Child process id: %jd\n", (intmax_t)getpid());
-        printf("Parent process id of the child: %jd\n", (intmax_t)getppid());
-        pgid = getpgrp();
-        printf("Child process group id: %jd\n", (intmax_t)pgid);
-    }
+		printf("Child process id: %jd\n", (intmax_t)getpid());
+		printf("Parent process id of the child: %jd\n", (intmax_t)getppid());
+		pgid = getpgrp();
+		printf("Child process group id: %jd\n", (intmax_t)pgid);
+	}
 
-    return 0;
+	return 0;
 }
 
 void exit_sys(const char *msg)
 {
-    perror(msg);
+	perror(msg);
 
-    exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -33357,7 +33355,7 @@ void exit_sys(const char *msg)
 
     - Diğer bir terminalden proses grubuna SIGUSR1 sinyali gönderilir:
 
-   $ kill -USR1 -49792
+    $ kill -USR1 -49792
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -33372,55 +33370,53 @@ void exit_sys(const char *msg);
 
 int main(void)
 {
-    pid_t pgid;
-    pid_t pid;
-    struct sigaction sa;
+	pid_t pgid;
+	pid_t pid;
+	struct sigaction sa;
 
-    sa.sa_handler = sigusr1_handler;
-    sigemptyset(&sa.sa_mask);
-    sa.sa_flags = 0;
+	sa.sa_handler = sigusr1_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
 
 	if (sigaction(SIGUSR1, &sa, NULL) == -1)
-        exit_sys("siagaction");
+		exit_sys("siagaction");
 
-    if ((pid = fork()) == -1)
-        exit_sys("fork");
+	if ((pid = fork()) == -1)
+		exit_sys("fork");
 
-    if (pid != 0) {     /* parent process */
-        printf("Parent process id: %jd\n", (intmax_t)getpid());
-        printf("Parent process id of the parent: %jd\n", (intmax_t)getppid());
-        pgid = getpgrp();
-        printf("Parent process group id: %jd\n", (intmax_t)pgid);
+	if (pid != 0) {		/* parent process */
+		printf("Parent process id: %jd\n", (intmax_t)getpid());
+		printf("Parent process id of the parent: %jd\n", (intmax_t)getppid());
+		pgid = getpgrp();
+		printf("Parent process group id: %jd\n", (intmax_t)pgid);
 
-        if (waitpid(pid, NULL, 0) == -1)
-            exit_sys("waitpid");
-    }
-    else {      /* child process */
-        sleep(1);
-        printf("Child process id: %jd\n", (intmax_t)getpid());
-        printf("Parent process id of the child: %jd\n", (intmax_t)getppid());
-        pgid = getpgrp();
-        printf("Child process group id: %jd\n", (intmax_t)pgid);
+		if (waitpid(pid, NULL, 0) == -1)
+			exit_sys("waitpid");
+	}
+	else {		/* child process */
+		sleep(1);
+		printf("Child process id: %jd\n", (intmax_t)getpid());
+		printf("Parent process id of the child: %jd\n", (intmax_t)getppid());
+		pgid = getpgrp();
+		printf("Child process group id: %jd\n", (intmax_t)pgid);
 
 		pause();
-    }
+	}
 
-    return 0;
+	return 0;
 }
 
 void sigusr1_handler(int sno)
 {
-    printf("SIGUSR1 occurred in process %ld\n", (intmax_t)getpid());
+	printf("SIGUSR1 occurred in process %ld\n", (intmax_t)getpid());
 }
 
 void exit_sys(const char *msg)
 {
-    perror(msg);
+	perror(msg);
 
-    exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 }
-
-<BURADA KALDIK>
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Kabuk ile birden fazla programı boru eşliğinde çalıştırdığımızı düşünelim. Örneğin:
@@ -33491,42 +33487,42 @@ void exit_sys(const char *msg);
 
 int main(void)
 {
-    pid_t pgid;
-    pid_t pid;
+	pid_t pgid;
+	pid_t pid;
 
-    if ((pid = fork()) == -1)
-        exit_sys("fork");
+	if ((pid = fork()) == -1)
+		exit_sys("fork");
 
-    if (pid != 0) {     /* parent process */
-        printf("Parent process id: %ld\n", (long)getpid());
-        printf("Parent process id of the parent: %ld\n", (long)getppid());
-        pgid = getpgrp();
-        printf("Parent process group id: %ld\n", (long)pgid);
-        printf("Parent process session id: %ld\n", (long)getsid(0));
+	if (pid != 0) {		/* parent process */
+		printf("Parent process id: %ld\n", (long)getpid());
+		printf("Parent process id of the parent: %ld\n", (long)getppid());
+		pgid = getpgrp();
+		printf("Parent process group id: %ld\n", (long)pgid);
+		printf("Parent process session id: %ld\n", (long)getsid(0));
 
-        if (waitpid(pid, NULL, 0) == -1)
-            exit_sys("waitpid");
-    }
-    else {      /* child process */
-        sleep(1);
-        if (setpgid(getpid(), getpid() /* 0 */ ) == -1)
-            exit_sys("setpgid");
+		if (waitpid(pid, NULL, 0) == -1)
+			exit_sys("waitpid");
+	}
+	else {		/* child process */
+		sleep(1);
+		if (setpgid(getpid(), getpid() /* 0 */ ) == -1)
+			exit_sys("setpgid");
 
-        printf("Child process id: %ld\n", (long)getpid());
-        printf("Parent process id of the child: %ld\n", (long)getppid());
-        pgid = getpgrp();
-        printf("Child process group id: %ld\n", (long)pgid);
-        printf("Child process session id: %ld\n", (long)getsid(0));
-    }
+		printf("Child process id: %ld\n", (long)getpid());
+		printf("Parent process id of the child: %ld\n", (long)getppid());
+		pgid = getpgrp();
+		printf("Child process group id: %ld\n", (long)pgid);
+		printf("Child process session id: %ld\n", (long)getsid(0));
+	}
 
-    return 0;
+	return 0;
 }
 
 void exit_sys(const char *msg)
 {
-    perror(msg);
+	perror(msg);
 
-    exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -33557,17 +33553,17 @@ void exit_sys(const char *msg);
 
 int main(void)
 {
-    if (setsid() == -1)     /* function possibly will fail! */
-        exit_sys("setsid");
+	if (setsid() == -1)		/* function possibly will fail! */
+		exit_sys("setsid");
 
-    return 0;
+	return 0;
 }
 
 void exit_sys(const char *msg)
 {
-    perror(msg);
+	perror(msg);
 
-    exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -33583,31 +33579,31 @@ void exit_sys(const char *msg);
 
 int main(void)
 {
-    pid_t pid;
+	pid_t pid;
 
-    if ((pid = fork()) == -1)
-        exit_sys("fork");
+	if ((pid = fork()) == -1)
+		exit_sys("fork");
 
-    if (pid != 0)
-        exit(EXIT_SUCCESS);
+	if (pid != 0)
+		exit(EXIT_SUCCESS);
 
-    if (setsid() == -1)     /* function possibly will fail! */
-        exit_sys("setsid");
+	if (setsid() == -1)		/* function possibly will fail! */
+		exit_sys("setsid");
 
-    printf("Ok, i am session leader of the new session!\n");
+	printf("Ok, i am session leader of the new session!\n");
 
-    return 0;
+	return 0;
 }
 
 void exit_sys(const char *msg)
 {
-    perror(msg);
+	perror(msg);
 
-    exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Oturum  lideri open fonksiyonuyla O_NOCTTY bayrağı kullanılmadan bir terminal aygıt sürücüsünü açtığında artık o terminal
+    Oturum lideri open fonksiyonuyla O_NOCTTY bayrağı kullanılmadan bir terminal aygıt sürücüsünü açtığında artık o terminal
     oturumun ilişkin olduğu terminal (controlling terminal) durumuna gelir. Eğer terminal o anda başka bir oturumun terminaliyse oradan kopartılmaktadır.
     open işlemini yapan prosese ise "terminali kontrol eden proses (controlling proscess)" denilmektedir. Normal olarak kabuk programı (bash)
     terminali kontrol eden proses (controlling process) durumundadır. Dosyaların betimleyicileri üst prosesten alt prosese aktarıldığına göre
@@ -33628,7 +33624,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Oturumun arka plan bir plan prosesi, prosesin ilşkin olduğu terminalden (controlling terminal) okuma yapmak isterse terminal 
     sürücüsü o arka plan prosesin içinde bulunduğu proses grubuna SIGTTIN sinyalini göndermektedir. Bu sinyalin default eylemi 
-    (default action)  prosesin durdurulmasıdır. Bu biçimde durdurulmuş olan prosesler SIGCONT sinyali ile yeniden çalıştırılmak 
+    (default action) prosesin durdurulmasıdır. Bu biçimde durdurulmuş olan prosesler SIGCONT sinyali ile yeniden çalıştırılmak 
     istenebilirler. Ancak yeniden okuma yapılırsa yine proses durdurulur. Bu tür prosesler kabuk üzerinden fg komutuyla ön plana 
     çekilebilir. Bu durumda kabuk önce prosesin proses grubunu ön plan proses grubu yapar sonra da onu SIGCONT sinyali ile yeniden 
     çalışır duruma getirir.
@@ -33646,18 +33642,18 @@ void exit_sys(const char *msg);
 
 int main(void)
 {
-    sleep(10);
-    fgets(s, 100, stdin);
-    puts(s);
+	sleep(10);
+	fgets(s, 100, stdin);
+	puts(s);
 
-    return 0;
+	return 0;
 }
 
 void exit_sys(const char *msg)
 {
-    perror(msg);
+	perror(msg);
 
-    exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -33680,46 +33676,46 @@ FILE *g_f;
 
 int main(void)
 {
-    char s[100];
-    struct sigaction sa;
+	char s[100];
+	struct sigaction sa;
 
-    if ((g_f = fopen("log.txt", "w")) == NULL)
-        exit_sys("fopen");
+	if ((g_f = fopen("log.txt", "w")) == NULL)
+		exit_sys("fopen");
 
-    sa.sa_handler = sigttin_handler;
-    sigemptyset(&sa.sa_mask);
-    sa.sa_flags = 0;
+	sa.sa_handler = sigttin_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
 
-    if (sigaction(SIGTTIN, &sa, NULL) == -1)
-        exit_sys("sigaction");
+	if (sigaction(SIGTTIN, &sa, NULL) == -1)
+		exit_sys("sigaction");
 
-    sleep(10);
-    if (fgets(s, 100, stdin) == NULL && errno == EINTR)
-        fprintf(g_f, "gets terminated by signal!..\n");
-    puts(s);
+	sleep(10);
+	if (fgets(s, 100, stdin) == NULL && errno == EINTR)
+		fprintf(g_f, "gets terminated by signal!..\n");
+	puts(s);
 
-    return 0;
+	return 0;
 }
 
 void exit_sys(const char *msg)
 {
-    perror(msg);
+	perror(msg);
 
-    exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 }
 
 void sigttin_handler(int sno)
 {
-    fprintf(g_f, "SIGTTIN occurred!..\n");
+	fprintf(g_f, "SIGTTIN occurred!..\n");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Arka plan proses grubundaki bir prosesin ilişkin olduğu terminale (controlling terminal) bir şeyler yazmaya çalışması da uygun değildir. 
     Bu durumda da terminal sürücüsü prosesin ilişkin olduğu arka plan proses grubuna SIGTTOU sinyalini göndermektedir. Bu sinyalin default 
-    eylemi yine prosesin durdurulmasıdır.  Ancak bu sinyalin aygıt sürücüsü tarafından arka plan proses grubuna gönderilmesi için Linux'ta 
+    eylemi yine prosesin durdurulmasıdır. Ancak bu sinyalin aygıt sürücüsü tarafından arka plan proses grubuna gönderilmesi için Linux'ta 
     terminalin TOSTOP modunda olması gerekir. Eğer terminal bu modda değilse proses durdurulmaz ancak yazılanlar da kaybolur. 
 
-    Aşağıdaki programı sonuna & koyarak çalıştırmayı deneyiniz
+    Aşağıdaki programı sonuna & koyarak çalıştırmayı deneyiniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -33728,13 +33724,13 @@ void sigttin_handler(int sno)
 
 int main(void)
 {
-    sleep(10);
+	sleep(10);
 
-    printf("test\n");
+	printf("test\n");
 
-    sleep(10);
+	sleep(10);
 
-    return 0;
+	return 0;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -33762,34 +33758,34 @@ void sigtstop_handler(int sno);
 
 int main(void)
 {
-    int i;
-    struct sigaction sa;
+	int i;
+	struct sigaction sa;
 
-    sa.sa_handler = sigtstop_handler;
-    sigemptyset(&sa.sa_mask);
-    sa.sa_flags = 0;
+	sa.sa_handler = sigtstop_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
 
-    if (sigaction(SIGTSTP, &sa, NULL) == -1)
-        exit_sys("sigaction");
+	if (sigaction(SIGTSTP, &sa, NULL) == -1)
+		exit_sys("sigaction");
 
-    for (i = 0;; ++i) {
-        printf("%d\n", i);
-        sleep(1);
-    }
+	for (i = 0;; ++i) {
+		printf("%d\n", i);
+		sleep(1);
+	}
 
-    return 0;
+	return 0;
 }
 
 void exit_sys(const char *msg)
 {
-    perror(msg);
+	perror(msg);
 
-    exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 }
 
 void sigtstop_handler(int sno)
 {
-    printf("SIGTSTOP occurred!..\n");
+	printf("SIGTSTOP occurred!..\n");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
