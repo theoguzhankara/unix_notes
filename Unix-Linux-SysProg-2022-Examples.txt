@@ -3731,7 +3731,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Bir dizin (directory) yaratmak için mkdir isimli POSIX fonksiyonu kullanılmaktadır. Dizin yaratma işlemi open fonksiyonuyla 
-    yapılamamaktadır. mkdir fonksiyonun prototipi şöyledir:
+    yapılamamaktadır. mkdir fonksiyonunun prototipi şöyledir:
 
     #include <sys/stat.h>
 
@@ -4366,7 +4366,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Dizin girişlerini elde etmek için önce dizin'in opendir fonksiyonuyla açılması gerekmektedir. Bunun için dizin'e okuma hakkının 
-    bulunuyor olması gerekmektedir. opendir fonksiyonun prototipi şöyledir:
+    bulunuyor olması gerekmektedir. opendir fonksiyonunun prototipi şöyledir:
 
     #include <dirent.h>
 
@@ -5357,7 +5357,7 @@ EXIT:
     göstericiyi gösteren bir göstericinin adresi geçirilmelidir. Üçüncü parametre filte işleminde kullanılacak fonksiyonu belirtmektedir. 
     Her dizin girişi bulundukça bu fonksiyon çağrılır. Eğer bu fonksiyon sıfır dışı bir değerle geri dönerse dizin girişi biriktirilir. 
     Bu parametre NULL adres geçilebilir. Bu durumda dizindeki tüm girişler elde edilir. Son parametre filtrelenen girişlere ilişkin 
-    gösterici dizisini sort etmek için kullanılacak karşılaştırma fonksiyonunu belirtmektedir. Bu karşılaştırma fonksiyonun prototipi şöyle olmalıdır:
+    gösterici dizisini sort etmek için kullanılacak karşılaştırma fonksiyonunu belirtmektedir. Bu karşılaştırma fonksiyonunun prototipi şöyle olmalıdır:
 
     int cmp(const struct **direnet1, const struct **dirent2);
 
@@ -5502,7 +5502,7 @@ void exit_sys(const char *msg)
     Dizin ağacını özyinelemeli biçimde dolaşan ftw (file traverse walk) ve nftw (new file traverse walk) isimli POSIX fonksiyonları 
     bulunmaktadır. Aslında eskiden yalnızca ftw fonksiyonu vardı. Ancak bu fonksiyona bazı eklemeler yapılıp nftw fonksiyonu oluşturuldu
     ve ftw fonksiyonu "deprecated" yapıldı. Yani bugün hem ftw hem de nftw fonksiyonları bulunuyor olsa da nftw fonksiyonun kullanılması 
-    önerilmektedir. Zaten nftw fonksiyonu işlevsel olarak ftw fonksiyonu kapsamaktadır. nftw fonksiyonun prototipi şöyledir:
+    önerilmektedir. Zaten nftw fonksiyonu işlevsel olarak ftw fonksiyonu kapsamaktadır. nftw fonksiyonunun prototipi şöyledir:
 
     #include <ftw.h>
 
@@ -5695,7 +5695,7 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    link fonksiyonunun linkat ismiyle "at"li bir versiyonu da vardır. linkat fonksiyonun prototipi şöyledir:
+    link fonksiyonunun linkat ismiyle "at"li bir versiyonu da vardır. linkat fonksiyonunun prototipi şöyledir:
 
     #include <fcntl.h>
 
@@ -7765,7 +7765,7 @@ int main(void)
 /*--------------------------------------------------------------------------------------------------------------------------
     gets fonksiyonun problemi parametre olarak verdiğimiz dizinin her zaman taşırılabilme olasılığıdır. Fonksiyonun dizi unuzunluğunu da
     parametre olarak alması gerekirdi. İşte C11 ile birlikte isteğe bağlı biçimde standartlara eklenmiş olan gets_s bununu yapmaktadır.
-    gets_s fonksiyonun prototipi şöyledir:
+    gets_s fonksiyonunun prototipi şöyledir:
 
     char *gets_s(char *s, rsize_t n);
 
@@ -7806,7 +7806,7 @@ int main(void)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Bazı programcılar gets_s fonksiyonu derleyicilerde bulunmadığı için onun işlevselliğini fgets fonksiyonu ile karşılamaya çalışmaktadır. 
-    fgets fonksiyonun prototipi şöyledir:
+    fgets fonksiyonunun prototipi şöyledir:
 
     char *fgets(char *s, size_t n, FILE *f);
 
@@ -7909,8 +7909,7 @@ EXIT:
     Bir dosayı byte byte okurken fgetc fonksiyonundan faydalanırız. Standart C fonksiyonları tamponlu çalıştığına göre 
     gereksiz bir biçimde sistem fonksiyonları tekrar tekrar çağrılmayacaktır. Ancak öte yandan fonksiyon çağırmanın da bir maliyeti 
     vardır. İşte C standartlarında fgetc yerine getc isimli alternatif bir fonksiyon da bulundurulmuştur. getc fonksiyonu makro olarak 
-    yazılabilmektedir. Yani iki fonksiyon arasınaki tek fark getc fonksiyonunun bir makro biçiminde yazılabilmesidir. getc fonksiyonun prototipi de 
-    şöyledir:
+    yazılabilmektedir. Yani iki fonksiyon arasındaki tek fark getc fonksiyonunun bir makro biçiminde yazılabilmesidir. getc fonksiyonunun prototipi de şöyledir:
 
     #include <stdio.h>
 
@@ -9143,7 +9142,7 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Prosesin çevre değişkenlerine ilşkin gösterici dizisi ve onların gösterdikleri yerler prosesin bellek alanı içerisindedir. 
+    Prosesin çevre değişkenlerine ilişkin gösterici dizisi ve onların gösterdikleri yerler prosesin bellek alanı içerisindedir. 
     fork işlemi sırasında üst prosesin tüm bellek alanının bir kopyası oluşturulduğuna göre alt prosesin çevre değişken listesi üst
     prosesinkini aynısı olacaktır. Ancak fork işleminden sonra üst proses ya da alt proses çevre değişken listesinde bir değişiklik 
     yaparsa artık yalnızca o değişiklik o prosese özgü olacaktır. Çünkü fork işlemi sırasında kopyalama yapıldıktan sonra artık üst prosesle
@@ -11405,7 +11404,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    setuid fonksiyonun prototipi şöyledir:
+    setuid fonksiyonunun prototipi şöyledir:
 
     #include <unistd.h>
 
@@ -14302,7 +14301,7 @@ void exit_sys(const char *msg)
     değil onların elde edilmesi için (get edilmesi için) de kullanılmaktadır. Biz daha önce close on exec bayrağını set etmek için fcntl fonksiyonunu 
     zaten kullanmıştık. Ancak orada fonksiyonun genel tanıtımını yapmamıştık. 
 
-    fcntl fonksiyonun prototipi şöyledir:
+    fcntl fonksiyonunun prototipi şöyledir:
 
     #include <fcntl.h>
 
@@ -16632,7 +16631,7 @@ void exit_sys(const char *msg)
     zaman aşımı değerleri "göreli" değil "mutlak"tır. Örneğin biz zaman aşımını 10 saniye tutacaksak buraya şimdiden 10 saniye sonraki
     timespec değerini girmeliyiz. Bunun için önce clock_gettime fonksiyonu ile şimdiki zamana ilişkin timespec değeri elde edilebilir. 
     Sonra o değere belli bir değer toplanıp zaman aşımı göreli biçimde oluşturulabilir. clock_gettime fonksiyonu aynı zamanda standart
-    bir C fonksiyonudur. Bu fonksiyondaki saat türünün CLOCK_REALTIME alınması uygun olur. clock_gettime fonksiyonun prototipi şöyledir:
+    bir C fonksiyonudur. Bu fonksiyondaki saat türünün CLOCK_REALTIME alınması uygun olur. clock_gettime fonksiyonunun prototipi şöyledir:
 
     int clock_gettime(clockid_t clock_id, struct timespec *tp);
 
@@ -16743,7 +16742,7 @@ void exit_sys(const char *msg)
 
     1) Paylaşılan bellek alanı, shmget fonksiyonu ile anahtar verilip id elde edilecek biçimde yaratılır ya da olan açılır. 
     Yine id değerleri sistem genelinde tektir. Yani bu id değeri, diğer prosesler tarafından biliniyorsa yetki durumu da uygunsa
-    shmget fonksiyonu çağrılmadan doğrudan kullanılabilir. shmget fonksiyonun prototipi şöyledir:
+    shmget fonksiyonu çağrılmadan doğrudan kullanılabilir. shmget fonksiyonunun prototipi şöyledir:
 
     #include <sys/shm.h>
 
@@ -23781,7 +23780,7 @@ void exit_sys_errno(const char *msg, int eno)
     geri dönmektedir. errno değişkeni uygun biçimde set edilmektedir. 
 
     4) Nihayet isimli semaphore nesnesi sem_unlink fonksiyonu ile yok edilebilir. Eğer nesne yok edilmezse "kernel persistant" 
-    bir biçimde sistem reboot edilene kadar kalmaya devam eder. sem_unlik fonksiyonun prototipi şöyledir:
+    bir biçimde sistem reboot edilene kadar kalmaya devam eder. sem_unlik fonksiyonunun prototipi şöyledir:
 
     #include <semaphore.h>
 
@@ -32838,14 +32837,14 @@ void exit_sys(const char *msg)
 
     Bu fonksiyonlar birinci parametresiyle belirtilmiş olan sinyal kümesindeki herhangi bir sinyal oluşana kadar thread'i blokede 
     bekletmektedir. Yani bu fonksiyonlarda biz hangi sinyaller için bekleme yapacağımızı fonksiyonun birinci parametresiyle 
-    fonksiyona veriririz. Fonksiyon da bu sinyallerden biri oluşana kadar çağrıyı yapan thread'i bloke bekletir. Fonksiyonlar 
+    fonksiyona veririz. Fonksiyon da bu sinyallerden biri oluşana kadar çağrıyı yapan thread'i bloke bekletir. Fonksiyonlar 
     bizim belirttiğimiz kümedeki hangi sinyal dolayısıyla sonlanmışsa o sinyalin bilgilerini bizim ikinci parametreyle verdiğimiz 
     nesneye yerleştirmektedir. sigwait ile sigwaitinfo arasındaki tek fark sigwait fonksiyonunun yalnızca oluşan sinyalin numarasını 
-    bize vermesi ancak sigwaitinfo fonksiyonunun oluşan sinyalin pek çok bilgisini siginfo_y yapısı eşliğinde bize vermesidir. 
-    Fonksiyonlar başarı durumunda 0 değerine başarısızlık durumunda errno değerinin kendisine geri dönmektedir. Zaten POSIX 
-    standartları başarsızlık durumunda yalnızca EINVAL errno değerini tanımlamıştır.
+    bize vermesi ancak sigwaitinfo fonksiyonunun oluşan sinyalin pek çok bilgisini siginfo_t yapısı eşliğinde bize vermesidir. 
+    Fonksiyonlar başarı durumunda 0 değerine, başarısızlık durumunda errno değerinin kendisine geri dönmektedir. Zaten POSIX 
+    standartları başarısızlık durumunda yalnızca EINVAL errno değerini tanımlamıştır.
 
-    Bu fonksiyonların sinyal kümelerine biz normal sinyaleri de gerçek zamanlı siyalleri de ekleyebiliriz. Gerçek zamanlı sinyaller 
+    Biz bu fonksiyonların sinyal kümelerine normal sinyalleri de gerçek zamanlı sinyalleri de ekleyebiliriz. Gerçek zamanlı sinyaller 
     kuyruklandığı için kuyruktaki yalnızca ilk sinyalin bilgisi elde edilecektir. Ancak POSIX standartları pending duruma geçen 
     birden fazla sinyal olduğunda gerçek zamanlı sinyallerden düşük numarada (yüksek öncelikte) olanın bilgilerinin elde edileceğini
     belirtmiş olsa da pending durumda olan hem normal sinyal hem de gerçek zamanlı sinyal olduğunda bunların hangisinin bilgilerinin
@@ -32855,9 +32854,9 @@ void exit_sys(const char *msg)
     POSIX standartları eğer bu sinyaller bloke edilmediyse fonksiyon çağrısının tanımsız davranış oluşturacağını belirtmektedir. 
 
     Görüldüğü gibi biz sinyalleri bloke edip sigwait ya da sigwaitinfo fonksiyonlarıyla bekleyerek işlediğimizde aslında o sinyalleri 
-    asenkron değil senkron bir biçimde işlemiş olmaktayız. 
+    asenkron değil, senkron bir biçimde işlemiş olmaktayız. 
 
-    Aşağıdaki örnekte önce SIGINT ve SIGUSR1 sinyalleri bloke edilmiş sonra da sigwait fonksiyonu ile bu sinyaller olana kadar
+    Aşağıdaki örnekte önce SIGINT ve SIGUSR1 sinyalleri bloke edilmiş sonra da sigwait fonksiyonu ile bu sinyaller oluşana kadar
     bekleme yapılmıştır. Bu sinyallerden biri gerçekleştiğinde gerçekleşen sinyalin numarası da stdout dosyasına yazdırılmıştır.
     Daha sonra bloke edilen sinyallerin blokelerinin de açıldığına dikkat ediniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -32907,8 +32906,8 @@ void exit_sys(const char *msg)
     Bilindiği gibi C'de goto işlemi aynı fonksiyon içerisinde yapılabilen bir işlemdir. Yani biz C'de bir fonksiyondan başka 
     bir fonksiyonun bir yerine goto yapamayız. Zaten goto etiketleri de C'de "fonksiyon faaliyet alanına (function scope)"
     sahiptir. İşte bir fonksiyondan başka bir fonksiyona goto yapmaya C dünyasında "long jump" denilmektedir. Her ne kadar
-    bu "long jump" konsu aslında C Programalama Diline ilişkin bir konu ise de genellikle bu eğitimlerde çok ayrıntı olduğu için
-    bu fonksiyon üzerinde durulmamaktadır. Ancak long jump işlemleri sinyaller söz konusu olduğunda UNIX/Linux sistem programlama
+    bu "long jump" konusu aslında C Programalama Diline ilişkin bir konu ise de genellikle bu eğitimlerde çok ayrıntı olduğu için
+    bu fonksiyon üzerinde durulmamaktadır. Ancak long jump işlemleri sinyaller söz konusu olduğunda UNIX/Linux Sistem Programlama
     faaliyetlerinde kullanılabilmektedir. Biz de burada önce "long jump" işlemini ele alacağız. Sonra da onun sinyaller konusundaki 
     kullanımları üzerinde duracağız.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -33435,9 +33434,9 @@ void exit_sys(const char *msg)
 
     O halde durum özetle şöyledir: Kabuk bir proses grubu yaratır. Kendisini bu proses grubunun lideri yapar. Aynı zamanda kabuk bir 
     oturum yaratıp bu oturumun da lideri olmaktadır. (Bu işlemlerin nasıl yapıldığına ilişkin ayrıntılar izleyen paragraflarda açıklanmaktadır.)
-    Sonra kabuk sonu & ile biten komutlar için yarattığı proses guplarını oturumun arka plan proses grupları yapar. Sonunda & olmayan komutları da 
-    oturumun ön plan proses grubu yapmaktadır. Böylece belli bir anda oturumun içerisinde bir önplan proses grubu ve çeşitli arka plan 
-    proses grupları bulunacaktır. Kabuğun kendisi bir sonunda & olmayan bir komut uygulandığında oturumun arka plan proses grubu içerisinde
+    Sonra kabuk, sonu & ile biten komutlar için yarattığı proses gruplarını oturumun arka plan proses grupları yapar. Sonunda & olmayan komutları da 
+    oturumun ön plan proses grubu yapmaktadır. Böylece belli bir anda oturumun içerisinde bir ön plan proses grubu ve çeşitli arka plan 
+    proses grupları bulunacaktır. Kabuğun kendisi de sonunda & olmayan bir komut uygulandığında oturumun arka plan proses grubu içerisinde
     olmaktadır. Terminal sürücüsü de SIGINT ve SIGQUIT gibi sinyalleri oturumun ön plan proses grubuna göndermektedir. Örneğin biz 
     mample programını sonunda & olacak biçimde sample programını da normal bir biçimde aşağıdaki gibi çalıştırmış olalım:
 
@@ -33449,14 +33448,14 @@ void exit_sys(const char *msg)
     grup id'lerini, oturum id'lerini yazdıralım:
 
     $ps -o pid,pgid,sid,cmd -t pts/0
-      PID    PGID     SID CMD
+    PID     PGID    SID CMD
     31684   31684   31684 bash
     52630   52630   31684 ./mample
     52632   52632   31684 ./sample
 
-    Burada görülen şudur: Kabuğun kendisi, mample ve sample prosesleri için kabuk ayrı birer proses grubu yaratmıştır. Ancak bu proses
-    grupları aynı oturum içerisindedir. Oturumun lideri kabuktur. Komut çıktısından göremiyoruz ancak kabuk ve mample oturumun arka plan 
-    proses gruplarını, sample ise ön plan proses grubunu oluşturmaktadır
+    Burada görülen şudur: Kabuğun kendisi, mample ve sample prosesleri için ayrı birer proses grubu yaratmıştır. Ancak bu proses grupları 
+    aynı oturum içerisindedir. Oturumun lideri kabuktur. Komut çıktısından göremesek de kabuk ve mample oturumun arka plan proses gruplarını, 
+    sample ise ön plan proses grubunu oluşturmaktadır.
 
     Oturumların da proses gruplarında olduğu gibi id'leri vardır. Oturumların id'leri (session id) oturum içerisindeki bir proses grubunun 
     liderinin id'si ile aynıdır. Oturum terminal sürücüsüyle ilişkili bir kavram olarak uydurulmuştur. Oturumların bir "ilişkin olduğu terminal 
@@ -33469,7 +33468,7 @@ void exit_sys(const char *msg)
     Burada aktardığımız bilgiler üzerinde şu anahtar noktalara yeniden dikkatinizi çekmek istiyoruz:
 
     1) Kabuk programları bir proses grubu ve oturum yaratmakta ve kendilerini oturum lideri yapmaktadır. Kabuğun çalıştığı terminal de
-    oturumun "ilişkin olduğu terminali (controlling terminal)" olmaktadır. Kabuk bir komut çalıştırmaz durumdayken kendi proses grubunu 
+    oturumun "ilişkin olduğu terminal (controlling terminal)" olmaktadır. Kabuk bir komut çalıştırmaz durumdayken kendi proses grubunu 
     oturumun ön plan proses grubu yapar.
 
     2) Kabuk sonu & ile bitmeyen her komut için bir proses grubu oluşturur ve onu oturumun ön plan proses grubu yapar. Terminal sinyalleri
@@ -33481,7 +33480,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir prosesin ilişkin olduğu oturum id'si (session id) getsid POSIX fonksiyonula alınmaktadır:
+    Bir prosesin ilişkin olduğu oturum id'si (session id) getsid POSIX fonksiyonuyla alınmaktadır:
 
     #include <unistd.h>
 
@@ -33522,10 +33521,12 @@ int main(void)
 		exit_sys("fork");
 
 	if (pid != 0) {		/* parent process */
-		printf("Parent process id: %jd\n", (intmax_t)getpid());
-		printf("Parent process id of the parent: %jd\n", (intmax_t)getppid());
+
 		pgid = getpgrp();
 		sid = getsid(0);
+
+		printf("Parent process id: %jd\n", (intmax_t)getpid());
+		printf("Parent process id of the parent: %jd\n", (intmax_t)getppid());
 		printf("Parent process group id: %jd\n", (intmax_t)pgid);
 		printf("Parent process session id: %jd\n", (intmax_t)sid);
 
@@ -33533,6 +33534,7 @@ int main(void)
 			exit_sys("waitpid");
 	}
 	else {		/* child process */
+
 		sleep(1);
 
 		pgid = getpgrp();
@@ -33556,7 +33558,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi biz sıfırdan bir "job control shell" yazmak istersek bu oturum işlemlerini nasıl yaparız? Öncelikle bizim bir oturum 
-    yaratıp oturumumuzu bir terminal aygıt sürücü ile ilişkilendirmemiz gerekir. Yani oturumumuzun bir "controlling terminal"A
+    yaratıp oturumumuzu bir terminal aygıt sürücü ile ilişkilendirmemiz gerekir. Yani oturumumuzun bir "controlling terminal" a
     sahip olması gerekir. 
 
     Yeni bir oturum (session) yaratmak için setsid fonksiyonu kullanılmaktadır:
@@ -33584,9 +33586,9 @@ void exit_sys(const char *msg)
     yapar sonra alt proseste setsid fonksiyonunu çağırır. Böylece üst proses proses grup lideri olsa bile alt proses hiçbir 
     zaman proses grup lideri olamayacaktır. 
 
-    Örneğin biz kabuktan çalıştırdığımız programda setsid fonksiyonunu çalıştırırsak fonksiyon başarısız olacaktır. Çünkü 
+    Örneğin biz kabuktan çalıştırdığımız programda setsid fonksiyonunu çağırırsak fonksiyon başarısız olacaktır. Çünkü 
     kabuk bizim programımız için bir proses grubu yaratıp bizi o proses grubunun grup lideri yapmaktadır. Aşağıdaki 
-    programı çalıştırarak haatayı inceleyiniz. 
+    programı çalıştırarak hatayı inceleyiniz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -33649,19 +33651,19 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Biz sıfırdan bir kabuk programı oluşturmak istediğimizde fork yapıp alt proseste setsid fonksiyonunu çağırıp oturum
-    yaratabildik. Pekiyi oturumumuzu nasıl bir terminal yagıt sürücüsü ile ilişkilendireceğiz? işte oturum lideri open 
+    yaratabildik. Pekiyi oturumumuzu nasıl bir terminal aygıt sürücüsü ile ilişkilendireceğiz? İşte oturum lideri open 
     fonksiyonuyla O_NOCTTY bayrağı kullanılmadan bir terminal aygıt sürücüsünü açtığında artık o terminal oturumun ilişkin 
     olduğu terminal (controlling terminal) durumuna gelir. 
 
     Eğer terminal o anda başka bir oturumun terminaliyse oradan kopartılmaktadır. open işlemini yapan prosese ise 
-    "terminali kontrol eden proses (controlling proscess)" denilmektedir. Normal olarak kabuk programı (bash) terminali kontrol 
+    "terminali kontrol eden proses (controlling process)" denilmektedir. Normal olarak kabuk programı (bash), terminali kontrol 
     eden proses (controlling process) durumundadır. Dosyaların betimleyicileri üst prosesten alt prosese aktarıldığına göre bu 
-    terminal betimleyicisi her prosete gözükecektir. Yukarıda belirttiğimiz gibi buna "ilgili prosese ilişkin terminal (process 
+    terminal betimleyicisi her proseste gözükecektir. Yukarıda belirttiğimiz gibi buna "ilgili prosese ilişkin terminal (process 
     controlling terminal)" denilmektedir. Anımsanacağı gibi aslında 0 numaralı betimleyici terminal aygıt sürücüsünün (controlling terminal)
     O_RDONLY modunda açılmasıyla, 1 numaralı betimleyici aynı aygıt sürücünün O_WRONLY moduyla açılmasıyla ve stderr dosyası da 
-    1 numaralı betimleyinin dup yapılmasıyla oluşturulmaktadır. Yani aslında 0, 1 ve 2 betimleyiciler aynı terminale ilişkindir. 
+    1 numaralı betimleyicinin dup yapılmasıyla oluşturulmaktadır. Yani aslında 0, 1 ve 2 betimleyiciler aynı terminale ilişkindir. 
 
-    Aşağıda bir fikir vermesi bakımından örnek bir kod parçası oluşturulmuştur. Bu örnekte bir oturum yaratılmış, Sonra da tüm 
+    Aşağıda bir fikir vermesi bakımından örnek bir kod parçası oluşturulmuştur. Bu örnekte bir oturum yaratılmış, sonra da tüm 
     betimleyiciler kapatılarak terminal aygıt sürücüsü open fonksiyonuyla açılmış ve oturumun terminali haline getirilmiştir. 
     Örnek kodda stdin, stdout ve stderr dosyalarının aslında nasıl oluşturulduğu konusunda bir fikir de edinilmektedir. 
     (Örneğimizde dosya betimleyici tablosunun uzunluğunun 1024 olduğu varsayılmıştır. Ancak gerçek uzunluk aslında ileride 
@@ -33714,27 +33716,27 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Oturumdaki ön plan proses grubunun hangisi olduğu tcgetpgrp POSIX fonksiyonuyla elde edilebilir. Oturumun ön plan proses
-    grubu da tcsetpgrp POSIX fonksiyonula değiştirilebilir. 
+    grubu da tcsetpgrp POSIX fonksiyonuyla değiştirilebilir. 
 
     #include <unistd.h>
 
     pid_t tcgetpgrp(int fildes);
     int tcsetpgrp(int fildes, pid_t pgid_id);
 
-    Fonksiyonlar termşnal aygıt sürücüsüne ilişkin dosya betimleyicileri ile çalışmaktadır. 
+    Fonksiyonlar terminal aygıt sürücüsüne ilişkin dosya betimleyicileri ile çalışmaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Oturumun arka plan bir prosesi, prosesin ilşkin olduğu terminalden (controlling terminal) okuma yapmak isterse terminal 
+    Oturumun arka plan bir prosesi, prosesin ilişkin olduğu terminalden (controlling terminal) okuma yapmak isterse terminal 
     sürücüsü o arka plan prosesin içinde bulunduğu proses grubuna SIGTTIN sinyalini göndermektedir. Bu sinyalin default eylemi 
     (default action) prosesin durdurulmasıdır. Bu biçimde durdurulmuş olan prosesler SIGCONT sinyali ile yeniden çalıştırılmak 
-    istenebilirler. Ancak yeniden okuma yapılırsa yine proses durdurulur. Bu tür prosesler kabuk üzerinden fg komutuyla ön plana 
-    çekilebilir. Bu durumda kabuk önce prosesin proses grubunu ön plan proses grubu yapar sonra da onu SIGCONT sinyali ile yeniden 
+    istenebilirler. Ancak yeniden okuma yapılırsa proses yine durdurulur. Bu tür prosesler kabuk üzerinden fg komutuyla ön plana 
+    çekilebilir. Bu durumda kabuk önce prosesin proses grubunu ön plan proses grubu yapar sonra da SIGCONT sinyali ile yeniden 
     proses grubunu çalışır duruma getirir.
 
     Aşağıdaki programı komut satırında sonuna & getirerek çalıştırınız. Program 10 saniye sonra stdin dosyasından okuma yapmaya
     çalışacak ve bu nedenden dolayı SIGTTIN sinyali gönderilerek durdurulacaktır. Prosesin durdurulmuş olduğunu ps -l komutu ile ya da 
-    ps -o stat,cmd komutuyla gözleyiniz.
+    ps -o stat,cmd komutuyla gözlemleyiniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -33756,8 +33758,8 @@ int main(void)
     bu sırada yeniden başlatılabilir olmayan bir sistem fonksiyonu içerisinde bulunuluyorsa bu sistem fonksiyonu EINTR hata 
     koduyla geri döner. 
 
-    Aşağıda programı sonuna & getirerek çalıştırıp log dosyasını inceleyiniz. Burada çıktılar stdout dosyasına değil bir log 
-    dosyasına yazdırılmıştır. Bunun nedeni sonraki paragrafta açıklanmaktadr.
+    Aşağıda programın sonuna & getirerek çalıştırıp log dosyasını inceleyiniz. Burada çıktılar stdout dosyasına değil, bir log 
+    dosyasına yazdırılmıştır. Bunun nedeni sonraki paragrafta açıklanmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -33788,7 +33790,7 @@ int main(void)
 	sleep(10);
 
 	if (getchar() == EOF && errno == EINTR)
-		fprintf(g_f, "getchar terminated by signal!..\n");
+		fprintf(g_f, "getchar terminated by signal!...\n");
 
 	sleep(1);
 
@@ -33832,12 +33834,16 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
+                                                82. Ders 17/09/2023 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Bir thread'in akışını belli bir süre bekletmek için işletim sistemlerinde sleep fonksiyonları bulundurulmaktadır. Bu fonksiyonlar
     thread'i bloke ederek çalışma kuyruğundan çıkartır ve özel sleep kuyruklarına yerleştirir. İstenen zaman dolduğunda yeniden 
     thread çalışma kuyruğuna yerleştirilir. Böylece istenilen miktarda bekleme CPU zamanı harcanmadan sağlanmış olur. 
 
     UNIX türevi sistemlerde ilk zamanlardan beri sleep isimli bir bekleme fonksiyonu bulunmaktadır. Bu fonksiyon saniye 
-    cinsinden bir duyarlılığa sahiptir. Günümüzde saniye düşük bir çözünürlük durumuna gelmiştir. sleep fonksiyonun prototipi 
+    cinsinden bir duyarlılığa sahiptir. Günümüzde saniye düşük bir çözünürlük durumuna gelmiştir. sleep fonksiyonunun prototipi 
     şöyledir:
 
     #include <unistd.h>
@@ -33847,7 +33853,7 @@ int main(void)
     Fonksiyon parametre olarak beklenecek saniye sayısını almaktadır. Fonksiyonun geri dönüş değeri sinyal dolayısıyla erken 
     sonlanmada kalan saniye değerini belirtmektedir. Fonksiyonun 0 ile geri dönmesi normal bir sonlanma anlamına gelmektedir. 
     Ancak fonksiyonun geri döndürdüğü değerin de saniye duyarlılığında olması kalan zaman hakkında detaylı bilgi verememektedir. 
-    sleep fonksiyonu sinyyal geldiğinde hiçbir zaman otomatik yeniden çalıştırılmaz. Yani örneğin biz bir sinyali SA_RESTART
+    sleep fonksiyonu sinyal geldiğinde hiçbir zaman otomatik yeniden çalıştırılmaz. Yani örneğin biz bir sinyali SA_RESTART
     bayrağı ile set etmiş olalım ve o anda sleep fonksiyonunda bekliyor olalım. İlgili sinyal geldiğinde sleep yeniden başlatılmaz. 
     Programcılar genel olarak sleep fonksiyonunun geri dönüş değeri ile ilgilenmezler. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -33861,9 +33867,9 @@ int main(void)
 
     int usleep(useconds_t usec);
 
-    Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri dönmektedir. Fonksiyon sinyal dolayı 
-    başarısız olursa yeniden başlatılmaz errno değişkeni EINTR değeriyle set edilir. Fonksiyona uygunsuz argüman girildiğinde
-    errno EINVAL değeri ile set edilmektedir.
+    Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri dönmektedir. Fonksiyon sinyalden dolayı 
+    başarısız olursa yeniden başlatılmaz ve errno değişkeni EINTR değeriyle set edilir. Fonksiyona uygunsuz argüman girildiğinde
+    errno değişkeni EINVAL değeriyle set edilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -34183,10 +34189,762 @@ void exit_sys(const char *msg)
     edilmesi gerektiği belirtilmiştir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-<BURADA KALDIK>
+/*--------------------------------------------------------------------------------------------------------------------------
+                                            83. Ders 23/09/2023 - Cumartesi
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    UNIX/Linux sistemlerinde zaman ölçümü için...
+    POSIX standartlarında zaman ölçmek için en uygun fonksiyon clock_gettime fonksiyonudur. Biz zaten bu fonksiyonu daha önce
+    senkronizasyon nesnelerinde zaman aşımlı bekleme yapmak için kullanmıştık. Fonksiyonun prototipi şöyledir:
+
+    #include <time.h>
+
+    int clock_gettime(clockid_t clock_id, struct timespec *tp);
+
+    Fonksiyonun birinci parametresi zaman ölüçümünde kullanılacak saatin türünü almaktadır. Bu tür şunlardan biri olabilir:
+
+    CLOCK_REALTIME
+    CLOCK_MONOTONIC
+    CLOCK_PROCESS_CPUTIME_ID
+    CLOCK_THREAD_CPUTIME_ID
+
+    Biz daha önce CLOCK_REALTIME ile CLOCK_MONOTONIC arasındaki farkı belirtmiştik. CLOCK_REALTIME sistem zamanının değişmesinden
+    etkilenebilecek bir saati belirtirken CLOCK_MONOTONIC sistem zamanın değişmesinden etkilenmeyecek stabil bir saati temsil 
+    ediyordu. CLOCK_PROCESS_CPUTIME_ID belli bir prosesin tüm thread'lerinin harcadığı CPU zamanını ölçmek için CLOCK_THREAD_CPUTIME_ID 
+    ise belli bir thread'im harcadığı CPU zamanını ölçmek için kullanılmaktadır. Fonksiyonun ikinci parametresi timespec yapı nesnesinin
+    adresini almaktadır. Zaman bilgisi bu nesnenin içerisine yerleştirilmektedir. Fonksiyon başarı durumunda 0, başarısızlık 
+    durumunda -1 değerine geri dönmektedir. timespec yapısını yeniden anımsatmak istiyoruz:
+
+    struct timespec {
+        time_t   tv_sec;        /* seconds */
+        long     tv_nsec;       /* nanoseconds */
+    };
+
+    Aşağıda clock_gettime ile programın iki noktası arasındaki zaman ölçümüne bir örnek verilmiştir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	struct timespec ts1, ts2;
+	long long elapsed_time;
+
+	if (clock_gettime(CLOCK_MONOTONIC, &ts1) == -1)
+		exit_sys("clock_gettime");
+
+	for (int i = 0; i < 2000000000; ++i)
+		;
+
+	if (clock_gettime(CLOCK_MONOTONIC, &ts2) == -1)
+		exit_sys("clock_gettime");
+
+	elapsed_time = (ts2.tv_sec * 1000000000LL + ts2.tv_nsec) - (ts1.tv_sec * 1000000000LL + ts1.tv_nsec);
+	/* elsapsed_time = (ts2.tv_sec - ts1.tv_sec) * 1000000000.0 + ts2.tv_nsec - ts1.tv_nsec; */
+
+	printf("Elapsed Nonosecond: %lld\n", elapsed_time);
+	printf("Elapsed Second: %f\n", elapsed_time / 1000000000.);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    clock_gettime fonksiyonu ile elde edilen zaman her ne kadar nano saniye mertebesindeki timespec yapısının içerisine 
+    yerleştiriliyorsa da ölçüm duyarlılığı umulan kadar yüksek olmayabilir. Çünkü ölçümün duyarlılığı işlemciye ve işletim
+    sisteminin çekirdeğine bağlı olabilmektedir. İşte ölçümün duyarlılığı ayrıca clock_getres fonksiyonu ile elde edilebilmektedir. 
+
+    #include <time.h>
+
+    int clock_getres(clockid_t clock_id, struct timespec *res);
+
+    Fonksiyınun birinci parametresi duyarlılığı ölüçğlecek olan saat türünü belirtmektedir. İkinci parametre ise duyarlılığın 
+    yerleştirileceği timespec yapısının adresini belirtmektedir. 
+
+    Aşağa fonksiyonun kullanımına bir örnek verilmiştir. Kursun yürütüldüğü sanal makinede bu fonksiyon 1 nanonasiye duyarlılık 
+    belirtmektedir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	struct timespec ts;
+	long long result;
+
+	if (clock_getres(CLOCK_MONOTONIC, &ts) == -1)
+		exit_sys("clock_gettime");
+
+	result = (ts.tv_sec * 1000000000LL + ts.tv_nsec);
+
+	printf("%lld\n", result);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    clock_gettime fonksiyonunda clockid_t olarak CLOCK_PROCESS_CPUTIME_ID geçilirse prosesin yalnızca CPU'da harcadığı zamanların
+    toplamı verilir. Bu muhtemelen gerçek zamandan daha kısa olacaktır. Eğer proses çok thread'ten oluşuyorsa bu hesaba tüm 
+    thread'lerin CPU zamanları dahil edilmektedir. Fakat clockid_t olarak CLOCK_THREAD_CPUTIME_ID verilirse bu da spesifik 
+    bir thread'in (fonksiyonu çağıran) CPU zamanını ölçmekte kullanılır.
+
+    Aşağıdaki örnekte aslında programın iki noktası arasında geçen zaman 5 saniyeden daha yüksek olduğu halde ölçüm 
+    CLOCK_PROCESS_CPUTIME_ID ile yapıldığından ve yalnızca prosesin CPU'da harcadığı zamanın ölçülmesinden dolayı işlemden 
+    çok küçük bir değer elde edilecektir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <unistd.h>
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	struct timespec ts1, ts2;
+	long long elapsed_time;
+
+	if (clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts1) == -1)
+		exit_sys("clock_gettime");
+
+	for (int i = 0; i < 5; ++i) {
+		for (int k = 0; k < 10000000; ++k)
+			;
+		sleep(1);
+	}
+
+	if (clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts2) == -1)
+		exit_sys("clock_gettime");
+
+	elapsed_time = (ts2.tv_sec * 1000000000LL + ts2.tv_nsec) - (ts1.tv_sec * 1000000000LL + ts1.tv_nsec);
+	/* elsapsed_time = (ts2.tv_sec - ts1.tv_sec) * 1000000000.0 + ts2.tv_nsec - ts1.tv_nsec; */
+
+	printf("Elapsed Nonosecond: %lld\n", elapsed_time);
+	printf("Elapsed Second: %f\n", elapsed_time / 1000000000.);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    clock_gettime fonksiyonunda eğer clock id olarak CLOCK_THREAD_CPUTIME_ID verilirse yalnızca fonksiyonu çağıran thread'in
+    CPU'da harcadığı zaman elde edilmektedir. Tabii tek thread'li uygulamalarda CLOCK_PROCESS_CPUTIME_ID ile CLOCK_THREAD_CPUTIME_ID
+    arasında bir fark oluşmayacaktır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Ayrıca POSIX standartlarında clock_settime isimli bir fonksiyon da vardır. Bu fonksiyon söz konusu saati set etmek için
+    kullanılmaktadır. Ancak set işlemi yalnızca uygun önceliğe sahip prosesler tarafından yapılabilmektedir. Her saat türü de
+    set edilemeyebilmektedir. Fonksiyonun prototipi şöyledir:
+
+    #include <time.h>
+
+    int clock_settime(clockid_t clock_id, const struct timespec *tp);
+
+    Biz burada bu fonksiyonun kullanımına örnek vermeyeceğiz. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir prosesin user modda ve kernel modda harcadığı zamanlar işletim sistemi tarafından proses kontrol bloğunda saklanmaktadır. 
+    Proses kontrol bloğundan bu bilgiler times isimli POSIX fonksiyonu ile (doğrudan ilgili sistem fonksiyonunu çağırmaktadır)
+    elde edilebilmektedir. Fonksiyonun prototipi şöyledir:
+
+    #include <sys/times.h>
+
+    clock_t times(struct tms *buffer);
+
+    Fonksiyon çağrıldığı ana kadarki prosesin zaman bilgisini alarak tms isimli bir yapı nesnesinin içerisine yerleştirmektedir. 
+    Fonksiyonun geri dönüş değeri belli bir orijinden geçen gerçek zamanı belirten bir değerdir. (Yani bu değer tek başına bir 
+    anlam taşımaz.) Fonksiyon başarısızlık durumunda -1 değerine geri dönmeketedir. 
+
+    tms yapısı şöyledir:
+
+    struct tms {
+        clock_t tms_utime;  /* user time */
+        clock_t tms_stime;  /* system time */
+        clock_t tms_cutime; /* user time of children */
+        clock_t tms_cstime; /* system time of children */
+    };
+
+    Yapının tms_utime elemanı prosesin user modda harcadığı zamanı, tms_stime elemanı kernel modda harcadığı zamanı vermektedir. 
+    tms_cutime elemanı wait fonksiyonlarıyla beklenen tüm alt proseslerin (ve onların alt proseslerinin de) user moddaki zamanlarını
+    tms_cstime da wait fonksiyonu ile beklenen tüm alt proseslerin (ve onların alt proseslerinin de) kernel moddaki zamanlarını 
+    vermektedir. Fonksiyonun verdiği zamanlar proses kontrol bloktan alınmaktadır. Proses kontrol bloğa da zamanlar "timer tick" 
+    olarak yazılmaktadır. Timer tick değerleri günümüzün masaüstü sistemlerinde 1 milisaniye, yavaş sistemlerde 10 milisaniye 
+    periyottadır. Bu fonksiyon prosesin bloke olup uykuda beklediği zamanları bize herhangi bir biçimde vermemektedir. Yalnızca
+    prosesin ve alt proseslerin user modda ve kernel modda harcağı zamanları bize vermektedir. 
+
+    standard time kabuk komutu bu fonksiyon ve muhtemelen clock_gettime fonksiyonu kullanılarak gerçekleştirilmiştir. 
+
+    Aşağıdaki örnekte komut satırından alınan program çalıştırılmış ve onun user ve kernel moddaki zamanı yazdırılmıştır. 
+    Ancak programın çalışmaıs için gereken gerçek zaman yazdırılmamıştır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <time.h>
+#include <sys/times.h>
+
+void exit_sys(const char *msg);
+
+int main(int argc, char *argv[])
+{
+	struct tms tms;
+	pid_t pid;
+
+	if (argc < 2) {
+		fprintf(stderr, "wrong number of arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if ((pid = fork()) == -1)
+		exit_sys("fork");
+
+	if (pid == 0 && execvp(argv[1], &argv[1]) == -1)
+		_exit(EXIT_FAILURE);
+
+	if (wait(NULL) == -1)
+		exit_sys("wait");
+
+	if (times(&tms) == -1)
+		exit_sys("times");
+
+	printf("User time: %f\n", (double)tms.tms_cutime / CLOCKS_PER_SEC);
+	printf("Kernel time: %f\n", (double)tms.tms_cstime / CLOCKS_PER_SEC);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bazen belli periyotta sürekli işlemlerin yapılması gerekebilmektedir. Örneğin ekrana canlı bir saat çıkartmak istediğimizi 
+    düşünelim. Saatimizin duyarlılığı da saniye cinsinden olsun. Biz saniyede bir periyodik olarak bir fonksiyonumuzun çağrılmasını
+    sağlarsak bu işlemi kolaylıkla yaapabiliriz. Bu tür periyodik timer mekanizmalarına "interval timer" da denilmektedir. 
+    POSIX standartlarında "interval timer" oluşturmak için iki fonksiyon bulundurulmuştur. 
+
+    Şüphesiz interval timer oluşturmanın basit bir yolu bir thread yaratmak ve o thread içerisinde bir döngü oluşturup 
+    clock_nanosleep gibi bir fonksiyonla bekleme yapmak olabilir. Ancak bunun için bir thread'e gereksinim duyulmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Interval timer setitimer isimli POSIX fonksiyonu ile basit bir biçimde oluşturulabilmektedir. Ancak POSIX standartlarına 
+    izleyen paragraflarda ele alacağımız daha yetenekli bir "interval timer" mekanizması eklendiği için bu fonksiyon "obsolete"
+    yani "deprecated" yapılmıştır. Fonksiyonun prototipi şöyledir:
+
+    #include <sys/time.h>
+
+    int setitimer(int which, const struct itimerval *new_value, struct itimerval *old_value);
+
+    setitimer fonksiyonunda periyodik işleme başlamak için gereken zaman ile periyot zamanı ayrı ayrı fonksiyona verilmektedir. 
+    setitimer fonksiyonu ile oluşturulan "interval timer" mekanizmasının türleri vardır. Her tür zaman dolduğunda farklı bir 
+    sinyalin oluşmasına yol açmaktadır. Fonksiyonun birinci parametresi interval timer'ın türünü belirtmektedir. Bu tür 
+    şunlardan biri olabilir:
+
+    ITIMER_REAL: Bu gerçek zamana dayalı ölçüm yaapar. Zaman dolduğunda SIGALRM sinyali gönderilmektedir. 
+
+    ITIMER_VIRTUAL: Buradaki ölçüm prosesin çalışmasına göre yapımaktadır. Yani proses çalışmadığı sürece saat artmamaktadır. 
+    Bu türde zaman dolduğunda SIGVTALRM sinyali gönderilmektedir. 
+
+    ITIMER_PROF: Burada ölçüm yine prosesin çalışmasına göre yapılmaktadır. Ancak bekeleme zamanları da buna dahil edilmektedir. 
+    Zaman dolduğunda SIGPROF sinyali gönderilmektedir. 
+
+    Fonksiyonun ikinci parametresi itimerval isimli bir yapı türündendir. Bu yapı şöyle bildirilmiştir:
+
+    struct itimerval {
+        struct timeval it_interval;     /* next value */
+        struct timeval it_value;        /* current value */
+    };
+
+    Yapının elemanlarının struct timeval türünden olduğuna dikkat ediniz. Bu yapı da şöyle bildirilmiştir:
+
+    struct timeval {
+        time_t      tv_sec;         /* seconds */
+        suseconds_t tv_usec;        /* microseconds */
+    };
+
+    itimerval yapısının it_value elemanı ilk periyoda kadar geçen zamanı, it_interval elemanı da periyodik zamanı belirtmektedir. 
+    Fonksiyonun üçüncü parametresi bir önceki itimer çağrısında set edilen değerin elde edilmesi için kullanılmaktadır. Bu
+    parametre NULL geçilebilir. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri dönmektedir. 
+
+    setitemer ile oluşturulan interval timer'ın disable hale getirilmesi için fonksiyonun ikinci parametresindeki yapının 
+    it_value elemanı sıfırlanarak çağrılması gerekmektedir. 
+
+    Aşağıdaki örnekte interval timer ilk periyoda kadar 5 saniye bekleyecek biçimde oluşturulmuştur. Timer periyodu da 
+    1 saniye olarak ayarlanmıştır. 10 kere sinyal oluşturulduktan sonra interval timer disable edilmiştir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <unistd.h>
+#include <sys/time.h>
+
+int g_count;
+
+void sigalrm_handler(int signo);
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	struct sigaction sa;
+	struct itimerval itval;
+
+	sa.sa_handler = sigalrm_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;
+
+	if (sigaction(SIGALRM, &sa, NULL) == -1)
+		exit_sys("sigaction");
+
+	itval.it_value.tv_sec = 5;
+	itval.it_value.tv_usec = 0;
+
+	itval.it_interval.tv_sec = 1;
+	itval.it_interval.tv_usec = 0;
+
+	if (setitimer(ITIMER_REAL, &itval, NULL) == -1)
+		exit_sys("setitimer");
+
+	for (;;) {
+		pause();
+		++g_count;
+		if (g_count == 10) {
+			itval.it_value.tv_sec = 0;
+			itval.it_value.tv_usec = 0;
+
+			if (setitimer(ITIMER_REAL, &itval, NULL) == -1)
+				exit_sys("setitimer");
+			break;
+		}
+	}
+
+	printf("timer disabled, sleeps for 5 exta seconds before finish...\n");
+	sleep(5);
+
+	return 0;
+}
+
+void sigalrm_handler(int signo)
+{
+	struct itimerval itval;
+
+	printf("interval timer...\n");		/* UNSAFE */
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Periyodik timer oluşturabilmek için kullanılan setitime fonksiyonunun bazı yetersizlikleri şunlardır:
+
+    - Haberdar etme mekanizması yalnızca sinyalle yapılmaktadır.
+    - Kullanılan sinyal gerçek zamanlı olmayan sinyallerdir. Bunların da biriktirilmesi söz konusu değildir. 
+    - Sinyal oluştuğunda sinyal gerçek zamanlı olmadığı için sinyale iliştirilecek bir bilgi de yoktur.
+    - Thread yoluyla haberdar edilme mekanizması yoktur.
+    - Zaman duyarlılığı mikrosaniye mertebesindedir.
+
+    İşte bu eksikliklerden dolayı POSIX'e yeni bir interval timer mekanizması eklenmiştir. Bu interval timer mekanizmasının 
+    kullanılması setitimer mekanizmasına göre daha zordur. Bu yeni mekanizmada ilk yapılacak şey bir interval timer nesnesinin
+    timer_create fonksiyonu ile yaratılmasdır. timer_create fonksiyonunun prototipi şöyledir:
+
+    #include <time.h>
+
+    int timer_create(clockid_t clockid, struct sigevent *evp, timer_t *timerid);
+
+    Fonksiyonun birinci parametresi zamanlamada kullanılacak saatin türünü belirtmektedir. Bu tür daha önce gördüğümüz CLOCK_MONOTINIC,
+    CLOCK_REALTIME, CLOCK_PROCESS_CPUTIME_ID, CLOCK_THREAD_CPUTIME_ID olabileceği gibi clock_getcpuclockid ve pthread_getcpuclockid
+    fonksiyonlarından elde edilen clock id'ler kullanılabilmektedir. Fonksiyonun ikinci parametresi sigevent isimli bir yapı 
+    nesnesinin adresini almaktadır. sigevent yapısı şöyle bildirilmiştir:
+
+    union sigval {            /* Data passed with notification */
+        int     sival_int;    /* Integer value */
+        void   *sival_ptr;    /* Pointer value */
+    };
+
+    struct sigevent {
+        int    sigev_notify;                                    /* Notification method */
+        int    sigev_signo;                                     /* Notification signal */
+        union sigval sigev_value;                               /* Data passed with notification */
+        void (*sigev_notify_function)(union sigval);            /* Function used for thread notification (SIGEV_THREAD) */
+        void  *sigev_notify_attributes;                         /* Attributes for notification thread (SIGEV_THREAD) */
+        pid_t  sigev_notify_thread_id;                          /* ID of thread to signal (SIGEV_THREAD_ID); Linux-specific */
+    };
+
+    Yapının sigev_notify elemanı periyot dolduğunda haberdar edilmenin nasıl yapılacağını belirtmektedir. Bu elemana şu değerlerden
+    biri yerleştiriebilir:
+
+    SIGEV_NONE: Haberdar edilme yapılmaz
+
+    SIGEV_SIGNAL: Haberdar edilme sinyal yoluyla yapılır.
+
+    SIGEV_THREAD: Haberdar edilme bu mekanizma tarafından yaratılan bir thread tarafındna yapılır.
+
+    SIGEV_THREAD_ID: Haberdar edilme prosesin spesifik bir thread'i ile sinyal yoluyla yapılmaktadır. (Bu yöntem POSIX 
+    standartlarında yoktur, dolayısıyla Linux'a özgüdür.)
+
+    Yapının sigev_signo elemanı eğer haberdar edilme sinyal yoluyla yapılacaksa oluşturulacak sinyalin numarasını almaktadır.
+    Bu sinyal numarası normal bir sinyal olabileceği gibi gerçek zamanlı bir sinyal de olabilmektedir. Yapının sigev_value 
+    elemanı gerçek zamanlı sinyallerde sinyale iliştirilecek bilgiyi belirtmektedir. Bu aynı zamanda thread yoluyla haberdar 
+    edilmede de kullanılmaktadır. Yapının sigev_notify_function elemanı eğer haberdar edilme thread yoluyla yapılacaksa haberdar
+    edecek thread'in çağıracağı fonksiyonu belirtmektedir. Yapının sigev_notify_attributes elemanı ise yaratılacak thread'in 
+    özellik bilgilerini belirtmektedir. Bu elemana NULL adres geçilebilir. Yapının sigev_notify_thread_id elemanı Linux'a özgüdür. 
+    Eğer birinci parametreye Linux'a özgü olan SIGEV_THREAD_ID değeri geçilirse bu elemana da thread'in pid değeri girilmelidir. 
+    Aslında fonksiyonun ikinci parametresi NULL adres de geçilebilmektedir. Bu durumda haberdar edilme SIGALRM sinyali yoluyla
+    yapılmaktadır. (Aslında POSIX standartları bu durumda sinyalin SIGALRM olduğunu açıkça belirtmemiştir, "defaul signal" ifadesini
+    kullanmıştır. Bu "default signal" Linux sistemlerinde SIGABRT sinyalidir.)
+
+    timer_create fonksiyonunun son parametresi yaratılan interval timer'ın id'sinin yerleştirileceği timer_t türünden nesnenin
+    adresini almaktadır. Fonksiyon başarı durumunda 0 değerine başarısılıkdurumunda -1 eğerine geri dönmektedir. Örneğin:
+
+    struct sigaction sa;
+    struct sigevent se;
+    timer_t itimer;
+
+    sa.sa_sigaction = signal_handler;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = SA_RESTART|SA_SIGINFO;
+
+    if (sigaction(SIGRTMIN, &sa, NULL) == -1)
+        exit_sys("sigaction");
+
+    se.sigev_notify = SIGEV_SIGNAL;
+    se.sigev_signo = SIGRTMIN;
+    se.sigev_value.sival_int = 100;
+
+    if (timer_create(CLOCK_MONOTONIC, &se, &itimer) == -1)
+        exit_sys("timer_create");
+
+    Interval timer nesnesi yaratıldıktan sonra artık periyot timer_settime fonksiyonu ile belirlenmelidir. Fonksiyonun prototipi
+    şöyledir:
+
+    #include <time.h>
+
+    int timer_settime(timer_t timerid, int flags, const struct itimerspec *new_value, struct itimerspec *old_value);
+
+    Fonksiyonun birinci parametresi timer_create fonksiyonundan elde edilen "timer id" değeridir. İkinci parametre 0 ya da 
+    TIMER_ABSTIME biçiminde geçilebilir. Bu parametre 0 geçilirse "göreli zaman", TIMER_ABSTIME geçilirse mutlak zaman 
+    dikkate alınır. Programcılar hemen her zaman göreli zaman kullanırlar. Fıonksiyonun üçüncü parametresi ilk hbaerdar 
+    edilmenin ve periyodik haberdar edilmenin zamanlamasının ayarlandığı itimerspec isimli yapı nesnesinin adresini almaktadır. 
+    Bu yapı programcı tarafından doldurulup fonksiyona verilmelidir. Yapı şöyle bildirilmiştir:
+
+    struct itimerspec {
+        struct timespec  it_interval;  /* Interval for periodic timer */
+        struct timespec  it_value;     /* Initial expiration */
+    };
+
+    Yapının it_value elemanı ilk haberdar edilmeye kadar geçecek zamaı, it_interval elemanı haberdar edilme periyodunu 
+    belirtmektedir. Anımsanacağı gibi timespec yapısı da şöyle bildirilmiştir:
+
+    struct timespec {
+        time_t tv_sec;           /* Seconds */
+        long tv_nsec;            /* Nanoseconds [0, 999'999'999] */
+    };
+
+    Fonksiyonun son parametresi eski değerlerin yerleştirileceği yapı nesnesinin adresini almaktadır. Bu parametre NULL 
+    geçilebilir. Ya da ikinci NULL geçilip eski değerler de alınabilir. 
+
+    timer_settime fonksiyonu başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri dönmektedir. Örneğin:
+
+    if (timer_create(CLOCK_MONOTONIC, &se, &itimer) == -1)
+        exit_sys("timer_create");
+
+    ts.it_value.tv_sec = 5;
+    ts.it_value.tv_nsec = 0;
+
+    ts.it_interval.tv_sec = 1;
+    ts.it_interval.tv_nsec = 0;
+
+    if (timer_settime(itimer, 0, &ts, NULL) == -1)
+        exit_sys("timer_settime");
+
+    Interval timer ile işimiz bitince onu timer_delete fonksiyonu ile yok etmemiz gerekir. Fonksiyonun prototipi şöyledir:
+
+    include <time.h>
+
+    int timer_delete(timer_t timerid);
+
+    Fonksiyon parametre olarak timer_create fonksiyonundan elde edilen timer id değerini almaktadır. Başarı durumunda 0 değerine, 
+    başarısızlık durumunda -1 değerine geri döner. Başrasının kontrol edilmesine normal olarak gerek yoktur. Örneğin:
+
+    timer_delete(itimer);
+
+    Aşağıda POSIX modern interval timer mekanizmasıyla sinyal yoluyla haberdar edilmeye bir örnek verilmiştir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <setjmp.h>
+#include <unistd.h>
+#include <signal.h>
+#include <time.h>
+
+void signal_handler(int signo, siginfo_t *info, void *context);
+void exit_sys(const char *msg);
+
+jmp_buf g_jb;
+int g_count;
+
+int main(void)
+{
+	struct sigaction sa;
+	struct sigevent se;
+	timer_t itimer;
+	struct itimerspec ts;
+
+	sa.sa_sigaction = signal_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART|SA_SIGINFO;
+
+	if (sigaction(SIGRTMIN, &sa, NULL) == -1)
+		exit_sys("sigaction");
+
+	se.sigev_notify = SIGEV_SIGNAL;
+	se.sigev_signo = SIGRTMIN;
+	se.sigev_value.sival_int = 100;
+
+	if (timer_create(CLOCK_MONOTONIC, &se, &itimer) == -1)
+		exit_sys("timer_create");
+
+	ts.it_value.tv_sec = 5;
+	ts.it_value.tv_nsec = 0;
+
+	ts.it_interval.tv_sec = 1;
+	ts.it_interval.tv_nsec = 0;
+
+	if (timer_settime(itimer, 0, &ts, NULL) == -1)
+		exit_sys("timer_settime");
+
+	for (;;) {
+		if (setjmp(g_jb) == 1)
+			break;
+		pause();
+		++g_count;
+	}
+
+	timer_delete(itimer);
+
+	return 0;
+}
+
+void signal_handler(int signo, siginfo_t *info, void *context)
+{
+	if (g_count == 10)
+		longjmp(g_jb, 1);
+
+	printf("interval timer code %d\n", info->si_int);		/* UNSAFE */
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Şimdi de thread yoluyla haberdar edilmeye bir örnek verelim. Bu yöntemde thread bu mekanizma tarafından yaratılıp bizim
+    fonksiyonumuz çağrılmaktadır. Burada yaratılacak olan thread'in toplamda bir tane mi olacağı yoksa her periyot için ayrı 
+    bir thread'in yeniden mi yaaratılacağı POSIX standartlarında işletim sistemini yazanların isteğine bırakılmıştır. Linux 
+    tek bir threda yaratıp tüm periyotlarda aynı thread'i kullanmaktadır. Bu durumda çağrılacak callback fonksiyonun sigevent 
+    yapısının sigev_notify_function elemanına girilmesi gerekmektedir. Fonksiyonun parametrik yapısı şöyle olmalıdır:
+
+    void notification_proc(union sigval);
+
+    Örneğin:
+
+    struct sigevent se;
+    timer_t itimer;
+    struct itimerspec ts;
+
+    se.sigev_notify = SIGEV_THREAD;
+    se.sigev_notify_function = notification_proc;
+    se.sigev_notify_attributes = NULL;
+    se.sigev_value.sival_int = 100;
+
+    if (timer_create(CLOCK_MONOTONIC, &se, &itimer) == -1)
+        exit_sys("timer_create");
+
+    ts.it_value.tv_sec = 5;
+    ts.it_value.tv_nsec = 0;
+
+    ts.it_interval.tv_sec = 1;
+    ts.it_interval.tv_nsec = 0;
+
+    if (timer_settime(itimer, 0, &ts, NULL) == -1)
+        exit_sys("timer_settime");
+
+    Aşağıda thread yaratılarak haberdar edilmeye bir örnek verilmiştir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <setjmp.h>
+#include <unistd.h>
+#include <signal.h>
+#include <time.h>
+
+void notification_proc(union sigval sval);
+void exit_sys(const char *msg);
+
+int g_count;
+
+int main(void)
+{
+	struct sigevent se;
+	timer_t itimer;
+	struct itimerspec ts;
+
+	se.sigev_notify = SIGEV_THREAD;
+	se.sigev_notify_function = notification_proc;
+	se.sigev_notify_attributes = NULL;
+	se.sigev_value.sival_int = 100;
+
+	if (timer_create(CLOCK_MONOTONIC, &se, &itimer) == -1)
+		exit_sys("timer_create");
+
+	ts.it_value.tv_sec = 5;
+	ts.it_value.tv_nsec = 0;
+
+	ts.it_interval.tv_sec = 1;
+	ts.it_interval.tv_nsec = 0;
+
+	if (timer_settime(itimer, 0, &ts, NULL) == -1)
+		exit_sys("timer_settime");
+
+	printf("Press ENTER to exit...\n");
+	getchar();
+
+	timer_delete(itimer);
+
+	return 0;
+}
+
+void notification_proc(union sigval sval)
+{
+	printf("interval timer code %d\n", sval.sival_int);
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Biz sinyal yoluyla haberdar edilirken gerçek zamanlı bir sinyal kullanmamışsak bir biriktirme yapılmadığı için ilgili 
+    bloke edildiğinde kaç periyot geçtiğini anlayamayız. İşte bunu anlayabilmek için POSIX interval mekanizmasında timer_getoverrun
+    fonksiyonu bulundurulmuştur. Fonksiyonun prototipi şöyledir:
+
+    #include <time.h>
+
+    int timer_getoverrun(timer_t timerid);
+
+    Fonksiyon bize sinyal bloke edildiğinde kaç kez periyot geçtiğini vermektedir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    UNIX türevi sistemlerde çok sayıda sistemden sisteme değişebilecek parametrik değer vardır. Örneğin bir yol ifadesinin 
+    maksimum uzunluğu, bir prosesin açık durumda tutabileceği makisimum dısya sayısı (yani dosya betimleyici tablosunun büyüklüğü), 
+    bir kullanıcının yaratabileceği alt proseslerin sayısı, exec fonksiyonuna geçirilecek komut satırı argümanlarının sayısı, 
+    ek grupların (supplementary groups) sayısı (bu konu ileride ele laınmaktadır) gibi pek parametrik değer sistemden sisteme 
+    değişebilmektedir. Halbuki taşınabilir programlar oluşturabilmek için bu parametrik değerlerin o anda programın sistemde
+    siliniyor olması gerekebilmektedir.
+
+    Genel olarak sistemdeki parametrik değerlerin define edildiği temel dosya <limits.h> dosyasıdır. (C standartlarında da bir 
+    limits.h dosyası vardır ama POSIX limits.h dosyası çok daha geniş kapsamlıdır.) <limits.h> dosyası içerisindeki sembolik 
+    sabitler POSIX standartlarında şu gruplara ayrılmıştır:
+
+    - Runtime Invariant Values (Possibly Indeterminate)
+    - Pathname Variable Values
+    - Runtime Increasable Values
+    - Maximum Values
+    - Minimum Values
+    - Numerical Limits (C standartlarında da var)
+    - Other Invariant Values
+
+    POSIX standartları bazı parametrik değerlerin POSIX uyumlu sistemler için olabilecek en küçük değerlerini "Minimum Values"
+    kategorisi içerisinde define etmiştir. Buradaki sembolik sabitlerin hepsi _POSIX_ öneki başlatılmıştır ve genellikle sonunda MAX
+    soneki bulunmaktadır. Yani bu sembolik sabitlerin isimleri tipik olarak _POSIX_XXXXX_MAX biçimindedir. Her ne kadar sembolik 
+    sabit isminde MAX soneki kullanılmışsa da aslında bu değerler her POSIX uyumlu sistemin destekleyeceği minimum değerlerdir. 
+    Bu minimum değerlerin hepsi açıkça POSIX standartlarında belirtilmiştir. Örneğin bir prosesin açık durumda tutabileceği dosya 
+    sayısı (yani dosya betimleyici tablosunun uzunluğu) _POSIX_OPEN_MAX sembolik sabitiyle belirtilmiştir ve bunun değeri 20'dir. 
+    Yine örneğin bir kullanıcının yaratabileceği maksimum alt proses sayısı _POSIX_CHILD_MAX sembolik sabitiyle belirtilmiştir ve
+    bunun değeri de 25'tir. Buradaki isimsel karışıklığa dikkat ediniz. _POSIX_CHILD_MAX sembolik sabiti bir kullanıcının yaratabileceği
+    maksimum alt proses sayısına ilişkindir. Ancak bu sembolik sabitin değeri POSIX uyumlu sistemdeki olabilecek minimum değerdir. 
+    Örneğin _POSIX_ARG_MAX sembolik sabiti exec fonksiyonlarında girilebilecek maksimum argüman sayısı ve maksimum çevre değişkeni sayısı 
+    ile ilgilidir. Ancak bu sembolik sabit POSIX uyumlu bir sistemdeki minimal değeri belirtmektedri ve 4096 olarak belirlenmiştir. 
+    Başka bir deyişle bir POSIX uyumlu bir işletim sistemi yazacaksak bir kulalnıcının yaratbileceği maksimum alt proses sayısının 
+    en az 25 olmasını, exec fonksiyonuna girilebilecek maksimum argüman sayısının ve çevre değişkeni sayısının en az 4096 olmasını 
+    sağlamalıyız.
+
+    POSIX tarafından belirlenen ve _POSIX_XXXXX_MAX biçiminde <limits.h> içerisinde define edilmiş olan minimum değerler aslında
+    çok küçük değerlerdir. Örneğin _POSIX_NAME_MAX bir dısyanın karakter duzunluğunu belirtir. Bunun minimum değer 14'tür. Halbuki 
+    yaygın hiçbir sistem 14 karakterden çok daha fazla dosya isimlerini desteklemektedir. Bnezer biçimde bir kullanıcının maksimum 
+    yaratacağı alt proses sayısının 25 olması da çok düşük bir değerdir. İşte bu sembolik sabitler tüm POSIX sistemlerindeki olabilecek
+    en küçük değerleri belirtmektedir ancak modern sistemler dikkae alındığında bir kullanımı yoktur. O halde programcının 
+    POSIX standartlarının en küçük değere değil o sistemdeki mevcut değere gereksinmi vardır. 
+
+    <limits.h> dosyası içerisinde "Runtime Invariant Values (Possibly Indeterminate)" kategorisi bazı _POSIX_XXXXX_MAX değerlerinin 
+    ilgili sistemdeki gerçek değerlerini belirtmektedir. Bu gerçek değerler <limits.h> içerisinde başında _POSIX_ öneki olmadan 
+    bildirilmiştir. Örneğin _POSIX_CHILD_MAX minimum değerinin ilgi sistemdeki gerçek değeri CHILD_MAX sembolik sabiti ile
+    _POSIX_OPEN_MAX minimum değerinin ilgili sistemdeki geröek değeri OPEN_MAX sembolik sabitiyle bildirilmiştir. Böylece <limits.h>
+    içerisinde hem POSIX sistemlerindeki minimum değerler hem de ilgili sistemdeki gerçek değerler define edilmiş durumdadır. 
+    Ancak burada da önemli bir pürüz vardır. Bazı parametrik değerler sistemin çalışması sırasında değiştirilebilmektedir ya da 
+    bazı parametrik değerler o andaki sistem kaynaklarının miktarıyla ilgilidir. Bu durumda bu parametrelerin ilgili sistemdeki 
+    değerleri baştan tespit edilememektedir. Ayrıca bazı parametrelerin ilgili sistemde bir sınırı da olmayabilir. İşte 
+    POSIX standartları "Runtime Invariant Values (Possibly Indeterminate)" başlığı altında "eğer bir parametrik değer sistem 
+    çalışırken değiştirilebiliyorsa ya da onun bir sınırı yoksa" ona ilişkin sembolik sabitin <limits.h> içerisinde define 
+    edilmemesi gerektiğini" belirtmektedir. Yani aslında OPEN_MAX gibi, ARG_MAX gibi, CHILD_MAX gibi sembolik sabitler <limits.h> 
+    içerisinde define edilmemiş de olabilirler. Yani bu parametrelere ilişkin sembolik sabitler ancak define edilmişse 
+    kullanılabilmektedir. Pekiyi bir sembolik sabitin define edilip edilmeyeceği belirsizse biz bundan faydalanabilir miyiz? 
+    İşte POSIX standartlarının örtük bir biçimde önerdiği yöntem şudur: Eğer bir parametrik değer <limits.h> içerisinde define 
+    edilmişse programcı onu doğrudan derleme zamanında kullanabilir. Ancak define edilmemişse o anki gerçek değer programın 
+    çalışma zamanı sırasında sysconf, pathconf ve fpathconf fonksiyonlarıyla elde edilmelidir. (Tabii hiç sembolik sabite bakılmadan 
+    doğrudan bu fonksiyonlar da çağrılabilir. Yalnızca fonksiyon çağrıma maliyeti bir dezavantaj oluşturmaktadır.)
+
+    <BURADA KALDIK>
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -34221,25 +34979,7 @@ void exit_sys(const char *msg)
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------------------------------------------------------------
 
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
 
 
 
