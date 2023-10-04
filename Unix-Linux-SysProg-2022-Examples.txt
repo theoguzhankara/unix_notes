@@ -435,7 +435,7 @@ int main(int argc, char *argv[])
 		result = disp_octal(f, n_arg);
 
 	if (!result) {
-		fprintf(stderr, "canno read file: %s\n", argv[optind]);
+		fprintf(stderr, "cannot read file: %s\n", argv[optind]);
 		exit(EXIT_FAILURE);
 	}
 
@@ -2859,7 +2859,7 @@ void exit_sys(const char *msg)
     dosyanın son okuma zamanını, write fonksiyonu son yazma ve i-node bilgilerinin değiştirilme zamanını güncellemektedir.
 
     stat yapısının bu zamanı tutan elemanları eski POSIX standartlarında time_t türündendi ve isimleri st_atime, st_mtime ve st_ctime
-    biçimindeydi. Bu elemanlar epoch olan 01/01/1970'ten geçen saniye sayısını tutuyordu (C Programlama Dilinde epoch'un 01/01/1970 olması 
+    biçimindeydi. Bu elemanlar epoch olan 01/01/1970'ten geçen saniye sayısını tutuyordu (C Programlama Dili'nde epoch'un 01/01/1970 olması 
     zorunlu değildir. Ancak POSIX standartlarında bu zorunludur.) Ancak daha sonra POSIX standartlarında bu zaman bilgisini nanosaniye çözünürlüğe
     çektiler. Dolayısıyla zamansal bilgiler time_t türü ile değil timespec bir yapıyla belirtilmeye başlandı. Yapı elemanlarının isimleri de 
     st_atime, st_mtim ve st_ctim olarak değiştirildi. timespec yapısı geçmişe doğru uyumu koruyabilmek için aşağıdaki gibi bildirilmiştir:
@@ -5567,14 +5567,14 @@ void exit_sys(const char *msg)
 
     FTW_DP: Post-order dolaşımda bir dizinle karşılaşıldığında bayrak FTW_D yerine FTW_DP olarak set edilmektedir. 
 
-    FTW_F: Bulunan dizin girişi sıradan bir dıosyadır (regular file).
+    FTW_F: Bulunan dizin girişi sıradan bir dosyadır (regular file).
 
     FTW_NS: Bulunan dizin girişi için stat ya da lstat fonksiyonu başarısız olmuştur. Dolayısıyla fonksiyona geçirilen stat yapısı da
     anlamlı değildir. 
 
     FTW_SL: Bulunan giriş bir sembolik bağlantı dosyasına ilişkindir. Sembolik bağlantı dosyasının hedefi mevcuttur. 
 
-    FTW_SLN: Bulunan giriş bir sembolik bağlantı dosyasına ilişkindir. Sembolik bağlantı dosyasının hedefi mevcut değildir ("danging klink" durumu). 
+    FTW_SLN: Bulunan giriş bir sembolik bağlantı dosyasına ilişkindir. Sembolik bağlantı dosyasının hedefi mevcut değildir ("danging link" durumu). 
 
     callback fonksiyonun son parametresi FTW isimli bir yapı türündendir Bu yapı şöyle bildirilmiştir:
 
@@ -5641,7 +5641,7 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir dosyanın hard link'ini programalama yoluyla oluşturabilmek için link isimli POSIX fonksiyonu kullanılmaktadır. Linux sistemlerinde 
+    Bir dosyanın hard link'ini programlama yoluyla oluşturabilmek için link isimli POSIX fonksiyonu kullanılmaktadır. Linux sistemlerinde 
     link fonksiyonu doğrudan işletim sisteminin sys_link isimli sistem fonksiyonunu çağırmaktadır. link fonksiyonunun prototipi şöyledir:
 
     #include <unistd.h>
@@ -5716,7 +5716,7 @@ void exit_sys(const char *msg)
     int symlink(const char *path1, const char *path2);
 
     Fonksiyonun birinci parametresi sembolik bağlantısı çıkartılacak dosyanın ypl ifadesini, ikinci parametresi ise sembolik bağlantı dosyasının 
-    yol ifadesini alır. Fonksiyon başarı durumunda sıfır değerine, başarısızlık durumunda -1 değerine geri döner. Prptotipten de gördüğünüz 
+    yol ifadesini alır. Fonksiyon başarı durumunda sıfır değerine, başarısızlık durumunda -1 değerine geri döner. Prototipten de gördüğünüz 
     gibi sembolik bağlantı dosyasının kendisine ilişkin erişim hakları bizden istenmemektedir. Çünkü sembolik bağlantı dosyasının kendi erişim haklarının 
     bir önemi yoktur. Bu fonksiyon bu erişim hakları için "rwxrwxrwx" haklarını vermektedir. Sembolik bağlantı dosyasını izleyen fonksiyonlar
     hedef dosyanın erişim haklarını dikkate alırlar. Sembolik bağlantı dosyasının kendi erişim haklarının bir önemi yoktur. 
@@ -5957,7 +5957,7 @@ void exit_sys(const char *msg)
 
     int faccessat(int fd, const char *path, int amode, int flag);
 
-    Fonksiyonun birinci paraetresi ikinci parametresiyle belirtilen yol ifadesinin göreli olması durumunda aramanın yapılacağı 
+    Fonksiyonun birinci parametresi ikinci parametresiyle belirtilen yol ifadesinin göreli olması durumunda aramanın yapılacağı 
     dizini belirtmektedir. Son parametre 0 geçilebilir ya da AT_EACCESS geçilebilir. Bu AT_EACCESS değeri test işleminin etkin kullanıcı ve grup 
     id'lerine bakılarak yapılacağı anlamına gelmektedir. (Tabii ikinci parametre ile belirtilen yol ifadesi mutlak olduğunda birinci parametrede 
     belirtilen dizine ilişkin betimleyici yine dikkate alınmaz. Ancak üçüncü parametreyle belirtilen bayrak dikkate alınır)
@@ -6543,7 +6543,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Şimdi de 0 numaralı betimleyiciyi yönlendirelim. Eğer biz 0 numaralı betimleyiciyi bir dosyaya yönlendirirsek bu durumda 
-    kalvyeden (stdin dosyasından) okuma yaptığını sanan standart C fonksiyonları aslında bu dosyadan okuma yapacaktır. Yani adeta 
+    klavyeden (stdin dosyasından) okuma yaptığını sanan standart C fonksiyonları aslında bu dosyadan okuma yapacaktır. Yani adeta 
     sanki bu dosyanın içindekiler klavyeden girilmiş gibi bit etki oluşturacaktır. Aşağıdaki örnekte "test.txt" dosyasının içeriği şöyledir:
 
     10 20
@@ -6570,7 +6570,7 @@ int main(void)
 	if ((fd = open("test.txt", O_RDONLY)) == -1)
 		exit_sys("open");
 
-	if (fd != 0) {				/* özel bir durum yoksa bu kontrole gerek yok */
+	if (fd != 0) {		/* özel bir durum yoksa bu kontrole gerek yok */
 		if (dup2(fd, 0) == -1)
 			exit_sys("dup2");
 		close(fd);
@@ -6595,8 +6595,8 @@ void exit_sys(const char *msg)
     ./sample > test.txt
 
     Bu durumda kabuk önce ">" sembolünün sağındaki dosyayı O_WRONLY|O_TRUNC modunda açar. Sonra ./sample programını çalıştırarak bu 
-    prosesin 1 numaralı betimleyicisini dup2 fonksiyonu ile bu dosyaya yönlendirir. Böylece ./sample sample programının ekrana yazdığını
-    zannettiği ieşyle bu dosyaya yazılmış olacaktır. 
+    prosesin 1 numaralı betimleyicisini dup2 fonksiyonu ile bu dosyaya yönlendirir. Böylece ./sample, sample programının ekrana yazdığını
+    zannettiği şeyler bu dosyaya yazılmış olacaktır. 
 
     ls gibi, cat gibi kabuk komutlarının da aslında birer program olduğuna bunların da 1 numaralı betimleyiciyi kullanarak yazdırma 
     yaptığına dikkat ediniz. Örneğimn biz kabuk üzerinde şu komutu uygulayabiliriz:
@@ -6616,7 +6616,7 @@ void exit_sys(const char *msg)
     ./sample < test.txt
 
     Burada kabuk "test.txt" dosyasını O_RDONLY modda açar. Sonra ./sample programını çalıştırır. Prosesin 0 numaralı betimleyicisini
-    "test.txt" dosyasına dup2 fonksiyonuyla yönlendirir. Böylece rpogram sanki klavyeden okuduğunu sanırken aslında dosyadan okuma
+    "test.txt" dosyasına dup2 fonksiyonuyla yönlendirir. Böylece program sanki klavyeden okuduğunu sanırken aslında dosyadan okuma
     yapacaktır. Aşağıdaki örnekte programın "sample.c" olduğunu kabul edelim. "test.txt" dosyasının içeriği de şöyle olsun:
 
     10 20
@@ -7590,13 +7590,13 @@ int main(void)
     ch1 = getchar();
     ch2 = getchar();
 
-    Birinci getchar fonksiyonu bizden bir satır alarak onu stdin dosyasının tampona yerleştirir. Tabii tamponun sonunda '\n' karaketeri de
+    Birinci getchar fonksiyonu bizden bir satır alarak onu stdin dosyasının tampona yerleştirir. Tabii tamponun sonunda '\n' karakteri de
     bulunacaktır. İkinci getchar tampon boş olmadığı sürece artık klavyeden giriş istemeyip tampondan girişi karşılayacaktır. 
     Yukarıdaki örnekte biz ilk getchar fonksiyonunda klavyeden "a" karakterine basıp ENTER tuşuna basalım. Bu durumda tamponda şu karakter olacaktır:
 
     a\n
 
-    İlk getchar bu 'a' karaekterini ikinci getchar ise '\n' karakterini alacaktır. Biz getchar fonksiyonunu üçüncü kez çağırdığımızda 
+    İlk getchar bu 'a' karakterini ikinci getchar ise '\n' karakterini alacaktır. Biz getchar fonksiyonunu üçüncü kez çağırdığımızda 
     artık yeni bir satır istenecektir. Yani stdin dosyasından okuma yapan fonksiyonlar tampon boşsa read fonksiyonunu çağırarak bizden 
     bir satırlık bilgi istemektedir. Aşağıdaki programla test işlemini yapabilirsiniz:
 
@@ -9374,7 +9374,7 @@ void exit_sys(const char *msg)
     main fonksiyonunun argv parametresine geçirilecek komut satırı argümanlarını belirtmektedir. 
 
     exec fonksiyonları çeşitli nedenlerle başarısız olabilir. Örneğin çalıştırılacak program dosyası bulunamayabilir, bulunduğu halde proses
-    dosya için "x" hakkına sahip olmayabilir, çalıştırılabilen dosyanın formatı bozulmuş olabilir. Bu durumlarda ernno değeri uygun biçimde set edilir. 
+    dosya için "x" hakkına sahip olmayabilir, çalıştırılabilen dosyanın formatı bozulmuş olabilir. Bu durumlarda errno değeri uygun biçimde set edilir. 
 
     Aşağıdaki örneği inceleyiniz. Aşağıdaki sample programı çalıştırıldığında ekranda şu yazıların çıkması gerekir:
 
@@ -11830,7 +11830,7 @@ void exit_sys(const char *msg)
     6) chdir fonksiyonuyla prosesin çalışma dizinini /etc/passwd dosyasında belirtildiği gibi set et
     7) exec ile /etc/passwd dosyasında belirtilen programı çalıştır.
 
-    Genel olarak login rpogramı fork/exec değil yalnızca exec yapmaktadır. Biz shell'den çıkınca normalde yeniden login programı
+    Genel olarak login programı fork/exec değil yalnızca exec yapmaktadır. Biz shell'den çıkınca normalde yeniden login programı
     çalıştırışmaktadır. 
 
     Tabii prosesin ek grupları da diğer bilgilerde olduğu gibi prosesin kontrol bloğunda saklanmaktadır.
@@ -12108,13 +12108,13 @@ void exit_sys(const char *msg)
     bekleyecek olan thread boşuna CPU zamanı harcamadan pasif bir biçimde bekletilmiş olur. Örneğin bir thread klavyeden bir şey okumak 
     istesin. İşletim sistemi thread'i bloke ederek çalıştırma kuyruğundan çıkartır ve onu bekleme kuyruğuna alır. Artık o thread çalıştırma
     kuyruğunda olmadığından zaman paylaşımlı çalışmada işletim sistemi tarafından ele alınmaz. Beklenen dışsaş olay (örneğin klavye okuması)
-    gerçekleştiğinde thread yeniden çalıştıra kuyruğuna yerleştirilir. Böylece çalışma aynıo prensiple devam ettirlir. İşletim sistemi
+    gerçekleştiğinde thread yeniden çalıştırma kuyruğuna yerleştirilir. Böylece çalışma aynı prensiple devam ettirilir. İşletim sistemi
     bekleme kuyruklarındaki thread'lere ilişkin olayların gerçekleştiğini birkaç biçimde anlayabilmektedir. Örneğin bir soket okuması 
     yapıldığında eğer sokete henüz bilgi gelmemişse işletim sistemi thread'i bloke eder. Sonra network kartına paket geldiğinde network 
     kartı bir donanım kesmesi oluşturur. İşletim sistemi devreye girer. İşletim sistemi eğer gelen paket soketten okuma yapacak thread'e 
     ilişkinse bu kesme kodunda (interrupt hanler) aynı zamanda o thread'i blokeden kurtarır. Ya da örneğin wait gibi bir işlemde işletim sistemi 
     wait işlemini yapan thread'i bloke ederek wait kuyruğuna yerleştirir. Alt proses bittiğinde _exit sistem fonksiyonunda bu wait kuyruklarına 
-    bu sistem fonksiyonu bakar ve ilgili thread'lerin blokesini çözer. sleep gibi bir fonksiyonda ise işletim sistemi bekeleme zamanını kendisi 
+    bu sistem fonksiyonu bakar ve ilgili thread'lerin blokesini çözer. sleep gibi bir fonksiyonda ise işletim sistemi bekleme zamanını kendisi 
     hesaplar. Bekleme zamanı dolunca thread'in blokesini çözer. Genel olarak işletim sistemleri her olayın için ayrı bir wait kuyruğu oluşturmaktadır. 
     Örneğin aygıt sürücüler kendi wait kuyruklarını oluşturup bloke işlemlerini kendileri yapmaktadır. 
 
@@ -17948,7 +17948,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Linux sistemlerinde mmap fonksiyonun MAP_SHAED, MAP_PRIVATE ve MAP_FIXED bayraklarının dışında POSIX'te olmayan başka 
+    Linux sistemlerinde mmap fonksiyonun MAP_SHARED, MAP_PRIVATE ve MAP_FIXED bayraklarının dışında POSIX'te olmayan başka 
     bayrakları da vardır. Bu bayraklardan en önemlisi MAP_ANONYMOUS bayrağıdır. Bu bayrakla mapping yapıldığında bu duruma
     Linux sistemlerinde "anonymous mapping" denilmektedir. Anonymous mapping, dosya üzerinde (yani bellek tabanlı dosya biçiminde)
     yapılamamaktadır. Dolayısıyla anonymous mapping yapılırken mmap fonksiyonunun fd ve offset parametreleri dikkate alınmamaktadır. 
@@ -18164,7 +18164,7 @@ void exit_sys(const char *msg)
     Thread'ler 90'lı yıllarda işletim sistemlerine sokulmuştur. Microsoft'un thread'li ilk işletim sistemi Windows NT (1993) ve 
     sonra da Windows 95 (1995) sistemleridir. Benzer biçimde UNIX/Linux dünyasına da thread'ler ilk kez 90'lı yıllarla sokulmuştur. 
     Yani thread'ler daha önce denemeler yapılmış olsa da 90'lı yılların başlarında işletim sistemlerine sokulmuş durumdadır. 
-    Bugün pek çok programalama dili ve framework kendi içerisinde thread'leri barındıran kütüphanelere sahiptir. Hatta yeni dillerin
+    Bugün pek çok programlama dili ve framework kendi içerisinde thread'leri barındıran kütüphanelere sahiptir. Hatta yeni dillerin
     bazıları artık thread'leri anahtar sözcüklerle dilin sentaksına dahil etmektedir. Örneğin C++ Programlama Dili'ne 2011 versiyonuyla (C++11)
     bir thread kütüphanesi eklenmiştir. Benzer biçimde .NET ve C#'ın ilk sürümlerinde (2002) bile framework bir thread kütüphanesine sahipti.
     Benzer biçimde Java Dilininde kütüphanesi içerisinde thread'lerle işlem yapan sınıflar bulunuyordu. Microsoft'un MFC framework'ü gibi,
@@ -18174,7 +18174,7 @@ void exit_sys(const char *msg)
     ve framework'ler thread kullanımını "platform bağımsız" hale de getirmektedir. Yani örneğin Windows'un ve Linux'un sağladığı thread 
     mekanizması farklı olmasına karşın C++'ın standart thread kütüphanesi "platform bağımsız" bir kütüphanedir. Başka bir deyişle C++'ın
     standart thread kütüphanesi Windows sistemlerinde "Windows API Fonksiyonları" kullanılarak UNIX/Linux sistemlerinde "POSIX fonksiyonları"
-    kullanılarak gerçekleştirilmiştir. C programlama Dili'ne de 2011 sürümüyle (C11) birlikte "isteğe bağlı (optional)" mini 
+    kullanılarak gerçekleştirilmiştir. C Programlama Dili'ne de 2011 sürümüyle (C11) birlikte "isteğe bağlı (optional)" mini 
     bir thread kütüphanesi eklenmiştir. Ancak bu mini thread kütüphanesi Microsoft C derleyicisi tarafından ve gcc derleyicileri tarafından 
     desteklenmiyordu. Ancak gcc derleyicilerinin son versiyonları bu thread kütüphanesini desteklemektedir. 
 
@@ -18584,7 +18584,7 @@ int main(void)
 
 	for (int i = 0; i < NTHREADS; ++i) {
 		if ((buf = (char *)malloc(1024)) == NULL) {
-			fprintf(stderr, "cannnot allocate memory!..\n");
+			fprintf(stderr, "cannot allocate memory!..\n");
 			exit(EXIT_FAILURE);
 		}
 		snprintf(buf, 1024, "Thread-%d", i);
@@ -18649,7 +18649,7 @@ int main(void)
 	struct PARAM_INFO *pi;
 
 	if ((pi = (struct PARAM_INFO *)malloc(sizeof(struct PARAM_INFO))) == NULL) {
-		fprintf(stderr, "cannot alocate memory!..\n");
+		fprintf(stderr, "cannot allocate memory!..\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -29908,7 +29908,7 @@ void exit_sys_errno(const char *msg, int eno)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    C Programlama Diline, 2011 versiyonuyla (ISO/IEC 9899:2011 ya da kısaca C11) isteğe bağlı mini bir thread kütüphanesi 
+    C Programlama Dili'ne, 2011 versiyonuyla (ISO/IEC 9899:2011 ya da kısaca C11) isteğe bağlı mini bir thread kütüphanesi 
     eklenmiştir. Bu thread kütüphanesi henüz Microsoft derleyicileri tarafından desteklenmemektedir. gcc ve clang derleyicilerinin
     kullandığı glibc kütüphanesinin son versiyonları bu thread kütüphanesini destekler hale gelmiştir. Biz de burada kısaca bu
     kütüphane hakkında temel bilgiler vereceğiz. Kütüphanedeki tüm fonksiyonların prototipleri, sembolik sabitler ve typedef
@@ -30951,7 +30951,7 @@ void exit_sys(const char *msg)
     Sinyal numaralarını alarak hata mesajları için sinyali betimleyen bir yazı veren strsignal isimli bir POSIX fonksiyonu 
     bulunmaktadır:
 
-    include <string.h>
+    #include <string.h>
 
     char *strsignal(int signum);
 
@@ -32281,7 +32281,7 @@ void exit_sys(const char *msg)
     Gerçek zamanlı sinyaller set edilirken sigaction fonksiyonu kullanılmak zorundadır. Gerçek zamanlı sinyaller signal fonksiyonu ile 
     set edilememektedir. Bu fonksiyonda sinyal fonksiyonunun adresi artık sigaction yapısının sa_handler elemanına değil, sa_sigaction 
     elemanına yerleştirilmelidir. Tabii fonksiyonun bunu anlaması için flags parametresine de ayrıca SA_SIGINFO eklenmelidir. (Yani başka 
-    bir deyişle fonkisyon sa_flags parametresinde SA_SIGINFO değerini gördüğünde artık sinyal fonksiyonu için yapının sa_sigaction elemanına 
+    bir deyişle fonksiyon sa_flags parametresinde SA_SIGINFO değerini gördüğünde artık sinyal fonksiyonu için yapının sa_sigaction elemanına 
     bakar.) Örneğin:
 
 	struct sigaction sa;
@@ -32906,7 +32906,7 @@ void exit_sys(const char *msg)
     Bilindiği gibi C'de goto işlemi aynı fonksiyon içerisinde yapılabilen bir işlemdir. Yani biz C'de bir fonksiyondan başka 
     bir fonksiyonun bir yerine goto yapamayız. Zaten goto etiketleri de C'de "fonksiyon faaliyet alanına (function scope)"
     sahiptir. İşte bir fonksiyondan başka bir fonksiyona goto yapmaya C dünyasında "long jump" denilmektedir. Her ne kadar
-    bu "long jump" konusu aslında C Programalama Diline ilişkin bir konu ise de genellikle bu eğitimlerde çok ayrıntı olduğu için
+    bu "long jump" konusu aslında C Programlama Dili'ne ilişkin bir konu ise de genellikle bu eğitimlerde çok ayrıntı olduğu için
     bu fonksiyon üzerinde durulmamaktadır. Ancak long jump işlemleri sinyaller söz konusu olduğunda UNIX/Linux Sistem Programlama
     faaliyetlerinde kullanılabilmektedir. Biz de burada önce "long jump" işlemini ele alacağız. Sonra da onun sinyaller konusundaki 
     kullanımları üzerinde duracağız.
@@ -33888,7 +33888,7 @@ int main(void)
     };
 
     nanosleep fonksiyonu da bir sinyal oluştuğunda sinyal fonksiyonu set edilmişse başarısız olur ve errno değeri EINTT ile 
-    set edilir. Bu durumda bakeleme için kalan süre fonksiyonun ikinci parametresiyle belirtilen timespec yapısının içerisine 
+    set edilir. Bu durumda bekleme için kalan süre fonksiyonun ikinci parametresiyle belirtilen timespec yapısının içerisine 
     yerleştirilmektedir. Fonksiyonun ikinci parametresi NULL adres girilebilir. Bu durumda bu yerleştirme yapılmaz. Birinci 
     parametreyle ikinci parametreye aynı nesnenin adreslerinin girilmesinde de bir sakınca yoktur. 
 
@@ -33908,7 +33908,7 @@ int main(void)
 {
 	struct timespec ts;
 
-	printf("sleeping 3.5 second...\n");
+	printf("sleeping 3.5 seconds...\n");
 
 	ts.tv_sec = 3;
 	ts.tv_nsec = 500000000;
@@ -33944,6 +33944,7 @@ void exit_sys(const char *msg)
     ^Csignt handler...
     Left second: 9
     Left nanosecond: 464386077
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -33984,7 +33985,7 @@ int main(void)
 
 void sigint_handler(int sig)
 {
-	printf("signt handler...\n");		/* UNSAFE */
+	printf("sigint handler...\n");		/* UNSAFE */
 }
 
 void exit_sys(const char *msg)
@@ -34003,14 +34004,14 @@ void exit_sys(const char *msg)
 
     int clock_nanosleep(clockid_t clock_id, int flags, const struct timespec *rqtp, struct timespec *rmtp);
 
-    Fonksiyonun birinci parametresi beklemede kullanılacak saati cinsini belirtmektedir. POSIX standartlarında şu saat cinsleri 
+    Fonksiyonun birinci parametresi beklemede kullanılacak saatin cinsini belirtmektedir. POSIX standartlarında şu saat cinsleri 
     bulunmaktadır:
 
     CLOCK_REALTIME: Bu saat kullanılırsa bekleme sistem zamanının değiştirilmesinden etkilenebilmektedir. Örneğin 30 saniye 
     beklemek isterken sistem zamanı ileri alınırsa daha az bekleme söz konusu olabilmektedir. 
 
-    CLOCK_MONOTONIC: Sistem zamanının değiştirilemsinden ve diğer faktörlerden etkilenmeyen göreli bir saattir. Monotonic saat
-    kararklı beklemeler için tercih edilmesi gereken saattir. 
+    CLOCK_MONOTONIC: Sistem zamanının değiştirilmesinden ve diğer faktörlerden etkilenmeyen göreli bir saattir. Monotonic saat
+    kararlı beklemeler için tercih edilmesi gereken saattir. 
 
     CLOCK_PROCESS_CPUTIME_ID: Bu saat proses zamanının ölçülmesinde kullanılan saattir. Genel olarak bu saat timer tick'lerle
     ilerletilmektedir. 
@@ -34020,11 +34021,11 @@ void exit_sys(const char *msg)
 
     Linux sistemlerine özgü CLOCK_TAI ve CLOCK_BOOTTIME gibi başka saatler de bulunmaktadır.
 
-    Fonksiyonun ikinci parametresine (flags) 0 geçilebilir ya da TIMER_ABSTIME değeri geçilebilir. Eğer bu parametreye TIMER_ABSTIME 
-    değeri geçilirse bu durumda bekleme göreli zaman ile değil mutlak zaman ile yapılmalıdır. Yani başka bir deyişle bu durumda
+    Fonksiyonun ikinci parametresine (flags) ya 0 ya da TIMER_ABSTIME değeri geçilebilir. Eğer bu parametreye TIMER_ABSTIME 
+    değeri geçilirse bu durumda bekleme göreli zaman ile değil, mutlak zaman ile yapılmalıdır. Yani başka bir deyişle bu durumda
     bekleme miktarını belirten timespec yapısında beklemenin sonlandırılacağı mutlak zaman bilgisi bulunmalıdır. (Aslında biz 
-    mutlak zamanlı beklemeleri thread konusunda bazı senkronizasyon nesneleerinin zaman aşımlı biçimlerini anlatırken görmüştük.)
-    Mutlak zaman bekelemesi için önce o andaki zaman bilgisinin clock_gettime fonksiyonuyla alınıp üzerine ekleme yapılması 
+    mutlak zamanlı beklemeleri thread konusunda bazı senkronizasyon nesnelerinin zaman aşımlı biçimlerini anlatırken görmüştük.)
+    Mutlak zaman beklemesi için önce o andaki zaman bilgisinin clock_gettime fonksiyonuyla alınıp üzerine ekleme yapılması 
     gerekmektedir. Örneğin:
 
     if (clock_gettime(CLOCK_REALTIME, &ts) == -1)
@@ -34033,7 +34034,7 @@ void exit_sys(const char *msg)
     ts.tv_sec += 10;
 
     Fonksiyonun üçüncü parametresi bekleme zamanını, dördüncü parametresi ise işlemin sinyal dolayısıyla sonlanması durumunda kalan
-    zamanı belirtmektedir. Bu son parametre yine NULL adres geçilebilir. Fonksiyon başarı durumunda 0 değerine başarısızlık durumunda 
+    zamanı belirtmektedir. Bu son parametre yine NULL adres geçilebilir. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda 
     errno değerine geri dönmektedir. 
 
     Aşağıda daha önce nanosleep fonksiyonu için yapılan örneğin clock_nanosleep kullanan biçimi verilmiştir.
@@ -34067,7 +34068,7 @@ int main(void)
 	ts.tv_nsec = 500000000;
 
 	if (clock_nanosleep(CLOCK_MONOTONIC, 0, &ts, &tsleft) == -1 && errno != EINTR)
-		exit_sys("nanosleep");
+		exit_sys("clock_nanosleep");
 
 	printf("Left second: %ju\n", (intmax_t)tsleft.tv_sec);
 	printf("Left nanosecond: %ld\n", (intmax_t)tsleft.tv_nsec);
@@ -34077,7 +34078,7 @@ int main(void)
 
 void sigint_handler(int sig)
 {
-	printf("signt handler...\n");		/* UNSAFE */
+	printf("sigint handler...\n");		/* UNSAFE */
 }
 
 void exit_sys(const char *msg)
@@ -34088,22 +34089,22 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Şu anda almak için ve zaman ölçmek için zaten C'de prototipleri <time.h> içerisinde olan standart C fonksiyonları bulundurulmuştur.
-    Ancak bu standart C fonksiyonları genel olarak düşük bir çözünürlüğe sahiptir. Bu fonksiyonlar C Programalama Dili kurslarında 
-    ele alındığı için biz yalnızca bir özey yapacağız. 
+    Şu andaki almak için ve zaman ölçmek için zaten C'de prototipleri <time.h> içerisinde olan standart C fonksiyonları bulundurulmuştur.
+    Ancak bu standart C fonksiyonları genel olarak düşük bir çözünürlüğe sahiptir. Bu fonksiyonlar C Programlama Dili kurslarında 
+    ele alındığı için biz yalnızca bir özet yapacağız. 
 
-    time isimli standart C fonksiyonu epoch'tan geçen (epoch göreli orijini belirten bir terimdir) zamanı time_t türünden 
-    vermektedir. Prototipi şöyledir:
+    time isimli standart C fonksiyonu epoch'tan geçen (epoch göreli orijini belirten bir terimdir) zamanı time_t türünden vermektedir. 
+    Prototipi şöyledir:
 
     time_t time(time_t *timer);
 
     Buradaki time_t türü C standartlarına göre nümerik herhangi bir tür olabilmektedir. (Örneğin double ya da float da olabilmektedir.)
-    Ancak POSIX standartlarında bu türün bir tamsayı türü olması gerektiği belirtilmiştir. Ayrıca C standartlarında "epoch" 
-    belirtilmemiştir. POSIX standartlarında epoch 01/01/1970 : 00:00:00 olarak belirlenmiştir. (Genel olarak C derleyicilerinin hemen hepsi
-    zaten epoch olarak bu tarihi almaktadır.)
+    Ancak POSIX standartlarında bu türün bir tamsayı türü olması gerektiği belirtilmiştir. Ayrıca C standartlarında "epoch" belirtilmemiştir. 
+    POSIX standartlarında epoch 01/01/1970 : 00:00:00 olarak belirlenmiştir. (Genel olarak C derleyicilerinin hemen hepsi zaten epoch 
+    olarak bu tarihi almaktadır.)
 
-    localtime fonksiyonu time_t değerini alarak bunu bileşenlerine ayrıştırır ve struct tm yapısı biçiminde bize verir. 
-    Fonksiyonun prototipi şöyledir:
+    localtime fonksiyonu time_t değerini alarak bunu bileşenlerine ayrıştırır ve struct tm yapısı biçiminde bize verir. Fonksiyonun 
+    prototipi şöyledir:
 
     struct tm *localtime(const time_t *timer);
 
@@ -34114,9 +34115,8 @@ void exit_sys(const char *msg)
 
     Türkiye'nin yerel saati UTC'ye göre "day light saving" durumuna bağlı olarak +2 ya da +3 durumundadır. 
 
-    ctime ve asctime fonksiyonları doğrudan tarih ve zamanı bize bir yazı olarak vermektedir. Bu iki fonksiyon arasındaki 
-    tek fark cime fonksiyonunun time_t parametresi alırken asctime fonksiyonunun struct tm parametresi almasıdır. Bu fonksiyonların
-    prototipleri şöyledir:
+    ctime ve asctime fonksiyonları doğrudan tarih ve zamanı bize bir yazı olarak vermektedir. Bu iki fonksiyon arasındaki tek fark ctime 
+    fonksiyonu time_t parametresi alırken asctime fonksiyonunun struct tm parametresi almasıdır. Bu fonksiyonların prototipleri şöyledir:
 
     char *ctime(const time_t *timer);
     char *asctime(const struct tm *timeptr);
@@ -34144,7 +34144,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    C'de programın iki noktasdı arasındaki zamanı ölçmek için iki yöntem kullanılabilmektedir. Birincisi time fonksiyonu 
+    C'de programın iki noktası arasındaki zamanı ölçmek için iki yöntem kullanılabilmektedir. Birincisi time fonksiyonu 
     ile zamanı elde edip bunları çıkartmak olabilir. Örneğin:
 
     time_t start, stop;
@@ -34170,7 +34170,7 @@ void exit_sys(const char *msg)
     sabitiyle define edilmiştir. O halde programcı programın iki noktası arasında clock fonksiyonunu çağırıp bunları çıkartıp
     sonucu CLOCKS_PER_SEC değerine bölerse geçen zamanı elde edebilir. Örneğin:
 
-    clock_t starti stop;
+    clock_t start, stop;
     double result;
 
     start = clock();
@@ -34185,7 +34185,7 @@ void exit_sys(const char *msg)
     sistemlerinde mikrosaniye duyarlılıkta zaman ölçülebilir. Windows sistemlerinde ise CLOCKS_PER_SEC sembolik sabiti 1000 
     değerindedir. Yani bu yöntemle milisaniye duyarlılıkta ölçüm yapılabilmektedir. 
 
-    clock_t türünün C standartlarında ve POSIX standartlarında nümerik bir olarak (yani tamsayı ya da gerçek sayı türü) typedef 
+    clock_t türünün C standartlarında ve POSIX standartlarında nümerik bir tür olarak (yani tamsayı ya da gerçek sayı türü) typedef 
     edilmesi gerektiği belirtilmiştir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -34201,7 +34201,7 @@ void exit_sys(const char *msg)
 
     int clock_gettime(clockid_t clock_id, struct timespec *tp);
 
-    Fonksiyonun birinci parametresi zaman ölüçümünde kullanılacak saatin türünü almaktadır. Bu tür şunlardan biri olabilir:
+    Fonksiyonun birinci parametresi zaman ölçümünde kullanılacak saatin türünü almaktadır. Bu tür şunlardan biri olabilir:
 
     CLOCK_REALTIME
     CLOCK_MONOTONIC
@@ -34209,9 +34209,9 @@ void exit_sys(const char *msg)
     CLOCK_THREAD_CPUTIME_ID
 
     Biz daha önce CLOCK_REALTIME ile CLOCK_MONOTONIC arasındaki farkı belirtmiştik. CLOCK_REALTIME sistem zamanının değişmesinden
-    etkilenebilecek bir saati belirtirken CLOCK_MONOTONIC sistem zamanın değişmesinden etkilenmeyecek stabil bir saati temsil 
-    ediyordu. CLOCK_PROCESS_CPUTIME_ID belli bir prosesin tüm thread'lerinin harcadığı CPU zamanını ölçmek için CLOCK_THREAD_CPUTIME_ID 
-    ise belli bir thread'im harcadığı CPU zamanını ölçmek için kullanılmaktadır. Fonksiyonun ikinci parametresi timespec yapı nesnesinin
+    etkilenebilecek bir saati belirtirken CLOCK_MONOTONIC sistem zamanının değişmesinden etkilenmeyecek stabil bir saati temsil 
+    ediyordu. CLOCK_PROCESS_CPUTIME_ID belli bir prosesin tüm thread'lerinin harcadığı CPU zamanını ölçmek için, CLOCK_THREAD_CPUTIME_ID 
+    ise belli bir thread'in harcadığı CPU zamanını ölçmek için kullanılmaktadır. Fonksiyonun ikinci parametresi timespec yapı nesnesinin
     adresini almaktadır. Zaman bilgisi bu nesnenin içerisine yerleştirilmektedir. Fonksiyon başarı durumunda 0, başarısızlık 
     durumunda -1 değerine geri dönmektedir. timespec yapısını yeniden anımsatmak istiyoruz:
 
@@ -34246,7 +34246,7 @@ int main(void)
 	elapsed_time = (ts2.tv_sec * 1000000000LL + ts2.tv_nsec) - (ts1.tv_sec * 1000000000LL + ts1.tv_nsec);
 	/* elsapsed_time = (ts2.tv_sec - ts1.tv_sec) * 1000000000.0 + ts2.tv_nsec - ts1.tv_nsec; */
 
-	printf("Elapsed Nonosecond: %lld\n", elapsed_time);
+	printf("Elapsed Nanosecond: %lld\n", elapsed_time);
 	printf("Elapsed Second: %f\n", elapsed_time / 1000000000.);
 
 	return 0;
@@ -34268,10 +34268,10 @@ void exit_sys(const char *msg)
 
     int clock_getres(clockid_t clock_id, struct timespec *res);
 
-    Fonksiyınun birinci parametresi duyarlılığı ölüçğlecek olan saat türünü belirtmektedir. İkinci parametre ise duyarlılığın 
+    Fonksiyonun birinci parametresi duyarlılığı ölçülecek olan saat türünü belirtmektedir. İkinci parametre ise duyarlılığın 
     yerleştirileceği timespec yapısının adresini belirtmektedir. 
 
-    Aşağa fonksiyonun kullanımına bir örnek verilmiştir. Kursun yürütüldüğü sanal makinede bu fonksiyon 1 nanonasiye duyarlılık 
+    Aşağıda fonksiyonun kullanımına bir örnek verilmiştir. Kursun yürütüldüğü sanal makinede bu fonksiyon 1 nanonasiye duyarlılık 
     belirtmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -34287,7 +34287,7 @@ int main(void)
 	long long result;
 
 	if (clock_getres(CLOCK_MONOTONIC, &ts) == -1)
-		exit_sys("clock_gettime");
+		exit_sys("clock_getres");
 
 	result = (ts.tv_sec * 1000000000LL + ts.tv_nsec);
 
@@ -34341,7 +34341,7 @@ int main(void)
 	elapsed_time = (ts2.tv_sec * 1000000000LL + ts2.tv_nsec) - (ts1.tv_sec * 1000000000LL + ts1.tv_nsec);
 	/* elsapsed_time = (ts2.tv_sec - ts1.tv_sec) * 1000000000.0 + ts2.tv_nsec - ts1.tv_nsec; */
 
-	printf("Elapsed Nonosecond: %lld\n", elapsed_time);
+	printf("Elapsed Nanosecond: %lld\n", elapsed_time);
 	printf("Elapsed Second: %f\n", elapsed_time / 1000000000.);
 
 	return 0;
@@ -34383,7 +34383,7 @@ void exit_sys(const char *msg)
 
     Fonksiyon çağrıldığı ana kadarki prosesin zaman bilgisini alarak tms isimli bir yapı nesnesinin içerisine yerleştirmektedir. 
     Fonksiyonun geri dönüş değeri belli bir orijinden geçen gerçek zamanı belirten bir değerdir. (Yani bu değer tek başına bir 
-    anlam taşımaz.) Fonksiyon başarısızlık durumunda -1 değerine geri dönmeketedir. 
+    anlam taşımaz.) Fonksiyon başarısızlık durumunda -1 değerine geri dönmektedir. 
 
     tms yapısı şöyledir:
 
@@ -34400,12 +34400,12 @@ void exit_sys(const char *msg)
     vermektedir. Fonksiyonun verdiği zamanlar proses kontrol bloktan alınmaktadır. Proses kontrol bloğa da zamanlar "timer tick" 
     olarak yazılmaktadır. Timer tick değerleri günümüzün masaüstü sistemlerinde 1 milisaniye, yavaş sistemlerde 10 milisaniye 
     periyottadır. Bu fonksiyon prosesin bloke olup uykuda beklediği zamanları bize herhangi bir biçimde vermemektedir. Yalnızca
-    prosesin ve alt proseslerin user modda ve kernel modda harcağı zamanları bize vermektedir. 
+    prosesin ve alt proseslerin user modda ve kernel modda harcadığı zamanları bize vermektedir. 
 
-    standard time kabuk komutu bu fonksiyon ve muhtemelen clock_gettime fonksiyonu kullanılarak gerçekleştirilmiştir. 
+    Standard time kabuk komutu bu fonksiyon ve muhtemelen clock_gettime fonksiyonu kullanılarak gerçekleştirilmiştir. 
 
     Aşağıdaki örnekte komut satırından alınan program çalıştırılmış ve onun user ve kernel moddaki zamanı yazdırılmıştır. 
-    Ancak programın çalışmaıs için gereken gerçek zaman yazdırılmamıştır.
+    Ancak programın çalışması için gereken gerçek zaman yazdırılmamıştır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -34456,7 +34456,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Bazen belli periyotta sürekli işlemlerin yapılması gerekebilmektedir. Örneğin ekrana canlı bir saat çıkartmak istediğimizi 
     düşünelim. Saatimizin duyarlılığı da saniye cinsinden olsun. Biz saniyede bir periyodik olarak bir fonksiyonumuzun çağrılmasını
-    sağlarsak bu işlemi kolaylıkla yaapabiliriz. Bu tür periyodik timer mekanizmalarına "interval timer" da denilmektedir. 
+    sağlarsak bu işlemi kolaylıkla yapabiliriz. Bu tür periyodik timer mekanizmalarına "interval timer" da denilmektedir. 
     POSIX standartlarında "interval timer" oluşturmak için iki fonksiyon bulundurulmuştur. 
 
     Şüphesiz interval timer oluşturmanın basit bir yolu bir thread yaratmak ve o thread içerisinde bir döngü oluşturup 
@@ -34472,17 +34472,17 @@ void exit_sys(const char *msg)
 
     int setitimer(int which, const struct itimerval *new_value, struct itimerval *old_value);
 
-    setitimer fonksiyonunda periyodik işleme başlamak için gereken zaman ile periyot zamanı ayrı ayrı fonksiyona verilmektedir. 
-    setitimer fonksiyonu ile oluşturulan "interval timer" mekanizmasının türleri vardır. Her tür zaman dolduğunda farklı bir 
+    setitimer fonksiyonunda periyodik işleme başlamak için gereken zaman ile periyot zamanı fonksiyona ayrı ayrı verilmektedir. 
+    setitimer fonksiyonu ile oluşturulan "interval timer" mekanizmasının türleri vardır. Her tür, zaman dolduğunda farklı bir 
     sinyalin oluşmasına yol açmaktadır. Fonksiyonun birinci parametresi interval timer'ın türünü belirtmektedir. Bu tür 
     şunlardan biri olabilir:
 
-    ITIMER_REAL: Bu gerçek zamana dayalı ölçüm yaapar. Zaman dolduğunda SIGALRM sinyali gönderilmektedir. 
+    ITIMER_REAL: Bu gerçek zamana dayalı ölçüm yapar. Zaman dolduğunda SIGALRM sinyali gönderilmektedir. 
 
-    ITIMER_VIRTUAL: Buradaki ölçüm prosesin çalışmasına göre yapımaktadır. Yani proses çalışmadığı sürece saat artmamaktadır. 
+    ITIMER_VIRTUAL: Buradaki ölçüm prosesin çalışmasına göre yapılmaktadır. Yani proses çalışmadığı sürece saat artmamaktadır. 
     Bu türde zaman dolduğunda SIGVTALRM sinyali gönderilmektedir. 
 
-    ITIMER_PROF: Burada ölçüm yine prosesin çalışmasına göre yapılmaktadır. Ancak bekeleme zamanları da buna dahil edilmektedir. 
+    ITIMER_PROF: Burada ölçüm yine prosesin çalışmasına göre yapılmaktadır. Ancak bekleme zamanları da buna dahil edilmektedir. 
     Zaman dolduğunda SIGPROF sinyali gönderilmektedir. 
 
     Fonksiyonun ikinci parametresi itimerval isimli bir yapı türündendir. Bu yapı şöyle bildirilmiştir:
@@ -34555,7 +34555,7 @@ int main(void)
 		}
 	}
 
-	printf("timer disabled, sleeps for 5 exta seconds before finish...\n");
+	printf("timer disabled, sleeps for extra 5 seconds before finish...\n");
 	sleep(5);
 
 	return 0;
@@ -34563,8 +34563,6 @@ int main(void)
 
 void sigalrm_handler(int signo)
 {
-	struct itimerval itval;
-
 	printf("interval timer...\n");		/* UNSAFE */
 }
 
@@ -34574,6 +34572,10 @@ void exit_sys(const char *msg)
 
 	exit(EXIT_FAILURE);
 }
+
+/*--------------------------------------------------------------------------------------------------------------------------
+                                            84. Ders 24/09/2023 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Periyodik timer oluşturabilmek için kullanılan setitime fonksiyonunun bazı yetersizlikleri şunlardır:
@@ -34586,39 +34588,41 @@ void exit_sys(const char *msg)
 
     İşte bu eksikliklerden dolayı POSIX'e yeni bir interval timer mekanizması eklenmiştir. Bu interval timer mekanizmasının 
     kullanılması setitimer mekanizmasına göre daha zordur. Bu yeni mekanizmada ilk yapılacak şey bir interval timer nesnesinin
-    timer_create fonksiyonu ile yaratılmasdır. timer_create fonksiyonunun prototipi şöyledir:
+    timer_create fonksiyonu ile yaratılmasıdır. timer_create fonksiyonunun prototipi şöyledir:
 
     #include <time.h>
 
     int timer_create(clockid_t clockid, struct sigevent *evp, timer_t *timerid);
 
-    Fonksiyonun birinci parametresi zamanlamada kullanılacak saatin türünü belirtmektedir. Bu tür daha önce gördüğümüz CLOCK_MONOTINIC,
+    Fonksiyonun birinci parametresi zamanlamada kullanılacak saatin türünü belirtmektedir. Bu tür daha önce gördüğümüz CLOCK_MONOTONIC,
     CLOCK_REALTIME, CLOCK_PROCESS_CPUTIME_ID, CLOCK_THREAD_CPUTIME_ID olabileceği gibi clock_getcpuclockid ve pthread_getcpuclockid
     fonksiyonlarından elde edilen clock id'ler kullanılabilmektedir. Fonksiyonun ikinci parametresi sigevent isimli bir yapı 
     nesnesinin adresini almaktadır. sigevent yapısı şöyle bildirilmiştir:
 
-    union sigval {            /* Data passed with notification */
-        int     sival_int;    /* Integer value */
-        void   *sival_ptr;    /* Pointer value */
+    #include <signal.h>
+
+    union sigval {				/* Data passed with notification */
+        int     sival_int;		/* Integer value */
+        void   *sival_ptr;		/* Pointer value */
     };
 
     struct sigevent {
-        int    sigev_notify;                                    /* Notification method */
-        int    sigev_signo;                                     /* Notification signal */
-        union sigval sigev_value;                               /* Data passed with notification */
-        void (*sigev_notify_function)(union sigval);            /* Function used for thread notification (SIGEV_THREAD) */
-        void  *sigev_notify_attributes;                         /* Attributes for notification thread (SIGEV_THREAD) */
-        pid_t  sigev_notify_thread_id;                          /* ID of thread to signal (SIGEV_THREAD_ID); Linux-specific */
+        int    sigev_notify;							/* Notification method */
+        int    sigev_signo;								/* Notification signal */
+        union  sigval sigev_value;						/* Data passed with notification */
+        void  (*sigev_notify_function)(union sigval);	/* Function used for thread notification (SIGEV_THREAD) */
+        void   *sigev_notify_attributes;				/* Attributes for notification thread (SIGEV_THREAD) */
+        pid_t  sigev_notify_thread_id;					/* ID of thread to signal (SIGEV_THREAD_ID); Linux-specific */
     };
 
     Yapının sigev_notify elemanı periyot dolduğunda haberdar edilmenin nasıl yapılacağını belirtmektedir. Bu elemana şu değerlerden
-    biri yerleştiriebilir:
+    biri yerleştirilebilir:
 
-    SIGEV_NONE: Haberdar edilme yapılmaz
+    SIGEV_NONE: Haberdar edilme yapılmaz.
 
     SIGEV_SIGNAL: Haberdar edilme sinyal yoluyla yapılır.
 
-    SIGEV_THREAD: Haberdar edilme bu mekanizma tarafından yaratılan bir thread tarafındna yapılır.
+    SIGEV_THREAD: Haberdar edilme bu mekanizma tarafından yaratılan bir thread tarafından yapılır.
 
     SIGEV_THREAD_ID: Haberdar edilme prosesin spesifik bir thread'i ile sinyal yoluyla yapılmaktadır. (Bu yöntem POSIX 
     standartlarında yoktur, dolayısıyla Linux'a özgüdür.)
@@ -34631,11 +34635,11 @@ void exit_sys(const char *msg)
     özellik bilgilerini belirtmektedir. Bu elemana NULL adres geçilebilir. Yapının sigev_notify_thread_id elemanı Linux'a özgüdür. 
     Eğer birinci parametreye Linux'a özgü olan SIGEV_THREAD_ID değeri geçilirse bu elemana da thread'in pid değeri girilmelidir. 
     Aslında fonksiyonun ikinci parametresi NULL adres de geçilebilmektedir. Bu durumda haberdar edilme SIGALRM sinyali yoluyla
-    yapılmaktadır. (Aslında POSIX standartları bu durumda sinyalin SIGALRM olduğunu açıkça belirtmemiştir, "defaul signal" ifadesini
+    yapılmaktadır. (Aslında POSIX standartları bu durumda sinyalin SIGALRM olduğunu açıkça belirtmemiştir, "default signal" ifadesini
     kullanmıştır. Bu "default signal" Linux sistemlerinde SIGABRT sinyalidir.)
 
     timer_create fonksiyonunun son parametresi yaratılan interval timer'ın id'sinin yerleştirileceği timer_t türünden nesnenin
-    adresini almaktadır. Fonksiyon başarı durumunda 0 değerine başarısılıkdurumunda -1 eğerine geri dönmektedir. Örneğin:
+    adresini almaktadır. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri dönmektedir. Örneğin:
 
     struct sigaction sa;
     struct sigevent se;
@@ -34664,25 +34668,27 @@ void exit_sys(const char *msg)
 
     Fonksiyonun birinci parametresi timer_create fonksiyonundan elde edilen "timer id" değeridir. İkinci parametre 0 ya da 
     TIMER_ABSTIME biçiminde geçilebilir. Bu parametre 0 geçilirse "göreli zaman", TIMER_ABSTIME geçilirse mutlak zaman 
-    dikkate alınır. Programcılar hemen her zaman göreli zaman kullanırlar. Fıonksiyonun üçüncü parametresi ilk hbaerdar 
+    dikkate alınır. Programcılar hemen her zaman göreli zaman kullanırlar. Fonksiyonun üçüncü parametresi ilk haberdar 
     edilmenin ve periyodik haberdar edilmenin zamanlamasının ayarlandığı itimerspec isimli yapı nesnesinin adresini almaktadır. 
     Bu yapı programcı tarafından doldurulup fonksiyona verilmelidir. Yapı şöyle bildirilmiştir:
 
+    #include <time.h>
+
     struct itimerspec {
-        struct timespec  it_interval;  /* Interval for periodic timer */
-        struct timespec  it_value;     /* Initial expiration */
+        struct timespec  it_interval;	/* Interval for periodic timer */
+        struct timespec  it_value;		/* Initial expiration */
     };
 
-    Yapının it_value elemanı ilk haberdar edilmeye kadar geçecek zamaı, it_interval elemanı haberdar edilme periyodunu 
+    Yapının it_value elemanı ilk haberdar edilmeye kadar geçecek zamanı, it_interval elemanı haberdar edilme periyodunu 
     belirtmektedir. Anımsanacağı gibi timespec yapısı da şöyle bildirilmiştir:
 
     struct timespec {
-        time_t tv_sec;           /* Seconds */
-        long tv_nsec;            /* Nanoseconds [0, 999'999'999] */
+        time_t tv_sec;		/* Seconds */
+        long tv_nsec;		/* Nanoseconds [0, 999'999'999] */
     };
 
     Fonksiyonun son parametresi eski değerlerin yerleştirileceği yapı nesnesinin adresini almaktadır. Bu parametre NULL 
-    geçilebilir. Ya da ikinci NULL geçilip eski değerler de alınabilir. 
+    geçilebilir. Ya da ikinci parametre NULL geçilip eski değerler de alınabilir. 
 
     timer_settime fonksiyonu başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri dönmektedir. Örneğin:
 
@@ -34700,16 +34706,16 @@ void exit_sys(const char *msg)
 
     Interval timer ile işimiz bitince onu timer_delete fonksiyonu ile yok etmemiz gerekir. Fonksiyonun prototipi şöyledir:
 
-    include <time.h>
+    #include <time.h>
 
     int timer_delete(timer_t timerid);
 
     Fonksiyon parametre olarak timer_create fonksiyonundan elde edilen timer id değerini almaktadır. Başarı durumunda 0 değerine, 
-    başarısızlık durumunda -1 değerine geri döner. Başrasının kontrol edilmesine normal olarak gerek yoktur. Örneğin:
+    başarısızlık durumunda -1 değerine geri döner. Başarısının kontrol edilmesine normal olarak gerek yoktur. Örneğin:
 
     timer_delete(itimer);
 
-    Aşağıda POSIX modern interval timer mekanizmasıyla sinyal yoluyla haberdar edilmeye bir örnek verilmiştir.
+    Aşağıda POSIX modern interval timer mekanizmasını sinyal yoluyla haberdar etmeye bir örnek verilmiştir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -34785,7 +34791,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Şimdi de thread yoluyla haberdar edilmeye bir örnek verelim. Bu yöntemde thread bu mekanizma tarafından yaratılıp bizim
     fonksiyonumuz çağrılmaktadır. Burada yaratılacak olan thread'in toplamda bir tane mi olacağı yoksa her periyot için ayrı 
-    bir thread'in yeniden mi yaaratılacağı POSIX standartlarında işletim sistemini yazanların isteğine bırakılmıştır. Linux 
+    bir thread'in yeniden mi yaratılacağı POSIX standartlarında işletim sistemini yazanların isteğine bırakılmıştır. Linux 
     tek bir threda yaratıp tüm periyotlarda aynı thread'i kullanmaktadır. Bu durumda çağrılacak callback fonksiyonun sigevent 
     yapısının sigev_notify_function elemanına girilmesi gerekmektedir. Fonksiyonun parametrik yapısı şöyle olmalıdır:
 
@@ -34888,7 +34894,7 @@ void exit_sys(const char *msg)
     UNIX türevi sistemlerde çok sayıda sistemden sisteme değişebilecek parametrik değer vardır. Örneğin bir yol ifadesinin 
     maksimum uzunluğu, bir prosesin açık durumda tutabileceği makisimum dısya sayısı (yani dosya betimleyici tablosunun büyüklüğü), 
     bir kullanıcının yaratabileceği alt proseslerin sayısı, exec fonksiyonuna geçirilecek komut satırı argümanlarının sayısı, 
-    ek grupların (supplementary groups) sayısı (bu konu ileride ele laınmaktadır) gibi pek parametrik değer sistemden sisteme 
+    ek grupların (supplementary groups) sayısı (bu konu ileride ele alınmaktadır) gibi pek parametrik değer sistemden sisteme 
     değişebilmektedir. Halbuki taşınabilir programlar oluşturabilmek için bu parametrik değerlerin o anda programın sistemde
     siliniyor olması gerekebilmektedir.
 
@@ -34923,7 +34929,7 @@ void exit_sys(const char *msg)
     çok küçük değerlerdir. Örneğin _POSIX_NAME_MAX bir dısyanın karakter duzunluğunu belirtir. Bunun minimum değer 14'tür. Halbuki 
     yaygın hiçbir sistem 14 karakterden çok daha fazla dosya isimlerini desteklemektedir. Bnezer biçimde bir kullanıcının maksimum 
     yaratacağı alt proses sayısının 25 olması da çok düşük bir değerdir. İşte bu sembolik sabitler tüm POSIX sistemlerindeki olabilecek
-    en küçük değerleri belirtmektedir ancak modern sistemler dikkae alındığında bir kullanımı yoktur. O halde programcının 
+    en küçük değerleri belirtmektedir ancak modern sistemler dikkate alındığında bir kullanımı yoktur. O halde programcının 
     POSIX standartlarının en küçük değere değil o sistemdeki mevcut değere gereksinmi vardır. 
 
     <limits.h> dosyası içerisinde "Runtime Invariant Values (Possibly Indeterminate)" kategorisi bazı _POSIX_XXXXX_MAX değerlerinin 
@@ -34943,8 +34949,772 @@ void exit_sys(const char *msg)
     edilmişse programcı onu doğrudan derleme zamanında kullanabilir. Ancak define edilmemişse o anki gerçek değer programın 
     çalışma zamanı sırasında sysconf, pathconf ve fpathconf fonksiyonlarıyla elde edilmelidir. (Tabii hiç sembolik sabite bakılmadan 
     doğrudan bu fonksiyonlar da çağrılabilir. Yalnızca fonksiyon çağrıma maliyeti bir dezavantaj oluşturmaktadır.)
+---------------------------------------------------------------------------------------------------------------------------*/
 
-    <BURADA KALDIK>
+/*--------------------------------------------------------------------------------------------------------------------------
+                                            85. Ders 30/09/2023 - Cumartesi
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    <limits.h> içerisindeki diğer bir grup da "Pathname Variable Values" isimli gruptur. Bu başlık altında belirtilen 
+    sembolik sabitlerin değerleri o anda kullanılan dosya sistemine bağlı olarak değişebilmektedir. UNIX/Linux sistemlerinde 
+    farklı dosya sistemleri farklı noktalara mount edilebilmektedir. Bu farklı dosya dosya sistemlerinin isim uzunlukları gibi 
+    özellikleri de birbirindne farklı olabilmektedir. İşte bu tür büyüklükler <limits.h> içerisinde "Pathname Variable Values"
+    başlığı altında toplanmıştır. Bu gruptaki en önemli sembolik sabitler NAME_MAX, PATH_MAX sembolik sabitleridir. NAME_MAX 
+    bir dizin girişinin isminin maksimum olabilecek karakter sayısını belirtmektedir. PATH_MAX ise toplamda mutlak bir yol 
+    ifadesinin olabileceği en büyük karakter sayısını belirtir. Bir dosya isminin ya da bir yol isminin bir yerde saklanacağı 
+    durumlarda saklanacak yerin büyüklüğünün belirlenmesi için bu değerlere gereksinim duyulmaktadır. Yukarıda da belirttiğimiz gibi
+    bu değerler dosya sistemine değişebilecek değerlerdir. İşte POSIX standartları eğer bu değerler tüm dizin ağacı içerisinde 
+    sabit ise bu sembolik sabitlerin define edilmesi ancak sabit değilse define edilmemesi gerektiğini belirtmektedir. Yani örneğin
+    PATH_MAX sembolik sabiti bir UNIX türevi sistemde define edilmişken başka bir sistemde edilmemiş olabilir. İşte "Pathname Variable
+    Values" grubundaki sembolik sabitler eğer <limits.h> içerisinde define edilmemişse bu durumda onların değerleri pathconf ya da
+    fpathconf POSIX fonksiyonuyla alınmalıdır. 
+
+    <limits.h> içerisindeki "Runtime Increasable Values" grubundaki sembolik sabitler sistemden sisteme değişebilir ve işletiminin
+    çalışma zamanı sırasında artırılabilir. Bu sembolik sabitler ilgili sistemdeki minimum değerleri bu başlık altında define 
+    edilmek zorundadır. Anımsanacağı gibi bazı sembolik sabitlerin tüm POSIX sistemleri genelindeki minimum değerleri _POSIX_XXX
+    biçiminde "Minimum Values" grubunda belirtilmiştir. Özetle "Runtime Increasable Values" grubundaki değerler o sistemdeki
+    minimum değerler olarak kullanılabilir. Ancak bunların gerçek değerleri programın çalışma zamanı sırasında sysconf fonksiyonu
+    ile elde edilmelidir. 
+
+    <limits.h> içerisindeki "Numeric Limits" grubundaki sembolik sabitler aslında C'nin <limits.h> dosyası içerisinde de bulunmaktadır. 
+    Bu sembolik sabitler temel türlerin o sistemdeki maksimum ve minimum değerlerini belirtmektedir. Örneğin INT_MIN int türünün 
+    o sistemdeki minimum değerini, INT_MAX ise maksimum değerini belirtir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    sysconf fonksiyonu yuklarıda da belirttiğimiz gibi "Runtime Invariant Values" ve "untime Increasable Values" grubundaki 
+    büyüklüklerin programın çalışma zamanı sırasında elde edilmesinde kullanılmaktadır. Tabii "Runtime Invariant Values" 
+    grubundaki sembolik sabitler eğer define edilmişse bu fonksiyonu çağırmaya gerek yoktur. Doğrudan o sembolik sabitlerin 
+    değeri programcı tarafından kullanılabilir. sysconf fonksiyonun prototipi şöyledir:
+
+    #include <unistd.h>
+
+    long sysconf(int name);
+
+    Fonksiyon parametre olarak hangi büyüklüğün değerinin elde edilmek istendiğini almaktadır. Bu değerler _SC_XXX biçiminde 
+    define edilmiştir. Bu sembolik sabitlerin oluşturulmasındaki kurala dikkat ediniz: POSIX'teki minimum değerler _POSIX_XXX
+    biçiminde, o sistemdeki değerler XXX biçiminde, syscons fonksiyonun parametreleri ise _SC_XXX biçiminde isimlendirilmiştir. 
+    Örneğin dosya betimleyici tablosunun POSIX'teki minimum uzunlupu _POSIX_OPEN_MAX sembolik sabiti ile, ilgili sistemdeki uzunluğu
+    OPEN_MAX sembolik sabiti ile, sysconf fonksiyonundaki parametre ismi ise _SC_OPEN_MAX ismi ile define edilmiştir. 
+
+    sysconf fonksiyonu başarı durumunda ilgili büyüklüğe başarısızlık durumunda -1 değerine geri dönmektedir. sysconf ile 
+    elde edilmek istenen büyüklük belirli olmayabilir ve sınırsız (infinite) da olabilir. Bu durumda fonksiyon başarısız 
+    olur ancak errno değer değiştirmez. (Yani bu durumu belirlemek için errno değişkenine sysconf fonksiyonunu çağırmadan önce 0 
+    değeri yerleştirilir sonra fonksiyon başarısız olduğunda errno değişkenine bakılır. Eğer hale 0 değeri duruyorsa ilgili 
+    büyüklüğün belirsiz ya da sınırsız olduğu sonucu çıkartılır.)
+
+    Örneğin dosya betimleyici tablosunun uzunluğunu (yani açılacak maksimum dosya sayısını) sysconf fonksiyonu ile şöyle elde 
+    edebiliriz:
+
+    errno = 0;
+    if ((result = sysconf(_SC_OPEN_MAX)) == -1)
+        if (errno == 0)
+            fprintf(stderr, "infinite value...\n");
+        else
+            exit_sys("sysconf");
+    else
+        printf("%ld\n", result);
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <limits.h>
+#include <errno.h>
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	long result;
+
+	errno = 0;
+	if ((result = sysconf(_SC_OPEN_MAX)) == -1)
+		if (errno == 0)
+			fprintf(stderr, "infinite value...\n");
+		else
+			exit_sys("sysconf");
+	else
+		printf("%ld\n", result);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Yukarıda da belirttiğimiz gibi <limits.h> içerisindeki "Pathname Variable Values" grubunda bulunan sembolik sabitler eğer
+    ilgili sistemde define edilmemişse bunların değerleri paathconf ya da fpathconf fonksiyonlarıyla elde edilmelidir. Bu 
+    fonksiyonların prototipleri şöyledir:
+
+    #include <unistd.h>
+
+    long fpathconf(int fildes, int name);
+    long pathconf(const char *path, int name);
+
+    Fonksiyonarın ikinci parametreleri değeri elde edilecek büyüklüğü belirtmektedir. Büyüklüğün POSIX sistemlerindeki minimum 
+    değeri _POSIX_XXX, ilgili sistemdeki değeri XXX olmak üzere buradaki büyüklük isimleri _PC_XXX biçiminde isimlendirilmiştir. 
+    Örneğin bir dosyanın makismum karakter uzunluğunun POSIX'teki minimum değeri _POSIX_NAME_MAX biçimindedir. İlgili sistemdeki
+    değeri NAME_MAX biçiminde pathconf ve fpathconf fonksiyonlarındaki isimleri ise _PC_NAME_MAX biçimindedir. path fonksiyonu
+    yol ifadesiyle çalışırken, fpathconf fonksiyonu açık dosya betimleyicisi ile çalışmaktadır. Bazı büyüklükler için bu yol 
+    ifadesinin ya da betimleyicinin dizine ilişkin olması gerekir. 
+
+    Fonksiyon başarı durumunda ilgili büyüklük değerine başarısızlık durumunda -1 değerine geri dönmektedir. Eğer ilgili 
+    büyüklüğün o sistemde belli bir sınırı yoksa fonksiyonlar başarısız olmakta ancak errno değerini değiştirmemektedir. 
+
+    Biz yukarıda genel olarak açıklamış olsak da belli büyüklerin değerlerini elde ederken ayrıntılar için POSIX dokümanlarına 
+    başvurmanızı tavsiye ederiz. Örneğin _PC_NAME_MAX ve _PC_PATH_MAX değerlerini elde etmek için yol ifadesinin ya da betimleyicinin 
+    bir dizine ilişkin olması gerekmektedir. Aksi takdirde fonksiyonun çalışması sistemden sisteme değişebilmektedir. Ayrıca örneğin 
+    _PC_PATH_MAX ile verilen uzunluk o dizine göreli uzunluktur. Yani buuzunluğa o dizine kadarki karakter uzunluğu da eklenmelidir. 
+    Ayrıca örneğin NAME_MAX sembolik sabitiyle ya da _PC_NAME_MAX ismiyle elde edilen uzunluğa null karakter dahil değildir. 
+    Halbuki PATH_MAX ya da _PC_PATH_MAX ile elde edilen uzunluğa null karakter dahildir. Örneğin PATH_MAX değerini pathconf 
+    fonksiyonu ile şöyle edebiliriz:
+
+    long result;
+
+    errno = 0;
+    if ((result = pathconf("/", _PC_PATH_MAX)) == -1)
+        if (errno == 0)
+            fprintf(stderr, "infinite value...\n");
+        else
+            exit_sys("pathmax");
+    else
+        printf("%ld\n", result);
+
+    Biz burada kök dizinden itibaren (yani kök dizine göreli biçimde) yol ifadesinin uzunluğunu elde ettik. Dolayısıyla mutlak 
+    yol ifadesi için karaken karakter sayısı burada elde edilendne 1 fazla olmalıdır. Çünkü bu fonksiyonların verdikleri değer
+    bizim onlara geçtiğimiz dizine görelidir. Tabii Linux sistemlerinde NAME_MAX ve PATH_MAX sembolik sabitleri zaten define 
+    edilmiştir. Dolayısıyla aslında Linux sistemlerinde bu fonksiyonların bu amaçla çağrılmasına gerek yoktur. Yani yazacağınız
+    kod yalnızca Linux sistemlerinde kullanılacaksa zaten siz NAME_MAX ve PATH_MAX sembolik sabitlerini doğrudan kullanabilirsiniz. 
+    Ancak taşınabilir programlar için bu fonksiyonlara gereksinim duyulabilmektedir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <limits.h>
+#include <errno.h>
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	long result;
+
+	errno = 0;
+	if ((result = pathconf("/", _PC_PATH_MAX)) == -1)
+		if (errno == 0)
+			fprintf(stderr, "infinite value...\n");
+		else
+			exit_sys("pathmax");
+	else
+		printf("%ld\n", result);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Pekiyi bazı büyüklere ilişkin değerler ilgili sistemde define edilmeyebileceğine göre taşınabilir programlar için nasıl 
+    bir yol izlenmelidir? Tabii yöntemlerden biri her zaman sysconf ya da pathcnf, fpathconf fonksiyonlarını çağırmak olabilir. 
+    ancak ilgili sembolik sabitler o sistemde sistemde define edilmişse bu çağrı gereksiz zaman kaybına yol açacaktır. Taşınabilirliği 
+    sağlamak için Stevens "Advanced Programming in the UNIX Environment" kitabında aşağıdaki gibi bir yöntem önermektedir:
+
+    #define PATH_MAX_GUESS		4096
+
+    #ifdef MAX_PATH
+        static long g_max_path = MAX_PATH;
+    #else
+        static long g_max_path = 0;
+    #endif
+
+    long path_max(void)
+    {
+        if (!g_max_path) {
+            errno = 0;
+            if ((g_max_path = pathconf("/", _PC_PATH_MAX)) == -1)
+                if (errno == 0)
+                    g_max_path = PATH_MAX_GUESS;
+                else
+                    exit_sys("pathmax");
+            else
+                ++g_max_path;
+        }
+
+        return g_max_path;
+    }
+
+    Burada path_max fonksiyonu toplamda sıfır kere ya da en fazla bir kere sysconf fonksiyonunu çağırmaktadır. 
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <limits.h>
+#include <errno.h>
+
+void exit_sys(const char *msg);
+
+#define PATH_MAX_GUESS		4096
+
+#ifdef MAX_PATH
+	static long g_max_path = MAX_PATH;
+#else
+	static long g_max_path = 0;
+#endif
+
+long path_max(void)
+{
+	if (!g_max_path) {
+		errno = 0;
+		if ((g_max_path = pathconf("/", _PC_PATH_MAX)) == -1)
+			if (errno == 0)
+				g_max_path = PATH_MAX_GUESS;
+			else
+				exit_sys("pathmax");
+		else
+			++g_max_path;
+	}
+
+	return g_max_path;
+}
+
+int main(void)
+{
+	char *path;
+
+	if ((path = (char *)malloc(path_max())) == NULL) {
+		fprintf(stderr, "cannot allocate memory!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	free(path);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    İşletim sistemni bir kaynak yöneticisi olarak da düşünebiliriz. Prosesler işletim sisteminin sunduğu çeşitli kaynakları 
+    kullanmaktadır. Tabii işletim sistemleri proseslerin kaynak kullanımlarını sınırlandırmaktadır. Aksi takdirde bir proses
+    çok fazla kaynak kullanıp diğer proseslerin o kaynağa erişimini güçleştirebilir. Prosesin kaynak limitleri (yani kaynakları 
+    hangi sınırlar içerisinde kullanabilecek) proses kontol bloğu içerisinde saklanmaktadır. (Linux'ta bu vilgi task_struct 
+    yapısının signal elemanın gösterdiği struct signal yapısının içerisindeki struct rlimit dizisinde bulunmaktadır.)
+
+    UNIX türevi işletim sistemleri her kaynak için "bir soft limit (buna current limit de denilmektedir)" bri de "hard limit"
+    değeri tutmaktadır. Kontroller soft limit dikkate alınarak yapılır. Herhangi bir proses soft limiti yükseltebilir. Ancak 
+    fazla hard limit kadar yükseltebilir. Yani hard limit soft limit için tavan değeri beelirtmektedir. Sıradan prosesler 
+    hard limiti yükseltemezler ancak düşürebilirler. Eğer hard limit sıradan prosesler tarafından düşürülürse bir daha eski 
+    değerine bile yükseltilemez. Uygun önceliğe sahip prosesler hard limiti yükseltebilirler. Dolayısıyla soft limiti de
+    yükseltebilirler. Bir özelliğin hard limiti soft limitin aşağısına çakilememektedir. 
+
+    O halde bizim şu bilgileri edinmemiz gerekir: Prosesin kaynakları nelerdir ve bu kaynak limitleri nasıl elde edilip 
+    değiştirilmektedir?
+
+    Prosesin kaynak limitlerini elde etmek için getrlimit POSIX fonksiyonu, set etmek için setrlimit POSIX fonksiyonu kullanılmaktadır. 
+    getrlimit fonksiyonunun prototipi şöyledir:
+
+    #include <sys/resource.h>
+
+    int getrlimit(int resource, struct rlimit *rlp);
+
+    Fonksiyonunun birinci parametresi kaynağın türünü ikinci parametresi kaynak bilgilerinin yerleştirileceği rlimit yapı 
+    nesnesinin adresini almaktadır. rlimit yapısı şöyle bildirilmiştir:
+
+    struct rlimit {
+        rlim_t rlim_cur;    /* Soft limit */
+        rlim_t rlim_max;    /* Hard limit (ceiling for rlim_cur) */
+    };
+
+    Buradaki rlimit tür ismi işaretsiz bir tamsayı biçiminde typedef edilmek zorundadır. Fonksiyon başarı durumunda 0 değerine,
+    başarısızlık durumunda -1 değerine geri dönmektedir. 
+
+    getrlimit fonksiyonunda dikkat edilmesi gereken birkaç nokta vardır: Fonksiyonun birinci parametresindeki kaynak belirten 
+    değer <sys/resource.h> dosyası içerisinde RLIMIT_XXX sembolik sabitleriyle define edilmiştir. Fonksiyon ile elde edilmek 
+    istenen limitler sınırsız olabilir. Bu durumda rlimit yapısının rlim_cur ve rlim_max eelemanlarına RLIM_INFINITY özel 
+    değeri yerleştirilir. Elde edilmek istenen limit o sistemde belirsiz olabilir ya da o limitin o sistemde elde edilme yolu 
+    olmayabilir (unspecifed) bu durumda tapının rlim_cur elemanına RLIM_SAVED_CUR özel değeri, yapının rlim_max elemanına ise
+    RLIM_SAVED_MAX değeri yerleştirilir. getrlimit fonksiyonu aşağıdaki gibi kullanılmalıdır:
+
+    struct rlimit rl;
+
+    if (getrlimit(RLIMIT_STACK, &rl) == -1)
+        exit_sys("getrlimit");
+
+    if (rl.rlim_cur == RLIM_INFINITY)
+        printf("soft limit infinite...\n");
+    else if (rl.rlim_cur == RLIM_SAVED_CUR)
+        printf("soft limit unrepresentable...\n");
+    else
+        printf("Soft limit: %ju\n", (uintmax_t)rl.rlim_cur);
+
+    if (rl.rlim_max == RLIM_INFINITY)
+        printf("hard limit infinite...\n");
+    else if (rl.rlim_max == RLIM_SAVED_MAX)
+        printf("hard limit unrepresentable...\n");
+    else
+        printf("hard limit: %ju\n", (uintmax_t)rl.rlim_max);
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <sys/resource.h>
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	struct rlimit rl;
+
+	if (getrlimit(RLIMIT_STACK, &rl) == -1)
+		exit_sys("getrlimit");
+
+	if (rl.rlim_cur == RLIM_INFINITY)
+		printf("soft limit infinite...\n");
+	else if (rl.rlim_cur == RLIM_SAVED_CUR)
+		printf("soft limit unrepresentable...\n");
+	else
+		printf("Soft limit: %ju\n", (uintmax_t)rl.rlim_cur);
+
+	if (rl.rlim_max == RLIM_INFINITY)
+		printf("hard limit infinite...\n");
+	else if (rl.rlim_max == RLIM_SAVED_MAX)
+		printf("hard limit unrepresentable...\n");
+	else
+		printf("hard limit: %ju\n", (uintmax_t)rl.rlim_max);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    setrlimit fonksiyonu prosesin kaynaklarındaki hard ve/veya soft limitleri değiştirmek için kullanılmaktadır. Yukarıda da 
+    belirttiğimiz gibi soft limit en fazla hard limit kadar yükseltilebilir. Hard limit ise ancak uygun önceliğe sahip prosesler
+    tarafından yükseltilebilmektedir. Fonksiyonun prototipi şöyledir:
+
+    #include <sys/resource.h>
+
+    int setrlimit(int resource, const struct rlimit *rlp);
+
+    Fonksiyonun yine birinci parametresi kaynağı ikinci parametresi yükseltilecek limitleri belirtmektedir. Örneğin:
+
+    struct rlimit rl;
+
+    if (getrlimit(RLIMIT_NOFILE, &rl) == -1)
+        exit_sys("getrlimit");
+
+    rl.rlim_cur = 4096;
+
+    if (setrlimit(RLIMIT_NOFILE, &rl) == -1)
+        exit_sys("getrlimit");
+
+    Burada önce dosya betimleyici tablosunun soft ve hard limitleri getrlimit fonksiyonuyla elde edilmiştir. Daha sonra da
+    setrlimit fonksiyonu ile yalnızca soft limit değiştirilmiştir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <sys/resource.h>
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	struct rlimit rl;
+
+	if (getrlimit(RLIMIT_NOFILE, &rl) == -1)
+		exit_sys("getrlimit");
+
+	rl.rlim_cur = 4096;
+
+	if (setrlimit(RLIMIT_NOFILE, &rl) == -1)
+		exit_sys("getrlimit");
+
+	if (getrlimit(RLIMIT_NOFILE, &rl) == -1)
+			exit_sys("getrlimit");
+
+	if (rl.rlim_cur == RLIM_INFINITY)
+		printf("soft limit infinite...\n");
+	else if (rl.rlim_cur == RLIM_SAVED_CUR)
+		printf("soft limit unrepresentable...\n");
+	else
+		printf("Soft limit: %ju\n", (uintmax_t)rl.rlim_cur);
+
+	if (rl.rlim_max == RLIM_INFINITY)
+		printf("hard limit infinite...\n");
+	else if (rl.rlim_max == RLIM_SAVED_MAX)
+		printf("hard limit unrepresentable...\n");
+	else
+		printf("hard limit: %ju\n", (uintmax_t)rl.rlim_max);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+                                            86. Ders 01/10/2023 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Prosesin kaynak limitleri üst prosesten alt prosese fork işlemi sırasında aktarılmaktadır. Yani örneğin kabuk programının 
+    kaynak limiti değiştirilirse bu limit kabuktan çalıştırılan bütün programlara yansıtılacaktır. Ancak bu konuda genellikle 
+    yanlış anlaşılan bir nokta vardır. İşletim sistemi kaynak aşımına ilişkin kontrolleri o prosesin proses kontrol bloğundaki 
+    değerlere göre yapmaktadır. Örneğin Bir kullanıcının yaratacağı maksimum proses sayısı RLIMIT_NPROC isimli kaynak ile 
+    belirlenmiştir. Biz bu değeri değiştirdiğimizde artık bizim prosesimiz ve bizim yarattığımız prosesler bu limitten etkilenir. 
+    Ancak bizim başka proseslerimizin proses kontrol bloğunda bu değişiklik yapılmamış olduğu için onlar bu değişiklikten 
+    etkilenmeyecektir. Oysa kişiler bu limitin kullanıcı tabanlı bir limit olduğunu gördüğünde sanki bir proses bu limiti 
+    değiştirdiğinde sistem genelinde bir değişiklik yapılıyormuş gibi düşünmektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Kabuk programının proses limitleri ulimit isimli içsel (internal) kabuk komutuyla görntülenip değiştirilebilmektedir. 
+    (ulimit komutunun tıpkı cd komutu gibi dışsal bir komut olamayacağına dikkat ediniz.) ulimit komutu -a seçeneği ile 
+    kullanılırsa tüm soft limitler görüntülenir. Örneğin:
+
+    $ ulimit -a
+    real-time non-blocking time  (microseconds, -R) unlimited
+    core file size              (blocks, -c) 0
+    data seg size               (kbytes, -d) unlimited
+    scheduling priority                 (-e) 0
+    file size                   (blocks, -f) unlimited
+    pending signals                     (-i) 15070
+    max locked memory           (kbytes, -l) 497904
+    max memory size             (kbytes, -m) unlimited
+    open files                          (-n) 1000
+    pipe size                (512 bytes, -p) 8
+    POSIX message queues         (bytes, -q) 819200
+    real-time priority                  (-r) 0
+    stack size                  (kbytes, -s) 8192
+    cpu time                   (seconds, -t) unlimited
+    max user processes                  (-u) 15070
+    virtual memory              (kbytes, -v) unlimited
+    file locks                          (-x) unlimited
+
+    Hard limitleri görüntülemek için -H, soft limitleri görüntülemek için (default) -S seçenekleri kullanılmaktadır. Örneğin:
+
+    $ ulimit -H -a
+    real-time non-blocking time  (microseconds, -R) unlimited
+    core file size              (blocks, -c) unlimited
+    data seg size               (kbytes, -d) unlimited
+    scheduling priority                 (-e) 0
+    file size                   (blocks, -f) unlimited
+    pending signals                     (-i) 15070
+    max locked memory           (kbytes, -l) 497904
+    max memory size             (kbytes, -m) unlimited
+    open files                          (-n) 1048576
+    pipe size                (512 bytes, -p) 8
+    POSIX message queues         (bytes, -q) 819200
+    real-time priority                  (-r) 0
+    stack size                  (kbytes, -s) unlimited
+    cpu time                   (seconds, -t) unlimited
+    max user processes                  (-u) 15070
+    virtual memory              (kbytes, -v) unlimited
+    file locks                          (-x) unlimited
+
+    Limitlerde değişiklik yapmak için limite özgü seçenekler kullanılmalıdır. Örneğin -n seçeneği dosya betimleyici tablosunun 
+    uzunluğu ile ilgilidir. Değişiklik şöyle yapılabilir:
+
+    $ ulimit -n 2048
+    $ ulimit -n
+    2048
+
+    Burada deafult olarak hem hard hem de soft limit değiştirilmiştir. Yalnızca soft limitin değiştirilmesi için -S, yalnızca 
+    hard limitin değiştirilemsi için -H seçeneğinin de komuta eklenmesi gerekir. Örneğin:
+
+    $ ulimit -H -n 5000
+    $ ulimit -H
+    unlimited
+    $ ulimit -a -H
+    real-time non-blocking time  (microseconds, -R) unlimited
+    core file size              (blocks, -c) 0
+    data seg size               (kbytes, -d) unlimited
+    scheduling priority                 (-e) 0
+    file size                   (blocks, -f) unlimited
+    pending signals                     (-i) 15070
+    max locked memory           (kbytes, -l) 497904
+    max memory size             (kbytes, -m) unlimited
+    open files                          (-n) 5000
+    pipe size                (512 bytes, -p) 8
+    POSIX message queues         (bytes, -q) 819200
+    real-time priority                  (-r) 0
+    stack size                  (kbytes, -s) unlimited
+    cpu time                   (seconds, -t) unlimited
+    max user processes                  (-u) 15070
+    virtual memory              (kbytes, -v) unlimited
+    file locks                          (-x) unlimited
+
+    Burada biz yalnızca hard limiti değiştirdik. Yukarıda da belirttiğimiz gibi hard limit soft limitin aşağısına indirilememektedir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Şimdi de bazı proses limitlerinden bahsedelim. Bunlar hakkında daha ayrıntılı bilgileri ilgili dokümanlardan edinebilirsiniz.
+
+    - RLIMIT_AS: Prosesin makismum kullanabileceği sanal bellek miktarını belirtir. LinuX'ta soft ve hard limit değerleri default 
+    değer RLIM_INFINITY biçimindedir. 
+
+    - RLIMIT_CORE: Bu limit üzerinde daha önce de "core dosyalarının oluşturulması" konusunda bazı şeyler söylemiştik. Bu limit
+    core dosyalarının maksimum uzunluğunu belirtmektedir. Linux'ta default olarak soft ve hard değerleri 0 durumundadır. Yani
+    core dosyalarının oluşturulabilmesi için bu limitin yükseltirlmesi (örneğin RLIM_INFINITY yapılması) gerekmektedir. 
+
+    - RLIMIT_CPU: Bu limit prosesin harcayacağı CPU zamanını sınırlandırmak için bulundurulmuştur. Eğer proses burada belirtilen 
+    CPU zamanını saniye olarak aşarsa bu durumda çekirdek prosese SIGXCPU sinyalini göndermektedir. Bu sinyalin default eylemi
+    prosesin sonlandırılması biçimindedir. Linux'ta bu sinyal için sinyal fonksiyonu yazıldığında proses hemen sonlandırılmaz. 
+    Her saniyede bu sinyal yeniden gönderilir. Soft limit değerine ulaşıldığında prosese SIGKILL sinyali gönderilerek proses 
+    sonlandırılmaktadır.
+
+    - RLIMIT_DATA: Bu limit ptosesin "data segment" kısmının limitini belirlemektedir. malloc gibi tahsisat fonksiyonları 
+    bu data segment kısmını büyüttüğü için bu limitten etkilenmektedir. Bu limitin Linux'taki hard ve soft default değeri 
+    RLIM_INFINITY biçimindedir. 
+
+    - RLIMIT_FSIZE: Prosesin toplamda yaratabileceği maksimum dosya uzunluğudur. Örneğin bu limit 5MB'a ayarlanmışsa proses
+    toplamda (tüm yarattığı dosyaların uzunluğu) ancak 5MB uzunluğunda dosya yaratabilecektir. Bu limitin Linux'taki default
+    hard ve soft değerleri RLIM_INFINITY biçimindedir. eğer bu limit aşılırsa işletim sistemi prosese SIGXFSZ sinyalini 
+    göndermektedir. Bu sinyalin defaut eylemi prosesin sonlandırılmasıdır.
+
+    - RLIMIT_NICE: Bu değer SCHED_OTHER prosesler için nice değerine sınır koymak koymak amacıyla düşünülmüştür. Anımsanacağı
+    gibi normalize edilmiş olan nice değerleri [0, 39] arasındaydı. Buradaki değer 20 - RLIMIT_NICE biçiminde normalize edilmektedir. 
+    Bu değerin olması prosesin nice değerini yükseltemeyeceği anlamına geşmektedir. Bu limitin Linux'taki default hard ve soft 
+    değerleri 0 biçimindedir. 
+
+    - RLIMIT_NOFILE: Prosesin dosya betimleyici tablosunun uzunluğunu belirtmektedir. Bu limitin default soft değeri 1024, 
+    hard değeri ise 1048576 biçimindedir. Biz bu limitin soft değerini değiştirdiğimizde kendi prosesimizin dosya betimleyici 
+    tablosunu otomatik olark büyütmüş olmaktayız. Ayrıca fork yaptığımız proseslerin de artık dosya betimleyici tabloları büyümüş
+    olacaktır. Linux'ta tüm proseslerin dosya betimleyici tablolarının uzunlukları toplamı için de bir kısıt vardır. Bu kısıt 
+    Linux'ta proc dosya sistemindeki /proc/sys/fs/file-max dosyasında belirtilmiştir. Güncel çeekirdeklerde buradaki değer 
+    9223372036854775807 biçiminde aşırı derecede büyüktür. Prosesin hard limiti olan 1048576 değeri de aslında proc dosya sistemi 
+    ile değiştirilebilmektedir. Bunun için proc dosya sistemindeki /proc/sys/fs/nr_open dosyası kullanılmaktadır. Bu dosyadaki değeri 
+    aşağıdaki gibi bir komutla değiştirebilirsiniz:
+
+    sudo sh -c "echo 20 > /proc/sys/fs/mqueue/msg_max"
+
+    Anımsanacağı gibi bu bilgi aynı zamanda sysconf fonksiyonundan da elde edilebilmektedir. 
+
+    - RLIMIT_NPROC: Belli bir kullanıcının yaratabileceği maksimum proses sayısıdır. Anımsanacağı gibi Linux sistemlerinde 
+    thread'ler için de task_struct yapısı ayrılmaktadır. Bu nedenle buradaki limitler Linux sistemlerinde thread'leri de 
+    kapsamaktadır. Yani biz thread yarattıkça da bu bu limite doğru ilerlemiş oluruz. Mevcut sistemlerde bu limitin hard ve 
+    soft değerleri default olarak 15070 biçimindedir. 
+
+    Anımsanacağı gibi bu bilgi aynı zamanda sysconf fonksiyonundan da elde edilebilmektedir. 
+
+    - RLIMIT_RTPRIO: Bu limit uygun önceliğe sahip olmayan SCHED_FIFO ve SCHED_RR proseslerin önceliklerini sınırlandırmak için 
+    kullanımaktadır. (Anımsanacağı gibi bu çizelgeleme politikalarına sahip proseslerin Linux'taki öncelikleri [0, 99] arasında 
+    olabiliyordu). Bu limitin default soft ve hard değerleri Linux'ta 0 biçimindedir. 
+
+    - RLIMIT_SIGPENDING: Gerçek zamanlı sinyallerdeki kuyruk uzunluğunu belirtmektedir. Bu limitin Linux'tahi soft ve hard 
+    default değerleri mevcut çekirdeklerde 15070 biçimindedir. 
+
+    - RLIMIT_STACK: Bir thread'in stack uzunluğunu sınırlaandırmak için kullanılmaktadır. Linux'ta default durumda thread'lerin 
+    stack uzunlukları 8MB'dir. Bu limitin Linuxtaki default soft değeri 8MB, hard değeri ise RLIM_INFINITY biçimindedir. 
+    (Yani biz thread yaratırken stack uzunluğunu bu soft limiti yukarı çekmeden artıramayız, ancak düşürebiliriz.)
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Linux'ta limitlerin hard ve soft değerlerini kalıcı bir biçimde değiştirebilmek için /etc/security/limits.conf dosyası 
+    bulundurulmuştur. Örneğin bu dosya sayesinde biz sistem açıldığında prosesimizin dosya betimleyici tablosunun default 
+    uzunluğunun (soft limitini) istediğimiz bir değerde olmasını sağlayabiliriz. Bu dosyanın formatı için man sayfalarına 
+    başvurabilirsiniz. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir prosesin kaynak kullanımlarını elde etmek için getrusage isimli bir POSIX fonksiyonu bulundurulmuştur. Fonksiyonun 
+    prototipi şöyledir:
+
+    #include <sys/resource.h>
+
+    int getrusage(int who, struct rusage *r_usage);
+
+    Fonskiyonun birinci parametresi kaynak bilgilerinin elde edileceği prosesleri belirtmektedir. İkinci parametresi kaynak 
+    bilgilerinin yerleştirileceği yapı nesnesinin adresini almaktadır. Bu yapıda Linux'a özgü bazı elemanlar da vardır. 
+    Ayrıntıları için ilgili dokğmanlara başvurabilirsiniz. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Kursumuzun bu bölümünde birden fazla prosesin aynı dosyaya erişim yaptığı durumlardaki problemleri ve bu problemlerin 
+    nasıl çözülmesi gerektiği üzerinde duracağız. Bu komuya genel olarak işletim sistemlerinde "dosya kilitleme (file locking)"
+    de denilmektedir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    İki prosesin aynı anda aynı dosyanın aynı bölümü üzerinde işlem yaptığını düşünelim. Bu duurmda ne olur? Örneğin bir 
+    prosesin dosyanın belli bir kısmına write fonksiyonu ile yazma yaparken diğer bir proses aynı kısımdan aynı anda read 
+    fonksiyonu ile okuma yapmak istese bir problem oluşur mu? İşte UNIX türevi sistemlerde read ve write işlemleri sistem 
+    genelinde atomik işlemlerdir. Yani işletim sistemi read ve write işlemlerini onları biri tamamen bitince diğeri işleme 
+    sokulacak biçimde sıraya sokarak yapmaktadır. Bu nedenle bir proses dosyanın belli bir bölümüne yazma yaparken diğer bir 
+    proses de aynı dosyanın aynı bölümünden okuma yaparken okuyan proses ya yazan prosesin yazmış olduğu değeri okur ya da 
+    dosyadaki yazma işleminden önceki değeri okur. Karışık bir değer okumaz. Yazni read ve write işlemleri iç içe geçmemektedir. 
+    POSIX standartları bunu garanti etmektedir. Benzer biçimde iki proses de aynı dosyanın aynı bölümüne yazma yapma istese
+    dosyada ya birinin ya da diğerinin yazdığı gözükecektir. Karışık bir bilgi (yani biraz birinin biraz ötekinin yazdığı değer)
+    gözükmeyecektir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Veritabanı yönetimleri sistemleri ya da veritabanı kütüphaneleri bir dosyaya birbirleriyle ilgili birden fazla read ve 
+    write işlemi yapabilmektedir. Örneğin şöyle bir senaryo düşünelim. Siz bir dosyanın belli bir eyrine bir bilgi yazmak 
+    isteyin ancak o bilgini hash değeri de dosyanın başka bir yerine yazılacak olsun. Burada biribiriyle uyumlu iki farklı write 
+    işlemi söz konusudur. Siz birinci write işlemini yaptıktan sonra henüz ikinci write işlemini yapmadan başka bir proses 
+    bu iki write işlemini hızlı davranıp yaparsa siz ikinci write işlemini yaptığınızda artık yazdığınız hash değeri ile 
+    asıl bilgi uyumsuz hale gelecektir. İşte veritabanı uygulamalarında bu biçimdeki işlemler çok yoğun yapılmaktadır. 
+    Bir dosyaya veritabanı programı önce kaydı yazıp sonra dosyanın başka bir yerine onun indeks bilgisini yazabilmektedir. 
+    Bu bilginin tutarlı olması gerekmektedir. Özetle tek bir read ve write sistem genelinde atomiktir ancak birden fazla read ve 
+    write için böyle bir durum söz konusu değildir. Bu tür problemlerin çözümü için akla gelen ilk yöntem senkronizasyon nesnelerini
+    kullanmaktır. Örneğin proses iki write işlemi öncesinde mutex nesnesini kilitler iki write işlemi bittiğinde açar. Diğer 
+    prosesler de aynı mutex nesnesini aynı biçimde kullanır. Tabii burada mutex nesnesinin prosesler arasında kullanılabiliyor 
+    olması gerekmektedir. Ancak bu çözün hem yorucu hem de yavaş bir çözümdür. İşte bu tür problemler için "dosya kilitleme"
+    denilen mekanizmaalar kullanılmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Dosya kilitleme bütünsel olarak ve offset temelinde (yani dosyanın bölümünü kapsayacak biçimde) yapılabilmektedir. Bütünsel 
+    dosya kilitleme kullanışlı değildir ve seyrek uygulanmaktadır. Offset temelinde dosya kilitleme de kendi içerisinde ikiye 
+    ayırlmaktadır: İsteğe bağlı kilitleme (advisory lock) ve zorunlu kilitleme (mandatory lock). Biz bu bölümde önce bütünsel 
+    kilitlemeyi daha sonra offset temelinde kilitlemeyi ele alacağız. Bütünsel kilitleme adeta mutex benzeri bir senkronizasyon 
+    nesnesi ile dosyaya tüm ulaşımı englleyecek bir mekanizma oluşturmaktadır. Offset temelinde kilitlemede dosyanın yalnızca 
+    istenilen bölümleri kilitlenmekte diğer bölümleri üzerinde işlemler yapılabilmektedir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bütünsel dosya kilitleme için Linux sistemlerinde flock isimli fonksiyon kullanılmaktadır. Bu fonksiyon mevcut POSIX 
+    standartlarında bulunmamaktadır. Fonksiyonun prototipi şöyledir:
+
+    #include <sys/file.h>
+
+    int flock(int fd, int operation);
+
+    Fonksiyonun birinci parametresi bütünsel kilitlenecek dosyaya ilişkin betimleyiciyi belirtmektedir. İkinci parametre kilitlemnin 
+    nasıl yapılacağını belirtir. İkinci parametre şunlardan biri olabilir:
+
+    LOCK_SH
+    LOCK_EX
+    LOCK_UN
+
+    Bu değerlerden biri ayrıca LOCK_NB değeri ile de bit OR işlemine sokulabilmektedir. Buradaki mekanizma "reader-writer lock"
+    mekanizmasına benzmektedir. Yani dosyaya birden fazla proses read işlemi yapabilir. Ancak bir proses write yapıyorsa diğerlerinin
+    işlem bitene kadar beklemesi sağlanmalıdır. Buradaki LOCK_SH (shared lock) okuma eylemi için erişme anlamına gelmektedir. 
+    LOCK_EX ise yazma işlemi için erişmek anlamına gelir. LOCK_UN kilitlemeyi kaldırmaktadır. Bu durumda dosyaya yazma amaçlı 
+    erişilecekse önce LOCK_EX ve işlem bitince de LOCK_UN uygulanmalıdır. Dosyaya okuma amaçlı erişilecekse önce LOCK_SH işlem 
+    bitince de LOCK_UN uygulanmalıdır. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri dönmektedir. 
+
+    Proseslerden bir dosyanın değişik yerlerine tutarlı bir biçimde yazma yapacak olsun. Kodunu şöyle organize etmelidir (kontroller
+    yapılmamıştır):
+
+    flock(fd, LOCK_EX);
+
+    /* yazma işlemleri */
+
+    flock(fd, LOCK_UN);
+
+    Bu durumda diğer bir proses flock fonksiyonunu LOCK_SH ya da LOCK_EX ile çağırdığında blokede bekler. Ta ki bu proses 
+    flock fonksiyonunu LOCK_UN ile çağırana kadar. Dosyadan okuma yapacak proses de kodunu şöyle organize etmelidir:
+
+    flock(fd, LOCK_SH);
+
+    /* okuma işlemleri */
+
+    flock(fd, LOCK_UN);
+
+    Bu durumda başka bir proses de aynı dosyaya flock fonksiyonunu LOCK_SH ile çağırarak erişmek istese bloke oluşmaz. Ancak 
+    bir proses dosyaya flock fonksiyonunu LOCK_EX ile çağırarak erişmeye çalışırsa blokede bekler. Ta ki bu proses LOCK_UN 
+    yapana kadar. Mekanizma tamamen daha önce görmüş olduğumuz reader-writer lock senkronizasyon nesnesindeki gibidir. 
+
+    Bu biçimdeki kilitler alt prosese fork işlemi sırasında da geçirilmektedir ve exec işlemi sırasında bu kilitler korunmaktadır. 
+    Kilit bilgisi dosya nesnesinin içerisinde saklanmaktadır. Dolayısıyla bir dosya betimleyicisi ile kilit alındığında aynı 
+    dosyaya ilişkin başka bir betimleyici bu kilidi almamış olmaktadır. Ancak aynı betimleyici ile birden fazla kez flock 
+    fonksiyonu çağrılırsa bu durumda ikinci lock birincinin etkisini kaldırır ve yeni etki oluşur. 
+
+    Bütünsel lock işlemi uygulanırken LOCK_NB bayrağı da kullanılırsa bu durumda uyuşmayan lock işlemleri blokeye yol açmaz. 
+    fonksiyon başarısız olur ve errno değeri EWOULDBLOCK biçiminde set edilir. 
+
+    Eğer kilit hiç açılmazsa kilidin ilişkin olduğu dosya nesnesine ilişkin son betimleyici kapatıldığında kilit 
+    otomatik olarak açılmaktadır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Offset temelinde dosya kilitleme işlemleri yukarıda da belirttiğimiz gibi kendi aralarında "isteğe bağlı (advisory)" ve 
+    "zorunlu (mandatory)" olmak üzere ikiye ayrılmaktadır. Offset temelinde lock işlemleri fcntl fonksiyonu ile gerçekleştirilmektedir. 
+    fcntl fonksiyonu bir dosya betimleyicisi ile bazı özel işlemler yapmakta kullanılan genel bir fonksiyondu. Biz bu fonksiyonu
+    daha önce tanıtmıştık. Fonksiyonun prototipi şöyleydi:
+
+    #include <fcntl.h>
+
+    int fcntl(int fd, int cmd, ...);
+
+    Fonksiyon iki argümanla ya da üç argümanla çağrılmaktadır. İkinci parametreye komut parametresi denilmektedir. Üçüncü 
+    parametrenin anlamı ikinci parametredeki komuta göre değişmektedir. 
+
+    Offset temelinde kilitleme için kilitlenecek dosyayı temsil eden bir dosya betimleyicisi olmalıdır (birinci parametre). 
+    fcntl fonksiyonunun ikinci parametresine F_SETLK, F_SETLKW ya da F_GETLK değerlerinden biri girilir. Üçüncü paramtresine 
+    ise her zaman flock isimli bir yapı nesnesinin adresi yerleştirilmelidir. F_SETLK ve F_SETLKW komutlarında bu flock yapı
+    nesnesinin içi programcı tarafından doldurulmalıdır. Ancak F_GETLK komutunda Bu yapı nesnesinin içi fonksiyon tarafından 
+    doldurulmaktadır. flock yapısı şöyle bildirilmiştir:
+
+    struct flock {
+        short l_type;
+        short l_whence;
+        off_t l_start;
+        off_t l_len;
+        pid_t l_pid;
+    };
+
+    Bu yapı nesnesinin elemanları pid dışında programcı tarafından doldurulur. l_type elemanı kilitlmenin cinsini belirtir. 
+    Bu elemana F_RDLCK, F_WRLCK, F_UNLCK değerlerinden biri girilmelidir. Yapının l_whence elemanı offset için orijini belirtmektedir. 
+    Bu elemana da SEEK_SET, SEEK_CUR ya da SEEK_END değerleri girilmelidir. l_start kilitlenecek bölgenin başlangıç offset'ini
+    l_len ise uzunluğunu belirtmektedir. l_pid F_GETLK komutu tarafından doldulmaktadır. 
+
+    l_len değeri 0 ise bu l_start değerinden itibaren dosyanın sonuna ve ötesine kadar kilitleme anlamına gelmektedir. (Bu durumda
+    örneğin lseek ile dosya göstericisi EOF ötesine konumlandırılsa bile kilit geçerli olmaktadır.)
+
+    F_SETLK blokesiz F_SETLKW blokeli kilitleme yapmaktadır. Kilitlenmek istenen alan daha önce kilitlenmiş olan başka
+    alanları kapsıyor ya da kesişiyor olabilir. Bu duurmda çelişme tüm kapsanan ve kesişen alanlar dikkate alınarak belirlenmektedir.
+
+    F_SETLK ile kilitlemek isteyen proses eğer bu alan başka bir proses tarafından çelişki yaratacak biçimde kilitlenmişse fcntl -1
+    değerine geri döner ve errno EACCESS ya da EAGAIN değeriyle set edilir. F_SETLKW zaten bu durumda bloke olmaktadır. 
+    F_GETLK komutu için de programcının flock nesnesini oluşturmuş olması gerekir. Bu durumda fcntl bu alanın isteğe bağlı biçimde
+    kilitlenip kilitlenmeyeceğini bize söyler. Yani bu durumda fcntl kilitleme yapmaz ama sanki yapacakmış gibi duruma bakar. 
+    Eğer çelişki yoksa fcntl yalnızca yapının type elemanını F_UNLCK haline getirir. Eğer çelişki varsa bu çelişkiye yol açan kilit
+    bilgilerini yapı nesnesinin içerisine doldurur. Fakat o alan birden fazla proses tarafından farklı biçimde kilitlenmişse bu durumda
+    fcntl bu kilitlerin herhangi birinin bilgisini bize verecektir. 
+
+    fcntl ile offset temelindeki kilitler fork işlemi sırasında alt prosese aktarılmazlar. Yani üst prosesin kilitlemiş olduğu alanlar
+    alt proses tarafından da kilitlenmiş gibi olmazlar. exec işlemleri sırasında offset temelindeki kilitlemeler varlığını devam ettirmektedir. 
+    Bir proses sonlandığında ya da o i-node elemanına ilişkin tüm betimleyiciler kapatıldığında prosesin ilgili dosyadaki kilitleri serbest bırakılır. 
+
+    Prosesin dosyaya F_WRLCK koyabilmesi için dosyanın yazma modunda, F_RDLCK koyabilmesi için ise dosyanın okuma modunda 
+    açılmış olması gerekir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -34962,26 +35732,4 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-
-
-
-
-
 
