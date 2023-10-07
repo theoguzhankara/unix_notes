@@ -34924,29 +34924,29 @@ void exit_sys(const char *msg)
     sağlamalıyız.
 
     POSIX tarafından belirlenen ve _POSIX_XXXXX_MAX biçiminde <limits.h> içerisinde define edilmiş olan minimum değerler aslında
-    çok küçük değerlerdir. Örneğin _POSIX_NAME_MAX bir dısyanın karakter duzunluğunu belirtir. Bunun minimum değer 14'tür. Halbuki 
-    yaygın hiçbir sistem 14 karakterden çok daha fazla dosya isimlerini desteklemektedir. Bnezer biçimde bir kullanıcının maksimum 
+    çok küçük değerlerdir. Örneğin _POSIX_NAME_MAX bir dosyanın karakter uzunluğunu belirtir. Bunun minimum değeri 14'tür. Halbuki 
+    yaygın hiçbir sistem 14 karakterden çok daha fazla dosya isimlerini desteklemektedir. Benzer biçimde bir kullanıcının maksimum 
     yaratacağı alt proses sayısının 25 olması da çok düşük bir değerdir. İşte bu sembolik sabitler tüm POSIX sistemlerindeki olabilecek
-    en küçük değerleri belirtmektedir ancak modern sistemler dikkate alındığında bir kullanımı yoktur. O halde programcının 
-    POSIX standartlarının en küçük değere değil o sistemdeki mevcut değere gereksinmi vardır. 
+    en küçük değerleri belirtmektedir, ancak modern sistemler dikkate alındığında bir kullanımı yoktur. O halde programcının 
+    POSIX standartlarının desteklediği en küçük değere değil, o sistemdeki mevcut değere ihtiyacı vardır. 
 
     <limits.h> dosyası içerisinde "Runtime Invariant Values (Possibly Indeterminate)" kategorisi bazı _POSIX_XXXXX_MAX değerlerinin 
     ilgili sistemdeki gerçek değerlerini belirtmektedir. Bu gerçek değerler <limits.h> içerisinde başında _POSIX_ öneki olmadan 
-    bildirilmiştir. Örneğin _POSIX_CHILD_MAX minimum değerinin ilgi sistemdeki gerçek değeri CHILD_MAX sembolik sabiti ile
-    _POSIX_OPEN_MAX minimum değerinin ilgili sistemdeki geröek değeri OPEN_MAX sembolik sabitiyle bildirilmiştir. Böylece <limits.h>
+    bildirilmiştir. Örneğin _POSIX_CHILD_MAX minimum değerinin ilgili sistemdeki gerçek değeri CHILD_MAX sembolik sabitiyle,
+    _POSIX_OPEN_MAX minimum değerinin ilgili sistemdeki gerçek değeri OPEN_MAX sembolik sabitiyle bildirilmiştir. Böylece <limits.h>
     içerisinde hem POSIX sistemlerindeki minimum değerler hem de ilgili sistemdeki gerçek değerler define edilmiş durumdadır. 
     Ancak burada da önemli bir pürüz vardır. Bazı parametrik değerler sistemin çalışması sırasında değiştirilebilmektedir ya da 
     bazı parametrik değerler o andaki sistem kaynaklarının miktarıyla ilgilidir. Bu durumda bu parametrelerin ilgili sistemdeki 
     değerleri baştan tespit edilememektedir. Ayrıca bazı parametrelerin ilgili sistemde bir sınırı da olmayabilir. İşte 
     POSIX standartları "Runtime Invariant Values (Possibly Indeterminate)" başlığı altında "eğer bir parametrik değer sistem 
     çalışırken değiştirilebiliyorsa ya da onun bir sınırı yoksa" ona ilişkin sembolik sabitin <limits.h> içerisinde define 
-    edilmemesi gerektiğini" belirtmektedir. Yani aslında OPEN_MAX gibi, ARG_MAX gibi, CHILD_MAX gibi sembolik sabitler <limits.h> 
+    edilmemesi gerektiğini belirtmektedir. Yani aslında OPEN_MAX gibi, ARG_MAX gibi, CHILD_MAX gibi sembolik sabitler <limits.h> 
     içerisinde define edilmemiş de olabilirler. Yani bu parametrelere ilişkin sembolik sabitler ancak define edilmişse 
     kullanılabilmektedir. Pekiyi bir sembolik sabitin define edilip edilmeyeceği belirsizse biz bundan faydalanabilir miyiz? 
     İşte POSIX standartlarının örtük bir biçimde önerdiği yöntem şudur: Eğer bir parametrik değer <limits.h> içerisinde define 
     edilmişse programcı onu doğrudan derleme zamanında kullanabilir. Ancak define edilmemişse o anki gerçek değer programın 
     çalışma zamanı sırasında sysconf, pathconf ve fpathconf fonksiyonlarıyla elde edilmelidir. (Tabii hiç sembolik sabite bakılmadan 
-    doğrudan bu fonksiyonlar da çağrılabilir. Yalnızca fonksiyon çağrıma maliyeti bir dezavantaj oluşturmaktadır.)
+    doğrudan bu fonksiyonlar da çağrılabilir. Yalnızca fonksiyon çağırma maliyeti bir dezavantaj oluşturmaktadır.)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
