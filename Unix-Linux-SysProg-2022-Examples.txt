@@ -18484,10 +18484,10 @@ void exit_sys(const char *msg)
     int pthread_create(pthread_t *thread, const pthread_attr_t *attr, 
             void *(*start_routine)(void *), void *arg);
 
-    Fonksiyonun birinci parametresi thread'in id değerinin yerleştirileceği nesnensin adresini almaktadır. Nasıl proseslerin 
+    Fonksiyonun birinci parametresi thread'in id değerinin yerleştirileceği nesnenin adresini almaktadır. Nasıl proseslerin 
     id değerleri varsa thread'lerin de id değerleri vardır. Proseslerin id değerleri o anda sistem genelinde tektir (unique). 
     Ancak thread'lerin id değerleri sistem genelinde tek olmak zorunda değildir. Fakat proses içerisinde tektir. Yani farklı proseslerin 
-    yarattığı thread'lerin id değerleri aynı olabilir ancak aynı prosesin thread'lerinin id değerleri farklı olmak zorundadır. 
+    yarattığı thread'lerin id değerleri aynı olabilir, ancak aynı prosesin thread'lerinin id değerleri farklı olmak zorundadır. 
     (Linux sistemlerinde thread'lerin id değerleri onlar için ayrılan task_struct yapısına ilişkin bir değer olduğu için sistem genelinde
     tektir. Ancak POSIX standartlarında bunun bir garantisi yoktur.)
 
@@ -34792,7 +34792,7 @@ void exit_sys(const char *msg)
     Şimdi de thread yoluyla haberdar edilmeye bir örnek verelim. Bu yöntemde thread bu mekanizma tarafından yaratılıp bizim
     fonksiyonumuz çağrılmaktadır. Burada yaratılacak olan thread'in toplamda bir tane mi olacağı yoksa her periyot için ayrı 
     bir thread'in yeniden mi yaratılacağı POSIX standartlarında işletim sistemini yazanların isteğine bırakılmıştır. Linux 
-    tek bir threda yaratıp tüm periyotlarda aynı thread'i kullanmaktadır. Bu durumda çağrılacak callback fonksiyonun sigevent 
+    tek bir thread yaratıp tüm periyotlarda aynı thread'i kullanmaktadır. Bu durumda çağrılacak callback fonksiyonun sigevent 
     yapısının sigev_notify_function elemanına girilmesi gerekmektedir. Fonksiyonun parametrik yapısı şöyle olmalıdır:
 
     void notification_proc(union sigval);
@@ -34832,8 +34832,6 @@ void exit_sys(const char *msg)
 
 void notification_proc(union sigval sval);
 void exit_sys(const char *msg);
-
-int g_count;
 
 int main(void)
 {
@@ -34880,8 +34878,8 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Biz sinyal yoluyla haberdar edilirken gerçek zamanlı bir sinyal kullanmamışsak bir biriktirme yapılmadığı için ilgili 
-    bloke edildiğinde kaç periyot geçtiğini anlayamayız. İşte bunu anlayabilmek için POSIX interval mekanizmasında timer_getoverrun
-    fonksiyonu bulundurulmuştur. Fonksiyonun prototipi şöyledir:
+    sinyal bloke edildiğinde ondan kaç periyot geçtiğini anlayamayız. İşte bunu anlayabilmek için POSIX interval mekanizmasında 
+    timer_getoverrun fonksiyonu bulundurulmuştur. Fonksiyonun prototipi şöyledir:
 
     #include <time.h>
 
@@ -34892,14 +34890,14 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     UNIX türevi sistemlerde çok sayıda sistemden sisteme değişebilecek parametrik değer vardır. Örneğin bir yol ifadesinin 
-    maksimum uzunluğu, bir prosesin açık durumda tutabileceği makisimum dısya sayısı (yani dosya betimleyici tablosunun büyüklüğü), 
+    maksimum uzunluğu, bir prosesin açık durumda tutabileceği maksimum dosya sayısı (yani dosya betimleyici tablosunun büyüklüğü), 
     bir kullanıcının yaratabileceği alt proseslerin sayısı, exec fonksiyonuna geçirilecek komut satırı argümanlarının sayısı, 
-    ek grupların (supplementary groups) sayısı (bu konu ileride ele alınmaktadır) gibi pek parametrik değer sistemden sisteme 
-    değişebilmektedir. Halbuki taşınabilir programlar oluşturabilmek için bu parametrik değerlerin o anda programın sistemde
-    siliniyor olması gerekebilmektedir.
+    ek grupların (supplementary groups) sayısı (bu konu ileride ele alınmaktadır) gibi pek çok parametrik değer sistemden sisteme 
+    değişebilmektedir. Halbuki taşınabilir programlar oluşturabilmek için bu parametrik değerlerin o anda programın çalıştığı 
+    sistemde biliniyor olması gerekebilmektedir.
 
     Genel olarak sistemdeki parametrik değerlerin define edildiği temel dosya <limits.h> dosyasıdır. (C standartlarında da bir 
-    limits.h dosyası vardır ama POSIX limits.h dosyası çok daha geniş kapsamlıdır.) <limits.h> dosyası içerisindeki sembolik 
+    limits.h dosyası vardır, ama POSIX limits.h dosyası çok daha geniş kapsamlıdır.) <limits.h> dosyası içerisindeki sembolik 
     sabitler POSIX standartlarında şu gruplara ayrılmıştır:
 
     - Runtime Invariant Values (Possibly Indeterminate)
@@ -34920,8 +34918,8 @@ void exit_sys(const char *msg)
     bunun değeri de 25'tir. Buradaki isimsel karışıklığa dikkat ediniz. _POSIX_CHILD_MAX sembolik sabiti bir kullanıcının yaratabileceği
     maksimum alt proses sayısına ilişkindir. Ancak bu sembolik sabitin değeri POSIX uyumlu sistemdeki olabilecek minimum değerdir. 
     Örneğin _POSIX_ARG_MAX sembolik sabiti exec fonksiyonlarında girilebilecek maksimum argüman sayısı ve maksimum çevre değişkeni sayısı 
-    ile ilgilidir. Ancak bu sembolik sabit POSIX uyumlu bir sistemdeki minimal değeri belirtmektedri ve 4096 olarak belirlenmiştir. 
-    Başka bir deyişle bir POSIX uyumlu bir işletim sistemi yazacaksak bir kulalnıcının yaratbileceği maksimum alt proses sayısının 
+    ile ilgilidir. Ancak bu sembolik sabit POSIX uyumlu bir sistemdeki minimal değeri belirtmektedir ve 4096 olarak belirlenmiştir. 
+    Başka bir deyişle bir POSIX uyumlu bir işletim sistemi yazacaksak bir kullanıcının yaratbileceği maksimum alt proses sayısının 
     en az 25 olmasını, exec fonksiyonuna girilebilecek maksimum argüman sayısının ve çevre değişkeni sayısının en az 4096 olmasını 
     sağlamalıyız.
 
@@ -35564,6 +35562,46 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    Sonraki konuya yardımcı olması için UNIX türevi sisteemlerin dosya sistemlerinde kullandığı i-node yapısı üzerinde durmak 
+    istiyoruz.
+
+    Biz daha önce dosya betimleyici tablosundaki slotların "dosya nesnesi" denilen yapı nesnelerini gösterdiğini belirtmiştik. 
+    Dosya nesneleri Linux kaynak kodlarında "struct file" yapısıyla temsil edilmektedir. Daha önceki modelimiz şöyleydi:
+
+    Proses Kontrol Blok
+    ...
+    ---------------------------->   Dosya Betimleyici Tablosu
+    ...                             0
+                                    1
+                                    2
+                                    3 --------------------------------> Dosya Nesnesi
+                                    4
+                                    ...
+
+    İşte diskteki dosya için o dosya kullanılmaya başlandığı zaman işletim sistemi aynı zamanda i-node isimli bir nesne 
+    oluşturmaktadır. i-node nesnesi farklı prosesler aynı dosya dosyayı açsalar bile o dosya için toplamda bir tanedir. 
+    i-node nesnesi içerisinde tipik olarak bizin stat fonksiyonlarıyla elde ettiğimiz bilgiler bulunmaktadır. (Örneğin fstat
+    fonksiyonu hiç disk işlemi yapmdan bilgileri doğrudan bu i-node nesnesinin içerisinden almaktadır.) Burada anahtar nokta
+    toplamda bir dosya için işletim sisteminin sistem genelinde tek bir i-node nesnesi oluşturmasıdır. Çünkü i-node nesneleri
+    işletim sisteminin diskte tek olan dosya bilglerini yerleştirdiği nesnelerdir. O dosya diskte tek olduğuna göre o dosya 
+    bilgilerinin çekirdek tarafından bellekteki tremsili de tek olmalıdır. Tabii modern işletim sistemleri dosyalara ilişkin 
+    bu i-node elemanlarını bir cache sistemi içerisinde tutmaktadır. Yani bir dosya artık hiçbir proses tarafından kullanılmıyor 
+    olsa da o dosyanın bilgileri i-node cache içerisinde bulunuyor olabilir. Linux i-node nesneleri için LRU (Least Recently Used)
+    stratejisine sahip bir cache sistemi kullanmaktadır. Bu durumda yukarıdaki şeklin daha gerçekçi biçimi aşağıdaki gibi olabilir:
+
+        Proses Kontrol Blok
+    ...
+    ---------------------------->   Dosya Betimleyici Tablosu
+    ...                             0
+                                    1
+                                    2
+                                    3 --------------------------------> Dosya Nesnesi ------> i-node nesnesi
+                                    4
+                                    ...
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Kursumuzun bu bölümünde birden fazla prosesin aynı dosyaya erişim yaptığı durumlardaki problemleri ve bu problemlerin 
     nasıl çözülmesi gerektiği üzerinde duracağız. Bu komuya genel olarak işletim sistemlerinde "dosya kilitleme (file locking)"
     de denilmektedir. 
@@ -35595,7 +35633,7 @@ void exit_sys(const char *msg)
     kullanmaktır. Örneğin proses iki write işlemi öncesinde mutex nesnesini kilitler iki write işlemi bittiğinde açar. Diğer 
     prosesler de aynı mutex nesnesini aynı biçimde kullanır. Tabii burada mutex nesnesinin prosesler arasında kullanılabiliyor 
     olması gerekmektedir. Ancak bu çözün hem yorucu hem de yavaş bir çözümdür. İşte bu tür problemler için "dosya kilitleme"
-    denilen mekanizmaalar kullanılmaktadır.
+    denilen mekanizmalar kullanılmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -35608,15 +35646,15 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bütünsel dosya kilitleme için Linux sistemlerinde flock isimli fonksiyon kullanılmaktadır. Bu fonksiyon mevcut POSIX 
-    standartlarında bulunmamaktadır. Fonksiyonun prototipi şöyledir:
+    Bütünsel dosya kilitleme için Linux sistemlerinde flock isimli fonksiyon kullanılmaktadır. flock fonksiyonu ilk kez BSD 
+    sistemlerinde gerçekleştirilmiştir. POSIX standartlarında bulunmamaktadır. Fonksiyonun prototipi şöyledir:
 
     #include <sys/file.h>
 
     int flock(int fd, int operation);
 
-    Fonksiyonun birinci parametresi bütünsel kilitlenecek dosyaya ilişkin betimleyiciyi belirtmektedir. İkinci parametre kilitlemnin 
-    nasıl yapılacağını belirtir. İkinci parametre şunlardan biri olabilir:
+    Fonksiyonun birinci parametresi bütünsel olarak kilitlenecek dosyaya ilişkin betimleyiciyi belirtmektedir. İkinci parametre 
+    kilitlemenin nasıl yapılacağını belirtir. İkinci parametre şunlardan biri olabilir:
 
     LOCK_SH
     LOCK_EX
@@ -35652,15 +35690,20 @@ void exit_sys(const char *msg)
     yapana kadar. Mekanizma tamamen daha önce görmüş olduğumuz reader-writer lock senkronizasyon nesnesindeki gibidir. 
 
     Bu biçimdeki kilitler alt prosese fork işlemi sırasında da geçirilmektedir ve exec işlemi sırasında bu kilitler korunmaktadır. 
-    Kilit bilgisi dosya nesnesinin içerisinde saklanmaktadır. Dolayısıyla bir dosya betimleyicisi ile kilit alındığında aynı 
-    dosyaya ilişkin başka bir betimleyici bu kilidi almamış olmaktadır. Ancak aynı betimleyici ile birden fazla kez flock 
-    fonksiyonu çağrılırsa bu durumda ikinci lock birincinin etkisini kaldırır ve yeni etki oluşur. 
+    Kilit bilgisi dosya nesnesinin içerisinde saklanmaktadır. Dolayısıyla birden fazla kez open fonksiyonu çağrılarak elde edilmiş olan 
+    dosya betimleyicilerinden biri ile kilit alındığında diğer betimleyici bu kilidi almamış gibi olmaktadır. Ancak aynı doya nesnesini 
+    gösteren betimleyici ile birden fazla kez flock fonksiyonu çağrılırsa bu durumda ikinci flock birincinin etkisini kaldırır ve yeni 
+    etki oluşur. 
 
     Bütünsel lock işlemi uygulanırken LOCK_NB bayrağı da kullanılırsa bu durumda uyuşmayan lock işlemleri blokeye yol açmaz. 
     fonksiyon başarısız olur ve errno değeri EWOULDBLOCK biçiminde set edilir. 
 
     Eğer kilit hiç açılmazsa kilidin ilişkin olduğu dosya nesnesine ilişkin son betimleyici kapatıldığında kilit 
     otomatik olarak açılmaktadır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+                                        87. Ders 07/10/2023 - Cumartesi
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -35678,7 +35721,7 @@ void exit_sys(const char *msg)
 
     Offset temelinde kilitleme için kilitlenecek dosyayı temsil eden bir dosya betimleyicisi olmalıdır (birinci parametre). 
     fcntl fonksiyonunun ikinci parametresine F_SETLK, F_SETLKW ya da F_GETLK değerlerinden biri girilir. Üçüncü paramtresine 
-    ise her zaman flock isimli bir yapı nesnesinin adresi yerleştirilmelidir. F_SETLK ve F_SETLKW komutlarında bu flock yapı
+    ise her zaman flock isimli bir yapı nesnesinin adresi girilmelidir. F_SETLK ve F_SETLKW komutlarında bu flock yapı
     nesnesinin içi programcı tarafından doldurulmalıdır. Ancak F_GETLK komutunda Bu yapı nesnesinin içi fonksiyon tarafından 
     doldurulmaktadır. flock yapısı şöyle bildirilmiştir:
 
@@ -35692,29 +35735,360 @@ void exit_sys(const char *msg)
 
     Bu yapı nesnesinin elemanları pid dışında programcı tarafından doldurulur. l_type elemanı kilitlmenin cinsini belirtir. 
     Bu elemana F_RDLCK, F_WRLCK, F_UNLCK değerlerinden biri girilmelidir. Yapının l_whence elemanı offset için orijini belirtmektedir. 
-    Bu elemana da SEEK_SET, SEEK_CUR ya da SEEK_END değerleri girilmelidir. l_start kilitlenecek bölgenin başlangıç offset'ini
-    l_len ise uzunluğunu belirtmektedir. l_pid F_GETLK komutu tarafından doldulmaktadır. 
+    Bu elemana da SEEK_SET (0), SEEK_CUR (1) ya da SEEK_END (2) değerleri girilmelidir. l_start elemanı kilitlenecek bölgenin 
+    başlangıç offset'ini l_len ise uzunluğunu belirtmektedir. l_pid F_GETLK komutu tarafından doldulmaktadır. Yapının l_type elemanının
+    kilidin türünü belirttiğini söylemiştik. Bu tür tıpkı thread senkronizasyonu konusunda görmüş olduğumuz "okuma-yazma kilitleri 
+    (reader-writer lock)" gibi işlem görmektedir. Yani biz belli bir bölgeye F_WRLCK ile kilit yerleştirirsek bu durum "bizim o bölgeye
+    başkalarının okuma ya da yazma yapmasını istemediğimiz" anlamına gelmektedir. Biz belli bir bölgeye F_RDLCK ile kilit yerleştirirsek
+    bu durum da "bizim o bölgeye başkaalarının yazma yapmasını istemediğimiz ancak okuma yapmalarına izin verdiğimiz" anlamına gelmektedir. 
+    F_UNLCK ise bizim o bölgedeki kilidi kaldırmak istediğimiz anlamına gelmektedir. Bu kilit türlerini şöyle özetleyebiliriz:
+
+    F_WRLCK: Başkaları yazma da okuma da yapmamalı
+    F_RDLCK: Başkaları okuma yapabilir ancak yazma yapmamalı
+    F_UNLCK: Bu bölgedeki kilit kaldırılmak isteniyor
 
     l_len değeri 0 ise bu l_start değerinden itibaren dosyanın sonuna ve ötesine kadar kilitleme anlamına gelmektedir. (Bu durumda
-    örneğin lseek ile dosya göstericisi EOF ötesine konumlandırılsa bile kilit geçerli olmaktadır.)
+    örneğin lseek ile dosya göstericisi EOF ötesine konumlandırılsa bile kilit geçerli olmaktadır.) Yani yapının l_len elemanı 0
+    olarak girilirse dosya ne kadar büyütülürse büyütülsün tüm büyütülen alanlar da kilitli olacaktır.
 
-    F_SETLK blokesiz F_SETLKW blokeli kilitleme yapmaktadır. Kilitlenmek istenen alan daha önce kilitlenmiş olan başka
-    alanları kapsıyor ya da kesişiyor olabilir. Bu duurmda çelişme tüm kapsanan ve kesişen alanlar dikkate alınarak belirlenmektedir.
+    Pekiyi fcntl fonksiyonunun ikinci parametresindeki F_SETLK, F_SETLKW ve F_GETLK komutları ne anlama gelmektedir? F_SETLK blokesiz 
+    F_SETLKW blokeli kilitleme yapmaktadır. Blokesiz kilitlemede "çelişen (incompatible)" kilitleme isteklerinde thread bloke olmaz,
+    ancak fcntl fonksiyonu başarrısız olur. Blokeli kilitlemede ise çelişen (incompatible) kilitleme isteklerinde thread bloke olur. 
+    Ta ki bu çelişki ortadan kaldırılana kadar. Örneğin biz bir dosyanın 100 ile 110 offset'leri arasını F_WRLCK türü ile F_SETLK 
+    komutunu kullanarak kilitlemek isteyelim. eğer bu bölge başka bir proses tarafından F_RDLCK ya da F_WRLCK türü ile kilitlenmişse
+    kilitleme başarısız olur ve fcntl fonksiyonu -1 değeri ile geri döner. Ancak biz aynı bölgeyi F_SETLKW ile blokeli kilitlemek 
+    istersek bu durumda çelişkili bir kilitleme isteği söz konusu olduğu için thread bloke olur. Ta ki bu çelişki giderilene kadar. 
+    (Yani kilidi yerleştiren proses onu kaldırana kadar.) Özetle F_SETLK ile çelişkili kilit yerleştirilmek istenirse fcntl başarısız 
+    olmakta ancak F_SETLKW ile çelişkili kilit yerleştirilmek istenirse fcntl blokeye yol açmaktadır. Genellikle uygulamalarda F_SETLKW 
+    kullanılmaktadır. 
 
-    F_SETLK ile kilitlemek isteyen proses eğer bu alan başka bir proses tarafından çelişki yaratacak biçimde kilitlenmişse fcntl -1
-    değerine geri döner ve errno EACCESS ya da EAGAIN değeriyle set edilir. F_SETLKW zaten bu durumda bloke olmaktadır. 
+    Yukarıda da belirttiğimiz gibi F_SETLK ile bir bölgeyi kilitlemek isteyen proses eğer bu alan başka bir proses tarafından çelişki 
+    yaratacak biçimde kilitlenmişse fcntl fonksiyonu başarısız olur ve -1 değerine geri döner. Bu durumda errno değişkeni EACCESS 
+    ya da EAGAIN değerlerinden biri ile set edilmektedir. 
+
+    Aynı proses kendisinin yerleştirmiş olduğu bir kilidin türünü değiştirebilir. Bu durumda bir çelişkiye bakılmamaktadır. Yani 
+    örneğin biz bir dosyanın belli bölgesine bir F_WRLCK yerleştirmiş olabiliriz. Sonra bunu F_RDLCK ile yer değiştirebiliriz. 
+    Bu işlem atomik düzeyde yapılmaktadır.
+
     F_GETLK komutu için de programcının flock nesnesini oluşturmuş olması gerekir. Bu durumda fcntl bu alanın isteğe bağlı biçimde
     kilitlenip kilitlenmeyeceğini bize söyler. Yani bu durumda fcntl kilitleme yapmaz ama sanki yapacakmış gibi duruma bakar. 
-    Eğer çelişki yoksa fcntl yalnızca yapının type elemanını F_UNLCK haline getirir. Eğer çelişki varsa bu çelişkiye yol açan kilit
-    bilgilerini yapı nesnesinin içerisine doldurur. Fakat o alan birden fazla proses tarafından farklı biçimde kilitlenmişse bu durumda
-    fcntl bu kilitlerin herhangi birinin bilgisini bize verecektir. 
+    Eğer çelişki yoksa fcntl yalnızca yapının l_type elemanını F_UNLCK haline getirir. Eğer çelişki varsa bu çelişkiye yol açan 
+    kilit bilgilerini yapı nesnesinin içerisine doldurur. Fakat o alan birden farklı biçimlerde kilitlenmişse bu durumda
+    fcntl bu kilitlerin herhangi birinin bilgisini bize verecektir. Örneğin kilit durumunu öğrenmek istediğimiz bölgede ayrık
+    iki farklı kilit bulunuyor olabilir. Bu tür durumlarda fcntl fonksiyonu bu kilit bilgilerinin herhangi birini bize vermektedir.
 
-    fcntl ile offset temelindeki kilitler fork işlemi sırasında alt prosese aktarılmazlar. Yani üst prosesin kilitlemiş olduğu alanlar
-    alt proses tarafından da kilitlenmiş gibi olmazlar. exec işlemleri sırasında offset temelindeki kilitlemeler varlığını devam ettirmektedir. 
-    Bir proses sonlandığında ya da o i-node elemanına ilişkin tüm betimleyiciler kapatıldığında prosesin ilgili dosyadaki kilitleri serbest bırakılır. 
+    fcntl ile offset temelinde konulmuş olan kilitler fork işlemi sırasında alt prosese aktarılmazlar. Yani üst prosesin 
+    kilitlemiş olduğu alanlar alt proses tarafından da kilitlenmiş gibi olmazlar. (Halbuki flock fonksiyonu ile bütünsel 
+    kilitleemelerin fork işlemi sırasında alt prosese aktarıldığını anımsayınız.) exec işlemleri sırasında offset temelindeki 
+    kilitlemeler varlığını devam ettirmektedir. 
 
-    Prosesin dosyaya F_WRLCK koyabilmesi için dosyanın yazma modunda, F_RDLCK koyabilmesi için ise dosyanın okuma modunda 
-    açılmış olması gerekir. 
+    Dosyanın kilit bilgileri dosyanın diskteki varlığı üzerine kaydedilmemektedir. İşletim sisteminin çekirdek içerisinde 
+    oluşturduğu i-node elemanın içerisinde kaydedilmektedir. Dolayısıyla aynı dosyayı açmış olan prosesler aynı i-node 
+    nesnesini gördükleri için aynı kilit bilgilerine sahip olurlar. Genellikle UNIX türevi işletim işletim sistemleri kiltit 
+    bilgilerini i-node nesnesi içerisinde bir bağlı listede proses id'lere göre sıralı bir biçimde tutmaktadır. 
+
+    Prosesin yerleştirmiş olduğu bir kilit o proses tarafından kilit türü F_UNLCK yapılarak kaldırılabilmektedir. Ancak en 
+    kötü olasılıkla ilgili dosya kapatıldığında o prosesin o dosya üzerinde yerleştirmiş olduğu kilitler de kaldırılmaktadır. 
+    Burada önemli bir nokta bir dosya betimleyicisi dup yapıldığında onların biri close ile kapatılırsa kilidin kaldırılacağıdır. 
+    Yani kilidin kaldırılması için bir betimleyicinin close edilmesi yeterli olmaktadır. Benzer biçimde aynı proses aynı dosyayı 
+    ikinci kez açmış olsa, onlardan herhangi biri close işlemş yaptığında kilit kaldırılmaktadır. Proses biterken zaten betimleyicler
+    üzerinde close işlemleri yapılacağı için o prosesin açmış olduğu dosyalar üzerinde yerleştirdiği kilitler de ortadan 
+    kaldırılacaktır. 
+
+    Prosesin dosyaya F_WRLCK kilidi yerleştirebilmesi için dosyanın yazma modunda, F_RDLCK kilidi koyabilmesi için ise dosyanın 
+    okuma modunda açılmış olması gerekir. 
+
+    Offset temelinde kilitlemede "deadlock" oluşmuna dikkat edilmelidir. Yani biz bir prosesin kilidi açmasını beklerken o 
+    proses de bizim başka bir kilidi açmamızı beekliyorsa burada bir "deadlock" durumu söz konusudur. İşte deadlock durumu 
+    fcntl fonksiyonu tarafından otomatik olarak tespit edilmektedir. Eğer bir proses F_SETLKW ile (F_SETLK ile değil) kilit 
+    koymak isterken bir "deadlock" durumu söz konusu ise fcntl başarısız olmakta ve errno değeri EDEADLK değeri ile set edilmektedir.
+
+    Kilitlenmek istenen bölgede birden fazla ayrık kilit bulunuyor olabilir. Bu durumda kilitlemenin yapılabilmesi için bu 
+    ayrık kilitlerin hiçbirinde bir çelişkinin olmaması gerekir. Aksş takdirde F_SETLK komutunda fcntl başarısız olur, F_SETLKW 
+    komutunda ise fcntl blokeye yol açar. Yani kilitleme işlemi "yap hep ya hiç" biçiminde yapılmaktadır. 
+
+    Bir bölgenin belli bir kilit türüyle kilitlenmiş olduğunu varsayalım. Aynı proses bu bölgenin bir alt bölgesini başka 
+    bir kilit türüyle kilitleyebilir ya da o alt bölgenin kilidini kaldırabilir. Bu durumda işletim sistemi otomatik olarak 
+    kilitleri birbirinden ayıracaktır. Örneğin:
+
+    WWWWWWWWWWWWWWWWWWWWW
+
+    Bu bölgenin F_WRLCK ile kilitlenmiş olduğunu düşünelim. Biz bu bölgenin ortasında bir bölgeyinin kilidini F_RDLCK olarak 
+    değiştirelim:
+
+    WWWWWWWWWRRRRRWWWWWWW
+
+    Burada artık üç kilit bölgesi oluşmaktadır. Kilidin kaldırılması eğer kilidi koyan proses tarafından yapılıyorsa bar zaman 
+    başarılı olmaktadır. Yani yukarıdaki üç bölgenin biz tek bir F_UNLCK ile kilidini kaldırabiliriz. Kilitlenmemiş bölgeye 
+    F_UNLCK uygulansa bile fcntl fonksiyonu başarısız olmamaktadır. 
+
+    Pekiyi fcntl fonksiyonunun başarısı nasıl kontorl edilmelidir. Eğer kilitleme F_SETLK fonksiyonu ile yapılıyorsa EACCES
+    ve EAGAIN değerleri test edilmelidir. Mesajlar bu durumlar için özel olarak verilmesi daha iyi bir tekniktir. Eğer kilitleeme
+     F_SETLKW ile yapılıyorsa EDEADLK değeri de test edilmelidir. Örneğin:
+
+    if (fcntl(fd, F_SETLK, &fl) == -1) {
+        if (errno == EACCES || errno == EAGAIN) {
+            fprintf(stderr, "lock failed!..\n");
+            ....
+        }
+        else
+            exit_sys("fcntl");
+    }
+
+    Ya da örneğin:
+
+    if (fcntl(fd, F_SETLKW, &fl) == -1) {
+        if (errno == EDEADLK) {
+            fprintf(stderr, "deadlock danger!..\n");
+            ....
+        }
+        else
+            exit_sys("fcntl");
+    }
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Aşağıda kilitleme işlemlerini test etmek için "flock-test.c" isimli örnek bir program verilmektedir. Bu programı çalıştırırken
+    komut satırı argümanı olarak kilitlemeye konu olacak dosyanın yol ifadesi verilmelidir. Örneğin:
+
+    ./flock-test test.txt
+
+    Program aşağıdaki gibi bir prompt'a düşmektedir:
+
+    CSD (55306)>
+
+    Parantezler içerisinde prosesin proses id'si bulunmaktadır. Buraya kullanıcı komutlar girerek fcntl ile kilit yerleştirebilir. 
+    Girilecek komutların biçimi şöyle olmalıdır:
+
+    <fcntl command code> <lock type> <starting offset> <length>
+
+    Örneğin:
+
+    CSD (55306)>F_SETLK F_RDLCK 0 64
+
+    Bu komutla fcntl fonksiyonu ile "test.txt" dosyaının 0 offset'inden 64 byte uzunluktaki bölgeye F_RDLCK yerleştirilmek 
+    istenmiştir. Yerleştirme işlemi blokeye yol açmayan F_SETLK komut kodu ile yapılacaktır. Aynı programı başka bir terminalden 
+    girerek çalıştırmalısınız. Örneğin:
+
+    CSD (55377)>F_SETLK F_WRLCK 0 64
+    Locked failed!..
+
+    F_GETLK komutunda aslında kilit türünün belirtilmesi gereksizdir. Ancak buradaki programı kısaltmak için kullanılmayacak olsa 
+    da bir kilit türünü yine belirtmek zorundayız. Örneğin:
+
+    CSD (55471)>F_GETLK F_RDLCK 0 64
+    Write Lock
+    Whence: 0
+    Start: 0
+    Length: 64
+    Process Id: 55469
+
+    Komutun ikinci argümanı aslında program tarafından kullanılmamaktadır. Ancak girilmek zorundadır. 
+
+    Programdan çıkmak için quit tuşuna basılabilir. 
+
+    Bu programı kllanarak F_SETLKW komutuyla blokeli işlemleri de deneyiniz. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* fclock-test.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#define MAX_CMDLINE     4096
+#define MAX_ARGS        64
+
+void parse_cmd(void);
+int get_cmd(struct flock *fl);
+void disp_flock(const struct flock *fl);
+void exit_sys(const char *msg);
+
+char g_cmd[MAX_CMDLINE];
+int g_count;
+char *g_args[MAX_ARGS];
+
+int main(int argc, char *argv[])
+{
+    int fd;
+    pid_t pid;
+    char *str;
+    struct flock fl;
+    int fcntl_cmd;
+
+    if (argc != 2) {
+        fprintf(stderr, "wrong number of arguments!..\n");
+        exit(EXIT_FAILURE);
+    }
+
+    pid = getpid();
+
+    if ((fd = open(argv[1], O_RDWR)) == -1)
+        exit_sys("open");
+
+    for (;;) {
+        printf("CSD (%ld)>", (long)pid), fflush(stdout);
+        fgets(g_cmd, MAX_CMDLINE, stdin);
+        if ((str = strchr(g_cmd, '\n')) != NULL)
+            *str = '\0';
+        parse_cmd();
+        if (g_count == 0)
+            continue;
+        if (g_count == 1 && !strcmp(g_args[0], "quit"))
+            break;
+        if (g_count != 4) {
+            printf("invalid command!\n");
+            continue;
+        }
+
+        if ((fcntl_cmd = get_cmd(&fl)) == -1) {
+            printf("invalid command!\n");
+            continue;
+        }
+
+        if (fcntl(fd, fcntl_cmd, &fl) == -1)
+            if (errno == EACCES || errno == EAGAIN)
+                printf("Locked failed!..\n");
+            else
+                perror("fcntl");
+        if (fcntl_cmd == F_GETLK)
+            disp_flock(&fl);
+    }
+
+    close(fd);
+
+    return 0;
+}
+
+void parse_cmd(void)
+{
+    char *str;
+
+    g_count = 0;
+    for (str = strtok(g_cmd, " \t"); str != NULL; str = strtok(NULL, " \t"))
+        g_args[g_count++] = str;
+}
+
+int get_cmd(struct flock *fl)
+{
+    int cmd, type;
+
+    if (!strcmp(g_args[0], "F_SETLK"))
+        cmd = F_SETLK;
+    else if (!strcmp(g_args[0], "F_SETLKW"))
+        cmd = F_SETLKW;
+    else if (!strcmp(g_args[0], "F_GETLK"))
+        cmd = F_GETLK;
+    else
+        return -1;
+
+    if (!strcmp(g_args[1], "F_RDLCK"))
+        type = F_RDLCK;
+    else if (!strcmp(g_args[1], "F_WRLCK"))
+        type = F_WRLCK;
+    else if (!strcmp(g_args[1], "F_UNLCK"))
+        type = F_UNLCK;
+    else
+        return -1;
+
+    fl->l_type = type;
+    fl->l_whence = SEEK_SET;
+    fl->l_start = (off_t)strtol(g_args[2], NULL, 10);
+    fl->l_len = (off_t)strtol(g_args[3], NULL, 10);
+
+    return cmd;
+}
+
+void disp_flock(const struct flock *fl)
+{
+    switch (fl->l_type) {
+        case F_RDLCK:
+            printf("Read Lock\n");
+            break;
+        case F_WRLCK:
+            printf("Write Lock\n");
+            break;
+        case F_UNLCK:
+            printf("Unlocked (can be locked)\n");
+    }
+
+    printf("Whence: %d\n", fl->l_whence);
+    printf("Start: %ld\n", (long)fl->l_start);
+    printf("Length: %ld\n", (long)fl->l_len);
+    if (fl->l_type != F_UNLCK)
+        printf("Process Id: %ld\n", (long)fl->l_pid);
+}
+
+void exit_sys(const char *msg)
+{
+    perror(msg);
+
+    exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+    Pekiyi dosya kilitleme mekanizmasından nasıl faydalanılacaktır? Örneğin biz aynı dosyanın iki bölgesi üzerinde birbirleriyle 
+    ilgili iki güncelleme yapmak isteyelim. Tipik olarak bunun için önce iki bölgeyi kilitleriz. Sonra güncellemeleri yaparız. 
+    Sonra da kilitleri açarız. Örneğin (kontroller yapılmamıştır):
+
+    fcntl(fd, F_SETLKW, &region1);      /* F_WRLCK */
+    fcntl(fd, FSETLKW, &region2);       /* F_WRLCK */
+
+    write(fd, region1, size1);
+    write(fd, region2, size2);
+
+    fcntl(fd, F_SETLKW, &region1);      /* F_UNLCK */
+    fcntl(fd, FSETLKW, &region2);       /* F_UNLCK */
+
+    Şimdi belli bir kaydın bir elemanını değiştirmek isteyim:
+
+    fcntl(fd, F_SETLKW, &region);       /* F_WRLCK */
+
+    read(fd, buf, elem_size);
+    <update işlemi>
+    write(fd, buf, elem_size)
+
+    fcntl(fd, F_SETLKW, &region);         /* F_UNLCK */
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Biz yukarıda "isteğe bağlı (advisory)" kilitleme işlemi yaptık. Burada "isteğe bağlı (advisory)" demekle aslında read/write 
+    fonksiyonlarının bu kilitlere hiç bakmaması anlatılmak istenmiştir. Örneğin biz dosyanın bir bölgesine F_WRLCK ile bir 
+    kilit yerleştirelim. Başka bir proses o bölgete write ile yazma yapabilir. Tabii dosya erişien ilgili programların hepsi
+    birbirleriyle koordineli yazıldığı için onlar da read/write yapmadna önce aynı kilit mekanizmasını kullanarak senkronizasyon 
+    sağlamaktadır. Özetle "isteğe bağlı kilitleme (advisory locking)" demekle read/write fonksiyonlarnın bakmadığı fcntl fonkcisyonun
+    baktığı kilit anlaşılmaktadır. Pekiyi "zorunlu (mandatory)" kilit sistemi nedir? Zorunlu kilitlemede read/write fonksiyonları 
+    kilitlere bakarak çalışmaktadır. Yani örneğin biz bir bölgeye F_WRLCK ile zorunlu kilit yerleştirmişsek o bölgeden read 
+    işlemi ya da o bölgeye write işlemi yapıldığında bu fonksiyonlar otomatik blokeye yol açmakta ya da başarız olmaktadır. 
+    Uygulamada "isteğe bağlı (advisory) kilitleme" çok dah ayoğun kullanılmaktadır. Çünkü zorunlu kilitlemede read/write 
+    fonksiyonlarının her defasında kilitlere bakması (kilitler konulmamış bile olsa) zaman kaybına yol açmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Pekiyi zorunlu (mandatory) kilitleme nasıl uygulanmaktadır? İsteğe bağlı kilitleme ile zorunlu kilitlemenin uygulanış biçimi 
+    arasında hiçbir farklılık yoktur. Kilitlemen isteğe bağlı mı yoksa zorunlu mu olduğu "mount parametrelerine" ve "dosyanın erişim 
+    haklarına" bakılarak belirlenmektedir. 
+
+    Zorunlu kilitleme kavramı POSIX standartların bulunmamaktadır. POSIX standartları fcntl fonksiyonun açıklamasında bunun gerekçelerini
+    belirtmiştir. Zaten bazı işletim sistemleri zorunlu kilitlemeyi hiç desteklememektedir. Linux 2.4 çekirdeği ile birlikte zorunlu 
+    dosya kilitlemesini destekler hale gelmiştir. Yukarıda da belirttiğimiz gibi zorunlu kilitleme için aslında fcntl fonksiyonunda 
+    ek bir şey yapılmaz. inux'ta zorlamalı kilitleme için şu koşulların sağlanmış olması gerekmektedir:
+
+    1) Dosyanın içinde bulunduğu dosya sisteminin -o mand ile mount edilmiş olması gerekir. Mevcut mount edilmiş olan bir 
+    dosya sisteminin mount parametreleri aşağıdaki gibi değiştirilebilir:
+
+    sudo mount -o mand,remount <device> <mount point
+
+    <BURADA KALDIK>
+
+    2) İlgili dosyanın setg-group id bayrağı set edilip x hakkı varsa reset edilmelidir. (chmod <dosya> g+s g-x)
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -35732,4 +36106,17 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+
+
+
+
 
