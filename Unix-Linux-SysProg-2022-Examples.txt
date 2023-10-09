@@ -1182,7 +1182,7 @@ void pwd_proc(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir hata değerinin yazısını elde etmek için strerror fonksiyonu kullanılabilir. Fonksiyon bizden EXXXX biçimindeki hata kodunu 
+    Bir hata değerinin yazısını elde etmek için strerror fonksiyonu kullanılabilir. Fonksiyon bizden EXXX biçimindeki hata kodunu 
     parametre olarak alır, bize statik düzeyde tahsis edilmiş hata yazısının adresini verir. Biz de POSIX fonksiyonu başarısız 
     olduğunda errno değerini bu biçimde yazıya dönüştürüp rapor edebiliriz. 
 
@@ -1771,7 +1771,7 @@ void exit_sys(const char *msg)
     ya da üç argümanla çağrılmalıdır. open fonksiyonunu daha fazla argümanla çağırmak "tanımsız davranışa (undefined behavior)" yol açmaktadır.
 
     Fonksiyonun birinci parametresi açılacak dosyanın yol ifadesini belirtir. İkinci parametre açış bayraklarını (modlarını) belirtmektedir. 
-    Bu parametre O_XXXX biçiminde isimlendirilmiş sembolik sabitlerin "bit OR" işlemine sokulmasıyla oluşturulur. Açış sırasında aşağıdaki sembolik sabitlerden 
+    Bu parametre O_XXX biçiminde isimlendirilmiş sembolik sabitlerin "bit OR" işlemine sokulmasıyla oluşturulur. Açış sırasında aşağıdaki sembolik sabitlerden 
     yalnızca biri belirtilmek zorundadır. 
 
     O_RDONLY
@@ -2513,7 +2513,7 @@ void exit_sys(const char *msg)
     umask(mode);
 
     Tabii programcı umask fonksiyonuna octal digitler girebilir. Ancak sistemlerde bu ocatl digitler tam olarak S_IXXX sembolik sabitlerinin 
-    değerlerine karşı gelmeyebilir. Ancak daha önceden de bahsedildiği gibi POSIX standartlarında belli bir zamandan sonra bu S_IXXXX sembolik sabitlerinin 
+    değerlerine karşı gelmeyebilir. Ancak daha önceden de bahsedildiği gibi POSIX standartlarında belli bir zamandan sonra bu S_IXXX sembolik sabitlerinin 
     değerleri açıkça belirtilmiştir. Örneğin:
 
     umask(00022);               /* Eskiden bu biçimde belirleme taşınabilir değildi, eski sistemlerde dikkat edilmesi gerekir */
@@ -2798,8 +2798,8 @@ void exit_sys(const char *msg)
 
     Yapının st_mode elemanı dosyanın erişim bilgilerini ve türünü içermektedir. Yine bu elemanın içerisindeki değerler bitler biçiminde oluşturulmuştur. 
     1 olan bitler ilgili özelliğin olduğunu belirtmektedir. Belli bir erişim hakkının (örneğin S_IWGRP gibi) olup olmadığını anlamak için programcı ilgili 
-    bitin set edilip edilmedeiğine st_mode & S_IXXX işlemi ile bakmalıdır. Dosyanın türü de yine aynı elemanın içerisine bitsel olarak kodlanmıştır. Ancak hangi bitlerin
-    hangi türleri belirttiği POSIX standartlarında belirtilmemiştir. Bu durum sistemden sisteme değişebilmektedir. (Anımsanacağı gibi eskiden aynı durum S_IXXXX
+    bitin set edilip edilmedeiğine st_mode & S_IXX işlemi ile bakmalıdır. Dosyanın türü de yine aynı elemanın içerisine bitsel olarak kodlanmıştır. Ancak hangi bitlerin
+    hangi türleri belirttiği POSIX standartlarında belirtilmemiştir. Bu durum sistemden sisteme değişebilmektedir. (Anımsanacağı gibi eskiden aynı durum S_IXXX
     sembolik sabitleri için de geçerliydi. Ancak daha sonra bu sembolik sabitlerinyonları sayısal değerleri yani bit pozisyonları POSIX standartlarında belirlendi.)
     Dosyanın türünü anlamak için iki yöntem bulunmaktadır. Birincisi <sys/stat.h> içerisindeki S_ISXXX biçimindeki makroları kullanmaktır. Bu makrolar
     eğer dosya ilgili türdense sıfır dışı bir değer ilgili türden değilse sıfır değerini verir. Makrolar şunlardır:
@@ -5813,7 +5813,7 @@ void exit_sys(const char *msg)
 
     Aşağıdaki örnekte biz yoli fadesinin yerleştirileceği diziyi 4096 + 1 eleman uzunluğunda açtık. Lşnux sistemlerinde x86 ve x64 mimarilerinde 
     (sayfa uzunluğunun 4K olduğu mimarilerde) yol ifadeleri en fazla 4096 karakter olabilmektedir. Ancak diğer mimarilerde ve POSIX genelinde
-    böyle bir zorunluluk yoktur. O sistemdeki makismum yol ifadesi uzunluğu <limits.h> dosyası içerisindeki PATH_MAX sembolik sabitiyle 
+    böyle bir zorunluluk yoktur. O sistemdeki maksimum yol ifadesi uzunluğu <limits.h> dosyası içerisindeki PATH_MAX sembolik sabitiyle 
     belirtilmektedir. Ancak maalesef bu sembolik sabitin define edilmiş olması da zorunlu değildir. Bu konunun biraz ayrıntıları olduğu için 
     konu bir başlık altında ileride ele alınacaktır.
 
@@ -6367,7 +6367,7 @@ void exit_sys(const char *msg)
     dikkat ediniz. fd betimleyicisini kapatmak doğru tekniktir. 1 numaralı betimleyici zaten ileride de ele alınacağı gibi proses bittiğinde kapatılmaktadır.
 
     Burada gerçekleşmesi beklenmeyen bir küçük nokta üzerinde de durmak istiyoruz. Bizim open fonksiyonuyla yönlendirilecek dosyayı
-    açtığımız durumda ya stdout dosyası zaten katapılmışsa ne olacaktır? İşte bu durumda close işlemi bizim için sorun oluşturur. Şöyle ki 
+    açtığımız durumda ya stdout dosyası zaten kapatılmışsa ne olacaktır? İşte bu durumda close işlemi bizim için sorun oluşturur. Şöyle ki 
     Bu durumda open fonksiyonu en düşük betimleyici olan 1 numaralı betimleyiciyi tahsis edecektir. dup2(fd, 1) çağrısında her iki betimleyici de
     aynı olduğu için dup2 bir şey yapmayacaktır. Ancak bundan sonda fd betimleyicisinin kapatılması aslında 1 numaralı betimleyicinin 
     kapatılması anlamına gelecektir. Yani sakıncalı bir durum oluşaçaktır. Bu sakıncalı durum aşağıdaki gibi bir kontrolle elimine edilebilir:
@@ -6787,7 +6787,7 @@ int main(void)
     "/dev/random" ve "/dev/urandom" aygıt sürücüleri her okunduğunda rastgele byte'lar elde edilmektedir. Bu iki aygıt sürücü arasında
     bazı küçük farklılıklar vardır. Ancak burada onun üzerinde durmayacağız. Ayrıca bu aygıt sürücülerden okumayı pratik hale getirmek 
     için Linux'a 3.17 çekirdeği ile birlikte "sys_getrandom" isimli bir sistem fonksiyonu da eklenmiştir. Aşağıdaki örnekte bu aygıt sürücüden 
-    rastgele byte'lar okunup hex sistemde ekrana yazdırılmıştır. Program beklemelere yol açarsa şaşırmayınız. Çünkü konuun bazı 
+    rastgele byte'lar okunup hex sistemde ekrana yazdırılmıştır. Program beklemelere yol açarsa şaşırmayınız. Çünkü konunun bazı 
     ayrıntıları vardır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -7126,7 +7126,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     İşte standart C fonksiyonları da yukarıdaki örnekte olduğu gibi sistem fonksiyonlarını daha az çağırmak için bir tampon
-    kullanmaktadır. Biz örneğin fgetc fonksiyonu ile bir byte bile okumak istesek fgetc bir taponlukluk bilgiyi okur ve bize 
+    kullanmaktadır. Biz örneğin fgetc fonksiyonu ile bir byte bile okumak istesek fgetc bir tamponluk bilgiyi okur ve bize 
     onun içerisinde bir byte'ı verir. Biz daha sonra yeniden fgetc fonksiyonunu çağırdığımızda fgetc zaten tamponda daha önce okunmuş olan 
     bilgi yığını olduğu için read fonksiyonu ile okuma yapmaz bize doğrudan tampondan verir. Tabii tampondaki her byte okunduktan sonra 
     (yani tamponun sonuna gelindiğinde) fgetc yeniden read fonksiyonunu çağıracak ve tamponu yeniden dolduracaktır. 
@@ -7896,7 +7896,7 @@ EXIT:
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Bir dosyadan okunan karakter beğenilmezse sanki hiç okunmamış gibi bir etki oluşturmak için (yani o karakteri tampona geri bırakmak için)
-    ungetc isimli bir standart C fonksiyonu buundurulmuştur:
+    ungetc isimli bir standart C fonksiyonu bulundurulmuştur:
 
     #include <stdio.h>
 
@@ -11247,7 +11247,7 @@ void exit_sys(const char *msg)
     dizin'in grup id'si olarak set edilmektedir. 
 
     Dizinlerin set-user-id bayraklarının set edilmesi benzer bir etkiye yol açmamaktadır. (Bu durum bazı eski UNIX sistemlerinde denenmiştir ancak
-    modern sistemlerde böyle br semantik yoktur.)
+    modern sistemlerde böyle bir semantik yoktur.)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -18286,7 +18286,7 @@ void exit_sys(const char *msg)
     thread'ler UNIX/Linux sistemlerine ilk sokulduğunda farklı thread kütüphaneleri oluşturulmuştu. Programcılar bu kütüphanelerden birini 
     kullanıyorlardı. Ancak 90'lı yılların ortalarında thread kütüphanesi "Realtime Extensions" başlığı altında POSIX standartlarına 
     sokulmuştur. POSIX tarafından desteklenen bu thread kütüphanesine "POSIX Thread kütüphanesi" ya da kısaca "pthread" kütüphanesi 
-    denilmektedir. POSIX thread kütüphanesinin içerisindeki bütün fonksiyonlar pthread_xxxx biçiminde "pthread_" öneki ile başlatılmış durumdadır. 
+    denilmektedir. POSIX thread kütüphanesinin içerisindeki bütün fonksiyonlar pthread_xxx biçiminde "pthread_" öneki ile başlatılmış durumdadır. 
     POSIX thread kütüphanesi "libpthread" isimli bir kütüphane biçiminde oluşturulmuştur. Bu kütüphaneyi kullanırken derleme sırasında 
     "-lpthread" seçeneğinin bulundurulması gerekmektedir. Bu seçenek link aşamasında POSIX thread kütüphanesinin linker tarafından 
     işleme sokulacağını belirtmektedir. Diğer programlama dillerindeki thread kütüphaneleri de UNIX/Linux sistemlerinde pthread 
@@ -18444,8 +18444,8 @@ void exit_sys(const char *msg)
 
     int result;
     ...
-    if ((result = pthread_xxxx(...)) != 0) {
-        fprintf(stderr, "pthread_xxxx: %s\n", strerror(result));
+    if ((result = pthread_xxx(...)) != 0) {
+        fprintf(stderr, "pthread_xxx: %s\n", strerror(result));
         exit(EXIT_FAILURE);
     }
 
@@ -18464,8 +18464,8 @@ void exit_sys(const char *msg)
 
     int result;
     ...
-    if ((result = pthread_xxxx(...)) != 0) 
-        exit_sys_errno("pthread_xxxx", result);
+    if ((result = pthread_xxx(...)) != 0) 
+        exit_sys_errno("pthread_xxx", result);
 
     errno ismi bazı sistemlerde bir değişken değil makro olduğu için errno isminde bir değişken tanımlamayınız. 
 
@@ -21823,7 +21823,7 @@ void exit_sys_errno(const char *msg, int eno)
     int pthread_mutex_wait(pthread_cond_t *cond, pthread_mutex_t *mutex)
     {
         1) Atomik biçimde mutex'in sahipliğini bırak (yani kilidini aç) ve uykuya dal
-        2) Şimdi uyandın, çünkü başka bir thread pthread_vond_signal ya da pthread_cond_broadcast fonksiyonlarını çağırdı
+        2) Şimdi uyandın, çünkü başka bir thread pthread_cond_signal ya da pthread_cond_broadcast fonksiyonlarını çağırdı
         3) Şimdi mutex sahipliğini almaya çalış:
 
         <Thread'lerden biri mutex'in sahipliğini alacak, yanlışlıkla uyanan diğerleri bu noktada bekleyecek>
@@ -26052,7 +26052,7 @@ void *thread_proc4(void *param)
     gcc'de bazı built-in fonksiyonlar atomik işlemler için bulundurulmuştur. Ancak gcc'de önceleri bu atomic built-in fonksiyonlar
     __sync_xxx biçiminde isimlendirilmişti. Sonra C++'a <atomic> kütüphanesi eklenince C++ kütüphanesi de kullanabilsin diye
     bu eski __sync_xxx isimli fonksiyonlar yerine bunların "memory model" parametresi alan __atomic_xxx versiyonları oluşturuldu. 
-    Artık yeni programların bu __atomic_xxxx biçimindeki bu yeni fonksiyonları kullanması tavsiye edilmektedir. Her iki fonksiyon grubunun 
+    Artık yeni programların bu __atomic_xxx biçimindeki bu yeni fonksiyonları kullanması tavsiye edilmektedir. Her iki fonksiyon grubunun 
     dokümanlarına ilişkin bağlantıları aşağıda veriyoruz:
 
     https://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/_005f_005fatomic-Builtins.html
@@ -28678,8 +28678,7 @@ void exit_sys_errno(const char *msg, int eno)
     Retbleed:                       Not affected
     Spec store bypass:              Vulnerable
     Spectre v1:                     Mitigation; usercopy/swapgs barriers and __user pointer sanitization
-    Spectre v2:                     Mitigation; Retpolines, IBPB conditional, STIBP disabled, RSB filling, PBRSB-e
-                                    IBRS Not affected
+    Spectre v2:                     Mitigation; Retpolines, IBPB conditional, STIBP disabled, RSB filling, PBRSB-e IBRS Not affected
     Srbds:                          Not affected
     Tsx async abort:                Not affected
     itlb multihit:                  Not affected
@@ -28718,7 +28717,7 @@ int main(void)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Linux'a özgü sched_getcpu isimli fonksiyon o anda fonksiyonu çağıran thread'in hangi işlemci ya da çekirdekte çalışmakta 
-    olduu bilgisini vermektedir. Fonksiyonun prototipi şöyledir:
+    olduğu bilgisini vermektedir. Fonksiyonun prototipi şöyledir:
 
     #define _GNU_SOURCE
 
@@ -34910,27 +34909,27 @@ void exit_sys(const char *msg)
 
     POSIX standartları bazı parametrik değerlerin POSIX uyumlu sistemler için olabilecek en küçük değerlerini "Minimum Values"
     kategorisi içerisinde define etmiştir. Buradaki sembolik sabitlerin hepsi _POSIX_ öneki başlatılmıştır ve genellikle sonunda MAX
-    soneki bulunmaktadır. Yani bu sembolik sabitlerin isimleri tipik olarak _POSIX_XXXXX_MAX biçimindedir. Her ne kadar sembolik 
+    soneki bulunmaktadır. Yani bu sembolik sabitlerin isimleri tipik olarak _POSIX_XXX_MAX biçimindedir. Her ne kadar sembolik 
     sabit isminde MAX soneki kullanılmışsa da aslında bu değerler her POSIX uyumlu sistemin destekleyeceği minimum değerlerdir. 
     Bu minimum değerlerin hepsi açıkça POSIX standartlarında belirtilmiştir. Örneğin bir prosesin açık durumda tutabileceği dosya 
     sayısı (yani dosya betimleyici tablosunun uzunluğu) _POSIX_OPEN_MAX sembolik sabitiyle belirtilmiştir ve bunun değeri 20'dir. 
     Yine örneğin bir kullanıcının yaratabileceği maksimum alt proses sayısı _POSIX_CHILD_MAX sembolik sabitiyle belirtilmiştir ve
     bunun değeri de 25'tir. Buradaki isimsel karışıklığa dikkat ediniz. _POSIX_CHILD_MAX sembolik sabiti bir kullanıcının yaratabileceği
     maksimum alt proses sayısına ilişkindir. Ancak bu sembolik sabitin değeri POSIX uyumlu sistemdeki olabilecek minimum değerdir. 
-    Örneğin _POSIX_ARG_MAX sembolik sabiti exec fonksiyonlarında girilebilecek maksimum argüman sayısı ve maksimum çevre değişkeni sayısı 
+    Örneğin _POSIX_ARG_MAX sembolik sabiti exec fonksiyonlarında girilebilecek maksimum argüman ve çevre değişkenlerinin byte uzunluğu 
     ile ilgilidir. Ancak bu sembolik sabit POSIX uyumlu bir sistemdeki minimal değeri belirtmektedir ve 4096 olarak belirlenmiştir. 
     Başka bir deyişle bir POSIX uyumlu bir işletim sistemi yazacaksak bir kullanıcının yaratbileceği maksimum alt proses sayısının 
     en az 25 olmasını, exec fonksiyonuna girilebilecek maksimum argüman sayısının ve çevre değişkeni sayısının en az 4096 olmasını 
     sağlamalıyız.
 
-    POSIX tarafından belirlenen ve _POSIX_XXXXX_MAX biçiminde <limits.h> içerisinde define edilmiş olan minimum değerler aslında
+    POSIX tarafından belirlenen ve _POSIX_XXX_MAX biçiminde <limits.h> içerisinde define edilmiş olan minimum değerler aslında
     çok küçük değerlerdir. Örneğin _POSIX_NAME_MAX bir dosyanın karakter uzunluğunu belirtir. Bunun minimum değeri 14'tür. Halbuki 
     yaygın hiçbir sistem 14 karakterden çok daha fazla dosya isimlerini desteklemektedir. Benzer biçimde bir kullanıcının maksimum 
     yaratacağı alt proses sayısının 25 olması da çok düşük bir değerdir. İşte bu sembolik sabitler tüm POSIX sistemlerindeki olabilecek
     en küçük değerleri belirtmektedir, ancak modern sistemler dikkate alındığında bir kullanımı yoktur. O halde programcının 
     POSIX standartlarının desteklediği en küçük değere değil, o sistemdeki mevcut değere ihtiyacı vardır. 
 
-    <limits.h> dosyası içerisinde "Runtime Invariant Values (Possibly Indeterminate)" kategorisi bazı _POSIX_XXXXX_MAX değerlerinin 
+    <limits.h> dosyası içerisinde "Runtime Invariant Values (Possibly Indeterminate)" kategorisi bazı _POSIX_XXX_MAX değerlerinin 
     ilgili sistemdeki gerçek değerlerini belirtmektedir. Bu gerçek değerler <limits.h> içerisinde başında _POSIX_ öneki olmadan 
     bildirilmiştir. Örneğin _POSIX_CHILD_MAX minimum değerinin ilgili sistemdeki gerçek değeri CHILD_MAX sembolik sabitiyle,
     _POSIX_OPEN_MAX minimum değerinin ilgili sistemdeki gerçek değeri OPEN_MAX sembolik sabitiyle bildirilmiştir. Böylece <limits.h>
@@ -34956,20 +34955,20 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     <limits.h> içerisindeki diğer bir grup da "Pathname Variable Values" isimli gruptur. Bu başlık altında belirtilen 
     sembolik sabitlerin değerleri o anda kullanılan dosya sistemine bağlı olarak değişebilmektedir. UNIX/Linux sistemlerinde 
-    farklı dosya sistemleri farklı noktalara mount edilebilmektedir. Bu farklı dosya dosya sistemlerinin isim uzunlukları gibi 
-    özellikleri de birbirindne farklı olabilmektedir. İşte bu tür büyüklükler <limits.h> içerisinde "Pathname Variable Values"
-    başlığı altında toplanmıştır. Bu gruptaki en önemli sembolik sabitler NAME_MAX, PATH_MAX sembolik sabitleridir. NAME_MAX 
-    bir dizin girişinin isminin maksimum olabilecek karakter sayısını belirtmektedir. PATH_MAX ise toplamda mutlak bir yol 
-    ifadesinin olabileceği en büyük karakter sayısını belirtir. Bir dosya isminin ya da bir yol isminin bir yerde saklanacağı 
+    farklı dosya sistemleri farklı noktalara mount edilebilmektedir. Bu farklı dosya sistemlerinin isim uzunlukları gibi 
+    özellikleri de birbirinden farklı olabilmektedir. İşte bu tür büyüklükler <limits.h> içerisinde "Pathname Variable Values"
+    başlığı altında toplanmıştır. Bu gruptaki en önemli sembolik sabitler NAME_MAX ve PATH_MAX sembolik sabitleridir. NAME_MAX 
+    bir dizin girişinin isminin olabilecek maksimum karakter sayısını belirtmektedir. PATH_MAX ise toplamda mutlak bir yol 
+    ifadesinin olabileceği en fazla karakter sayısını belirtir. Bir dosya isminin ya da bir yol isminin bir yerde saklanacağı 
     durumlarda saklanacak yerin büyüklüğünün belirlenmesi için bu değerlere gereksinim duyulmaktadır. Yukarıda da belirttiğimiz gibi
-    bu değerler dosya sistemine değişebilecek değerlerdir. İşte POSIX standartları eğer bu değerler tüm dizin ağacı içerisinde 
-    sabit ise bu sembolik sabitlerin define edilmesi ancak sabit değilse define edilmemesi gerektiğini belirtmektedir. Yani örneğin
+    bu değerler dosya sisteminden sistemine değişebilecek değerlerdir. İşte POSIX standartları eğer bu değerler tüm dizin ağacı içerisinde 
+    sabit ise bu sembolik sabitlerin define edilmesi, ancak sabit değilse define edilmemesi gerektiğini belirtmektedir. Yani örneğin
     PATH_MAX sembolik sabiti bir UNIX türevi sistemde define edilmişken başka bir sistemde edilmemiş olabilir. İşte "Pathname Variable
     Values" grubundaki sembolik sabitler eğer <limits.h> içerisinde define edilmemişse bu durumda onların değerleri pathconf ya da
     fpathconf POSIX fonksiyonuyla alınmalıdır. 
 
     <limits.h> içerisindeki "Runtime Increasable Values" grubundaki sembolik sabitler sistemden sisteme değişebilir ve işletiminin
-    çalışma zamanı sırasında artırılabilir. Bu sembolik sabitler ilgili sistemdeki minimum değerleri bu başlık altında define 
+    çalışma zamanı sırasında artırılabilir. Bu sembolik sabitlerin ilgili sistemdeki minimum değerleri bu başlık altında define 
     edilmek zorundadır. Anımsanacağı gibi bazı sembolik sabitlerin tüm POSIX sistemleri genelindeki minimum değerleri _POSIX_XXX
     biçiminde "Minimum Values" grubunda belirtilmiştir. Özetle "Runtime Increasable Values" grubundaki değerler o sistemdeki
     minimum değerler olarak kullanılabilir. Ancak bunların gerçek değerleri programın çalışma zamanı sırasında sysconf fonksiyonu
@@ -34981,7 +34980,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    sysconf fonksiyonu yuklarıda da belirttiğimiz gibi "Runtime Invariant Values" ve "untime Increasable Values" grubundaki 
+    sysconf fonksiyonu yukarıda da belirttiğimiz gibi "Runtime Invariant Values" ve "untime Increasable Values" grubundaki 
     büyüklüklerin programın çalışma zamanı sırasında elde edilmesinde kullanılmaktadır. Tabii "Runtime Invariant Values" 
     grubundaki sembolik sabitler eğer define edilmişse bu fonksiyonu çağırmaya gerek yoktur. Doğrudan o sembolik sabitlerin 
     değeri programcı tarafından kullanılabilir. sysconf fonksiyonun prototipi şöyledir:
@@ -34992,14 +34991,14 @@ void exit_sys(const char *msg)
 
     Fonksiyon parametre olarak hangi büyüklüğün değerinin elde edilmek istendiğini almaktadır. Bu değerler _SC_XXX biçiminde 
     define edilmiştir. Bu sembolik sabitlerin oluşturulmasındaki kurala dikkat ediniz: POSIX'teki minimum değerler _POSIX_XXX
-    biçiminde, o sistemdeki değerler XXX biçiminde, syscons fonksiyonun parametreleri ise _SC_XXX biçiminde isimlendirilmiştir. 
-    Örneğin dosya betimleyici tablosunun POSIX'teki minimum uzunlupu _POSIX_OPEN_MAX sembolik sabiti ile, ilgili sistemdeki uzunluğu
-    OPEN_MAX sembolik sabiti ile, sysconf fonksiyonundaki parametre ismi ise _SC_OPEN_MAX ismi ile define edilmiştir. 
+    biçiminde, o sistemdeki değerler XXX biçiminde, sysconf fonksiyonun parametreleri ise _SC_XXX biçiminde isimlendirilmiştir. 
+    Örneğin dosya betimleyici tablosunun POSIX'teki minimum uzunluğu _POSIX_OPEN_MAX sembolik sabitiyle, ilgili sistemdeki uzunluğu
+    OPEN_MAX sembolik sabitiyle, sysconf fonksiyonundaki parametre ismi ise _SC_OPEN_MAX ismiyle define edilmiştir. 
 
-    sysconf fonksiyonu başarı durumunda ilgili büyüklüğe başarısızlık durumunda -1 değerine geri dönmektedir. sysconf ile 
+    sysconf fonksiyonu başarı durumunda ilgili büyüklüğe, başarısızlık durumunda -1 değerine geri dönmektedir. sysconf ile 
     elde edilmek istenen büyüklük belirli olmayabilir ve sınırsız (infinite) da olabilir. Bu durumda fonksiyon başarısız 
-    olur ancak errno değer değiştirmez. (Yani bu durumu belirlemek için errno değişkenine sysconf fonksiyonunu çağırmadan önce 0 
-    değeri yerleştirilir sonra fonksiyon başarısız olduğunda errno değişkenine bakılır. Eğer hale 0 değeri duruyorsa ilgili 
+    olur. Ancak errno, değer değiştirmez. (Yani bu durumu belirlemek için errno değişkenine sysconf fonksiyonunu çağırmadan önce 0 
+    değeri yerleştirilir. Sonra fonksiyon başarısız olduğunda errno değişkenine bakılır. Eğer hala 0 değeri duruyorsa ilgili 
     büyüklüğün belirsiz ya da sınırsız olduğu sonucu çıkartılır.)
 
     Örneğin dosya betimleyici tablosunun uzunluğunu (yani açılacak maksimum dosya sayısını) sysconf fonksiyonu ile şöyle elde 
@@ -35049,7 +35048,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Yukarıda da belirttiğimiz gibi <limits.h> içerisindeki "Pathname Variable Values" grubunda bulunan sembolik sabitler eğer
-    ilgili sistemde define edilmemişse bunların değerleri paathconf ya da fpathconf fonksiyonlarıyla elde edilmelidir. Bu 
+    ilgili sistemde define edilmemişse bunların değerleri pathconf ya da fpathconf fonksiyonlarıyla elde edilmelidir. Bu 
     fonksiyonların prototipleri şöyledir:
 
     #include <unistd.h>
@@ -35057,23 +35056,23 @@ void exit_sys(const char *msg)
     long fpathconf(int fildes, int name);
     long pathconf(const char *path, int name);
 
-    Fonksiyonarın ikinci parametreleri değeri elde edilecek büyüklüğü belirtmektedir. Büyüklüğün POSIX sistemlerindeki minimum 
+    Fonksiyonların ikinci parametreleri değeri elde edilecek büyüklüğü belirtmektedir. Büyüklüğün POSIX sistemlerindeki minimum 
     değeri _POSIX_XXX, ilgili sistemdeki değeri XXX olmak üzere buradaki büyüklük isimleri _PC_XXX biçiminde isimlendirilmiştir. 
-    Örneğin bir dosyanın makismum karakter uzunluğunun POSIX'teki minimum değeri _POSIX_NAME_MAX biçimindedir. İlgili sistemdeki
+    Örneğin bir dosyanın maksimum karakter uzunluğunun POSIX'teki minimum değeri _POSIX_NAME_MAX biçimindedir. İlgili sistemdeki
     değeri NAME_MAX biçiminde pathconf ve fpathconf fonksiyonlarındaki isimleri ise _PC_NAME_MAX biçimindedir. path fonksiyonu
     yol ifadesiyle çalışırken, fpathconf fonksiyonu açık dosya betimleyicisi ile çalışmaktadır. Bazı büyüklükler için bu yol 
     ifadesinin ya da betimleyicinin dizine ilişkin olması gerekir. 
 
-    Fonksiyon başarı durumunda ilgili büyüklük değerine başarısızlık durumunda -1 değerine geri dönmektedir. Eğer ilgili 
+    Fonksiyon başarı durumunda ilgili büyüklük değerine, başarısızlık durumunda -1 değerine geri dönmektedir. Eğer ilgili 
     büyüklüğün o sistemde belli bir sınırı yoksa fonksiyonlar başarısız olmakta ancak errno değerini değiştirmemektedir. 
 
-    Biz yukarıda genel olarak açıklamış olsak da belli büyüklerin değerlerini elde ederken ayrıntılar için POSIX dokümanlarına 
+    Biz yukarıda genel olarak açıklamış olsak da belli büyüklüklerin değerlerini elde ederken ayrıntılar için POSIX dokümanlarına 
     başvurmanızı tavsiye ederiz. Örneğin _PC_NAME_MAX ve _PC_PATH_MAX değerlerini elde etmek için yol ifadesinin ya da betimleyicinin 
     bir dizine ilişkin olması gerekmektedir. Aksi takdirde fonksiyonun çalışması sistemden sisteme değişebilmektedir. Ayrıca örneğin 
-    _PC_PATH_MAX ile verilen uzunluk o dizine göreli uzunluktur. Yani buuzunluğa o dizine kadarki karakter uzunluğu da eklenmelidir. 
+    _PC_PATH_MAX ile verilen uzunluk o dizine göreli uzunluktur. Yani bu uzunluğa o dizine kadarki karakter uzunluğu da eklenmelidir. 
     Ayrıca örneğin NAME_MAX sembolik sabitiyle ya da _PC_NAME_MAX ismiyle elde edilen uzunluğa null karakter dahil değildir. 
     Halbuki PATH_MAX ya da _PC_PATH_MAX ile elde edilen uzunluğa null karakter dahildir. Örneğin PATH_MAX değerini pathconf 
-    fonksiyonu ile şöyle edebiliriz:
+    fonksiyonu ile şöyle elde edebiliriz:
 
     long result;
 
@@ -35087,7 +35086,7 @@ void exit_sys(const char *msg)
         printf("%ld\n", result);
 
     Biz burada kök dizinden itibaren (yani kök dizine göreli biçimde) yol ifadesinin uzunluğunu elde ettik. Dolayısıyla mutlak 
-    yol ifadesi için karaken karakter sayısı burada elde edilendne 1 fazla olmalıdır. Çünkü bu fonksiyonların verdikleri değer
+    yol ifadesi için gereken karakter sayısı burada elde edilenden 1 fazla olmalıdır. Çünkü bu fonksiyonların verdikleri değer
     bizim onlara geçtiğimiz dizine görelidir. Tabii Linux sistemlerinde NAME_MAX ve PATH_MAX sembolik sabitleri zaten define 
     edilmiştir. Dolayısıyla aslında Linux sistemlerinde bu fonksiyonların bu amaçla çağrılmasına gerek yoktur. Yani yazacağınız
     kod yalnızca Linux sistemlerinde kullanılacaksa zaten siz NAME_MAX ve PATH_MAX sembolik sabitlerini doğrudan kullanabilirsiniz. 
@@ -35126,9 +35125,9 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Pekiyi bazı büyüklere ilişkin değerler ilgili sistemde define edilmeyebileceğine göre taşınabilir programlar için nasıl 
+    Pekiyi bazı büyüklüklere ilişkin değerler ilgili sistemde define edilmeyebileceğine göre taşınabilir programlar için nasıl 
     bir yol izlenmelidir? Tabii yöntemlerden biri her zaman sysconf ya da pathcnf, fpathconf fonksiyonlarını çağırmak olabilir. 
-    ancak ilgili sembolik sabitler o sistemde sistemde define edilmişse bu çağrı gereksiz zaman kaybına yol açacaktır. Taşınabilirliği 
+    Ancak ilgili sembolik sabitler o sistemde define edilmişse bu çağrı gereksiz zaman kaybına yol açacaktır. Taşınabilirliği 
     sağlamak için Stevens "Advanced Programming in the UNIX Environment" kitabında aşağıdaki gibi bir yöntem önermektedir:
 
     #define PATH_MAX_GUESS		4096
@@ -35155,8 +35154,7 @@ void exit_sys(const char *msg)
         return g_max_path;
     }
 
-    Burada path_max fonksiyonu toplamda sıfır kere ya da en fazla bir kere sysconf fonksiyonunu çağırmaktadır. 
-
+    Burada path_max fonksiyonu toplamda sıfır kere ya da en fazla bir kere pathconf fonksiyonunu çağırmaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -35213,18 +35211,18 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    İşletim sistemni bir kaynak yöneticisi olarak da düşünebiliriz. Prosesler işletim sisteminin sunduğu çeşitli kaynakları 
+    İşletim sistemini bir kaynak yöneticisi olarak da düşünebiliriz. Prosesler işletim sisteminin sunduğu çeşitli kaynakları 
     kullanmaktadır. Tabii işletim sistemleri proseslerin kaynak kullanımlarını sınırlandırmaktadır. Aksi takdirde bir proses
     çok fazla kaynak kullanıp diğer proseslerin o kaynağa erişimini güçleştirebilir. Prosesin kaynak limitleri (yani kaynakları 
-    hangi sınırlar içerisinde kullanabilecek) proses kontol bloğu içerisinde saklanmaktadır. (Linux'ta bu vilgi task_struct 
-    yapısının signal elemanın gösterdiği struct signal yapısının içerisindeki struct rlimit dizisinde bulunmaktadır.)
+    hangi sınırlar içerisinde kullanabileceği) proses kontol bloğu içerisinde saklanmaktadır. (Linux'ta bu bilgi task_struct 
+    yapısının signal elemanının gösterdiği struct signal yapısının içerisindeki struct rlimit dizisinde bulunmaktadır.)
 
-    UNIX türevi işletim sistemleri her kaynak için "bir soft limit (buna current limit de denilmektedir)" bri de "hard limit"
+    UNIX türevi işletim sistemleri her kaynak için bir "soft limit (buna current limit de denilmektedir)" bir de "hard limit"
     değeri tutmaktadır. Kontroller soft limit dikkate alınarak yapılır. Herhangi bir proses soft limiti yükseltebilir. Ancak 
-    fazla hard limit kadar yükseltebilir. Yani hard limit soft limit için tavan değeri beelirtmektedir. Sıradan prosesler 
-    hard limiti yükseltemezler ancak düşürebilirler. Eğer hard limit sıradan prosesler tarafından düşürülürse bir daha eski 
+    en fazla hard limit kadar yükseltebilir. Yani hard limit, soft limit için tavan değeri belirtmektedir. Sıradan prosesler 
+    hard limiti yükseltemezler, ancak düşürebilirler. Eğer hard limit sıradan prosesler tarafından düşürülürse bir daha eski 
     değerine bile yükseltilemez. Uygun önceliğe sahip prosesler hard limiti yükseltebilirler. Dolayısıyla soft limiti de
-    yükseltebilirler. Bir özelliğin hard limiti soft limitin aşağısına çakilememektedir. 
+    yükseltebilirler. Bir özelliğin hard limiti, soft limitin aşağısına çekilememektedir. 
 
     O halde bizim şu bilgileri edinmemiz gerekir: Prosesin kaynakları nelerdir ve bu kaynak limitleri nasıl elde edilip 
     değiştirilmektedir?
@@ -35236,8 +35234,8 @@ void exit_sys(const char *msg)
 
     int getrlimit(int resource, struct rlimit *rlp);
 
-    Fonksiyonunun birinci parametresi kaynağın türünü ikinci parametresi kaynak bilgilerinin yerleştirileceği rlimit yapı 
-    nesnesinin adresini almaktadır. rlimit yapısı şöyle bildirilmiştir:
+    Fonksiyonun birinci parametresi kaynağın türünü, ikinci parametresi kaynak bilgilerinin yerleştirileceği rlimit yapı nesnesinin 
+    adresini almaktadır. rlimit yapısı şöyle bildirilmiştir:
 
     struct rlimit {
         rlim_t rlim_cur;    /* Soft limit */
@@ -35249,9 +35247,9 @@ void exit_sys(const char *msg)
 
     getrlimit fonksiyonunda dikkat edilmesi gereken birkaç nokta vardır: Fonksiyonun birinci parametresindeki kaynak belirten 
     değer <sys/resource.h> dosyası içerisinde RLIMIT_XXX sembolik sabitleriyle define edilmiştir. Fonksiyon ile elde edilmek 
-    istenen limitler sınırsız olabilir. Bu durumda rlimit yapısının rlim_cur ve rlim_max eelemanlarına RLIM_INFINITY özel 
+    istenen limitler sınırsız olabilir. Bu durumda rlimit yapısının rlim_cur ve rlim_max elemanlarına RLIM_INFINITY özel 
     değeri yerleştirilir. Elde edilmek istenen limit o sistemde belirsiz olabilir ya da o limitin o sistemde elde edilme yolu 
-    olmayabilir (unspecifed) bu durumda tapının rlim_cur elemanına RLIM_SAVED_CUR özel değeri, yapının rlim_max elemanına ise
+    olmayabilir (unspecifed). Bu durumda yapının rlim_cur elemanına RLIM_SAVED_CUR özel değeri, yapının rlim_max elemanına ise
     RLIM_SAVED_MAX değeri yerleştirilir. getrlimit fonksiyonu aşağıdaki gibi kullanılmalıdır:
 
     struct rlimit rl;
@@ -35322,7 +35320,7 @@ void exit_sys(const char *msg)
 
     int setrlimit(int resource, const struct rlimit *rlp);
 
-    Fonksiyonun yine birinci parametresi kaynağı ikinci parametresi yükseltilecek limitleri belirtmektedir. Örneğin:
+    Fonksiyonun yine birinci parametresi kaynağı, ikinci parametresi yükseltilecek limitleri belirtmektedir. Örneğin:
 
     struct rlimit rl;
 
@@ -35355,10 +35353,10 @@ int main(void)
 	rl.rlim_cur = 4096;
 
 	if (setrlimit(RLIMIT_NOFILE, &rl) == -1)
-		exit_sys("getrlimit");
+		exit_sys("setrlimit");
 
 	if (getrlimit(RLIMIT_NOFILE, &rl) == -1)
-			exit_sys("getrlimit");
+		exit_sys("getrlimit");
 
 	if (rl.rlim_cur == RLIM_INFINITY)
 		printf("soft limit infinite...\n");
@@ -35482,7 +35480,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Şimdi de bazı proses limitlerinden bahsedelim. Bunlar hakkında daha ayrıntılı bilgileri ilgili dokümanlardan edinebilirsiniz.
 
-    - RLIMIT_AS: Prosesin makismum kullanabileceği sanal bellek miktarını belirtir. LinuX'ta soft ve hard limit değerleri default 
+    - RLIMIT_AS: Prosesin maksimum kullanabileceği sanal bellek miktarını belirtir. LinuX'ta soft ve hard limit değerleri default 
     değer RLIM_INFINITY biçimindedir. 
 
     - RLIMIT_CORE: Bu limit üzerinde daha önce de "core dosyalarının oluşturulması" konusunda bazı şeyler söylemiştik. Bu limit
@@ -35513,7 +35511,7 @@ void exit_sys(const char *msg)
     hard değeri ise 1048576 biçimindedir. Biz bu limitin soft değerini değiştirdiğimizde kendi prosesimizin dosya betimleyici 
     tablosunu otomatik olark büyütmüş olmaktayız. Ayrıca fork yaptığımız proseslerin de artık dosya betimleyici tabloları büyümüş
     olacaktır. Linux'ta tüm proseslerin dosya betimleyici tablolarının uzunlukları toplamı için de bir kısıt vardır. Bu kısıt 
-    Linux'ta proc dosya sistemindeki /proc/sys/fs/file-max dosyasında belirtilmiştir. Güncel çeekirdeklerde buradaki değer 
+    Linux'ta proc dosya sistemindeki /proc/sys/fs/file-max dosyasında belirtilmiştir. Güncel çekirdeklerde buradaki değer 
     9223372036854775807 biçiminde aşırı derecede büyüktür. Prosesin hard limiti olan 1048576 değeri de aslında proc dosya sistemi 
     ile değiştirilebilmektedir. Bunun için proc dosya sistemindeki /proc/sys/fs/nr_open dosyası kullanılmaktadır. Bu dosyadaki değeri 
     aşağıdaki gibi bir komutla değiştirebilirsiniz:
@@ -35562,7 +35560,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Sonraki konuya yardımcı olması için UNIX türevi sisteemlerin dosya sistemlerinde kullandığı i-node yapısı üzerinde durmak 
+    Sonraki konuya yardımcı olması için UNIX türevi sistemlerin dosya sistemlerinde kullandığı i-node yapısı üzerinde durmak 
     istiyoruz.
 
     Biz daha önce dosya betimleyici tablosundaki slotların "dosya nesnesi" denilen yapı nesnelerini gösterdiğini belirtmiştik. 
@@ -35608,7 +35606,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    İki prosesin aynı anda aynı dosyanın aynı bölümü üzerinde işlem yaptığını düşünelim. Bu duurmda ne olur? Örneğin bir 
+    İki prosesin aynı anda aynı dosyanın aynı bölümü üzerinde işlem yaptığını düşünelim. Bu durumda ne olur? Örneğin bir 
     prosesin dosyanın belli bir kısmına write fonksiyonu ile yazma yaparken diğer bir proses aynı kısımdan aynı anda read 
     fonksiyonu ile okuma yapmak istese bir problem oluşur mu? İşte UNIX türevi sistemlerde read ve write işlemleri sistem 
     genelinde atomik işlemlerdir. Yani işletim sistemi read ve write işlemlerini onları biri tamamen bitince diğeri işleme 
@@ -35799,7 +35797,7 @@ void exit_sys(const char *msg)
     okuma modunda açılmış olması gerekir. 
 
     Offset temelinde kilitlemede "deadlock" oluşmuna dikkat edilmelidir. Yani biz bir prosesin kilidi açmasını beklerken o 
-    proses de bizim başka bir kilidi açmamızı beekliyorsa burada bir "deadlock" durumu söz konusudur. İşte deadlock durumu 
+    proses de bizim başka bir kilidi açmamızı bekliyorsa burada bir "deadlock" durumu söz konusudur. İşte deadlock durumu 
     fcntl fonksiyonu tarafından otomatik olarak tespit edilmektedir. Eğer bir proses F_SETLKW ile (F_SETLK ile değil) kilit 
     koymak isterken bir "deadlock" durumu söz konusu ise fcntl başarısız olmakta ve errno değeri EDEADLK değeri ile set edilmektedir.
 
@@ -35823,13 +35821,13 @@ void exit_sys(const char *msg)
     F_UNLCK uygulansa bile fcntl fonksiyonu başarısız olmamaktadır. 
 
     Pekiyi fcntl fonksiyonunun başarısı nasıl kontorl edilmelidir. Eğer kilitleme F_SETLK fonksiyonu ile yapılıyorsa EACCES
-    ve EAGAIN değerleri test edilmelidir. Mesajlar bu durumlar için özel olarak verilmesi daha iyi bir tekniktir. Eğer kilitleeme
+    ve EAGAIN değerleri test edilmelidir. Mesajlar bu durumlar için özel olarak verilmesi daha iyi bir tekniktir. Eğer kilitleme
      F_SETLKW ile yapılıyorsa EDEADLK değeri de test edilmelidir. Örneğin:
 
     if (fcntl(fd, F_SETLK, &fl) == -1) {
         if (errno == EACCES || errno == EAGAIN) {
             fprintf(stderr, "lock failed!..\n");
-            ....
+            ...
         }
         else
             exit_sys("fcntl");
@@ -35840,7 +35838,7 @@ void exit_sys(const char *msg)
     if (fcntl(fd, F_SETLKW, &fl) == -1) {
         if (errno == EDEADLK) {
             fprintf(stderr, "deadlock danger!..\n");
-            ....
+            ...
         }
         else
             exit_sys("fcntl");
@@ -35900,8 +35898,8 @@ void exit_sys(const char *msg)
 #include <fcntl.h>
 #include <unistd.h>
 
-#define MAX_CMDLINE     4096
-#define MAX_ARGS        64
+#define MAX_CMDLINE		4096
+#define MAX_ARGS		64
 
 void parse_cmd(void);
 int get_cmd(struct flock *fl);
@@ -35914,120 +35912,120 @@ char *g_args[MAX_ARGS];
 
 int main(int argc, char *argv[])
 {
-    int fd;
-    pid_t pid;
-    char *str;
-    struct flock fl;
-    int fcntl_cmd;
+	int fd;
+	pid_t pid;
+	char *str;
+	struct flock fl;
+	int fcntl_cmd;
 
-    if (argc != 2) {
-        fprintf(stderr, "wrong number of arguments!..\n");
-        exit(EXIT_FAILURE);
-    }
+	if (argc != 2) {
+		fprintf(stderr, "wrong number of arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
 
-    pid = getpid();
+	pid = getpid();
 
-    if ((fd = open(argv[1], O_RDWR)) == -1)
-        exit_sys("open");
+	if ((fd = open(argv[1], O_RDWR)) == -1)
+		exit_sys("open");
 
-    for (;;) {
-        printf("CSD (%ld)>", (long)pid), fflush(stdout);
-        fgets(g_cmd, MAX_CMDLINE, stdin);
-        if ((str = strchr(g_cmd, '\n')) != NULL)
-            *str = '\0';
-        parse_cmd();
-        if (g_count == 0)
-            continue;
-        if (g_count == 1 && !strcmp(g_args[0], "quit"))
-            break;
-        if (g_count != 4) {
-            printf("invalid command!\n");
-            continue;
-        }
+	for (;;) {
+		printf("CSD (%ld)>", (long)pid), fflush(stdout);
+		fgets(g_cmd, MAX_CMDLINE, stdin);
+		if ((str = strchr(g_cmd, '\n')) != NULL)
+			*str = '\0';
+		parse_cmd();
+		if (g_count == 0)
+			continue;
+		if (g_count == 1 && !strcmp(g_args[0], "quit"))
+			break;
+		if (g_count != 4) {
+			printf("invalid command!\n");
+			continue;
+		}
 
-        if ((fcntl_cmd = get_cmd(&fl)) == -1) {
-            printf("invalid command!\n");
-            continue;
-        }
+		if ((fcntl_cmd = get_cmd(&fl)) == -1) {
+			printf("invalid command!\n");
+			continue;
+		}
 
-        if (fcntl(fd, fcntl_cmd, &fl) == -1)
-            if (errno == EACCES || errno == EAGAIN)
-                printf("Locked failed!..\n");
-            else
-                perror("fcntl");
-        if (fcntl_cmd == F_GETLK)
-            disp_flock(&fl);
-    }
+		if (fcntl(fd, fcntl_cmd, &fl) == -1)
+			if (errno == EACCES || errno == EAGAIN)
+				printf("Locked failed!..\n");
+			else
+				perror("fcntl");
+		if (fcntl_cmd == F_GETLK)
+			disp_flock(&fl);
+	}
 
-    close(fd);
+	close(fd);
 
-    return 0;
+	return 0;
 }
 
 void parse_cmd(void)
 {
-    char *str;
+	char *str;
 
-    g_count = 0;
-    for (str = strtok(g_cmd, " \t"); str != NULL; str = strtok(NULL, " \t"))
-        g_args[g_count++] = str;
+	g_count = 0;
+	for (str = strtok(g_cmd, " \t"); str != NULL; str = strtok(NULL, " \t"))
+		g_args[g_count++] = str;
 }
 
 int get_cmd(struct flock *fl)
 {
-    int cmd, type;
+	int cmd, type;
 
-    if (!strcmp(g_args[0], "F_SETLK"))
-        cmd = F_SETLK;
-    else if (!strcmp(g_args[0], "F_SETLKW"))
-        cmd = F_SETLKW;
-    else if (!strcmp(g_args[0], "F_GETLK"))
-        cmd = F_GETLK;
-    else
-        return -1;
+	if (!strcmp(g_args[0], "F_SETLK"))
+		cmd = F_SETLK;
+	else if (!strcmp(g_args[0], "F_SETLKW"))
+		cmd = F_SETLKW;
+	else if (!strcmp(g_args[0], "F_GETLK"))
+		cmd = F_GETLK;
+	else
+		return -1;
 
-    if (!strcmp(g_args[1], "F_RDLCK"))
-        type = F_RDLCK;
-    else if (!strcmp(g_args[1], "F_WRLCK"))
-        type = F_WRLCK;
-    else if (!strcmp(g_args[1], "F_UNLCK"))
-        type = F_UNLCK;
-    else
-        return -1;
+	if (!strcmp(g_args[1], "F_RDLCK"))
+		type = F_RDLCK;
+	else if (!strcmp(g_args[1], "F_WRLCK"))
+		type = F_WRLCK;
+	else if (!strcmp(g_args[1], "F_UNLCK"))
+		type = F_UNLCK;
+	else
+		return -1;
 
-    fl->l_type = type;
-    fl->l_whence = SEEK_SET;
-    fl->l_start = (off_t)strtol(g_args[2], NULL, 10);
-    fl->l_len = (off_t)strtol(g_args[3], NULL, 10);
+	fl->l_type = type;
+	fl->l_whence = SEEK_SET;
+	fl->l_start = (off_t)strtol(g_args[2], NULL, 10);
+	fl->l_len = (off_t)strtol(g_args[3], NULL, 10);
 
-    return cmd;
+	return cmd;
 }
 
 void disp_flock(const struct flock *fl)
 {
-    switch (fl->l_type) {
-        case F_RDLCK:
-            printf("Read Lock\n");
-            break;
-        case F_WRLCK:
-            printf("Write Lock\n");
-            break;
-        case F_UNLCK:
-            printf("Unlocked (can be locked)\n");
-    }
+	switch (fl->l_type) {
+		case F_RDLCK:
+			printf("Read Lock\n");
+			break;
+		case F_WRLCK:
+			printf("Write Lock\n");
+			break;
+		case F_UNLCK:
+			printf("Unlocked (can be locked)\n");
+	}
 
-    printf("Whence: %d\n", fl->l_whence);
-    printf("Start: %ld\n", (long)fl->l_start);
-    printf("Length: %ld\n", (long)fl->l_len);
-    if (fl->l_type != F_UNLCK)
-        printf("Process Id: %ld\n", (long)fl->l_pid);
+	printf("Whence: %d\n", fl->l_whence);
+	printf("Start: %ld\n", (long)fl->l_start);
+	printf("Length: %ld\n", (long)fl->l_len);
+	if (fl->l_type != F_UNLCK)
+		printf("Process Id: %ld\n", (long)fl->l_pid);
 }
 
 void exit_sys(const char *msg)
 {
-    perror(msg);
+	perror(msg);
 
-    exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -36036,24 +36034,24 @@ void exit_sys(const char *msg)
     ilgili iki güncelleme yapmak isteyelim. Tipik olarak bunun için önce iki bölgeyi kilitleriz. Sonra güncellemeleri yaparız. 
     Sonra da kilitleri açarız. Örneğin (kontroller yapılmamıştır):
 
-    fcntl(fd, F_SETLKW, &region1);      /* F_WRLCK */
-    fcntl(fd, FSETLKW, &region2);       /* F_WRLCK */
+    fcntl(fd, F_SETLKW, &region1);		/* F_WRLCK */
+    fcntl(fd, FSETLKW, &region2);		/* F_WRLCK */
 
     write(fd, region1, size1);
     write(fd, region2, size2);
 
-    fcntl(fd, F_SETLKW, &region1);      /* F_UNLCK */
-    fcntl(fd, FSETLKW, &region2);       /* F_UNLCK */
+    fcntl(fd, F_SETLKW, &region1);		/* F_UNLCK */
+    fcntl(fd, FSETLKW, &region2);		/* F_UNLCK */
 
     Şimdi belli bir kaydın bir elemanını değiştirmek isteyim:
 
-    fcntl(fd, F_SETLKW, &region);       /* F_WRLCK */
+    fcntl(fd, F_SETLKW, &region);		/* F_WRLCK */
 
     read(fd, buf, elem_size);
     <update işlemi>
     write(fd, buf, elem_size)
 
-    fcntl(fd, F_SETLKW, &region);         /* F_UNLCK */
+    fcntl(fd, F_SETLKW, &region);		/* F_UNLCK */
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -36061,7 +36059,7 @@ void exit_sys(const char *msg)
     Biz yukarıda "isteğe bağlı (advisory)" kilitleme işlemi yaptık. Burada "isteğe bağlı (advisory)" demekle aslında read/write 
     fonksiyonlarının bu kilitlere hiç bakmaması anlatılmak istenmiştir. Örneğin biz dosyanın bir bölgesine F_WRLCK ile bir 
     kilit yerleştirelim. Başka bir proses o bölgete write ile yazma yapabilir. Tabii dosya erişien ilgili programların hepsi
-    birbirleriyle koordineli yazıldığı için onlar da read/write yapmadna önce aynı kilit mekanizmasını kullanarak senkronizasyon 
+    birbirleriyle koordineli yazıldığı için onlar da read/write yapmadan önce aynı kilit mekanizmasını kullanarak senkronizasyon 
     sağlamaktadır. Özetle "isteğe bağlı kilitleme (advisory locking)" demekle read/write fonksiyonlarnın bakmadığı fcntl fonkcisyonun
     baktığı kilit anlaşılmaktadır. Pekiyi "zorunlu (mandatory)" kilit sistemi nedir? Zorunlu kilitlemede read/write fonksiyonları 
     kilitlere bakarak çalışmaktadır. Yani örneğin biz bir bölgeye F_WRLCK ile zorunlu kilit yerleştirmişsek o bölgeden read 
@@ -36078,17 +36076,497 @@ void exit_sys(const char *msg)
     Zorunlu kilitleme kavramı POSIX standartların bulunmamaktadır. POSIX standartları fcntl fonksiyonun açıklamasında bunun gerekçelerini
     belirtmiştir. Zaten bazı işletim sistemleri zorunlu kilitlemeyi hiç desteklememektedir. Linux 2.4 çekirdeği ile birlikte zorunlu 
     dosya kilitlemesini destekler hale gelmiştir. Yukarıda da belirttiğimiz gibi zorunlu kilitleme için aslında fcntl fonksiyonunda 
-    ek bir şey yapılmaz. inux'ta zorlamalı kilitleme için şu koşulların sağlanmış olması gerekmektedir:
+    ek bir şey yapılmaz. Linux'ta zorlamalı kilitleme için şu koşulların sağlanmış olması gerekmektedir:
 
     1) Dosyanın içinde bulunduğu dosya sisteminin -o mand ile mount edilmiş olması gerekir. Mevcut mount edilmiş olan bir 
     dosya sisteminin mount parametreleri aşağıdaki gibi değiştirilebilir:
 
-    sudo mount -o mand,remount <device> <mount point
+    sudo mount -o mand,remount <device> <mount point>
+
+    Hangi dosya sisteminin "mand" parametresi ile mount edileceğini tespit etmeniz gerekir. Bunun için df komutunu argümansız biçimde 
+    kullanabilirsiniz. Örneğin:
+
+    $ df
+    Dosyasistemi    1K-blok     Dolu      Boş Kull% Bağlanılan yer
+    udev            1471368        0  1471368    0% /dev
+    tmpfs            303552     1364   302188    1% /run
+    /dev/sda5      81526200 41496476 35845404   54% /
+    tmpfs           1517748        4  1517744    1% /dev/shm
+    tmpfs              5120        4     5116    1% /run/lock
+    tmpfs           1517748        0  1517748    0% /sys/fs/cgroup
+    /dev/sda1        523248        4   523244    1% /boot/efi
+    tmpfs            303548      104   303444    1% /run/user/1000
+
+    mount parametrelerini görebilmek için mount komutunu parametresiz olarak kullanabilirsiniz. Ancak burada karşınıza uzun 
+    bir liste çıkabilir. grep utility'si ile ilgili satırı görüntüleyebilirsiniz. Örneğin:
+
+    $ mount | grep /dev/sda5
+    /dev/sda5 on / type ext4 (rw,relatime,mand,errors=remount-ro)
+
+    Aslında mount komutu bu bilgileri /proc/mounts dosyasından elde etmektedir. Örneğin:
+
+    sudo mount -o mand,remount /dev/sda5 /
+
+    Sistemin açıldığında igili dosya sisteminin "mand" parametresi ile mount edilebilmesi için bazı start-up dosyaları 
+    kullanabilirsiniz. Örneğin /etc/fstab dosyası bu amaçla kullanılabilmektedir.
+
+    2) İlgili dosyanın set-group-id bayrağı set edilip gruba x hakkı varsa reset edilmelidir. Bu işlem şöyle yapılmalıdır:
+
+    chmod g+s,g-x <dosya>
+
+    Örneğin:
+
+    chmod g+s,g-x test.txt
+
+    Bir dosyanın bir proses tarafından zorunlu kilitlenmiş olması dosyanın silinmesini engellemektedir. Dosyanın truncate ve 
+    ftruncate fonksiyonu ile genişletilmesi ya da budanması işleminde zorunlu kilitleme mekanizması devreye girmektedir. 
+    Yani bu fonksiyonlar sanki dosyaya yazma yapıyormuş gibi etki göstermektedir. Benzer biçimde örneğin dosyaya zorunlu 
+    kilit konulmuşsa dosya O_TRUNC modunda açılamamaktadır. Ancak yukarıda belirttiğimiz gibi dosya remove ya da unlink 
+    fonksiyonlarıyla üzerinde zorunlu kilit olsa bile silinebilmektedir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+                                        88. Ders 08/10/2023 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Aşağıda zorunlu kilitlemeyi test etmek için bir örnek hazırlanmıştır. Bu örnekte iki program vardır. "flock-test.c" 
+    programı yukarıdaki programın aynısıdır. "rw-test.c" programı ise belli bir dosyanın belli bir offsetinde belli miktarda
+    okuma ya da yazma yapan bir programdır. "flock-test.c" programını yukarıda açıklamıştık. "rw-test.c" programının komut 
+    satırı argümanları şöyledir:
+
+    ./rw-test <dosya ismi> <r|w> <offset> <uzunluk>
+
+    Burada "r" okuma "w" ise yazma yapma anlamına gelmektedir. Örneğin:
+
+    ./rw-test test.txt w 60 10
+
+    Bu çalıştırmayla program write fonksiyonu ile "test.txt" dosyasına 60'ıncı offset'inden itibaren 10 byte yazacaktır. Örneğin:
+
+    ./rw-test test.txt r 0 64
+
+    Burada da program "test.txt" dosyasının 0'ıncı offset'inden 64 byte okuyacaktır.
+
+    Aşağıdaki örneği testte şu biçimde kullanabilirsiniz: Önce "flock-test" programı ile dosyanın belli bir bölgesine kilit 
+    yerleştiriniz. Sonra "rw-test" programı ile ilgili offset'ti kapsayan bölgeden okuma/yazma yapmaya çalınız. read ve write 
+    fonksiyonlarındaki blokeyi gözlemleyiniz. Sonra kilidi kaldırınca fonksiyonların blokeden çıkacağını göreceksiniz. Tabii 
+    örnekte test işleminde kullanacağınız dosyanın (örneğin "test.txt") yukarıda belirttiğimiz gibi zorunlu kilitlemeye 
+    hazırlanmış olması gerekir. 
+
+    Zorunlu kilitleme uygulanmış bir dosya open fonksiyonu ile O_NONBLOCK bayrağı kullanılarak açılmışsa (normal dosyaların 
+    bu bayrak kullanılarak açılması genellikle işlevsizdir, ancak burada bir istisna vardır) bu durumda read/write fonksiyonları
+    çelişkili kilitle karşılaştığında bloke olmazlar ve başarısızlıkla (-1 değeriyle) geri dönerler. Bu durumda errno değeri 
+    EAGAIN (Resource temporarily unavailable) değeri ile set edilmektedir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* flock-test.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#define MAX_CMDLINE		4096
+#define MAX_ARGS		64
+
+void parse_cmd(void);
+int get_cmd(struct flock *fl);
+void disp_flock(const struct flock *fl);
+void exit_sys(const char *msg);
+
+char g_cmd[MAX_CMDLINE];
+int g_count;
+char *g_args[MAX_ARGS];
+
+int main(int argc, char *argv[])
+{
+	int fd;
+	pid_t pid;
+	char *str;
+	struct flock fl;
+	int fcntl_cmd;
+F_SETLKW"wrong number of arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	pid = getpid();
+
+	if ((fd = open(argv[1], O_RDWR)) == -1)
+		exit_sys("open");
+
+	for (;;) {
+		printf("CSD (%ld)>", (long)pid), fflush(stdout);
+		fgets(g_cmd, MAX_CMDLINE, stdin);
+		if ((str = strchr(g_cmd, '\n')) != NULL)
+			*str = '\0';
+		parse_cmd();
+		if (g_count == 0)
+			continue;
+		if (g_count == 1 && !strcmp(g_args[0], "quit"))
+			break;
+		if (g_count != 4) {
+			printf("invalid command!\n");
+			continue;
+		}
+
+		if ((fcntl_cmd = get_cmd(&fl)) == -1) {
+			printf("invalid command!\n");
+			continue;
+		}
+
+		if (fcntl(fd, fcntl_cmd, &fl) == -1)
+			if (errno == EACCES || errno == EAGAIN)
+				printf("Locked failed!..\n");
+			else
+				perror("fcntl");
+		if (fcntl_cmd == F_GETLK)
+			disp_flock(&fl);
+	}
+
+	close(fd);
+
+	return 0;
+}
+
+void parse_cmd(void)
+{
+	char *str;
+
+	g_count = 0;
+	for (str = strtok(g_cmd, " \t"); str != NULL; str = strtok(NULL, " \t"))
+		g_args[g_count++] = str;
+}
+
+int get_cmd(struct flock *fl)
+{
+	int cmd, type;
+
+	if (!strcmp(g_args[0], "F_SETLK"))
+		cmd = F_SETLK;
+	else if (!strcmp(g_args[0], "F_SETLKW"))
+		cmd = F_SETLKW;
+	else if (!strcmp(g_args[0], "F_GETLK"))
+		cmd = F_GETLK;
+	else
+		return -1;
+
+	if (!strcmp(g_args[1], "F_RDLCK"))
+		type = F_RDLCK;
+	else if (!strcmp(g_args[1], "F_WRLCK"))
+		type = F_WRLCK;
+	else if (!strcmp(g_args[1], "F_UNLCK"))
+		type = F_UNLCK;
+	else
+		return -1;
+
+	fl->l_type = type;
+	fl->l_whence = SEEK_SET;
+	fl->l_start = (off_t)strtol(g_args[2], NULL, 10);
+	fl->l_len = (off_t)strtol(g_args[3], NULL, 10);
+
+	return cmd;
+}
+
+void disp_flock(const struct flock *fl)
+{
+	switch (fl->l_type) {
+		case F_RDLCK:
+			printf("Read Lock\n");
+			break;
+		case F_WRLCK:
+			printf("Write Lock\n");
+			break;
+		case F_UNLCK:
+			printf("Unlocked (can be locked)\n");
+	}
+
+	printf("Whence: %d\n", fl->l_whence);
+	printf("Start: %ld\n", (long)fl->l_start);
+	printf("Length: %ld\n", (long)fl->l_len);
+	if (fl->l_type != F_UNLCK)
+		printf("Process Id: %ld\n", (long)fl->l_pid);
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/* rw-test.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+void exit_sys(const char *msg);
+
+/* ./rwtest <dosya ismi> <r/w> <offset> <uzunluk> */
+
+int main(int argc, char *argv[])
+{
+	int fd;
+	int operation;
+	off_t offset;
+	off_t len;
+	char *buf;
+	ssize_t result;
+
+	if (argc != 5) {
+		fprintf(stderr, "wrong number of arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if (strcmp(argv[2], "r") && strcmp(argv[2], "w")) {
+		fprintf(stderr, "invalid operation!\n");
+		exit(EXIT_FAILURE);
+	}
+
+	offset = (off_t)strtol(argv[3], NULL, 10);
+	len = (off_t)strtol(argv[4], NULL, 10);
+
+	if ((buf = (char *)calloc(len, 1)) == NULL) {
+		fprintf(stderr, "cannot allocate memory!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if ((fd = open(argv[1], argv[2][0] == 'r' ? O_RDONLY : O_WRONLY)) == -1)
+		exit_sys("open");
+
+	lseek(fd, offset, SEEK_SET);
+	if (argv[2][0] == 'r') {
+		if ((result = read(fd, buf, len)) == -1)
+			exit_sys("read");
+		printf("%ld bytes read\n", (long)result);
+	}
+	else {
+		if ((result = write(fd, buf, len)) == -1)
+			exit_sys("write");
+		printf("%ld bytes written\n", (long)result);
+	}
+
+	free(buf);
+
+	close(fd);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Dosyalardaki kilitleri izlemek için proc dosya sistemindeki /proc/locks dosyasından faydalanılabilmektedir. Örneğin:
+
+    $ cat /proc/locks
+    1: POSIX  ADVISORY  WRITE 34561 08:05:4194918 0 EOF
+    2: POSIX  MANDATORY WRITE 57926 08:05:1207498 0 63
+    3: POSIX  ADVISORY  READ 34560 00:36:103 0 EOF
+    4: POSIX  ADVISORY  READ 34560 08:05:3031150 0 EOF
+    5: POSIX  ADVISORY  READ 34560 08:05:3050341 0 EOF
+    6: FLOCK  ADVISORY  WRITE 705 00:19:673 0 EOF
+
+    Buradaki ilk sütun kilidin hangi fonksiyonlarla konulduğunu belirtmektedir. Bu sütunda POSIX belirteci kilidin fcntl ile 
+    ya da lockf fonksiyonu konulduğunu belirtir. flock fonksiyonu Linux'a özgü olduğu için burada LINUX belirteci ile görüntülenecektir. 
+    İkinci sütun kilidin isteğe bağlı mı zorunlu mu olduğunu belirtmektedir. Üçüncü sütun ise kilidin türünü belirtmektedir. 
+    Dördüncü sütun kilidi koyan prosesin proses id'sini belirtmektedir. Sonraki sütun ':' karakterleriyle ayrılmış üç alandan 
+    oluşmaktadır. İlk iki alan dosyanın içinde bulunduğu aygıtın majör ve minör numaralarını belirtmektdir. üçüncü alanda 
+    kilit uygulanan dosyanın i-node numarası belirtilmektedir. Sonraki iki sürunda da kilidin başlangıç offset'i ve uzunluğu
+    belirtilmektedir. 
+
+    UNIX/Linux sistemlerinde dosyanın yol ifadesinden hareketle stat, fstat, lstat fonksiyonlarıyla biz dosyanın i-node
+    numarasını elde edebiliriz. Ancak bunun tersini yaapan bir mekanizma yoktur. Bu işlem ancak find utility'si ile arama 
+    yöntemiyle yapılabilir. Örneğin:
+
+    find / -inum 1207498 2> /dev/null
+
+    Burada find utility'sine biz i-node numarası 1207498 olan dizin girişlerini kökten itibaren özyinelemeli biçimde aratmaktayız. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Dosya kilitleme için POSIX standartlarında lockf isimli bir fonksiyon da bulundurulmuştur. Bu fonksiyon aslında yukarıda 
+    görmüş olduğumuz fcntl fonksiyonuna sarma yapan bir fonksiyondur. lockf fonksiyonunun prototipi şöyledir:
+
+    #include <unistd.h>
+
+    int lockf(int fd, int function, off_t size);
+
+    Fonksiyonun birinci parametresi dosya betimleyicisini, ikinci parametresi uygulanacak lock işleminin türünü, üçüncü 
+    parametresi ise kilitlenecek alanının uzunluğunu belirtmektedir. Fonksiyonda başlangıç offset'inin olmadığına dikkat ediniz.
+    Fonksiyon her zaman dosya göstericisinin gösterdiği yerden itibaren kilitleme yapmaktadır. İkinci parametrede belirtilen 
+    kilit türü şunlardan biri olabilir:
+
+    Kilit Türü      fcntl Karşılığı             Anlamı
+
+    F_ULOCK         F_SETLK, F_UNLCK            Kilidi kaldırır
+    F_LOCK          F_SETLK, F_WRLCK            Blokesiz, yazma kilidi yerleştirir
+    F_TLOCK         F_SETLKW, FWRLCK            Blokeli yazma kilidi yerleştirir
+    F_TEST          F_GETLK                     Kilidin yerleştirilmiş olup olmadığına bakar
+
+    Görüldüğü gibi fonksiyon her zaman "yazma (yani "exclusive")" bir kilit yerleştirmektedir. Dolayısıyla bu fonksiyon fcntl 
+    fonksiyonuna göre daha yeteneksizdir. Programcılar tarafından pek tercih edilmemektedir. 
+
+    Fonksiyonun üçüncü parametresi 0 geçlilirse bu durum "bulunulan offset'ten dosya sonuna kadar ve daha sonraki eklemeleri 
+    kapsayacak biçimde" kilit yerleştirilmesi anlamına gelir. Eğer F_ULOCK işleminde bu parametre 0 girilirse bulunulan offset'ten 
+    itibaren sonraki bütün kilitler kaldırılmaktadır. Fonksiyonun uzunluk belirten size parametresi negatif de girilebilir. 
+    Bu durumda dosya göstericisinin gösterdiği yerden geriye doğru alan klilitlenir. Fonksiyon başarı durumunda 0 değerine, 
+    başarısızlık durumunda -1 değerine geri dönmektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Biz şimdiye kadar read/write fonksiyonlarıyla klasik IO işlemleri yaptık. UNIX/Linux sistemlerinde bloke durumlarında 
+    kullanılabilecek alternatif IO modelleri de vardır. Bunalra "ileri IO (advanced IO)" de denilmektedir. Bu bölümde özellikle 
+    client-server programların gerçekleştirilmesinde kullanılabilecek ileri IO modelleri üzerinde duracağız.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Pekiyi ileri IO işlemlerine neden gereksinim duyulmaktadır? Client-server bir sistem için bir server programı yazacak olalım. 
+    Sever program N tane client'tan gelen istekleri okusun ve onlara yanıt göndersin. Haberleşme ortamı isimli borularla ya da 
+    sonraki bölümde göreceğimiz soketlerle yapılabilmektedir. Ancak isimli borulardan ve soketlerden okuma yapılırken eğer boruda
+    ya da sokette hiçbir bilgi yoksa read fonksiyonu bloke olmaktadır. Bu nedenle böyle bir program aşağıdaki gibi bir döngüyle 
+    yazılalamktadır:
+
+    for (;;) {
+        for (int i = 0; i < N; ++i) {
+            read(...);
+            write(...);
+        }
+        ...
+    }
+
+    Burada bir client'ın borsunda ya da soketinde hiç bilgi yoksa read fonksiyonu blokeye yol açacak ve diğer client'lardan gelen
+    bilgiler işleme sokulamayacaktır. Tabii bu durum yalnızca borular ve soketler için değil bloke yok açan diğer kaynaklar için 
+    de söz konusudur. Bu tür durumlarda ilk akla gelen şey blokesiz modda işlem yapmak olabilir. Örneğin:
+
+    for (;;) {
+        for (int i = 0; i < N; ++i) {
+            result = read(...);
+            if (result == -1 && errno == EAGAIN)
+                continue;
+            write(...);
+        }
+        ...
+    }
+
+    Burada problem çözülmül gibi gözüekmekle birlikte aslında başka bir sorun oluşmaktadır. eğer hiçbir client'tan bilgi gelmemişse 
+    burada "meşgul bir döngü (busy loop)" oluşmaktadır. Bu tür durumlarda akla gelen en basit çözüm "thread ya da proses" modelini 
+    kullanmaktadır. Tabii proses yaratımı thread yaratımına göre çok daha maliyetli olduğu için thread modeli tercih edilmektedir. 
+    Bu modelde her client için ayrı bir thread (ya da proses) oluşturulur. O client'ın istekleri o thread (ya da proses) tarafından 
+    sağlanır. Böylece bir client'a bilgi gelmediği zaman yalnızca o thread (ya da proses) bloke olacaktır. Diğerlerinin çalışması 
+    devam edecektir. Bu model basitliği nedeniyle az sayıda client'ın bulunduğu durumlarda uygun bir yöntemdir. Ancak ölçeklenebilir 
+    (scalable) değildir. Yani client sayısı arttığında çok fazla sistem kaynağı kullanılacağınzdan olumsuzluk ortaya çıkacaktır.
+    İşte ileri IO modelleri temel olarak yukarıdaki tarzda problemleri çözmek için geliştirilmiştir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    POSIX sistemlerinde ileri IO işlemleri dört bölüme ayrılarak incelenebilir:
+
+    1) Multiplexed IO: Bu modelde bir grup betimleyici izlemeye alınır. Bu betimleyicilerde ilgilenilen olay (read/write/error) 
+    gerçekleşmemişse blokede beklenir. Ta ki bu betimleyicilerden en az birinde ilgilenilen olay gerçekleşene kadar. Multiplexed 
+    IO için select ve poll POSIX fonksiyonları kullanılmaktadır. Ancak Linux epoll isimli daha yetenekli bir fonksiyona da sahiptir.
+
+    2) Signal Driven IO: Burada belli betimleyiciler izlemeye alınır. Ancak blokede beklenmez. Bu betimleyicilerde olay gerçekleştiğinde
+    SIGIO isimli sinyal oluşur. Programcı da bu sinyal oluşturuğunda blokeye maruz kalmadan read/write işlemini yapılabilir.
+
+    3) Asenkron IO: Burada read/write işlemleri başlatılır. Ancak bir bloke oluşmaz. Arka planda çekirdek tarafından okuma 
+    ve yazma bir yandan devam ettirilir. Ancak aktarım bittiğinde programcı bundan haberdar edilir. Bunun signal driven IO'dan 
+    farkı şudur: Signal driven IO'da aktarım yapılmamaktadır. Yalnızca okuma yazma yaılırsa bloke olunmayacağı prosese söylenmektedir. 
+    Halbuki asenkron IO'da okuma ve yazma işlemi bloke çözülüdüğünde arka planda gerçekleştirilmekte ve yalnızca işlemin bittiği 
+    haber verilmektedir. 
+
+    4) Scatter-Gather IO: Burada okuma birden fazla adrese yazma ise birden fazla adresten kaynağa yapılmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Multiplexed IO işlemlerşnde select ve poll isimli POSIX fonksiyonları ve Linux sistemlerinde de Linux sistemlerine özgü 
+    epoll fonksiyonu kullanılmaktadır. select fonksiyonu çok eskiden beri var olan klasik fonklsiyonlardan biridir. select ilk 
+    kez BSD sistemlerinde gerçekleştirilmiştir. POSIX standartları oluşturulduğunda doğrudan standartlarda bulundurulmuştur. Aslında
+    select fonksiyonunun tasarımında bazı kusurlar vardır. Ancak fonksiyon hala en çok kullanılan ileri IO fonksiyonlarındandır.
+
+    select fonksiyonun prototipi şöyledir:
+
+    #include <sys/select.h>
+
+    int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *errorfds, struct timeval *timeout);
+
+    Fonksiyonun parametrelerindeki fd_set türü bir bit dizisi belirtmektedir. Bu bit dizisinin belli bitini 1 yapmak için
+    FD_SET, belli bitini 0 yapmak için FD_CLR, tüm bitlerini sıfır yapmak için FD_ZERO, belli bitini test etmek için ise 
+    FD_ISSET makroları kullanılmaktadır. Biz fonksiyonun ikinci (readfds), üçünücü (writefds) ve dörüdncü (errorfds) parametrelerine 
+    bir grup betimleyiciyi o betimelyicilerin numaralarına karşı gelen bitleri 1 yaparak veririz. Örneğin biz 18, 23 ve 47 numaralı
+    betimleyicilerle ilgilenmek isteyelim. Bunun için fd_set veri yapısının 18, 23 ve 47 numaralı birlerini 1 yaparız. Fonksiyonun 
+    ikinci parametresi (readfds) "okuma amaçlı izlenecek betimleyicilerin kümesini", üçüncü parametresi (writefds) "yazma 
+    amaçlı izlenecek betimleyicilerin kümesini" ve dördüncü parametresi (errorfds) ise "hata (exception) oluşmu için izlenecek 
+    betimleyicilerin kümesini" belirtmektedir. Bu parametrelerin biri ya da birden fazlası NULL geçilebilir. Bu durum ilgili 
+    izlemenin yapılmayacağını belirtmektedir. Fonksiyonun birinci parametresi bu kümelerdeki en yüksek betimleyicinin bir fazla 
+    değerini almaktadır. Bu parametre aslında işlemlerini hızlandırmak için düşünülmüştür. En yüksek betimleyici değeri 
+    FD_SETSIZE (1024) ile define edilmiş durumdadır. (Yani bu parametreye istersek doğrudan bu değeri de geçebiliriz.) Örneğin 
+    biz 18, 23 ve 47 numaralı betimleyicileri izlemek istiyorsak bu birinci parametreye 48 değerini (47 + 1) girebiliriz. Ancak 
+    buraya en yüksek betimleyici değeir olan FD_SETSIZE girilse de bir sorun oluşmayacaktır. Yukarıda da belirttiğimiz gibi 
+    bu birinci parametre yalnızca işlemleri hızlandırmak için bir ipucu niteliğindedir.
+
+    Fonksiyon son parametresi "zaman aşımı" belirtmektedir. Zaman aşımı için NULL adres girilebilir. Bu durum zaman aşaımının
+    uygulanmayacağı anlamına gelir. timeval yapısını biz daha önce kullanmıştık. Anımsatmak istiyoruz:
+
+    struct timeval {
+        time_t		tv_sec;
+        suseconds_t tv_usec;
+    };
+
+    Bu yapı mikrosaniye çözünürlüğünde bir zaman aralığı beirtmek için oluşturulmuştur. Yapının her iki elemanı 0'da girilebilir. 
+    Bu durumda select fonksiyonu hemen testini yapar ve geri döner. 
+
+    select fonksiyonu ile bir grup betimleyiciyi okuma amaçlı izlemek isteyelim. İlk ayapacığımız şey izlenecek betimleyicileri bir 
+    fd_set nesnesi içerisinde belirtmek ve bu nesnesin adresini fonksiyonun ikinci parametresine vermektir. Birinci parametreye de buradaki
+    en yüksek betimleyici değerinin 1 fazlası geçirilecektir. Örneğin:
+
+    fd_set rset;
+
+    FD_ZERO(&rset);
+    FD_SET(&rset, fd1);     /* fd1 = 18 varsayalım */
+    FD_SET(&rset, fd2);     /* fd2 = 23 varsayalım */
+    FD_SET(&reset, fd3);    /* fd3 = 48 varsayalım
+
+    maxfds = getmax(fd1, fd2, fd3);
+
+    select(maxfds + 1, &rset, NULL, NULL, NULL);
+
+    select fonksiyonu bizim ona verdiğimiz betimelyicileri okuma amaçlı izler. Bu betimleyicilere hiçbir bilgi gelmemişse select 
+    akışı blokede bekletmektedir. Ancak bu betimelyicilerin en az birine bir bilgi geldiyse bu durumda select blokeyi çözmektedir. 
+    Görüldüğü gibi select fonksiyonu "okunacak hiçbir bilgi betimleyicilerde oluşmamışsa akışı blokede bekletmekte ancak en az bir 
+    betimelyicide okunacak bilgi oluşmuşsa okuma işleminin yapılması için blokeyi çözmektedir. select fonksiyonun okumayı yapmadığına 
+    yalnızca okuma yapılabilecek bir durumun oluştuğunu tespit ettiğine dikkat ediniz. Tabii programıcının select'in blokesi çözüldüğünde
+    hangi betimleyicilere bilgi gelmiş olduğunu anlaması gerekir. Çünkü gelen bilgileri read ile o betimleyicilerden okuyacaktır. Tabii 
+    select fonksiyonu aslında bir kez değil genellikle bir dönü içerisinde kullanılmaktadır. 
 
     <BURADA KALDIK>
 
-    2) İlgili dosyanın setg-group id bayrağı set edilip x hakkı varsa reset edilmelidir. (chmod <dosya> g+s g-x)
+    fonksiyonu okuma takibi için tipik olarak şöyle kullanılır: Progrtamcı okuma izlemesi yapılacak betimleyicilerin numaralarına ilişkin bitleri
+    bir fd_set içerisinde set eder. Bunu fonksiyonun ikinci parametresine verir. Fonksiyon da yalnızca 1 olan bitlere ilişkin betimleyicileri 
+    izleyecektir. Programcı bu betimleyicilerden okuma yapılamayacak durumda ise (yani okuma girişiminde bloke oluşacak durumda ise) select blokede 
+    akışı bekletir. En az bir betimleyicide okuma eylemi yapılabilecek durumdaysa bloke çözülür. Fonksiyon hangi betimleyicilerde okuma işleminin yapılabileceğini
+    yine bizim ona verdiğimiz fd_set nesnesinin ilgili 1 yaparak bize iletmektedir. Yani bizim fonksiyona verdiğimiz fd_set nesnesi fonksiyon geri döndüğünde
+    artık bozlmuş durumdadır yani hangi betimleyicilerin okumaya elvirişli olduğunu gösterecek biçimde değiştirilmiş durumdadır. Buradaki aynı çalışma
+    biçimi "yazma" ve "error" işlemi için de aynı biçimde söz konusudur. Programcı aynı zamanda isterse üç ayrı fd_set nesnesini de fonksiyona verebilir. 
 
+    select fonksiyou başarısızlık durumunda -1 değerine geri döner. Eğer hiçbir betimleyicide olay gerçekleşmemiş ancak zaman aşımı dolmuşsa 0 değerine geri döner.
+    Eğer en az bir betimleyicide ilgili olay gerçekleşmişse toplam olay gerçekleşen betimleyici sayısına geri döner. (Aynı betimleyici örneğn hen okuma hem de yazma
+    için izleniyorsa ve bu betimleyicide hem okuma hem de yazma olayı gerçekleşmişse bu değer 2 artırılmaktadır.)
+
+    select fonksiyonun normal disk dosyaları için kullanılması anlamsızdır. Uzun süre beklemeye yol açabilecek terminal gibi, boru gibi, soket gibi aygıtlar için
+    kullanılmalıdır. Normal olarak select ile bekelenecek betimleyicilere ilişkin kaynaklar "blokeli" modda açılmalıdırlar.
+
+    Aşağıdaki örnekte 0 numaralı betimleyici select ile izlenmiştir. Bu betimleyici terminal sürücüne ilişkindir. Kullanıcı bir yazı girip ENTER
+    tuşuna bastığıda terminal sürücüsü select fonksiyonun blokesini çözecektir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -36114,7 +36592,6 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------------------------------*/
-
 
 
 
