@@ -2869,7 +2869,7 @@ void exit_sys(const char *msg)
         long    tv_nsec;
     };
 
-    Yapının tv_sec elemanı yşne 01/01/1970'ten geçen saniye saniye sayısını tv_nsec elemanı ise o saniyeden sonraki nano saniye sayısını tutmaktadır. 
+    Yapının tv_sec elemanı yine 01/01/1970'ten geçen saniye saniye sayısını tv_nsec elemanı ise o saniyeden sonraki nano saniye sayısını tutmaktadır. 
     Sistemlerin çoğu POSIX standartlarında bu konuda değişiklik yapılmış olsa da eski doğru uyumu şöyle korumuştur:
 
     struct stat {
@@ -4536,7 +4536,7 @@ int main(int argc, char *argv[])
 	char path[4096];
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number od arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -4659,7 +4659,7 @@ int main(int argc, char *argv[])
 	int fd;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number od arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -5533,7 +5533,7 @@ void exit_sys(const char *msg)
     FTW_CHDIR: Eğer bu bayrak belirtilirse fonksiyon her dizine geçtiğinde prosesin çalışma dizinini de o dizin olarak değiştirmektedir. 
 
     FTW_DEPTH: Normalde dolaşım "pre-order" biçimde yapılmaktadır. Bu bayrak girilirse "post-order" dolaşım yapılır. Bayrağın ismi yanlış verilmiştir. 
-    "pre-order" dolaşım demek bir dizin ile karşılaşıldığında önce dizin girişinin ele alnıması sonra özyineleme yapılması demektir. "post-order" dolaşım ise
+    "pre-order" dolaşım demek bir dizin ile karşılaşıldığında önce dizin girişinin ele alınması sonra özyineleme yapılması demektir. "post-order" dolaşım ise
     önce özyineleme yapılıp sonra dizin girişinin ele alınması demektir. Defaul durum "pre-order" dolaşım biçimindedir. 
 
     FTW_MOUNT: Bu bayrak belirtilirse özyineleme yapılırken bir "mount point" ile karşılaşılırsa o dosya sistemine girilmez. Default durumda 
@@ -5549,7 +5549,7 @@ void exit_sys(const char *msg)
     nftw fonksiyonun geri dönüş değeri fonksiyon başarıssa -1, başarılıysa 0'dır. Ancak aslında fonksiyon başarılı durumda callback fonksiyonun 
     geri dönüş değeri ile geri döner. Şöyle ki: Biz callback fonksiyonu 0 ile geri döndürürsek özyinelemeye devam etmek istediğimizi belirtmiş 
     oluruz. Bu durumda bir IO hatası da olmazsa nftw fonksiyonu 0 ile geri döner. Eğer biz bu fonksiyondan sıfır dışı bir değerle geri dönersek.
-    nftw fonksiyonu özyinelemeyi bırakıp hemen hemen geri çıkar ve bizim callback fonksiyondan döndürrüğümüz sıfır dışı değerle geri döner. 
+    nftw fonksiyonu özyinelemeyi bırakıp hemen geri çıkar ve bizim callback fonksiyondan döndürdüğümüz sıfır dışı değerle geri döner. 
 
     Şimdi de callback fonksiyonun parametrelerine gelelim:
 
@@ -5724,8 +5724,8 @@ void exit_sys(const char *msg)
     symlink fonksiyonu ile "dangling" link oluşturulabilmektedir. Yani başka bir deyişle fonksiyonun birinci parametresinde belirtilen 
     dosyanın bulunuyor olması gerekmez.
 
-    Bir POSIX fonksiyonun sembolik bağlantı dosyasını izleyip izlemediğine dikkat ediniz. Şüphe duyarsanız dokğümanlardan bunu doğrulayınız. 
-    Örneğin open fonksiyonu sembolik bağlantıyı izlemektedir. Ancak remove ve unlik fonksiyonları sembolik bağalntı dosyalarını izlememektedir. 
+    Bir POSIX fonksiyonun sembolik bağlantı dosyasını izleyip izlemediğine dikkat ediniz. Şüphe duyarsanız dokümanlardan bunu doğrulayınız. 
+    Örneğin open fonksiyonu sembolik bağlantıyı izlemektedir. Ancak remove ve unlik fonksiyonları sembolik bağlantı dosyalarını izlememektedir. 
     (Yani remove ve unlink ile sembolik bağlantı dosyası silinmeye çalışılırsa bu fonksiyonlar sembolik bağlantı dosyasının kendisini silmektedir.) 
     Genel olarak POSIX fonksiyonlarının büyük bölümü sembolik bağlantı dosyasını izlemektedir. 
 
@@ -5811,7 +5811,7 @@ void exit_sys(const char *msg)
     Tabii biz burada istersek null karakteri dizinin sonuna yerleştirip onu normak olarak yazdırabiliriz. Ancak bu durumda da dizi uzunluğunun yeterli 
     olduğuna dikkat etmemiz gerekir. 
 
-    Aşağıdaki örnekte biz yoli fadesinin yerleştirileceği diziyi 4096 + 1 eleman uzunluğunda açtık. Lşnux sistemlerinde x86 ve x64 mimarilerinde 
+    Aşağıdaki örnekte biz yoli fadesinin yerleştirileceği diziyi 4096 + 1 eleman uzunluğunda açtık. Linux sistemlerinde x86 ve x64 mimarilerinde 
     (sayfa uzunluğunun 4K olduğu mimarilerde) yol ifadeleri en fazla 4096 karakter olabilmektedir. Ancak diğer mimarilerde ve POSIX genelinde
     böyle bir zorunluluk yoktur. O sistemdeki maksimum yol ifadesi uzunluğu <limits.h> dosyası içerisindeki PATH_MAX sembolik sabitiyle 
     belirtilmektedir. Ancak maalesef bu sembolik sabitin define edilmiş olması da zorunlu değildir. Bu konunun biraz ayrıntıları olduğu için 
@@ -5888,7 +5888,7 @@ void exit_sys(const char *msg)
 
     access fonksiyonu test olumluysa 0 değerine olumsuzsa -1 değerine geri dönmektedir. Tabii access fonksiyonun başarısızlığının başka nedenleri de olabilir. 
     Ancak programcı genellikle öyle ya da böyle istediği işlemi yapıp yapamayacağı ile ilgilenmektedir. Ancak yine de fonksiyon başarısız olduğunda 
-    errno değeri incelenebilir ve başarısızlığın EACCESS nedenyiyle olduğu doğrulanabilir. Biz aşağıdaki örnekte bu yola gitmiyoruz. 
+    errno değeri incelenebilir ve başarısızlığın EACCESS nedeniyle olduğu doğrulanabilir. Biz aşağıdaki örnekte bu yola gitmiyoruz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -9146,7 +9146,7 @@ int main(void)
     fork işlemi sırasında üst prosesin tüm bellek alanının bir kopyası oluşturulduğuna göre alt prosesin çevre değişken listesi üst
     prosesinkini aynısı olacaktır. Ancak fork işleminden sonra üst proses ya da alt proses çevre değişken listesinde bir değişiklik 
     yaparsa artık yalnızca o değişiklik o prosese özgü olacaktır. Çünkü fork işlemi sırasında kopyalama yapıldıktan sonra artık üst prosesle
-    alt prosesin bellek alanlarını biribirinden tamamen ayrılmış olur. 
+    alt prosesin bellek alanlarını birbirinden tamamen ayrılmış olur. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -9266,7 +9266,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Pekiyi çevre değişkenlerine neden gereksinim duyulmaktadır? Çevre değişkenleri birtakım aşağı seviyeli işlemlerin paramtrik hale
+    Pekiyi çevre değişkenlerine neden gereksinim duyulmaktadır? Çevre değişkenleri birtakım aşağı seviyeli işlemlerin parametrik hale
     getirilmesi için kullanılmaktadır. Yani aşağı seviyeli bazı işlemlerin basit bir biçimde dışarıdan değiştirilmesine olanak 
     sağlamaktadır. Bazı çevre değişkenleri bazı POSIX fonksiyonları tarafından kullanılmaktadır. Örneğin exec fonksiyonlarının 
     p'li biçimleri prosesin PATH çevre değişkenine başvurmaktadır. Ya da örneğin dinamik bir kütüphane yüklenirken işletim sisteminin 
@@ -9664,7 +9664,7 @@ int main(int argc, char *argv[])
 	pid_t pid;
 
 	if (argc == 1) {
-		fprintf(stderr, "wrong number od arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -9800,7 +9800,7 @@ int main(int argc, char *argv[])
 	pid_t pid;
 
 	if (argc == 1) {
-		fprintf(stderr, "wrong number od arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -10059,7 +10059,7 @@ int main(int argc, char *argv[])
 	char *env[] = {"city=eskisehir", "PATH=/bin:/usr/bin", "name=ali", NULL};
 
 	if (argc == 1) {
-		fprintf(stderr, "wrong number od arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -10199,7 +10199,7 @@ int main(int argc, char *argv[])
 	pid_t pid;
 
 	if (argc == 1) {
-		fprintf(stderr, "wrong number od arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -10271,7 +10271,7 @@ int main(int argc, char *argv[])
 	pid_t pid;
 
 	if (argc == 1) {
-		fprintf(stderr, "wrong number od arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -10359,7 +10359,7 @@ int main(int argc, char *argv[])
 	int fd;
 
 	if (argc == 1) {
-		fprintf(stderr, "wrong number od arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -11421,7 +11421,7 @@ void exit_sys(const char *msg)
     eğer parametresi ile belirtilen uid değeri prosesin gerçek ya da saklı kullanıcı id'si ile aynı ise prosesin yalnızca etkin kullanıcı id'sini
     parametresi ile belirtilen id olarak değiştirir. Bu koşullar sağlanmıyorsa fonksiyon başarısız olmaktadır. Pekiyi bunun anlamı nedir? 
     Bu işlem set-user-id prgramların kısmen geri daha sonra dönüp yeniden önceliği geri almasını sağlamak için düşünülmüştür. Saklı id'lerin
-    kullanımasının tek nedeni de budur. Şöyle ki:
+    kullanılmasının tek nedeni de budur. Şöyle ki:
 
     - Biz kaan prosesi olarak set-user-id bayrağı set edilmiş root programını çalıştırdığımızı düşünelim. Şimdi bizim id'lerimiz
     şöyle olacaktır:
@@ -11576,7 +11576,7 @@ void exit_sys(const char *msg)
 
     setegid(test_gid);
 
-    Tabii burada yşne setgid fonksiyonu da kullanılabilirdi. Görüldüğü gibi grup temelinde geri dönüp yeniden aynı etkin grup id'ye 
+    Tabii burada yine setgid fonksiyonu da kullanılabilirdi. Görüldüğü gibi grup temelinde geri dönüp yeniden aynı etkin grup id'ye 
     sahip olabilmek için saklı grup id'den faydalanılmıştır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -12484,7 +12484,7 @@ int main(void)
     sayfasını RAM'e yükleyip sayfa tablosunun o sayfalar dışındaki fiziksel sayfa numaralarını "-" haline getirir. Böylece yukarıda açıklanan mekanizma
     eşliğinde kesiksiz çalışma sağlanacaktır.
 
-    Pekiyi ya erişilmek istenen sanal adres uydurma bir adresse ne olacaktır? İşte işletim sisteminin page fault kemse kodu (handler)
+    Pekiyi ya erişilmek istenen sanal adres uydurma bir adresse ne olacaktır? İşte işletim sisteminin page fault kesme kodu (handler)
     öncelikle erişilmek istenen adresin o proses için legal bir adres olup olmadığına bakmaktadır. Eğer erişilmek istenen adres legal bir adres değilse
     artık hiç swap işlemi yapılmadan proses cezalandırılır ve sonlandırılır. Yani her türlü sanal adresin diskte bir karşılığı yoktur. 
     Biz bir göstericiye rastgele bir adres yerleştirip oraya erişmek istesek aslında proses bu page fault kesme kodu tarafından 
@@ -35390,7 +35390,7 @@ void exit_sys(const char *msg)
     Prosesin kaynak limitleri üst prosesten alt prosese fork işlemi sırasında aktarılmaktadır. Yani örneğin kabuk programının 
     kaynak limiti değiştirilirse bu limit kabuktan çalıştırılan bütün programlara yansıtılacaktır. Ancak bu konuda genellikle 
     yanlış anlaşılan bir nokta vardır. İşletim sistemi kaynak aşımına ilişkin kontrolleri o prosesin proses kontrol bloğundaki 
-    değerlere göre yapmaktadır. Örneğin Bir kullanıcının yaratacağı maksimum proses sayısı RLIMIT_NPROC isimli kaynak ile 
+    değerlere göre yapmaktadır. Örneğin bir kullanıcının yaratacağı maksimum proses sayısı RLIMIT_NPROC isimli kaynak ile 
     belirlenmiştir. Biz bu değeri değiştirdiğimizde artık bizim prosesimiz ve bizim yarattığımız prosesler bu limitten etkilenir. 
     Ancak bizim başka proseslerimizin proses kontrol bloğunda bu değişiklik yapılmamış olduğu için onlar bu değişiklikten 
     etkilenmeyecektir. Oysa kişiler bu limitin kullanıcı tabanlı bir limit olduğunu gördüğünde sanki bir proses bu limiti 
@@ -35398,7 +35398,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Kabuk programının proses limitleri ulimit isimli içsel (internal) kabuk komutuyla görntülenip değiştirilebilmektedir. 
+    Kabuk programının proses limitleri ulimit isimli içsel (internal) kabuk komutuyla görüntülenip değiştirilebilmektedir. 
     (ulimit komutunun tıpkı cd komutu gibi dışsal bir komut olamayacağına dikkat ediniz.) ulimit komutu -a seçeneği ile 
     kullanılırsa tüm soft limitler görüntülenir. Örneğin:
 
@@ -35449,8 +35449,8 @@ void exit_sys(const char *msg)
     $ ulimit -n
     2048
 
-    Burada deafult olarak hem hard hem de soft limit değiştirilmiştir. Yalnızca soft limitin değiştirilmesi için -S, yalnızca 
-    hard limitin değiştirilemsi için -H seçeneğinin de komuta eklenmesi gerekir. Örneğin:
+    Burada default olarak hem hard hem de soft limit değiştirilmiştir. Yalnızca soft limitin değiştirilmesi için -S, yalnızca 
+    hard limitin değiştirilmesi için -H seçeneğinin de komuta eklenmesi gerekir. Örneğin:
 
     $ ulimit -H -n 5000
     $ ulimit -H
@@ -35474,42 +35474,42 @@ void exit_sys(const char *msg)
     virtual memory              (kbytes, -v) unlimited
     file locks                          (-x) unlimited
 
-    Burada biz yalnızca hard limiti değiştirdik. Yukarıda da belirttiğimiz gibi hard limit soft limitin aşağısına indirilememektedir. 
+    Burada biz yalnızca hard limiti değiştirdik. Yukarıda da belirttiğimiz gibi hard limit, soft limitin aşağısına indirilememektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Şimdi de bazı proses limitlerinden bahsedelim. Bunlar hakkında daha ayrıntılı bilgileri ilgili dokümanlardan edinebilirsiniz.
 
-    - RLIMIT_AS: Prosesin maksimum kullanabileceği sanal bellek miktarını belirtir. LinuX'ta soft ve hard limit değerleri default 
-    değer RLIM_INFINITY biçimindedir. 
+    - RLIMIT_AS: Prosesin maksimum kullanabileceği sanal bellek miktarını belirtir. Bu limitin Linux'taki default hard ve soft default  
+    RLIM_INFINITY biçimindedir. 
 
     - RLIMIT_CORE: Bu limit üzerinde daha önce de "core dosyalarının oluşturulması" konusunda bazı şeyler söylemiştik. Bu limit
     core dosyalarının maksimum uzunluğunu belirtmektedir. Linux'ta default olarak soft ve hard değerleri 0 durumundadır. Yani
-    core dosyalarının oluşturulabilmesi için bu limitin yükseltirlmesi (örneğin RLIM_INFINITY yapılması) gerekmektedir. 
+    core dosyalarının oluşturulabilmesi için bu limitin yükseltilmesi (örneğin RLIM_INFINITY yapılması) gerekmektedir. 
 
     - RLIMIT_CPU: Bu limit prosesin harcayacağı CPU zamanını sınırlandırmak için bulundurulmuştur. Eğer proses burada belirtilen 
     CPU zamanını saniye olarak aşarsa bu durumda çekirdek prosese SIGXCPU sinyalini göndermektedir. Bu sinyalin default eylemi
-    prosesin sonlandırılması biçimindedir. Linux'ta bu sinyal için sinyal fonksiyonu yazıldığında proses hemen sonlandırılmaz. 
-    Her saniyede bu sinyal yeniden gönderilir. Soft limit değerine ulaşıldığında prosese SIGKILL sinyali gönderilerek proses 
+    prosesin sonlandırılması biçimindedir. Linux'ta bu sinyal için sinyal fonksiyonu yazıldığında proses hemen sonlandırılmaz ve
+    her saniyede bu sinyal yeniden gönderilir. Soft limit değerine ulaşıldığında prosese SIGKILL sinyali gönderilerek proses 
     sonlandırılmaktadır.
 
     - RLIMIT_DATA: Bu limit ptosesin "data segment" kısmının limitini belirlemektedir. malloc gibi tahsisat fonksiyonları 
-    bu data segment kısmını büyüttüğü için bu limitten etkilenmektedir. Bu limitin Linux'taki hard ve soft default değeri 
+    bu data segment kısmını büyüttüğü için bu limitten etkilenmektedir. Bu limitin Linux'taki default hard ve soft değeri 
     RLIM_INFINITY biçimindedir. 
 
     - RLIMIT_FSIZE: Prosesin toplamda yaratabileceği maksimum dosya uzunluğudur. Örneğin bu limit 5MB'a ayarlanmışsa proses
     toplamda (tüm yarattığı dosyaların uzunluğu) ancak 5MB uzunluğunda dosya yaratabilecektir. Bu limitin Linux'taki default
-    hard ve soft değerleri RLIM_INFINITY biçimindedir. eğer bu limit aşılırsa işletim sistemi prosese SIGXFSZ sinyalini 
+    hard ve soft değerleri RLIM_INFINITY biçimindedir. Eğer bu limit aşılırsa işletim sistemi prosese SIGXFSZ sinyalini 
     göndermektedir. Bu sinyalin defaut eylemi prosesin sonlandırılmasıdır.
 
-    - RLIMIT_NICE: Bu değer SCHED_OTHER prosesler için nice değerine sınır koymak koymak amacıyla düşünülmüştür. Anımsanacağı
-    gibi normalize edilmiş olan nice değerleri [0, 39] arasındaydı. Buradaki değer 20 - RLIMIT_NICE biçiminde normalize edilmektedir. 
-    Bu değerin olması prosesin nice değerini yükseltemeyeceği anlamına geşmektedir. Bu limitin Linux'taki default hard ve soft 
-    değerleri 0 biçimindedir. 
+    - RLIMIT_NICE: Bu değer SCHED_OTHER prosesler için nice değerine sınır koymak amacıyla düşünülmüştür. Anımsanacağı gibi 
+    normalize edilmiş olan nice değerleri [0, 39] arasındaydı. Buradaki değer 20 - RLIMIT_NICE biçiminde normalize edilmektedir. 
+    Bu değerin sıfır olması, prosesin nice değerini yükseltemeyeceği anlamına gelmektedir. Bu limitin Linux'taki default hard ve 
+    soft değerleri 0 biçimindedir. 
 
-    - RLIMIT_NOFILE: Prosesin dosya betimleyici tablosunun uzunluğunu belirtmektedir. Bu limitin default soft değeri 1024, 
+    - RLIMIT_NOFILE: Prosesin dosya betimleyici tablosunun uzunluğunu belirtmektedir. Bu limitin Linux'taki default soft değeri 1024, 
     hard değeri ise 1048576 biçimindedir. Biz bu limitin soft değerini değiştirdiğimizde kendi prosesimizin dosya betimleyici 
-    tablosunu otomatik olark büyütmüş olmaktayız. Ayrıca fork yaptığımız proseslerin de artık dosya betimleyici tabloları büyümüş
+    tablosunu otomatik olarak büyütmüş olmaktayız. Ayrıca fork yaptığımız proseslerin de artık dosya betimleyici tabloları büyümüş
     olacaktır. Linux'ta tüm proseslerin dosya betimleyici tablolarının uzunlukları toplamı için de bir kısıt vardır. Bu kısıt 
     Linux'ta proc dosya sistemindeki /proc/sys/fs/file-max dosyasında belirtilmiştir. Güncel çekirdeklerde buradaki değer 
     9223372036854775807 biçiminde aşırı derecede büyüktür. Prosesin hard limiti olan 1048576 değeri de aslında proc dosya sistemi 
@@ -35522,20 +35522,20 @@ void exit_sys(const char *msg)
 
     - RLIMIT_NPROC: Belli bir kullanıcının yaratabileceği maksimum proses sayısıdır. Anımsanacağı gibi Linux sistemlerinde 
     thread'ler için de task_struct yapısı ayrılmaktadır. Bu nedenle buradaki limitler Linux sistemlerinde thread'leri de 
-    kapsamaktadır. Yani biz thread yarattıkça da bu bu limite doğru ilerlemiş oluruz. Mevcut sistemlerde bu limitin hard ve 
+    kapsamaktadır. Yani biz thread yarattıkça da bu limite doğru ilerlemiş oluruz. Mevcut sistemlerde bu limitin hard ve 
     soft değerleri default olarak 15070 biçimindedir. 
 
     Anımsanacağı gibi bu bilgi aynı zamanda sysconf fonksiyonundan da elde edilebilmektedir. 
 
     - RLIMIT_RTPRIO: Bu limit uygun önceliğe sahip olmayan SCHED_FIFO ve SCHED_RR proseslerin önceliklerini sınırlandırmak için 
-    kullanımaktadır. (Anımsanacağı gibi bu çizelgeleme politikalarına sahip proseslerin Linux'taki öncelikleri [0, 99] arasında 
-    olabiliyordu). Bu limitin default soft ve hard değerleri Linux'ta 0 biçimindedir. 
+    kullanılmaktadır. (Anımsanacağı gibi bu çizelgeleme politikalarına sahip proseslerin Linux'taki öncelikleri [0, 99] arasında 
+    olabiliyordu). Bu limitin Linux'taki default hard ve soft değerleri 0 biçimindedir.
 
-    - RLIMIT_SIGPENDING: Gerçek zamanlı sinyallerdeki kuyruk uzunluğunu belirtmektedir. Bu limitin Linux'tahi soft ve hard 
-    default değerleri mevcut çekirdeklerde 15070 biçimindedir. 
+    - RLIMIT_SIGPENDING: Gerçek zamanlı sinyallerdeki kuyruk uzunluğunu belirtmektedir. Bu limitin Linux'taki default hard ve soft 
+    değerleri mevcut çekirdeklerde 15070 biçimindedir. 
 
-    - RLIMIT_STACK: Bir thread'in stack uzunluğunu sınırlaandırmak için kullanılmaktadır. Linux'ta default durumda thread'lerin 
-    stack uzunlukları 8MB'dir. Bu limitin Linuxtaki default soft değeri 8MB, hard değeri ise RLIM_INFINITY biçimindedir. 
+    - RLIMIT_STACK: Bir thread'in stack uzunluğunu sınırlandırmak için kullanılmaktadır. Linux'ta default durumda thread'lerin 
+    stack uzunlukları 8MB'dir. Bu limitin Linux'taki default soft değeri 8MB, hard değeri ise RLIM_INFINITY biçimindedir. 
     (Yani biz thread yaratırken stack uzunluğunu bu soft limiti yukarı çekmeden artıramayız, ancak düşürebiliriz.)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -35554,9 +35554,9 @@ void exit_sys(const char *msg)
 
     int getrusage(int who, struct rusage *r_usage);
 
-    Fonskiyonun birinci parametresi kaynak bilgilerinin elde edileceği prosesleri belirtmektedir. İkinci parametresi kaynak 
+    Fonksiyonun birinci parametresi kaynak bilgilerinin elde edileceği prosesleri belirtmektedir. İkinci parametresi kaynak 
     bilgilerinin yerleştirileceği yapı nesnesinin adresini almaktadır. Bu yapıda Linux'a özgü bazı elemanlar da vardır. 
-    Ayrıntıları için ilgili dokğmanlara başvurabilirsiniz. 
+    Ayrıntıları için ilgili dokümanlara başvurabilirsiniz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -35582,7 +35582,7 @@ void exit_sys(const char *msg)
     fonksiyonu hiç disk işlemi yapmdan bilgileri doğrudan bu i-node nesnesinin içerisinden almaktadır.) Burada anahtar nokta
     toplamda bir dosya için işletim sisteminin sistem genelinde tek bir i-node nesnesi oluşturmasıdır. Çünkü i-node nesneleri
     işletim sisteminin diskte tek olan dosya bilglerini yerleştirdiği nesnelerdir. O dosya diskte tek olduğuna göre o dosya 
-    bilgilerinin çekirdek tarafından bellekteki tremsili de tek olmalıdır. Tabii modern işletim sistemleri dosyalara ilişkin 
+    bilgilerinin çekirdek tarafından bellekteki temsili de tek olmalıdır. Tabii modern işletim sistemleri dosyalara ilişkin 
     bu i-node elemanlarını bir cache sistemi içerisinde tutmaktadır. Yani bir dosya artık hiçbir proses tarafından kullanılmıyor 
     olsa da o dosyanın bilgileri i-node cache içerisinde bulunuyor olabilir. Linux i-node nesneleri için LRU (Least Recently Used)
     stratejisine sahip bir cache sistemi kullanmaktadır. Bu durumda yukarıdaki şeklin daha gerçekçi biçimi aşağıdaki gibi olabilir:
@@ -35601,46 +35601,46 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Kursumuzun bu bölümünde birden fazla prosesin aynı dosyaya erişim yaptığı durumlardaki problemleri ve bu problemlerin 
-    nasıl çözülmesi gerektiği üzerinde duracağız. Bu komuya genel olarak işletim sistemlerinde "dosya kilitleme (file locking)"
+    nasıl çözülmesi gerektiği üzerinde duracağız. Bu konuya genel olarak işletim sistemlerinde "dosya kilitleme (file locking)"
     de denilmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    İki prosesin aynı anda aynı dosyanın aynı bölümü üzerinde işlem yaptığını düşünelim. Bu durumda ne olur? Örneğin bir 
-    prosesin dosyanın belli bir kısmına write fonksiyonu ile yazma yaparken diğer bir proses aynı kısımdan aynı anda read 
+    İki prosesin aynı anda, aynı dosyanın, aynı bölümü üzerinde işlem yaptığını düşünelim. Bu durumda ne olur? Örneğin bir 
+    proses dosyanın belli bir kısmına write fonksiyonu ile yazma yaparken diğer bir proses aynı kısımdan, aynı anda read 
     fonksiyonu ile okuma yapmak istese bir problem oluşur mu? İşte UNIX türevi sistemlerde read ve write işlemleri sistem 
-    genelinde atomik işlemlerdir. Yani işletim sistemi read ve write işlemlerini onları biri tamamen bitince diğeri işleme 
-    sokulacak biçimde sıraya sokarak yapmaktadır. Bu nedenle bir proses dosyanın belli bir bölümüne yazma yaparken diğer bir 
-    proses de aynı dosyanın aynı bölümünden okuma yaparken okuyan proses ya yazan prosesin yazmış olduğu değeri okur ya da 
-    dosyadaki yazma işleminden önceki değeri okur. Karışık bir değer okumaz. Yazni read ve write işlemleri iç içe geçmemektedir. 
-    POSIX standartları bunu garanti etmektedir. Benzer biçimde iki proses de aynı dosyanın aynı bölümüne yazma yapma istese
-    dosyada ya birinin ya da diğerinin yazdığı gözükecektir. Karışık bir bilgi (yani biraz birinin biraz ötekinin yazdığı değer)
+    genelinde atomik işlemlerdir. Yani işletim sistemi read ve write işlemlerini sıraya sokarak onların biri tamamen bitince 
+    diğeri işleme sokulacak biçimde yapmaktadır. Bu nedenle bir proses, dosyanın belli bir bölümüne yazma yaparken diğer bir 
+    proses de aynı dosyanın, aynı bölümünden okuma yapıyorsa; okuyan proses ya yazan prosesin yazmış olduğu değeri okur ya da 
+    dosyadaki yazma işleminden önceki değeri okur. Karışık bir değer okumaz. Yani read ve write işlemleri iç içe geçmemektedir. 
+    POSIX standartları bunu garanti etmektedir. Benzer biçimde iki proses de aynı dosyanın aynı bölümüne yazma yapmak istese,
+    dosyada ya birinin ya da diğerinin yazdığı gözükecektir. Karışık bir bilgi (yani biraz birinin, biraz ötekinin yazdığı değer)
     gözükmeyecektir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Veritabanı yönetimleri sistemleri ya da veritabanı kütüphaneleri bir dosyaya birbirleriyle ilgili birden fazla read ve 
-    write işlemi yapabilmektedir. Örneğin şöyle bir senaryo düşünelim. Siz bir dosyanın belli bir eyrine bir bilgi yazmak 
-    isteyin ancak o bilgini hash değeri de dosyanın başka bir yerine yazılacak olsun. Burada biribiriyle uyumlu iki farklı write 
+    Veritabanı yönetim sistemleri ya da veritabanı kütüphaneleri bir dosyaya birbirleriyle ilgili birden fazla read ve 
+    write işlemi yapabilmektedir. Örneğin şöyle bir senaryo düşünelim. Siz bir dosyanın belli bir yerine bir bilgi yazmak 
+    isteyin, ancak o bilginin hash değeri de dosyanın başka bir yerine yazılacak olsun. Burada birbiriyle uyumlu iki farklı write 
     işlemi söz konusudur. Siz birinci write işlemini yaptıktan sonra henüz ikinci write işlemini yapmadan başka bir proses 
-    bu iki write işlemini hızlı davranıp yaparsa siz ikinci write işlemini yaptığınızda artık yazdığınız hash değeri ile 
+    bu iki write işlemini hızlı davranıp yaparsa, siz ikinci write işlemini yaptığınızda artık yazdığınız hash değeri ile 
     asıl bilgi uyumsuz hale gelecektir. İşte veritabanı uygulamalarında bu biçimdeki işlemler çok yoğun yapılmaktadır. 
-    Bir dosyaya veritabanı programı önce kaydı yazıp sonra dosyanın başka bir yerine onun indeks bilgisini yazabilmektedir. 
-    Bu bilginin tutarlı olması gerekmektedir. Özetle tek bir read ve write sistem genelinde atomiktir ancak birden fazla read ve 
+    Veritabanı programı bir dosyaya önce kaydı yazıp sonra dosyanın başka bir yerine onun indeks bilgisini yazabilmektedir. 
+    Bu bilginin tutarlı olması gerekmektedir. Özetle tek bir read ve write sistem genelinde atomiktir, ancak birden fazla read ve 
     write için böyle bir durum söz konusu değildir. Bu tür problemlerin çözümü için akla gelen ilk yöntem senkronizasyon nesnelerini
-    kullanmaktır. Örneğin proses iki write işlemi öncesinde mutex nesnesini kilitler iki write işlemi bittiğinde açar. Diğer 
-    prosesler de aynı mutex nesnesini aynı biçimde kullanır. Tabii burada mutex nesnesinin prosesler arasında kullanılabiliyor 
-    olması gerekmektedir. Ancak bu çözün hem yorucu hem de yavaş bir çözümdür. İşte bu tür problemler için "dosya kilitleme"
+    kullanmaktır. Örneğin proses iki write işlemi öncesinde mutex nesnesini kilitler ve iki write işlemi bittiğinde kilidi açar. 
+    Diğer prosesler de aynı mutex nesnesini aynı biçimde kullanır. Tabii burada mutex nesnesinin prosesler arasında kullanılabiliyor 
+    olması gerekmektedir. Ancak bu çözüm hem yorucu hem de yavaş bir çözümdür. İşte bu tür problemler için "dosya kilitleme"
     denilen mekanizmalar kullanılmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Dosya kilitleme bütünsel olarak ve offset temelinde (yani dosyanın bölümünü kapsayacak biçimde) yapılabilmektedir. Bütünsel 
+    Dosya kilitleme bütünsel olarak ve offset temelinde (yani dosyanın bir bölümünü kapsayacak biçimde) yapılabilmektedir. Bütünsel 
     dosya kilitleme kullanışlı değildir ve seyrek uygulanmaktadır. Offset temelinde dosya kilitleme de kendi içerisinde ikiye 
-    ayırlmaktadır: İsteğe bağlı kilitleme (advisory lock) ve zorunlu kilitleme (mandatory lock). Biz bu bölümde önce bütünsel 
+    ayrılmaktadır: İsteğe bağlı kilitleme (advisory lock) ve zorunlu kilitleme (mandatory lock). Biz bu bölümde önce bütünsel 
     kilitlemeyi daha sonra offset temelinde kilitlemeyi ele alacağız. Bütünsel kilitleme adeta mutex benzeri bir senkronizasyon 
-    nesnesi ile dosyaya tüm ulaşımı englleyecek bir mekanizma oluşturmaktadır. Offset temelinde kilitlemede dosyanın yalnızca 
-    istenilen bölümleri kilitlenmekte diğer bölümleri üzerinde işlemler yapılabilmektedir. 
+    nesnesi ile dosyaya tüm ulaşımı engelleyecek bir mekanizma oluşturmaktadır. Offset temelinde kilitlemede dosyanın yalnızca 
+    istenilen bölümleri kilitlenmekte, diğer bölümleri üzerinde işlemler yapılabilmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -35654,15 +35654,15 @@ void exit_sys(const char *msg)
     Fonksiyonun birinci parametresi bütünsel olarak kilitlenecek dosyaya ilişkin betimleyiciyi belirtmektedir. İkinci parametre 
     kilitlemenin nasıl yapılacağını belirtir. İkinci parametre şunlardan biri olabilir:
 
-    LOCK_SH
-    LOCK_EX
-    LOCK_UN
+    LOCK_SH: Okuma için kilidi alma
+    LOCK_EX: Yazma için kilidi alma
+    LOCK_UN: Kilidi bırakma
 
-    Bu değerlerden biri ayrıca LOCK_NB değeri ile de bit OR işlemine sokulabilmektedir. Buradaki mekanizma "reader-writer lock"
-    mekanizmasına benzmektedir. Yani dosyaya birden fazla proses read işlemi yapabilir. Ancak bir proses write yapıyorsa diğerlerinin
+    Bu değerlerden biri ayrıca LOCK_NB (non-blocking) değeri ile de bit OR işlemine sokulabilmektedir. Buradaki mekanizma "reader-writer lock" 
+    mekanizmasına benzemektedir. Yani dosyaya birden fazla proses read işlemi yapabilir. Ancak bir proses write yapıyorsa diğerlerinin
     işlem bitene kadar beklemesi sağlanmalıdır. Buradaki LOCK_SH (shared lock) okuma eylemi için erişme anlamına gelmektedir. 
     LOCK_EX ise yazma işlemi için erişmek anlamına gelir. LOCK_UN kilitlemeyi kaldırmaktadır. Bu durumda dosyaya yazma amaçlı 
-    erişilecekse önce LOCK_EX ve işlem bitince de LOCK_UN uygulanmalıdır. Dosyaya okuma amaçlı erişilecekse önce LOCK_SH işlem 
+    erişilecekse önce LOCK_EX ve işlem bitince de LOCK_UN uygulanmalıdır. Dosyaya okuma amaçlı erişilecekse önce LOCK_SH ve işlem 
     bitince de LOCK_UN uygulanmalıdır. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri dönmektedir. 
 
     Proseslerden bir dosyanın değişik yerlerine tutarlı bir biçimde yazma yapacak olsun. Kodunu şöyle organize etmelidir (kontroller
@@ -35689,15 +35689,15 @@ void exit_sys(const char *msg)
 
     Bu biçimdeki kilitler alt prosese fork işlemi sırasında da geçirilmektedir ve exec işlemi sırasında bu kilitler korunmaktadır. 
     Kilit bilgisi dosya nesnesinin içerisinde saklanmaktadır. Dolayısıyla birden fazla kez open fonksiyonu çağrılarak elde edilmiş olan 
-    dosya betimleyicilerinden biri ile kilit alındığında diğer betimleyici bu kilidi almamış gibi olmaktadır. Ancak aynı doya nesnesini 
+    dosya betimleyicilerinden biri ile kilit alındığında diğer betimleyici bu kilidi almamış gibi olmaktadır. Ancak aynı dosya nesnesini 
     gösteren betimleyici ile birden fazla kez flock fonksiyonu çağrılırsa bu durumda ikinci flock birincinin etkisini kaldırır ve yeni 
     etki oluşur. 
 
-    Bütünsel lock işlemi uygulanırken LOCK_NB bayrağı da kullanılırsa bu durumda uyuşmayan lock işlemleri blokeye yol açmaz. 
-    fonksiyon başarısız olur ve errno değeri EWOULDBLOCK biçiminde set edilir. 
+    Bütünsel lock işlemi uygulanırken LOCK_NB bayrağı da kullanılırsa bu durumda uyuşmayan lock işlemleri blokeye yol açmaz. Fonksiyon 
+    başarısız olur ve errno değeri EWOULDBLOCK biçiminde set edilir. 
 
-    Eğer kilit hiç açılmazsa kilidin ilişkin olduğu dosya nesnesine ilişkin son betimleyici kapatıldığında kilit 
-    otomatik olarak açılmaktadır. 
+    Eğer kilit hiç açılmazsa kilidin ilişkin olduğu dosya nesnesine ilişkin son betimleyici kapatıldığında kilit otomatik olarak 
+    açılmaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -35718,9 +35718,9 @@ void exit_sys(const char *msg)
     parametrenin anlamı ikinci parametredeki komuta göre değişmektedir. 
 
     Offset temelinde kilitleme için kilitlenecek dosyayı temsil eden bir dosya betimleyicisi olmalıdır (birinci parametre). 
-    fcntl fonksiyonunun ikinci parametresine F_SETLK, F_SETLKW ya da F_GETLK değerlerinden biri girilir. Üçüncü paramtresine 
+    fcntl fonksiyonunun ikinci parametresine F_SETLK, F_SETLKW ya da F_GETLK değerlerinden biri girilir. Üçüncü parametresine 
     ise her zaman flock isimli bir yapı nesnesinin adresi girilmelidir. F_SETLK ve F_SETLKW komutlarında bu flock yapı
-    nesnesinin içi programcı tarafından doldurulmalıdır. Ancak F_GETLK komutunda Bu yapı nesnesinin içi fonksiyon tarafından 
+    nesnesinin içi programcı tarafından doldurulmalıdır. Ancak F_GETLK komutunda bu yapı nesnesinin içi fonksiyon tarafından 
     doldurulmaktadır. flock yapısı şöyle bildirilmiştir:
 
     struct flock {
@@ -35734,11 +35734,11 @@ void exit_sys(const char *msg)
     Bu yapı nesnesinin elemanları pid dışında programcı tarafından doldurulur. l_type elemanı kilitlmenin cinsini belirtir. 
     Bu elemana F_RDLCK, F_WRLCK, F_UNLCK değerlerinden biri girilmelidir. Yapının l_whence elemanı offset için orijini belirtmektedir. 
     Bu elemana da SEEK_SET (0), SEEK_CUR (1) ya da SEEK_END (2) değerleri girilmelidir. l_start elemanı kilitlenecek bölgenin 
-    başlangıç offset'ini l_len ise uzunluğunu belirtmektedir. l_pid F_GETLK komutu tarafından doldulmaktadır. Yapının l_type elemanının
+    başlangıç offset'ini l_len ise uzunluğunu belirtmektedir. l_pid, F_GETLK komutu tarafından doldulmaktadır. Yapının l_type elemanının
     kilidin türünü belirttiğini söylemiştik. Bu tür tıpkı thread senkronizasyonu konusunda görmüş olduğumuz "okuma-yazma kilitleri 
     (reader-writer lock)" gibi işlem görmektedir. Yani biz belli bir bölgeye F_WRLCK ile kilit yerleştirirsek bu durum "bizim o bölgeye
     başkalarının okuma ya da yazma yapmasını istemediğimiz" anlamına gelmektedir. Biz belli bir bölgeye F_RDLCK ile kilit yerleştirirsek
-    bu durum da "bizim o bölgeye başkaalarının yazma yapmasını istemediğimiz ancak okuma yapmalarına izin verdiğimiz" anlamına gelmektedir. 
+    bu durum da "bizim o bölgeye başkalarının yazma yapmasını istemediğimiz ancak okuma yapmalarına izin verdiğimiz" anlamına gelmektedir. 
     F_UNLCK ise bizim o bölgedeki kilidi kaldırmak istediğimiz anlamına gelmektedir. Bu kilit türlerini şöyle özetleyebiliriz:
 
     F_WRLCK: Başkaları yazma da okuma da yapmamalı
@@ -35749,9 +35749,9 @@ void exit_sys(const char *msg)
     örneğin lseek ile dosya göstericisi EOF ötesine konumlandırılsa bile kilit geçerli olmaktadır.) Yani yapının l_len elemanı 0
     olarak girilirse dosya ne kadar büyütülürse büyütülsün tüm büyütülen alanlar da kilitli olacaktır.
 
-    Pekiyi fcntl fonksiyonunun ikinci parametresindeki F_SETLK, F_SETLKW ve F_GETLK komutları ne anlama gelmektedir? F_SETLK blokesiz 
+    Pekiyi fcntl fonksiyonunun ikinci parametresindeki F_SETLK, F_SETLKW ve F_GETLK komutları ne anlama gelmektedir? F_SETLK blokesiz, 
     F_SETLKW blokeli kilitleme yapmaktadır. Blokesiz kilitlemede "çelişen (incompatible)" kilitleme isteklerinde thread bloke olmaz,
-    ancak fcntl fonksiyonu başarrısız olur. Blokeli kilitlemede ise çelişen (incompatible) kilitleme isteklerinde thread bloke olur. 
+    ancak fcntl fonksiyonu başarısız olur. Blokeli kilitlemede ise çelişen (incompatible) kilitleme isteklerinde thread bloke olur. 
     Ta ki bu çelişki ortadan kaldırılana kadar. Örneğin biz bir dosyanın 100 ile 110 offset'leri arasını F_WRLCK türü ile F_SETLK 
     komutunu kullanarak kilitlemek isteyelim. eğer bu bölge başka bir proses tarafından F_RDLCK ya da F_WRLCK türü ile kilitlenmişse
     kilitleme başarısız olur ve fcntl fonksiyonu -1 değeri ile geri döner. Ancak biz aynı bölgeyi F_SETLKW ile blokeli kilitlemek 
@@ -36384,7 +36384,7 @@ void exit_sys(const char *msg)
     belirtilmektedir. 
 
     UNIX/Linux sistemlerinde dosyanın yol ifadesinden hareketle stat, fstat, lstat fonksiyonlarıyla biz dosyanın i-node
-    numarasını elde edebiliriz. Ancak bunun tersini yaapan bir mekanizma yoktur. Bu işlem ancak find utility'si ile arama 
+    numarasını elde edebiliriz. Ancak bunun tersini yapan bir mekanizma yoktur. Bu işlem ancak find utility'si ile arama 
     yöntemiyle yapılabilir. Örneğin:
 
     find / -inum 1207498 2> /dev/null
@@ -36488,7 +36488,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Multiplexed IO işlemlerşnde select ve poll isimli POSIX fonksiyonları ve Linux sistemlerinde de Linux sistemlerine özgü 
+    Multiplexed IO işlemlerinde select ve poll isimli POSIX fonksiyonları ve Linux sistemlerinde de Linux sistemlerine özgü 
     epoll fonksiyonu kullanılmaktadır. select fonksiyonu çok eskiden beri var olan klasik fonklsiyonlardan biridir. select ilk 
     kez BSD sistemlerinde gerçekleştirilmiştir. POSIX standartları oluşturulduğunda doğrudan standartlarda bulundurulmuştur. Aslında
     select fonksiyonunun tasarımında bazı kusurlar vardır. Ancak fonksiyon hala en çok kullanılan ileri IO fonksiyonlarındandır.
@@ -36534,7 +36534,7 @@ void exit_sys(const char *msg)
     FD_ZERO(&rset);
     FD_SET(&rset, fd1);     /* fd1 = 18 varsayalım */
     FD_SET(&rset, fd2);     /* fd2 = 23 varsayalım */
-    FD_SET(&reset, fd3);    /* fd3 = 48 varsayalım
+    FD_SET(&reset, fd3);    /* fd3 = 48 varsayalım */
 
     maxfds = getmax(fd1, fd2, fd3);
 
@@ -36543,7 +36543,7 @@ void exit_sys(const char *msg)
     select fonksiyonu bizim ona verdiğimiz betimelyicileri okuma amaçlı izler. Bu betimleyicilere hiçbir bilgi gelmemişse select 
     akışı blokede bekletmektedir. Ancak bu betimelyicilerin en az birine bir bilgi geldiyse bu durumda select blokeyi çözmektedir. 
     Görüldüğü gibi select fonksiyonu "okunacak hiçbir bilgi betimleyicilerde oluşmamışsa akışı blokede bekletmekte ancak en az bir 
-    betimelyicide okunacak bilgi oluşmuşsa okuma işleminin yapılması için blokeyi çözmektedir. select fonksiyonun okumayı yapmadığına 
+    betimleyicide okunacak bilgi oluşmuşsa okuma işleminin yapılması için blokeyi çözmektedir. select fonksiyonun okumayı yapmadığına 
     yalnızca okuma yapılabilecek bir durumun oluştuğunu tespit ettiğine dikkat ediniz. Tabii programıcının select'in blokesi çözüldüğünde
     hangi betimleyicilere bilgi gelmiş olduğunu anlaması gerekir. Çünkü gelen bilgileri read ile o betimleyicilerden okuyacaktır. Tabii 
     select fonksiyonu aslında bir kez değil genellikle bir dönü içerisinde kullanılmaktadır. 
@@ -36558,7 +36558,7 @@ void exit_sys(const char *msg)
     artık bozlmuş durumdadır yani hangi betimleyicilerin okumaya elvirişli olduğunu gösterecek biçimde değiştirilmiş durumdadır. Buradaki aynı çalışma
     biçimi "yazma" ve "error" işlemi için de aynı biçimde söz konusudur. Programcı aynı zamanda isterse üç ayrı fd_set nesnesini de fonksiyona verebilir. 
 
-    select fonksiyou başarısızlık durumunda -1 değerine geri döner. Eğer hiçbir betimleyicide olay gerçekleşmemiş ancak zaman aşımı dolmuşsa 0 değerine geri döner.
+    select fonksiyonu başarısızlık durumunda -1 değerine geri döner. Eğer hiçbir betimleyicide olay gerçekleşmemiş ancak zaman aşımı dolmuşsa 0 değerine geri döner.
     Eğer en az bir betimleyicide ilgili olay gerçekleşmişse toplam olay gerçekleşen betimleyici sayısına geri döner. (Aynı betimleyici örneğn hen okuma hem de yazma
     için izleniyorsa ve bu betimleyicide hem okuma hem de yazma olayı gerçekleşmişse bu değer 2 artırılmaktadır.)
 
