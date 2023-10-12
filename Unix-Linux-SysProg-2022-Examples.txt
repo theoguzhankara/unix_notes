@@ -5817,8 +5817,8 @@ void exit_sys(const char *msg)
     belirtilmektedir. Ancak maalesef bu sembolik sabitin define edilmiş olması da zorunlu değildir. Bu konunun biraz ayrıntıları olduğu için 
     konu bir başlık altında ileride ele alınacaktır.
 
-    Aşağıdaki örnekte yol ifadesi tam olarak 4096 karakter de olabilir. Ya da daha uzun olup budanmış da olabilir. Bu tür durumlarda tavsiye edilen diziyi büyütüp fonksiyonu başarılı olan kadar tekrar tekrar çağırmaktır. Ancak bir yol ifadesinin 4096 karakterden büyük olması 
-    çok çok uç bir noktadır. 
+    Aşağıdaki örnekte yol ifadesi tam olarak 4096 karakter de olabilir. Ya da daha uzun olup budanmış da olabilir. Bu tür durumlarda tavsiye edilen
+    diziyi büyütüp fonksiyonu başarılı olan kadar tekrar tekrar çağırmaktır. Ancak bir yol ifadesinin 4096 karakterden büyük olması çok çok uç bir noktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -5885,7 +5885,9 @@ void exit_sys(const char *msg)
     bu teste dayalı olarak dosya üzerinde işlem yapılmak istendiğinde bu işlemin başarılı olması garanti değildir. Çünkü o arada
     sistemdeki başka bir proses dosyanın erişim hakları üzerinde değişiklik yapmış olabilir. 
 
-    access fonksiyonu test olumluysa 0 değerine olumsuzsa -1 değerine geri dönmektedir. Tabii access fonksiyonun başarısızlığının başka nedenleri de olabilir. Ancak programcı genellikle öyle ya da böyle istediği işlemi yapıp yapamayacağı ile ilgilenmektedir. Ancak yine de fonksiyon başarısız olduğunda errno değeri incelenebilir ve başarısızlığın EACCESS nedeniyle olduğu doğrulanabilir. Biz aşağıdaki örnekte bu yola gitmiyoruz. 
+    access fonksiyonu test olumluysa 0 değerine olumsuzsa -1 değerine geri dönmektedir. Tabii access fonksiyonun başarısızlığının başka nedenleri de 
+    olabilir. Ancak programcı genellikle öyle ya da böyle istediği işlemi yapıp yapamayacağı ile ilgilenmektedir. Ancak yine de fonksiyon başarısız 
+    olduğunda errno değeri incelenebilir ve başarısızlığın EACCESS nedeniyle olduğu doğrulanabilir. Biz aşağıdaki örnekte bu yola gitmiyoruz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
