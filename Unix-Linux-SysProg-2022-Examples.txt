@@ -2204,7 +2204,7 @@ void exit_sys(const char *msg)
     gerekli kontrolleri yapar (örneğin dosyanın yazma modunda açılıp açılmadığı gibi). Eğer bu kontrollerde başarısızlık oluşursa 
     write fonksiyonu -1 ile geri döner. Eğer bu kontrollerde başarısızlık oluşmazsa write fonksiyonu 0 ile geri döner. Ancak yukarıda da 
     belirttiğimiz gibi bu durumda gerçek bir yazma yapılmamaktadır. POSIX standartları normal dosyaların dışında (yani "regular" olmayan dosyaların dışında)
-    0 byte yazma işlemini "unspeicifed" olarak belirtmiştir. Dolayısıyla ileride göreceğimiz boru gibi dosyalara 0 byte yazıldığında ne olacağı
+    0 byte yazma işlemini "unspecified" olarak belirtmiştir. Dolayısıyla ileride göreceğimiz boru gibi dosyalara 0 byte yazıldığında ne olacağı
     o sisteme bağlı bir durumdur. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -2739,7 +2739,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Bir dosyaya ilişkin bilgileri elde etmek için stat, lstat ve fstat isimli üç fonksiyon kullanılmaktadır. Bu fonksiyonlar
-    aslıunda aynı şeyi yaparlar. Fakat parametrik yapı bakımından ve semantik bakımdan bunların arasında küçük farklılıkllr vardır. 
+    aslında aynı şeyi yaparlar. Fakat parametrik yapı bakımından ve semantik bakımdan bunların arasında küçük farklılıklar vardır. 
     Fonksiyonların prototipleri şöyledir:
 
     #include <sys/stat.h>
@@ -2798,7 +2798,7 @@ void exit_sys(const char *msg)
 
     Yapının st_mode elemanı dosyanın erişim bilgilerini ve türünü içermektedir. Yine bu elemanın içerisindeki değerler bitler biçiminde oluşturulmuştur. 
     1 olan bitler ilgili özelliğin olduğunu belirtmektedir. Belli bir erişim hakkının (örneğin S_IWGRP gibi) olup olmadığını anlamak için programcı ilgili 
-    bitin set edilip edilmedeiğine st_mode & S_IXX işlemi ile bakmalıdır. Dosyanın türü de yine aynı elemanın içerisine bitsel olarak kodlanmıştır. Ancak hangi bitlerin
+    bitin set edilip edilmediğine st_mode & S_IXX işlemi ile bakmalıdır. Dosyanın türü de yine aynı elemanın içerisine bitsel olarak kodlanmıştır. Ancak hangi bitlerin
     hangi türleri belirttiği POSIX standartlarında belirtilmemiştir. Bu durum sistemden sisteme değişebilmektedir. (Anımsanacağı gibi eskiden aynı durum S_IXXX
     sembolik sabitleri için de geçerliydi. Ancak daha sonra bu sembolik sabitlerinyonları sayısal değerleri yani bit pozisyonları POSIX standartlarında belirlendi.)
     Dosyanın türünü anlamak için iki yöntem bulunmaktadır. Birincisi <sys/stat.h> içerisindeki S_ISXXX biçimindeki makroları kullanmaktır. Bu makrolar
@@ -3832,7 +3832,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     /etc/passwd dosyası üzerinde parse işlemi yapan fonksiyonların prototipleri <pwd.h> dosyası içerisinde bulundurulmuştur. 
     getpwnam POSIX fonksiyonu bir kullanıcının ismini alarak o kullanıcı hakkında /etc/passwd dosyasında belirtilen bilgileri 
-    vermektedir. Fonksiyonun prototipi şöyleid:r
+    vermektedir. Fonksiyonun prototipi şöyledir:
 
     #include <pwd.h>
 
@@ -5817,8 +5817,7 @@ void exit_sys(const char *msg)
     belirtilmektedir. Ancak maalesef bu sembolik sabitin define edilmiş olması da zorunlu değildir. Bu konunun biraz ayrıntıları olduğu için 
     konu bir başlık altında ileride ele alınacaktır.
 
-    Aşağıdaki örnekte yol ifadesi tam olarak 4096 karakter de olabilir. Ya da daha uzun olup budanmış da olabilir. Bu tür durumlarda tavsiye edilen 
-    diziyi büyütüp fonksiyonu başarılı olan kadar tekrar tekrar çağırmaktır. Ancak bir yol ifadesinin 4096 karakterden büyük olması 
+    Aşağıdaki örnekte yol ifadesi tam olarak 4096 karakter de olabilir. Ya da daha uzun olup budanmış da olabilir. Bu tür durumlarda tavsiye edilen diziyi büyütüp fonksiyonu başarılı olan kadar tekrar tekrar çağırmaktır. Ancak bir yol ifadesinin 4096 karakterden büyük olması 
     çok çok uç bir noktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -5886,9 +5885,7 @@ void exit_sys(const char *msg)
     bu teste dayalı olarak dosya üzerinde işlem yapılmak istendiğinde bu işlemin başarılı olması garanti değildir. Çünkü o arada
     sistemdeki başka bir proses dosyanın erişim hakları üzerinde değişiklik yapmış olabilir. 
 
-    access fonksiyonu test olumluysa 0 değerine olumsuzsa -1 değerine geri dönmektedir. Tabii access fonksiyonun başarısızlığının başka nedenleri de olabilir. 
-    Ancak programcı genellikle öyle ya da böyle istediği işlemi yapıp yapamayacağı ile ilgilenmektedir. Ancak yine de fonksiyon başarısız olduğunda 
-    errno değeri incelenebilir ve başarısızlığın EACCESS nedeniyle olduğu doğrulanabilir. Biz aşağıdaki örnekte bu yola gitmiyoruz. 
+    access fonksiyonu test olumluysa 0 değerine olumsuzsa -1 değerine geri dönmektedir. Tabii access fonksiyonun başarısızlığının başka nedenleri de olabilir. Ancak programcı genellikle öyle ya da böyle istediği işlemi yapıp yapamayacağı ile ilgilenmektedir. Ancak yine de fonksiyon başarısız olduğunda errno değeri incelenebilir ve başarısızlığın EACCESS nedeniyle olduğu doğrulanabilir. Biz aşağıdaki örnekte bu yola gitmiyoruz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -7131,7 +7128,7 @@ void exit_sys(const char *msg)
     bilgi yığını olduğu için read fonksiyonu ile okuma yapmaz bize doğrudan tampondan verir. Tabii tampondaki her byte okunduktan sonra 
     (yani tamponun sonuna gelindiğinde) fgetc yeniden read fonksiyonunu çağıracak ve tamponu yeniden dolduracaktır. 
 
-    fopen fonksiyonun geri döndürdüğü FILE türünden yapının ieçrisinde aslında bu tamponu yönetmek için gerekli olan bilgiler de 
+    fopen fonksiyonun geri döndürdüğü FILE türünden yapının içerisinde aslında bu tamponu yönetmek için gerekli olan bilgiler de 
     bulunmaktadır. 
 
     Standart C fonksiyonlarının kullandıkları default tampon büyüklüğü <stdio.h> içerisinde BUFSIZ sembolik sabitiyle ifade edilmiştir. 
@@ -7676,7 +7673,7 @@ int main(void)
     ch = getchar();
 
     Burada Windows sistemlerinde Ctrl+z tuşuna UNIX/Linux sistemlerinde Ctrl+d tuşuna basıldığında "dosya sonuna gelme etkisi" yaratılacak ve 
-    getchar fonksiyonu EOF değerine (-1) gei dönecektir. Tabii bu tuş kombinasyonlarına basıldığında gerçekte dosya sonuna gelme gibi bir durum 
+    getchar fonksiyonu EOF değerine (-1) geri dönecektir. Tabii bu tuş kombinasyonlarına basıldığında gerçekte dosya sonuna gelme gibi bir durum 
     oluşmamaktadır. Bu yalancı bir etkidir. Yani daha sonra stdin dosyasından yine okuma yapılabilir. Bu nedenle stdin tamponunu boşaltırken 
     kullanıcının EOF etkisi yaratmak isteyebileceğine de dikkat edilmelidir:
 
@@ -7941,7 +7938,7 @@ EXIT:
 
     pid_t getpid(void);
 
-    Fonksiyon başarız olamaz. 
+    Fonksiyon başarısız olamaz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -12031,7 +12028,7 @@ void exit_sys(const char *msg)
     Fonksiyon birinci parametresiyle kullanıcının ismini alır. /etc/group dosyasına başvurarak kullanıcının ek grup id'lerini elde 
     eder. Sonra da setgroups fonksiyonunu uygulayarak prosesin ek gruplarını set eder. Tabii fonksiyonun bu işlemi yapabilmesi için 
     yine uygun önceliğe sahip olması gerekmektedir. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine döner ve 
-    errno uygıun biçimde set edilir. Fonksiyonun ikinci parametresi /etc/group dosyasından elde edilen ek gruplara dahil edilecek 
+    errno uygun biçimde set edilir. Fonksiyonun ikinci parametresi /etc/group dosyasından elde edilen ek gruplara dahil edilecek 
     ekstra bir grubu belirtmektedir. Tipik olarak login prosesi prosesin etkin grup id'sini bu listeye eklemek için fonksiyonun 
     ikinci parametresini prosesin etkin grup id'si ile çağırmaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -12474,7 +12471,7 @@ int main(void)
     ...                         ...
 
     Burada Fiziksel Sayfa Numarasındaki "-" sembolleri o sanal sayfaya bir fiziksel sayfanın karşı getirilmediğini belirtmektedir. 
-    Dolayısıyla örneğin işlemci 23604 numaralı, 23606 numaralı sanal sayfalar için dönüştürme yapmak isteiğinde "page fault" oluşturacaktır. 
+    Dolayısıyla örneğin işlemci 23604 numaralı, 23606 numaralı sanal sayfalar için dönüştürme yapmak istediğinde "page fault" oluşturacaktır. 
     İşte "page fault"" denilen kesme oluştuğunda işletim sisteminin kesme kodu devreye girer. Buna "page fault handler" denilmektedir. Bütün 
     swap mekanizması bu işletim sisteminin kesme kodu tarafından yapılmaktadır. İşletim sisteminin bu kesme kodu (page fault handler) önce
     hangi prosesin hangi sayfaya erişmek istediğini tespit eder. Sonra onun diskteki karşılığını bulur ve yer değiştirme işlemini yapar. 
@@ -17453,7 +17450,7 @@ void exit_sys(const char *msg)
     YANIT: Eğer fonksiyonun flags parametresinde MAP_FIXED belirtilmemişse birinci parametre sayfa katlarında olmak zorunda değildir. 
     Ancak MAP_FIXED belirtilmişse POSIX'in eski versiyonu sayfa katlarını zorunlu tutmaktaydı. Ancak güncel versiyonda bu zorunluluk 
     gevşetilmiştir ve işletim sisteminin isteğine bağlı hale getirilmiştir. Linux çekirdeği MAP_FIXED durumunda birinci parametredeki adresin
-    sayfa katlarında olmasını zorunlu tutmaktadır. Fonksiyonun son parametresindeki offset değeri eğer MAP_FIXED belirtilmisşe 
+    sayfa katlarında olmasını zorunlu tutmaktadır. Fonksiyonun son parametresindeki offset değeri eğer MAP_FIXED belirtilmişse 
     POSIX standartlarına göre birinci parametrede belirtilen adresin sayfa katlarına bölümüne elde edilen kalanla aynı kalanı vermek zorundadır. 
     Ancak POSIX standartları MAP_FIXED belirtilsin ya da belirtilmesin offset değerinin işletim sistemi tarafından sayfa katlarında olmasının 
     zorunlu tutulabileceğini (may require) de belirtmiştir. Linux sistemlerinde MAP_FIXED belirtilse de belirtilmese de offset değeri sayfa katlarında 
@@ -21911,7 +21908,7 @@ void exit_sys_errno(const char *msg, int eno)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Üretici-Tüketici Problemi (Producer-Consumer Problem) gerçek hayatta en fazla karşılaşılan senkronizasyon problemlerinden biridir. 
-    Problemin çeşitli varyasyonları vardır. Üretici-Tükettici problemi aynı prosesin thread'leri arasında uygulanabilecğei gibi 
+    Problemin çeşitli varyasyonları vardır. Üretici-Tükettici problemi aynı prosesin thread'leri arasında uygulanabileceği gibi 
     farklı proseslerin thread'leri arasında da uygulanabilmektedir. Üretici-Tüketici probleminde en az bir üretici thread ve en az bir 
     tüketici thread vardır. Biz bir üretici bir de tüketici thread'in olduğunu varsayalım. Üretici thread belli bir işlemden sonra bir 
     değer üretir. Ancak o değerin işlenmesini tüketici thread'e havale eder. Bunun için ortak bir paylaşılan alan oluşturulur. Üretici 
@@ -25595,7 +25592,7 @@ void exit_sys_errno(const char *msg, int eno)
     ya da bağlı listeden eleman silerken, diğer thread'lerin bu işlemin bitmesini beklemesi gerekir. Benzer biçimde bir thread
     bağlı listede arama yaparken diğer thread'lerin bu arama bitene kadar eleman eklemesilme işlemlerine başlamaması gerekir. 
     Ancak buradaki kritik nokta birden fazla thread'in bağlı liste üzerinde arama yapabilmesinin bir sıkıntıya yol açmayacağıdır. 
-    Yani birden fazla thread'in bağlı liste üzerinde arama yapması mümkün hale geitrilmelidir. Aslında bu örnek bağlı listeye 
+    Yani birden fazla thread'in bağlı liste üzerinde arama yapması mümkün hale getirilmelidir. Aslında bu örnek bağlı listeye 
     eleman ekleme ya da bağlı listeden eleman silme işlemi bir "write" işlemi olarak ele alınabilir. Benzer biçimde bağlı 
     listede eleman arama işlemi de bir "read" işlemi olarak ele alınabilir. O halde bizim sağlamamız gereken durum şöyle özetlenebilir:
 
@@ -35578,10 +35575,10 @@ void exit_sys(const char *msg)
 
     İşte diskteki dosya için o dosya kullanılmaya başlandığı zaman işletim sistemi aynı zamanda i-node isimli bir nesne 
     oluşturmaktadır. i-node nesnesi farklı prosesler aynı dosya dosyayı açsalar bile o dosya için toplamda bir tanedir. 
-    i-node nesnesi içerisinde tipik olarak bizin stat fonksiyonlarıyla elde ettiğimiz bilgiler bulunmaktadır. (Örneğin fstat
-    fonksiyonu hiç disk işlemi yapmdan bilgileri doğrudan bu i-node nesnesinin içerisinden almaktadır.) Burada anahtar nokta
+    i-node nesnesi içerisinde tipik olarak bizim stat fonksiyonlarıyla elde ettiğimiz bilgiler bulunmaktadır. (Örneğin fstat
+    fonksiyonu hiç disk işlemi yapmadan bilgileri doğrudan bu i-node nesnesinin içerisinden almaktadır.) Burada anahtar nokta
     toplamda bir dosya için işletim sisteminin sistem genelinde tek bir i-node nesnesi oluşturmasıdır. Çünkü i-node nesneleri
-    işletim sisteminin diskte tek olan dosya bilglerini yerleştirdiği nesnelerdir. O dosya diskte tek olduğuna göre o dosya 
+    işletim sisteminin diskte tek olan dosya bilgilerini yerleştirdiği nesnelerdir. O dosya diskte tek olduğuna göre o dosya 
     bilgilerinin çekirdek tarafından bellekteki temsili de tek olmalıdır. Tabii modern işletim sistemleri dosyalara ilişkin 
     bu i-node elemanlarını bir cache sistemi içerisinde tutmaktadır. Yani bir dosya artık hiçbir proses tarafından kullanılmıyor 
     olsa da o dosyanın bilgileri i-node cache içerisinde bulunuyor olabilir. Linux i-node nesneleri için LRU (Least Recently Used)
@@ -35753,15 +35750,15 @@ void exit_sys(const char *msg)
     F_SETLKW blokeli kilitleme yapmaktadır. Blokesiz kilitlemede "çelişen (incompatible)" kilitleme isteklerinde thread bloke olmaz,
     ancak fcntl fonksiyonu başarısız olur. Blokeli kilitlemede ise çelişen (incompatible) kilitleme isteklerinde thread bloke olur. 
     Ta ki bu çelişki ortadan kaldırılana kadar. Örneğin biz bir dosyanın 100 ile 110 offset'leri arasını F_WRLCK türü ile F_SETLK 
-    komutunu kullanarak kilitlemek isteyelim. eğer bu bölge başka bir proses tarafından F_RDLCK ya da F_WRLCK türü ile kilitlenmişse
+    komutunu kullanarak kilitlemek isteyelim. Eğer bu bölge başka bir proses tarafından F_RDLCK ya da F_WRLCK türü ile kilitlenmişse
     kilitleme başarısız olur ve fcntl fonksiyonu -1 değeri ile geri döner. Ancak biz aynı bölgeyi F_SETLKW ile blokeli kilitlemek 
     istersek bu durumda çelişkili bir kilitleme isteği söz konusu olduğu için thread bloke olur. Ta ki bu çelişki giderilene kadar. 
     (Yani kilidi yerleştiren proses onu kaldırana kadar.) Özetle F_SETLK ile çelişkili kilit yerleştirilmek istenirse fcntl başarısız 
-    olmakta ancak F_SETLKW ile çelişkili kilit yerleştirilmek istenirse fcntl blokeye yol açmaktadır. Genellikle uygulamalarda F_SETLKW 
+    olmakta, ancak F_SETLKW ile çelişkili kilit yerleştirilmek istenirse fcntl blokeye yol açmaktadır. Genellikle uygulamalarda F_SETLKW 
     kullanılmaktadır. 
 
     Yukarıda da belirttiğimiz gibi F_SETLK ile bir bölgeyi kilitlemek isteyen proses eğer bu alan başka bir proses tarafından çelişki 
-    yaratacak biçimde kilitlenmişse fcntl fonksiyonu başarısız olur ve -1 değerine geri döner. Bu durumda errno değişkeni EACCESS 
+    yaratacak biçimde kilitlenmişse fcntl fonksiyonu başarısız olur ve -1 değerine geri döner. Bu durumda errno değişkeni EACCES 
     ya da EAGAIN değerlerinden biri ile set edilmektedir. 
 
     Aynı proses kendisinin yerleştirmiş olduğu bir kilidin türünü değiştirebilir. Bu durumda bir çelişkiye bakılmamaktadır. Yani 
@@ -35777,32 +35774,32 @@ void exit_sys(const char *msg)
 
     fcntl ile offset temelinde konulmuş olan kilitler fork işlemi sırasında alt prosese aktarılmazlar. Yani üst prosesin 
     kilitlemiş olduğu alanlar alt proses tarafından da kilitlenmiş gibi olmazlar. (Halbuki flock fonksiyonu ile bütünsel 
-    kilitleemelerin fork işlemi sırasında alt prosese aktarıldığını anımsayınız.) exec işlemleri sırasında offset temelindeki 
+    kilitlemelerin fork işlemi sırasında alt prosese aktarıldığını anımsayınız.) exec işlemleri sırasında offset temelindeki 
     kilitlemeler varlığını devam ettirmektedir. 
 
     Dosyanın kilit bilgileri dosyanın diskteki varlığı üzerine kaydedilmemektedir. İşletim sisteminin çekirdek içerisinde 
-    oluşturduğu i-node elemanın içerisinde kaydedilmektedir. Dolayısıyla aynı dosyayı açmış olan prosesler aynı i-node 
-    nesnesini gördükleri için aynı kilit bilgilerine sahip olurlar. Genellikle UNIX türevi işletim işletim sistemleri kiltit 
+    oluşturduğu i-node elemanının içerisinde kaydedilmektedir. Dolayısıyla aynı dosyayı açmış olan prosesler aynı i-node 
+    nesnesini gördükleri için aynı kilit bilgilerine sahip olurlar. Genellikle UNIX türevi işletim sistemleri kilit 
     bilgilerini i-node nesnesi içerisinde bir bağlı listede proses id'lere göre sıralı bir biçimde tutmaktadır. 
 
-    Prosesin yerleştirmiş olduğu bir kilit o proses tarafından kilit türü F_UNLCK yapılarak kaldırılabilmektedir. Ancak en 
-    kötü olasılıkla ilgili dosya kapatıldığında o prosesin o dosya üzerinde yerleştirmiş olduğu kilitler de kaldırılmaktadır. 
-    Burada önemli bir nokta bir dosya betimleyicisi dup yapıldığında onların biri close ile kapatılırsa kilidin kaldırılacağıdır. 
-    Yani kilidin kaldırılması için bir betimleyicinin close edilmesi yeterli olmaktadır. Benzer biçimde aynı proses aynı dosyayı 
-    ikinci kez açmış olsa, onlardan herhangi biri close işlemş yaptığında kilit kaldırılmaktadır. Proses biterken zaten betimleyicler
-    üzerinde close işlemleri yapılacağı için o prosesin açmış olduğu dosyalar üzerinde yerleştirdiği kilitler de ortadan 
-    kaldırılacaktır. 
+    Prosesin yerleştirmiş olduğu bir kilit o proses tarafından kilit türü F_UNLCK yapılarak kaldırılabilmektedir. Ancak en kötü 
+    olasılıkla ilgili dosya kapatıldığında o prosesin o dosya üzerinde yerleştirmiş olduğu kilitler de kaldırılmaktadır. Burada 
+    önemli bir nokta bir dosya betimleyicisi dup yapıldığında onlardan herhangi biri close ile kapatılırsa kilidin kaldırılacağıdır. 
+    Yani kilidin kaldırılması için bir betimleyicinin close edilmesi yeterli olmaktadır. Benzer biçimde aynı proses, aynı dosyayı 
+    ikinci kez açtığı durumda, onlardan herhangi biri close işlemi yaptığında kilit kaldırılmaktadır. Proses biterken zaten 
+    betimleyiciler üzerinde close işlemleri yapılacağı için o prosesin açmış olduğu dosyalar üzerinde yerleştirdiği kilitler de 
+    ortadan kaldırılacaktır. 
 
     Prosesin dosyaya F_WRLCK kilidi yerleştirebilmesi için dosyanın yazma modunda, F_RDLCK kilidi koyabilmesi için ise dosyanın 
     okuma modunda açılmış olması gerekir. 
 
-    Offset temelinde kilitlemede "deadlock" oluşmuna dikkat edilmelidir. Yani biz bir prosesin kilidi açmasını beklerken o 
+    Offset temelinde kilitlemede "deadlock" oluşumuna dikkat edilmelidir. Yani biz bir prosesin kilidi açmasını beklerken o 
     proses de bizim başka bir kilidi açmamızı bekliyorsa burada bir "deadlock" durumu söz konusudur. İşte deadlock durumu 
     fcntl fonksiyonu tarafından otomatik olarak tespit edilmektedir. Eğer bir proses F_SETLKW ile (F_SETLK ile değil) kilit 
     koymak isterken bir "deadlock" durumu söz konusu ise fcntl başarısız olmakta ve errno değeri EDEADLK değeri ile set edilmektedir.
 
     Kilitlenmek istenen bölgede birden fazla ayrık kilit bulunuyor olabilir. Bu durumda kilitlemenin yapılabilmesi için bu 
-    ayrık kilitlerin hiçbirinde bir çelişkinin olmaması gerekir. Aksş takdirde F_SETLK komutunda fcntl başarısız olur, F_SETLKW 
+    ayrık kilitlerin hiçbirinde bir çelişkinin olmaması gerekir. Aksi takdirde F_SETLK komutunda fcntl başarısız olur, F_SETLKW 
     komutunda ise fcntl blokeye yol açar. Yani kilitleme işlemi "yap hep ya hiç" biçiminde yapılmaktadır. 
 
     Bir bölgenin belli bir kilit türüyle kilitlenmiş olduğunu varsayalım. Aynı proses bu bölgenin bir alt bölgesini başka 
@@ -35811,18 +35808,18 @@ void exit_sys(const char *msg)
 
     WWWWWWWWWWWWWWWWWWWWW
 
-    Bu bölgenin F_WRLCK ile kilitlenmiş olduğunu düşünelim. Biz bu bölgenin ortasında bir bölgeyinin kilidini F_RDLCK olarak 
+    Bu bölgenin F_WRLCK ile kilitlenmiş olduğunu düşünelim. Biz bu bölgenin ortasında bir bölgenin kilidini F_RDLCK olarak 
     değiştirelim:
 
     WWWWWWWWWRRRRRWWWWWWW
 
-    Burada artık üç kilit bölgesi oluşmaktadır. Kilidin kaldırılması eğer kilidi koyan proses tarafından yapılıyorsa bar zaman 
-    başarılı olmaktadır. Yani yukarıdaki üç bölgenin biz tek bir F_UNLCK ile kilidini kaldırabiliriz. Kilitlenmemiş bölgeye 
+    Burada artık üç kilit bölgesi oluşmaktadır. Kilidin kaldırılması eğer kilidi koyan proses tarafından yapılıyorsa her zaman 
+    başarılı olmaktadır. Yani biz yukarıdaki üç bölgenin kilidini tek bir F_UNLCK ile kaldırabiliriz. Kilitlenmemiş bölgeye 
     F_UNLCK uygulansa bile fcntl fonksiyonu başarısız olmamaktadır. 
 
-    Pekiyi fcntl fonksiyonunun başarısı nasıl kontorl edilmelidir. Eğer kilitleme F_SETLK fonksiyonu ile yapılıyorsa EACCES
-    ve EAGAIN değerleri test edilmelidir. Mesajlar bu durumlar için özel olarak verilmesi daha iyi bir tekniktir. Eğer kilitleme
-     F_SETLKW ile yapılıyorsa EDEADLK değeri de test edilmelidir. Örneğin:
+    Pekiyi fcntl fonksiyonunun başarısı nasıl kontrol edilmelidir. Eğer kilitleme F_SETLK fonksiyonu ile yapılıyorsa EACCES
+    ve EAGAIN değerleri test edilmelidir. Mesajlar bu durumlar için özel olarak verilmesi daha iyi bir tekniktir. Eğer kilitleme 
+    F_SETLKW ile yapılıyorsa EDEADLK değeri de test edilmelidir. Örneğin:
 
     if (fcntl(fd, F_SETLK, &fl) == -1) {
         if (errno == EACCES || errno == EAGAIN) {
@@ -35865,7 +35862,7 @@ void exit_sys(const char *msg)
 
     CSD (55306)>F_SETLK F_RDLCK 0 64
 
-    Bu komutla fcntl fonksiyonu ile "test.txt" dosyaının 0 offset'inden 64 byte uzunluktaki bölgeye F_RDLCK yerleştirilmek 
+    Bu komutla fcntl fonksiyonu ile "test.txt" dosyasının 0 offset'inden 64 byte uzunluktaki bölgeye F_RDLCK yerleştirilmek 
     istenmiştir. Yerleştirme işlemi blokeye yol açmayan F_SETLK komut kodu ile yapılacaktır. Aynı programı başka bir terminalden 
     girerek çalıştırmalısınız. Örneğin:
 
@@ -35884,7 +35881,7 @@ void exit_sys(const char *msg)
 
     Komutun ikinci argümanı aslında program tarafından kullanılmamaktadır. Ancak girilmek zorundadır. 
 
-    Programdan çıkmak için quit tuşuna basılabilir. 
+    Programdan çıkmak için komut satırına "quit" yazılabilir. 
 
     Bu programı kllanarak F_SETLKW komutuyla blokeli işlemleri de deneyiniz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -36028,28 +36025,29 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
-/*--------------------------------------------------------------------------------------------------------------------------
+/* fclock-test.c */
 
+/*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi dosya kilitleme mekanizmasından nasıl faydalanılacaktır? Örneğin biz aynı dosyanın iki bölgesi üzerinde birbirleriyle 
     ilgili iki güncelleme yapmak isteyelim. Tipik olarak bunun için önce iki bölgeyi kilitleriz. Sonra güncellemeleri yaparız. 
     Sonra da kilitleri açarız. Örneğin (kontroller yapılmamıştır):
 
     fcntl(fd, F_SETLKW, &region1);		/* F_WRLCK */
-    fcntl(fd, FSETLKW, &region2);		/* F_WRLCK */
+    fcntl(fd, F_SETLKW, &region2);		/* F_WRLCK */
 
     write(fd, region1, size1);
     write(fd, region2, size2);
 
     fcntl(fd, F_SETLKW, &region1);		/* F_UNLCK */
-    fcntl(fd, FSETLKW, &region2);		/* F_UNLCK */
+    fcntl(fd, F_SETLKW, &region2);		/* F_UNLCK */
 
-    Şimdi belli bir kaydın bir elemanını değiştirmek isteyim:
+    Şimdi belli bir kaydın bir elemanını değiştirmek isteyelim:
 
     fcntl(fd, F_SETLKW, &region);		/* F_WRLCK */
 
     read(fd, buf, elem_size);
     <update işlemi>
-    write(fd, buf, elem_size)
+    write(fd, buf, elem_size);
 
     fcntl(fd, F_SETLKW, &region);		/* F_UNLCK */
 
@@ -36058,28 +36056,28 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Biz yukarıda "isteğe bağlı (advisory)" kilitleme işlemi yaptık. Burada "isteğe bağlı (advisory)" demekle aslında read/write 
     fonksiyonlarının bu kilitlere hiç bakmaması anlatılmak istenmiştir. Örneğin biz dosyanın bir bölgesine F_WRLCK ile bir 
-    kilit yerleştirelim. Başka bir proses o bölgete write ile yazma yapabilir. Tabii dosya erişien ilgili programların hepsi
+    kilit yerleştirelim. Başka bir proses o bölgeye write ile yazma yapabilir. Tabii dosya erişen ilgili programların hepsi
     birbirleriyle koordineli yazıldığı için onlar da read/write yapmadan önce aynı kilit mekanizmasını kullanarak senkronizasyon 
-    sağlamaktadır. Özetle "isteğe bağlı kilitleme (advisory locking)" demekle read/write fonksiyonlarnın bakmadığı fcntl fonkcisyonun
+    sağlamaktadır. Özetle "isteğe bağlı kilitleme (advisory locking)" demekle read/write fonksiyonlarının bakmadığı, fcntl fonksiyonunun
     baktığı kilit anlaşılmaktadır. Pekiyi "zorunlu (mandatory)" kilit sistemi nedir? Zorunlu kilitlemede read/write fonksiyonları 
     kilitlere bakarak çalışmaktadır. Yani örneğin biz bir bölgeye F_WRLCK ile zorunlu kilit yerleştirmişsek o bölgeden read 
-    işlemi ya da o bölgeye write işlemi yapıldığında bu fonksiyonlar otomatik blokeye yol açmakta ya da başarız olmaktadır. 
-    Uygulamada "isteğe bağlı (advisory) kilitleme" çok dah ayoğun kullanılmaktadır. Çünkü zorunlu kilitlemede read/write 
+    işlemi ya da o bölgeye write işlemi yapıldığında bu fonksiyonlar otomatik blokeye yol açmakta ya da başarısız olmaktadır. 
+    Uygulamada "isteğe bağlı (advisory) kilitleme" çok daha yoğun kullanılmaktadır. Çünkü zorunlu kilitlemede read/write 
     fonksiyonlarının her defasında kilitlere bakması (kilitler konulmamış bile olsa) zaman kaybına yol açmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi zorunlu (mandatory) kilitleme nasıl uygulanmaktadır? İsteğe bağlı kilitleme ile zorunlu kilitlemenin uygulanış biçimi 
-    arasında hiçbir farklılık yoktur. Kilitlemen isteğe bağlı mı yoksa zorunlu mu olduğu "mount parametrelerine" ve "dosyanın erişim 
+    arasında hiçbir farklılık yoktur. Kilitleme isteğe bağlı mı yoksa zorunlu mu olduğu "mount parametrelerine" ve "dosyanın erişim 
     haklarına" bakılarak belirlenmektedir. 
 
-    Zorunlu kilitleme kavramı POSIX standartların bulunmamaktadır. POSIX standartları fcntl fonksiyonun açıklamasında bunun gerekçelerini
+    Zorunlu kilitleme kavramı POSIX standartların bulunmamaktadır. POSIX standartları fcntl fonksiyonunun açıklamasında bunun gerekçelerini
     belirtmiştir. Zaten bazı işletim sistemleri zorunlu kilitlemeyi hiç desteklememektedir. Linux 2.4 çekirdeği ile birlikte zorunlu 
     dosya kilitlemesini destekler hale gelmiştir. Yukarıda da belirttiğimiz gibi zorunlu kilitleme için aslında fcntl fonksiyonunda 
     ek bir şey yapılmaz. Linux'ta zorlamalı kilitleme için şu koşulların sağlanmış olması gerekmektedir:
 
-    1) Dosyanın içinde bulunduğu dosya sisteminin -o mand ile mount edilmiş olması gerekir. Mevcut mount edilmiş olan bir 
-    dosya sisteminin mount parametreleri aşağıdaki gibi değiştirilebilir:
+    1) Dosyanın içinde bulunduğu dosya sisteminin -o mand ile mount edilmiş olması gerekir. Mevcut mount edilmiş olan bir dosya sisteminin 
+    mount parametreleri aşağıdaki gibi değiştirilebilir:
 
     sudo mount -o mand,remount <device> <mount point>
 
@@ -36107,7 +36105,7 @@ void exit_sys(const char *msg)
 
     sudo mount -o mand,remount /dev/sda5 /
 
-    Sistemin açıldığında igili dosya sisteminin "mand" parametresi ile mount edilebilmesi için bazı start-up dosyaları 
+    Sistemin açıldığında ilgili dosya sisteminin "mand" parametresi ile mount edilebilmesi için bazı start-up dosyaları 
     kullanabilirsiniz. Örneğin /etc/fstab dosyası bu amaçla kullanılabilmektedir.
 
     2) İlgili dosyanın set-group-id bayrağı set edilip gruba x hakkı varsa reset edilmelidir. Bu işlem şöyle yapılmalıdır:
@@ -36296,6 +36294,8 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
+/* flock-test.c */
+
 /* rw-test.c */
 
 #include <stdio.h>
@@ -36364,6 +36364,8 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
+/* rw-test.c */
+
 /*--------------------------------------------------------------------------------------------------------------------------
     Dosyalardaki kilitleri izlemek için proc dosya sistemindeki /proc/locks dosyasından faydalanılabilmektedir. Örneğin:
 
@@ -36424,7 +36426,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Biz şimdiye kadar read/write fonksiyonlarıyla klasik IO işlemleri yaptık. UNIX/Linux sistemlerinde bloke durumlarında 
-    kullanılabilecek alternatif IO modelleri de vardır. Bunalra "ileri IO (advanced IO)" de denilmektedir. Bu bölümde özellikle 
+    kullanılabilecek alternatif IO modelleri de vardır. Bunlara "ileri IO (advanced IO)" de denilmektedir. Bu bölümde özellikle 
     client-server programların gerçekleştirilmesinde kullanılabilecek ileri IO modelleri üzerinde duracağız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -36458,13 +36460,13 @@ void exit_sys(const char *msg)
         ...
     }
 
-    Burada problem çözülmül gibi gözüekmekle birlikte aslında başka bir sorun oluşmaktadır. eğer hiçbir client'tan bilgi gelmemişse 
+    Burada problem çözülmüş gibi gözükmekle birlikte aslında başka bir sorun oluşmaktadır. Eğer hiçbir client'tan bilgi gelmemişse 
     burada "meşgul bir döngü (busy loop)" oluşmaktadır. Bu tür durumlarda akla gelen en basit çözüm "thread ya da proses" modelini 
     kullanmaktadır. Tabii proses yaratımı thread yaratımına göre çok daha maliyetli olduğu için thread modeli tercih edilmektedir. 
     Bu modelde her client için ayrı bir thread (ya da proses) oluşturulur. O client'ın istekleri o thread (ya da proses) tarafından 
     sağlanır. Böylece bir client'a bilgi gelmediği zaman yalnızca o thread (ya da proses) bloke olacaktır. Diğerlerinin çalışması 
     devam edecektir. Bu model basitliği nedeniyle az sayıda client'ın bulunduğu durumlarda uygun bir yöntemdir. Ancak ölçeklenebilir 
-    (scalable) değildir. Yani client sayısı arttığında çok fazla sistem kaynağı kullanılacağınzdan olumsuzluk ortaya çıkacaktır.
+    (scalable) değildir. Yani client sayısı arttığında çok fazla sistem kaynağı kullanılacağından dolayı olumsuzluk ortaya çıkacaktır.
     İşte ileri IO modelleri temel olarak yukarıdaki tarzda problemleri çözmek için geliştirilmiştir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -36480,7 +36482,7 @@ void exit_sys(const char *msg)
 
     3) Asenkron IO: Burada read/write işlemleri başlatılır. Ancak bir bloke oluşmaz. Arka planda çekirdek tarafından okuma 
     ve yazma bir yandan devam ettirilir. Ancak aktarım bittiğinde programcı bundan haberdar edilir. Bunun signal driven IO'dan 
-    farkı şudur: Signal driven IO'da aktarım yapılmamaktadır. Yalnızca okuma yazma yaılırsa bloke olunmayacağı prosese söylenmektedir. 
+    farkı şudur: Signal driven IO'da aktarım yapılmamaktadır. Yalnızca okuma yazma yapılırsa bloke olunmayacağı prosese söylenmektedir. 
     Halbuki asenkron IO'da okuma ve yazma işlemi bloke çözülüdüğünde arka planda gerçekleştirilmekte ve yalnızca işlemin bittiği 
     haber verilmektedir. 
 
@@ -36511,10 +36513,10 @@ void exit_sys(const char *msg)
     değerini almaktadır. Bu parametre aslında işlemlerini hızlandırmak için düşünülmüştür. En yüksek betimleyici değeri 
     FD_SETSIZE (1024) ile define edilmiş durumdadır. (Yani bu parametreye istersek doğrudan bu değeri de geçebiliriz.) Örneğin 
     biz 18, 23 ve 47 numaralı betimleyicileri izlemek istiyorsak bu birinci parametreye 48 değerini (47 + 1) girebiliriz. Ancak 
-    buraya en yüksek betimleyici değeir olan FD_SETSIZE girilse de bir sorun oluşmayacaktır. Yukarıda da belirttiğimiz gibi 
+    buraya en yüksek betimleyici değeri olan FD_SETSIZE girilse de bir sorun oluşmayacaktır. Yukarıda da belirttiğimiz gibi 
     bu birinci parametre yalnızca işlemleri hızlandırmak için bir ipucu niteliğindedir.
 
-    Fonksiyon son parametresi "zaman aşımı" belirtmektedir. Zaman aşımı için NULL adres girilebilir. Bu durum zaman aşaımının
+    Fonksiyonun son parametresi "zaman aşımı" belirtmektedir. Zaman aşımı için NULL adres girilebilir. Bu durum zaman aşımının
     uygulanmayacağı anlamına gelir. timeval yapısını biz daha önce kullanmıştık. Anımsatmak istiyoruz:
 
     struct timeval {
@@ -36522,7 +36524,7 @@ void exit_sys(const char *msg)
         suseconds_t tv_usec;
     };
 
-    Bu yapı mikrosaniye çözünürlüğünde bir zaman aralığı beirtmek için oluşturulmuştur. Yapının her iki elemanı 0'da girilebilir. 
+    Bu yapı mikrosaniye çözünürlüğünde bir zaman aralığı belirtmek için oluşturulmuştur. Yapının her iki elemanı 0'da girilebilir. 
     Bu durumda select fonksiyonu hemen testini yapar ve geri döner. 
 
     select fonksiyonu ile bir grup betimleyiciyi okuma amaçlı izlemek isteyelim. İlk ayapacığımız şey izlenecek betimleyicileri bir 
@@ -36542,24 +36544,24 @@ void exit_sys(const char *msg)
 
     select fonksiyonu bizim ona verdiğimiz betimelyicileri okuma amaçlı izler. Bu betimleyicilere hiçbir bilgi gelmemişse select 
     akışı blokede bekletmektedir. Ancak bu betimelyicilerin en az birine bir bilgi geldiyse bu durumda select blokeyi çözmektedir. 
-    Görüldüğü gibi select fonksiyonu "okunacak hiçbir bilgi betimleyicilerde oluşmamışsa akışı blokede bekletmekte ancak en az bir 
+    Görüldüğü gibi select fonksiyonu okunacak hiçbir bilgi betimleyicilerde oluşmamışsa akışı blokede bekletmekte ancak en az bir 
     betimleyicide okunacak bilgi oluşmuşsa okuma işleminin yapılması için blokeyi çözmektedir. select fonksiyonun okumayı yapmadığına 
     yalnızca okuma yapılabilecek bir durumun oluştuğunu tespit ettiğine dikkat ediniz. Tabii programıcının select'in blokesi çözüldüğünde
     hangi betimleyicilere bilgi gelmiş olduğunu anlaması gerekir. Çünkü gelen bilgileri read ile o betimleyicilerden okuyacaktır. Tabii 
-    select fonksiyonu aslında bir kez değil genellikle bir dönü içerisinde kullanılmaktadır. 
+    select fonksiyonu aslında bir kez değil genellikle bir döngü içerisinde kullanılmaktadır. 
 
     <BURADA KALDIK>
 
-    fonksiyonu okuma takibi için tipik olarak şöyle kullanılır: Progrtamcı okuma izlemesi yapılacak betimleyicilerin numaralarına ilişkin bitleri
+    fonksiyonu okuma takibi için tipik olarak şöyle kullanılır: Programcı okuma izlemesi yapılacak betimleyicilerin numaralarına ilişkin bitleri
     bir fd_set içerisinde set eder. Bunu fonksiyonun ikinci parametresine verir. Fonksiyon da yalnızca 1 olan bitlere ilişkin betimleyicileri 
     izleyecektir. Programcı bu betimleyicilerden okuma yapılamayacak durumda ise (yani okuma girişiminde bloke oluşacak durumda ise) select blokede 
     akışı bekletir. En az bir betimleyicide okuma eylemi yapılabilecek durumdaysa bloke çözülür. Fonksiyon hangi betimleyicilerde okuma işleminin yapılabileceğini
     yine bizim ona verdiğimiz fd_set nesnesinin ilgili 1 yaparak bize iletmektedir. Yani bizim fonksiyona verdiğimiz fd_set nesnesi fonksiyon geri döndüğünde
-    artık bozlmuş durumdadır yani hangi betimleyicilerin okumaya elvirişli olduğunu gösterecek biçimde değiştirilmiş durumdadır. Buradaki aynı çalışma
+    artık bozulmuş durumdadır yani hangi betimleyicilerin okumaya elverişli olduğunu gösterecek biçimde değiştirilmiş durumdadır. Buradaki aynı çalışma
     biçimi "yazma" ve "error" işlemi için de aynı biçimde söz konusudur. Programcı aynı zamanda isterse üç ayrı fd_set nesnesini de fonksiyona verebilir. 
 
     select fonksiyonu başarısızlık durumunda -1 değerine geri döner. Eğer hiçbir betimleyicide olay gerçekleşmemiş ancak zaman aşımı dolmuşsa 0 değerine geri döner.
-    Eğer en az bir betimleyicide ilgili olay gerçekleşmişse toplam olay gerçekleşen betimleyici sayısına geri döner. (Aynı betimleyici örneğn hen okuma hem de yazma
+    Eğer en az bir betimleyicide ilgili olay gerçekleşmişse toplam olay gerçekleşen betimleyici sayısına geri döner. (Aynı betimleyici örneğin hem okuma hem de yazma
     için izleniyorsa ve bu betimleyicide hem okuma hem de yazma olayı gerçekleşmişse bu değer 2 artırılmaktadır.)
 
     select fonksiyonun normal disk dosyaları için kullanılması anlamsızdır. Uzun süre beklemeye yol açabilecek terminal gibi, boru gibi, soket gibi aygıtlar için
