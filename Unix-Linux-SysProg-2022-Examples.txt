@@ -2361,6 +2361,34 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    read ve write POSIX fonksiyonları yukarıda da belirttiğimiz gibi dosya göstericisinin gösterdiği yerden itibaren okuma ve 
+    yazma işlemlerini yapmaktadır. Bu fonksiyonlar dosya göstericisinin konumunu okunan ya da yazılan miktar kadar ilerletmektedir. 
+    İşte read ve write fonksiyonlarının pread ve pwrite biçiminde bir versiyonu da bulunmaktadır. pread ve pwrite fonksiyonları, 
+    işlemlerini dosya göstericisinin gösterdiği yerden itibaren değil, parametreleriyle belirtilen offset'ten yapmaktadır. Bu 
+    fonksiyonlar dosya göstericisinin konumunu değiştirmezler. Uygulamada pread ve pwrite fonksiyonları seyrek kullanılmaktadır. 
+    Örneğin dosyanın farklı yerlerinden sürekli okuma/yazma yapıldığı durumlarda bu fonksiyonlar kullanım kolaylığı sağlayabilmektedir. 
+    Fonksiyonların prototipleri şöyledir:
+
+    #include <unistd.h>
+
+    ssize_t pread(int fildes, void *buf, size_t nbyte, off_t offset);
+    ssize_t pwrite(int fildes, const void *buf, size_t nbyte, off_t offset);
+
+    pread ve pwrite fonksiyonlarının read ve write fonksiyonlarından tek farkı offset parametresidir. Bu fonksiyonlar dosya 
+    göstericisinin gösterdiği yerden değil, son parametreleriyle belirtilen yerden okuma ve yazma işlemini yaparlar. Fonksiyonların
+    dosya göstericisinin konumunu değiştirmediğine dikkat ediniz. 
+
+    Dosyalara okuma yazma işlemi genellikle ardışıl bir biçimde yapıldığı için bu fonksiyonlar seyrek kullanılmaktadır. Ancak
+    yukarıda da belirttiğimiz gibi veritabanı işlemlerinde olduğu gibi dosyanın farklı offset'lerinden sıkça okuma ve yazmanın
+    yapıldığı durumlarda fonksiyon tercih edilebilmektedir.
+
+    pread ve pwrite fonksiyonları da doğrudan ilgili sistem fonksiyonlarını çağırmaktadır. (Linux sistemlerinde sys_pread ve 
+    sys_pwrite). Tabii bu işlemler önce dosya gösterisicini saklayıp, sonra konumlandırıp sonra read/write işlemlerini yapıp, 
+    sonra yeniden dosya göstericisini eski konumuna yerleştirmekle yapılabilir. Ancak pread ve pwrite işlemlerini yapan 
+    sistem fonksiyonları bu biçimde değil, daha doğrudan aynı işlemi yapmaktadır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Dosya göstericisi dosya açıldığında 0'ıncı offset'tedir. Ancak okuma ve yazma yapıldığında okunan ya da yazılan miktar kadar otomatik ilerletilmektedir. 
     Dosya göstericisini belli bir konuma almak için lseek isimli POSIX fonksiyonu kullanılmaktadır. Bu fonksiyon da pek çok işletim 
     sisteminde doğrudan dosyayı konumlandıran sistem fonksiyonunu (Linux'ta sys_lseek) çağırmaktadır. lseek fonksiyonun genel kullanımı
@@ -36409,20 +36437,20 @@ void exit_sys(const char *msg)
     Fonksiyon her zaman dosya göstericisinin gösterdiği yerden itibaren kilitleme yapmaktadır. İkinci parametrede belirtilen 
     kilit türü şunlardan biri olabilir:
 
-    Kilit Türü      fcntl Karşılığı             Anlamı
+    Kilit Türü		fcntl Karşılığı			Anlamı
 
-    F_ULOCK         F_SETLK, F_UNLCK            Kilidi kaldırır
-    F_LOCK          F_SETLK, F_WRLCK            Blokesiz, yazma kilidi yerleştirir
-    F_TLOCK         F_SETLKW, FWRLCK            Blokeli yazma kilidi yerleştirir
-    F_TEST          F_GETLK                     Kilidin yerleştirilmiş olup olmadığına bakar
+    F_ULOCK			F_SETLK, F_UNLCK		Kilidi kaldırır
+    F_LOCK			F_SETLK, F_WRLCK		Blokesiz yazma kilidi yerleştirir
+    F_TLOCK			F_SETLKW, F_WRLCK		Blokeli yazma kilidi yerleştirir
+    F_TEST			F_GETLK					Kilidin yerleştirilmiş olup olmadığına bakar
 
     Görüldüğü gibi fonksiyon her zaman "yazma (yani "exclusive")" bir kilit yerleştirmektedir. Dolayısıyla bu fonksiyon fcntl 
     fonksiyonuna göre daha yeteneksizdir. Programcılar tarafından pek tercih edilmemektedir. 
 
-    Fonksiyonun üçüncü parametresi 0 geçlilirse bu durum "bulunulan offset'ten dosya sonuna kadar ve daha sonraki eklemeleri 
+    Fonksiyonun üçüncü parametresi 0 geçilirse bu durum "bulunulan offset'ten dosya sonuna kadar ve daha sonraki eklemeleri 
     kapsayacak biçimde" kilit yerleştirilmesi anlamına gelir. Eğer F_ULOCK işleminde bu parametre 0 girilirse bulunulan offset'ten 
     itibaren sonraki bütün kilitler kaldırılmaktadır. Fonksiyonun uzunluk belirten size parametresi negatif de girilebilir. 
-    Bu durumda dosya göstericisinin gösterdiği yerden geriye doğru alan klilitlenir. Fonksiyon başarı durumunda 0 değerine, 
+    Bu durumda dosya göstericisinin gösterdiği yerden geriye doğru alan kilitlenir. Fonksiyon başarı durumunda 0 değerine, 
     başarısızlık durumunda -1 değerine geri dönmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -36432,13 +36460,12 @@ void exit_sys(const char *msg)
     client-server programların gerçekleştirilmesinde kullanılabilecek ileri IO modelleri üzerinde duracağız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi ileri IO işlemlerine neden gereksinim duyulmaktadır? Client-server bir sistem için bir server programı yazacak olalım. 
-    Sever program N tane client'tan gelen istekleri okusun ve onlara yanıt göndersin. Haberleşme ortamı isimli borularla ya da 
+    Server program N tane client'tan gelen istekleri okusun ve onlara yanıt göndersin. Haberleşme ortamı isimli borularla ya da 
     sonraki bölümde göreceğimiz soketlerle yapılabilmektedir. Ancak isimli borulardan ve soketlerden okuma yapılırken eğer boruda
     ya da sokette hiçbir bilgi yoksa read fonksiyonu bloke olmaktadır. Bu nedenle böyle bir program aşağıdaki gibi bir döngüyle 
-    yazılalamktadır:
+    yazılamamaktadır:
 
     for (;;) {
         for (int i = 0; i < N; ++i) {
