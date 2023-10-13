@@ -36073,10 +36073,10 @@ void exit_sys(const char *msg)
     arasında hiçbir farklılık yoktur. Kilitleme isteğe bağlı mı yoksa zorunlu mu olduğu "mount parametrelerine" ve "dosyanın erişim 
     haklarına" bakılarak belirlenmektedir. 
 
-    Zorunlu kilitleme kavramı POSIX standartların bulunmamaktadır. POSIX standartları fcntl fonksiyonunun açıklamasında bunun gerekçelerini
+    Zorunlu kilitleme kavramı POSIX standartlarında bulunmamaktadır. POSIX standartları fcntl fonksiyonunun açıklamasında bunun gerekçelerini
     belirtmiştir. Zaten bazı işletim sistemleri zorunlu kilitlemeyi hiç desteklememektedir. Linux 2.4 çekirdeği ile birlikte zorunlu 
     dosya kilitlemesini destekler hale gelmiştir. Yukarıda da belirttiğimiz gibi zorunlu kilitleme için aslında fcntl fonksiyonunda 
-    ek bir şey yapılmaz. Linux'ta zorlamalı kilitleme için şu koşulların sağlanmış olması gerekmektedir:
+    ek bir şey yapılmaz. Linux'ta zorunlu kilitleme için şu koşulların sağlanmış olması gerekmektedir:
 
     1) Dosyanın içinde bulunduğu dosya sisteminin -o mand ile mount edilmiş olması gerekir. Mevcut mount edilmiş olan bir dosya sisteminin 
     mount parametreleri aşağıdaki gibi değiştirilebilir:
@@ -36107,7 +36107,7 @@ void exit_sys(const char *msg)
 
     sudo mount -o mand,remount /dev/sda5 /
 
-    Sistemin açıldığında ilgili dosya sisteminin "mand" parametresi ile mount edilebilmesi için bazı start-up dosyaları 
+    Sistem açıldığında ilgili dosya sisteminin "mand" parametresi ile mount edilebilmesi için bazı start-up dosyaları 
     kullanabilirsiniz. Örneğin /etc/fstab dosyası bu amaçla kullanılabilmektedir.
 
     2) İlgili dosyanın set-group-id bayrağı set edilip gruba x hakkı varsa reset edilmelidir. Bu işlem şöyle yapılmalıdır:
@@ -36118,7 +36118,7 @@ void exit_sys(const char *msg)
 
     chmod g+s,g-x test.txt
 
-    Bir dosyanın bir proses tarafından zorunlu kilitlenmiş olması dosyanın silinmesini engellemektedir. Dosyanın truncate ve 
+    Bir dosyanın bir proses tarafından zorunlu kilitlenmiş olması dosyanın silinmesini engellememektedir. Dosyanın truncate ve 
     ftruncate fonksiyonu ile genişletilmesi ya da budanması işleminde zorunlu kilitleme mekanizması devreye girmektedir. 
     Yani bu fonksiyonlar sanki dosyaya yazma yapıyormuş gibi etki göstermektedir. Benzer biçimde örneğin dosyaya zorunlu 
     kilit konulmuşsa dosya O_TRUNC modunda açılamamaktadır. Ancak yukarıda belirttiğimiz gibi dosya remove ya da unlink 
@@ -36131,13 +36131,13 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Aşağıda zorunlu kilitlemeyi test etmek için bir örnek hazırlanmıştır. Bu örnekte iki program vardır. "flock-test.c" 
-    programı yukarıdaki programın aynısıdır. "rw-test.c" programı ise belli bir dosyanın belli bir offsetinde belli miktarda
+    programı yukarıdaki programın aynısıdır. "rw-test.c" programı ise belli bir dosyanın belli bir offsetinden belli miktarda
     okuma ya da yazma yapan bir programdır. "flock-test.c" programını yukarıda açıklamıştık. "rw-test.c" programının komut 
     satırı argümanları şöyledir:
 
     ./rw-test <dosya ismi> <r|w> <offset> <uzunluk>
 
-    Burada "r" okuma "w" ise yazma yapma anlamına gelmektedir. Örneğin:
+    Burada "r" okuma, "w" ise yazma yapma anlamına gelmektedir. Örneğin:
 
     ./rw-test test.txt w 60 10
 
@@ -36147,8 +36147,8 @@ void exit_sys(const char *msg)
 
     Burada da program "test.txt" dosyasının 0'ıncı offset'inden 64 byte okuyacaktır.
 
-    Aşağıdaki örneği testte şu biçimde kullanabilirsiniz: Önce "flock-test" programı ile dosyanın belli bir bölgesine kilit 
-    yerleştiriniz. Sonra "rw-test" programı ile ilgili offset'ti kapsayan bölgeden okuma/yazma yapmaya çalınız. read ve write 
+    Aşağıdaki örneği test yaparken şu biçimde kullanabilirsiniz: Önce "flock-test" programı ile dosyanın belli bir bölgesine kilit 
+    yerleştiriniz. Sonra "rw-test" programı ile ilgili offset'i kapsayan bölgeden okuma/yazma yapmaya çalışınız. read ve write 
     fonksiyonlarındaki blokeyi gözlemleyiniz. Sonra kilidi kaldırınca fonksiyonların blokeden çıkacağını göreceksiniz. Tabii 
     örnekte test işleminde kullanacağınız dosyanın (örneğin "test.txt") yukarıda belirttiğimiz gibi zorunlu kilitlemeye 
     hazırlanmış olması gerekir. 
@@ -36379,12 +36379,12 @@ void exit_sys(const char *msg)
     5: POSIX  ADVISORY  READ 34560 08:05:3050341 0 EOF
     6: FLOCK  ADVISORY  WRITE 705 00:19:673 0 EOF
 
-    Buradaki ilk sütun kilidin hangi fonksiyonlarla konulduğunu belirtmektedir. Bu sütunda POSIX belirteci kilidin fcntl ile 
-    ya da lockf fonksiyonu konulduğunu belirtir. flock fonksiyonu Linux'a özgü olduğu için burada LINUX belirteci ile görüntülenecektir. 
+    Buradaki ilk sütun kilidin hangi fonksiyonlarla konulduğunu belirtmektedir. Bu sütunda POSIX belirteci kilidin fcntl ya da 
+    lockf fonksiyonu ile konulduğunu belirtir. flock fonksiyonu Linux'a özgü olduğu için burada LINUX belirteci ile görüntülenecektir. 
     İkinci sütun kilidin isteğe bağlı mı zorunlu mu olduğunu belirtmektedir. Üçüncü sütun ise kilidin türünü belirtmektedir. 
     Dördüncü sütun kilidi koyan prosesin proses id'sini belirtmektedir. Sonraki sütun ':' karakterleriyle ayrılmış üç alandan 
-    oluşmaktadır. İlk iki alan dosyanın içinde bulunduğu aygıtın majör ve minör numaralarını belirtmektdir. üçüncü alanda 
-    kilit uygulanan dosyanın i-node numarası belirtilmektedir. Sonraki iki sürunda da kilidin başlangıç offset'i ve uzunluğu
+    oluşmaktadır. İlk iki alan dosyanın içinde bulunduğu aygıtın majör ve minör numaralarını belirtmektdir. Üçüncü alanda 
+    kilit uygulanan dosyanın i-node numarası belirtilmektedir. Sonraki iki sütunda da kilidin başlangıç offset'i ve uzunluğu
     belirtilmektedir. 
 
     UNIX/Linux sistemlerinde dosyanın yol ifadesinden hareketle stat, fstat, lstat fonksiyonlarıyla biz dosyanın i-node
