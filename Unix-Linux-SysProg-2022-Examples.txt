@@ -2379,12 +2379,12 @@ void exit_sys(const char *msg)
     dosya göstericisinin konumunu değiştirmediğine dikkat ediniz. 
 
     Dosyalara okuma yazma işlemi genellikle ardışıl bir biçimde yapıldığı için bu fonksiyonlar seyrek kullanılmaktadır. Ancak
-    yukarıda da belirttiğimiz gibi veritabanı işlemlerinde olduğu gibi dosyanın farklı offset'lerinden sıkça okuma ve yazmanın
-    yapıldığı durumlarda fonksiyon tercih edilebilmektedir.
+    örneğin veritabanı işlemlerinde yukarıda da belirttiğimiz gibi dosyanın farklı offset'lerinden sıkça okuma ve yazmanın
+    yapıldığı durumlarda bu fonksiyonlar tercih edilebilmektedir.
 
     pread ve pwrite fonksiyonları da doğrudan ilgili sistem fonksiyonlarını çağırmaktadır. (Linux sistemlerinde sys_pread ve 
-    sys_pwrite). Tabii bu işlemler önce dosya gösterisicini saklayıp, sonra konumlandırıp sonra read/write işlemlerini yapıp, 
-    sonra yeniden dosya göstericisini eski konumuna yerleştirmekle yapılabilir. Ancak pread ve pwrite işlemlerini yapan 
+    sys_pwrite). Tabii bu işlemler önce dosya gösterisicini saklayıp, sonra konumlandırıp, sonra read/write işlemlerini yapıp, 
+    sonra da yeniden dosya göstericisini eski konumuna yerleştirmekle yapılabilir. Ancak pread ve pwrite işlemlerini yapan 
     sistem fonksiyonları bu biçimde değil, daha doğrudan aynı işlemi yapmaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -35010,7 +35010,7 @@ void exit_sys(const char *msg)
     sysconf fonksiyonu yukarıda da belirttiğimiz gibi "Runtime Invariant Values" ve "untime Increasable Values" grubundaki 
     büyüklüklerin programın çalışma zamanı sırasında elde edilmesinde kullanılmaktadır. Tabii "Runtime Invariant Values" 
     grubundaki sembolik sabitler eğer define edilmişse bu fonksiyonu çağırmaya gerek yoktur. Doğrudan o sembolik sabitlerin 
-    değeri programcı tarafından kullanılabilir. sysconf fonksiyonun prototipi şöyledir:
+    değeri programcı tarafından kullanılabilir. sysconf fonksiyonunun prototipi şöyledir:
 
     #include <unistd.h>
 
@@ -36475,8 +36475,8 @@ void exit_sys(const char *msg)
         ...
     }
 
-    Burada bir client'ın borsunda ya da soketinde hiç bilgi yoksa read fonksiyonu blokeye yol açacak ve diğer client'lardan gelen
-    bilgiler işleme sokulamayacaktır. Tabii bu durum yalnızca borular ve soketler için değil bloke yok açan diğer kaynaklar için 
+    Burada bir client'ın borusunda ya da soketinde hiç bilgi yoksa read fonksiyonu blokeye yol açacak ve diğer client'lardan gelen
+    bilgiler işleme sokulamayacaktır. Tabii bu durum yalnızca borular ve soketler için değil, bloke yok açan diğer kaynaklar için 
     de söz konusudur. Bu tür durumlarda ilk akla gelen şey blokesiz modda işlem yapmak olabilir. Örneğin:
 
     for (;;) {
@@ -36491,7 +36491,7 @@ void exit_sys(const char *msg)
 
     Burada problem çözülmüş gibi gözükmekle birlikte aslında başka bir sorun oluşmaktadır. Eğer hiçbir client'tan bilgi gelmemişse 
     burada "meşgul bir döngü (busy loop)" oluşmaktadır. Bu tür durumlarda akla gelen en basit çözüm "thread ya da proses" modelini 
-    kullanmaktadır. Tabii proses yaratımı thread yaratımına göre çok daha maliyetli olduğu için thread modeli tercih edilmektedir. 
+    kullanmaktadır. Tabii proses yaratımı, thread yaratımına göre çok daha maliyetli olduğu için thread modeli tercih edilmektedir. 
     Bu modelde her client için ayrı bir thread (ya da proses) oluşturulur. O client'ın istekleri o thread (ya da proses) tarafından 
     sağlanır. Böylece bir client'a bilgi gelmediği zaman yalnızca o thread (ya da proses) bloke olacaktır. Diğerlerinin çalışması 
     devam edecektir. Bu model basitliği nedeniyle az sayıda client'ın bulunduğu durumlarda uygun bir yöntemdir. Ancak ölçeklenebilir 
@@ -36507,24 +36507,23 @@ void exit_sys(const char *msg)
     IO için select ve poll POSIX fonksiyonları kullanılmaktadır. Ancak Linux epoll isimli daha yetenekli bir fonksiyona da sahiptir.
 
     2) Signal Driven IO: Burada belli betimleyiciler izlemeye alınır. Ancak blokede beklenmez. Bu betimleyicilerde olay gerçekleştiğinde
-    SIGIO isimli sinyal oluşur. Programcı da bu sinyal oluşturuğunda blokeye maruz kalmadan read/write işlemini yapılabilir.
+    SIGIO isimli sinyal oluşur. Programcı da bu sinyal oluştuğunda blokeye maruz kalmadan read/write işlemini yapılabilir.
 
     3) Asenkron IO: Burada read/write işlemleri başlatılır. Ancak bir bloke oluşmaz. Arka planda çekirdek tarafından okuma 
     ve yazma bir yandan devam ettirilir. Ancak aktarım bittiğinde programcı bundan haberdar edilir. Bunun signal driven IO'dan 
     farkı şudur: Signal driven IO'da aktarım yapılmamaktadır. Yalnızca okuma yazma yapılırsa bloke olunmayacağı prosese söylenmektedir. 
-    Halbuki asenkron IO'da okuma ve yazma işlemi bloke çözülüdüğünde arka planda gerçekleştirilmekte ve yalnızca işlemin bittiği 
+    Halbuki asenkron IO'da okuma ve yazma işlemi bloke çözüldüğünde arka planda gerçekleştirilmekte ve yalnızca işlemin bittiği 
     haber verilmektedir. 
 
-    4) Scatter-Gather IO: Burada okuma birden fazla adrese yazma ise birden fazla adresten kaynağa yapılmaktadır.
+    4) Scatter-Gather IO: Burada okuma birden fazla adrese, yazma ise birden fazla adresten kaynağa yapılmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Multiplexed IO işlemlerinde select ve poll isimli POSIX fonksiyonları ve Linux sistemlerinde de Linux sistemlerine özgü 
-    epoll fonksiyonu kullanılmaktadır. select fonksiyonu çok eskiden beri var olan klasik fonklsiyonlardan biridir. select ilk 
+    epoll fonksiyonu kullanılmaktadır. select fonksiyonu çok eskiden beri var olan klasik fonksiyonlardan biridir. select ilk 
     kez BSD sistemlerinde gerçekleştirilmiştir. POSIX standartları oluşturulduğunda doğrudan standartlarda bulundurulmuştur. Aslında
     select fonksiyonunun tasarımında bazı kusurlar vardır. Ancak fonksiyon hala en çok kullanılan ileri IO fonksiyonlarındandır.
-
-    select fonksiyonun prototipi şöyledir:
+    select fonksiyonunun prototipi şöyledir:
 
     #include <sys/select.h>
 
@@ -36532,18 +36531,20 @@ void exit_sys(const char *msg)
 
     Fonksiyonun parametrelerindeki fd_set türü bir bit dizisi belirtmektedir. Bu bit dizisinin belli bitini 1 yapmak için
     FD_SET, belli bitini 0 yapmak için FD_CLR, tüm bitlerini sıfır yapmak için FD_ZERO, belli bitini test etmek için ise 
-    FD_ISSET makroları kullanılmaktadır. Biz fonksiyonun ikinci (readfds), üçünücü (writefds) ve dörüdncü (errorfds) parametrelerine 
-    bir grup betimleyiciyi o betimelyicilerin numaralarına karşı gelen bitleri 1 yaparak veririz. Örneğin biz 18, 23 ve 47 numaralı
-    betimleyicilerle ilgilenmek isteyelim. Bunun için fd_set veri yapısının 18, 23 ve 47 numaralı birlerini 1 yaparız. Fonksiyonun 
+    FD_ISSET makroları kullanılmaktadır. Biz fonksiyonun ikinci (readfds), üçüncü (writefds) ve dördüncü (errorfds) parametrelerine 
+    bir grup betimleyiciyi o betimleyicilerin numaralarına karşı gelen bitleri 1 yaparak veririz. Örneğin biz 18, 23 ve 47 numaralı
+    betimleyicilerle ilgilenmek isteyelim. Bunun için fd_set veri yapısının 18, 23 ve 47 numaralı bitlerini 1 yaparız. Fonksiyonun 
     ikinci parametresi (readfds) "okuma amaçlı izlenecek betimleyicilerin kümesini", üçüncü parametresi (writefds) "yazma 
-    amaçlı izlenecek betimleyicilerin kümesini" ve dördüncü parametresi (errorfds) ise "hata (exception) oluşmu için izlenecek 
+    amaçlı izlenecek betimleyicilerin kümesini" ve dördüncü parametresi (errorfds) ise "hata (exception) oluşumu için izlenecek 
     betimleyicilerin kümesini" belirtmektedir. Bu parametrelerin biri ya da birden fazlası NULL geçilebilir. Bu durum ilgili 
-    izlemenin yapılmayacağını belirtmektedir. Fonksiyonun birinci parametresi bu kümelerdeki en yüksek betimleyicinin bir fazla 
-    değerini almaktadır. Bu parametre aslında işlemlerini hızlandırmak için düşünülmüştür. En yüksek betimleyici değeri 
-    FD_SETSIZE (1024) ile define edilmiş durumdadır. (Yani bu parametreye istersek doğrudan bu değeri de geçebiliriz.) Örneğin 
-    biz 18, 23 ve 47 numaralı betimleyicileri izlemek istiyorsak bu birinci parametreye 48 değerini (47 + 1) girebiliriz. Ancak 
-    buraya en yüksek betimleyici değeri olan FD_SETSIZE girilse de bir sorun oluşmayacaktır. Yukarıda da belirttiğimiz gibi 
-    bu birinci parametre yalnızca işlemleri hızlandırmak için bir ipucu niteliğindedir.
+    izlemenin yapılmayacağını belirtmektedir. 
+
+    Fonksiyonun birinci parametresi bu kümelerdeki en yüksek betimleyicinin bir fazla değerini almaktadır. Bu parametre aslında 
+    işlemleri hızlandırmak için düşünülmüştür. En yüksek betimleyici değeri FD_SETSIZE (1024) ile define edilmiş durumdadır. 
+    (Yani bu parametreye istersek doğrudan bu değeri de geçebiliriz.) Örneğin biz 18, 23 ve 47 numaralı betimleyicileri izlemek 
+    istiyorsak bu birinci parametreye 48 değerini (47 + 1) girebiliriz. Ancak buraya en yüksek betimleyici değeri olan FD_SETSIZE 
+    girilse de bir sorun oluşmayacaktır. Yukarıda da belirttiğimiz gibi bu birinci parametre yalnızca işlemleri hızlandırmak için 
+    bir ipucu niteliğindedir.
 
     Fonksiyonun son parametresi "zaman aşımı" belirtmektedir. Zaman aşımı için NULL adres girilebilir. Bu durum zaman aşımının
     uygulanmayacağı anlamına gelir. timeval yapısını biz daha önce kullanmıştık. Anımsatmak istiyoruz:
@@ -36571,13 +36572,13 @@ void exit_sys(const char *msg)
 
     select(maxfds + 1, &rset, NULL, NULL, NULL);
 
-    select fonksiyonu bizim ona verdiğimiz betimelyicileri okuma amaçlı izler. Bu betimleyicilere hiçbir bilgi gelmemişse select 
-    akışı blokede bekletmektedir. Ancak bu betimelyicilerin en az birine bir bilgi geldiyse bu durumda select blokeyi çözmektedir. 
+    select fonksiyonu bizim ona verdiğimiz betimleyicileri okuma amaçlı izler. Bu betimleyicilere hiçbir bilgi gelmemişse select 
+    akışı blokede bekletmektedir. Ancak bu betimleyicilerin en az birine bir bilgi geldiyse bu durumda select blokeyi çözmektedir. 
     Görüldüğü gibi select fonksiyonu okunacak hiçbir bilgi betimleyicilerde oluşmamışsa akışı blokede bekletmekte ancak en az bir 
-    betimleyicide okunacak bilgi oluşmuşsa okuma işleminin yapılması için blokeyi çözmektedir. select fonksiyonun okumayı yapmadığına 
+    betimleyicide okunacak bilgi oluşmuşsa okuma işleminin yapılması için blokeyi çözmektedir. select fonksiyonunun okumayı yapmadığına 
     yalnızca okuma yapılabilecek bir durumun oluştuğunu tespit ettiğine dikkat ediniz. Tabii programıcının select'in blokesi çözüldüğünde
     hangi betimleyicilere bilgi gelmiş olduğunu anlaması gerekir. Çünkü gelen bilgileri read ile o betimleyicilerden okuyacaktır. Tabii 
-    select fonksiyonu aslında bir kez değil genellikle bir döngü içerisinde kullanılmaktadır. 
+    select fonksiyonu aslında bir kez değil, genellikle bir döngü içerisinde kullanılmaktadır. 
 
     <BURADA KALDIK>
 
