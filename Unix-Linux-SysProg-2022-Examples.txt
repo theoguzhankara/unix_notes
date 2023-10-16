@@ -4642,7 +4642,7 @@ char *get_ls(struct stat *finfo, const char *name)
     sonra sys_getdents sistem fonksiyonu ile dizin girişlerinin okunması ve nihayet sys_close fonksiyonu ile dizin'in kapatılması yoluyla 
     yapılmaktadır. Ancak POSIX standartlarında bu işlemler taşınabilir biçimde opendir, readdir ve closedir fonksiyonlarına devredilmiştir. 
     Şüphesiz bu fonksiyonlar asında dizini açıp onun betimleyicisini DIR yapısının içerisinde saklamaktadır. İşte elimizde DIR yapısı 
-    varsa biz de açık dizin'in betimleycisini elde etmek isttyorsak bunun için dirfd isimli POSIX fonksiyonundan faydalanabiliriz:
+    varsa biz de açık dizin'in betimleyicisini elde etmek isttyorsak bunun için dirfd isimli POSIX fonksiyonundan faydalanabiliriz:
 
     #include <dirent.h>
 
@@ -4660,7 +4660,7 @@ char *get_ls(struct stat *finfo, const char *name)
     Fonksiyonun fd parametresinin yanı sıra aynı zamanda bir flag parametresinin olduğuna dikkat ediniz. Bu parametre stat semantiğinin mi yoksa 
     lstat semantiğinin mi uygulanacağını belirtmektedir. Eğer bu parametreye 0 geçilirse bu durumda stat semnatiği uygulanır Eğer bu parametreye 
     AT_SYMLINK_NOFOLLOW değeri geçilirse bu durumda lstat semantiği uygulanmaktadır. AT_SYMLINK_NOFOLLOW sembolik sabiti <sys/stat.h> içerisinde değil
-    <fcntl.h> içerisinde bildirilmiştir. İşte biz yukarıdaki örnekte önce dizin'in betimleycisini dirfd fonksiyonu ile alıp bunu fstatat 
+    <fcntl.h> içerisinde bildirilmiştir. İşte biz yukarıdaki örnekte önce dizin'in betimleyicisini dirfd fonksiyonu ile alıp bunu fstatat 
     fonksiyonunda kullanırsak yol ifadesini düzenlememize gerek kalmaz. Aşağıdaki örnekte bu çözüm verilmiştir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -6131,7 +6131,7 @@ void exit_sys(const char *msg)
 
     int dup(int fildes);
 
-    Fonksiyon parametre olarak açık bir dosyanın betimleyicisini alır, o betimleycinin gösterdiği dosya nesnesini gösteren yeni bir betimleyici 
+    Fonksiyon parametre olarak açık bir dosyanın betimleyicisini alır, o betimleyicinin gösterdiği dosya nesnesini gösteren yeni bir betimleyici 
     oluşturup o betimleyiciye geri döner. Fonksiyon başarısızlık durumunda -1'e geri dönmektedir. dup fonksiyonunun en düşük boş betimleyici
     slotunu tahsis etmesi garanti edilmiştir. 
 
@@ -6188,7 +6188,7 @@ int main(void)
     ilk boş betimleyici ile değil ikinci parametresiyle belirtilen betimleyici ile geri dönmek ister. Yani biz istersek 
     bu fonksiyon sayesinde istediğimiz bir betimleyicinin birinci parametresiyle belirtilen betimleyici ile aynı dosya nesnesini 
     göstermesini sağlayabiliriz. Eğer ikinci parametresiyle belirtilen betimleyici zaten açık bir dosyaya ilişkinse bu durumda dosya 
-    önce kapatılır, sonra o betimleyicinin birinci parametresiyle belirtilen betimleycinin gösterdiği dosya nesnesini göstermesi 
+    önce kapatılır, sonra o betimleyicinin birinci parametresiyle belirtilen betimleyicinin gösterdiği dosya nesnesini göstermesi 
     sağlanır. Fonksiyon başarı durumunda ikinci parametresiyle belirtilen betimleyicinin aynısına, başarısızlık durumunda -1 değerine
     geri dönmektedir. Tabii fonksiyon birinci ve ikinci parametresinin aynı betimleyiciye ilişkin olduğunu da kontrol etmektedir. 
     Bu durumda bir şey yapmadan başarılı olur. Fonksiyonun iki argümanı aynı betimleyiciyi belirtiyorsa dup2 hiçbir şey yapmaz, argümanlarla
@@ -8389,7 +8389,7 @@ void exit_sys(const char *msg)
 
     Fonksiyon, parametre olarak prosesin "exit kodunu" almaktadır. Tabii bir proses sonlanmadan önce prosesin sistem genelinde 
     tahsis etmiş olduğu kaynaklar boşaltılmaktadır. Yani örneğin biz open fonksiyonu ile birtakım dosyalar açmışsak _exit işlemi
-    sırasında bütün bu dosyalar kapatılacaktır. Linux sistemlerinde _exit fonksiyonu doğrudan işletim sisteminin sys_exit isimli
+    sırasında bütün bu dosyalar kapatılacaktır. Linux sistemlerinde _exit fonksiyonu doğrudan işletim sisteminin sys_exit_group isimli
     sistem fonksiyonunu çağırmaktadır. Tabii asıl prosesin sonlandırılması bu sistem fonksiyonu tarafından yapılmaktadır. 
     Yine geleneksel olarak başarılı sonlanmalar için 0 değeri, başarısız sonlanmalar için sıfır dışı değerler kullanılmaktadır. 
 
@@ -8401,7 +8401,7 @@ void exit_sys(const char *msg)
 
     C'nin exit fonksiyonu prosesin sonlandırılması için UNIX/Linux sistemlerinde aslında _exit POSIX fonksiyonunu çağırmaktadır:
 
-    exit ----> _exit ----> sys_exit (Linux)
+    exit ----> _exit ----> sys_exit_group (Linux)
 
     exit standart C fonksiyonu, standart C kütüphanesinde yapılan bazı işlemleri de geri almaktadır. Örneğin exit fonksiyonu önce 
     atexit fonksiyonu ile kaydetterilmiş olan fonksiyonları ters sırada çağırır, sonra tmpfile fonksiyonu ile yaratılmış geçici dosyaları 
@@ -8420,6 +8420,10 @@ void exit_sys(const char *msg)
     foo fonksiyonu program sonlanırken çağrılmayacaktır. Aynı zamanda dosya tamponları da flush edilmeyeceğinden dolayı printf 
     fonksiyonu ile ekrana yazılmak istenen ancak satır tamponlaması nedeniyle henüz yazılamayan "ok" yazısı da ekranda görülmeyecektir. 
     Burada _exit çağrısını kaldırırsanız. Akış main fonksiyonunu bitirince exit standart C fonksiyonu çağrılacağı için bir sorun kalmayacaktır.
+
+    Linux'ta aslında _exit fonksiyonu işletim sisteminin sys_exit sistem fonksiyonunu değil sys_exit_group sistem fonksiyonunu 
+    çağırmaktadır. Linux'ta sys_exit sistem fonksiyonu yalnızca fonksiyonu çağıran thread'i sys_exit_group fonksiyonu ise tüm thread'leri 
+    dolayısıyla da prosesi sonlandırmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -13012,7 +13016,7 @@ int main(int argc, char *argv[])
 
 	if (pidl == 0) {
 		close(pipefds[0]);
-		if (pipefds[1] != 1) {				/* bu kontrol normal dureumda yapılmayabilir */
+		if (pipefds[1] != 1) {				/* bu kontrol normal durumda yapılmayabilir */
 			if (dup2(pipefds[1], 1) == -1)
 				exit_sys_child("dup2");
 			close(pipefds[1]);
@@ -13029,7 +13033,7 @@ int main(int argc, char *argv[])
 
 	if (pidr == 0) {
 		close(pipefds[1]);
-		if (pipefds[0] != 0) {				/* bu kontrol normal dureumda yapılmayabilir */
+		if (pipefds[0] != 0) {				/* bu kontrol normal durumda yapılmayabilir */
 			if (dup2(pipefds[0], 0) == -1)
 				exit_sys_child("dup2");
 			close(pipefds[0]);
@@ -16294,7 +16298,7 @@ void exit_sys(const char *msg)
 
     int mq_close(mqd_t mqdes);
 
-    Fonksiyon parametre olarak mesaj kuyruğu betimleycicisini alır. Başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri döner. 
+    Fonksiyon parametre olarak mesaj kuyruğu betimleyicicisini alır. Başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri döner. 
     Programcı her şeyi doğru yaptığına inanıyorsa başarının kontrol edilmesine gerek yoktur. 
 
     Tabii eğer programcı mq_close fonksiyonunu hiç kullanmazsa proses bittiğinde otomatik olarak betimleyici kapatılmaktadır.
@@ -16659,6 +16663,8 @@ void exit_sys(const char *msg)
     timespec değerini girmeliyiz. Bunun için önce clock_gettime fonksiyonu ile şimdiki zamana ilişkin timespec değeri elde edilebilir. 
     Sonra o değere belli bir değer toplanıp zaman aşımı göreli biçimde oluşturulabilir. clock_gettime fonksiyonu aynı zamanda standart
     bir C fonksiyonudur. Bu fonksiyondaki saat türünün CLOCK_REALTIME alınması uygun olur. clock_gettime fonksiyonunun prototipi şöyledir:
+
+	#include <time.h>
 
     int clock_gettime(clockid_t clock_id, struct timespec *tp);
 
@@ -18084,9 +18090,10 @@ void exit_sys(const char *msg)
     zorunluluğu yoktur. Uzunluk parametresi herhangi bir değerde olabilir. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine
     geri dönmektedir. errno uygun biçimde set edilmektedir. 
 
-	Bir adres sayfa katlarına şu şekilde align edilebilir:
-	#include <stdint.h>
-	void *addr = (void *)((uintptr_t)buf & ~0xFFF);
+    Bir adres sayfa katlarına şu şekilde align edilebilir:
+
+    #include <stdint.h>
+    void *addr = (void *)((uintptr_t)buf & ~0xFFF);
 
     mlock fonksiyonu ile kilitlenmeye çalışılan sayfalar o anda RAM'de değilse mlock önce onları RAM'e alıp kilitlemektedir. 
     Yani fonksiyon başarılı bir biçimde geri döndüğünde kesinlikle sayfalar o anda RAM'de bulunmaktadır. 
@@ -29088,10 +29095,10 @@ int main(void)
     Fonksiyonun ikinci parametresi slot yok edilirken çağrılacak fonksiyonu belirtmektedir. Bu parametre NULL geçilebilir. 
     Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda errno değerine geri dönmektedir. Örneğin:
 
-	pthread_key_t g_key;
-	...
-	if ((result = pthread_key_create(&g_key, NULL) != 0)) != 0)
-		exit_sys_errno("pthread_key_create", result);
+    pthread_key_t g_key;
+    ...
+    if ((result = pthread_key_create(&g_key, NULL) != 0)) != 0)
+           exit_sys_errno("pthread_key_create", result);
 
     Artık biz her thread'te geçerli olan bir slot tahsis etmiş olduk. Bu slot numarasını da g_key değişkenine yerleştirmiş olduk.
 
@@ -30139,6 +30146,7 @@ int thread_proc2(void *param)
     bulundurulması gerekmektedir. Programın testi için derlemeyi şöyle yapabilirsiniz:
 
     g++ -o sample sample.cpp -pthread
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -30403,13 +30411,13 @@ void thread_proc2()
     ignore edilememektedir. Tabii signal fonksiyonunun geri dönüş değeri sinyale göre SIG_DFL ve SIG_IGN biçiminde de olabilmektedir. 
     Örneğin biz bir sinyali ilk kez set ediyorsak önceki sinyal fonksiyonu muhtemelen SIG_DFL ya da SIG_IGN biçiminde olacaktır. 
 
-	void (*old_handler)(int);
+    void (*old_handler)(int);
 
-	if ((old_handler = signal(SIGINT, sigint_handler)) == SIG_ERR)
-		exit_sys("signal");
+    if ((old_handler = signal(SIGINT, sigint_handler)) == SIG_ERR)
+        exit_sys("signal");
 
-	if (old_handler == SIG_DFL)
-		printf("yes, old handler is SIG_DFL\n");
+    if (old_handler == SIG_DFL)
+        printf("yes, old handler is SIG_DFL\n");
 
     Aşağıdaki örnekte SIGINT sinyali için bir sinyal fonksiyonu set edilmiştir. Daha önceden de belirttiğimiz gibi SIGINT sinyali
     terminal aygıt sürücüsü tarafından Ctrl+C tuşlarına basıldığında prosese gönderilmektedir. Bu sinyalin default davranışı 
@@ -30515,24 +30523,24 @@ void exit_sys(const char *msg)
     eskiden bu etkiyi ortadan kaldırmak için programcılar sinyal fonksiyonunun (signal handler) hemen başında sinyal default'a 
     çekildiği için yeniden set işlemi yapıyorlardı. Örneğin:
 
-	void signal_handler(int sno)
-	{
-		if (signal(SIGXXX, signal_handler) == SIG_ERR)
-			exit_sys("signal");
-		...
-	}
+    void signal_handler(int sno)
+    {
+        if (signal(SIGXXX, signal_handler) == SIG_ERR)
+		    exit_sys("signal");
+        ....
+    }
 
     Böylece sinyal default'a çekildiğinde yeniden sinyal set ediliyordu. Ancak üst üste aynı sinyalin oluştuğu durumlarda 
     prosesin sonlandırılmasına yönelik bir durum her zaman mümkün olabilmekteydi:
 
-	void signal_handler(int sno)
-	{
-		----> BU NOKTADA AYNI SİNYALDEN OLUŞSA SİNYAL DEFAULT'A ÇEKİLDİĞİ İÇİN PROSES SONLANDIRILACAKTIR!
+    void signal_handler(int sno)
+    {
+        ----> BU NOKTADA AYNI SİNYALDEN OLUŞSA SİNYAL DEFAULT'A ÇEKİLDİĞİ İÇİN PROSES SONLANDIRILACAKTIR!
 
-		if (signal(SIGXXX, signal_handler) == SIG_ERR)
-			exit_sys("signal");
-		...
-	}
+        if (signal(SIGXXX, signal_handler) == SIG_ERR)
+            exit_sys("signal");
+        ....
+    }
 
     AT&T ve türevlerinde yukarıda duruma ilişkin bir önlem alınamıyordu. Ancak daha sonra BSD UNIX sistemleri bu problemi
     "sinyalin default'a çekilmemesi" biçiminde değiştirerek çözmeye çalışmıştır. BSD ve türevlerinde sinyal default'a 
@@ -32115,33 +32123,33 @@ void exit_sys(const char *msg)
     olacaktır. Tabii bu sırada errno değişkeni değer değiştirebileceği için fonksiyonun başında alınıp çıkışta yeniden set edilmesi 
     uygun olur. Örneğin:
 
-	void sigchld_handler(int sig)
-	{
-		int errno_temp = errno;
+    void sigchld_handler(int sig)
+    {
+        int errno_temp = errno;
 
-		while (waitpid(-1, NULL, WNOHANG) > 0)
-			;
+        while (waitpid(-1, NULL, WNOHANG) > 0)
+            ;
 
-		errno = errno_temp;
-	}
+        errno = errno_temp;
+    }
 
     waitpid fonksiyonu aslında başka nedenlerle de başarısız olabilir. Gerçi bu durumlar programcı her şeyi doğru yapmışsa 
     söz konusu olmamaktadır. Ancak bazı programcılar waitpid başarısız olmuşsa ve başarısızlık nedeni beklenecek alt prosesin 
     olmayışından dolayı değilse bir hata rapor edebilmektedir. Bu durumda sinyal fonksiyonu şöyle de oluşturulabilmektedir:
 
-	void sigchld_handler(int sig)
-	{
-		int errno_temp = errno;
-		int result;
+    void sigchld_handler(int sig)
+    {
+        int errno_temp = errno;
+        int result;
 
-		while ((result = waitpid(-1, NULL, WNOHANG)) > 0)
-			;
+        while ((result = waitpid(-1, NULL, WNOHANG)) > 0)
+            ;
 
-		if (result == -1 && errno != ECHILD)
-			exit_sys("waitpid");
+        if (result == -1 && errno != ECHILD)
+            exit_sys("waitpid");
 
-		errno = errno_temp;
-	}
+        errno = errno_temp;
+    }
 
     Aşağıdaki örnekte üst proses 10 tane alt proses yaratmıştır. Bu alt proseslerin zombie oluşturmasını, SIGCHLD sinyal 
     fonksiyonunda yukarıda belirtildiği gibi engellemiştir. Bu programı çalıştırıp başka bir terminalden "ps -u" komutu 
@@ -35241,7 +35249,7 @@ void exit_sys(const char *msg)
     İşletim sistemini bir kaynak yöneticisi olarak da düşünebiliriz. Prosesler işletim sisteminin sunduğu çeşitli kaynakları 
     kullanmaktadır. Tabii işletim sistemleri proseslerin kaynak kullanımlarını sınırlandırmaktadır. Aksi takdirde bir proses
     çok fazla kaynak kullanıp diğer proseslerin o kaynağa erişimini güçleştirebilir. Prosesin kaynak limitleri (yani kaynakları 
-    hangi sınırlar içerisinde kullanabileceği) proses kontol bloğu içerisinde saklanmaktadır. (Linux'ta bu bilgi task_struct 
+    hangi sınırlar içerisinde kullanabileceği) proses kontrol bloğu içerisinde saklanmaktadır. (Linux'ta bu bilgi task_struct 
     yapısının signal elemanının gösterdiği struct signal yapısının içerisindeki struct rlimit dizisinde bulunmaktadır.)
 
     UNIX türevi işletim sistemleri her kaynak için bir "soft limit (buna current limit de denilmektedir)" bir de "hard limit"
@@ -36564,9 +36572,9 @@ void exit_sys(const char *msg)
     fd_set rset;
 
     FD_ZERO(&rset);
-    FD_SET(&rset, fd1);     /* fd1 = 18 varsayalım */
-    FD_SET(&rset, fd2);     /* fd2 = 23 varsayalım */
-    FD_SET(&reset, fd3);    /* fd3 = 48 varsayalım */
+    FD_SET(fd1, &rset);		// fd1 = 18 varsayalım
+    FD_SET(fd2, &rset);		// fd2 = 23 varsayalım
+    FD_SET(fd3, &rset);		// fd3 = 48 varsayalım
 
     maxfds = getmax(fd1, fd2, fd3);
 
@@ -36574,31 +36582,886 @@ void exit_sys(const char *msg)
 
     select fonksiyonu bizim ona verdiğimiz betimleyicileri okuma amaçlı izler. Bu betimleyicilere hiçbir bilgi gelmemişse select 
     akışı blokede bekletmektedir. Ancak bu betimleyicilerin en az birine bir bilgi geldiyse bu durumda select blokeyi çözmektedir. 
-    Görüldüğü gibi select fonksiyonu okunacak hiçbir bilgi betimleyicilerde oluşmamışsa akışı blokede bekletmekte ancak en az bir 
-    betimleyicide okunacak bilgi oluşmuşsa okuma işleminin yapılması için blokeyi çözmektedir. select fonksiyonunun okumayı yapmadığına 
+    Görüldüğü gibi select fonksiyonu "okunacak hiçbir bilgi betimleyicilerde oluşmamışsa akışı blokede bekletmekte ancak en az bir 
+    betimleyicide okunacak bilgi oluşmuşsa okuma işleminin yapılması için blokeyi çözmektedir. select fonksiyonun okumayı yapmadığına 
     yalnızca okuma yapılabilecek bir durumun oluştuğunu tespit ettiğine dikkat ediniz. Tabii programıcının select'in blokesi çözüldüğünde
     hangi betimleyicilere bilgi gelmiş olduğunu anlaması gerekir. Çünkü gelen bilgileri read ile o betimleyicilerden okuyacaktır. Tabii 
     select fonksiyonu aslında bir kez değil, genellikle bir döngü içerisinde kullanılmaktadır. 
 
+    Pekiyi select blokeyi çözdüğünde programcı ne yapmalıdır? Örneğin biz yine 18, 23 ve 48 numaralı betimleyicileri okuma amaçlı
+    izlemek isteyelim. select fonksiyonu 23 numaralı betimleyiciye bilgi geldiğinden dolayı blokeyi çözmüş olsun. Bizim bunu anlayıp
+    23 numaralı betimleyiciden read fonksiyonu ile (ya da soketler söz konusu ise recv ya da recvfrom fonksiyonları ile) okuma yapmamız 
+    gerekir. İşte select bizim ona verdiğimiz fd_set nesnelerini çıkışta yeniden uygun biçimde set etmektedir. Hangi betimleyicilerde
+    ilgili olay gerçekleşmişse o betimleyicilere ilişkin bitleri set edip diğerlerini reset etmektedir. Yani select bizim ona verdiğimiz 
+    fd_set nesnelerinin içeriğini bozup ilgili olayın gerçekleştiği betimleyicileri o nesnelerde belirtmektedir. O halde bizim select 
+    fonksiyonu geri döndüğünde bu fd_set nesnelerinin bitlerine bakıp hangi betimleyiciye ilişkin bitlerin set edildiğini anlamamız ve 
+    onlardan okuma yapmamız gerekir. select ile beklerken birden fazla betimleyicide olayın gerçekleşmiş olabileceğine dikkat ediniz. 
+    Bu nedenle kontrolü else-if ile değil, ayrık if deyimleriyle yapmalısınız. Aşağıdaki kod parçasında üç betimleyici select ile izlenmiş,
+    select fonksiyonunun blokesi çözüldüğünde bu betimleyicilere ilişkin bitler tek tek FD_ISSET makrosu ile kontrol edilmiştir. Hangi 
+    betimleyicide okuma olayı gerçekleşmişse read fonksiyonu ile o betimleyiciden okuma yapılmıştır. Bu noktada artık read fonksiyonunun 
+    blokeye yol açmayacağına dikkat ediniz. 
+
+    fd_set rset;
+    ...
+
+    FD_ZERO(&rset);
+    FD_SET(fd1, &rset);		// fd1 = 18 varsayalım
+    FD_SET(fd2, &rset);		// fd2 = 23 varsayalım
+    FD_SET(fd3, &rset);		// fd3 = 48 varsayalım
+
+    maxfds = getmax(fd1, fd2, fd3);
+
+    if (select(maxfds + 1, &rset, NULL, NULL, NULL) == -1)
+        exit_sys("select");
+
+    if (FD_ISSET(fd1, &rset)) {
+        read(fd1, ...);
+    }
+    if (FD_ISSET(fd2, &rset)) {
+        read(fd2, ...);
+    }
+    if (FD_ISSET(fd3, &rset)) {
+        read(fd3, ...);
+    }
+
+    Programcı select yoluyla çok sayıda betimleyiciyi izliyorsa select çıkışında onlar için ayrı if deyimleriyle kontrol yapmak 
+    yorucu olabilmektedir. Bu durumda iki yol izlenebilir. Birincisi tüm betimleyicileri bir döngü içerisinde kontrol etmektir:
+
+    ...
+    if (select(maxfds + 1, &rset, NULL, NULL, NULL) == -1)
+        exit_sys("select");
+
+    for (int fd = 0; fd <= maxfds; ++fd)
+        if (FD_ISSET(fd, &rset)) {
+            read(fd, ...);
+        }
+
+    Burada 0'dan maxfds değerine kadar rset nesnesindeki tüm bitlere bakılmış ve set edilen bitlere ilişkin betimleyicilerden okuma
+    yapılmıştır. İkinci yöntem, izlenecek betimleyicileri aynı zamanda bir diziye yerleştirmektir. Örneğin:
+
+    fd_set rset;
+    int fds[3];
+    ...
+
+    fds[0] = fd1;
+    fds[1] = fd2;
+    fds[2] = fd3;
+    ...
+    FD_ZERO(&rset);
+
+    for (int i = 0; i < 3; ++i)
+        FD_SET(fds[i], &rset);
+
+    maxfds = getmax(fds, 3);
+
+    if (select(maxfds + 1, &rset, NULL, NULL, NULL) == -1)
+        exit_sys("select");
+
+    for (int i = 0; i < 3; ++i)
+        if (FD_ISSET(fds[i], &rset)) {
+            read(fds[i], ...);
+        }
+
+    Burada izlenecek betimleyicilerin numaraları fds dizisine yerleştirilmiştir. select geri döndüğünde yalnızca fds dizisindeki 
+    betimleyicilere ilişkin bitler FD_ISSET makrosuyla kontrol edilmiştir. 
+
+    Yukarıda da belirttiğimiz gibi select fonksiyonu genel olarak bir döngü içerisinde kullanılmaktadır. Fonksiyonu döngü içerisinde kullanırken 
+    bizim ona verdiğimiz fd_set kümesinin bozulacağına, dolayısıyla döngünün başında onun yeniden yüklenmesi gerektiğine dikkat ediniz. 
+    Örneğin:
+
+    fd_set rset, orset;
+    ...
+
+    FD_ZERO(&rset);
+    FD_SET(fd1, &rset);		// fd1 = 18 varsayalım
+    FD_SET(fd2, &rset);		// fd2 = 23 varsayalım
+    FD_SET(fd3, &rset);		// fd3 = 48 varsayalım
+
+    maxfds = getmax(fd1, fd2, fd3);
+
+    for (;;) {
+        orset = rset;
+        if (select(maxfds + 1, &orset, NULL, NULL, NULL) == -1)
+            exit_sys("select");
+
+        if (FD_ISSET(fd1, &orset)) {
+            read(fd1, ...);
+        }
+        if (FD_ISSET(fd2, &orset)) {
+            read(fd2, ...);
+        }
+        if (FD_ISSET(fd3, &orset)) {
+            read(fd3, ...);
+        }
+    }
+
+    Burada her döngünün başında izlemenin yapılacağı rset nesnesi orset (output rset) nesnesine atanmıştır. Böylece her defasında orset
+    izlenmesi gereken betimleyicileri belirtmektedir. İki fd_set nesnesi birbirine atanabilmektedir. (fd_set türü tipik olarak bir yapı 
+    biçiminde oluşturulmuştur. İki yapı nesnesi birbirine atandığında karşılıklı elemanların atanacağına dikkat ediniz.)
+
+    Pekiyi boru, soket gibi betimleyicilerden select eşliğinde okuma yapılırken karşı taraf bu betimleyicileri kapatırsa ne olacaktır?
+    İşte bu durumda select fonksiyonu sanki o betimleyicide "okuma" olayı varmış gibi davranmaktadır. Örneğin boruyu karşı taraf 
+    kapattığında select fonksiyonu okuma olayı gerçekleşmiş gibi geri döner, biz de read fonksiyonu ile 0 byte okuruz ve artık
+    karşı tarafın boruyu kapatmış olduğunu anlarız.
+
+    select ile çok sayıda betimleyiciyi izlerken bu betimleyicileri karşı taraf kapattığında biz de read fonksiyonu ile bunu anladığımızda
+    artık betimleyiciyi okuma kümesinden çıkartmamız gerekir. 
+
+    select fonksiyou başarısızlık durumunda -1 değerine geri döner. Eğer hiçbir betimleyicide olay gerçekleşmemiş, ancak zaman aşımı 
+    dolmuşsa fonksiyon 0 değerine geri dönmektedir. Eğer en az bir betimleyicide ilgili olay gerçekleşmişse select fonksiyonu bu durumda 
+    toplam gerçekleşen olay sayısına geri dönmektedir. (Aynı betimleyici örneğin hem okuma hem de yazma için izleniyorsa ve bu betimleyicide 
+    hem okuma hem de yazma olayı gerçekleşmişse bu değer 2 artırılmaktadır.) Fonksiyonun geri dönüş değeri genellikle programcılar
+    tarafından kullanılmamaktadır.
+
+    select fonksiyonunun normal disk dosyaları için kullanılması anlamsızdır. Eğer select normal disk dosyaları için kullanılırsa 
+    select her zaman olay gerçekleşmiş gibi geri dönecektir. select fonksiyonu uzun süre beklemeye yol açabilecek terminal 
+    gibi, boru gibi, soket gibi aygıtlar için kullanılmalıdır. Normal olarak select ile beklenecek betimleyicilere ilişkin kaynaklar 
+    "blokeli" modda açılmalıdırlar. select blokeyi kendisi uygulamaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+                                            89. Ders 14/10/2023 - Cumartesi
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Aşağıda select fonksiyonunun kullanımına basit bir örnek verilmiştir. Bu örnekte select ile stdin dosyası (0 numaralı
+    betimleyici) okuma amaçlı izlenmektedir. Klavyeden giriş yapılıp ENTER tuşuna basıldığında select blokeyi çözmekte ve 
+    read ile artık bloke olmadan okuma yapılabilmektedir. select fonksiyonunun tek bir betimleyici için kullanılmasının 
+    bir anlamı yoktur. Bu örnek yalnızca select fonksiyonunun kullanımını ana hatlarıyla açıklamak için verilmiştir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/select.h>
+
+#define BUFFER_SIZE		4096
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	fd_set rset, orset;
+	char buf[BUFFER_SIZE + 1];
+	ssize_t result;
+
+	FD_ZERO(&rset);
+	FD_SET(0, &rset);
+
+	for (;;) {
+		orset = rset;
+		if (select(0 + 1, &orset, NULL, NULL, NULL) == -1)
+			exit_sys("select");
+
+		if (FD_ISSET(0, &orset)) {
+			if ((result = read(0, buf, BUFFER_SIZE)) == -1)
+				exit_sys("read");
+			if (result == 0)
+				break;
+
+			buf[result] = '\0';
+			printf("%s", buf);
+		}
+	}
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir grup betimleyici select fonksiyonu ile izlenirken karşı taraf ilgili betimleyiciyi kapatırsa ne olacaktır? Örneğin 
+    biz select fonksiyonu ile isimli boruları ya da soketleri izleyebiliriz. Böylece borunun ya da soketin karşı tarafındakilerin
+    yazdıklarını etkin bir biçimde elde edebiliriz. Pekiyi ya karşı taraf boruyu ya da soketi kapatırsa ne olacaktır. İşte
+    yukarıda da belirttiğimiz gibi karşı taraf boru ya da soketi kapattığında select sanki "okuma" olayı oluşmuş gibi davranır. 
+    Biz de bunu read fonksiyonu ile anlarız (read bu durumda 0 ile geri dönecektir). Böylece kendi betimleyicimizi kapatıp 
+    ilgili betimleyiciyi de izleme listesinden çıkartırız. 
+
+    Aşağıdaki örnekte program komut satırı argümanlarıyla aldığı isimli boruları okuma amacıyla select fonksiyonuyla izlemektedir. 
+    İsimli boruların O_RDONLY modda açılması sırasında karşı taraf boruyu O_WRONLY modunda (ya da O_RDWR modunda) açana kadar
+    open fonksiyonunun blokeye yol açtığını anımsayınız. Bu programı kullanırken önce mkfifo komutuyla isimli boruları yaratmalısınız. 
+    Örneğin:
+
+    mkfifo x y Z
+
+    Burada x, y ve z isimli boruları yaratılacaktır. Daha sonra programı bu isimli boruların yol ifadeleriyle çalıştırmalısınız. 
+    Örneğin:
+
+    ./sample x y z
+
+    Artık bu isimli borular açıldığında program bir döngü içerisinde select fonksiyonunda bekleyecektir. Bu borulardan herhangi 
+    birine yazma yapıldığında select blokesi çözülecek ve artık program o borudan okuma yapacaktır. Bütün borular kapatıldığında
+    program sonlandırılmaktadır. 
+
+    Aşağıdaki programı test etmek için en pratik yöntem başka terminaller açarak cat programını borulara yönlendirerek çalıştırmaktır. 
+    Örneğin:
+
+    cat > x
+
+    Artık klavyeden bir şeyler yazıp ENTER tuşuna bastığımızda cat onu boruya yazacaktır. cat programından Ctrl+D tuşu ile 
+    çıkabilirsiniz. Tabii aslında cat programı Ctrl+C ile sinyal yoluyla sonlandırılsa da bir sorun oluşmayacaktır. Bir 
+    proses nasıl sonlanırsa sonlansın işletim sistemi o prosesin açmış olduğu dosyaları kapatmaktadır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/select.h>
+
+#define BUFFER_SIZE		4096
+#define MAX_SIZE		4096
+
+void exit_sys(const char *msg);
+
+int main(int argc, char *argv[])
+{
+	fd_set rset, orset;
+	char buf[BUFFER_SIZE + 1];
+	ssize_t result;
+	int fds[MAX_SIZE];
+	int maxfd;
+	int count;
+
+	if (argc == 1) {
+		fprintf(stderr, "too few arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	printf("opens named pipes... it may block...\n");
+
+	FD_ZERO(&rset);
+
+	maxfd = -1;
+	for (int i = 1; i < argc; ++i) {
+		if ((fds[i] = open(argv[i], O_RDONLY)) == -1)
+			exit_sys("open");
+		printf("%s opened...\n", argv[i]);
+		if (fds[i] > maxfd)
+			maxfd = fds[i];
+
+		FD_SET(fds[i], &rset);
+		++count;
+	}
+
+	for (;;) {
+		orset = rset;
+		printf("waiting at select...\n");
+		if (select(maxfd + 1, &orset, NULL, NULL, NULL) == -1)
+			exit_sys("select");
+
+		for (int i = 0; i <= maxfd; ++i)
+			if (FD_ISSET(fds[i], &orset)) {
+				if ((result = read(fds[i], buf, BUFFER_SIZE)) == -1)
+					exit_sys("read");
+				if (result == 0) {
+					printf("peer closed descriptor...\n");
+					close(fds[i]);
+					FD_CLR(fds[i], &rset);
+					--count;
+
+					if (count == 0)
+						goto EXIT;
+				}
+
+				buf[result] = '\0';
+				printf("%s", buf);
+			}
+	}
+EXIT:
+
+	printf("there is no descriptor open, finishes...\n");
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    select fonksiyonu en çok okuma amaçlı izlemede kullanılmaktadır. Pekiyi yazma amaçlı izleme nedir? İşte bazı aygıtlar 
+    yazma sırasında da blokeye yol açabilmektedir. Örneğin biz borulara write fonksiyonu ile yazma yaptığımızda eğer boru
+    tamamen doluysa boruda yer açılana kadar blokede bekleriz. Ancak bu bizim diğer borulara yazma yapmamızı engelleyebilir. 
+    O zaman biz select fonksiyonunu yazma izlemesi için de kullanabiliriz. Örneğin select fonksiyonuna biz üç boru betimleyicisini
+    yazma izlemesi için vermiş olalım. select boruda yer açılınca blokeyi çözecek ve yazma yapılabilecek betimleyicileri yine
+    okumadaki gibi set edecektir. Biz de okumadakine benzer bir biçimde hangi boruda boşluk oluştuysa ona yazma yaparız. 
+    (Borularda tüm bilgi boruya yazılana kadar bloke oluşmaktadır. select az bir byte yazabilme durumunda blokeyi çözmektedir. 
+    Tabii okuyan taraf da aynı miktar bilgiyi okuyorsa burada yine sorun çıkmayacaktır.) Benzer biçimde soketlere yazma yapılırken 
+    yazılan bilgiler önce network tamponuna yazılmaktadır. Eğer bu tampon doluysa yine bloke oluşmaktadır. Görüldüğü gibi 
+    okumadaki benzer bloke problemi yazmada da ortaya çıkabilmektedir. 
+
+    Borularda önce yazan tarafın boruyu kapatması gerekmektedir. Ancak okuyan taraf boruyu kapatırsa yazan taraf boruya 
+    yazma yaptığında SIGPIPE sinyalinin oluştuğunu anımsayınız. select fonksiyonunda okuyan taraf boruyu kapatırsa yazma
+    takibinde sanki bir yazma olayı varmış gibi durum oluşmaktadır. Tabii bu durumda select geri dönünce yazma yapılırsa yine 
+    SIGPIPE sinyali oluşturulacaktır. Aynı durum aslında soketlerde de söz konusudur.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    select fonksiyonunun dördüncü parametresi olan "errorfds" ne anlama gelmektedir?
+
+    int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *errorfds, struct timeval *timeout);
+
+    Bu parametre programcılar tarafından genellikle yanlış anlaşılmaktadır. İsminden dolayı sanki betimleyicide bir hata 
+    izlemesinin yapılacağı sanılmaktadır. Oysa bu parametre çok kısıtlı bir kullanıma sahiptir. Borularda bu parametrenin 
+    bir etkisi yoktur. Soketlerde ise "out of band data" oluştuğunda bir etkisi olmaktadır. Yani bu parametre bulunuyor 
+    olsa da önemli bir kullanıma sahip değildir. Dolayısıyla genellikle NULL geçilmektedir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    select fonksiyonunun son parametresi zaman aşımı belirtmektedir. Zaman aşımı "en kötü olasılıkla blokenin ne kadar süreceğini"
+    belirtir. select eğer zaman aşımından dolayı sonlanırsa 0 değerine geri dönmektedir. Bu zaman aşımı parametresi NULL geçilirse
+    bu durum herhangi bir zaman aşımının uygulanmayacağı anlamına gelir. Linux sistemlerinde bu zaman aşımı parametresi girilirse
+    çıkışta bu elemana "kalan zaman" set edilmektedir. Ancak POSIX standartları bu davranışı garanti etmemektedir. 
+
+    select fonksiyonundaki zaman aşımı parametresi mikrosaniye duyarlılığındadır. Ancak pek çok işletim sistemi bu duyarlılıkta 
+    işlem yapamamaktadır. timeval yapısını yeniden anımsatmak istiyoruz:
+
+    struct timeval {
+        time_t      tv_sec;         /* seconds */
+        suseconds_t tv_usec;        /* microseconds */
+    };
+
+    Eskiden UNIX türevi sistemlerde yüksek çözünürlüklü bekleme yapan nanosleep ve clock_nanosleep fonksiyonları yoktu. 
+    Programcılar da bu amaçla select fonksiyonunu kullanabiliyordu. Eğer select fonksiyonunun izleme parametrelerinin hepsine
+    NULL geçilirse ancak zaman aşımı parametresine belli bir süre girilirse fonksiyon sanki mikrosaniye duyarlılığına sahip 
+    sleep gibi çalışmaktadır. Tabii buradaki duyarlılık sistemlerde sağlanamayabiliyordu. Örneğin:
+
+    struct timeval tv;
+    ...
+
+    tv.tv_sec = 3;
+    tv.tv_usec = 500000;
+
+    printf("waiting at sleep for 3.5 second..\n");
+
+    if (select(0, NULL, NULL, NULL, &tv) == -1)
+        exit_sys("select");
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/select.h>
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	struct timeval tv;
+
+	tv.tv_sec = 3;
+	tv.tv_usec = 500000;
+
+	printf("waiting at sleep for 3.5 second..\n");
+
+	if (select(0, NULL, NULL, NULL, &tv) == -1)
+		exit_sys("select");
+
+	printf("Ok\n");
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    select fonksiyonunda kullanılan fd_set bit dizisi en fazla FD_SETSIZE kadar biti içermektedir. Linux sistemlerinde FD_SETSIZE
+    1024 olarak define edilmiştir. Dolayısıyla Linux sistemlerinde select fonksiyonu ile ancak ilk 1024 betimleyici izlenebilir. 
+    Biz setrlimit fonksiyonu ile dosya betimleyici tablomuzu büyütsek bile select fonksiyonu yalnızca ilk 1024 betimleyici ile
+    çalışmaya devam edecektir. Bunun için çeşitli çözümler uyduruldaysa da bunların hiçbiri genel ve taşınabilir değildir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    poll fonksiyonu select fonksiyonun alternatifi olan bir fonksiyondur. select ile poll aynı amaçlarla kullanılmaktadır. 
+    Fakat bu iki fonksiyonun parametrik yapıları ve kullanılma biçimleri farklıdır. Daha önceden de belirttiğimiz gibi select
+    fonksiyonu BSD sistemlerinde tasarlanmışken poll fonksiyonu klasik AT&T UNIX sistemlerinde tasarlanmıştır. Tabii bu iki 
+    fonksiyon da ilk zamandan beri POSIX standartlarında bulunmaktadır. 
+
+    poll fonksiyonu bazı bakımlardan select fonksiyonundan daha iyi gibi gözükmektedir. Ancak poll fonksiyonunun kullanımı 
+    biraz daha zordur.
+
+    poll fonksiyonunun prototipi şöyledir:
+
+    #include <poll.h>
+
+    int poll(struct pollfd fds[], nfds_t nfds, int timeout);
+
+    poll fonksiyonu izlenilecek betimleyicileri bit dizisi olarak değil, bir yapı dizisi olarak almaktadır. Fonksiyonun birinci 
+    parametresi pollfd türünden bir yapı dizisinin adresini, ikinci parametresi ise onun uzunluğunu almaktadır. Son parametre 
+    milisaniye cinsinden zaman aşımını belirtir. Bu parametre -1 girilirse zaman aşımı uygulanmaz, 0 girilirse fonksiyon betimleyicilerin 
+    durumuna bakıp hemen geri döner. pollfd yapısı şöyle bildirilmiştir:
+
+    struct pollfd {
+        int fd;           /* file descriptor */
+        short events;     /* requested events */
+        short revents;    /* returned events */
+    };
+
+    Yapının fd elemanı izlenecek betimleyiciyi, events elemanı izleme biçimini belirtmektedir. Eğer bu betimleyici değeri negatif 
+    herhangi bir değer olarak girilirse o betimleyici için izleme yapılmamaktadır. Dolayısıyla pollfd dizisinden bir elemanı 
+    mantıksal olarak çıkartmak için bu betimleyici negatif bir değere çekilebilir. Programcı poll fonksiyonunu çağırmadan önce bu 
+    iki elemana değer yerleştirmelidir. Ancak yapının revents elemanı fonksiyon geri döndüğünde oluşan olay hakkında bilgi vermektedir. 
+    Bu eleman programcı tarafından events elemanında set edilmez, fonksiyon tarafından revents elemanında set edilir. (Bu sayede dizinin 
+    elemanlarının bozulmadığına dikkat ediniz.) 
+
+    İzlenecek olayların bazıları bazı aygıtlara ilişkindir. En önemli izleme olayları şunlardır:
+
+    POLLIN: Okuma amaçlı izlemeyi belirtir.
+
+    POLLOUT: Yazma amaçlı izlemeyi belirtir.
+
+    POLLERR: Hata amaçlı izlemeyi belirtir. Bu konuda bazı ayrıntılar vardır. Bu bayrak yapının events elemanında set edilmez, 
+    fonksiyon tarafından yapının revents elemanında set edilmektedir. 
+
+    POLLHUP: Fonksiyon tarafından ilgili aygıt ya da boru kapatıldığında set edilmektedir. Bu bayrak yapının events elemanında 
+    set edilmez, fonksiyon tarafından yapının revents elemanında set edilmektedir. 
+
+    Bu bayraklar bit OR işlemine sokulabilmektedir. Örneğin hem okuma hem de yazma izlemesi için POLLIN|POLLOUT kullanılabilir.
+
+    Geri döndürülen olayların birden fazlası birlikte gerçekleşmiş olabilir. Bu nedenle programcının kontrolü else-if ile 
+    değil, ayrık if deyimleriyle yapması gerekir. Okuyan taraf boruları ve soketleri kapatırsa bu durum poll fonksiyonunda POLLERR 
+    olayı biçiminde ele alınmaktadır. Programcının POLLHUP ve POLLERR bayraklarını yapının events elemanında set etmesi gerekmemektedir. 
+    Bu bayraklar gerektiğinde fonksiyon tarafından yapının revents elemanında set edilmektedir. Borular kapatıldığında seyrek de 
+    olsa hem POLLIN hem de POLLHUP olayları birlikte de gerçekleşebilmektedir. Karşı taraf bir boruyu kapatıldığında POLLHUP 
+    oluştuktan sonra yeniden karşı tarafı kapalı olan boru poll işlemi uygulanırsa yine POLLHUP olayı gerçekleşmektedir. Yani 
+    karşı tarafın borusu kapalıysa artık her defasında POLLHUP olayu gerçekleşir. 
+
+    poll fonksiyonuna geçersiz bir betimleyici ya da açık olmayan bir betimleyici girilmişse poll fonksiyonu o betimleyici içim 
+    POLLNVAL olayı oluşturmaktadır. Bu nedenle kapatılmış betimleyicilerin ya negatif bir değere çekilmesi ya da diziden çıkartılması 
+    gerekir. 
+
+    Server uygulamalarında programcı yine tipik olarak poll fonksiyonunu bir döngü içerisinde çağırır. Döngüden çıkışta dizinin 
+    tüm elemanlarının revents elemanını uygun olay için kontrol eder. Eğer bir betimleyici üzerinde hiçbir olay gerçekleşmemişse revents 
+    elemanı 0 değerinde olacaktır. Örneğin okuma amaçlı nfds kadar betimleyiciyi poll fonksiyonu ile izlemek isteyelim. İzlenecek 
+    betimleyici bilgilerinin pfds isimli dizi de olduğuna varsayalım. poll sonrasındaki kontrol şöyle yapılabilir (kontroller uygulanmamıştır):
+
+    poll(pfds, nfds, -1);
+
+    for (int i = 0; i < nfds; ++i) {
+        if (pfds[i].revents & POLLIN) {
+            read(pfds[i].fd, ...);
+            ...
+        }
+        if (pfds[i].revents & POLLOUT) {
+            read(pfds[i].fd, ....);
+            ...
+        }
+        ...
+    }
+
+    Görüldüğü gibi dizinin hangi elemanlarında olay gerçekleştiği bilinmemektedir. (select fonksiyonunda da bizim tek tek
+    betimleyicilere FD_ISSET makrosuyla baktığımızı anımsayınız.)
+
+    poll fonksiyonu başarı durumunda bizim dizideki olay gerçekleşen eleman sayısına (olay sayısına değil) geri dönmektedir. 
+    Fonksiyon zaman aşımından dolayı sonlanmışsa 0 değerine geri dönmektedir. Zaman aşımı 0 verildiyse ve hiçbir olay 
+    gerçekleşmemişse fonksiyon yine 0 değerine geri dönmektedir. Fonksiyon başarısızlık durumunda -1 değerine geri döner ve 
+    errno değişkeni uygun biçimde set edilir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+                                                    90. Ders 15/10/2023 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Aşağıda poll fonksiyonunun stdin üzerinde basit bir kullanımına örnek verilmiştir. poll fonksiyonu terminal ile kullanılırken
+    Ctrl+d tuşlarına basıldığında POLLHUP olayı değil POLLIN olayı gerçekleşmektedir. Dolayısıyla aşağıdaki kodda döngüden read
+    fonksiyonu ile 0 byte okunduğunda çıkılmaktadır. Ctrl+d tuşlarına basıldığında EOF etkisi oluşturulmakta ve read fonksiyonu 
+    0 byte okumaktadır. Ancak izleyen paragraflarda görüleceği gibi borular kapatıldığında poll fonksiyonu POLLHUP olayı 
+    oluşturmaktadır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <poll.h>
+
+#define BUFFER_SIZE		4096
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+    char buf[BUFFER_SIZE + 1];
+    ssize_t result;
+    struct pollfd pfds[1];
+
+    pfds[0].fd = 0;
+    pfds[0].events = POLLIN;
+
+    for (;;) {
+        if (poll(pfds, 1, -1) == -1)
+            exit_sys("poll");
+
+        if (pfds[0].revents & POLLIN) {
+            if ((result = read(pfds[0].fd, buf, BUFFER_SIZE)) == -1)
+                exit_sys("read");
+            if (result == 0)
+                break;
+            buf[result] = '\0';
+            printf("%s", buf);
+        }
+    }
+
+    return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Şimdi de gerçek bir server uygulamasına benzer biçimde bir grup isimli borudan poll fonksiyonu ile okuma yapmaya çalışalım.
+    Aşağıdaki örnek daha önce select fonksiyonuyla yaptığımız örneğin poll versiyonudur. Yani bu örnekteki program yine bir 
+    grup isimli boru komut satırı argümanı yapılarak çalıştırılmalıdır. Örneğin:
+
+    ./sample x y z
+
+    Örneğimizde önce borlar açılıp pfds dizisi oluşturulmuştur:
+
+    struct pollfd pfds[MAX_SIZE];
+    ...
+
+    for (int i = 1; i < argc; ++i) {
+        if (count >= MAX_SIZE) {
+            fprintf(stderr, "too many arguments, last arguments ignored!..\n");
+            break;
+        }
+        if ((pfds[i - 1].fd = open(argv[i], O_RDONLY)) == -1)
+            exit_sys("open");
+        pfds[i - 1].events = POLLIN;
+        printf("%s opened...\n", argv[i]);
+        ++count;
+    }
+
+    İzlemenin POLLIN ile okuma izlemesi olduğuna dikkat ediniz. Yukarıda da belirttiğimiz gibi izlemede POLLHUP belirtilmemektedir. 
+    Yine örneğimizde bir döngü içerisinde poll fonksiyonu çağrılmıştır:
+
+    for (;;) {
+        printf("waiting at poll...\n");
+
+        if (poll(pfds, count, -1) == -1)
+            exit_sys("poll");
+        ...
+    }
+
+    Buradaki count pfds dizisindeki eleman sayısını belirtmektedir. poll fonksiyonu blokeyi çözdüğünde bizin dizinin tüm 
+    elemanlarını kontrol edip POLLIN ve POLLHUP olaylarının gerçekleşip gerçekleşmediğine bakmamız gerekmedir:
+
+    for (int i = 0; i < count; ++i) {
+        if (pfds[i].revents & POLLIN) {
+            ...
+        }
+        else if (pfds[i].revents & POLLHUP) {
+            ....
+        }
+        ...
+    }
+
+    Burada POLLIN ve POLLHUP olaylarının else-if biçiminde ele alındığına dikkat ediniz. Normal örneğin okuma ve yazma izlemesi 
+    yapılırken bu olayların ayrık if deyimleriyle yapılması gerekir. Ancak POLLIN ve POLLHUP olaylarının else-if biçiminde ele 
+    alınması daha uygundur. Bunun nedenini şöyle açıklayabiliriz: Karşı taraf boruya (ya da sokete) bilgi yazıp hemen boruyu 
+    kapattığında POLLIN ve POLLHUP olayları birlikte oluşabilmektedir. Bu durumda POLLIN ve POLLHUP ayrık if deyimleriyle ele 
+    alınırsa ve POLLIN olayında borudakilerin hepsi okunmazsa arkdana POLLUP işlemi ele alınırken boru kapatılacağı için eksik 
+    yapılmış olacaktır. Halbuki else-if durumunda biz borudakilerin tamamını okumasak bile sonraki poll işleminde yeniden POLLIN 
+    ve POLLHUP oluşacak ve boruyu bitirdikten sonra artık yalnızca POLLHUP olayı oluşacaktır. 
+
+    Örneğimizde bir boru kapatıldığında onun dizi elemanındaki betimelyicisi negatif bir değere çekilmiş ve böylece mantıksal 
+    olarak diziden atılmıştır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <poll.h>
+
+#define BUFFER_SIZE         4096
+#define MAX_SIZE            128
+
+void exit_sys(const char *msg);
+
+int main(int argc, char *argv[])
+{
+    char buf[BUFFER_SIZE + 1];
+    struct pollfd pfds[MAX_SIZE];
+    ssize_t result;
+    int tcount, count;
+
+    if (argc == 1) {
+        fprintf(stderr, "too few arguments!..\n");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("opens named pipes... it may block...\n");
+
+    count = 0;
+    for (int i = 1; i < argc; ++i) {
+         if (count >= MAX_SIZE) {
+            fprintf(stderr, "too many arguments, last arguments ignored!..\n");
+            break;
+        }
+        if ((pfds[i - 1].fd = open(argv[i], O_RDONLY)) == -1)
+            exit_sys("open");
+        pfds[i - 1].events = POLLIN;
+        printf("%s opened...\n", argv[i]);
+        ++count;
+    }
+    tcount = count;
+
+    for (;;) {
+        printf("waiting at poll...\n");
+
+        if (poll(pfds, count, -1) == -1)
+            exit_sys("poll");
+
+        for (int i = 0; i < count; ++i) {
+            if (pfds[i].revents & POLLIN) {
+                printf("POLLIN occured...\n");
+                if ((result = read(pfds[i].fd, buf, BUFFER_SIZE)) == -1)
+                    exit_sys("read");
+                buf[result] = '\0';
+                printf("%s\n", buf);
+
+            }
+            else if (pfds[i].revents & POLLHUP) {
+                printf("POLLHUP occured...\n");
+                close(pfds[i].fd);
+                pfds[i].fd = -1;
+                --tcount;
+            }
+        }
+        if (tcount == 0)
+            break;
+    }
+
+    printf("ther is no descriptor open, finishes...\n");
+
+    return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Yukarıda da belirttiğimiz gibi aslında kapanan betimleyicileri mantıksal olarak diziden atmak için onun betimleyicisi 
+    negatif bir değere çekilebilmektedir. Ancak istersek gerçekten kapanan betimelyicileri didizen atabiliriz. Tabii bu atma
+    işlemi aslında dizinin sonundakinin atılacak elemanla yer değiştirilmesi yoluyla yapılabilmektedir. Aşağıda buna bir örnek
+    verilmiştir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <poll.h>
+
+#define BUFFER_SIZE         4096
+#define MAX_SIZE            128
+
+void exit_sys(const char *msg);
+
+int main(int argc, char *argv[])
+{
+    char buf[BUFFER_SIZE + 1];
+    struct pollfd pfds[MAX_SIZE];
+    ssize_t result;
+    int tcount, count;
+
+    if (argc == 1) {
+        fprintf(stderr, "too few arguments!..\n");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("opens named pipes... it may block...\n");
+
+    count = 0;
+    for (int i = 1; i < argc; ++i) {
+         if (count >= MAX_SIZE) {
+            fprintf(stderr, "too many arguments, last arguments ignored!..\n");
+            break;
+        }
+        if ((pfds[i - 1].fd = open(argv[i], O_RDONLY)) == -1)
+            exit_sys("open");
+        pfds[i - 1].events = POLLIN;
+        printf("%s opened...\n", argv[i]);
+        ++count;
+    }
+    tcount = count;
+
+    for (;;) {
+        printf("waiting at poll...\n");
+
+        if (poll(pfds, count, -1) == -1)
+            exit_sys("poll");
+
+        for (int i = 0; i < count; ++i) {
+            if (pfds[i].revents & POLLIN) {
+                printf("POLLIN occured...\n");
+                if ((result = read(pfds[i].fd, buf, BUFFER_SIZE)) == -1)
+                    exit_sys("read");
+                buf[result] = '\0';
+                printf("%s\n", buf);
+
+            }
+            else if (pfds[i].revents & POLLHUP) {
+                printf("POLLHUP occured...\n");
+                close(pfds[i].fd);
+                pfds[i] = pfds[tcount - 1];
+                --tcount;
+            }
+        }
+        count = tcount;
+        if (count == 0)
+            break;
+    }
+
+    printf("ther is no descriptor open, finishes...\n");
+
+    return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Pekiyi select ve poll fonksiyonlarını birbiriyle kıyaslarsak ne söyleyebiliriz?
+
+    - select fonksiyonunun kullanımı biraz daha kolay gibidir. 
+
+    - select fonksiyonu FD_SETSIZE (1024) kadar betimleyiciyi desteklemektedir. Oysa poll fonksiyonundaki dizi istenildiği 
+    kadar büyük olabilir. 
+
+    - select fonksiyonunda fonksiyona verdiğimiz kümeler fonksiyon tarafından güncellendiği için fonksiyonun her çağırlmasında
+    eski kümeyi saklayarak yeniden kullanmamız gerekir. 
+
+    - select fonksiyonundaki zaman aşımı duyarlılığı mikrosaniye, poll fonksiyonundaki zaman aşımı duyarlılığı milisaniye 
+    mertebesindendir. 
+
+    - Her iki fonksiyonda da betimleyici sayısı fazlalaştıkça performans düşme eğilimindedir. 
+
+    - poll fonksiyonunu kullanabilmek için pollfd türünden bir yapı dizisinin oluşturulması gerekmektedir. Halbuki select 
+    fonksiyonunda fd_set veri yapısı bitsel düzeyde olduğu için az yer kaplamaktadır. 
+
+    poll fonksiyonun select fonksiyonuna göre en önemli avantajı betimleyici sayısının istenildiği kadar çok olabilmesidir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    select ve poll fonksiyonlarının en önemli sorunu betimeleyici sayısı arttığında performansın ciddi biçimde düşmesidir. Yani
+    bu fonksiyonlar iyi bir ölçeklenebilirliğe (scalability) sahip değildir. İşte bu nedenden dolayı multiplexed IO işlemleri için 
+    Linux sistemlerinde bu sistemlere özgü epoll fonksiyonları da bulundurulmuştur. epoll fonksiyonları select ve poll fonksiyonlarına 
+    göre özellikle betimleyici sayısı arttığında çok daha iyi performans göstermektedir. Bu nedenle Linux sistemlerinde ölçeklenebilir 
+    server uygulamaları için tercih edilecek yöntem epoll yöntemi olmalıdır. Ancak epoll fonksiyonlarının taşınabilir olmadığına, 
+    yalnızca Linux sistemlerine özgü olduğuna dikkat ediniz. 
+
+    epoll aarayüzünün kullanımı temelde üç fonksiyon ile yapılmaktadır. epoll_create (ya da epoll_create1), epoll_ctl ve epoll_wait. 
+    epoll arayüzünün kullanımı tipik olarak aşağıdaki adımlardan geçilerek yapılmaktadır:
+
+    1) Programcı önce epoll_create isimli fonksiyonla bir betimleyici elde eder. Bu betimleyicinin IO olaylarının izleneceği 
+    betimleyici ile bir ilgisi yoktur. Bu betimleyici diğer fonksiyonlara bir handle gibi geçirilmektedir. Fonksiyonun prototipi 
+    şöyledir:
+
+    #include <sys/epoll.h>
+
+    int epoll_create(int size);
+
+    Fonksiyonun parametresi kaç betimleyicinin izlenileceğine yönelik bir ip ucu değeri alır. Programcı burada verdiği değerden
+    daha fazla betimleyiciyi izleyebilir. Dolayısıyla bu parametre yalnızca bir ipucu niteliğindedir. Zaten daha sonra bu parametre 
+    tasarımcıları rahatsız etmiş ve epoll_create1 isimli fonksiyonla kaldırılmıştır:
+
+    #include <sys/epoll.h>
+
+    int epoll_create1(int flags);
+
+    Buradaki flags şimdilik yalnızca FD_CLOEXEC değerini ya da 0 değerini alabilmektedir. Fonksiyonların geri dönüş değeri
+    başarı durumunda handle görevinde olan bir betimleyicidir. 
+
+    epoll_create ve epoll_create1 fonksiyonları başarı durumunda epoll betimleyicisine, başarısızlık durumunda -1 değerine geri 
+    dönmektedir. 
+
+    2) Artık programcı izleyeceği betimleyicileri epoll sistemine epoll_ctl fonksiyonuyla ekler. Örneğin programcı 3 boru betimleyicisini
+    izleyecekse bu 3 betimleiyici için de ayrı ayrı epoll_ctl çağrısı yapmalıdır. Fonksiyon prototipi şöyledir:
+
+    #include <sys/epoll.h>
+
+    int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);
+
+    Fonksiyonun birinci parametresi epoll_create ya da epoll_create1 fonksiyonundan elde edilen betimleyici değeridir. İkinci parametre
+    EPOLL_CTL_ADD, EPOLL_CTL_MOD, EPOLL_CTL_DEL değerlerinden birini alır. EPOLL_CTL_ADD sisteme betimleyici eklemek için, EPOLL_CTL_DEL 
+    sistemden betimleyici çıkartmak için, EPOLL_CTL_MOD da mevcut eklenmiş betimleyicide izleme değişikliği yapmak için kullanılmaktadır. 
+    Üçüncü parametre izlenecek betimleyiciyi belirtir. Son parametre izlenecek olayı belirtmektedir. sturct epoll_event yapısı şöyle 
+    bildirilmiştir:
+
     <BURADA KALDIK>
 
-    fonksiyonu okuma takibi için tipik olarak şöyle kullanılır: Programcı okuma izlemesi yapılacak betimleyicilerin numaralarına ilişkin bitleri
-    bir fd_set içerisinde set eder. Bunu fonksiyonun ikinci parametresine verir. Fonksiyon da yalnızca 1 olan bitlere ilişkin betimleyicileri 
-    izleyecektir. Programcı bu betimleyicilerden okuma yapılamayacak durumda ise (yani okuma girişiminde bloke oluşacak durumda ise) select blokede 
-    akışı bekletir. En az bir betimleyicide okuma eylemi yapılabilecek durumdaysa bloke çözülür. Fonksiyon hangi betimleyicilerde okuma işleminin yapılabileceğini
-    yine bizim ona verdiğimiz fd_set nesnesinin ilgili 1 yaparak bize iletmektedir. Yani bizim fonksiyona verdiğimiz fd_set nesnesi fonksiyon geri döndüğünde
-    artık bozulmuş durumdadır yani hangi betimleyicilerin okumaya elverişli olduğunu gösterecek biçimde değiştirilmiş durumdadır. Buradaki aynı çalışma
-    biçimi "yazma" ve "error" işlemi için de aynı biçimde söz konusudur. Programcı aynı zamanda isterse üç ayrı fd_set nesnesini de fonksiyona verebilir. 
+    struct epoll_event {
+        uint32_t   events;
+        epoll_data_t data;
+    };
 
-    select fonksiyonu başarısızlık durumunda -1 değerine geri döner. Eğer hiçbir betimleyicide olay gerçekleşmemiş ancak zaman aşımı dolmuşsa 0 değerine geri döner.
-    Eğer en az bir betimleyicide ilgili olay gerçekleşmişse toplam olay gerçekleşen betimleyici sayısına geri döner. (Aynı betimleyici örneğin hem okuma hem de yazma
-    için izleniyorsa ve bu betimleyicide hem okuma hem de yazma olayı gerçekleşmişse bu değer 2 artırılmaktadır.)
+    Yapının events elemanı tıpkı poll fonksiyonunda olduğu gibi EPOLLIN, EPOLLOUT değerlerini almaktadır. Geri döndürülen
+    olay da yine EPOLLIN, EPOLLOUT, EPOLLERR ve EPOLLHUP gibi olaylardır. Yapının data elemanı aslında çekirdek tarafından saklanıp
+    epoll_wait fonksiyonu yoluyla bize geri verilmektedir. Bu eleman bir birlik biçiminde bildirilmiştir:
 
-    select fonksiyonun normal disk dosyaları için kullanılması anlamsızdır. Uzun süre beklemeye yol açabilecek terminal gibi, boru gibi, soket gibi aygıtlar için
-    kullanılmalıdır. Normal olarak select ile bekelenecek betimleyicilere ilişkin kaynaklar "blokeli" modda açılmalıdırlar.
+    typedef union epoll_data {
+        void        *ptr;
+        int          fd;
+        uint32_t     u32;
+        uint64_t     u64;
+    } epoll_data_t;
 
-    Aşağıdaki örnekte 0 numaralı betimleyici select ile izlenmiştir. Bu betimleyici terminal sürücüne ilişkindir. Kullanıcı bir yazı girip ENTER
-    tuşuna bastığıda terminal sürücüsü select fonksiyonun blokesini çözecektir.
+    select ve poll fonksiyonları "düzey tetiklemeli (level triggered)" çalışmaktadır. epoll fonksiyonu da default durumda düzey tetiklemeli 
+    çalışır. Ancak events parametresine bit or işlemi ile EPOLLET eklenirse o betimleyici için "kenar tetiklemeli (edge triggered)" mod kullanılır. 
+    Düzey tetiklemeli mod demek (select, poll daki durum ve epoll'daki default durum) bir okuma ya da yazma olayı açılıp bloke çözüldüğünde
+    programcı eğer okuma ya da yazma yapmayıp yeniden bu fonksiyonları çağrırsa bekleme yapılmayacak demektir. Yani örneğin biz select ya poll ile
+    stdin dosyasını izliyorsak ve klavyeden bir giriş yapıldıysa bu fonksiyonlar blokeyi çözer. Fakat biz read ile okuma yapmazsak ve yeniden select ve poll
+    fonksiyonlarını çağırırsak artık bloke oluşmaz. Halbuki kenar tetiklemeli modda biz okuma yapmasak bile yeni okuma eylemi oluşana kadar yine
+     blokede kalırız.
+
+    3) Asıl bekleme ve izleme işlemi epoll_wait fonksiyonu tarafından yapılmaktadır. Bu fonksiyon poll select ve poll fonksiyonu gibi 
+    bloke oluşturur ve arka planda betimleyicileri izler. 
+
+     int epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout);
+
+     Fonksiyonun birinci parametresi epoll_create ya da epoll_create1 fonksiyonundan elde edilmiş olan handle değeridir. İkinci 
+     parametre oluşan olayların depolanacağı yapı dizisinin adresidir. Biz bu yapının events elemanından oluşan olayın ne olduğunu 
+     anlarız. Yapının data elemanı epoll_ctl sırasında verdiğimiz değeri belirtir. Bizim en azından epoll_ctl fonksiyonund ilgili 
+     betimleyiciyi bu data elemanında girmiş olmamız gerekir. Fonksiyonun üçüncü paranetresi ikinci parametresiyle belirtilen 
+     dizinin uzunluğudur. (Normal olarak bu dizinin eklenmiş olan betimleyici sayısı kadar olması gerekir. Ancak buradaki değer 
+     toplam izlenecek betimleyici sayısından az olabilir. Bu parametre tek en fazla hamlede kaç betimleyici hakkında bilgi 
+     verileceğini belirtmektedir.) Son parametre yine milisaniye cinsinden zaman aşımını belirtir. -1 değeri zaman aşımının 
+     kullanılmayacağını, 0 değeri hemen bakıp çıkılacağını belirtmektedir. Fonksiyon başarı durumunda diziye doldurduğu eleman 
+     sayısı ile başarısızlık durumda -1 ile geri döner. Fonksiyon 0 değeri ile geri dönerse sonlanmanın zaman aşımından dolayı 
+     oluştuğu anlaşılır.
+
+    Sistemin kapatılması için epoll_create ya da epoll_create1 ile elde edilen betimleyici kapatılabilir. 
+
+
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -36625,7 +37488,87 @@ void exit_sys(const char *msg)
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
+/*--------------------------------------------------------------------------------------------------------------------------
 
+---------------------------------------------------------------------------------------------------------------------------*/
 
+/*--------------------------------------------------------------------------------------------------------------------------
 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
 
