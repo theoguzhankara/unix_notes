@@ -224,7 +224,7 @@ int main(void)
 				break;
 			case '?':
 			if (optopt == 'b')
-				fprintf(stderr, "-b option given without argument!..\n");
+				fprintf(stderr, "-b option given without argument!...\n");
 			else
 				fprintf(stderr, "invalid option: -%c\n", optopt);
 			break;
@@ -383,13 +383,13 @@ int main(int argc, char *argv[])
 			case 'n':
 				n_flag = 1;
 				if ((n_arg = check_number(optarg)) < 0) {
-					fprintf(stderr, "-n argument is invalid!..\n");
+					fprintf(stderr, "-n argument is invalid!...\n");
 					err_flag = 1;
 				}
 				break;
 			case '?':
 				if (optopt == 'n')
-					fprintf(stderr, "-%c option given without argument!..\n", optopt);
+					fprintf(stderr, "-%c option given without argument!...\n", optopt);
 				else
 					fprintf(stderr, "invalid option: -%c\n", optopt);
 				err_flag = 1;
@@ -402,7 +402,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (t_flag + o_flag + x_flag > 1) {
-		fprintf(stderr, "only one of -[tox] option may be specified!..\n");
+		fprintf(stderr, "only one of -[tox] option may be specified!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -410,16 +410,16 @@ int main(int argc, char *argv[])
 		t_flag = 1;
 
 	if (t_flag && n_flag) {
-		fprintf(stderr, "-n option cannot be used with -t option!..\n");
+		fprintf(stderr, "-n option cannot be used with -t option!...\n");
 		exit(EXIT_FAILURE);
 	}
 
 	if (argc - optind == 0) {
-		fprintf(stderr, "file must be specified!..\n");
+		fprintf(stderr, "file must be specified!...\n");
 		exit(EXIT_FAILURE);
 	}
 	if (argc - optind > 1) {
-		fprintf(stderr, "too many files specified!..\n");
+		fprintf(stderr, "too many files specified!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -751,11 +751,11 @@ int main(int argc, char *argv[])
 			break;
 		case '?':
 			if (optopt == 'c')
-				fprintf(stderr, "option -c or --count without argument!..\n");
+				fprintf(stderr, "option -c or --count without argument!...\n");
 			else if (optopt != 0)
 				fprintf(stderr, "invalid option: -%c\n", optopt);
 			else
-				fprintf(stderr, "invalid long option!..\n");
+				fprintf(stderr, "invalid long option!...\n");
 			/* fprintf(stderr, "invalid long option: %s\n", argv[optind - 1]); */
 			err_flag = 1;
 			break;
@@ -842,13 +842,13 @@ int main(int argc, char *argv[])
 				break;
 			case '?':
 				if (optopt == 'b')
-					fprintf(stderr, "-b option must have an argument!..\n");
+					fprintf(stderr, "-b option must have an argument!...\n");
 				else if (optopt == 2)
 					fprintf(stderr, "argument must be specified with --count option\n");
 				else if (optopt != 0)
 					fprintf(stderr, "invalid option: -%c\n", optopt);
 				else
-					fprintf(stderr, "invalid long option!..\n");
+					fprintf(stderr, "invalid long option!...\n");
 
 				err_flag = 1;
 
@@ -1155,7 +1155,7 @@ void parse_cmd_line(char *cmdline)
 
 void dir_proc(void)
 {
-	printf("dir command executing..\n");
+	printf("dir command executing...\n");
 }
 
 void clear_proc(void)
@@ -1168,7 +1168,7 @@ void pwd_proc(void)
 	char cwd[4096];
 
 	if (g_nparams > 1) {
-		printf("pwd command must be used withoud argument!..\n");
+		printf("pwd command must be used withoud argument!...\n");
 		return;
 	}
 
@@ -1215,7 +1215,7 @@ int main(void)
     Türkçe UNICODE UTF-8 locale'i "tr_TR.UTF-8" ile temsil edilmektedir. Dolayısıyla bu işlemi şöyle yapabilirsiniz:
 
 	if (setlocale(LC_ALL, "tr_TR.UTF-8") == NULL) {
-		fprintf(stderr, "cannot set locale!..\n");
+		fprintf(stderr, "cannot set locale!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -1231,7 +1231,7 @@ int main(void)
 int main(void)
 {
 	if (setlocale(LC_ALL, "tr_TR.UTF-8") == NULL) {
-		fprintf(stderr, "cannot set locale!..\n");
+		fprintf(stderr, "cannot set locale!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -1389,7 +1389,7 @@ void exit_sys(const char *format, ...)
     kursumuzda standart C fonksiyonlarında set edilen errno değişkenini kullanmayacağız. Örneğin:
 
 	if ((f = fopen("test.dat", "r")) == NULL) {
-		fprintf(stderr, "cannot open file!..\n");
+		fprintf(stderr, "cannot open file!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -1641,7 +1641,7 @@ void parse_cmd_line(char *cmdline)
 
 void dir_proc(void)
 {
-	printf("dir command executing..\n");
+	printf("dir command executing...\n");
 }
 
 void clear_proc(void)
@@ -2270,7 +2270,7 @@ int main(int argc, char *argv[])
 	ssize_t result;
 
 	if (argc != 3) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -2282,7 +2282,7 @@ int main(int argc, char *argv[])
 
 	while ((result = read(fds, buf, BUFFER_SIZE)) > 0)
 		if (write(fdd, buf, result) != result) {
-			fprintf(stderr, "cannot write file!..\n");
+			fprintf(stderr, "cannot write file!...\n");
 			exit(EXIT_FAILURE);
 		}
 
@@ -2325,7 +2325,7 @@ int main(int argc, char *argv[])
 	ssize_t size, result;
 
 	if (argc != 3) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -2339,7 +2339,7 @@ int main(int argc, char *argv[])
 		if ((size = write(fdd, buf, result)) == -1)
 			exit_sys("write");
 		if (size != result) {
-			fprintf(stderr, "cannot write file!..\n");
+			fprintf(stderr, "cannot write file!...\n");
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -2675,7 +2675,7 @@ void parse_cmd_line(char *cmdline)
 
 void dir_proc(void)
 {
-	printf("dir command executing..\n");
+	printf("dir command executing...\n");
 }
 
 void clear_proc(void)
@@ -2718,7 +2718,7 @@ void umask_proc(void)
 	int argval;
 
 	if (g_nparams > 2) {
-		printf("too many arguments in umask command!..\n");
+		printf("too many arguments in umask command!...\n");
 		return;
 	}
 
@@ -2732,7 +2732,7 @@ void umask_proc(void)
 	}
 
 	if (!check_umask_arg(g_params[1])) {
-		printf("%s octal number out of range!..\n", g_params[1]);
+		printf("%s octal number out of range!...\n", g_params[1]);
 		return;
 	}
 
@@ -3120,7 +3120,7 @@ int main(int argc, char *argv[])
 	struct stat finfo;
 
 	 if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -3358,7 +3358,7 @@ char *get_ls(struct stat *finfo, const char *name)
 int main(int argc, char *argv[])
 {
 	if (argc == 1) {
-		fprintf(stderr, "file name(s) must be specified!..\n");
+		fprintf(stderr, "file name(s) must be specified!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -3465,7 +3465,7 @@ int main(int argc, char *argv[])
 	int mode;
 
 	if (argc < 3) {
-		fprintf(stderr, "too few parameters!..\n");
+		fprintf(stderr, "too few parameters!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -3521,7 +3521,7 @@ int main(int argc, char *argv[])
 	mode_t mode;
 
 	if (argc < 3) {
-		fprintf(stderr, "too few parameters!..\n");
+		fprintf(stderr, "too few parameters!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -3789,7 +3789,7 @@ void exit_sys(const char *msg);
 int main(int argc, char *argv[])
 {
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -3915,14 +3915,14 @@ int main(int argc, char *argv[])
 	struct passwd *pass;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
 	errno = 0;
 	if ((pass = getpwnam(argv[1])) == NULL) {
 		if (errno == 0) {
-			fprintf(stderr, "user name cannot found!..\n");
+			fprintf(stderr, "user name cannot found!...\n");
 			exit(EXIT_FAILURE);
 		}
 		exit_sys("getpwnam");
@@ -3973,14 +3973,14 @@ int main(int argc, char *argv[])
 	struct passwd *pass;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
 	errno = 0;
 	if ((pass = getpwuid(atoi(argv[1]))) == NULL) {
 		if (errno == 0) {
-			fprintf(stderr, "user name cannot found!..\n");
+			fprintf(stderr, "user name cannot found!...\n");
 			exit(EXIT_FAILURE);
 		}
 		exit_sys("getpwnam");
@@ -4493,7 +4493,7 @@ int main(int argc, char *argv[])
 	struct dirent *de;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -4785,7 +4785,7 @@ int main(int argc, char *argv[])
 	struct dirent *de;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -4849,7 +4849,7 @@ int main(int argc, char *argv[])
 	long loc;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -4924,7 +4924,7 @@ void exit_sys(const char *msg);
 int main(int argc, char *argv[])
 {
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -5000,7 +5000,7 @@ void exit_sys(const char *msg);
 int main(int argc, char *argv[])
 {
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -5083,7 +5083,7 @@ void exit_sys(const char *msg);
 int main(int argc, char *argv[])
 {
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -5177,7 +5177,7 @@ void exit_sys(const char *msg);
 int main(int argc, char *argv[])
 {
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -5286,7 +5286,7 @@ int main(int argc, char *argv[])
 	int result;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -5297,7 +5297,7 @@ int main(int argc, char *argv[])
 	if (result != 0)
 		printf("function terminates prematurely with %d code\n", result);
 	else
-		printf("function terminates normally!..\n");
+		printf("function terminates normally!...\n");
 
 	return 0;
 }
@@ -5424,7 +5424,7 @@ int main(int argc, char *argv[])
 	struct dirent **dents;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -5495,7 +5495,7 @@ int main(int argc, char *argv[])
 	struct dirent **dents;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -5565,7 +5565,7 @@ void exit_sys(const char *msg)
     önce özyineleme yapılıp sonra dizin girişinin ele alınması demektir. Defaul durum "pre-order" dolaşım biçimindedir. 
 
     FTW_MOUNT: Bu bayrak belirtilirse özyineleme yapılırken bir "mount point" ile karşılaşılırsa o dosya sistemine girilmez. Default durumda 
-    özyineleme sırasında bir "mount point" ile kaşılaşılırsa özyineleme o dosya sisteminin içime girilerek devam ettirilmektedir. 
+    özyineleme sırasında bir "mount point" ile kaşılaşılırsa özyineleme o dosya sisteminin içine girilerek devam ettirilmektedir. 
 
     FTW_PHYS: Default durumda nftw fonksiyonu bir sembolik link dosyası ile karşılaştığında linki izler ve link'in hedefine
     yönelik hareket eder. Daha önce bir böyle bir durumun sonsuz döngüye yol açabileceğinden bahsetmiştik. Bu nedenle biz özyinelemede stat fonksiyonu yerine
@@ -5584,9 +5584,9 @@ void exit_sys(const char *msg)
     int callback(const char *path, const struct stat *finfo, int flag, struct FTW *ftw);
 
     Fonksiyonun birinci parametresine bulunun dizin girişinin yol ifadesi yerleştirilir. Bu yol ifadesinin baş kısmı tamamen 
-    bizin nftw fonksiyonuna verdiğimiz dizin ifadesinden oluşmaktadır. (Yani biz nftw fonksiyonuna mutlak bir yol iafdesi verirsek buraya
+    bizim nftw fonksiyonuna verdiğimiz dizin ifadesinden oluşmaktadır. (Yani biz nftw fonksiyonuna mutlak bir yol iafdesi verirsek buraya
     mutlak bir yol ifadesi geçirilir, biz nftw fonksiyonuna göreli bir yol ifadesi verirsek burada göreli bir yol ifadesi geçirilir.) 
-    Fonksiyonun ikinci parametresi bulunan dizin girşine ilişkin sturct stat yapısının adresini belirtmektedir. Fonksiyonun üçüncü parametresi ise
+    Fonksiyonun ikinci parametresi bulunan dizin girişine ilişkin struct stat yapısının adresini belirtmektedir. Fonksiyonun üçüncü parametresi ise
     bulunan dizin girişinin türünü belirtmektedir. Bu tür şunlardan birine tam eşit olmak zorundadır:
 
     FTW_D: Bulunan giriş bir dizin girişidir.
@@ -5633,7 +5633,7 @@ int main(int argc, char *argv[])
 	int result;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -5705,7 +5705,7 @@ void exit_sys(const char *msg);
 int main(int argc, char *argv[])
 {
 	if (argc != 3) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -5786,7 +5786,7 @@ void exit_sys(const char *msg);
 int main(int argc, char *argv[])
 {
 	if (argc != 3) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -5861,7 +5861,7 @@ int main(int argc, char *argv[])
 	ssize_t result;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -5875,7 +5875,7 @@ int main(int argc, char *argv[])
 		puts(buf);
 	}
 	else
-		fprintf(stderr, "path maybe truncated!..\n");
+		fprintf(stderr, "path maybe truncated!...\n");
 
 	return 0;
 }
@@ -5927,14 +5927,14 @@ void exit_sys(const char *msg);
 int main(int argc, char *argv[])
 {
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
 	if (access(argv[1], F_OK) == 0)
 		printf("file exists...\n");
 	else {
-		printf("file doesn't exist!..\n");
+		printf("file doesn't exist!...\n");
 		exit(EXIT_SUCCESS);
 	}
 	if (access(argv[1], R_OK) == 0)
@@ -5948,9 +5948,9 @@ int main(int argc, char *argv[])
 		printf("can't write...\n");
 
 	if (access(argv[1], X_OK) == 0)
-		printf("execute access ok\n..");
+		printf("execute access ok\n...");
 	else
-		printf("can't execute..\n");
+		printf("can't execute...\n");
 
 	return 0;
 }
@@ -6002,14 +6002,14 @@ int main(int argc, char *argv[])
 	int fd;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
 	if (faccessat(AT_FDCWD, argv[1], F_OK, AT_EACCESS) == 0)
 		printf("file exists...\n");
 	else {
-		printf("file doesn't exist!..\n");
+		printf("file doesn't exist!...\n");
 		exit(EXIT_SUCCESS);
 	}
 	if (faccessat(AT_FDCWD, argv[1], R_OK, AT_EACCESS) == 0)
@@ -6023,9 +6023,9 @@ int main(int argc, char *argv[])
 		printf("can't write...\n");
 
 	if (faccessat(AT_FDCWD, argv[1], X_OK, AT_EACCESS) == 0)
-		printf("execute access ok\n..");
+		printf("execute access ok\n...");
 	else
-		printf("can't execute..\n");
+		printf("can't execute...\n");
 
 	return 0;
 }
@@ -6722,7 +6722,7 @@ int main(void)
     Programcı hata mesajlarını her zaman "stderr" dosyasına yazdırmalıdır. Bu iyi bir tekniktir. Örneğin:
 
     if ((f = fopen("test.txt", "r")) == NULL) {
-        fprintf(stderr, "cannot open file!..\n");
+        fprintf(stderr, "cannot open file!...\n");
         exit(EXIT_FAILURE);
     }
 
@@ -6791,13 +6791,13 @@ int main(void)
 	int ch;
 
 	if ((f = fopen("/dev/zero", "rb")) == NULL) {
-		fprintf(stderr, "cannot open file!..\n");
+		fprintf(stderr, "cannot open file!...\n");
 		exit(EXIT_FAILURE);
 	}
 
 	for (int i = 0; i < 10; ++i) {
 		if ((ch = fgetc(f)) == EOF) {
-			fprintf(stderr, "cannot read from file!..\n");
+			fprintf(stderr, "cannot read from file!...\n");
 			exit(EXIT_FAILURE);
 		}
 		printf("%d ", ch);
@@ -6827,13 +6827,13 @@ int main(void)
 	int ch;
 
 	if ((f = fopen("/dev/random", "rb")) == NULL) {
-		fprintf(stderr, "cannot open file!..\n");
+		fprintf(stderr, "cannot open file!...\n");
 		exit(EXIT_FAILURE);
 	}
 
 	for (int i = 0; i < 256; ++i) {
 		if ((ch = fgetc(f)) == EOF) {
-			fprintf(stderr, "cannot read from file!..\n");
+			fprintf(stderr, "cannot read from file!...\n");
 			exit(EXIT_FAILURE);
 		}
 		printf("%02X%c", ch, i % 16 == 15 ? '\n' : ' ');
@@ -7077,7 +7077,7 @@ int main(int argc, char *argv[])
 	ssize_t result;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -7122,7 +7122,7 @@ int main(int argc, char *argv[])
 	ssize_t result;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -7247,7 +7247,7 @@ int main(void)
 	ssize_t result;
 
 	if ((f = fopen("test.txt", "r")) == NULL) {
-		fprintf(stderr, "cannot open file!..\n");
+		fprintf(stderr, "cannot open file!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -7313,7 +7313,7 @@ int main(void)
 		putchar(ch);
 
 	if (ferror(f)) {
-		fprintf(stderr, "cannot read file!..\n");
+		fprintf(stderr, "cannot read file!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -7394,7 +7394,7 @@ int main(void)
 	int ch;
 
 	if ((f = fopen("test.txt", "r")) == NULL) {
-		fprintf(stderr, "cannot open file!..\n");
+		fprintf(stderr, "cannot open file!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -7452,12 +7452,12 @@ int main(void)
 	int ch;
 
 	if ((f = fopen("test.txt", "r")) == NULL) {
-		fprintf(stderr, "cannot open file!..\n");
+		fprintf(stderr, "cannot open file!...\n");
 		exit(EXIT_FAILURE);
 	}
 
 	if (setvbuf(f, mybuf, _IOLBF, 512) != 0) {
-		fprintf(stderr, "cannot set buffer!..\n");
+		fprintf(stderr, "cannot set buffer!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -7886,7 +7886,7 @@ int disp_menu(void)
 
 		printf("\nChoose an item:");
 		if ((result = scanf("%d", &option)) != 1 || option < 0 || option > 4) {
-			printf("Invalid option!..\n");
+			printf("Invalid option!...\n");
 			clear_stdin();
 		}
 	} while (result != 1);
@@ -8909,7 +8909,7 @@ int main(int argc, char *argv[])
 	char *value;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -8980,7 +8980,7 @@ int main(int argc, char *argv[])
 	char *str;
 
 	if (argc == 1) {
-		fprintf(stderr, "too few arguments!..\n");
+		fprintf(stderr, "too few arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -9033,7 +9033,7 @@ int main(int argc, char *argv[])
 	char *str;
 
 	if (argc == 1) {
-		fprintf(stderr, "too few arguments!..\n");
+		fprintf(stderr, "too few arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -9066,7 +9066,7 @@ int main(void)
 		exit_sys("setenv");
 
 	if ((value = getenv("city")) == NULL) {
-		fprintf(stderr, "cannot find environment variable \"city\"!..\n");
+		fprintf(stderr, "cannot find environment variable \"city\"!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -9075,7 +9075,7 @@ int main(void)
 	strcpy(env, "village=urla");
 
 	if ((value = getenv("village")) == NULL)
-		fprintf(stderr, "cannot find environment variable \"village\"!..\n");
+		fprintf(stderr, "cannot find environment variable \"village\"!...\n");
 
 	puts(value);
 
@@ -9164,7 +9164,7 @@ int main(void)
 	char *val;
 
 	if ((val = mygetenv("xxx")) == NULL) {
-		fprintf(stderr, "environment variable not found!..\n");
+		fprintf(stderr, "environment variable not found!...\n");
 		exit(EXIT_FAILURE);
 	}
 	puts(val);
@@ -9205,7 +9205,7 @@ int main(int argc, char *argv[])
 	char *value;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -9313,7 +9313,7 @@ void exit_sys(const char *msg)
 		data_path = value;
 
 	if (f = fopen(data_path, "r")) == NULL) {
-		fprintf(stderr, "cannot open file!..\n");
+		fprintf(stderr, "cannot open file!...\n");
 		exit(EXIT_FAILURE);
 	}
 	...
@@ -10354,7 +10354,7 @@ int main(int argc, char *argv[])
 /*--------------------------------------------------------------------------------------------------------------------------
     fexecve isimli fonksiyon execve fonksiyonu gibidir. Ancak bunun tek farkı dosyayı yol ifadesini alarak değil dosya betimleyicisini 
     alarak çalıştırmasıdır. Yani biz çalıştırmak istediğimiz dosyayı zaten open fonksiyonu ile açmışsak bu durumda doğrudan 
-    fexecve fonksiyonunu kullanabiliriz. Fonksiyon prototipi şöyledir:
+    fexecve fonksiyonunu kullanabiliriz. Fonksiyonun prototipi şöyledir:
 
     #include <unistd.h>
 
@@ -10519,7 +10519,7 @@ int main(int argc, char *argv[])
 	ssize_t result;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -11003,7 +11003,7 @@ int main(void)
 	result = mysystem("ls");
 
 	if (result == -1 || WIFEXITED(result) && WEXITSTATUS(result) != 0) {
-		fprintf(stderr,"command failed!..\n");
+		fprintf(stderr,"command failed!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -11919,7 +11919,7 @@ int main(void)
 		exit_sys("getgroups");
 
 	if ((sgids = (gid_t *)malloc(ngroups * sizeof(gid_t))) == NULL) {
-		fprintf(stderr, "cannot allocate memory!..\n");
+		fprintf(stderr, "cannot allocate memory!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -12005,7 +12005,7 @@ int main(void)
 		exit_sys("getgroups");
 
 	if ((sgids = (gid_t *)malloc((ngroups + 1) * sizeof(gid_t))) == NULL) {
-		fprintf(stderr, "cannot allocate memory!..\n");
+		fprintf(stderr, "cannot allocate memory!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -12614,7 +12614,7 @@ int main(void)
 
 	pc = (char *)malloc(5000000000);
 	if (pc == NULL) {
-		fprintf(stderr, "cannot allocate memory!..\n");
+		fprintf(stderr, "cannot allocate memory!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -12978,7 +12978,7 @@ int main(int argc, char *argv[])
 	int n;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -12994,7 +12994,7 @@ int main(int argc, char *argv[])
 	cmdl[n] = NULL;
 
 	if (n == 0) {
-		fprintf(stderr, "invalid argument!..\n");
+		fprintf(stderr, "invalid argument!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -13004,7 +13004,7 @@ int main(int argc, char *argv[])
 	cmdr[n] = NULL;
 
 	if (n == 0) {
-		fprintf(stderr, "invalid argument!..\n");
+		fprintf(stderr, "invalid argument!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -13110,7 +13110,7 @@ void exit_sys_child(const char *msg)
     if (WIFEXITED(status))
         printf("Shell exit status: %d\n", WEXITSTATUS(status));
     else
-        printf("shell abnormal terminated!..\n");
+        printf("shell abnormal terminated!...\n");
 
     Aşağıdaki programda "ls -l" komutu çalıştırılıp onun çıktısı elde edilmiştir. Programda pclose fonksiyonun geri dönüş değerinin 
     alınıp kontrol edilmesine genellikle gerek yoktur. 
@@ -13497,7 +13497,7 @@ int main(int argc, char *argv[])
 	size_t len;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -13611,7 +13611,7 @@ int main(int argc, char *argv[])
 	char delim = '\n';
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -14301,7 +14301,7 @@ int cmd_proc(int client_id, const char *msg_param)
 	int ch;
 
 	if ((f = popen(msg_param, "r")) == NULL) {
-		printf("cannot execute shell command!..\n");
+		printf("cannot execute shell command!...\n");
 		return -1;
 	}
 
@@ -16545,7 +16545,7 @@ int main(void)
 		exit_sys("mq_getattr");
 
 	if ((buf = malloc(attr.mq_msgsize + 1)) == NULL) {
-		fprintf(stderr, "cannot allocate memory!..\n");
+		fprintf(stderr, "cannot allocate memory!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -17170,7 +17170,7 @@ void exit_sys(const char *msg)
 
     3) Artık paylaşılan bellek alanı nesnesinin belleğe "map" edilmesi gerekmektedir. (Klasik Sistem 5 paylaşılan bellek alanlarında 
     "map etmek" yerine "attach etmek" terimi kullanılmaktaydı. Bu arayüzde "attach" yerine "mapping" sözcüğü tercih edilmiştir.)
-    Bunun içim mmap isimli bir POSIX fonksiyonu kullanılmaktadır. mmap fonksiyonu pek çok UNIX türevi sistemde bir sistem fonksiyonu 
+    Bunun için mmap isimli bir POSIX fonksiyonu kullanılmaktadır. mmap fonksiyonu pek çok UNIX türevi sistemde bir sistem fonksiyonu 
     olarak gerçekleştirilmiştir. mmap, paylaşılan bellek alanlarının dışında başka amaçlarla da kullanılabilen ayrıntılı bir sistem 
     fonksiyonudur. Bu nedenle, biz burada önce fonksiyonun paylaşılan bellek alanlarında kullanımına kısaca değineceğiz. Sonra bu 
     fonksiyonu ayrıca daha ayrıntılı biçimde ele alacağız. mmap fonksiyonunun prototipi şöyledir:
@@ -17622,7 +17622,7 @@ int main(int argc, char *argv[])
 	struct stat finfo;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -17766,7 +17766,7 @@ int main(int argc, char *argv[])
 	struct stat finfo;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -17779,7 +17779,7 @@ int main(int argc, char *argv[])
 	if ((maddr = (char *)mmap(NULL, finfo.st_size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0)) == MAP_FAILED) 
 		exit_sys("mmap");
 
-	printf("Press ENTER to continue..\n");
+	printf("Press ENTER to continue...\n");
 
 	getchar();
 
@@ -17820,7 +17820,7 @@ int main(int argc, char *argv[])
 	int fd;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -17925,7 +17925,7 @@ int main(int argc, char *argv[])
 	struct stat finfo;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -17943,7 +17943,7 @@ int main(int argc, char *argv[])
 	if (msync(maddr, finfo.st_size, MS_SYNC) == -1)
 		exit_sys("msync");
 
-	printf("Press ENTER to continue..\n");
+	printf("Press ENTER to continue...\n");
 
 	if (munmap(maddr, finfo.st_size) == -1)
 		exit_sys("munmap");
@@ -18618,7 +18618,7 @@ int main(void)
 
 	for (int i = 0; i < NTHREADS; ++i) {
 		if ((buf = (char *)malloc(1024)) == NULL) {
-			fprintf(stderr, "cannot allocate memory!..\n");
+			fprintf(stderr, "cannot allocate memory!...\n");
 			exit(EXIT_FAILURE);
 		}
 		snprintf(buf, 1024, "Thread-%d", i);
@@ -18657,7 +18657,7 @@ void exit_sys_errno(const char *msg, int eno)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Thread fonksiyonuna getirilecek parametre birden fazla ise tipik olarak programcı bu parametreleri bir yapı biçiminde oluşturur. .
+    Thread fonksiyonuna getirilecek parametre birden fazla ise tipik olarak programcı bu parametreleri bir yapı biçiminde oluşturur. 
     İlgili yapı türünden bir dinammik bir nesne tahsis eder ve o nesnenin adresini thread fonksiyonuna geçirir. Aşağıda buna ilişkin 
     bir örnek verilmiştir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -18683,7 +18683,7 @@ int main(void)
 	struct PARAM_INFO *pi;
 
 	if ((pi = (struct PARAM_INFO *)malloc(sizeof(struct PARAM_INFO))) == NULL) {
-		fprintf(stderr, "cannot allocate memory!..\n");
+		fprintf(stderr, "cannot allocate memory!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -18736,7 +18736,7 @@ void exit_sys_errno(const char *msg, int eno)
     void pthread_exit(void *value_ptr);
 
     Nasıl exit fonksiyonu prosesi sonlandırırken bir exit kodunu alıyorsa pthread_exit fonksiyonu da thread'i sonlandırırken 
-    void * türünden bir exit kodu almaktadır. (main fonksiyonun geri dönüş değeri int türdendir. exit fonksiyonun parametresi de 
+    void * türünden bir exit kodu almaktadır. (main fonksiyonunun geri dönüş değeri int türdendir. exit fonksiyonunun parametresi de 
     int türdendir. İşte thread fonksiyonunun geri dönüş değeri void * türünden olduğu için pthread_exit fonksiyonunun parametresi de 
     void * türündendir.)
 
@@ -18907,7 +18907,7 @@ int main(void)
 	if ((result = pthread_create(&tid, NULL, thread_proc, NULL)) != 0)
 		exit_sys_errno("pthread_create", result);
 
-	/* Dikkat! main bittiğinde proses sonlanacak ve dolayısıyla prosesin tüm thread'leri de sonlandırılacaktır */
+	/* Dikkat! main bittiğinde proses sonlanacak ve dolayısıyla prosesin tüm thread'leri de sonlandırılacaktır. */
 
     return 0;
 }
@@ -22792,7 +22792,7 @@ void exit_sys_errno(const char *msg, int eno)
     <kritik kodun başı>
     ...
     ...
-    ...			<KRİTİK KODDA MAKİNE ATAMASI YAPILIYOR>
+    ...		<KRİTİK KODDA MAKİNE ATAMASI YAPILIYOR>
     ...
     ...
     <kritik kodun sonu>
@@ -23049,7 +23049,7 @@ int main(void)
 
 	for (int i = 0; i < NTHREADS; ++i) {
 		if ((threads_info[i] = (THREAD_INFO *)malloc(sizeof(THREAD_INFO))) == NULL) {
-			fprintf(stderr, "cannot allocate memory!..\n");
+			fprintf(stderr, "cannot allocate memory!...\n");
 			exit(EXIT_FAILURE);
 		}
 		snprintf(threads_info[i]->name, 32, "Thread-%d", i + 1);
@@ -27239,7 +27239,7 @@ int main(int argc, char *argv[])
 	int prio;
 
 	if (argc != 3) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -27360,7 +27360,7 @@ int main(int argc, char *argv[])
 	int result;
 
 	if (argc != 3) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -29120,7 +29120,7 @@ int main(void)
         int result;
 
         if ((tsd = (THREAD_SPECIFIC_DATA *)malloc(sizeof(THREAD_SPECIFIC_DATA))) == NULL) {
-            fprintf(stderr, "cannot allocate memory!..\n");
+            fprintf(stderr, "cannot allocate memory!...\n");
             exit(EXIT_FAILURE);
         }
 
@@ -29143,7 +29143,7 @@ int main(void)
         THREAD_SPECIFIC_DATA *tsd;
 
         if ((tsd = (THREAD_SPECIFIC_DATA *)pthread_getspecific(g_key)) == NULL) {
-            fprintf(stderr, "cannot get thread specific data!..\n");
+            fprintf(stderr, "cannot get thread specific data!...\n");
             exit(EXIT_FAILURE);
         }
 
@@ -29222,7 +29222,7 @@ void *thread_proc1(void *param)
 	int result;
 
 	if ((tsd = (THREAD_SPECIFIC_DATA *)malloc(sizeof(THREAD_SPECIFIC_DATA))) == NULL) {
-		fprintf(stderr, "cannot allocate memory!..\n");
+		fprintf(stderr, "cannot allocate memory!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -29241,7 +29241,7 @@ void *thread_proc2(void *param)
 	THREAD_SPECIFIC_DATA *tsd;
 
 	if ((tsd = (THREAD_SPECIFIC_DATA *)malloc(sizeof(THREAD_SPECIFIC_DATA))) == NULL) {
-		fprintf(stderr, "cannot allocate memory!..\n");
+		fprintf(stderr, "cannot allocate memory!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -29260,7 +29260,7 @@ void foo(void)
 	THREAD_SPECIFIC_DATA *tsd;
 
 	if ((tsd = (THREAD_SPECIFIC_DATA *)pthread_getspecific(g_key)) == NULL) {
-		fprintf(stderr, "cannot get thread specific data!..\n");
+		fprintf(stderr, "cannot get thread specific data!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -29582,7 +29582,7 @@ static TSD_RAND *rand_init(void)
 
 	if ((tsdrand = pthread_getspecific(g_rand_key)) == NULL) {
 		if ((tsdrand = (TSD_RAND *)malloc(sizeof(TSD_RAND))) == NULL) {
-			fprintf(stderr, "Fatal error: cannot allocate memory!..\n");
+			fprintf(stderr, "Fatal error: cannot allocate memory!...\n");
 			exit(EXIT_FAILURE);
 		}
 		if ((result = pthread_setspecific(g_rand_key, tsdrand)) != 0)
@@ -29801,7 +29801,7 @@ int main(void)
 	int result;
 
 	if ((g_f = fopen("test.txt", "w")) == NULL) {
-		fprintf(stderr, "cannot open file!..\n");
+		fprintf(stderr, "cannot open file!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -30009,7 +30009,7 @@ int main(void)
 	thrd_t tid;
 
 	if (thrd_create(&tid, thread_proc, "other thread") != thrd_success) {
-		fprintf(stderr, "cannot create thread!..\n");
+		fprintf(stderr, "cannot create thread!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -30024,7 +30024,7 @@ int main(void)
 	}
 
 	if (thrd_join(tid, NULL) != thrd_success) {
-		fprintf(stderr, "cannot join thread!..\n");
+		fprintf(stderr, "cannot join thread!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -30078,27 +30078,27 @@ int main(void)
 	thrd_t tid1, tid2;
 
 	if (mtx_init(&g_mutex, mtx_plain) != thrd_success) {
-		fprintf(stderr, "cannot initialize mutex!..\n");
+		fprintf(stderr, "cannot initialize mutex!...\n");
 		exit(EXIT_FAILURE);
 	}
 
 	if (thrd_create(&tid1, thread_proc1, NULL) != thrd_success) {
-		fprintf(stderr, "cannot create thread!..\n");
+		fprintf(stderr, "cannot create thread!...\n");
 		exit(EXIT_FAILURE);
 	}
 
 	if (thrd_create(&tid2, thread_proc1, NULL) != thrd_success) {
-		fprintf(stderr, "cannot create thread!..\n");
+		fprintf(stderr, "cannot create thread!...\n");
 		exit(EXIT_FAILURE);
 	}
 
 	if (thrd_join(tid1, NULL) != thrd_success) {
-		fprintf(stderr, "cannot join thread!..\n");
+		fprintf(stderr, "cannot join thread!...\n");
 		exit(EXIT_FAILURE);
 	}
 
 	if (thrd_join(tid2, NULL) != thrd_success) {
-		fprintf(stderr, "cannot join thread!..\n");
+		fprintf(stderr, "cannot join thread!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -30527,7 +30527,7 @@ void exit_sys(const char *msg)
     {
         if (signal(SIGXXX, signal_handler) == SIG_ERR)
 		    exit_sys("signal");
-        ....
+        ...
     }
 
     Böylece sinyal default'a çekildiğinde yeniden sinyal set ediliyordu. Ancak üst üste aynı sinyalin oluştuğu durumlarda 
@@ -30539,7 +30539,7 @@ void exit_sys(const char *msg)
 
         if (signal(SIGXXX, signal_handler) == SIG_ERR)
             exit_sys("signal");
-        ....
+        ...
     }
 
     AT&T ve türevlerinde yukarıda duruma ilişkin bir önlem alınamıyordu. Ancak daha sonra BSD UNIX sistemleri bu problemi
@@ -30915,7 +30915,7 @@ int main(int argc, char *argv[])
 	pid_t pid;
 
 	if (argc != 3) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 	pid = (pid_t)atol(argv[2]);
@@ -31966,7 +31966,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-                                                77. Ders 02/09/2023 - Cumartesi
+												77. Ders 02/09/2023 - Cumartesi
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -32068,7 +32068,7 @@ int main(void)
 
 	*str = 'x';
 
-	printf("unreachable code!..\n");
+	printf("unreachable code!...\n");
 
 	return 0;
 }
@@ -32355,7 +32355,7 @@ int main(int argc, char *argv[])
 	union sigval val;
 
 	if (argc != 4) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -32404,7 +32404,7 @@ int main(int argc, char *argv[])
 	int signo;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -32438,7 +32438,7 @@ void sigrt_handler(int signo, siginfo_t *info, void *context)
 /* proc2.c */
 
 /*--------------------------------------------------------------------------------------------------------------------------
-                                            78. Ders 03/09/2023 - Pazar
+												78. Ders 03/09/2023 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -32580,7 +32580,7 @@ int main(int argc, char *argv[])
 	union sigval sv;
 
 	if (argc != 4) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -32677,7 +32677,7 @@ int main(int argc, char *argv[])
 	struct sigaction sa;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -32777,7 +32777,7 @@ int main(int argc, char *argv[])
 	sigset_t ss;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -32835,7 +32835,7 @@ int main(int argc, char *argv[])
 	union sigval sv;
 
 	if (argc != 4) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -32856,7 +32856,7 @@ void exit_sys(const char *msg)
 /* sq.c */
 
 /*--------------------------------------------------------------------------------------------------------------------------
-                                                        79. Ders 09/09/2023 - Cumartesi
+												79. Ders 09/09/2023 - Cumartesi
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -33078,7 +33078,7 @@ void tar(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-                                                        80. Ders 10/09/2023 - Pazar
+												80. Ders 10/09/2023 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -33451,7 +33451,7 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-                                        81. Ders 16/09/2023 - Cumartesi
+												81. Ders 16/09/2023 - Cumartesi
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -33833,7 +33833,7 @@ int main(void)
 
 void sigttin_handler(int sno)
 {
-	fprintf(g_f, "SIGTTIN occurred!..\n");
+	fprintf(g_f, "SIGTTIN occurred!...\n");
 }
 
 void exit_sys(const char *msg)
@@ -33868,7 +33868,7 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-                                                82. Ders 17/09/2023 - Pazar
+												82. Ders 17/09/2023 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -34224,7 +34224,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-                                            83. Ders 23/09/2023 - Cumartesi
+												83. Ders 23/09/2023 - Cumartesi
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -34458,7 +34458,7 @@ int main(int argc, char *argv[])
 	pid_t pid;
 
 	if (argc < 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -34608,7 +34608,7 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-                                            84. Ders 24/09/2023 - Pazar
+												84. Ders 24/09/2023 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -34984,7 +34984,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-                                            85. Ders 30/09/2023 - Cumartesi
+												85. Ders 30/09/2023 - Cumartesi
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -35229,7 +35229,7 @@ int main(void)
 	char *path;
 
 	if ((path = (char *)malloc(path_max())) == NULL) {
-		fprintf(stderr, "cannot allocate memory!..\n");
+		fprintf(stderr, "cannot allocate memory!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -35418,7 +35418,7 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-                                            86. Ders 01/10/2023 - Pazar
+												86. Ders 01/10/2023 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -35736,7 +35736,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-                                        87. Ders 07/10/2023 - Cumartesi
+												87. Ders 07/10/2023 - Cumartesi
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -35861,7 +35861,7 @@ void exit_sys(const char *msg)
 
     if (fcntl(fd, F_SETLK, &fl) == -1) {
         if (errno == EACCES || errno == EAGAIN) {
-            fprintf(stderr, "lock failed!..\n");
+            fprintf(stderr, "lock failed!...\n");
             ...
         }
         else
@@ -35872,7 +35872,7 @@ void exit_sys(const char *msg)
 
     if (fcntl(fd, F_SETLKW, &fl) == -1) {
         if (errno == EDEADLK) {
-            fprintf(stderr, "deadlock danger!..\n");
+            fprintf(stderr, "deadlock danger!...\n");
             ...
         }
         else
@@ -35954,7 +35954,7 @@ int main(int argc, char *argv[])
 	int fcntl_cmd;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -35985,7 +35985,7 @@ int main(int argc, char *argv[])
 
 		if (fcntl(fd, fcntl_cmd, &fl) == -1)
 			if (errno == EACCES || errno == EAGAIN)
-				printf("Locked failed!..\n");
+				printf("Locked failed!...\n");
 			else
 				perror("fcntl");
 		if (fcntl_cmd == F_GETLK)
@@ -36162,7 +36162,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-                                        88. Ders 08/10/2023 - Pazar
+												88. Ders 08/10/2023 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -36223,7 +36223,7 @@ int main(int argc, char *argv[])
 	char *str;
 	struct flock fl;
 	int fcntl_cmd;
-F_SETLKW"wrong number of arguments!..\n");
+F_SETLKW"wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -36254,7 +36254,7 @@ F_SETLKW"wrong number of arguments!..\n");
 
 		if (fcntl(fd, fcntl_cmd, &fl) == -1)
 			if (errno == EACCES || errno == EAGAIN)
-				printf("Locked failed!..\n");
+				printf("Locked failed!...\n");
 			else
 				perror("fcntl");
 		if (fcntl_cmd == F_GETLK)
@@ -36356,7 +36356,7 @@ int main(int argc, char *argv[])
 	ssize_t result;
 
 	if (argc != 5) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -36369,7 +36369,7 @@ int main(int argc, char *argv[])
 	len = (off_t)strtol(argv[4], NULL, 10);
 
 	if ((buf = (char *)calloc(len, 1)) == NULL) {
-		fprintf(stderr, "cannot allocate memory!..\n");
+		fprintf(stderr, "cannot allocate memory!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -36720,7 +36720,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-                                            89. Ders 14/10/2023 - Cumartesi
+												89. Ders 14/10/2023 - Cumartesi
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -36829,7 +36829,7 @@ int main(int argc, char *argv[])
 	int count;
 
 	if (argc == 1) {
-		fprintf(stderr, "too few arguments!..\n");
+		fprintf(stderr, "too few arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -36941,7 +36941,7 @@ void exit_sys(const char *msg)
     tv.tv_sec = 3;
     tv.tv_usec = 500000;
 
-    printf("waiting at sleep for 3.5 second..\n");
+    printf("waiting at sleep for 3.5 second...\n");
 
     if (select(0, NULL, NULL, NULL, &tv) == -1)
         exit_sys("select");
@@ -36961,7 +36961,7 @@ int main(void)
 	tv.tv_sec = 3;
 	tv.tv_usec = 500000;
 
-	printf("waiting at sleep for 3.5 second..\n");
+	printf("waiting at sleep for 3.5 second...\n");
 
 	if (select(0, NULL, NULL, NULL, &tv) == -1)
 		exit_sys("select");
@@ -37015,7 +37015,7 @@ void exit_sys(const char *msg)
     herhangi bir değer olarak girilirse o betimleyici için izleme yapılmamaktadır. Dolayısıyla pollfd dizisinden bir elemanı 
     mantıksal olarak çıkartmak için bu betimleyici negatif bir değere çekilebilir. Programcı poll fonksiyonunu çağırmadan önce bu 
     iki elemana değer yerleştirmelidir. Ancak yapının revents elemanı fonksiyon geri döndüğünde oluşan olay hakkında bilgi vermektedir. 
-    Bu eleman programcı tarafından events elemanında set edilmez, fonksiyon tarafından revents elemanında set edilir. (Bu sayede dizinin 
+    Bu eleman programcı tarafından events elemanında set edilmez, fonksiyon tarafından revents elemanında set edilir. (Bu sayede yapının 
     elemanlarının bozulmadığına dikkat ediniz.) 
 
     İzlenecek olayların bazıları bazı aygıtlara ilişkindir. En önemli izleme olayları şunlardır:
@@ -37036,11 +37036,11 @@ void exit_sys(const char *msg)
     değil, ayrık if deyimleriyle yapması gerekir. Okuyan taraf boruları ve soketleri kapatırsa bu durum poll fonksiyonunda POLLERR 
     olayı biçiminde ele alınmaktadır. Programcının POLLHUP ve POLLERR bayraklarını yapının events elemanında set etmesi gerekmemektedir. 
     Bu bayraklar gerektiğinde fonksiyon tarafından yapının revents elemanında set edilmektedir. Borular kapatıldığında seyrek de 
-    olsa hem POLLIN hem de POLLHUP olayları birlikte de gerçekleşebilmektedir. Karşı taraf bir boruyu kapatıldığında POLLHUP 
+    olsa hem POLLIN hem de POLLHUP olayları birlikte gerçekleşebilmektedir. Karşı taraf bir boruyu kapatıldığında POLLHUP 
     oluştuktan sonra yeniden karşı tarafı kapalı olan boru poll işlemi uygulanırsa yine POLLHUP olayı gerçekleşmektedir. Yani 
-    karşı tarafın borusu kapalıysa artık her defasında POLLHUP olayu gerçekleşir. 
+    karşı tarafın borusu kapalıysa artık her defasında POLLHUP olayı gerçekleşir. 
 
-    poll fonksiyonuna geçersiz bir betimleyici ya da açık olmayan bir betimleyici girilmişse poll fonksiyonu o betimleyici içim 
+    poll fonksiyonuna geçersiz bir betimleyici ya da açık olmayan bir betimleyici girilmişse poll fonksiyonu o betimleyici için 
     POLLNVAL olayı oluşturmaktadır. Bu nedenle kapatılmış betimleyicilerin ya negatif bir değere çekilmesi ya da diziden çıkartılması 
     gerekir. 
 
@@ -37057,7 +37057,7 @@ void exit_sys(const char *msg)
             ...
         }
         if (pfds[i].revents & POLLOUT) {
-            read(pfds[i].fd, ....);
+            read(pfds[i].fd, ...);
             ...
         }
         ...
@@ -37073,7 +37073,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-                                                    90. Ders 15/10/2023 - Pazar
+												90. Ders 15/10/2023 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -37095,28 +37095,28 @@ void exit_sys(const char *msg);
 
 int main(void)
 {
-    char buf[BUFFER_SIZE + 1];
-    ssize_t result;
-    struct pollfd pfds[1];
+	char buf[BUFFER_SIZE + 1];
+	ssize_t result;
+	struct pollfd pfds[1];
 
-    pfds[0].fd = 0;
-    pfds[0].events = POLLIN;
+	pfds[0].fd = 0;
+	pfds[0].events = POLLIN;
 
-    for (;;) {
-        if (poll(pfds, 1, -1) == -1)
-            exit_sys("poll");
+	for (;;) {
+		if (poll(pfds, 1, -1) == -1)
+			exit_sys("poll");
 
-        if (pfds[0].revents & POLLIN) {
-            if ((result = read(pfds[0].fd, buf, BUFFER_SIZE)) == -1)
-                exit_sys("read");
-            if (result == 0)
-                break;
-            buf[result] = '\0';
-            printf("%s", buf);
-        }
-    }
+		if (pfds[0].revents & POLLIN) {
+			if ((result = read(pfds[0].fd, buf, BUFFER_SIZE)) == -1)
+				exit_sys("read");
+			if (result == 0)
+				break;
+			buf[result] = '\0';
+			printf("%s", buf);
+		}
+	}
 
-    return 0;
+	return 0;
 }
 
 void exit_sys(const char *msg)
@@ -37129,18 +37129,18 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Şimdi de gerçek bir server uygulamasına benzer biçimde bir grup isimli borudan poll fonksiyonu ile okuma yapmaya çalışalım.
     Aşağıdaki örnek daha önce select fonksiyonuyla yaptığımız örneğin poll versiyonudur. Yani bu örnekteki program yine bir 
-    grup isimli boru komut satırı argümanı yapılarak çalıştırılmalıdır. Örneğin:
+    grup isimli boru, komut satırı argümanı yapılarak çalıştırılmalıdır. Örneğin:
 
     ./sample x y z
 
-    Örneğimizde önce borlar açılıp pfds dizisi oluşturulmuştur:
+    Örneğimizde önce borular açılıp pfds dizisi oluşturulmuştur:
 
     struct pollfd pfds[MAX_SIZE];
     ...
 
     for (int i = 1; i < argc; ++i) {
         if (count >= MAX_SIZE) {
-            fprintf(stderr, "too many arguments, last arguments ignored!..\n");
+            fprintf(stderr, "too many arguments, last arguments ignored!...\n");
             break;
         }
         if ((pfds[i - 1].fd = open(argv[i], O_RDONLY)) == -1)
@@ -37161,28 +37161,28 @@ void exit_sys(const char *msg)
         ...
     }
 
-    Buradaki count pfds dizisindeki eleman sayısını belirtmektedir. poll fonksiyonu blokeyi çözdüğünde bizin dizinin tüm 
-    elemanlarını kontrol edip POLLIN ve POLLHUP olaylarının gerçekleşip gerçekleşmediğine bakmamız gerekmedir:
+    Buradaki count, pfds dizisindeki eleman sayısını belirtmektedir. poll fonksiyonu blokeyi çözdüğünde bizim dizinin tüm 
+    elemanlarını kontrol edip POLLIN ve POLLHUP olaylarının gerçekleşip gerçekleşmediğine bakmamız gerekmektedir:
 
     for (int i = 0; i < count; ++i) {
         if (pfds[i].revents & POLLIN) {
             ...
         }
         else if (pfds[i].revents & POLLHUP) {
-            ....
+            ...
         }
         ...
     }
 
-    Burada POLLIN ve POLLHUP olaylarının else-if biçiminde ele alındığına dikkat ediniz. Normal örneğin okuma ve yazma izlemesi 
+    Burada POLLIN ve POLLHUP olaylarının else-if biçiminde ele alındığına dikkat ediniz. Normalde örneğin okuma ve yazma izlemesi 
     yapılırken bu olayların ayrık if deyimleriyle yapılması gerekir. Ancak POLLIN ve POLLHUP olaylarının else-if biçiminde ele 
     alınması daha uygundur. Bunun nedenini şöyle açıklayabiliriz: Karşı taraf boruya (ya da sokete) bilgi yazıp hemen boruyu 
     kapattığında POLLIN ve POLLHUP olayları birlikte oluşabilmektedir. Bu durumda POLLIN ve POLLHUP ayrık if deyimleriyle ele 
-    alınırsa ve POLLIN olayında borudakilerin hepsi okunmazsa arkdana POLLUP işlemi ele alınırken boru kapatılacağı için eksik 
+    alınırsa ve POLLIN olayında borudakilerin hepsi okunmazsa arkadan POLLUP işlemi ele alınırken boru kapatılacağı için eksik 
     yapılmış olacaktır. Halbuki else-if durumunda biz borudakilerin tamamını okumasak bile sonraki poll işleminde yeniden POLLIN 
     ve POLLHUP oluşacak ve boruyu bitirdikten sonra artık yalnızca POLLHUP olayı oluşacaktır. 
 
-    Örneğimizde bir boru kapatıldığında onun dizi elemanındaki betimelyicisi negatif bir değere çekilmiş ve böylece mantıksal 
+    Örneğimizde bir boru kapatıldığında onun dizi elemanındaki betimleyicisi negatif bir değere çekilmiş ve böylece mantıksal 
     olarak diziden atılmıştır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -37192,68 +37192,68 @@ void exit_sys(const char *msg)
 #include <unistd.h>
 #include <poll.h>
 
-#define BUFFER_SIZE         4096
-#define MAX_SIZE            128
+#define BUFFER_SIZE		4096
+#define MAX_SIZE		128
 
 void exit_sys(const char *msg);
 
 int main(int argc, char *argv[])
 {
-    char buf[BUFFER_SIZE + 1];
-    struct pollfd pfds[MAX_SIZE];
-    ssize_t result;
-    int tcount, count;
+	char buf[BUFFER_SIZE + 1];
+	struct pollfd pfds[MAX_SIZE];
+	ssize_t result;
+	int tcount, count;
 
-    if (argc == 1) {
-        fprintf(stderr, "too few arguments!..\n");
-        exit(EXIT_FAILURE);
-    }
+	if (argc == 1) {
+		fprintf(stderr, "too few arguments!...\n");
+		exit(EXIT_FAILURE);
+	}
 
-    printf("opens named pipes... it may block...\n");
+	printf("opens named pipes... it may block...\n");
 
-    count = 0;
-    for (int i = 1; i < argc; ++i) {
-         if (count >= MAX_SIZE) {
-            fprintf(stderr, "too many arguments, last arguments ignored!..\n");
-            break;
-        }
-        if ((pfds[i - 1].fd = open(argv[i], O_RDONLY)) == -1)
-            exit_sys("open");
-        pfds[i - 1].events = POLLIN;
-        printf("%s opened...\n", argv[i]);
-        ++count;
-    }
-    tcount = count;
+	count = 0;
+	for (int i = 1; i < argc; ++i) {
+		 if (count >= MAX_SIZE) {
+			fprintf(stderr, "too many arguments, last arguments ignored!...\n");
+			break;
+		}
+		if ((pfds[i - 1].fd = open(argv[i], O_RDONLY)) == -1)
+			exit_sys("open");
+		pfds[i - 1].events = POLLIN;
+		printf("%s opened...\n", argv[i]);
+		++count;
+	}
+	tcount = count;
 
-    for (;;) {
-        printf("waiting at poll...\n");
+	for (;;) {
+		printf("waiting at poll...\n");
 
-        if (poll(pfds, count, -1) == -1)
-            exit_sys("poll");
+		if (poll(pfds, count, -1) == -1)
+			exit_sys("poll");
 
-        for (int i = 0; i < count; ++i) {
-            if (pfds[i].revents & POLLIN) {
-                printf("POLLIN occured...\n");
-                if ((result = read(pfds[i].fd, buf, BUFFER_SIZE)) == -1)
-                    exit_sys("read");
-                buf[result] = '\0';
-                printf("%s\n", buf);
+		for (int i = 0; i < count; ++i) {
+			if (pfds[i].revents & POLLIN) {
+				printf("POLLIN occured...\n");
+				if ((result = read(pfds[i].fd, buf, BUFFER_SIZE)) == -1)
+					exit_sys("read");
+				buf[result] = '\0';
+				printf("%s\n", buf);
 
-            }
-            else if (pfds[i].revents & POLLHUP) {
-                printf("POLLHUP occured...\n");
-                close(pfds[i].fd);
-                pfds[i].fd = -1;
-                --tcount;
-            }
-        }
-        if (tcount == 0)
-            break;
-    }
+			}
+			else if (pfds[i].revents & POLLHUP) {
+				printf("POLLHUP occured...\n");
+				close(pfds[i].fd);
+				pfds[i].fd = -1;
+				--tcount;
+			}
+		}
+		if (tcount == 0)
+			break;
+	}
 
-    printf("ther is no descriptor open, finishes...\n");
+	printf("there is no descriptor open, finishes...\n");
 
-    return 0;
+	return 0;
 }
 
 void exit_sys(const char *msg)
@@ -37265,8 +37265,8 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Yukarıda da belirttiğimiz gibi aslında kapanan betimleyicileri mantıksal olarak diziden atmak için onun betimleyicisi 
-    negatif bir değere çekilebilmektedir. Ancak istersek gerçekten kapanan betimelyicileri didizen atabiliriz. Tabii bu atma
-    işlemi aslında dizinin sonundakinin atılacak elemanla yer değiştirilmesi yoluyla yapılabilmektedir. Aşağıda buna bir örnek
+    negatif bir değere çekilebilmektedir. Ancak istersek gerçekten kapanan betimleyicileri diziden atabiliriz. Tabii bu atma
+    işlemi aslında dizinin sonundaki elemanın, atılacak elemanla yer değiştirilmesi yoluyla yapılabilmektedir. Aşağıda buna bir örnek
     verilmiştir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -37276,69 +37276,69 @@ void exit_sys(const char *msg)
 #include <unistd.h>
 #include <poll.h>
 
-#define BUFFER_SIZE         4096
-#define MAX_SIZE            128
+#define BUFFER_SIZE		4096
+#define MAX_SIZE		128
 
 void exit_sys(const char *msg);
 
 int main(int argc, char *argv[])
 {
-    char buf[BUFFER_SIZE + 1];
-    struct pollfd pfds[MAX_SIZE];
-    ssize_t result;
-    int tcount, count;
+	char buf[BUFFER_SIZE + 1];
+	struct pollfd pfds[MAX_SIZE];
+	ssize_t result;
+	int tcount, count;
 
-    if (argc == 1) {
-        fprintf(stderr, "too few arguments!..\n");
-        exit(EXIT_FAILURE);
-    }
+	if (argc == 1) {
+		fprintf(stderr, "too few arguments!...\n");
+		exit(EXIT_FAILURE);
+	}
 
-    printf("opens named pipes... it may block...\n");
+	printf("opens named pipes... it may block...\n");
 
-    count = 0;
-    for (int i = 1; i < argc; ++i) {
-         if (count >= MAX_SIZE) {
-            fprintf(stderr, "too many arguments, last arguments ignored!..\n");
-            break;
-        }
-        if ((pfds[i - 1].fd = open(argv[i], O_RDONLY)) == -1)
-            exit_sys("open");
-        pfds[i - 1].events = POLLIN;
-        printf("%s opened...\n", argv[i]);
-        ++count;
-    }
-    tcount = count;
+	count = 0;
+	for (int i = 1; i < argc; ++i) {
+		 if (count >= MAX_SIZE) {
+			fprintf(stderr, "too many arguments, last arguments ignored!...\n");
+			break;
+		}
+		if ((pfds[i - 1].fd = open(argv[i], O_RDONLY)) == -1)
+			exit_sys("open");
+		pfds[i - 1].events = POLLIN;
+		printf("%s opened...\n", argv[i]);
+		++count;
+	}
+	tcount = count;
 
-    for (;;) {
-        printf("waiting at poll...\n");
+	for (;;) {
+		printf("waiting at poll...\n");
 
-        if (poll(pfds, count, -1) == -1)
-            exit_sys("poll");
+		if (poll(pfds, count, -1) == -1)
+			exit_sys("poll");
 
-        for (int i = 0; i < count; ++i) {
-            if (pfds[i].revents & POLLIN) {
-                printf("POLLIN occured...\n");
-                if ((result = read(pfds[i].fd, buf, BUFFER_SIZE)) == -1)
-                    exit_sys("read");
-                buf[result] = '\0';
-                printf("%s\n", buf);
+		for (int i = 0; i < count; ++i) {
+			if (pfds[i].revents & POLLIN) {
+				printf("POLLIN occured...\n");
+				if ((result = read(pfds[i].fd, buf, BUFFER_SIZE)) == -1)
+					exit_sys("read");
+				buf[result] = '\0';
+				printf("%s\n", buf);
 
-            }
-            else if (pfds[i].revents & POLLHUP) {
-                printf("POLLHUP occured...\n");
-                close(pfds[i].fd);
-                pfds[i] = pfds[tcount - 1];
-                --tcount;
-            }
-        }
-        count = tcount;
-        if (count == 0)
-            break;
-    }
+			}
+			else if (pfds[i].revents & POLLHUP) {
+				printf("POLLHUP occured...\n");
+				close(pfds[i].fd);
+				pfds[i] = pfds[tcount - 1];
+				--tcount;
+			}
+		}
+		count = tcount;
+		if (count == 0)
+			break;
+	}
 
-    printf("ther is no descriptor open, finishes...\n");
+	printf("there is no descriptor open, finishes...\n");
 
-    return 0;
+	return 0;
 }
 
 void exit_sys(const char *msg)
@@ -37356,7 +37356,7 @@ void exit_sys(const char *msg)
     - select fonksiyonu FD_SETSIZE (1024) kadar betimleyiciyi desteklemektedir. Oysa poll fonksiyonundaki dizi istenildiği 
     kadar büyük olabilir. 
 
-    - select fonksiyonunda fonksiyona verdiğimiz kümeler fonksiyon tarafından güncellendiği için fonksiyonun her çağırlmasında
+    - select fonksiyonunda fonksiyona verdiğimiz kümeler fonksiyon tarafından güncellendiği için fonksiyonun her çağrılmasında
     eski kümeyi saklayarak yeniden kullanmamız gerekir. 
 
     - select fonksiyonundaki zaman aşımı duyarlılığı mikrosaniye, poll fonksiyonundaki zaman aşımı duyarlılığı milisaniye 
@@ -37371,14 +37371,14 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    select ve poll fonksiyonlarının en önemli sorunu betimeleyici sayısı arttığında performansın ciddi biçimde düşmesidir. Yani
+    select ve poll fonksiyonlarının en önemli sorunu betimleyici sayısı arttığında performansın ciddi biçimde düşmesidir. Yani
     bu fonksiyonlar iyi bir ölçeklenebilirliğe (scalability) sahip değildir. İşte bu nedenden dolayı multiplexed IO işlemleri için 
-    Linux sistemlerinde bu sistemlere özgü epoll fonksiyonları da bulundurulmuştur. epoll fonksiyonları select ve poll fonksiyonlarına 
+    Linux sistemlerinde bu sistemlere özgü epoll fonksiyonları da bulundurulmuştur. epoll fonksiyonları, select ve poll fonksiyonlarına 
     göre özellikle betimleyici sayısı arttığında çok daha iyi performans göstermektedir. Bu nedenle Linux sistemlerinde ölçeklenebilir 
     server uygulamaları için tercih edilecek yöntem epoll yöntemi olmalıdır. Ancak epoll fonksiyonlarının taşınabilir olmadığına, 
     yalnızca Linux sistemlerine özgü olduğuna dikkat ediniz. 
 
-    epoll aarayüzünün kullanımı temelde üç fonksiyon ile yapılmaktadır. epoll_create (ya da epoll_create1), epoll_ctl ve epoll_wait. 
+    epoll arayüzünün kullanımı temelde üç fonksiyon ile yapılmaktadır. epoll_create (ya da epoll_create1), epoll_ctl ve epoll_wait. 
     epoll arayüzünün kullanımı tipik olarak aşağıdaki adımlardan geçilerek yapılmaktadır:
 
     1) Programcı önce epoll_create isimli fonksiyonla bir betimleyici elde eder. Bu betimleyicinin IO olaylarının izleneceği 
@@ -37404,7 +37404,7 @@ void exit_sys(const char *msg)
     dönmektedir. 
 
     2) Artık programcı izleyeceği betimleyicileri epoll sistemine epoll_ctl fonksiyonuyla ekler. Örneğin programcı 3 boru betimleyicisini
-    izleyecekse bu 3 betimleiyici için de ayrı ayrı epoll_ctl çağrısı yapmalıdır. Fonksiyon prototipi şöyledir:
+    izleyecekse bu 3 betimleyici için de ayrı ayrı epoll_ctl çağrısı yapmalıdır. Fonksiyonun prototipi şöyledir:
 
     #include <sys/epoll.h>
 
@@ -37413,7 +37413,7 @@ void exit_sys(const char *msg)
     Fonksiyonun birinci parametresi epoll_create ya da epoll_create1 fonksiyonundan elde edilen betimleyici değeridir. İkinci parametre
     EPOLL_CTL_ADD, EPOLL_CTL_MOD, EPOLL_CTL_DEL değerlerinden birini alır. EPOLL_CTL_ADD sisteme betimleyici eklemek için, EPOLL_CTL_DEL 
     sistemden betimleyici çıkartmak için, EPOLL_CTL_MOD da mevcut eklenmiş betimleyicide izleme değişikliği yapmak için kullanılmaktadır. 
-    Üçüncü parametre izlenecek betimleyiciyi belirtir. Son parametre izlenecek olayı belirtmektedir. sturct epoll_event yapısı şöyle 
+    Üçüncü parametre izlenecek betimleyiciyi belirtir. Son parametre izlenecek olayı belirtmektedir. struct epoll_event yapısı şöyle 
     bildirilmiştir:
 
     <BURADA KALDIK>
@@ -37440,23 +37440,23 @@ void exit_sys(const char *msg)
     programcı eğer okuma ya da yazma yapmayıp yeniden bu fonksiyonları çağrırsa bekleme yapılmayacak demektir. Yani örneğin biz select ya poll ile
     stdin dosyasını izliyorsak ve klavyeden bir giriş yapıldıysa bu fonksiyonlar blokeyi çözer. Fakat biz read ile okuma yapmazsak ve yeniden select ve poll
     fonksiyonlarını çağırırsak artık bloke oluşmaz. Halbuki kenar tetiklemeli modda biz okuma yapmasak bile yeni okuma eylemi oluşana kadar yine
-     blokede kalırız.
+    blokede kalırız.
 
     3) Asıl bekleme ve izleme işlemi epoll_wait fonksiyonu tarafından yapılmaktadır. Bu fonksiyon poll select ve poll fonksiyonu gibi 
     bloke oluşturur ve arka planda betimleyicileri izler. 
 
-     int epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout);
+    int epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout);
 
-     Fonksiyonun birinci parametresi epoll_create ya da epoll_create1 fonksiyonundan elde edilmiş olan handle değeridir. İkinci 
-     parametre oluşan olayların depolanacağı yapı dizisinin adresidir. Biz bu yapının events elemanından oluşan olayın ne olduğunu 
-     anlarız. Yapının data elemanı epoll_ctl sırasında verdiğimiz değeri belirtir. Bizim en azından epoll_ctl fonksiyonund ilgili 
-     betimleyiciyi bu data elemanında girmiş olmamız gerekir. Fonksiyonun üçüncü paranetresi ikinci parametresiyle belirtilen 
-     dizinin uzunluğudur. (Normal olarak bu dizinin eklenmiş olan betimleyici sayısı kadar olması gerekir. Ancak buradaki değer 
-     toplam izlenecek betimleyici sayısından az olabilir. Bu parametre tek en fazla hamlede kaç betimleyici hakkında bilgi 
-     verileceğini belirtmektedir.) Son parametre yine milisaniye cinsinden zaman aşımını belirtir. -1 değeri zaman aşımının 
-     kullanılmayacağını, 0 değeri hemen bakıp çıkılacağını belirtmektedir. Fonksiyon başarı durumunda diziye doldurduğu eleman 
-     sayısı ile başarısızlık durumda -1 ile geri döner. Fonksiyon 0 değeri ile geri dönerse sonlanmanın zaman aşımından dolayı 
-     oluştuğu anlaşılır.
+    Fonksiyonun birinci parametresi epoll_create ya da epoll_create1 fonksiyonundan elde edilmiş olan handle değeridir. İkinci 
+    parametre oluşan olayların depolanacağı yapı dizisinin adresidir. Biz bu yapının events elemanından oluşan olayın ne olduğunu 
+    anlarız. Yapının data elemanı epoll_ctl sırasında verdiğimiz değeri belirtir. Bizim en azından epoll_ctl fonksiyonund ilgili 
+    betimleyiciyi bu data elemanında girmiş olmamız gerekir. Fonksiyonun üçüncü paranetresi ikinci parametresiyle belirtilen 
+    dizinin uzunluğudur. (Normal olarak bu dizinin eklenmiş olan betimleyici sayısı kadar olması gerekir. Ancak buradaki değer 
+    toplam izlenecek betimleyici sayısından az olabilir. Bu parametre tek en fazla hamlede kaç betimleyici hakkında bilgi 
+    verileceğini belirtmektedir.) Son parametre yine milisaniye cinsinden zaman aşımını belirtir. -1 değeri zaman aşımının 
+    kullanılmayacağını, 0 değeri hemen bakıp çıkılacağını belirtmektedir. Fonksiyon başarı durumunda diziye doldurduğu eleman 
+    sayısı ile başarısızlık durumda -1 ile geri döner. Fonksiyon 0 değeri ile geri dönerse sonlanmanın zaman aşımından dolayı 
+    oluştuğu anlaşılır.
 
     Sistemin kapatılması için epoll_create ya da epoll_create1 ile elde edilen betimleyici kapatılabilir. 
 
