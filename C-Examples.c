@@ -206,11 +206,11 @@
 	1010 1010
 
 	Aslında ikiye tümleyeni bulmanın kolay bir yolu da vardır: Sayıda sağdan sola ilk 1 görene kadar ilk 1 dahil olmak üzere aynısı yazılarak ilerlenir. 
-	Sonra 0'lar 1, 1'ler 0 yapılarak devam edilir. Örneğin:
+	Sonrasında solda kalan bitler için 0'lar 1, 1'ler 0 yapılarak devam edilir. Örneğin:
 
 	0101 0110
 
-	sayının ikiye tümleyenini tek hamlede bulalım:
+	sayısının ikiye tümleyenini tek hamlede bulalım:
 
 	10101010
 
@@ -13925,7 +13925,7 @@ int main(void)
 
 	Burada 100 byte'lık blok 50 byte'a küçültülmüştür. realloc fonksiyonu bloğu küçültürken de yerini değiştirebilmektedir. Dolayısıyla programcının yine realloc fonksiyonunun geri dönüş değerini dikkate alması gerekir.
 
-	Biz yukarıda realloc fonksiyonu ile daha önce tahsis edilmiş olan bloğu büyütürken realloc fonksiyonunun tipik olarak önce eski bloğun altında toplam yeni uzunluğu karşılayacak kadar yer var mı diye baktığını, eğer yer varsa hemen orayı da tahsis ettiğini söylemiştik. Standartlar realloc fonksiyonun önce eski bloğun altına bakacağı yönünde bir ifade kullanmamıştır. Dolayısıyla biz burada tipik gerçekleştirimin bu biçimde olduğunu belirttik. Bir derleyicideki realloc fonksiyonu eski bloğun aşağısına bakmadan heap'in başka bir yerinde toplam yeni uzunluk kadar yer araştırabilir.
+	Biz yukarıda realloc fonksiyonu ile daha önce tahsis edilmiş olan bloğu büyütürken realloc fonksiyonunun tipik olarak önce eski bloğun altında toplam yeni uzunluğu karşılayacak kadar yer var mı diye baktığını, eğer yer varsa hemen orayı da tahsis ettiğini söylemiştik. Standartlar realloc fonksiyonunun önce eski bloğun altına bakacağı yönünde bir ifade kullanmamıştır. Dolayısıyla biz burada tipik gerçekleştirimin bu biçimde olduğunu belirttik. Bir derleyicideki realloc fonksiyonu eski bloğun aşağısına bakmadan heap'in başka bir yerinde toplam yeni uzunluk kadar yer araştırabilir.
 
 	realloc fonksiyonunun birinci parametresine NULL adres geçilirse realloc tamamen malloc gibi davranmaktadır. yani malloc(n) çağrısı ile realloc(NULL, n) çağrısı tamamen eşdeğerdir.
 
@@ -13984,7 +13984,7 @@ int main(void)
 }
 
 /*-----------------------------------------------------------------------------------------------
-	Yukarıdaki gibi dinamik büyütülen dizilerde aslında büyütme birer birer yapılmamaktadır. Çünkü bir eleman için yeniden realloc fonksiyonun çağrılması oldukça maliyetlidir. Şimdi yukarıdaki örneği büyütmeyi birer birer değil CHUNK_SIZE kadar yapacak biçimde değiştirelim.
+	Yukarıdaki gibi dinamik büyütülen dizilerde aslında büyütme birer birer yapılmamaktadır. Çünkü bir eleman için yeniden realloc fonksiyonun çağrılması oldukça maliyetlidir. Şimdi yukarıdaki örneği büyütmeyi birer birer değil, CHUNK_SIZE kadar yapacak biçimde değiştirelim.
 ------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -14026,13 +14026,13 @@ int main(void)
 /*-----------------------------------------------------------------------------------------------
 	Aslında dinamik büyütülen dizilerde büyütme genellikle eskisinin iki katı olacak biçimde (yani geometrik biçimde) yapılmaktadır. Bunun nedenini burada açıklamayacağız. Ancak eğer dizi 1'den başlatılacaksa tipik olarak 1, 2, 4, 8, 16, 32, 64, 128, 256 biçiminde büyütme uygulanmaktadır. Bu biçimde dinamik büyütme gerçekleştiriminde tipik olarak programcı iki uzunluğu tutar: Toplam tahsis edilmiş eleman uzunluğu ve dolu eleman uzunluğu. Genellikle toplam tahsis edilmiş eleman uzunluğuna "capacity", dolu eleman uzunluğuna da "size" denilmektedir. İşin başında size = 0 biçimindedir. Her adımda size değeri bir artırılır. size değeri capacity değerine eriştiğinde eskisinin iki katı olacak biçimde yeniden tahsisat yapılır.
 
-	Aşağıdaki örnekte dinamik dizi için işin başında DEF_CAPACITY kadar yer ayrılmıştır. Sonra size değeri capacity değerine eriştiğinde capacity iki kat artırılarak blok eskisinin iki katı büyüklükte olacak biçimde büyütülmüştür.
+	Aşağıdaki örnekte dinamik dizi için işin başında DEF_CAPACITY kadar yer ayrılmıştır. Sonra size değeri, capacity değerine eriştiğinde capacity iki kat artırılarak blok eskisinin iki katı büyüklükte olacak biçimde büyütülmüştür.
 ------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#define DEF_CAPACITY        4
+#define DEF_CAPACITY		2
 
 int main(void)
 {
@@ -15842,7 +15842,7 @@ int main(void)
 /*-----------------------------------------------------------------------------------------------
 	Bir yapının bir elemanının kendi türünden bir gösterici olması durumu "bağlı listeler (linked lists)" gibi veri yapılarının gerçekleştirilmesinde sıkça kullanılmaktadır. Bağlı listeler, C Programlama Dili tarafından doğrudan desteklenmeyen, programcının kendisinin oluşturması gereken bir veri yapısıdır. Veri yapıları ve algoritmalar konusu "Sistem Programlama ve İleri C Uygulamaları - 1" kursunda ele alınmaktadır. Ancak biz burada ayrıntıya girmeden uygulama amaçlı bağlı listelerden biraz bahsedeceğiz. 
 
-	Veri yapıları dünyasında elemanlar arasında öncelik-sonralık ilişkisi olan veri yapılarına genel olarak "liste (list)" denilmektedir. Önceki elemanın sonraki elemanı gösterdiği veri yapılarına ise "bağlı listeler (linked lists)" denilmektedir. Bağlı listelerin elemanlarına daha çok "düğüm (node)" denilmektedir. Bağlı listelerde her düğüm sonraki düğümün yerini tutar. Programcı da ilk düğümün yerini tutmaktadır. Böylece programcı her elemanı erişebilmektedir. Bağlı listelerin her düğümü genellikle (her zaman değil) heap'te malloc fonksiyonuyla tahsis edilmektedir. Böylece düğümler aslında herhangi bir yerde bulunabilir. Ancak önceki eleman sonraki elemanı gösterdiği için bir organizasyon oluşturulmuş olur. Bağlı liste gerçekleştirimlerinde programcılar genellikle son elemanın da yerini tutarlar. Böylece sona hızlı bir biçimde eleman ekleyebilirler. Bağlı listelerin dizilere göre avantajları ve dezavantajları şunlardır:
+	Veri yapıları dünyasında elemanlar arasında öncelik-sonralık ilişkisi olan veri yapılarına genel olarak "liste (list)" denilmektedir. Önceki elemanın sonraki elemanı gösterdiği veri yapılarına ise "bağlı listeler (linked lists)" denilmektedir. Bağlı listelerin elemanlarına daha çok "düğüm (node)" denilmektedir. Bağlı listelerde her düğüm sonraki düğümün yerini tutar. Programcı da ilk düğümün yerini tutmaktadır. Böylece programcı her elemana erişebilmektedir. Bağlı listelerin her düğümü genellikle (her zaman değil) heap'te malloc fonksiyonuyla tahsis edilmektedir. Böylece düğümler aslında herhangi bir yerde bulunabilir. Ancak önceki eleman sonraki elemanı gösterdiği için bir organizasyon oluşturulmuş olur. Bağlı liste gerçekleştirimlerinde programcılar genellikle son elemanın da yerini tutarlar. Böylece sona hızlı bir biçimde eleman ekleyebilirler. Bağlı listelerin dizilere göre avantajları ve dezavantajları şunlardır:
 
 	- Eleman erişimi dizilerde çok hızlı bir biçimde "rastgele" yapılabilmektedir. Yani p, bir dizinin başlangıç adresi olmak üzere p[n] ile dizinin n'inci elemanına erişim çok hızlıdır. Bir dizinin 0'ıncı elemanına erişimle 1000'inci elemanına erişim arasında bir zaman farkı yoktur. Ancak bağlı listelerde bir elemana erişebilmek için önceki elemanların üzerinden geçmek gerekir. 
 
@@ -15856,21 +15856,21 @@ int main(void)
 
 	Sonuç olarak eğer bir sistemde çok fazla insert, delete işlemi yapılıyor ancak elemana erişim fazla yapılmıyorsa bağlı listeler daha iyi bir seçenek oluşturabilmektedir. Sınırı baştan bilinmeyen durumlarda da dizi yerine bağlı listeler tercih edilebilmektedir. 
 
-	Bir bağlı listede önceki eleman sonraki elemanı gösterirken sonraki eleman da önceki elemanı gösteriyorsa bu tür bağlı listelere "çift bağlı listeler (doubly linked lists)" denilmektedir. Eğer yalnızca önceki eleman sonraki elemanı gösteriyorsa bu tür bağlı listelere "tek bağlı listeler (single linked lists)" denir. 
+	Bir bağlı listede önceki eleman sonraki elemanı gösterirken sonraki eleman da önceki elemanı gösteriyorsa bu tür bağlı listelere "çift bağlı listeler (doubly linked lists)" denilmektedir. Eğer yalnızca önceki eleman, sonraki elemanı gösteriyorsa bu tür bağlı listelere "tek bağlı listeler (single linked lists)" denir. 
 
 	Düğümler, bağlı listelerde yapılarla temsil edilir. Elemanlar da heap'te tahsis edilir. Tek bağlı listenin düğümü aşağıdaki gibi bir yapıyla temsil edilebilir:
 
 	struct NODE {
-		int val;		// tutulan değer
-		struct NODE *next;
+		int val;				// tutulan değer
+		struct NODE *next;		// sonraki node'un adresi
 	};
 
 	Çift bağlı listenin de bir düğümü şöyle bir yapıyla temsil edilebilir:
 
 	struct NODE {
-		int val;
-		struct NODE *next;
-		struct NODE *prev;
+		int val;				// tutulan değer
+		struct NODE *next;		// sonraki node'un adresi
+		struct NODE *prev;		// önceki node'un adresi
 	};
 
 	Genellikle bağlı listelerin ilk ve son düğümü ayrıca da içindeki eleman sayısı programcı tarafından tutulmaktadır. Yine genellikle bu bilgiler de bir yapıyla temsil edilmektedir:
@@ -19351,7 +19351,7 @@ int main(void)
 
 	pai = &a;		// geçersiz!
 
-	Dizi göstericileri tanımlanırken köşeli parantezin için boş bırakılamaz. Örneğin:
+	Dizi göstericileri tanımlanırken köşeli parantezin içi boş bırakılamaz. Örneğin:
 
 	int (*pai)[];		// geçersiz!
 
@@ -23848,3 +23848,4 @@ BURADA KALDIM
 
 	C++'ta restrict göstericiler olmadığı için eğer kodun C++ uyumlu olması isteniyorsa restrict göstericiler kullanılmamalıdır.
 ------------------------------------------------------------------------------------------------------------*/
+
