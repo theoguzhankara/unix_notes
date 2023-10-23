@@ -14032,7 +14032,7 @@ int main(void)
 #include <stdio.h>
 #include <stdlib.h>
 
-#define DEF_CAPACITY		2
+#define DEF_CAPACITY		4
 
 int main(void)
 {
