@@ -1026,7 +1026,7 @@ int main(void)
 
 	return 0;
 }
-BURADA KALDIM
+
 /*--------------------------------------------------------------------------------------------------------------------------
 												6. Ders 04/09/2023 - Pazartesi
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -1134,9 +1134,9 @@ constexpr int square(int a)
 
 int main(void)
 {
-	int a[square(10)];		// geçerli, burada square(10) çağrısı sabit ifadesi belirtiyor
+	constexpr int a[square(10)];		// geçerli, burada square(10) çağrısı sabit ifadesi belirtiyor
 	int b{10};
-	int c[square(b)];		// geçersiz artık square bir sabit ifadesi belirtimiyor
+	constexpr int c[square(b)];		// geçersiz artık square bir sabit ifadesi belirtmiyor
 
 	return 0;
 }
@@ -1158,10 +1158,10 @@ int main(void)
 		return a;
 	}
 
-	Böyle bir bar fonksiyonu constyexpr olarak tanımlanabilir mi? İşte C++23'e kadar bu durum mümkün değildi. Çünkü C++23'e kadar constexpr fonksiyonların 
-	yalnızca sabit ifadesi üretmesi esastı. Buradaki sorun bar fonksiyonunun aslında hiçbir biçimde sabit ifadesi üretememesidir. bar fonksiyonun sabit 
-	ifadesi üretmesi yalnıca return ifadesinde sabit ifadesi oluşturması anlamına gelmemektedir. bar fonksiyonun sabit ifadesi oluşturabilmesi demek her şeyiyle
-	derleme aşamasında yalnızca bir sabit değerin elde edilebilmesi demektir. Ancak C++23 ile birlikte bu durum da gevşetilmiştir. C++23'te bar fonksiyonun 
+	Böyle bir bar fonksiyonu constexpr olarak tanımlanabilir mi? İşte C++23'e kadar bu durum mümkün değildi. Çünkü C++23'e kadar constexpr fonksiyonların 
+	yalnızca sabit ifadesi üretmesi esastı. Buradaki sorun bar fonksiyonunun aslında hiçbir biçimde sabit ifadesi üretememesidir. bar fonksiyonunun sabit 
+	ifadesi üretmesi yalnızca return ifadesinde sabit ifadesi oluşturması anlamına gelmemektedir. bar fonksiyonun sabit ifadesi oluşturabilmesi demek her şeyiyle
+	derleme aşamasında yalnızca bir sabit değerin elde edilebilmesi demektir. Ancak C++23 ile birlikte bu durum da gevşetilmiştir. C++23'te bar fonksiyonunun 
 	tanımlaması geçerlidir. Ancak fonksiyon hiçbir zaman sabit ifadesi oluşturamayacaktır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -1169,18 +1169,18 @@ int main(void)
 	Mademki artık son standartlarda neredeyse constexpr fonksiyonlar normal fonksiyonlar gibi olmuştur. Bu durumda biz her fonksiyonu mümkün olduğunca constexpr
 	yapmalı mıyız? Yukarıda da belirttiğimiz gibi hala constexpr fonksiyonlar için bazı kısıtlar bulunmaktadır. Bu kısıtları ayrıntı olduğu gerekçesiyle burada 
 	şimdi ele almayacağız. Ancak olabilecek her fonksiyonu constexpr fonksiyon olarak tanımalama çalışmak da iyi bir fikir değildir. Bunun en önemli nedeni 
-	constexpr fonksiynların default olarak inline kabul edilmesidir. Biz henüz inline fonksiyonları görmemiş olsak da inline fonksiyonların bazı kısıtları ve 
+	constexpr fonksiyonların default olarak inline kabul edilmesidir. Biz henüz inline fonksiyonları görmemiş olsak da inline fonksiyonların bazı kısıtları ve 
 	dezavantajları söz konusu olabilmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
 	Aslında constexpr fonksiyonlarla ilgili bazı ayrıntılar da vardır. Örneğin bir sınıfın yapıcı fonksiyonu (constructor) constexpr olabilmektedir. Sınıfın 
-	üye fonksiyonları da constexpr olabilektedir. Konun bu ayrıntıları ilgili bölümlerde ele alınacaktır.
+	üye fonksiyonları da constexpr olabilmektedir. Konunun bu ayrıntıları ilgili bölümlerde ele alınacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	16) constexpr fonksiyonlar C++11 ile dile eklendiğinde amaç bu fonksiyonların her zaman sabit ifadesi oluşurması biçimindeydi. Daha sonra bu koşul gevşetildi ve
-	constexpr fonksiyonlar "koşula bağlı olarak sabit ifadesi oluşturur" hale getirildi. İşte C++20 ile birlikte her zmaan sabit ifadesi oluşturması gereken (yani
+	16) constexpr fonksiyonlar C++11 ile dile eklendiğinde amaç, bu fonksiyonların her zaman sabit ifadesi oluşturması biçimindeydi. Daha sonra bu koşul gevşetildi ve
+	constexpr fonksiyonlar "koşula bağlı olarak sabit ifadesi oluşturur" hale getirildi. İşte C++20 ile birlikte her zaman sabit ifadesi oluşturması gereken (yani
 	C++11'deki constexpr fonksiyonlar gibi) yeni bir fonksiyon biçimi oluşturuldu. Bunlara consteval fonksiyonlar ya da "immediate fonksiyonlar" denilmektedir. 
 	consteval bir fonksiyonun her çağrısının sabit ifadesi oluşturması zorunludur. Örneğin:
 
@@ -1201,9 +1201,9 @@ int main(void)
 
 	Burada hem square1 hem de square2 çağrıları sabit ifadesi oluşturmamaktadır. Ancak constexpr fonksiyonların zaten çağrıldıklarında sabit ifadesi oluşturma 
 	zorunluluğu yoktur. Fakat consteval fonksiyonların çağrıldıklarında sabit ifadesi oluşturma zorunluluğu vardır. Biz consteval fonksiyonları hangi ifadede 
-	ve hangi nesneye ilkdeğer vermek için çağırırsak çağıralım çağrının sabit ifadesi oluşturması zorunludur. 
+	ve hangi nesneye ilkdeğer vermek için çağırırsak çağıralım, çağrının sabit ifadesi oluşturması zorunludur. 
 
-	consteval fonksiyonların constexpr fonksiyonların içerisinde çağrılması bu bakımdan bir farklılık yaratmamaktadır. Örneğin:
+	consteval fonksiyonların, constexpr fonksiyonların içerisinde çağrılması bu bakımdan bir farklılık yaratmamaktadır. Örneğin:
 
 	consteval int square1(int a)
 	{
@@ -1215,7 +1215,7 @@ int main(void)
 		return square1(a);
 	}
 
-	Burada square2 fonksiyonu square1 fonksiyonunu çağırmıştır. Ancal square1 çağrısında sabit ifadesi kullanılmamış durumdadır. Bu işlemin tersini yapalım:
+	Burada square2 fonksiyonu square1 fonksiyonunu çağırmıştır. Ancak square1 çağrısında sabit ifadesi kullanılmamış durumdadır. Bu işlemin tersini yapalım:
 
 	constexpr int square1(int a)
 	{
@@ -1235,34 +1235,34 @@ int main(void)
 	int z = 10;
 	int k = square2(z);			// geçersiz!
 
-	Buradan da görüldüğü gibi önemli olan consteval fonksiyonun çağrısının derleme aşamasında sabit ifadesi oluşturma zorunluluğudur.
+	Buradan da görüldüğü gibi önemli olan consteval fonksiyonunun çağrısının derleme aşamasında sabit ifadesi oluşturma zorunluluğudur.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	17) C'de ifadeler ya "lvalue" ya da "rvalue" biçimindedir. C'de nesne belirtilen ifadelere lvaluei nesne belirtmeyen ifadelere rvalue denilmektedir. C++ da 
-	C'nin bu lvalue rvalue terimlerini kullanmıştır. Ancak C++11'e gelindiğinde dile bazı yeni özellikler eklenenince bu lvalue ve rvalue terimleri yetersiz kalmıştır.
-	Böylece C++11 ile birlikte bu konu "value categories" ismiyle genişletilmiştir. C++11'de C'deki ve C++11 öncesindeki C++'taki "lvalue" yine "lvalue" olarak kalmıştır. 
+	17) C'de ifadeler ya "lvalue" ya da "rvalue" biçimindedir. C'de nesne belirten ifadelere lvalue, nesne belirtmeyen ifadelere rvalue denilmektedir. C++ da 
+	C'nin bu lvalue ve rvalue terimlerini kullanmıştır. Ancak C++11'e gelindiğinde dile bazı yeni özellikler eklenince bu lvalue ve rvalue terimleri yetersiz kalmıştır.
+	Böylece C++11 ile birlikte bu konu "value categories" ismiyle genişletilmiştir. C++11'de, C'deki ve C++11 öncesindeki C++'taki "lvalue" yine "lvalue" olarak kalmıştır. 
 	Ancak "rvalue" artık "prvalue (pure rvalue)" olarak değiştirilmiştir. C++11'deki bu konuda yapılmış olan asıl yenilik "xvalue (expiring value)" biçiminde yeni 
 	bir kategorinin oluşturulmasıdır. Yukarıda da belirttiğimiz gibi bu kategorinin oluşturulmasının nedeni C++11 ile birlikte dile eklenen bazı özelliklerdendir. 
 	C++11'le birlikte eklenen "xvalue" kategorisi duruma göre hem bir "lvalue" gibi hem de "rvalue" gibi kulalnılabilen ifadelerdir. Bu durumda C++11'e "glvalue (generalized
 	value)" ve "rvalue" biçiminde iki üst kategori de eklenmiştir. glvalue kategorisi lvalue ve xvalue kategorilerinin birleşiminden oluşmaktadır. rvalue kategorisi ise
-	prvalue ve xvalue kategorilerinin birleşiminden oluşmaktdır. Bu durum aşağıdaki şekil ile özetlenebilir:
+	prvalue ve xvalue kategorilerinin birleşiminden oluşmaktadır. Bu durum aşağıdaki şekil ile özetlenebilir:
 
 		glvalue     rvalue
 		/  \	   /  \
 	   /    \     /    \
 	lvalue   xvalue    prvalue
 
-	C++ standartlarında rvlaue denildiğinde artık prvalue ve xvalue anlaşılmaktadır. glvalue denildiğinde ise lvalue ve xvalue anlaşılmaktadır. Eski lvalue terimi 
+	C++ standartlarında rvalue denildiğinde artık prvalue ve xvalue anlaşılmaktadır. glvalue denildiğinde ise lvalue ve xvalue anlaşılmaktadır. Eski lvalue terimi, 
 	lvalue olarak kaldığına göre ve eski rvalue terimi de prvalue haline geldiğine göre o halde xvalue nedir? xvalue terimi yukarıda da belirttiğimiz gibi "hayatını 
 	kaybetmek üzere olan" nesneler için kullanılmaktadır. Konunun ayrıntıları başka konularla ilgili olduğu için burada bu ayrıntılara henüz girmeyeceğiz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	18) C++'ta C'de olmayan ismine "referans (reference)" denilen göstericilere benzer adres tutan yeni bir tür de bulunmaktadır. C++11'e kadar C++'ta yalnızca 
-	referans kavramı ve terimi vardı. Ancak C++11 ile birlikte "move semantic" denilen bir özelliğin C++'a eklenebilmesi için ismine "sağ tafa değeri referansı (rvalue
-	referance)" denilen yeni bir referas türü daha dile eklenmiştir. Artık C++11 ve sonrasında eski referanslar "sol taraf değeri referansı (lavlue reference)" biçiminde
-	isimlendirilmektedir. Yani eski referanslara artık "sol taraf değeri referansları" denilmektedir. C++11 ile eklenen referanslar ise "sağ taraf değeri referanlarıdır".
+	18) C++'ta C'de olmayan, ismine "referans (reference)" denilen göstericilere benzer adres tutan yeni bir tür de bulunmaktadır. C++11'e kadar C++'ta yalnızca 
+	referans kavramı ve terimi vardı. Ancak C++11 ile birlikte "move semantic" denilen bir özelliğin C++'a eklenebilmesi için ismine "sağ taraf değeri referansı (rvalue
+	reference)" denilen yeni bir referas türü daha dile eklenmiştir. Artık C++11 ve sonrasında eski referanslar "sol taraf değeri referansı (lvalue reference)" biçiminde
+	isimlendirilmektedir. Yani eski referanslara artık "sol taraf değeri referansları" denilmektedir. C++11 ile eklenen referanslar ise "sağ taraf değeri referanslarıdır".
 
 	Biz "referans" dediğimizde hem sol taraf değeri referanslarını hem de sağ taraf değeri referanslarını kastedeceğiz. Ancak bunları ayırmamız gerektiğinde açıkça
 	"sol taraf değeri referansı" ya da "sağ taraf değeri referansı" diyeceğiz. 
@@ -1270,7 +1270,7 @@ int main(void)
 
 /*--------------------------------------------------------------------------------------------------------------------------
 	Bir sol taraf değeri referansı dekleratörde & atomuyla tanımlanır. Referanslara tanımlama sırasında ilkdeğer verilmesi zorunludur. Bir sol taraf değeri 
-	referansı tipik olarak aynı türden nesne belirten bir ifade ile (yani bir bir sol taraf değeri ile) ilkdeğer verilerek tanımlanmaktadır. Örneğin:
+	referansı tipik olarak aynı türden nesne belirten bir ifade ile (yani bir sol taraf değeri ile) ilkdeğer verilerek tanımlanmaktadır. Örneğin:
 
 	int a{10};
 	int &r = a;
@@ -1355,7 +1355,7 @@ int main(void)
 	Görüldüğü gibi bir referansa bir nesne ile ilkdeğer verildliğinde derleyici o nesnenin adresini kendisi referansa yerleştirmektedir. Ancak göstericilere biz 
 	nesnenin adresini elde ederek yerleştirmekteyiz.
 ---------------------------------------------------------------------------------------------------------------------------*/
-
+BURADA KALDIM
 /*--------------------------------------------------------------------------------------------------------------------------
 												7. Ders 06/09/2023 - Çarşamba
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -1453,7 +1453,7 @@ int main(void)
 
 	r = 20;
 
-	Burada derleyici isterse hiç r referansı için bir yer ayırmadan doğrudan 20 değerini a'ya aatayabilir. Yani derleyici burada aşağıdakine eşdeğer bir kod 
+	Burada derleyici isterse hiç r referansı için bir yer ayırmadan doğrudan 20 değerini a'ya atayabilir. Yani derleyici burada aşağıdakine eşdeğer bir kod 
 	üretebilir:
 
 	int a = 10;
@@ -1824,7 +1824,7 @@ int main()
 
 	foo() = 20;		// temp = 20
 
-	Burada aartık fonksiyon çağrısı bir sol taraf değeri belirtmektedir. Görüldüğü gibi C'de fonksiyon çağrıları her zaman sağ taraf değeri belirtir. AncakC++'ta
+	Burada artık fonksiyon çağrısı bir sol taraf değeri belirtmektedir. Görüldüğü gibi C'de fonksiyon çağrıları her zaman sağ taraf değeri belirtir. AncakC++'ta
 	fonksiyonun geri dönüş değeri sol taraf değeri referansı ise artık fonksiyon çağrısı sol taraf değeri belirtir. Fonksiyon çağrısına bir değer atadığımızda aslında biz
 	return ifadesindeki nesneye değer atamış oluruz. Tabii nasıl bir fonksiyon yerel bir nesnenin adresi ile geri dönmemeli ise benzer biçimde aynı durum referanslar
 	için de geçerlidir. Yani fonksiyonun geri dönüş değeri bir referans ise biz return ifadesinde yerel bir nense kullanmamalıyız (fonksiyon bittiğinde yerel nesnelerin 
@@ -2430,7 +2430,8 @@ int main(void)
 
 	Tabii C++11 ve sonrasında bütün küme parantezi sentakslarında "daraltıcı dönüştüre (narrowing conversion)" yasaklanmıştır. Örneğin:
 
-	int *pi = new int[] = {1, 2, 3.14};		// geçersiz! double -> int dönüştürmesi daaraltıcı dönüştürme
+	int *pi = new int[] = {1, 2, 3.14};		// geçersiz! double -> int dönüştürmesi daraltıcı dönüştürme
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -4509,7 +4510,7 @@ int main()
 
 	foo(100, 200);
 
-	Bu çağrının makine kodlarına bakıldığında aslında c paarametre değişkeni için 20 değerinin akratıldığı görülecektir. Yani verilen default değerlerin aktarımı 
+	Bu çağrının makine kodlarına bakıldığında aslında c parametre değişkeni için 20 değerinin akratıldığı görülecektir. Yani verilen default değerlerin aktarımı 
 	konusunda bir etkinlik söz konusu değildir. Buradaki fonksiyon her zaman üç parametreye sahiptir ve çağrım sırasında her zaman bu üç parametre için üç argüman 
 	aktarılmaktadır. Yukarıdaki fonksiyonu aşağıdaki gibi çağırmış olalım:
 
@@ -10654,7 +10655,7 @@ int main(void)
 
 	Burada aslında name isimli getter fonksiyon m_name elemanının adresiyle geri dönmektedir. Referansın const yapılması fonksiyonun adresini aldığı nesneyi değiştirememesi için 
 	gerekmektedir. Tabii bu tür durumlarda sınıfın veri elemanı olan nesnenin türü değiştilemez. Çünkü bu durumda getter fonksiyonlarını kullanan kodların da değiştirilmesi 
-	gerekir. Ancak genel olarak getter fonksiyonlar yazılırken bu biçimde referanslaa geri dönmemek daha iyi bir tekniktir. 
+	gerekir. Ancak genel olarak getter fonksiyonlar yazılırken bu biçimde referansla geri dönmemek daha iyi bir tekniktir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -11134,7 +11135,7 @@ int main(void)
 	gibi. 
 
 	Aslında bu iş bir fonksiyona da yaptırırlabilir. Zaten C++11 ile birlikte bu işlemi yapan tanımlaması <utility> dosyasında bulunan move isimli şablon bir fonksiyon bulundurulmuştur.
-	Bu durumdaaynı işlemi şöyle de yapabiliriz:
+	Bu durumda aynı işlemi şöyle de yapabiliriz:
 
 	foo(move(s));
 
@@ -15155,7 +15156,7 @@ int main()
 
 /*--------------------------------------------------------------------------------------------------------------------------
 	++ ve -- operatörlerine ilişkin operatör fonksiyonları da yazılabilir. Ancak bu operatörler hem önek (prefix) hem de sonek (postfix) kullanılabildiğinden dolayı
-	bunların yazımları için bazı noktalaa dikkat edilmesi gerekir. Birinci nokta önek ++ operatörünün C++'ta nesnenin kendisine ilişkin sol taraf değeri üretmesidir. 
+	bunların yazımları için bazı noktalara dikkat edilmesi gerekir. Birinci nokta önek ++ operatörünün C++'ta nesnenin kendisine ilişkin sol taraf değeri üretmesidir. 
 	Bu özelliğin sağlanabilmesi için bu operatör fonksiyonu yazılırken fonksiyonun geri dönüş değerinin türü aynı sınıf türünden bir referans olmalı ve fonksiyon 
 	*this ifadesi ile geri dönmelidir. C++'ta bu operatörlerin sonek versiyonları nesne belirtmez bu nedenle bu operatörlerin seonek versiyonları yazılırken geri dönüş değerinin 
 	türü kendi sınıfı türünden const bir nesne (referans değil) olmalıdır. Sonek versiyonların nesnenin değerini önce yerel bir nesnede saklayıp artırım ya da eksiltimi nesne üzerinde yapması 
@@ -17641,7 +17642,7 @@ int main()
 
 	En tepedeki exception sınıfının what isimli sanal const char * türüyle geri dönen (yani bir yazının adresiyle geri dönen) bir üye fonksiyonu vardır. Bu sanal 
 	fonksiyon türemiş sınıflarda override edilmiştir. exception sınıfından türetilmiş olan sınıfların hepsinin bir error yazısını parametre olarak alan bir yapıcı 
-	fonksiyonu bulunmaktadır. Zaten bu what fonksiyonları da bu yapıcı fonksiyon ile verilen yazıyı bize geri vermektdir. 
+	fonksiyonu bulunmaktadır. Zaten bu what fonksiyonları da bu yapıcı fonksiyon ile verilen yazıyı bize geri vermektedir. 
 
 	Aşağıdaki örnekte foo fonksiyonunun parametresi negatif olmamalıdır. foo fonksiyonunu yazan kişi işin başında bu parametreyi kontorl etmiş, eğer parametre negatif ise
 	invalid_argument nesnesi ile hata mesajını da belirterek thwor işlemi yapmıştır. Fonksiyon çağrısında da exception ele alınmıştır.
@@ -19645,7 +19646,7 @@ int main()
 	erişmek anlamındadır. 
 
 	[=] sentaksı kopyalama yoluyla otomatik capture anlamına gelmektedir. Yani bu durumda derleyici lambda ifadesini inceler. eğer orada üst fonksiyonun 
-	yerel değişkenleri kullanılmışsa o değişkenleri otomatik olarak capture eder. Bu capture işlemi lambda ifadesinin bulunduğu yerde kopyalaa yoluyla
+	yerel değişkenleri kullanılmışsa o değişkenleri otomatik olarak capture eder. Bu capture işlemi lambda ifadesinin bulunduğu yerde kopyalama yoluyla
 	yapılmaktadır. Öreğin:
 
 	#include <iostream>
@@ -19770,7 +19771,7 @@ int main()
 	yoktu. Thread'ler 90 yılların ortalarına doğru işletim sistemlerine girmiştir. Microsoft'un ilk thread'li işletim sistemi Windows NT (1993)'dir. Sonra bunu 
 	Windows 95 (1995) izlemiştir. UNIX/Linux dünyasına da thread'ler 90'lı yılların ortalarında girmiştir. 
 
-	Thread'ler proseslerin bağımsız çizelgelenen akışlarıdır. Modern işletim sistemleri genellikle "zaman paylaşımlı (time sharing)" bir thread çizelgelemesi kullanmaktdır. 
+	Thread'ler proseslerin bağımsız çizelgelenen akışlarıdır. Modern işletim sistemleri genellikle "zaman paylaşımlı (time sharing)" bir thread çizelgelemesi kullanmaktadır. 
 	Yani işletim sistemi bir thread'i alır onu belli bir süre çalıştırır sonra onun çalışmasına ara verir. Diğer thread'i alır onu da belli bir süre çalıştırır. 
 	Hep böyle thread'leir parça parça çalıştırıp durdurarak çalıştırmaktadır. Kullanıcı sanki programlarını "hep çalışıyormuş zanneder" aslında programlar hep çalışmamaktadır. 
 	İşletim sistemleri onları zaman paylaşımlı bir biçimde çalıştırmaktadır. Bir thread'in parçalı çalışma süresine "quanta süresi (time quantum)" denilmektedir. 
