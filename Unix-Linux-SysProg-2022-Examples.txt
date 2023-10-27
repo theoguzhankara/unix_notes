@@ -37492,7 +37492,7 @@ void exit_sys(const char *msg)
     bu fonksiyonlar yine durumu bize bildirmektedir. epoll fonksiyonu ise default durumda yine düzey tetiklemeli çalışırken özel olarak 
     epoll_event yapısının events elemanına EPOLLET eklenirse o betimleyici için "kenar tetiklemeli (edge triggered)" mod kullanılır.
 
-    Yukarıda da belirtildiği gibi düzey tetiklemeli mod demek (select, poll ve epoll'daki default durum) bir okuma ya da yazma olayı açılıp 
+    Yukarıda da belirtildiği gibi düzey tetiklemeli mod demek (select, poll'daki durum ve epoll'daki default durum) bir okuma ya da yazma olayı açılıp 
     bloke çözüldüğünde programcı eğer okuma ya da yazma yapmayıp yeniden bu fonksiyonları çağrırsa bekleme yapılmayacak demektir. Yani örneğin 
     biz select ya poll ile stdin dosyasını izliyorsak ve klavyeden bir giriş yapıldıysa bu fonksiyonlar blokeyi çözer. Fakat biz read ile okuma 
     yapmazsak ve yeniden select ve poll fonksiyonlarını çağırırsak artık bloke oluşmaz. Halbuki kenar tetiklemeli modda biz okuma yapmasak bile 
