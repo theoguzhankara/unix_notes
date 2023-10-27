@@ -1395,6 +1395,13 @@ void exit_sys(const char *format, ...)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    Aslında errno değişkeni Linux'ta çekirdek tarafından set edilen bir değişken değildir. errno değişkeni tamamen user moddaki 
+    POSIX kütüphanesi tarafından set edilmektedir. Tipik olarak Linux çekirdeğinde bir sistem fonksiyonu başarısız olduğunda 
+    negatif errno değerine geri dönmektedir. Sistem fonksiyonunu çağıran POSIX fonksiyonu bu negatif errno değerini pozitife 
+    dönüştürerek errno değişkenini set etmektedir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     UNIX/Linux sistemlerinde her dosyanın bir kullanıcı id'si (user id) ve grup id'si (group id) bulunmaktadır. Bu sistemlerde 
     tüm dosyalar "open" isimli bir POSIX fonksiyonu tarafından yaratılmaktadır. Bir dosyanın kullanıcı id'si onu yaratan 
     prosesin etkin kullanıcı id'si olarak set edilmektedir. Dosyanın grup id'si ise iki seçenekten biri olarak set edilebilmektedir. 
@@ -37444,11 +37451,11 @@ void exit_sys(const char *msg)
     bildirilmiştir:
 
     struct epoll_event {
-        uint32_t   events;
+        uint32_t events;
         epoll_data_t data;
     };
 
-    Yapının events elemanı tıpkı poll fonksiyonunda olduğu gibi izlenecek olayları beliten nayrak değerlerini almaktadır. Burada 
+    Yapının events elemanı tıpkı poll fonksiyonunda olduğu gibi izlenecek olayları belirten bayrak değerlerini almaktadır. Burada 
     kullanılacak tipik değerler EPOLLIN ve EPOLLOUT değerleridir. EPOLLIN okuma amaçlı izleme için, EPOLLOUT ise yazma amaçlı izleme 
     için kullanılmaktadır. Örneğin:
 
@@ -37457,11 +37464,11 @@ void exit_sys(const char *msg)
     ee.events = EPOLLIN|EPOLLOUT;
 
     Geri döndürülen olay da yine EPOLLIN, EPOLLOUT, EPOLLERR ve EPOLLHUP gibi olaylardır. EPOLLIN olayı okumanın mümkün olacağını, 
-    epoll yazmanın mümkün olacağını belirtmektedir. EPOLLHUP olayı borularda karşı tarafın boruyu kapattığını belirtmektedir. EPOLLERR 
-    olayı ise borularda ve soketlerde karşı taraf boruyu ya da soketi kapatmışsa oluşmaktadır. 
+    EPOLLOUT yazmanın mümkün olacağını belirtmektedir. EPOLLHUP olayı borularda karşı tarafın boruyu kapattığını belirtmektedir. 
+    EPOLLERR olayı ise borularda ve soketlerde karşı taraf boruyu ya da soketi kapatmışsa oluşmaktadır. 
 
     Yapının data elemanı aslında çekirdek tarafından saklanıp epoll_wait fonksiyonu yoluyla bize geri verilmektedir. Bu eleman bir 
-    birlik biçiminde bildirilmiştir (yani bu birliğin programcı tarafından yalnızca tek elemanı set edilmelidir):
+    birlik biçiminde bildirilmiştir (yani programcı tarafından bu birliğin yalnızca tek elemanı set edilmelidir):
 
     typedef union epoll_data {
         void *ptr;
@@ -37482,20 +37489,20 @@ void exit_sys(const char *msg)
     değişiklerin sürekli yapıldığını anlatmaktadır. Her ne bu terimler elektronikten geçtiyse de yazılımda da anlatımları kolaylaştırmak için
     kullanılmaktadır. Örneğin select ve poll fonksiyonları "düzey tetiklemeli (level triggered)" olarak çalışmaktadır. Yani bir boruya bilgi 
     geldiği zaman bu fonksiyonlar çağrıldığında durumu bize bildirirler. O bilgi borudan okunmadığı sürece bu fonksiyonları tekrar çağırdığımızda
-    bu fonksiyonlar yine durumu bize bildrimektedir. epoll fonksiyonu ise defauşt durumda yine düzey tetiklemeli çalışırken özel olarak 
+    bu fonksiyonlar yine durumu bize bildirmektedir. epoll fonksiyonu ise default durumda yine düzey tetiklemeli çalışırken özel olarak 
     epoll_event yapısının events elemanına EPOLLET eklenirse o betimleyici için "kenar tetiklemeli (edge triggered)" mod kullanılır.
 
-    Yukarıda da belirtildiği gibi düzey tetiklemeli mod demek (select, poll daki durum ve epoll'daki default durum) bir okuma ya da yazma 
-    olayı açılıp bloke çözüldüğünde programcı eğer okuma ya da yazma yapmayıp yeniden bu fonksiyonları çağrırsa bekleme yapılmayacak demektir. 
-    Yani örneğin biz select ya poll ile stdin dosyasını izliyorsak ve klavyeden bir giriş yapıldıysa bu fonksiyonlar blokeyi çözer. Fakat biz 
-    read ile okuma yapmazsak ve yeniden select ve poll fonksiyonlarını çağırırsak artık bloke oluşmaz. Halbuki kenar tetiklemeli modda biz 
-    okuma yapmasak bile yeni okuma eylemi oluşana kadar yine blokede kalırız.
+    Yukarıda da belirtildiği gibi düzey tetiklemeli mod demek (select, poll ve epoll'daki default durum) bir okuma ya da yazma olayı açılıp 
+    bloke çözüldüğünde programcı eğer okuma ya da yazma yapmayıp yeniden bu fonksiyonları çağrırsa bekleme yapılmayacak demektir. Yani örneğin 
+    biz select ya poll ile stdin dosyasını izliyorsak ve klavyeden bir giriş yapıldıysa bu fonksiyonlar blokeyi çözer. Fakat biz read ile okuma 
+    yapmazsak ve yeniden select ve poll fonksiyonlarını çağırırsak artık bloke oluşmaz. Halbuki kenar tetiklemeli modda biz okuma yapmasak bile 
+    yeni okuma eylemi oluşana kadar yine blokede kalırız.
 
-    Tabii programcının izleyeceği her betimleyici için spoll_ctl fonksiyonunu çağırması gerekir. Örneğin biz 3 farklı betimleyiciyi 
+    Tabii programcının izleyeceği her betimleyici için epoll_ctl fonksiyonunu çağırması gerekir. Örneğin biz 3 farklı betimleyiciyi 
     izleyeceksek bizim üç kere epoll_ctl fonksiyonunu çağırmamız gerekir. 
 
     3) Asıl bekleme ve izleme işlemi epoll_wait fonksiyonu tarafından yapılmaktadır. Bu fonksiyon select ve poll fonksiyonu gibi 
-    eğer izlenen betimleyicilerde hiçbir olay gerçekleşmemişse bloke oluşturur, eğer en az bir betimleyicide izlenen olaylardan 
+    eğer izlenen betimleyicilerde hiçbir olay gerçekleşmemişse bloke oluşturur ve eğer en az bir betimleyicide izlenen olaylardan 
     biri gerçekleşmişse blokeyi çözer. epoll_wait fonksiyonunun prototipi şöyledir: 
 
     #include <sys/epoll.h>
@@ -37505,15 +37512,15 @@ void exit_sys(const char *msg)
     Fonksiyonun birinci parametresi epoll_create ya da epoll_create1 fonksiyonundan elde edilmiş olan handle değeridir. İkinci 
     parametre oluşan olayların depolanacağı yapı dizisinin adresidir. Biz bu yapının events elemanından oluşan olayın ne olduğunu 
     anlarız. Yapının data elemanı epoll_ctl sırasında verdiğimiz değeri belirtir. Bizim en azından epoll_ctl fonksiyonunda ilgili 
-    betimleyiciyi bu data elemanında girmiş olmamız gerekir. Fonksiyonun üçüncü parametresi ikinci parametresiyle belirtilen 
+    betimleyiciyi bu data elemanında girmiş olmamız gerekir. Fonksiyonun üçüncü parametresi, ikinci parametresiyle belirtilen 
     dizinin uzunluğudur. Normal olarak bu dizinin eklenmiş olan betimleyici sayısı kadar olması gerekir. Ancak buradaki değer 
     toplam izlenecek betimleyici sayısından az olabilir. Bu parametre tek hamlede en fazla kaç betimleyici hakkında bilgi 
-    verileceğini belirtmektedir. Örneğin biz fonksyonun ikinci parametresine 5 elemanlı bir yapı dizisinin adresini, üçüncü 
+    verileceğini belirtmektedir. Örneğin biz fonksiyonun ikinci parametresine 5 elemanlı bir yapı dizisinin adresini, üçüncü 
     parametresine de 5 değerini girebiliriz. Bu durumda epoll_wait fonksiyonunu çağırdığımızda fonksiyon bize en fazla 5 olay
     hakkında bilgi verecektir. Son parametre yine milisaniye cinsinden zaman aşımını belirtir. -1 değeri zaman aşımının 
     kullanılmayacağını, 0 değeri hemen betimleyicilere bakılıp çıkılacağını belirtmektedir. Fonksiyon başarı durumunda diziye 
-    doldurduğu eleman sayısı ile başarısızlık durumda -1 değeri ile geri dönmektedir. Örneğin fonksiyon 2 değerine geri dönmüş 
-    olsun. Bu durum fonksiyon taarafından verdiğimiz dizinin "ilk 2" elemanının doldurulduğu anlamına gelmektedir. Fonksiyon 0 
+    doldurduğu eleman sayısı ile, başarısızlık durumda -1 değeri ile geri dönmektedir. Örneğin fonksiyon 2 değerine geri dönmüş 
+    olsun. Bu durum fonksiyon tarafından verdiğimiz dizinin "ilk 2" elemanının doldurulduğu anlamına gelmektedir. Fonksiyon 0 
     değeri ile geri dönerse sonlanmanın zaman aşımından dolayı oluştuğu anlaşılmaktadır. Tabii epoll_wait fonksiyonunun yine 
     bir döngü içerisinde çağrılması gerekmektedir. 
 
@@ -37589,8 +37596,8 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Şimdi de daha vermiş olduğumuz olduğumuz borulardan okuma örneğini aşağıda epoll fonksiyonu ile gerçekleştirelim. Örneğimizde
-    yine program isimli boruları komut satırı argümanı olarak almaktadır. Örneğin:
+    Şimdi de daha vermiş olduğumuz borulardan okuma örneğini aşağıda epoll fonksiyonu ile gerçekleştirelim. Örneğimizde yine program 
+    isimli boruları komut satırı argümanı olarak almaktadır. Örneğin:
 
     ./sample x y z
 
@@ -37650,7 +37657,7 @@ int main(int argc, char *argv[])
 		printf("waiting at epoll_wait...\n");
 
 		if ((nevents = epoll_wait(epfd, ree, MAX_EVENTS, -1)) == -1)
-			exit_sys("epoll");
+			exit_sys("epoll_wait");
 
 		for (int i = 0; i < nevents; ++i) {
 			if (ree[i].events & EPOLLIN) {
@@ -37671,7 +37678,7 @@ int main(int argc, char *argv[])
 			break;
 	}
 
-	printf("ther is no descriptor open, finishes...\n");
+	printf("there is no descriptor open, finishes...\n");
 
 	close(epfd);
 
@@ -37686,11 +37693,11 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Daha önceden de belirttiğiiz gibi Linuz sistemlerinde epoll fonksiyonun performansı select ve poll fonksiyonlarından 
+    Daha önceden de belirttiğimiz gibi Linux sistemlerinde epoll fonksiyonunun performansı select ve poll fonksiyonlarından 
     çok daha iyidir. Bu nedenle Linux sistemlerinde ilk tercih edilecek multiplexed IO sistemi epoll olmalıdır. Tabii epoll
-    sistemi POSIX uyumlı değildir. Yani epoll kullandığımız kodlar taşınabilir olmamaktadır. 
+    sistemi POSIX uyumlu değildir. Yani epoll kullandığımız kodlar taşınabilir olmamaktadır. 
 
-    epoll performansı için Michale Kerrisk'in "The Linux Programming Environment" kitabnda karşılaştırmalı olarak saniye cinsinden 
+    epoll performansı için Michael Kerrisk'in "The Linux Programming Environment" kitabında karşılaştırmalı olarak saniye cinsinden 
     şu değerler verilmektedir:
 
     Number of descriptors   poll() CPU time         select() CPU time           epoll CPU time
@@ -37700,13 +37707,13 @@ void exit_sys(const char *msg)
     1000                    35                      35                          0.53
     10000                   990                     930                         0.66
 
-    Burada görüldüğü gibi Linux sistemlerinde select ile poll fonksiyonlarının performansı biribirine çok yakındır. Ancak
+    Burada görüldüğü gibi Linux sistemlerinde select ile poll fonksiyonlarının performansı birbirine çok yakındır. Ancak
     epoll sisteminin performansı açık ara çok daha iyidir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    epoll fonksiyonu ile sistem genelinde izleneecek maksimum betimleyici sayısı default durumda sistem belliği ile ilgili 
-    bir biçimde ayarlanmaktadır. Bu bilgi /proc/sys/fs/epoll/max_user_watches dosyasında bulunmaktadır. Bu değer değiştirilebilmektedir. 
+    epoll fonksiyonu ile sistem genelinde izlenecek maksimum betimleyici sayısı default durumda sistem belleği ile ilgili bir 
+    biçimde ayarlanmaktadır. Bu bilgi /proc/sys/fs/epoll/max_user_watches dosyasında bulunmaktadır. Bu değer değiştirilebilmektedir. 
     Kursun yapıldığı sanal makinede bu değer 858824 biçimindedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -37723,16 +37730,16 @@ void exit_sys(const char *msg)
 
     Sinyal tabanlı IO modeli tipik olarak şu aşamalardan geçilerek gerçekleştirilmektedir.
 
-    1) Betimleyici open fonksiyonuyla açılır. Eğer soketler söz konusu ise betimleyici socket fonksiyonyla ya da accept fonksiyonuyla
+    1) Betimleyici open fonksiyonuyla açılır. Eğer soketler söz konusu ise betimleyici socket fonksiyonuyla ya da accept fonksiyonuyla
     elde edilmektedir. 
 
-    2) Oluşturulacak sinyal için (default durumda SIGIO isnyali) sinyal fonksiyonu set edilir. 
+    2) Oluşturulacak sinyal için (default durumda SIGIO sinyali) sinyal fonksiyonu set edilir. 
 
     3) İlgili betimleyicide olay oluştuğunda hangi prosese sinyal gönderileceği fcntl fonksiyonu ile set edilir. Tabii genel olarak 
     programcı sinyalin kendi prosesine gönderilmesini ister. Bunun için fcntl fonksiyonunun ikinci parametresi olan fcntl komutu için
     F_SETOWN girilmelidir. fcntl fonksiyonunun üçüncü parametresine ise sinyalin gönderileceği prosesin id değeri girilir. Bu 
-    parametreye getpid() fonksiyonun geri dönüş değeri girilirse ilgili olay gerçekleştiğinde kendi prosesimize sinyal gönderilir. 
-    Üçüncü parametre negatif bir proses id girilirse bu değerin mutlak değeri proses grup belirtmektedir. 
+    parametreye getpid() fonksiyonunun geri dönüş değeri girilirse ilgili olay gerçekleştiğinde kendi prosesimize sinyal gönderilir. 
+    Üçüncü parametre negatif bir proses id girilirse, bu değerin mutlak değeri proses grup belirtmektedir. 
 
     4) Betimleyici blokesiz moda sokulur ve aynı zamanda O_ASYNC bayrağı da set edilir. Bu işlem fcntl fonksiyonunda F_SETFL komut 
     koduyla yapılabilmektedir. 
@@ -37755,16 +37762,16 @@ void exit_sys(const char *msg)
     boruya ya da sokete yeni bir bilgi gelene kadar sinyal oluşmayacaktır. Bu nedenle bizim o zamana kadar gelmiş olan tüm 
     bilgileri bir döngü içerisinde okumamız uygun olur. 
 
-    Pekiyi sinyal geldiğinde okuma işlemi nasıl yapılmalıdır? İlk akla gelen yöntem okumanın sinyal fonksiyonun içerisinde 
+    Pekiyi sinyal geldiğinde okuma işlemi nasıl yapılmalıdır? İlk akla gelen yöntem okumanın sinyal fonksiyonunun içerisinde 
     yapılmasıdır. Ancak bu durum genellikle iyi bir teknik değildir. Bunun tipik nedenleri şunlardır:
 
-    - Sinyal oluştuğunda sinyal fonksiyonunda uzun süre işlem yapmak iyi bir teknik değildir. Çünkü aynı sinyal sinyal fonksiyonu 
+    - Sinyal oluştuğunda sinyal fonksiyonunda uzun süre işlem yapmak iyi bir teknik değildir. Çünkü aynı sinyal, sinyal fonksiyonu 
     çalıştığı sürece blokede kalmaktadır. SIGIO sinyali gerçek zamanlı bir sinyal olmadığı için kuyruklanmamaktadır. 
 
     - Sinyal fonksiyonu içerisinde ancak biz sinyal güvenli (signal safe) fonksiyonları çağırabiliriz. Ancak okuma ve sonrasında 
-    pek çok sinyal gğvenli olmayan fonksiyonların çağrılması gerekebilmektedir. 
+    pek çok sinyal güvenli olmayan fonksiyonların çağrılması gerekebilmektedir. 
 
-    Pekiyi okuma/yazma işlemlerini sinyal geldiği zaman sinyal fonksiyonu ieçrisinde yapmayacaksak nerede ve nasıl yapmalıyız? 
+    Pekiyi okuma/yazma işlemlerini sinyal geldiği zaman sinyal fonksiyonu içerisinde yapmayacaksak nerede ve nasıl yapmalıyız? 
 
     <BURADA KALDIK>
 
