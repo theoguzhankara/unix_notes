@@ -37760,69 +37760,1117 @@ void exit_sys(const char *msg)
     okuma/yazma yapması uygun olmaktadır. Örneğin boruya ya da sokete 100 byte gelmiş olsun. Bu durumda sinyal oluşturulur. 
     Eğer biz sinyal oluştuğunda eksik bilgi okursak (örneğin 50 byte okuduğumuzu varsayalım) kenar tetikleme yüzünden artık
     boruya ya da sokete yeni bir bilgi gelene kadar sinyal oluşmayacaktır. Bu nedenle bizim o zamana kadar gelmiş olan tüm 
-    bilgileri bir döngü içerisinde okumamız uygun olur. 
+    bilgileri bir döngü içerisinde okumamız uygun olur. Örneğin:
 
-    Pekiyi sinyal geldiğinde okuma işlemi nasıl yapılmalıdır? İlk akla gelen yöntem okumanın sinyal fonksiyonunun içerisinde 
+    for (;;) {
+        result = read(STDIN_FILENO, buf, BUFFER_SIZE);
+
+        if (result == -1) {
+            if (errno == EAGAIN)
+                break;
+            exit_sys("read");
+        }
+
+        if (result == 0)
+            exit(EXIT_SUCCESS);
+
+        buf[result] = '\0';
+        printf("%s", buf);		// UNSAFE
+    }
+
+    Burada bir döngü içerisinde errno değeri EAGAIN olmayana kadar okuma yapılmıştır.
+
+    Pekiyi sinyal geldiğinde okuma işlemi nasıl yapılmalıdır? İlk akla gelen yöntem okumanın sinyal fonksiyonun içerisinde 
     yapılmasıdır. Ancak bu durum genellikle iyi bir teknik değildir. Bunun tipik nedenleri şunlardır:
 
-    - Sinyal oluştuğunda sinyal fonksiyonunda uzun süre işlem yapmak iyi bir teknik değildir. Çünkü aynı sinyal, sinyal fonksiyonu 
-    çalıştığı sürece blokede kalmaktadır. SIGIO sinyali gerçek zamanlı bir sinyal olmadığı için kuyruklanmamaktadır. 
+    - Sinyal oluştuğunda sinyal fonksiyonunda uzun süre işlem yapmak iyi bir teknik değildir. Çünkü sinyal fonksiyonu çalıştığı 
+    sürece aynı sinyal blokede kalmaktadır. SIGIO sinyali gerçek zamanlı bir sinyal olmadığı için kuyruklanmamaktadır. Ancak 
+    mekanizmanın kenar tetiklemeli olduğunu anımsayınız. Bu nedenle sinyalin blokesi açıldığında o ana kadar gelmiş olan tüm 
+    bilgiler döngü içerisinde okunacaktır.
 
     - Sinyal fonksiyonu içerisinde ancak biz sinyal güvenli (signal safe) fonksiyonları çağırabiliriz. Ancak okuma ve sonrasında 
-    pek çok sinyal güvenli olmayan fonksiyonların çağrılması gerekebilmektedir. 
+    pek çok sinyal güvenli olmayan fonksiyonların çağrılması gerekebilmektedir.
 
-    Pekiyi okuma/yazma işlemlerini sinyal geldiği zaman sinyal fonksiyonu içerisinde yapmayacaksak nerede ve nasıl yapmalıyız? 
+    Pekiyi okuma/yazma işlemlerini sinyal geldiği zaman sinyal fonksiyonu ieçrisinde yapmayacaksak nerede ve nasıl yapmalıyız? 
+    İşte tipik olarak sinyal fonksiyonu içerisinde bir flag set edilip işlemler dışarıda yapılabilir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												92. Ders 28/10/2023 - Cumartesi
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki örnekte stdin dosyasından sinyal tabanlı okuma yapılmıştır. Bu örnekte sinyal fonksiyonunda yalnızca bir flag set
+    edilmiştir. Okumalar sinyal fonksiyonun dışında bu flag değişkenine bakılarak gerçekleştirilmiştir. flag değişkeni sig_atomic_t
+    türünden tanımlanmıştır. Anımsanacağı gibi bu türden nesnelere atama işlemleri tek makine komutuyla atomik yapılmaktadır. 
+    Her ne kadar sig_atomic_t türü "volatile" özelliğine de kapsıyor gibiyse de biz yine de flag değişkeninde volatile niteleyicisini 
+    kullandık.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <signal.h>
+
+#define BUFFER_SIZE		1024
+
+void sigio_handler(int signo);
+void exit_sys(const char *msg);
+
+volatile sig_atomic_t g_sigio_flag;
+
+int main(void)
+{
+	struct sigaction sa;
+	int flags;
+	char buf[BUFFER_SIZE + 1];
+	ssize_t result;
+
+	sa.sa_handler = sigio_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;
+
+	if (sigaction(SIGIO, &sa, NULL) == -1)
+		exit_sys("sigaction");
+
+	if (fcntl(STDIN_FILENO, F_SETOWN, getpid()) == -1)
+		exit_sys("fcntl");
+
+	flags = fcntl(STDIN_FILENO, F_GETFL);
+
+	if (fcntl(STDIN_FILENO, F_SETFL, flags|O_NONBLOCK|O_ASYNC) == -1)
+		exit_sys("fcntl");
+
+	for (;;) {
+		pause();
+
+		if (g_sigio_flag) {
+			for (;;) {
+				result = read(STDIN_FILENO, buf, BUFFER_SIZE);
+
+				if (result == -1) {
+					if (errno == EAGAIN)
+						break;
+					exit_sys("read");
+				}
+
+				if (result == 0)
+					exit(EXIT_SUCCESS);
+
+				buf[result] = '\0';
+				printf("%s", buf);
+			}
+			g_sigio_flag = 0;
+		}
+	}
+
+	return 0;
+}
+
+void sigio_handler(int signo)
+{
+	g_sigio_flag = 1;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Pekiyi sinyal taabanlı IO işlemlerinde birden fazla betimleyici ile nasıl işlem yapılacaktır? Örneğin biz 3 boru betimleyicisinden 
+    okuma yapmak isteyelim. SIGIO sinyali oluştuğunda hangi boruya bilgi geldiğini nasıl anlayacağız? Yukarıdaki örnekte yalnızca 
+    stdin dosyasından okuma yaptık. Bu örnekte böyle bir bilgiye ihtiyacımız yoktu. İşte bu yöntemin aslında etkin bir biçimde 
+    kullanılabilmesi için IO olayı olduğunda SIGIO sinyali yerine gerçek zamanlı bir sinyalin oluşturulması gerekmektedir. 
+    Gerçek zamanlı sinyaller hem kuyruklanmakta hem de bu sinyallere ek bir bilgi yerleştirilebilmektedir. 
+
+    Sinyal tabanlı IO işlemindeki default sinyalin SIGIO sinyali olduğunu belirtmiştik. Ancak SIGIO siynalinin gerçek zamanlı 
+    olmaması bir handikap oluşturmaktadır. İşte default sinyal aslında fcntl fonksiyonu ile F_SETSIG komutu kullanılarak 
+    değiştirilebilmektedir. Örneğin:
+
+    fcntl(fd, F_SETSIG, SIGRTMIN);
+
+    Benzer biçimde oluşturulacak sinyalin numarası da fcntl fonksiyonunda F_GETSIG komutuyla elde edilebilmektedir. Biz F_SETSIG
+    komutu ile gerçek zamanlı bir sinyal set ettiğimizde artık sinyal fonksiyonumuzun siginfo_t parametreli olması gerekmektedir. 
+    Gerçek zamanlı sinyallerin nasıl set edildiğini anımsatmak istiyoruz:
+
+    void signal_handler(int signo, siginfo_t *info, void *context);
+    ...
+    struct sigaction sa;
+    ...
+
+    sa.sa_sigaction = signal_handler;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = SA_RESTART|SA_SIGINFO;
+
+    Gerçek zamanlı siyallerin bu konudaki faydasını izleyen paragraflarda açıklayacağız. Ancak şimdi aşağıda sinyal tabanlı IO 
+    işlemleri için gerçek zamanlı sinyalin set edilmesine yönelik örnek vermek istiyoruz.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#define _GNU_SOURCE
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <signal.h>
+
+#define BUFFER_SIZE		1024
+
+void signal_handler(int signo, siginfo_t *info, void *context);
+void exit_sys(const char *msg);
+
+volatile sig_atomic_t g_sigio_flag;
+
+int main(void)
+{
+	struct sigaction sa;
+	int flags;
+	char buf[BUFFER_SIZE + 1];
+	ssize_t result;
+
+	sa.sa_sigaction = signal_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART|SA_SIGINFO;
+
+	if (sigaction(SIGRTMIN, &sa, NULL) == -1)
+		exit_sys("sigaction");
+
+	if (fcntl(STDIN_FILENO, F_SETOWN, getpid()) == -1)
+		exit_sys("fcntl");
+
+	flags = fcntl(STDIN_FILENO, F_GETFL);
+
+	if (fcntl(STDIN_FILENO, F_SETFL, flags|O_NONBLOCK|O_ASYNC) == -1)
+		exit_sys("fcntl");
+
+	if (fcntl(STDIN_FILENO, F_SETSIG, SIGRTMIN) == -1)
+		exit_sys("fcntl");
+
+	for (;;) {
+		pause();
+
+		if (g_sigio_flag) {
+			for (;;) {
+				result = read(STDIN_FILENO, buf, BUFFER_SIZE);
+
+				if (result == -1) {
+					if (errno == EAGAIN)
+						break;
+					exit_sys("read");
+				}
+
+				if (result == 0)
+					exit(EXIT_SUCCESS);
+
+				buf[result] = '\0';
+				printf("%s", buf);
+			}
+			g_sigio_flag = 0;
+		}
+	}
+
+	return 0;
+}
+
+void signal_handler(int signo, siginfo_t *info, void *context)
+{
+	g_sigio_flag = 1;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Anımsanacağı gibi gerçek zamanlı sinyallerde sinyal fonksiyonuna çekirdek tarafından içi doldurulan siginfo_t türünden bir 
+    yapı nesnesinin adresi geçiriliyordu. siginfo_y yapısını anımsayınız:
+
+    siginfo_t {
+        int      si_signo;     /* Signal number */
+        int      si_errno;     /* An errno value */
+        int      si_code;      /* Signal code */
+        int      si_trapno;    /* Trap number that caused hardware-generated signal (unused on most architectures) */
+        pid_t    si_pid;       /* Sending process ID */
+        uid_t    si_uid;       /* Real user ID of sending process */
+        int      si_status;    /* Exit value or signal */
+        clock_t  si_utime;     /* User time consumed */
+        clock_t  si_stime;     /* System time consumed */
+        union sigval si_value; /* Signal value */
+        int      si_int;       /* POSIX.1b signal */
+        void    *si_ptr;       /* POSIX.1b signal */
+        int      si_overrun;   /* Timer overrun count; POSIX.1b timers */
+        int      si_timerid;   /* Timer ID; POSIX.1b timers */
+        void    *si_addr;      /* Memory location which caused fault */
+        long     si_band;      /* Band event (was int in glibc 2.3.2 and earlier) */
+        int      si_fd;        /* File descriptor */
+        short    si_addr_lsb;  /* Least significant bit of address (since Linux 2.6.32) */
+        void    *si_lower;     /* Lower bound when address violation occurred (since Linux 3.19) */
+        void    *si_upper;     /* Upper bound when address violation occurred (since Linux 3.19) */
+        int      si_pkey;      /* Protection key on PTE that caused fault (since Linux 4.6) */
+        void    *si_call_addr; /* Address of system call instruction (since Linux 3.5) */
+        int      si_syscall;   /* Number of attempted system call (since Linux 3.5) */
+        unsigned int si_arch;  /* Architecture of attempted system call (since Linux 3.5) */
+    }
+
+    Anımsanacağı gibi yapının si_signo elemanı oluşan sinyalin numarasını, si_pid elemanı sinyali oluşturan prosesin id 
+    değerini vermekteydi. Sinyal tabanlı IO işlemlerinde yapının si_fd elemanı simyale yol açan betimleyicinin numarasını 
+    vermektedir. si_code elemanı ise sinyalin neden oluştuğuna yönelik bilgi vermektedir. Yapının bu si_code elemanında şu 
+    bitler set edilmiş olabilir:
+
+    POLL_IN: Okuma ya da kapatma olayı
+    POLL_OUT: Yazma olayın
+    POLL_ERR: IO hatası
+
+    Diğer bayraklar için dokümanlara başvurabilirsiniz.
+
+    Aşağıda daha önce yaptığımız boru örneğinin sinyal tabanlı IO modeli ile gerçekleştirimini veriyoruz. Bu örnekte sinyaller
+    senkron biçimde sigwaitinfo fonksiyonu ile işlenmiştir. Dolayısıyla bir sinyal fonksiyonu yazılmamıştır. sigwaitinfo 
+    uygulamadna önce beklenecek sinyalleri bloke etmeyi unutmayınız. Örneğimizde sigwaitinfo fonksiyonundan çıkıldığında 
+    oluşan olay siginfo_t yapısının si_code elemanından elde edilmiş ve yapının si_fd elemanındna okuma yapılmıştır. Karşı 
+    taraf boruyu ya da soketi kapattığında yine POLL_IN olayının gerçekleşeceğini anımsatmak istiyoruz. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#define _GNU_SOURCE
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <signal.h>
+#include <unistd.h>
+
+#define BUFFER_SIZE		4096
+#define MAX_SIZE		128
+
+void exit_sys(const char *msg);
+
+int main(int argc, char *argv[])
+{
+	char buf[BUFFER_SIZE + 1];
+	int fd;
+	ssize_t result;
+	sigset_t sset;
+	siginfo_t sinfo;
+	int count;
+
+	if (argc == 1) {
+		fprintf(stderr, "too few arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	printf("opens named pipes... it may block...\n");
+
+	count = 0;
+	for (int i = 1; i < argc; ++i) {
+		 if (count >= MAX_SIZE) {
+			fprintf(stderr, "too many arguments, last arguments ignored!..\n");
+			break;
+		}
+		if ((fd = open(argv[i], O_RDONLY)) == -1)
+			exit_sys("open");
+
+		if (fcntl(fd, F_SETOWN, getpid()) == -1)
+			exit_sys("fcntl");
+
+		if (fcntl(fd, F_SETFL, fcntl(fd, F_GETFL)|O_NONBLOCK|O_ASYNC) == -1)
+			exit_sys("fcntl");
+
+		if (fcntl(fd, F_SETSIG, SIGRTMIN) == -1)
+			exit_sys("fcntl");
+
+		printf("%s opened...\n", argv[i]);
+		++count;
+	}
+
+	sigaddset(&sset, SIGRTMIN);
+
+	if (sigprocmask(SIG_BLOCK, &sset, NULL) == -1)
+		exit_sys("sigprocmask");
+
+	for (;;) {
+		if ((sigwaitinfo(&sset, &sinfo)) == -1)
+			exit_sys("sigwaitinfo");
+
+		if (sinfo.si_code & POLL_IN) {
+			for (;;) {
+				result = read(sinfo.si_fd, buf, BUFFER_SIZE);
+
+				if (result == -1) {
+					if (errno == EAGAIN)
+						break;
+					exit_sys("read");
+				}
+
+				if (result == 0) {
+					--count;
+					close(sinfo.si_fd);
+					break;
+				}
+
+				buf[result] = '\0';
+				printf("%s", buf);
+			}
+			if (count == 0)
+				break;
+		}
+	}
+
+	if (sigprocmask(SIG_UNBLOCK, &sset, NULL) == -1)
+		exit_sys("sigprocmask");
+
+	printf("there is no descriptor open, finishes...\n");
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Pekiyi multiplexed select ve poll modeli ile sinyal tabanlı IO modelini kıyaslarsak ne söylebiliriz? Linux sistemlerinde 
+    sinyal tabanlı IO modeli select ve poll modeline göre daha yüksek performasn sunmaktadır. Özellikle önceki örnekte yaptığımız 
+    senkron sinyal işlemesi yüksek miktarda betimleyici söz konusu olduğunda select ve poll modelindne daha iyi sonuçlar vermektedir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    İleri IO modellerinden biri de "Asenkron IO Modelidir". Bu modelde okuma/yazma gibi işlemler başlatılır ancak akış devam eder.
+    İşlemler bittiğinde durum programcıya bir sinyal ya da fonksiyon çağrısı ile bildirilir. Asenkron işlemleri POSIX standartları
+    tarafından desteklenmektedir. Asenkron modelinde kullanılan fonksiyonlar aio_xxx biçiminde isimlendirilmiştir. Asenkron 
+    IO işlemleri için kullanılan fonksiyonlar ve yapılar <aio.h> dosyası içerisinde bildirilmiştir.
+
+    Asenkron IO işlemleri tipik olarak şu aşamalardan geçilerek yürütülmektedir:
+
+    1) Önce <aio.h> içerisinde bildirilmiş olan struct aiocb (asychronous io control block) isimli bir yapı türünden nesne tanımlanıp 
+    içinin doldurulması gerekir. Yapı şöyle bildirilmiştir.
+
+    struct aiocb {
+        int             aio_fildes;
+        off_t           aio_offset;
+        volatile void  *aio_buf;
+        size_t          aio_nbytes;
+        int             aio_reqprio;
+        struct sigevent aio_sigevent;
+        int             aio_lio_opcode;
+    };
+
+    Yapının aio_fildes elemanına okuma/yazma yapılmak istenen dosyaya ilişkin dosya betimleyicisi yerleştirilir. Asenkon okuma/yazma
+    işlemleri dosya göstericisinin gösterdiği yerden itibaren yapılmamaktadır. Okuma/yazmanın dosyanın neresinden yapılacağı yapının 
+    aio_offset elemanında belirtilir. (Seekable olmayan aygıtlar için bu elemana 0 girilebilir. Eğer yazma durumu söz konusuysa ve 
+    dosya O_APPEND modda açıldıysa bu durumda aio_offset elemanının değeri dikkate alınmaz. Her yazılan dosyaya eklenir.) Yapının 
+    aio_buf elemanı transferin yapılacağı bellek adresini belirtir. Bu adresteki dizinin işlem sonlanana kadar yaşıyor durumda olması 
+    gerekmektedir. Yapının aio_nbytes elemanı okunacak ya da yazılacak byte miktarını belirtmektedir. Tabii burada belirtilen byte miktarı 
+    aslında aio_buf dizisinin uzunluğunu belirtmektedir. Yoksa kesinlikle okunacak byte sayısını belirtmez. Yani örneğin asenkron biçimde 
+    bir borudan 100 byte okumak isteyelim. Bize "işlem bitti" bildirimi 100 byte okuduktan sonra gelmek zorunda değildir. En az 1 byte'lık 
+    okuma olayı gerçekleşmişse de "işlem bitti bildirimi" yapılır. Tabii hiçbir zaman burada belirtilen byte miktarından fazla okuma yazma 
+    yapılmayacaktır. Başka bir deyişle yapının bu aio_nbytes elemanı en fazla yapıalacak okuma/yazma miktarını belirtmektedir. Yapının 
+    aio_reprio elemanı ise okuma/yazma için bir öncelik derecesi belirtmektedir. Yani bu değer yapılacak transferin önceliğine ilişkin bir 
+    ip ucu belirtir. Ancak işletim sisteminin bu ipucunu kullanıp kullanmayacağı isteğe bağlı bırakılmıştır. Bu eleman 0 geçilebilir. 
+    Yapının aio_sigevent elemanı işlem bittiğinde yapılacak bildirim hakkında bilgileri barındırmaktadır. Bu sigevent yapısını daha önce 
+    timer konusunda görmüştük. Burada anımsatmak yeniden istiyoruz:
+
+    struct sigevent {
+        int          sigev_notify;
+        int          sigev_signo;
+        union sigval sigev_value;
+        void       (*sigev_notify_function) (union sigval);
+        void        *sigev_notify_attributes;
+    };
+
+    Bu yapının sigev_notify elemanı bildirimin türünü belirtir. Anımsanacağı gibi bu tür SIGEV_NONE, SIGEV_SIGNAL, SIGEV_THREAD biçiminde 
+    olabilmektedir. SIGEV_NONE IO olayı bittiğinde bir bildirimin yapılmayacağını, SIGEV_SIGNAL bir sinyal ile bildirimin yapılacağını, 
+    SIGEV_THREAD ise bildirimin kernel tarafındna yaratılan bir thread yoluyla yapılacağını belirtmektedir. Yapının sigev_signo elemanı 
+    ise eğer sinyal yoluyla bildirimde bulunulacaksa sinyalin numrasını belirtmektedir. Yapının sigev_value elemanı sinyal fonksiyonuna 
+    ya da thread fonksiyonuna gönderilecek kulanıcı tanımlı bilgiyi temsil etmektedir. Buradaki birliğin aşağıdkai gibi bildirildiğini anımsayınız:
+
+    union sigval {            /* Data passed with notification */
+        int     sival_int;    /* Integer value */
+        void   *sival_ptr;    /* Pointer value */
+    };
+
+    Yapının sigev_notify_function elemanı eğer bildirim thread yoluyla yapılacaksa işletim sistemi tarafından yaratılan thread'in çağıracağı 
+    callback fonksiyonu belirtmektedir. Yapının sigev_notify_attributes elemanı ise yaratılacak thread'in özelliklerini belirtir. Bu 
+    parametre NULL geçilebilir. 
+
+    Örneğin:
+
+    struct aiocb cb;
+    char buf[BUFFER_SIZE + 1];
+    ...
+
+    cb.aio_fildes = STDIN_FILENO;
+    cb.aio_offset = 0;
+    cb.aio_buf = buf;
+    cb.aio_nbytes = BUFFER_SIZE;
+    cb.aio_reqprio = 0;
+    cb.aio_sigevent.sigev_notify = SIGEV_THREAD;
+    cb.aio_sigevent.sigev_value.sival_ptr = &cb;
+    cb.aio_sigevent.sigev_notify_function = io_proc;
+    cb.aio_sigevent.sigev_notify_attributes = NULL;
+
+    2) Şimdi okuma ya da yazma olayını aio_read ya da aio_write fonksiyonuyla başlatmak gerekir. Artık akış bu fonksiyonlarda bloke olmayacak
+    fakat işlem bitince bize bildirimde bulunulacaktır.
+
+    #include <aio.h>
+
+    int aio_read(struct aiocb *aiocbp);
+    int aio_write(struct aiocb *aiocbp);
+
+    Fonksiyonlar başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri dönmektedir. İşlemlerin devam ettiğine yani henüz 
+    sonlanmadığına dikkat ediniz. Bu fonksiyonlara verdiğimiz aiocb yapılarının işlem tamamlanana kadar yaşıyor olması gerekir. Yani 
+    fonksiyon bizim verdiğimiz aicb yapısını çalışırken kullanıyor olabilir. 
+
+    aio_read ve aior_write fonksiyonları yalnızca bir defalık okuma yazma için mekanizmayı kurmaktadır. Mekanizmanın nasıl devam 
+    ettirileceği izleyen maddede ele alınacaktır.
+
+    Örneğin:
+
+    if (aio_read(&cb) == -1)
+        exit_sys("aio_read");
+
+    3) Anımsanacağı gibi biz aiocb yapısının aio_nbytes elemanına maksimum okuma/yazma miktarını vermiştik. Halbuki bundan daha
+    az okuma/yazma yapılması mümkündür. Pekiyi bize bildirimde bulunulduğunda ne kadar miktarda bilginin okunmuş ya da yazılmış 
+    olduğunu nasıl anlayacağız? İşte bunun için aio_result isimli fonksiyon kullanılmaktadır:
+
+    #include <aio.h>
+
+    ssize_t aio_return(struct aiocb *aiocbp);
+
+    Fonksiyon başarı durumunda transfer edilen byte sayısına başarısızlık durumunda -1'e geri dönmektedir. Eğer bildirim gelmeden
+    bu fonksion çağrılırsa geri dönüş değeri anlamlı olmayabilir. aio_read ve aio_write fonksiyonları sinyal güvenli değildir ancak
+    aio_return ve aio_error fonksiyonları sinyal güvenlidir.
+
+    Yukarıda aio_read ve aio_write işlemlerinin bir defalık okuma/yazma sağladığını belirtmiştik. İşlemin devamının sağlanmsı 
+    için her okuma/yazma olayı gerçekleştiğinde yeniden aio_read ve aio_write fonksiyonlarının çağrılması gerekmektedir. Yani
+    IO işlemi gerçekleştiğinde biz yeniden IO işlemi için bu fonksiyonların çağrılmasını sağlamalıyız.
+
+    Aşağıda asenkron IO modelinin uygulanmasına ilişkin bir örnek verilmiştir. Örnekte stdin dosyasından sürekli okuma yapılmak 
+    istenmiştir. Burada bildirim SIGEV_THREAD ile kernel tarafından yaaratılan bir thread yoluyla yapılmaktadır. Okuma olayın 
+    bittiğinde kernel bizim belirlediğimiz fonksiyonu çağırmaktadır. Biz de bu fonksiyon içerisinde aio_return fonksiyonu ile 
+    kaç byte okunduğunu belirleyip işlemin devam etmesi için aoi_read fonksiyonunu yendien çağırmaktayız. Burada thread fonksiyonuna
+    bizim aiocb yapısını nasıl geçirdiğimize dikkat ediniz:
+
+    cb.aio_sigevent.sigev_value.sival_ptr = &cb;
+
+    aio_sigevent yapısının sigev_value elemanı thread fonksiyonuna parametre olarak aktarılmaktadır. sigev_value elemanının 
+    bir birlik olduğunu anımsayınız. Biz de bu birliğin sival_ptr elemanına aiocb yapı nesnesinin adresini yerleştirdik. 
+    Klavyeden Ctrl+d tuşlarına basıldığında bu da bir IO olayı olarak ele alınmaktadır. Ancak bu durumda aio_return fonksiyonu
+    0 değeri ile geri dönmektedir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <aio.h>
+
+#define BUFFER_SIZE		4096
+
+void io_proc(union sigval sval);
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	struct aiocb cb;
+	char buf[BUFFER_SIZE + 1];
+
+	cb.aio_fildes = STDIN_FILENO;
+	cb.aio_offset = 0;
+	cb.aio_buf = buf;
+	cb.aio_nbytes = BUFFER_SIZE;
+	cb.aio_reqprio = 0;
+	cb.aio_sigevent.sigev_notify = SIGEV_THREAD;
+	cb.aio_sigevent.sigev_value.sival_ptr = &cb;
+	cb.aio_sigevent.sigev_notify_function = io_proc;
+	cb.aio_sigevent.sigev_notify_attributes = NULL;
+
+	if (aio_read(&cb) == -1)
+		exit_sys("aio_read");
+
+	printf("waiting at pause, press Ctrl+C to exit...\n");
+
+	pause();
+
+	return 0;
+}
+
+void io_proc(union sigval sval)
+{
+	ssize_t result;
+	struct aiocb *cb = (struct aiocb *)sval.sival_ptr;
+	char *buf = (char *)cb->aio_buf;
+
+	if ((result = aio_return(cb)) == -1)
+		exit_sys("aio_result");
+
+	if (result == 0) {
+		printf("Ctrl+d pressed...\n");
+		return;
+	}
+
+	buf[result] = '\0';
+	printf("%s", buf);
+
+	if (aio_read(cb) == -1)
+		exit_sys("aio_read");
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki örnekte daha önce yapmış olduğumuz birden fazla borudan okuma örneğini asenkron IO modeli ile gerçekleştiriyoruz.
+    Burada yine komut satırı argümanları ile alınan bir grup isimli boru açılmıştır. Her boru açıldığında bir aiocb yapısı 
+    dinamik bir biçimde tahsis edilerek içi doldurulmuştur. Tabii her asenkron IO işleminde farklı bir tamponun kullanılması 
+    gerekmektedir. Burada yine bildirim thread yoluyla yapılmaktadır. IO olayı bittiğinde belirlediğimiz fonksiyon kernel 
+    tarafından çağrılacaktır. Biz de bu fonksiyon içerisinde kaç byte okumanın yapıldığını belirleyip okunanları ekrana (stdout 
+    dosyasına) yazdırmaktayız. Tahsis edilen alanların betimleyici kapatıldıktan sonra free edildiğine dikkat ediniz. Ana akış
+    bu sırada pause fonksiyonunda bekletilmektedir. Son boru betimleyicisi de kapatıldığında raise fonksiyonu ile kendi prosesimize
+    SIGINT sinyalini göndererek işlemleri sonlandırmaktayız. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <signal.h>
+#include <stdatomic.h>
+#include <aio.h>
+
+#define BUFFER_SIZE		4096
+#define MAX_SIZE		128
+
+void io_proc(union sigval sval);
+void exit_sys(const char *msg);
+
+volatile atomic_int g_count;
+
+int main(int argc, char *argv[])
+{
+	char buf[BUFFER_SIZE + 1];
+	int fd;
+	struct aiocb *cb;
+
+	if (argc == 1) {
+		fprintf(stderr, "too few arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	printf("opens named pipes... it may block...\n");
+
+	g_count = 0;
+	for (int i = 1; i < argc; ++i) {
+		if (g_count >= MAX_SIZE) {
+			fprintf(stderr, "too many arguments, last arguments ignored!..\n");
+			break;
+		}
+		if ((fd = open(argv[i], O_RDONLY)) == -1)
+			exit_sys("open");
+
+		printf("%s opened...\n", argv[i]);
+
+		if ((cb = (struct aiocb *)malloc(sizeof(struct aiocb))) == NULL) {
+			fprintf(stderr, "cannot allocate memory!..\n");
+			exit(EXIT_FAILURE);
+		}
+
+		cb->aio_fildes = fd;
+		cb->aio_offset = 0;
+		if ((cb->aio_buf = malloc(BUFFER_SIZE + 1)) == NULL) {
+			fprintf(stderr, "cannot allocate memory!..\n");
+			exit(EXIT_FAILURE);
+		}
+		cb->aio_nbytes = BUFFER_SIZE;
+		cb->aio_reqprio = 0;
+		cb->aio_sigevent.sigev_notify = SIGEV_THREAD;
+		cb->aio_sigevent.sigev_value.sival_ptr = cb;
+		cb->aio_sigevent.sigev_notify_function = io_proc;
+		cb->aio_sigevent.sigev_notify_attributes = NULL;
+
+		if (aio_read(cb) == -1)
+			exit_sys("aio_read");
+
+		++g_count;
+	}
+
+	printf("waiting at pause, press Ctrl+C to exit...\n");
+
+	pause();
+
+	return 0;
+}
+
+void io_proc(union sigval sval)
+{
+	ssize_t result;
+	struct aiocb *cb = (struct aiocb *)sval.sival_ptr;
+	char *buf = (char *)cb->aio_buf;
+
+	if ((result = aio_return(cb)) == -1)
+		exit_sys("aio_result");
+
+	if (result == 0) {
+		printf("pipe closed...\n");
+		close(cb->aio_fildes);
+		free(buf);
+		free(cb);
+		--g_count;
+
+		if (g_count == 0)
+			if (raise(SIGINT) != 0)
+				exit_sys("raise");
+		return;
+	}
+
+	buf[result] = '\0';
+	printf("%s", buf);
+
+	if (aio_read(cb) == -1)
+		exit_sys("aio_read");
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Yukarıdaki örneği biraz farklı bir biçimde de düzenleyebiliriz. Örneğin aiocb yapısı ile tampon bizim oluşturduğumuz 
+    bir yapının içerisinde saklanabilir. Böylece tahsisat işlemleri ve kullanım işlemleri biraz daha kolaylatırılabilir. Örneğin:
+
+    typedef struct {
+        struct aiocb cb;
+        char buf[BUFFER_SIZE + 1];
+    } IOCB_BUF;
+
+    Bu sayede biz aiocb yapısı için ve tampon için iki ayrı tahsidat yapmak yerine tek bir tahsisat yapabiliriz. Aynı zamanda
+    bu yapının içerisine başka bilgiler de yerleştirilebilmektedir. Gerçekten de özellikle TCP soket uygulamalarında okunan
+    bilgilerin bir araya getirilmesi için tampona eşlik eden başka bilgilerinde bu yapıda tutulması gerekebilmektedir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <signal.h>
+#include <stdatomic.h>
+#include <aio.h>
+
+#define BUFFER_SIZE		4096
+#define MAX_SIZE		128
+
+typedef struct {
+	struct aiocb cb;
+	char buf[BUFFER_SIZE + 1];
+} IOCB_INFO;
+
+void io_proc(union sigval sval);
+void exit_sys(const char *msg);
+
+volatile atomic_int g_count;
+
+int main(int argc, char *argv[])
+{
+	int fd;
+	IOCB_INFO *ioinfo;
+
+	if (argc == 1) {
+		fprintf(stderr, "too few arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	printf("opens named pipes... it may block...\n");
+
+	g_count = 0;
+	for (int i = 1; i < argc; ++i) {
+		if (g_count >= MAX_SIZE) {
+			fprintf(stderr, "too many arguments, last arguments ignored!..\n");
+			break;
+		}
+		if ((fd = open(argv[i], O_RDONLY)) == -1)
+			exit_sys("open");
+
+		printf("%s opened...\n", argv[i]);
+
+		if ((ioinfo = (IOCB_INFO *)malloc(sizeof(IOCB_INFO))) == NULL) {
+			fprintf(stderr, "cannot allocate memory!..\n");
+			exit(EXIT_FAILURE);
+		}
+
+		ioinfo->cb.aio_fildes = fd;
+		ioinfo->cb.aio_offset = 0;
+		ioinfo->cb.aio_buf = ioinfo->buf;
+		ioinfo->cb.aio_nbytes = BUFFER_SIZE;
+		ioinfo->cb.aio_reqprio = 0;
+		ioinfo->cb.aio_sigevent.sigev_notify = SIGEV_THREAD;
+		ioinfo->cb.aio_sigevent.sigev_value.sival_ptr = ioinfo;
+		ioinfo->cb.aio_sigevent.sigev_notify_function = io_proc;
+		ioinfo->cb.aio_sigevent.sigev_notify_attributes = NULL;
+
+		if (aio_read(&ioinfo->cb) == -1)
+			exit_sys("aio_read");
+
+		++g_count;
+	}
+
+	printf("waiting at pause, press Ctrl+C to exit...\n");
+
+	pause();
+
+	return 0;
+}
+
+void io_proc(union sigval sval)
+{
+	ssize_t result;
+	IOCB_INFO *ioinfo = (IOCB_INFO *)sval.sival_ptr;
+
+	if ((result = aio_return(&ioinfo->cb)) == -1)
+		exit_sys("aio_result");
+
+	if (result == 0) {
+		printf("pipe closed...\n");
+		close(ioinfo->cb.aio_fildes);
+		free(ioinfo);
+		--g_count;
+
+		if (g_count == 0)
+			if (raise(SIGINT) != 0)
+				exit_sys("raise");
+		return;
+	}
+
+	ioinfo->buf[result] = '\0';
+	printf("%s", ioinfo->buf);
+
+	if (aio_read(&ioinfo->cb) == -1)
+		exit_sys("aio_read");
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    aio_cancel fonksiyonu ise başlatılmış olan bir asenkron IO işlemini iptal etmek için kullanılmaktadır.
+
+    #include <aio.h>
+
+    int aio_cancel(int fd, struct aiocb *aiocbp);
+
+    Fonksiyonun birinci parametresi iptal edilecek betimleyiciyi belirtir. Eğer iocb NULL geçilirse bu betimleyiciye lişkin 
+    bütün asenkron işlemler iptal edilmektedir.
+
+    Fonksiyon AIO_CANCELED değerine geri dönerse iptal başarılıdır. AIO_NOTCANCELED değerine geri dönerse işlem aktif biçimde 
+    devam etmekte olduğu için iptal başarısızdır. AIO_ALLDONE değeri ise işlemin zaten bittiğini belirtir. Fonksiyon başarıszlık 
+    durumunda -1 değerine geri dönmektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    aio_error isimli fonksiyon herhangi bir durumda başlatılan işlemin akibeti konusunda bilgi almak için kullanılabilir. 
+
+    #include <aio.h>
+
+    int aio_error(const struct aiocb *aiocbp);
+
+    Fonksiyonun geri dönüş değeri bu asenkron işlemin o anda ne durumda olduğu hakkında bize bilgi vermektedir. Eğer fonksiyon 
+    EINPROGRESS biçiminde özel bir değere geri dönerse işlemin hala devam ettiği anlamı çıkar. Geri dönüş değeri ECANCELED 
+    ise bu durumda işlem aio_cancel fonksiyonuyla iptal edilmiştir (Bu geri dönüş değeri POSIX standartlarında bulunmamaktadır. Linux 
+    sistemlerinde bulunmaktadır.) Fonksiyon errno değerini set etmez. Geri dönüş değeri diğer pozitif değerlerden birisi ise 
+    hata ile ilgili errno değerini belirtir. Başlatılan IO işlemi başarılı bir biçimde sonlanmışsa fonksiyon 0 değerine geri 
+    dönmektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Şimdiye kadar görmüş olduğumuz IO modellerinin kullanımlaro ve performansları hakkında şunları söyleyebiliriz:
+
+    - select, poll modeli ve asenkron IO modeli POSIX standartlarında bulunan taşınabilir modellerdir.
+    - epoll modeli ve sinyal tabanlı IO modeli Linux sistemlerine özgüdür. Yani taşınabilir değildir.
+    - Linux sistemlerinde performansı en yüksek model epoll modelidir. Perfomans sıralaması iyiden kötüye doğru şöyledir:
+
+    1) epoll modeli
+    2) sinyal tabanlı IO modeli ve asenkron IO modeli
+    3) select ve poll modeli
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Üzerinde duracağımız son IO modeli İngilizce "scatter/gather" Io modeli denilen modeldir. ("scatter" saçmak, "gather"
+    toplamak anlıma gelmektedir. Buna Türkçe "saçma/toplama IO modeli" deiyebiliriz.)
+
+    Pek çok uygulamada değişik adreslerdeki bilgilerin peşi sıraya dosyaya yazılması ya da dosyadan okunanların değişik adreslere
+    yazılması söz konusu olabilmektedir. Örneğin bir kaydı temsil eden aşağıdaki üç bilginin birbiri ardına dosyaya yazılmak 
+    istendiğini düşünelim:
+
+    int record_len;
+    char record[RECORD_SIZE];
+    int record_no;
+
+    Bu bilgilerin dosyaya yazılması için normal olarak üç ayrı write işlemi yapmak gerekir:
+
+    if (write(fd, &record_len, sizeof(int)) != sizeof(int)) {
+        ...
+    }
+
+    if (write(fd, record, RECORD_SIZE) != RECORD_SIZE) {
+        ...
+    }
+
+    if (write(fd, &record_no, sizeof(int)) != sizeof(int)) {
+        ...
+    }
+
+    Burada farklı adreslerde bulunan üç farklı bilgi dosyaya peşi sıra yazılmak istenmiştir. Ancak bu write işlemi göreli bir 
+    zaman kaybı oluşturabilmektedir. Tabii zaman kaybı uygulamaların ancak çok azında bir önem oluşturur. Buradaki zaman kaybının 
+    en önemli nedeni her write çağrısının kernel moda'a geçiş yapmasıdır. Eğer bu zaman kaybını aşağı çekmek istiyorsak ilk 
+    akla gelen yöntem önce bu bilgileri başka bir tampona kopyalayıp tek bir write işlemi yapmaktır:
+
+    char buf[BUFSIZE];
+
+    memcpy(buf, &recordlen, sizeof(int));
+    memcpy(buf + sizeof(int), record, BUFSIZE);
+    memcpy(buf + sizeof(int) + BUFIZE, &record_no, sizeof(int));
+
+    if (write(fd, buf, 2 * sizeof(int) + BUFSIZE) != 2 * sizeof(int) + BUFSIZE) {
+        ...
+    }
+
+    Bu işlem üç ayrı write işlemine göre oldukça hızlıdır. işte readv ve writev isimli fonksiyonlar farklı adreslerdeki bilgileri 
+    yukarıdakine benzer biçimde dosyaya yazıp dosyadan okumaktadır. Bu işlemlere İngilizce "scatter/gather IO" denilmektedir. readv ve 
+    writev fonksiyonlarının prototipleri şöyledir:
+
+    #include <sys/uio.h>
+
+    ssize_t readv(int fildes, const struct iovec *iov, int iovcnt);
+    ssize_t writev(int fildes, const struct iovec *iov, int iovcnt);
+
+    Fonskiyonların birinci parametreleri okuma ya da yazma işleminin yapılacağı dosya betimleyicisini, ikinci parametreleri 
+    kullanılacak tampon uzunluklarının ve adreslerinin belirtildiği yapı dizisinin adresini, üçüncü parametresi de bu yapı dizinin 
+    uzunluğunu belirtir. Programcı struct iovec türünden bir yapı dizisi oluşturupğ onun içini doldurmalıdır. Fonksiyonlar 
+    başarısızlık durumunda -1 değerine, diğer durumlarda okunan yazılan byte toplam byte miktarına geri dönmektedir. Okuma ve 
+    yazma işlemleri tek parça halinde atomik biçimde yapılmaktadır. Yani bu okuma yazma işlemlerinin arasında başka bir dosya
+    işlemi girememektedir. iovec yapısı şöyle bildirilmiştir:
+
+    struct iovec {
+        void *iov_base;
+        size_t iov_len;
+    };
+
+    Yapının iov_base elemanı yazılacak ya da okunacak bilginin bellek adresini iov_len elemanı ise bunun uzunluğunu belirtmektedir. 
+
+    Aşağıdaki örnekte aslında üç farklı write işlemi ile yapılacak yazma işlemleri tek hamlede atomik olarak writev fonksiyonuyla
+    yapılmıştır. Burada farklı adreslerdeki bilgilerin dosyaya dosya gösterdiği yerden itibaren peşi sıra yazıldığına dikkat ediniz. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <sys/uio.h>
+
+#define BUFFER_SIZE		10
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int fd;
+	char *buf1[BUFFER_SIZE];
+	char *buf2[BUFFER_SIZE];
+	char *buf3[BUFFER_SIZE];
+	struct iovec vec[3];
+
+	if ((fd = open("test.txt", O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)) == -1)
+		exit_sys("open");
+
+	memset(buf1, 'a', BUFFER_SIZE);
+	memset(buf2, 'b', BUFFER_SIZE);
+	memset(buf3, 'c', BUFFER_SIZE);
+
+	vec[0].iov_base = buf1;
+	vec[0].iov_len = BUFFER_SIZE;
+
+	vec[1].iov_base = buf2;
+	vec[1].iov_len = BUFFER_SIZE;
+
+	vec[2].iov_base = buf3;
+	vec[2].iov_len = BUFFER_SIZE;
+
+	if (writev(fd, vec, 3) == -1)
+		exit_sys("writev");
+
+	close(fd);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Aşağıda readv fonskiyonun kullanımına bir örnek verilmiştir. Burada yukarıdaki örnekte oluşturulan dosya ters bir biçimde
+    readv fonksiyonu ile farklı adreslere okunmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <sys/uio.h>
+
+#define BUFFER_SIZE		10
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int fd;
+	char *buf1[BUFFER_SIZE];
+	char *buf2[BUFFER_SIZE];
+	char *buf3[BUFFER_SIZE];
+	struct iovec vec[3];
+
+	if ((fd = open("test.txt", O_RDONLY)) == -1)
+		exit_sys("open");
+
+	vec[0].iov_base = buf1;
+	vec[0].iov_len = BUFFER_SIZE;
+
+	vec[1].iov_base = buf2;
+	vec[1].iov_len = BUFFER_SIZE;
+
+	vec[2].iov_base = buf3;
+	vec[2].iov_len = BUFFER_SIZE;
+
+	if (readv(fd, vec, 3) == -1)
+		exit_sys("writev");
+
+	write(1, buf1, BUFFER_SIZE);
+	write(1, buf2, BUFFER_SIZE);
+	write(1, buf3, BUFFER_SIZE);
+
+	close(fd);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Arka planda sessiz sedasız çalışan bir kullanıcı arayüzü olmayan, kullanıcılarla terminal yoluyla etkileşmeyen programlara 
+    Windows dünyasında "servis (service)" UNIX/Linux dünyasında ise "daemon (di:mın biçiminde okunuyor)" denilmektedir. Servisler 
+    ya da daemon'lar tipik olarak boot sırasında çlışmaya başlatılırlar ve yine tipik olarak makine reboot edilene kadar çalışmaya 
+    devam ederler. Tabii böyle bir zorunluluk yoktur. Yani servis ya da daemon programlar istenildiği zaman balatılıp istenildiği 
+    zaman sonlandırılabilmektedir. Servis ya da "daemon" kernel mod bir kavram değildir. Yani servisler ve daemon'lar genellikle
+    "user modda" çalışmak üzere yazılırlar. UNIX/Linux dünyasında geleneksel olarak daemon'lar "xxxxxd" biçiminde sonuna 'd' harfi 
+    getirilerek isimlendirilmektedir. Çekirdeğe ilişkin bazı thread'ler de servis benzeri işlemler yaptıkları için bunlar da çoğu 
+    kez sonu 'd' ile bitecek ancak başı da 'k' ile başlayacak biçimde isimlendirilmiştir. Bu kernel daemon'ların bizim şu andaki 
+    konumuz olan daemnon'larla hiçbir ilgisi yoktur. Yalnızca işlev bakımından bir benzerlik söz konusudur. UNIX/Linux dünyasında 
+    daemon dendiğinde akla öncelikle "server programlar" gelmektedir. Örneğin ftp server programı (ftpd) ve http server programı 
+    (httpd) daemon programlar biçiminde yazılmışlardır. Daemon'lar genellikle arka planda önemli işlemler yaptıkları için uygun 
+    önceliklerle (yani sudo ile root hakkıyla") çalıştırılırlar.
+
+    Daemon programlar pek çok modern UNIX/Linux sisteminde "init paketleri" içerisindeki özel utility'ler tarafından başlatılıp, 
+    sürdürülüp sonlandırılmaktadır. Yani ilgili dağıtımın bu dameon'ları idare etmek için özel komutları bulunabilmektedir. Linux 
+    sistemlerinde init prosesi ve diğer proseslerin kodları ve boot süreci ile ilgili utility'ler "init paketleri" denilen 
+    paketler biçiminde farklı proje grupları tarafından oluşturulmuştur. Başka bir deyişle "servis yönetim (service management)"
+    işlemleri organize bir biçimde bu "init paketleri" tarafından yapılmaktadır. Yaygın olarak kullanılan üç "init paketi" bulunmaktadır:
+
+    1) sysvinit: Klasik System5'teki işlevleri yapan init paketidir. Linux uzun bir süre bu paketi kullanmıştır.
+    2) Upstart: 2006 yılında oluşturulmuştur ve 2010'ların ortalarına kadar (bazı dağtımlarda hala) kullanılmaya yaygın biçimde kullanılmıştır.
+    3) systemd: 2010 yılında oluşturulmuştur ve son yıllarda pek çok Linux dağıtımında kullanılmaya başlanmıştır. Bugün en yaygın kullanılan 
+    init paketi durumundadır.
+/*--------------------------------------------------------------------------------------------------------------------------
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir deamon programı yazabilmek için öncelikle onun terminal bağlantısının kesilmesi gerekmektedir. Bir programı komut satırından
+    sonuna & getirerek "arka plan proses grubu" biçiminde çalıştırarak servis oluşturamayız. 
 
     <BURADA KALDIK>
 
----------------------------------------------------------------------------------------------------------------------------*/
+    Bir daemon programın yazılması tipik olarak şu aşamalardan geçilerek yapılmaktadır:
 
-/*--------------------------------------------------------------------------------------------------------------------------
+    1) Deamon programlar bir dosya açmak istediklerinde tam olarak belirlenen haklarla bunu yapmalıdırlar. Bu nedenle bu proseslerin
+    umask değerlerinin 0 yapılması uygun olur.
 
----------------------------------------------------------------------------------------------------------------------------*/
+    2) Bir prosesin deamon etkisi yaratması için terminalle bir bağlantısının kalmaması gerekir. Bu da basi tbir biçimde maalesef 0, 1, 2 
+    numaralı terminal betimleyicilerinin kapatılmasıyla sağlanamaz. Bunu sağlamanın en temel yolu setsid fonksiyonunu çağırmaktır. 
+    Anımsanacağı gibi setsid fonksiyonu yeni bir oturum (session) ve yeni bir proses grubu oluşturup lgili prosesi bu proses grubunun
+    ve oturumun lideri yapmaktadır. Ayrıca setsid fonksiyonu prosesin terminal ilişkisini (controlling terminal) de ortadan kaldırmaktadır. 
+    Ancak setsid uygulayabilmek için prosesin herhangi bir proses grup lideri olmaması gerekir. Aksi takdirde setsid fonksiyonu başarısız 
+    olmaktadır. Yine anımsanacağı gibi kabuk programlar çalıştırdıkları programlar için bir proses grubu yaratıp o programı da proses grup 
+    lideri yapıyordu. İşte proses grup lideri olmaktan kurtulmak için bir kez fork yapıp üst prosesi sonlandırabiliriz. Aynı zamanda bu 
+    işlem kabuk programının hemen komut satırına yeniden düşmesine yol açacaktır. O halde 2'inci aşamada fork işlemi yapılıp üst proses 
+    sonlandırılmalıdır. Bilindiği gibi terminale bağlı programları kabukta sonuna & getirerek arka planda çalıştırdığımızda yeniden 
+    komut satırına düşsek bile kabuk programları kapatıldığında bu programlar da SIGHUP sinyali gönderilerek sonlandırılmaktadır. Yani 
+    örneğin biz terminal ilişkisini kesmezsek bir kez fork yapıp alt proses arka planda çalışır gibi olur ancak bu durumda terminal 
+    kapatıldığında o alt proses de SIGHUP sinyali gönderilerek sanlandırılır. 
 
-/*--------------------------------------------------------------------------------------------------------------------------
+    3) Artık alt proses setsid fonksiyonunu uygulayarak yeni bir oturum yaratır ve terminal ilişkisini keser. Terminal ilişkisinin kesilmesi
+    ile artık terminal kapatılsa bile programımız çalışmaya devam eder. Tabii setsid ile terminal bağlantısının kesilmiş olması programın
+    terminale bir şey yazamayacağı anlamına gelmez. Hala 0, 1, 2 numaralı betimleyiciler açıktır. Terminal açık olduğu sürece oraya yazma
+    yapılabilir. 
 
----------------------------------------------------------------------------------------------------------------------------*/
+    4) Daemon programların çalışma dizinlerinin (current working directory) sağlam bir dizin olması tavsiye eidlir. Aksi takdirde 
+    o dizin silinirse arka plan bu programların çalışmaları bozulur. Bu nedenle daemon programların çoğu kök dizini (silinemeyeceği için) 
+    çalışma dizini yapmaktadır. Tabii bu zorunlu değildir. Bunun yerine varlığı garanti edilmiş olan herhangi bir dizin de çalışma 
+    dizini yapılabilir. 
 
-/*--------------------------------------------------------------------------------------------------------------------------
+    5) Daemon programın o ana kadar açılmış olan tüm betimleyicileri kapatması uygun olur. Örneğin 0, 1, 2 numaralı betimleyiciler
+    ilgili terminale ilişkindir ve artık o terminal kapatılmış ya da kapatılacak olabilir. Program kendini daemon yaptığı 
+    sırada açmış olduğu diğer dosyaları da kapatmalıdır. Bunu sağlamanın basit bir yolu prosesin toplam dosya betimleyici tablosunun 
+    uzunluğunu elde edip her bir betimleyici için close işlemi uygulamaktır. Çünkü maalesef biz açık betimleyicileri pratik bir 
+    biçimde tespit edememekteyiz. Zaten kapalı bir betimleyiciye close uygulanırsa close başarısz olur ancak program çökmez. 
+    Prosesin toplam betimleyici sayısı sysconf çağrısında _SC_OPEN_MAX argümanıyla ya da getrlimit fonksiyonunda RLIMIT_NOFILE 
+    argümanıyla elde edilebilir. İki fonksiyon da aynı değeri vermektedir. 
 
----------------------------------------------------------------------------------------------------------------------------*/
+    6) Zorunlu olmamakla birlikte ilk üç betimleyiciyi /dev/null aygıtına yönlendirmek iyi bir fikirdir. Çünkü bir biçimde bazı 
+    fonksiyonlar bu betimleyicileri kullanıyor olabilirler. Anımsanacağı gibi /dev/null aygıtına yazılanlar kaybolmaktadır. Bu aygıttan
+    okume yapılmak istendiğinde ise EOF etkisi oluşur.
 
-/*--------------------------------------------------------------------------------------------------------------------------
+    Pekiyi daemon'lar ne yaparlar? İşte daemon2lar arka planda genellikle sürekli bir biçimde birtakım işler yapmaktadır. Bu anlamda
+    en tipik daemon örnekleri "server" programlardır. Örneğin http server aslında httpd isimli bir daemon'dan ibarettir. Bunun gibi
+    UNIX/Linux sistemlerinde genellikle boot zamanında devreye giren onlarca daemon program vardır. Örneğin belli amanlarda belli işlerin 
+    yapılması için kullanılan cron utility'si aslında bir daemon olarak çalışmaktadır. 
 
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
+    Aşağıda bir prosesi daemon haline getiren bir fonksiyon örneği verilmiştir. Bu fonksiyon main fonksiyonun çağrılmış böylece proses
+    daemon haline getirilmiştir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
