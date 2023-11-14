@@ -4663,7 +4663,7 @@ char *get_ls(struct stat *finfo, const char *name)
     int fstatat(int fd, const char *restrict path, struct stat *restrict buf, int flag);
 
     Fonksiyonun fd parametresinin yanı sıra aynı zamanda bir flag parametresinin olduğuna dikkat ediniz. Bu parametre stat semantiğinin mi yoksa 
-    lstat semantiğinin mi uygulanacağını belirtmektedir. Eğer bu parametreye 0 geçilirse bu durumda stat semnatiği uygulanır Eğer bu parametreye 
+    lstat semantiğinin mi uygulanacağını belirtmektedir. Eğer bu parametreye 0 geçilirse bu durumda stat semantiği uygulanır. Eğer bu parametreye 
     AT_SYMLINK_NOFOLLOW değeri geçilirse bu durumda lstat semantiği uygulanmaktadır. AT_SYMLINK_NOFOLLOW sembolik sabiti <sys/stat.h> içerisinde değil
     <fcntl.h> içerisinde bildirilmiştir. İşte biz yukarıdaki örnekte önce dizin'in betimleyicisini dirfd fonksiyonu ile alıp bunu fstatat 
     fonksiyonunda kullanırsak yol ifadesini düzenlememize gerek kalmaz. Aşağıdaki örnekte bu çözüm verilmiştir.
@@ -6871,7 +6871,7 @@ int main(void)
     Burada aslında çalıştırılacak programlar "a" ve "d" programlarıdır. Diğerleri bunların komut satırı argümanlarıdır. 
 
     Aşağıdaki örnekte "a" programı ekrana (stdout dosyasına) 0'dan 10'a kadar sayıları yazdırmaktadır. "b" programı ise
-    döngü içerisinde klavyeden (stdin dosyasından) değer okuyup ekrana yazdırmaktadır. Bu iki programı aşağıdkai gibi çalıştıralım:
+    döngü içerisinde klavyeden (stdin dosyasından) değer okuyup ekrana yazdırmaktadır. Bu iki programı aşağıdaki gibi çalıştıralım:
 
     ./a | ./b
 
@@ -27160,7 +27160,11 @@ void exit_sys_errno(const char *msg, int err)
     biz yalnızca kendi proseslerimizin nice değerini düşürebiliriz. 
 
     - Herhangi bir prosesin (kendimiz dahil) nice değerini düşürmek için (yani daha fazla CPU zamanı kullanmasını sağlamak için)
-    bizim uygun önceliğe (tipik olarak root ya da Linux için CAP_SYS_NICE yeterliliğine) sahip olmamız gerekir. 
+    bizim uygun önceliğe (tipik olarak root ya da Linux için CAP_SYS_NICE yeterliliğine) sahip olmamız gerekir. Linux 2.6.12 çekirdeği 
+    ile birlikte prosesin nice değerinin değiştirilmesini prosesin RLIMIT_NICE kaynak limiti ile ilişkilendirmiştir. Uygun 
+    önceliğe sahip olmayan prosesler ancak 0 ile 39 arasındaki nice değerini en fazla 20 - rlim_cur değeri olarak düşürebilir. 
+    rlim_cur değerinin default değeri ise 0 biçimindedir. Bu da uygun önceliğe sahip proseslerin normal olarak kendi nice 
+    değerlerini sayısal olarak düşüremeyeceği anlamına gelmektedir. Prosesin kaynak limitleri konusu ileride ele alınacaktır.
 
     Daha önceden de belirttiğimiz gibi POSIX standartlarına göre dinamik öncelik ya da nice değeri prosese özgüdür. Yani biz 
     bir prosesin nice değerini set ettiğimizde onun bütün thread'lerinin nice değerini set etmiş oluruz. Ancak maalesef Linux 
@@ -31117,7 +31121,7 @@ void exit_sys(const char *msg)
     Bu fonksiyonun eşdeğeri aşağıdaki gibi kill fonksiyonu kullanılarak da elde edilebilir. Fakat kill fonksiyonu asenkron işlem 
     sağlarken, raise fonksiyonu senkron bir işlem sağlamaktadır.
 
-	kill(getpid(), sig);
+    kill(getpid(), sig);
 
     Fonksiyon gönderilecek sinyalin numarasını parametre olarak almaktadır. Başarı durumunda 0 değerine, başarısızlık durumunda 
     sıfır dışı herhangi bir değere (yani -1 olmak zorunda değil) geri dönmektedir. Tabii fonksiyon her zaman kendine sinyal 
@@ -32876,8 +32880,10 @@ void exit_sys(const char *msg)
     bizim belirttiğimiz kümedeki hangi sinyal dolayısıyla sonlanmışsa o sinyalin bilgilerini bizim ikinci parametreyle verdiğimiz 
     nesneye yerleştirmektedir. sigwait ile sigwaitinfo arasındaki tek fark sigwait fonksiyonunun yalnızca oluşan sinyalin numarasını 
     bize vermesi ancak sigwaitinfo fonksiyonunun oluşan sinyalin pek çok bilgisini siginfo_t yapısı eşliğinde bize vermesidir. 
-    Fonksiyonlar başarı durumunda 0 değerine, başarısızlık durumunda errno değerinin kendisine geri dönmektedir. Zaten POSIX 
-    standartları başarısızlık durumunda yalnızca EINVAL errno değerini tanımlamıştır.
+    sigwait fonksiyonu başarı durumunda 0 değerine, başarısızlık durumunda errno değerinin kendisine geri dönmektedir. Zaten POSIX 
+    standartları başarısızlık durumunda yalnızca EINVAL errno değerini tanımlamıştır. Ancak sigwaitinfo fonksiyonu başarı durumunda 0, 
+    başarısızlık durumunda -1 değerine geri dönmekte ve errno değişkenini uygun biçimde set etmektedir. (sigwait fonksiyonunun errno 
+    değişkenini set etmediğine ancak sigwaitinfo fonksiyonunun set ettiğine dikkat ediniz. )
 
     Biz bu fonksiyonların sinyal kümelerine normal sinyalleri de gerçek zamanlı sinyalleri de ekleyebiliriz. Gerçek zamanlı sinyaller 
     kuyruklandığı için kuyruktaki yalnızca ilk sinyalin bilgisi elde edilecektir. Ancak POSIX standartları pending duruma geçen 
@@ -32922,7 +32928,7 @@ int main(void)
 		exit(EXIT_FAILURE);
 	}
 
-	printf("%d signal occured and processing...\n", signo
+	printf("%d signal occured and processing...\n", signo);
 
 	if (sigprocmask(SIG_UNBLOCK, &sset, NULL) == -1)
 		exit_sys("sigprocmask");
@@ -33464,23 +33470,26 @@ void exit_sys(const char *msg)
     anlamına gelmektedir. Böylece kabuk çalıştırılan komutu wait fonksiyonlarıyla beklemez. Yeniden prompt'a düşer. Ancak o komut 
     çalışmaya devam etmektedir. İşte kabuk & ile çalıştırılan her komut için yeni bir proses grubu yaratır ve o proses grubunu 
     oturumun arka plan proses grubu durumuna getirir. Sonunda & olmadan çalıştırılan komutlar ise ön plan proses grubunu oluşturur. 
-    Kabuk kendisi için de bir proses grubu yaratıp kendisini oturumun bir proses grubu yapmaktadır. Oturumların birer id'si vardır. 
-    Bir oturumun id'si onu yaratan prosesin içinde bulunduğu proses grubunun id'si olur. 
+    Tabii oturumu yaratan aslında genellikle kabuk programlarıdır. Kabuk, oturumu ve proses grubunu yaratır. Kendisi de oturumda bir 
+    proses grubunda bulunuyor olur. Oturumların birer id'si vardır. Bir oturumun id'si onu yaratan prosesin içinde bulunduğu proses 
+    grubunun id'si olur. Oturumu yaratan bu prosese de "oturum lideri (session leader)" denilmektedir. (Oturum liderinin proses id'sinin,
+    proses grup id'sinin ve oturum id'sinin aynı olması gerektiğine dikkat ediniz.)
 
-    O halde durum özetle şöyledir: Kabuk bir proses grubu yaratır. Kendisini bu proses grubunun lideri yapar. Aynı zamanda kabuk bir 
-    oturum yaratıp bu oturumun da lideri olmaktadır. (Bu işlemlerin nasıl yapıldığına ilişkin ayrıntılar izleyen paragraflarda açıklanmaktadır.)
-    Sonra kabuk, sonu & ile biten komutlar için yarattığı proses gruplarını oturumun arka plan proses grupları yapar. Sonunda & olmayan komutları da 
-    oturumun ön plan proses grubu yapmaktadır. Böylece belli bir anda oturumun içerisinde bir ön plan proses grubu ve çeşitli arka plan 
-    proses grupları bulunacaktır. Kabuğun kendisi de sonunda & olmayan bir komut uygulandığında oturumun arka plan proses grubu içerisinde
-    olmaktadır. Terminal sürücüsü de SIGINT ve SIGQUIT gibi sinyalleri oturumun ön plan proses grubuna göndermektedir. Örneğin biz 
-    mample programını sonunda & olacak biçimde sample programını da normal bir biçimde aşağıdaki gibi çalıştırmış olalım:
+    O halde durum özetle şöyledir: Kabuk bir oturum ve bir proses grubu yaratır. Kendisini bu proses grubunun lideri yapar. 
+    kendisi proses grubunun ve oturumun lideri durumundadır. (Bu işlemlerin nasıl yapıldığına ilişkin ayrıntılar izleyen paragraflarda 
+    açıklanmaktadır.) Sonra kabuk sonu & ile biten komutlar için proses grupları yaratıp bu proses gruplarını oturumun arka plan 
+    proses grupları yapar. Sonunda & olmayan komutları da oturumun ön plan proses grubu yapmaktadır. Böylece belli bir anda oturumun 
+    içerisinde bir ön plan proses grubu ve çeşitli arka plan proses grupları bulunacaktır. Tabii kabuğun kendisi de "sonunda & 
+    olmayan" bir komut uygulandığında oturumun arka plan proses grubu içerisinde bulunuyor olacaktır. Terminal sürücüsü de SIGINT 
+    ve SIGQUIT gibi sinyalleri oturumun ön plan proses grubuna göndermektedir. Örneğin biz mample programını sonunda & olacak biçimde 
+    sample programını da normal bir biçimde aşağıdaki gibi çalıştırmış olalım:
 
     $./mample &
     [1] 52630
     $./sample
 
-    Her iki program da pause fonksiyonunda bekleyecek biçimde yazılmıştır. Şimdi diğer bir terminalden bu proseslerin id'lerini, proses 
-    grup id'lerini, oturum id'lerini yazdıralım:
+    Her iki program da pause fonksiyonunda bekleyecek biçimde yazılmıştır. Şimdi diğer bir terminalden bu proseslerin id'lerini, 
+    proses grup id'lerini, oturum id'lerini yazdıralım:
 
     $ps -o pid,pgid,sid,cmd -t pts/0
     PID     PGID    SID CMD
@@ -33489,29 +33498,65 @@ void exit_sys(const char *msg)
     52632   52632   31684 ./sample
 
     Burada görülen şudur: Kabuğun kendisi, mample ve sample prosesleri için ayrı birer proses grubu yaratmıştır. Ancak bu proses grupları 
-    aynı oturum içerisindedir. Oturumun lideri kabuktur. Komut çıktısından göremesek de kabuk ve mample oturumun arka plan proses gruplarını, 
-    sample ise ön plan proses grubunu oluşturmaktadır.
+    aynı oturum içerisindedir. Oturumun lideri ise kabuktur. Komut çıktısından göremesek de kabuk ve mample oturumun arka plan proses gruplarını, 
+    sample ise ön plan proses grubunu oluşturmaktadır. mample ve sample proseslerinin grup id'lerinin farklı olduğuna dikkat ediniz.
 
-    Oturumların da proses gruplarında olduğu gibi id'leri vardır. Oturumların id'leri (session id) oturum içerisindeki bir proses grubunun 
-    liderinin id'si ile aynıdır. Oturum terminal sürücüsüyle ilişkili bir kavram olarak uydurulmuştur. Oturumların bir "ilişkin olduğu terminal 
-    ya da terminal sürücüsü (controlling terminal)" vardır. Bu terminal gerçek terminal ise tty terminallerinden biridir. Sahte (pseudo)
-    bir terminal ise pts terminallerinden biridir. Pencere yöneticilerinin içerisinde açılan terminaller sahte terminallerdir. Ancak
-    işlev olarak sahte terminallerin gerçek terminallerden bir farkları yoktur. Klavyeden Ctrl+C ve Ctrl+\ (ya da Ctrl + Backspace) 
-    tuşlarına basıldığında SIGINT ve SIGQUIT sinyalleri bu terminal tarafından (aslında terminal sürücüsü tarafından) oturumun ön plan 
-    proses grubuna gönderilmektedir. 
+    Yukarıda da belirttiğimiz gibi oturumların da proses gruplarında olduğu gibi id'leri vardır. Oturumların id'leri (session id) oturum 
+    içerisindeki bir proses grubunun liderinin id'si ile aynıdır. Bu prosese aynı zamanda "oturum lideri (session leader)" denilmektedir.
+
+    Kabuktaki bütün arka plan proses komutları "jobs" komutu ile görülebilmektedir. Örneğin:
+
+    $ cat > x &
+    [1] 14797
+    $ cat > y &
+    [2] 14798
+    $ cat > z &
+    [3] 14799
+    $ cat > z | grep "test" &
+    [4] 14827
+    $ jobs
+    [1]   Running                 cat > x &
+    [2]   Running                 cat > y &
+    [3]-  Running                 cat > z &
+    [4]+  Running                 cat > z | grep --color=auto "test" &
+
+    Belli bir arka plan proses grubunu ön plana çekmek için "fg %n (n burada arka plandaki işin numarasını belirtmektedir) komutu uygulanır.
+    % karakteri hiç kullanılmayabilir. Örneğin:
+
+    $ fg %3
+    cat > z
+
+    Belli bir arka plan işe (job) yani proses grubuna "kill %n" komutuyla sinyal de gönderebiliriz. Örneğin:
+
+    $ kill %2
+
+    Oturum terminal sürücüsüyle ilişkili bir kavram olarak sisteme sokulmuştur. Oturumların bir "ilişkin olduğu terminal ya da terminal sürücüsü 
+    (controlling terminal)" vardır. Bu terminal gerçek terminal ise "/dev/ttynnn" (buradaki nnn bir sayıyı temsil ediyor) terminallerinden biridir. 
+    Sahte (pseudo) bir terminal ise "dev/pts/nnn" terminallerinden biridir. Pencere yöneticilerinin içerisinde açılan terminaller sahte (pseudo) 
+    terminallerdir. Ancak işlev olarak sahte terminallerin gerçek terminallerden bir farkları yoktur. Klavyeden Ctrl+C ve Ctrl+\ (ya da Ctrl + Backspace) 
+    tuşlarına basıldığında SIGINT ve SIGQUIT sinyalleri bu terminal sürücüsü tarafından oturumun ön plan proses grubuna gönderilmektedir. Örneğin:
+
+    $ cat | grep "test"
+
+    Bu komut terminalden uygulandıktan sonra biz Ctrl+c tuşlarına bastığımızda SIGINT sinyali ön plan proses grubuna gönderileceğinden dolayı
+    burada hem cat prosesi hem de grep prosesi sonlandırılacaktır.
 
     Burada aktardığımız bilgiler üzerinde şu anahtar noktalara yeniden dikkatinizi çekmek istiyoruz:
 
-    1) Kabuk programları bir proses grubu ve oturum yaratmakta ve kendilerini oturum lideri yapmaktadır. Kabuğun çalıştığı terminal de
-    oturumun "ilişkin olduğu terminal (controlling terminal)" olmaktadır. Kabuk bir komut çalıştırmaz durumdayken kendi proses grubunu 
-    oturumun ön plan proses grubu yapar.
+    1) Kabuk programları bir proses grubu ve oturum yaratmakta ve kendilerini proses grubunun ve oturumun oturum lideri yapmaktadır.
+    Kabuğun çalıştığı terminal de oturumun "ilişkin olduğu terminal (controlling terminal)" durumundadır. 
 
-    2) Kabuk sonu & ile bitmeyen her komut için bir proses grubu oluşturur ve onu oturumun ön plan proses grubu yapar. Terminal sinyalleri
-    bu proses grubuna gönderilmektedir. 
+    2) Kabuk "sonu & ile bitmeyen" her komut için bir proses grubu oluşturur ve o proses grubunu oturumun ön plan proses grubu yapar. 
+    Terminal sinyalleri bu proses grubuna gönderilmektedir. 
 
-    3) Kabuk sonu & ile biten her komut için ayrı bir proses grubu oluşturur ve o proses grubunu oturumun arka plan proses grubu haline getirir.
+    3) Kabuk "sonu & ile biten" her komut için ayrı bir proses grubu oluşturur ve o proses grubunu oturumun arka plan proses grubu 
+    haline getirir.
 
     4) Terminal tuşlarıyla oluşturulan SIGINT ve SIGQUIT gibi sinyaller oturumun ön plan proses grubuna gönderilmektedir. 
+
+    Yukarıda açıklandığı gibi çalışan kabuk programlarına "görev kontrol kabukları (job control shells)" denilmektedir.
+    Eski "Bourne Shell" kabuklarında görev kontrol özelliği yoktu. Bugün kullanılan kabuk programlarında genel olarak görev 
+    kontrol özelliği bulunmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -33593,7 +33638,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi biz sıfırdan bir "job control shell" yazmak istersek bu oturum işlemlerini nasıl yaparız? Öncelikle bizim bir oturum 
-    yaratıp oturumumuzu bir terminal aygıt sürücü ile ilişkilendirmemiz gerekir. Yani oturumumuzun bir "controlling terminal" a
+    yaratıp oturumumuzu bir terminal aygıt sürücü ile ilişkilendirmemiz gerekir. Yani oturumumuzun bir terminale ("controlling terminal)
     sahip olması gerekir. 
 
     Yeni bir oturum (session) yaratmak için setsid fonksiyonu kullanılmaktadır:
@@ -33687,34 +33732,77 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Biz sıfırdan bir kabuk programı oluşturmak istediğimizde fork yapıp alt proseste setsid fonksiyonunu çağırıp oturum
     yaratabildik. Pekiyi oturumumuzu nasıl bir terminal aygıt sürücüsü ile ilişkilendireceğiz? İşte oturum lideri open 
-    fonksiyonuyla O_NOCTTY bayrağı kullanılmadan bir terminal aygıt sürücüsünü açtığında artık o terminal oturumun ilişkin 
-    olduğu terminal (controlling terminal) durumuna gelir. 
+    fonksiyonuyla O_NOCTTY bayrağı kullanılmadan bir terminal aygıt sürücüsünü açtığında ve elde ettiği dosya betimleyicisi
+    ile ioctl(fd, TIOCSCTTY) çağrısı yaptığında artık o terminal oturumun ilişkin olduğu terminal (controlling terminal) 
+    durumuna gelir. Örneğin:
 
-    Eğer terminal o anda başka bir oturumun terminaliyse oradan kopartılmaktadır. open işlemini yapan prosese ise 
-    "terminali kontrol eden proses (controlling process)" denilmektedir. Normal olarak kabuk programı (bash), terminali kontrol 
-    eden proses (controlling process) durumundadır. Dosyaların betimleyicileri üst prosesten alt prosese aktarıldığına göre bu 
-    terminal betimleyicisi her proseste gözükecektir. Yukarıda belirttiğimiz gibi buna "ilgili prosese ilişkin terminal (process 
-    controlling terminal)" denilmektedir. Anımsanacağı gibi aslında 0 numaralı betimleyici terminal aygıt sürücüsünün (controlling terminal)
-    O_RDONLY modunda açılmasıyla, 1 numaralı betimleyici aynı aygıt sürücünün O_WRONLY moduyla açılmasıyla ve stderr dosyası da 
-    1 numaralı betimleyicinin dup yapılmasıyla oluşturulmaktadır. Yani aslında 0, 1 ve 2 betimleyiciler aynı terminale ilişkindir. 
+    if ((fd = open("/dev/tty1", O_RDWR)) == -1)
+        _exit(EXIT_FAILURE);
 
-    Aşağıda bir fikir vermesi bakımından örnek bir kod parçası oluşturulmuştur. Bu örnekte bir oturum yaratılmış, sonra da tüm 
-    betimleyiciler kapatılarak terminal aygıt sürücüsü open fonksiyonuyla açılmış ve oturumun terminali haline getirilmiştir. 
-    Örnek kodda stdin, stdout ve stderr dosyalarının aslında nasıl oluşturulduğu konusunda bir fikir de edinilmektedir. 
-    (Örneğimizde dosya betimleyici tablosunun uzunluğunun 1024 olduğu varsayılmıştır. Ancak gerçek uzunluk aslında ileride 
-    ele alacağımız yöntemlerle elde edilmektedir.)
+    if (ioctl(fd, TIOCSCTTY) == -1)
+        _exit(EXIT_FAILURE)
+
+    ioctl fonksiyonu aygıt sürücülerdeki fonksiyonların çağrılması için kullanılan genel amaçlı bir fonksiyondur. Bu fonksiyonun 
+    kullanımını "aygıt sürücüler" konusunda göreceğiz. (Bazı sistemlerde bu ioctl işlemini yapmaya gerek kalmamaktadır. Ancak Linux 
+    sistemlerinde bu işlemin yapılması gerekmektedir.)
+
+    Eğer ioctl işlemi yapılırken terminal o anda başka bir oturumun terminaliyse (controlling terminal) ve çağrıyı yapan proses 
+    uygun önceliğe de sahip değilse, çağrı EPERM errno değeri ile başarısız olmaktadır. Ancak ioctl çağrısı yapılırken eğer terminal 
+    başka bir oturumun terminaliyse ancak çağrıyı yapan proses uygun önceliğe sahipse bu durumda terminal o oturumdan koparılıp 
+    çağrının yapıldığı oturumun terminali (controlling terminal) haline getirilmektedir. Bu durumda ioctl işlemini yapan prosese 
+    de "terminali kontrol eden proses (controlling proscess)" biçiminde isimlendirilmektedir. Normal olarak kabuk programı (bash) 
+    terminali kontrol eden proses (controlling process) durumundadır. Dosyaların betimleyicileri üst prosesten alt prosese aktarıldığına 
+    göre bu terminal betimleyicisi her proseste gözükecektir. Yukarıda belirttiğimiz gibi buna "ilgili prosesin ilişkin terminal 
+    (process controlling terminal)" denilmektedir. Anımsanacağı gibi aslında 0 numaralı betimleyici terminal aygıt sürücüsünün O_RDONLY 
+    modunda açılmasıyla, 1 numaralı betimleyici aynı aygıt sürücünün O_WRONLY moduyla açılmasıyla ve stderr dosyası da 1 numaralı betimleyicinin 
+    dup yapılmasıyla oluşturulmaktadır. Yani aslında 0, 1 ve 2 betimleyiciler aynı terminale ilişkindir. 
+
+    Bir oturumun ilişkin olduğu terminalin oturumdan kopartılması işlemi de ioctl(fd, TIOCNOTTY) çağrısıyla yapılabilmektedir. 
+
+    Şimdiye kadar oturum ve terminale ilişkin pek çok terim gördük. Bu terimlerin neler olduğunu ve ne anlamlara geldiğini aşağıda
+    topluca listelemek istiyoruz:
+
+    - Oturum (Session): Proses gruplarından oluşan görev kontrol kabuklarının faydalandığı bir kavramdır. Yeni bir oturum oluşturmak 
+    için setsid fonksiyonu kullanılmaktadır.
+
+    - Oturumun İlişkin Olduğu Terminal (Controlling Terminal): Oturumdaki proseslerin kullandığı terminali (terminal aygıt
+     sürücüsünü) belirtmektedir. 
+
+    - Prosesin İlişkin Olduğu Terminal (Process Controlling Terminal): Belli bir prosesin kullandığı terminali (terminal aygıt sürücüsünü)
+    belirtmektedir.
+
+    - Oturum Lideri (Session Leader): Oturumu yaratan prosesi belirtir. Bu prosesin proses id'si, proses grup id'si ve oturum id'si
+    aynıdır.
+
+    - Oturum Id'si (Session Id): Oturumu temsil eden proses id değeridir. Oturum id'si normal olarak oturum içerisindeki bir 
+    proses grubunun, dolayısıyla da prosesin id'si ile aynıdır.
+
+    - Ön Plan Proses Grubu (Foreground Process Group): Oturum içerisindeki özel klavye tuşları için sinyallerin gönderildiği proses 
+    grubu. Bu proses grubu doğrudan terminalle etkileşebilmektedir. Sonuna & getirilmeden uygulanan komutlardaki prosesleri kabuk 
+    aynı proses grubuna yerleştirmekte ve o proses grubunu da kabuğun ön plan proses grubu yapmaktadır. Belli bir anda oturumda 
+    yalnızca bir tane ön plan proses grubu bulunmaktadır.
+
+    - Arka Plan Proses Grubu (Background Process Group): Sonuna & getirilerek uygulanan komutlardaki prosesleri kabuk aynı proses 
+    grubuna yerleştirmekte ve o proses grubunu da kabuğun arka plan proses grubu haline getirmektedir. Belli bir anda oturumda 
+    birden fazla arka plan proses grubu bulunabilmektedir.
+
+    Aşağıdaki örnekte bir oturum yaratılmış ve "/dev/tty1" terminali oturumun ilişkin olduğu terminal (controlling terminal) 
+    yapılmıştır. Sonra prosesin açmış olduğu bütün dosyalar kapatılmış ve ilk üç betimleyicinin söz konusu terminale ilişkin 
+    stdini, stdout ve stderr betimleyicisi olması sağlanmıştır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <sys/ioctl.h>
 
 void exit_sys(const char *msg);
 
 int main(void)
 {
 	pid_t pid;
+	int fd;
 
 	if ((pid = fork()) == -1)
 		exit_sys("fork");
@@ -33728,7 +33816,7 @@ int main(void)
 	for (int i = 0; i < 1024; ++i)
 		close(i);
 
-	if (open("/dev/tty1", O_RDONLY) == -1)
+	if ((fd = open("/dev/tty1", O_RDONLY)) == -1)
 		_exit(EXIT_FAILURE);
 
 	if (open("/dev/tty1", O_WRONLY) == -1)
@@ -33737,7 +33825,13 @@ int main(void)
 	if (dup(1) == -1)
 		_exit(EXIT_FAILURE);
 
-	printf("this is a test\n");
+	if (ioctl(fd, TIOCSCTTY) == -1)
+		_exit(EXIT_FAILURE);
+
+	for (int i = 0; i < 30; ++i) {
+	printf("%d\n", i);
+	sleep(1);
+	}
 
 	return 0;
 }
@@ -33755,8 +33849,8 @@ void exit_sys(const char *msg)
 
     #include <unistd.h>
 
-    pid_t tcgetpgrp(int fildes);
-    int tcsetpgrp(int fildes, pid_t pgid_id);
+    pid_t tcgetpgrp(int fd);
+    int tcsetpgrp(int fd, pid_t pgid_id);
 
     Fonksiyonlar terminal aygıt sürücüsüne ilişkin dosya betimleyicileri ile çalışmaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -33764,14 +33858,14 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Oturumun arka plan bir prosesi, prosesin ilişkin olduğu terminalden (controlling terminal) okuma yapmak isterse terminal 
     sürücüsü o arka plan prosesin içinde bulunduğu proses grubuna SIGTTIN sinyalini göndermektedir. Bu sinyalin default eylemi 
-    (default action) prosesin durdurulmasıdır. Bu biçimde durdurulmuş olan prosesler SIGCONT sinyali ile yeniden çalıştırılmak 
-    istenebilirler. Ancak yeniden okuma yapılırsa proses yine durdurulur. Bu tür prosesler kabuk üzerinden fg komutuyla ön plana 
-    çekilebilir. Bu durumda kabuk önce prosesin proses grubunu ön plan proses grubu yapar sonra da SIGCONT sinyali ile yeniden 
+    (default action)  prosesin durdurulmasıdır. Bu biçimde durdurulmuş olan prosesler SIGCONT sinyali ile yeniden çalıştırılmak 
+    istenebilir. Ancak yeniden okuma yapılırsa yine proses durdurulacaktır. Bu tür prosesler kabuk üzerinden fg %n komutuyla ön plana 
+    çekilebilir. Bu durumda kabuk önce prosesin proses grubunu ön plan proses grubu yapar sonra da onu SIGCONT sinyali ile yeniden 
     proses grubunu çalışır duruma getirir.
 
     Aşağıdaki programı komut satırında sonuna & getirerek çalıştırınız. Program 10 saniye sonra stdin dosyasından okuma yapmaya
-    çalışacak ve bu nedenden dolayı SIGTTIN sinyali gönderilerek durdurulacaktır. Prosesin durdurulmuş olduğunu ps -l komutu ile ya da 
-    ps -o stat,cmd komutuyla gözlemleyiniz.
+    çalışacak ve bu nedenden dolayı SIGTTIN sinyali gönderilerek durdurulacaktır. Prosesin durdurulmuş olduğunu "ps -l" komutu ile 
+    ya da "ps -o stat,cmd" komutuyla gözlemleyiniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -33789,12 +33883,18 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Arka plan proses grubundaki bir proses SIGTTIN sinyalini işleyebilir. Bu durumda proses stop edilmez. Ancak tabii eğer 
-    bu sırada yeniden başlatılabilir olmayan bir sistem fonksiyonu içerisinde bulunuluyorsa bu sistem fonksiyonu EINTR hata 
-    koduyla geri döner. 
+    Arka plan proses grubundaki bir proses SIGTTIN sinyalini işleyebilir. Bu durumda proses durdurulmaz. Ancak tabii eğer 
+    bu sırada sinyal yeniden başlatılabilir (SA_RESTART) biçimde set edilmemişse read fonksiyonu EINTR errno değeriyle 
+    başarısız olacaktır. Eğer SIGTTIN sinyali yeniden başlatılabilir biçimde (yani SA_RESTART bayrağı kullanılarak) set edilmişse 
+    bu durumda read fonksiyonu çekirdek tarafından yeniden başlatılacak ve yeniden aynı sinyal oluşacaktır. Dolayısıyla program 
+    sonsuz döngüye girecektir. 
 
-    Aşağıda programın sonuna & getirerek çalıştırıp log dosyasını inceleyiniz. Burada çıktılar stdout dosyasına değil, bir log 
-    dosyasına yazdırılmıştır. Bunun nedeni sonraki paragrafta açıklanmaktadır.
+    Aşağıda programın sonuna & getirerek çalıştırıp log dosyasını inceleyiniz. Programda stdin dosyasından okuma yapılmak istendiğinde
+    SIGTTIN sinyali oluşacak ve read fonksiyonu EINTR errno değeri ile başarısız olacaktır. Bu örnekte sigaction fonksiyonunda 
+    sinyalin SA_RESTART özelliği kullanılmadan set edildiğine dikkat ediniz. Eğer biz sinyal fonksiyonunu "otomatik olarak 
+    yeniden başlatılabilir biçimde" set etmiş olsaydık read fonksiyonu tekrar tekrar başarısız olacak ve sürekli bir biçimde 
+    sinyal fonksiyonu çağrılacaktı. Arka plan proseslerin stdout dosyasına yazmaya çalıştığındaki özel durum izleyen paragrafta 
+    ele alınmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -33806,14 +33906,10 @@ int main(void)
 void sigttin_handler(int sno);
 void exit_sys(const char *msg);
 
-FILE *g_f;
-
 int main(void)
 {
 	struct sigaction sa;
-
-	if ((g_f = fopen("log.txt", "w")) == NULL)
-		exit_sys("fopen");
+	char ch;
 
 	sa.sa_handler = sigttin_handler;
 	sigemptyset(&sa.sa_mask);
@@ -33822,19 +33918,15 @@ int main(void)
 	if (sigaction(SIGTTIN, &sa, NULL) == -1)
 		exit_sys("sigaction");
 
-	sleep(10);
-
-	if (getchar() == EOF && errno == EINTR)
-		fprintf(g_f, "getchar terminated by signal!...\n");
-
-	sleep(1);
+	if (read(STDIN_FILENO, &ch, 1) && errno == EINTR)
+		printf("read terminated by signal!..\n");
 
 	return 0;
 }
 
 void sigttin_handler(int sno)
 {
-	fprintf(g_f, "SIGTTIN occurred!...\n");
+	printf("SIGTTIN occurred!..\n");		/* UNSAFE */
 }
 
 void exit_sys(const char *msg)
@@ -33845,31 +33937,235 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Arka plan proses grubundaki bir prosesin ilişkin olduğu terminale (controlling terminal) bir şeyler yazmaya çalışması da uygun değildir. 
-    Bu durumda da terminal sürücüsü prosesin ilişkin olduğu arka plan proses grubuna SIGTTOU sinyalini göndermektedir. Bu sinyalin default 
-    eylemi yine prosesin durdurulmasıdır. Ancak bu sinyalin aygıt sürücüsü tarafından arka plan proses grubuna gönderilmesi için 
-    Linux'ta terminalin TOSTOP modunda olması gerekir. Eğer terminal bu modda değilse proses durdurulmaz ancak yazılanlar da kaybolur. 
+    Arka plan proses grubundaki bir prosesin ilişkin olduğu terminale (process controlling terminal) bir şeyler yazmaya çalışması da 
+    uygun değildir. Bu durumda da terminal sürücüsü prosesin ilişkin olduğu arka plan proses grubuna SIGTTOU sinyalini göndermektedir. 
+    Bu sinyalin default eylemi yine prosesin durdurulmasıdır. Ancak bu sinyalin aygıt sürücüsü tarafından arka plan proses 
+    grubuna gönderilmesi için Linux'ta terminalin TOSTOP modunda olması gerekir. Eğer terminal bu modda değilse SIGTTOU sinyali 
+    gönderilmemektedir. Bu durumda write fonksiyonu işlemini başarıyla sonlandırabilecektir. Terminal sürücüsünün default 
+    davranışını şöyle öğrenebilirsiniz:
 
-    Aşağıdaki programı sonuna & koyarak çalıştırmayı deneyiniz.
+    $ stty -a
+    speed 38400 baud; rows 27; columns 90; line = 0;
+    intr = ^C; quit = ^\; erase = ^?; kill = ^U; eof = ^D; eol = <undef>; eol2 = <undef>;
+    swtch = <undef>; start = ^Q; stop = ^S; susp = ^Z; rprnt = ^R; werase = ^W; lnext = ^V;
+    discard = ^O; min = 1; time = 0;
+    -parenb -parodd -cmspar cs8 -hupcl -cstopb cread -clocal -crtscts
+    -ignbrk -brkint -ignpar -parmrk -inpck -istrip -inlcr -igncr icrnl ixon -ixoff -iuclc
+    -ixany -imaxbel iutf8
+    opost -olcuc -ocrnl onlcr -onocr -onlret -ofill -ofdel nl0 cr0 tab0 bs0 vt0 ff0
+    isig icanon iexten echo echoe echok -echonl -noflsh -xcase -tostop -echoprt echoctl echoke
+    -flusho -extproc
+
+    Burada -tostop SIGTTOU sinyalinin gönderilmeyeceğini belirtmektedir. Arka plan proseslerin terminal sürücüsüne bir şeyler 
+    yazdığında SIGTTOU sinyalini göndermesini istiyorsanız şu komutu uygulamalısınız:
+
+    $ stty tostop
+
+    Artık aynı komutu uyguladığımızda ilgili seçenek "-tostop" yerine "tostop" biçiminde görüntülenecektir. 
+
+    Terminal aygıt sürücüsünün sinyal göndermemesini sağlamak için ise aşağıdaki komutu uygulayabilirsiniz:
+
+    $ stty -tostop
+
+    Yukarıdaki komutları da kullanarak aşağıdaki programı sonuna & getirerek arka plan proses grubu olarak çalıştırmayı 
+    deneyiniz ve durumu gözlemleyiniz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
+void exit_sys(const char *msg);
+
 int main(void)
 {
-	sleep(10);
-
-	printf("test\n");
-
-	sleep(10);
+	if (write(STDOUT_FILENO, "test\n", 5) == -1)
+		exit_sys("write");
 
 	return 0;
 }
 
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
 /*--------------------------------------------------------------------------------------------------------------------------
-												82. Ders 17/09/2023 - Pazar
+    Eskiden UNIX/Linux sistemlerine RS232 gibi seri haberleşme arayüzleriyle terminaller bağlanırdı. Programcılar ve kullanıcılar 
+    da bu terminalleri kullanarak başka bir odadan ya da uzaktan modem ile bağlanarak işlemlerini yapardı. Bu eski terminaller 
+    bilgisayar gibi değildi. Yalnızca ekran ve klavyeden oluşuyordu. Bunlara o zamanlar "aptal terminaller (dummy terminals)"
+    deniyordu. Teknoloji gelişince bu aptal terminaller ortadan kalktı. Artık uzaktan bağlanma için aptal terminaller yerine
+    aynı zamanda kendisi bilgisayar olan akıllı terminaller kullanılmaya başlandı. Sonra uzaktan kablolu bağlantı büyük ölçüde
+    teknoloji dışı kaldı. Bağlantılar genellikle (ssh gibi protokollerle) uzaktan yapılır hale geldi.
+
+    Bugün kullandığımız bilgisayarlarda eski terminallerin simüle edilmesini sağlayan iki temel mekanizma bulunmaktadır. 
+    Bunlardan birisi "Ctrl+F+N" tuşlarına basılarak açılan terminallerdir. Bu terminallere genellikle "sanal terminaller 
+    (virtual terminals)" denilmektedir. Diğeri ise GUI ortamında pencere yöneticilerinden açılan terminal pencereleridir. 
+    Bunlara ise "sahte terminaller (pseudo terminals)" denilmektedir.
+   ---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Terminal bağlantısı koptuğunda ya da sahte terminal penceresi kapatıldığında terminal aygıt sürücüsü o terminalin ilişkin 
+    olduğu oturumun liderine (aslında oturum liderinin proses grubuna) SIGHUP sinyali göndermektedir. Tipik komut satırlı 
+    çalışmada oturum lideri kabuk programıdır. Dolayısıyla terminal penceresi kapatıldığında SIGHUP sinyali kabuk programına 
+    (örneğin bash programına) gönderilmektedir. SIGHUP sinyalinin default eylemi prosesin sonlandırılmasıdır. Eğer terminalin 
+    ilişkin olduğu (controlling terminal) oturumun lideri bu sinyali "ignore" ederse bu durumda terminalden yapılacak okumalarda 
+    read fonksiyonu 0 ile (yani sanki EOF durumu oluşmuş gibi) geri dönmekte write fonksiyonu da EIO errno değeri ile başarısız 
+    olmaktadır.
+
+    Terminal bağlantısı koptuğunda ya da sahte terminal penceresi kapatıldığında terminal aygıt sürücüsünün kabuk 
+    programına SIGHUP sinyali gönderdiğini belirtmiştik. İşte kabuk programları da bu SIGHUP sinyalini işleyerek oturumdaki 
+    tüm proses gruplarına SIGHUP sinyali göndermektedir. Sonuç olarak terminal bağlantısı koptuğunda ya da terminal penceresi 
+    kapatıldığında oturumdaki tüm proseslere SIGHUP sinyali gönderilmiş olur ve default durumda oturumun tüm prosesleri bu 
+    biçimde sonlandırılır.
+
+    Ancak burada ince bir nokta da vardır. Oturumun arka plan bir proses grubundaki proses terminalden okuma yapmak istediğinde 
+    ona SIGTTIN sinyalinin gönderildiğini bu sinyalin de default durumda prosesi durdurduğunu (stop ettirdiğini) belirtmiştik. 
+    İşte terminal bağlantısı koptuğunda ya da terminal penceresi kapatıldığında kabuk programı tüm prposes gruplarına SIGHUP sinyalini
+    gönderdiğinde arka plandaki durdurulmuş olan prosesler bu durumda sonlanmayacaktır. (Durdurulmuş bir prosesin SIGKILL dışında 
+    bir sinyali işlemediğini, o sinyal gönderilse bile "pending" durumda kaldığını anımsayınız.) İşte bunun için kabuk programları 
+    (ancak tüm kabuk programları değil) durdurulmuş proseslerin bulunduğu proses gruplarına yalnızca SIGHUP sinyalini değil, aynı 
+    zamanda SIGCONT sinyalini de göndermektedir. Böylece bu durdurulmuş prosesler çalışmaya başlar başlamaz sonlandırılmaktadır. 
+
+    Pekiyi terminale ilişkin proses (controlling process) sonlanırsa ne olacaktır? İşte bu durumda çekirdek oturuma ilişkin tüm 
+    prosesleri terminalden koparır ve oturumun ön plan proses grubuna SIGHUP sinyali göndermektedir. Tabii tipik olarak terminali 
+    kontrol eden proses kabuk programı olduğu için kabuk programları bu tür durumlarda özel işlemler uygulamaktadır. Örneğin 
+    bash programından "exit" komutu ile çıkmak isterseniz "bash" programı eğer arka planda durudurulmuş prosesler varsa bir
+    uyarı mesajı çıkartmaktadır. Örneğin:
+
+    $ cat &
+    [1] 26338
+    $ exit
+    exit
+    Durmuş işler var.
+
+    [1]+  Durdu                   cat
+    $
+
+    Ancak bu tür durumlarda üst üste iki kez exit yapıldığında artık "bash" oturumun tüm ön plan ve arka plan proses gruplarına 
+    SIGHUP sinyali göndererek onları sonlandırmaktadır. Tabii durdurulmuş proseslere ilişkin proses grupları için aynı zamanda
+    SIGCONT sinyalini de göndermektedir.
+
+    Terminal kapatıldığında ya da kabuk programından çıkıldığında o terminalde çalışan programların çalışmasına devam etmesi 
+    isteniyorsa bunun için "nohup" ve "disown" isimli programlardan faydalanılmaktadır. nohup programı çalıştırdığı programın
+    SIGHUP sinyalini "ignore" eder, disown ise prosesi oturumdan koparır. Örneğin:
+
+    $ nohup ./sample &
+
+    Burada terminal kapatılsa bile bu prosesler çalışmaya devam edecektir. nohup programı stdout dosyasını "nohup.out" isimli
+    bir dosyaya yönlendirmektedir. Bu iki komut hakkında ayrıntılı açıklamalar için dokümanlara başvurabilirsiniz.
+
+    Pekiyi terminal bağlantısı koptuğunda ya da terminal penceresi kapatıldığında oluşan SIGHUP sinyali "ignore" edilirse ne olur?
+    İşte bir proses ister ön planda isterse arka planda çalışıyor olsun eeğer SIGHUP sinyalini "ignore" ederse terminal okumasında
+    read fonksiyonu sanki EOF durumu oluşmuş gibi 0 değeri ile geri dönmektedir. Yine ister ön planda isterse arka planda 
+    çalışıyor olursa olsun SIGHUP sinyali "ignore" edildiğinde terminale yazma yapılırsa write fonksiyonu EIO errno değeri ile
+    başarısız olmaktadır. Bu durum terminalin ilişkin olduğu proses için de (yani kabul prosesi için de) böyledir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Terminal ve oturum konusu ile ilgili diğer bir konu da "öksüz proses grupları (orphan process groups)" konusudur. Anımsanacağı 
+    gibi öksüz proses "kendisi devam ettiği halde üst prosesi sonlanmış olan proseslere" deniyordu. 
+
+    "Bir proses grubundaki her prosesin üst prosesi o proses grubundaysa ya da aynı oturumda değilse" böyle proses gruplarına
+    öksüz prose grupları denilmektedir. Bu tanım kişilere biraz karışık gibi gelmektedir. De Morgan kuralına göre bunun değili 
+    alınırsa belki daha sade bir tanım elde edilecektir: "Eğer bir proses grubundaki en az bir prosesin üst prosesi aynı 
+    oturumda ancak farklı bir proses grubunda bulunuyorsa" o proses grubu öksüz değildir. Örneğin kabuktan bir program çalıştırmış 
+    olalım. Program da birkaç kez fork yapıp alt proses oluşturmuş olsun. Şimdi bu proses grubu öksüz değildir. Çünkü bbu gruptaki 
+    tüm proseslerin üst prosesleri aynı gruptadır ya da aynı oturumdadır. Kabuktan çalıştırılan prosesin üst prosesinin kabuk 
+    olduğuna ve onun da aynı oturumda olduğuna dikkat ediniz. Şimdi kabuktan bir program çalıştıralım. Bu program fork işlemi yapıp 
+    kendisini sonlandırsın. Bu durumda alt prosesin üst prosesi "init" prosesi olacaktır. Böylece proses grubundaki söz konus 
+    alt prosesin üst prosesi aynı grupta değildir. 
+
+    Yukarıdaki örneği yinelemek istiyoruz. Biz kabuktan "./sample" programını çalıştıralım. Kabuk bu komut için bir ön plan proses 
+    grubu oluşturacaktır. sample prosesi de bu ön plan proses grubunun lideri olacaktır. Şimdi biz bu sample prosesi içerisinde 
+    fork yapıp üst prosesi sonlandırırsak proses grubu yaşamaya devam eder ancak öksüz durumda olur. Çünkü alt prosesin artık 
+    üst prosesi init olacağı için init prosesi de aynı oturumda olmadığından yukarıdaki tanım sağlanmış olacaktır. 
+
+    Aşağıdaki örnekte "sample" programında bir kez fork yapılıp üst proses sonlandırılmıştır. ps komutuyla oluşan duruma dikkat 
+    ediniz:
+
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <unistd.h>
+
+    void exit_sys(const char *msg);
+
+    int main(void)
+    {
+        pid_t pid;
+
+        if ((pid = fork()) == -1)
+            exit_sys("fork");
+
+        if (pid != 0)
+            _exit(EXIT_SUCCESS);
+
+        alarm(30);      // 30 saniye sonra proses sonlanacak
+        pause();
+
+        return 0;
+    }
+
+    void exit_sys(const char *msg)
+    {
+        perror(msg);
+
+        exit(EXIT_FAILURE);
+    }
+
+    Burada ps komutuyla elde edilen çıktılara bakınız:
+
+    $ ps -o pid,ppid,pgid,sid,cmd
+        PID    PPID    PGID     SID CMD
+    26667   26642   26667   26667 bash
+    27410    1136   27409   26667 ./sample
+    27411   26667   27411   26667 ps -o pid,ppid,pgid,sid,cmd
+
+    $ ps -p 1136,1 -o pid,ppid,pgid,sid,cmd
+    PID    PPID    PGID     SID CMD
+    1       0       1       1 /sbin/init splash
+    1136       1    1136    1136 /lib/systemd/systemd --user
+
+    Buradan elde edilen değerlere bakıldığında üst prosesi sonlanmış prosesin üst prosesinin 1136 pid değerine sahip olan 
+    systemd isimli proses olduğu, systemd prosesinin de üst prosesinin inti olduğu anlaşılmaktadır. Biz bir prosesin ğst prosesi
+    sonlandığında onun üst prosesinin init olacağını söylemiştik. Ancak günümüzdeki systemd init paketlerinde bu durum yukarıdaki 
+    gibi biraz farklıdır. Bu konu "servislerin (daemons) anlatıldığı" bölümde ele alınacaktır. Öksüz proses grubu tanımna dikkat 
+    edilirse aslında kabuk rpogramının içinde bulunduğu proses grubunun da öksüz olduğu görülmektedir:
+
+    $ ps -o pid,ppid,pgid,sid,cmd    PID    PPID    PGID     SID CMD
+    26667   26642   26667   26667 bash
+    27434   26667   27434   26667 ps -o pid,ppid,pgid,sid,cmd
+    $ ps -p 26642 -o pid,ppid,pgid,sid,cmd
+      PID    PPID    PGID     SID CMD
+    26642    1136   26642   26642 /usr/libexec/gnome-terminal-server
+
+    Burada bash kabuk programının üst prosesinin aynı oturuma dahil olmadığını görüyorsunuz. O halde bash prosesi de aslında 
+    otoromdaki öksüz bir proses grubundadır.
+
+    Öksüz proses gruplarında şöyle bir ayrıntı da vardır: Kabuk programları terminal bağlantısı koptuğunda ya da sahte terminal 
+    penceresi kapatıldığında oturumun öksüz proses gruplarına SIGHUP sinyali göndermemektedir. Ancak bir proses grubu öksüz 
+    hale geldiğinde eğer o proses grubu içerisinde durudurulmuş olan (stop edilmiş olan) bir proses varsa terminal aygıt 
+    sürücüsü öksüz hale gelmiş olan bu proses grubuna SIGHUP ve SIGCONT sinyalleri göndermektedir. Öksüz proses gruplarındaki 
+    proseslerin kabuk programı sonlansa bile yaşamaya devam edeceğine dikkat ediniz. 
+
+    Pekiyi öksüz proses grubundaki bir proses terminalden okuma yapmaya çalışırsa ya da terminale yazma yapmaya çalışırsa 
+    ne olur? İşte bu durumda read fonksiyonu EIO errno değeri ile başarısız olmaktadır. write fonksiyonu ise terminal aygıt
+    sürücünün TOSTOP ayarı aktif değilse normal olarak terminale yazmakta eğer aktif ise o da EIO errno değeri ile başarısız 
+    olmaktadır. Örneğin biz üst prosesi sonlanmış bir alt proseste terminalden okuma yapmaya çalışırsak read fonksiyonu başarısız
+    olacaktır. Ancak terminale yazma yapmaya çalışırsak terminalin TOSTOP ayarında göre ya yazdıklarımız ekrana çıkacak ya da 
+    write fonksiyonu EIO errno değeri ile başarısız olacaktır. (Michael Kerrisk'in "The Linux Programming Environment" kitabının 
+    730'uncu sayfasında sanki öksüz proses grubundaki proseslerin terminale yazma yapması durumunda write fonksiyonunun EIO errno 
+    değeriyle başarısız olacağı gibi bir cümle edilmiştir. Halbuki bu durum terminalin TOSTOP ayarı ile ilgidir.)
+
+    Öksüz proses grubundaki proseslere (arka planda çalıştırılsın ya da çalıştırılmasın) terminalden okuma yaptığında 
+    SIGTTIN sinyalinin gönderilmediğine, terminalin TOSTOP ayarı ne olursa olsun terminale yazma yapıldığında da SIGTTOU 
+    sinyalinin gönderilmediğine dikkat ediniz. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+                                                82. Ders 17/09/2023 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -36093,6 +36389,62 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    Bir programın tek bir kopyasının çalışması istenebilmektedir. Örneğin program bir kaynak kullanıyor olabilir. Programın 
+    kullandığı kaynak sistem genelinde tek olabilir. Ya da programın birden fazla kopyasının çalıştırılması tasarım bakımından 
+    anomalilere yol açıyor da olabilir. Bunu sağlamak için kayıt kilitleme mekaznizması kullanılabilmektedir. Program çalışmaya 
+    başladığında bir dosyayı bütünsel olarak kilitlemeye çalışır. Eğer kilitleme başarısız olursa programın başka bir kopyasının 
+    çalışıyor olduğu sonucuna varılır. Aslında bu işlem isimli senkronizasyon nesneleriyle de yapılabilmektedir. Örneğin Windows
+    sistemlerinde bunun için dosya kilitleme mekanizması yerine "isimli mutex nesneleri" tercih edilmektedir. Ancak UNIX/Linux
+    sistemlerindeki geleneksel yaklaşım dosya kilitleme mekanizmasının kullanılmasıdır.
+
+    Aşağıda programın tek bir kopyasının çalışmasını sağlayan basit bir örnek verilmiştir. Bu örnekte proses dosyayı bütünsel 
+    olarak "exclusive" bir biçimde kilitlemeye çalışmıştır. Dosya kapatıldığında zaten kilit de ortadan kalkmaktadır. Burada 
+    flock fonksiyonunda LOCK_NB bayrağını da kullandık. Çünkü bu tür durumlarda bloke oluşmasının engellenmesi gerekmektedir. 
+    Bu yöntemde içi boş bir dosyanın yaratılmış olduğuna dikkat ediniz. Bu tür dosyaların "/temp" dizini içerisinde yaratılması 
+    da sık karşılaşılan bir uygulamadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/file.h>
+
+#define LOCK_FILE_PATH		"lock.dat"
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int fd;
+
+	if ((fd = open(LOCK_FILE_PATH, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR)) == -1)
+		exit_sys("open");
+
+	if (flock(fd, LOCK_EX|LOCK_NB) == -1)
+		if (errno == EWOULDBLOCK) {
+			fprintf(stderr, "only one instance of this program can run...\n");
+			exit(EXIT_FAILURE);
+		}
+		else
+			exit_sys("flock");
+
+	sleep(10);
+
+	close(fd);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Biz yukarıda "isteğe bağlı (advisory)" kilitleme işlemi yaptık. Burada "isteğe bağlı (advisory)" demekle aslında read/write 
     fonksiyonlarının bu kilitlere hiç bakmaması anlatılmak istenmiştir. Örneğin biz dosyanın bir bölgesine F_WRLCK ile bir 
     kilit yerleştirelim. Başka bir proses o bölgeye write ile yazma yapabilir. Tabii dosya erişen ilgili programların hepsi
@@ -37791,7 +38143,7 @@ void exit_sys(const char *msg)
     - Sinyal fonksiyonu içerisinde ancak biz sinyal güvenli (signal safe) fonksiyonları çağırabiliriz. Ancak okuma ve sonrasında 
     pek çok sinyal güvenli olmayan fonksiyonların çağrılması gerekebilmektedir.
 
-    Pekiyi okuma/yazma işlemlerini sinyal geldiği zaman sinyal fonksiyonu ieçrisinde yapmayacaksak nerede ve nasıl yapmalıyız? 
+    Pekiyi okuma/yazma işlemlerini sinyal geldiği zaman sinyal fonksiyonu içerisinde yapmayacaksak nerede ve nasıl yapmalıyız? 
     İşte tipik olarak sinyal fonksiyonu içerisinde bir flag set edilip işlemler dışarıda yapılabilir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -37801,12 +38153,11 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Aşağıdaki örnekte stdin dosyasından sinyal tabanlı okuma yapılmıştır. Bu örnekte sinyal fonksiyonunda yalnızca bir flag set
-    edilmiştir. Okumalar sinyal fonksiyonun dışında bu flag değişkenine bakılarak gerçekleştirilmiştir. flag değişkeni sig_atomic_t
+    edilmiştir. Okumalar sinyal fonksiyonunun dışında bu flag değişkenine bakılarak gerçekleştirilmiştir. flag değişkeni sig_atomic_t
     türünden tanımlanmıştır. Anımsanacağı gibi bu türden nesnelere atama işlemleri tek makine komutuyla atomik yapılmaktadır. 
     Her ne kadar sig_atomic_t türü "volatile" özelliğine de kapsıyor gibiyse de biz yine de flag değişkeninde volatile niteleyicisini 
     kullandık.
 ---------------------------------------------------------------------------------------------------------------------------*/
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -37883,13 +38234,13 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Pekiyi sinyal taabanlı IO işlemlerinde birden fazla betimleyici ile nasıl işlem yapılacaktır? Örneğin biz 3 boru betimleyicisinden 
+    Pekiyi sinyal tabanlı IO işlemlerinde birden fazla betimleyici ile nasıl işlem yapılacaktır? Örneğin biz 3 boru betimleyicisinden 
     okuma yapmak isteyelim. SIGIO sinyali oluştuğunda hangi boruya bilgi geldiğini nasıl anlayacağız? Yukarıdaki örnekte yalnızca 
     stdin dosyasından okuma yaptık. Bu örnekte böyle bir bilgiye ihtiyacımız yoktu. İşte bu yöntemin aslında etkin bir biçimde 
     kullanılabilmesi için IO olayı olduğunda SIGIO sinyali yerine gerçek zamanlı bir sinyalin oluşturulması gerekmektedir. 
     Gerçek zamanlı sinyaller hem kuyruklanmakta hem de bu sinyallere ek bir bilgi yerleştirilebilmektedir. 
 
-    Sinyal tabanlı IO işlemindeki default sinyalin SIGIO sinyali olduğunu belirtmiştik. Ancak SIGIO siynalinin gerçek zamanlı 
+    Sinyal tabanlı IO işlemindeki default sinyalin SIGIO sinyali olduğunu belirtmiştik. Ancak SIGIO sinyalinin gerçek zamanlı 
     olmaması bir handikap oluşturmaktadır. İşte default sinyal aslında fcntl fonksiyonu ile F_SETSIG komutu kullanılarak 
     değiştirilebilmektedir. Örneğin:
 
@@ -37908,7 +38259,7 @@ void exit_sys(const char *msg)
     sigemptyset(&sa.sa_mask);
     sa.sa_flags = SA_RESTART|SA_SIGINFO;
 
-    Gerçek zamanlı siyallerin bu konudaki faydasını izleyen paragraflarda açıklayacağız. Ancak şimdi aşağıda sinyal tabanlı IO 
+    Gerçek zamanlı sinyallerin bu konudaki faydasını izleyen paragraflarda açıklayacağız. Ancak şimdi aşağıda sinyal tabanlı IO 
     işlemleri için gerçek zamanlı sinyalin set edilmesine yönelik örnek vermek istiyoruz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -38023,20 +38374,20 @@ void exit_sys(const char *msg)
     }
 
     Anımsanacağı gibi yapının si_signo elemanı oluşan sinyalin numarasını, si_pid elemanı sinyali oluşturan prosesin id 
-    değerini vermekteydi. Sinyal tabanlı IO işlemlerinde yapının si_fd elemanı simyale yol açan betimleyicinin numarasını 
+    değerini vermekteydi. Sinyal tabanlı IO işlemlerinde yapının si_fd elemanı sinyale yol açan betimleyicinin numarasını 
     vermektedir. si_code elemanı ise sinyalin neden oluştuğuna yönelik bilgi vermektedir. Yapının bu si_code elemanında şu 
     bitler set edilmiş olabilir:
 
     POLL_IN: Okuma ya da kapatma olayı
-    POLL_OUT: Yazma olayın
+    POLL_OUT: Yazma olayı
     POLL_ERR: IO hatası
 
     Diğer bayraklar için dokümanlara başvurabilirsiniz.
 
     Aşağıda daha önce yaptığımız boru örneğinin sinyal tabanlı IO modeli ile gerçekleştirimini veriyoruz. Bu örnekte sinyaller
     senkron biçimde sigwaitinfo fonksiyonu ile işlenmiştir. Dolayısıyla bir sinyal fonksiyonu yazılmamıştır. sigwaitinfo 
-    uygulamadna önce beklenecek sinyalleri bloke etmeyi unutmayınız. Örneğimizde sigwaitinfo fonksiyonundan çıkıldığında 
-    oluşan olay siginfo_t yapısının si_code elemanından elde edilmiş ve yapının si_fd elemanındna okuma yapılmıştır. Karşı 
+    uygulamadan önce beklenecek sinyalleri bloke etmeyi unutmayınız. Örneğimizde sigwaitinfo fonksiyonundan çıkıldığında 
+    oluşan olay siginfo_t yapısının si_code elemanından elde edilmiş ve yapının si_fd elemanından okuma yapılmıştır. Karşı 
     taraf boruyu ya da soketi kapattığında yine POLL_IN olayının gerçekleşeceğini anımsatmak istiyoruz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -38143,20 +38494,22 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi multiplexed select ve poll modeli ile sinyal tabanlı IO modelini kıyaslarsak ne söylebiliriz? Linux sistemlerinde 
-    sinyal tabanlı IO modeli select ve poll modeline göre daha yüksek performasn sunmaktadır. Özellikle önceki örnekte yaptığımız 
-    senkron sinyal işlemesi yüksek miktarda betimleyici söz konusu olduğunda select ve poll modelindne daha iyi sonuçlar vermektedir. 
+    sinyal tabanlı IO modeli, select ve poll modeline göre daha yüksek performans sunmaktadır. Özellikle önceki örnekte yaptığımız 
+    senkron sinyal işlemesi yüksek miktarda betimleyici söz konusu olduğunda select ve poll modelinden daha iyi sonuçlar vermektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    İleri IO modellerinden biri de "Asenkron IO Modelidir". Bu modelde okuma/yazma gibi işlemler başlatılır ancak akış devam eder.
-    İşlemler bittiğinde durum programcıya bir sinyal ya da fonksiyon çağrısı ile bildirilir. Asenkron işlemleri POSIX standartları
-    tarafından desteklenmektedir. Asenkron modelinde kullanılan fonksiyonlar aio_xxx biçiminde isimlendirilmiştir. Asenkron 
+    İleri IO modellerinden biri de "Asenkron IO" modelidir. Bu modelde okuma/yazma gibi işlemler başlatılır ancak akış devam eder.
+    İşlemler bittiğinde durum programcıya bir sinyal ya da fonksiyon çağrısı ile bildirilir. Asenkron IO işlemleri POSIX standartları
+    tarafından desteklenmektedir. Asenkron IO modelinde kullanılan fonksiyonlar aio_xxx biçiminde isimlendirilmiştir. Asenkron 
     IO işlemleri için kullanılan fonksiyonlar ve yapılar <aio.h> dosyası içerisinde bildirilmiştir.
 
     Asenkron IO işlemleri tipik olarak şu aşamalardan geçilerek yürütülmektedir:
 
-    1) Önce <aio.h> içerisinde bildirilmiş olan struct aiocb (asychronous io control block) isimli bir yapı türünden nesne tanımlanıp 
+    1) Önce <aio.h> içerisinde bildirilmiş olan struct aiocb (asychronous IO control block) isimli bir yapı türünden nesne tanımlanıp 
     içinin doldurulması gerekir. Yapı şöyle bildirilmiştir.
+
+    #include <aio.h>
 
     struct aiocb {
         int             aio_fildes;
@@ -38168,20 +38521,22 @@ void exit_sys(const char *msg)
         int             aio_lio_opcode;
     };
 
-    Yapının aio_fildes elemanına okuma/yazma yapılmak istenen dosyaya ilişkin dosya betimleyicisi yerleştirilir. Asenkon okuma/yazma
+    Yapının aio_fildes elemanına okuma/yazma yapılmak istenen dosyaya ilişkin dosya betimleyicisi yerleştirilir. Asenkron okuma/yazma
     işlemleri dosya göstericisinin gösterdiği yerden itibaren yapılmamaktadır. Okuma/yazmanın dosyanın neresinden yapılacağı yapının 
     aio_offset elemanında belirtilir. (Seekable olmayan aygıtlar için bu elemana 0 girilebilir. Eğer yazma durumu söz konusuysa ve 
     dosya O_APPEND modda açıldıysa bu durumda aio_offset elemanının değeri dikkate alınmaz. Her yazılan dosyaya eklenir.) Yapının 
     aio_buf elemanı transferin yapılacağı bellek adresini belirtir. Bu adresteki dizinin işlem sonlanana kadar yaşıyor durumda olması 
     gerekmektedir. Yapının aio_nbytes elemanı okunacak ya da yazılacak byte miktarını belirtmektedir. Tabii burada belirtilen byte miktarı 
-    aslında aio_buf dizisinin uzunluğunu belirtmektedir. Yoksa kesinlikle okunacak byte sayısını belirtmez. Yani örneğin asenkron biçimde 
+    aslında aio_buf dizisinin uzunluğunu belirtmektedir. Yoksa kesin olarak okunacak byte sayısını belirtmez. Yani örneğin asenkron biçimde 
     bir borudan 100 byte okumak isteyelim. Bize "işlem bitti" bildirimi 100 byte okuduktan sonra gelmek zorunda değildir. En az 1 byte'lık 
     okuma olayı gerçekleşmişse de "işlem bitti bildirimi" yapılır. Tabii hiçbir zaman burada belirtilen byte miktarından fazla okuma yazma 
-    yapılmayacaktır. Başka bir deyişle yapının bu aio_nbytes elemanı en fazla yapıalacak okuma/yazma miktarını belirtmektedir. Yapının 
+    yapılmayacaktır. Başka bir deyişle yapının bu aio_nbytes elemanı en fazla yapılacak okuma/yazma miktarını belirtmektedir. Yapının 
     aio_reprio elemanı ise okuma/yazma için bir öncelik derecesi belirtmektedir. Yani bu değer yapılacak transferin önceliğine ilişkin bir 
-    ip ucu belirtir. Ancak işletim sisteminin bu ipucunu kullanıp kullanmayacağı isteğe bağlı bırakılmıştır. Bu eleman 0 geçilebilir. 
+    ip ucu belirtir. Ancak işletim sisteminin bu ipucunu kullanıp kullanmayacağı isteğe bağlı bırakılmıştır. Bu elemana 0 geçilebilir. 
     Yapının aio_sigevent elemanı işlem bittiğinde yapılacak bildirim hakkında bilgileri barındırmaktadır. Bu sigevent yapısını daha önce 
-    timer konusunda görmüştük. Burada anımsatmak yeniden istiyoruz:
+    timer konusunda görmüştük. Burada yeniden anımsatmak istiyoruz:
+
+    #include <signal.h>
 
     struct sigevent {
         int          sigev_notify;
@@ -38193,9 +38548,11 @@ void exit_sys(const char *msg)
 
     Bu yapının sigev_notify elemanı bildirimin türünü belirtir. Anımsanacağı gibi bu tür SIGEV_NONE, SIGEV_SIGNAL, SIGEV_THREAD biçiminde 
     olabilmektedir. SIGEV_NONE IO olayı bittiğinde bir bildirimin yapılmayacağını, SIGEV_SIGNAL bir sinyal ile bildirimin yapılacağını, 
-    SIGEV_THREAD ise bildirimin kernel tarafındna yaratılan bir thread yoluyla yapılacağını belirtmektedir. Yapının sigev_signo elemanı 
-    ise eğer sinyal yoluyla bildirimde bulunulacaksa sinyalin numrasını belirtmektedir. Yapının sigev_value elemanı sinyal fonksiyonuna 
-    ya da thread fonksiyonuna gönderilecek kulanıcı tanımlı bilgiyi temsil etmektedir. Buradaki birliğin aşağıdkai gibi bildirildiğini anımsayınız:
+    SIGEV_THREAD ise bildirimin kernel tarafından yaratılan bir thread yoluyla yapılacağını belirtmektedir. Yapının sigev_signo elemanı 
+    ise eğer sinyal yoluyla bildirimde bulunulacaksa sinyalin numarasını belirtmektedir. Yapının sigev_value elemanı sinyal fonksiyonuna 
+    ya da thread fonksiyonuna gönderilecek kullanıcı tanımlı bilgiyi temsil etmektedir. Buradaki birliğin aşağıdaki gibi bildirildiğini anımsayınız:
+
+    #include <signal.h>
 
     union sigval {            /* Data passed with notification */
         int     sival_int;    /* Integer value */
@@ -38203,7 +38560,7 @@ void exit_sys(const char *msg)
     };
 
     Yapının sigev_notify_function elemanı eğer bildirim thread yoluyla yapılacaksa işletim sistemi tarafından yaratılan thread'in çağıracağı 
-    callback fonksiyonu belirtmektedir. Yapının sigev_notify_attributes elemanı ise yaratılacak thread'in özelliklerini belirtir. Bu 
+    callback fonksiyonunu belirtmektedir. Yapının sigev_notify_attributes elemanı ise yaratılacak thread'in özelliklerini belirtir. Bu 
     parametre NULL geçilebilir. 
 
     Örneğin:
@@ -38232,9 +38589,9 @@ void exit_sys(const char *msg)
 
     Fonksiyonlar başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri dönmektedir. İşlemlerin devam ettiğine yani henüz 
     sonlanmadığına dikkat ediniz. Bu fonksiyonlara verdiğimiz aiocb yapılarının işlem tamamlanana kadar yaşıyor olması gerekir. Yani 
-    fonksiyon bizim verdiğimiz aicb yapısını çalışırken kullanıyor olabilir. 
+    fonksiyon bizim verdiğimiz aiocb yapısını çalışırken kullanıyor olabilir. 
 
-    aio_read ve aior_write fonksiyonları yalnızca bir defalık okuma yazma için mekanizmayı kurmaktadır. Mekanizmanın nasıl devam 
+    aio_read ve aio_write fonksiyonları yalnızca bir defalık okuma yazma için mekanizmayı kurmaktadır. Mekanizmanın nasıl devam 
     ettirileceği izleyen maddede ele alınacaktır.
 
     Örneğin:
@@ -38244,30 +38601,30 @@ void exit_sys(const char *msg)
 
     3) Anımsanacağı gibi biz aiocb yapısının aio_nbytes elemanına maksimum okuma/yazma miktarını vermiştik. Halbuki bundan daha
     az okuma/yazma yapılması mümkündür. Pekiyi bize bildirimde bulunulduğunda ne kadar miktarda bilginin okunmuş ya da yazılmış 
-    olduğunu nasıl anlayacağız? İşte bunun için aio_result isimli fonksiyon kullanılmaktadır:
+    olduğunu nasıl anlayacağız? İşte bunun için aio_return isimli fonksiyon kullanılmaktadır:
 
     #include <aio.h>
 
     ssize_t aio_return(struct aiocb *aiocbp);
 
-    Fonksiyon başarı durumunda transfer edilen byte sayısına başarısızlık durumunda -1'e geri dönmektedir. Eğer bildirim gelmeden
-    bu fonksion çağrılırsa geri dönüş değeri anlamlı olmayabilir. aio_read ve aio_write fonksiyonları sinyal güvenli değildir ancak
+    Fonksiyon başarı durumunda transfer edilen byte sayısına, başarısızlık durumunda -1 değerine geri dönmektedir. Eğer bildirim gelmeden
+    bu fonksion çağrılırsa geri dönüş değeri anlamlı olmayabilir. aio_read ve aio_write fonksiyonları sinyal güvenli değildir, ancak
     aio_return ve aio_error fonksiyonları sinyal güvenlidir.
 
-    Yukarıda aio_read ve aio_write işlemlerinin bir defalık okuma/yazma sağladığını belirtmiştik. İşlemin devamının sağlanmsı 
+    Yukarıda aio_read ve aio_write işlemlerinin bir defalık okuma/yazma sağladığını belirtmiştik. İşlemin devamının sağlanması 
     için her okuma/yazma olayı gerçekleştiğinde yeniden aio_read ve aio_write fonksiyonlarının çağrılması gerekmektedir. Yani
-    IO işlemi gerçekleştiğinde biz yeniden IO işlemi için bu fonksiyonların çağrılmasını sağlamalıyız.
+    IO işlemi gerçekleştiğinde, biz yeniden IO işlemi için bu fonksiyonların çağrılmasını sağlamalıyız.
 
     Aşağıda asenkron IO modelinin uygulanmasına ilişkin bir örnek verilmiştir. Örnekte stdin dosyasından sürekli okuma yapılmak 
-    istenmiştir. Burada bildirim SIGEV_THREAD ile kernel tarafından yaaratılan bir thread yoluyla yapılmaktadır. Okuma olayın 
+    istenmiştir. Burada bildirim SIGEV_THREAD ile kernel tarafından yaratılan bir thread yoluyla yapılmaktadır. Okuma olayı 
     bittiğinde kernel bizim belirlediğimiz fonksiyonu çağırmaktadır. Biz de bu fonksiyon içerisinde aio_return fonksiyonu ile 
-    kaç byte okunduğunu belirleyip işlemin devam etmesi için aoi_read fonksiyonunu yendien çağırmaktayız. Burada thread fonksiyonuna
+    kaç byte okunduğunu belirleyip işlemin devam etmesi için aio_read fonksiyonunu yeniden çağırmaktayız. Burada thread fonksiyonuna
     bizim aiocb yapısını nasıl geçirdiğimize dikkat ediniz:
 
     cb.aio_sigevent.sigev_value.sival_ptr = &cb;
 
     aio_sigevent yapısının sigev_value elemanı thread fonksiyonuna parametre olarak aktarılmaktadır. sigev_value elemanının 
-    bir birlik olduğunu anımsayınız. Biz de bu birliğin sival_ptr elemanına aiocb yapı nesnesinin adresini yerleştirdik. 
+    bir birlik olduğunu anımsayınız. Biz de bu birliğin sival_ptr elemanına, aiocb yapı nesnesinin adresini yerleştirdik. 
     Klavyeden Ctrl+d tuşlarına basıldığında bu da bir IO olayı olarak ele alınmaktadır. Ancak bu durumda aio_return fonksiyonu
     0 değeri ile geri dönmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -38314,7 +38671,7 @@ void io_proc(union sigval sval)
 	char *buf = (char *)cb->aio_buf;
 
 	if ((result = aio_return(cb)) == -1)
-		exit_sys("aio_result");
+		exit_sys("aio_return");
 
 	if (result == 0) {
 		printf("Ctrl+d pressed...\n");
@@ -38334,6 +38691,10 @@ void exit_sys(const char *msg)
 
 	exit(EXIT_FAILURE);
 }
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												93. Ders 29/10/2023 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Aşağıdaki örnekte daha önce yapmış olduğumuz birden fazla borudan okuma örneğini asenkron IO modeli ile gerçekleştiriyoruz.
@@ -38425,7 +38786,7 @@ void io_proc(union sigval sval)
 	char *buf = (char *)cb->aio_buf;
 
 	if ((result = aio_return(cb)) == -1)
-		exit_sys("aio_result");
+		exit_sys("aio_return");
 
 	if (result == 0) {
 		printf("pipe closed...\n");
@@ -38455,15 +38816,15 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Yukarıdaki örneği biraz farklı bir biçimde de düzenleyebiliriz. Örneğin aiocb yapısı ile tampon bizim oluşturduğumuz 
-    bir yapının içerisinde saklanabilir. Böylece tahsisat işlemleri ve kullanım işlemleri biraz daha kolaylatırılabilir. Örneğin:
+    Yukarıdaki örneği biraz farklı bir biçimde de düzenleyebiliriz. Örneğin aiocb yapısı ile tampon, bizim oluşturduğumuz 
+    bir yapının içerisinde saklanabilir. Böylece tahsisat işlemleri ve kullanım işlemleri biraz daha kolaylaştırılabilir. Örneğin:
 
     typedef struct {
         struct aiocb cb;
         char buf[BUFFER_SIZE + 1];
     } IOCB_BUF;
 
-    Bu sayede biz aiocb yapısı için ve tampon için iki ayrı tahsidat yapmak yerine tek bir tahsisat yapabiliriz. Aynı zamanda
+    Bu sayede biz aiocb yapısı ve tampon için iki ayrı tahsisat yapmak yerine tek bir tahsisat yapabiliriz. Aynı zamanda
     bu yapının içerisine başka bilgiler de yerleştirilebilmektedir. Gerçekten de özellikle TCP soket uygulamalarında okunan
     bilgilerin bir araya getirilmesi için tampona eşlik eden başka bilgilerinde bu yapıda tutulması gerekebilmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -38547,7 +38908,7 @@ void io_proc(union sigval sval)
 	IOCB_INFO *ioinfo = (IOCB_INFO *)sval.sival_ptr;
 
 	if ((result = aio_return(&ioinfo->cb)) == -1)
-		exit_sys("aio_result");
+		exit_sys("aio_return");
 
 	if (result == 0) {
 		printf("pipe closed...\n");
@@ -38582,11 +38943,11 @@ void exit_sys(const char *msg)
 
     int aio_cancel(int fd, struct aiocb *aiocbp);
 
-    Fonksiyonun birinci parametresi iptal edilecek betimleyiciyi belirtir. Eğer iocb NULL geçilirse bu betimleyiciye lişkin 
+    Fonksiyonun birinci parametresi iptal edilecek betimleyiciyi belirtir. Eğer iocb NULL geçilirse bu betimleyiciye ilişkin 
     bütün asenkron işlemler iptal edilmektedir.
 
     Fonksiyon AIO_CANCELED değerine geri dönerse iptal başarılıdır. AIO_NOTCANCELED değerine geri dönerse işlem aktif biçimde 
-    devam etmekte olduğu için iptal başarısızdır. AIO_ALLDONE değeri ise işlemin zaten bittiğini belirtir. Fonksiyon başarıszlık 
+    devam etmekte olduğu için iptal başarısızdır. AIO_ALLDONE değeri ise işlemin zaten bittiğini belirtir. Fonksiyon başarısızlık 
     durumunda -1 değerine geri dönmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -38606,7 +38967,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Şimdiye kadar görmüş olduğumuz IO modellerinin kullanımlaro ve performansları hakkında şunları söyleyebiliriz:
+    Şimdiye kadar görmüş olduğumuz IO modellerinin kullanımları ve performansları hakkında şunları söyleyebiliriz:
 
     - select, poll modeli ve asenkron IO modeli POSIX standartlarında bulunan taşınabilir modellerdir.
     - epoll modeli ve sinyal tabanlı IO modeli Linux sistemlerine özgüdür. Yani taşınabilir değildir.
@@ -38615,13 +38976,14 @@ void exit_sys(const char *msg)
     1) epoll modeli
     2) sinyal tabanlı IO modeli ve asenkron IO modeli
     3) select ve poll modeli
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Üzerinde duracağımız son IO modeli İngilizce "scatter/gather" Io modeli denilen modeldir. ("scatter" saçmak, "gather"
-    toplamak anlıma gelmektedir. Buna Türkçe "saçma/toplama IO modeli" deiyebiliriz.)
+    Üzerinde duracağımız son IO modeli İngilizce "scatter/gather" IO modeli denilen modeldir. ("scatter" saçmak, "gather"
+    toplamak anlamına gelmektedir. Buna Türkçe "saçma/toplama IO modeli" diyebiliriz.)
 
-    Pek çok uygulamada değişik adreslerdeki bilgilerin peşi sıraya dosyaya yazılması ya da dosyadan okunanların değişik adreslere
+    Pek çok uygulamada değişik adreslerdeki bilgilerin peşi sıra dosyaya yazılması ya da dosyadan okunanların değişik adreslere
     yazılması söz konusu olabilmektedir. Örneğin bir kaydı temsil eden aşağıdaki üç bilginin birbiri ardına dosyaya yazılmak 
     istendiğini düşünelim:
 
@@ -38651,10 +39013,10 @@ void exit_sys(const char *msg)
     char buf[BUFSIZE];
 
     memcpy(buf, &recordlen, sizeof(int));
-    memcpy(buf + sizeof(int), record, BUFSIZE);
-    memcpy(buf + sizeof(int) + BUFIZE, &record_no, sizeof(int));
+    memcpy(buf + sizeof(int), record, RECORD_SIZE);
+    memcpy(buf + sizeof(int) + RECORD_SIZE, &record_no, sizeof(int));
 
-    if (write(fd, buf, 2 * sizeof(int) + BUFSIZE) != 2 * sizeof(int) + BUFSIZE) {
+    if (write(fd, buf, 2 * sizeof(int) + RECORD_SIZE) != 2 * sizeof(int) + RECORD_SIZE) {
         ...
     }
 
@@ -38667,11 +39029,11 @@ void exit_sys(const char *msg)
     ssize_t readv(int fildes, const struct iovec *iov, int iovcnt);
     ssize_t writev(int fildes, const struct iovec *iov, int iovcnt);
 
-    Fonskiyonların birinci parametreleri okuma ya da yazma işleminin yapılacağı dosya betimleyicisini, ikinci parametreleri 
-    kullanılacak tampon uzunluklarının ve adreslerinin belirtildiği yapı dizisinin adresini, üçüncü parametresi de bu yapı dizinin 
-    uzunluğunu belirtir. Programcı struct iovec türünden bir yapı dizisi oluşturupğ onun içini doldurmalıdır. Fonksiyonlar 
-    başarısızlık durumunda -1 değerine, diğer durumlarda okunan yazılan byte toplam byte miktarına geri dönmektedir. Okuma ve 
-    yazma işlemleri tek parça halinde atomik biçimde yapılmaktadır. Yani bu okuma yazma işlemlerinin arasında başka bir dosya
+    Fonksiyonların birinci parametreleri okuma ya da yazma işleminin yapılacağı dosya betimleyicisini, ikinci parametreleri 
+    kullanılacak tampon uzunluklarının ve adreslerinin belirtildiği yapı dizisinin adresini, üçüncü parametresi de bu yapı dizisinin 
+    uzunluğunu belirtir. Programcı struct iovec türünden bir yapı dizisi oluşturup onun içini doldurmalıdır. Fonksiyonlar 
+    başarısızlık durumunda -1 değerine, diğer durumlarda okunan yazılan toplam byte miktarına geri dönmektedir. Okuma ve 
+    yazma işlemleri tek parça halinde atomik biçimde yapılmaktadır. Yani bu okuma yazma işlemlerinin arasına başka bir dosya
     işlemi girememektedir. iovec yapısı şöyle bildirilmiştir:
 
     struct iovec {
@@ -38679,10 +39041,11 @@ void exit_sys(const char *msg)
         size_t iov_len;
     };
 
-    Yapının iov_base elemanı yazılacak ya da okunacak bilginin bellek adresini iov_len elemanı ise bunun uzunluğunu belirtmektedir. 
+    Yapının iov_base elemanı yazılacak ya da okunacak bilginin bellek adresini, iov_len elemanı ise bunun uzunluğunu belirtmektedir. 
 
     Aşağıdaki örnekte aslında üç farklı write işlemi ile yapılacak yazma işlemleri tek hamlede atomik olarak writev fonksiyonuyla
-    yapılmıştır. Burada farklı adreslerdeki bilgilerin dosyaya dosya gösterdiği yerden itibaren peşi sıra yazıldığına dikkat ediniz. 
+    yapılmıştır. Burada farklı adreslerdeki bilgilerin dosyaya dosya göstericisinin gösterdiği yerden itibaren peşi sıra yazıldığına 
+    dikkat ediniz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -38737,7 +39100,7 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Aşağıda readv fonskiyonun kullanımına bir örnek verilmiştir. Burada yukarıdaki örnekte oluşturulan dosya ters bir biçimde
+    Aşağıda readv fonksiyonun kullanımına bir örnek verilmiştir. Burada yukarıdaki örnekte oluşturulan dosya ters bir biçimde
     readv fonksiyonu ile farklı adreslere okunmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -38795,19 +39158,19 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Arka planda sessiz sedasız çalışan bir kullanıcı arayüzü olmayan, kullanıcılarla terminal yoluyla etkileşmeyen programlara 
     Windows dünyasında "servis (service)" UNIX/Linux dünyasında ise "daemon (di:mın biçiminde okunuyor)" denilmektedir. Servisler 
-    ya da daemon'lar tipik olarak boot sırasında çlışmaya başlatılırlar ve yine tipik olarak makine reboot edilene kadar çalışmaya 
-    devam ederler. Tabii böyle bir zorunluluk yoktur. Yani servis ya da daemon programlar istenildiği zaman balatılıp istenildiği 
-    zaman sonlandırılabilmektedir. Servis ya da "daemon" kernel mod bir kavram değildir. Yani servisler ve daemon'lar genellikle
+    ya da daemon'lar tipik olarak boot sırasında çalışmaya başlatılırlar ve yine tipik olarak makine reboot edilene kadar çalışmaya 
+    devam ederler. Tabii böyle bir zorunluluk yoktur. Yani servis ya da daemon programlar istenildiği zaman başlatılıp istenildiği 
+    zaman sonlandırılabilmektedir. "Servis" ya da "daemon" kernel mod bir kavram değildir. Yani servisler ve daemon'lar genellikle
     "user modda" çalışmak üzere yazılırlar. UNIX/Linux dünyasında geleneksel olarak daemon'lar "xxxxxd" biçiminde sonuna 'd' harfi 
     getirilerek isimlendirilmektedir. Çekirdeğe ilişkin bazı thread'ler de servis benzeri işlemler yaptıkları için bunlar da çoğu 
     kez sonu 'd' ile bitecek ancak başı da 'k' ile başlayacak biçimde isimlendirilmiştir. Bu kernel daemon'ların bizim şu andaki 
-    konumuz olan daemnon'larla hiçbir ilgisi yoktur. Yalnızca işlev bakımından bir benzerlik söz konusudur. UNIX/Linux dünyasında 
-    daemon dendiğinde akla öncelikle "server programlar" gelmektedir. Örneğin ftp server programı (ftpd) ve http server programı 
+    konumuz olan daemon'larla hiçbir ilgisi yoktur. Yalnızca işlev bakımından bir benzerlik söz konusudur. UNIX/Linux dünyasında 
+    daemon denildiğinde akla öncelikle "server programlar" gelmektedir. Örneğin ftp server programı (ftpd) ve http server programı 
     (httpd) daemon programlar biçiminde yazılmışlardır. Daemon'lar genellikle arka planda önemli işlemler yaptıkları için uygun 
-    önceliklerle (yani sudo ile root hakkıyla") çalıştırılırlar.
+    önceliklerle (yani sudo ile root hakkıyla) çalıştırılırlar.
 
     Daemon programlar pek çok modern UNIX/Linux sisteminde "init paketleri" içerisindeki özel utility'ler tarafından başlatılıp, 
-    sürdürülüp sonlandırılmaktadır. Yani ilgili dağıtımın bu dameon'ları idare etmek için özel komutları bulunabilmektedir. Linux 
+    sürdürülüp, sonlandırılmaktadır. Yani ilgili dağıtımın bu dameon'ları idare etmek için özel komutları bulunabilmektedir. Linux 
     sistemlerinde init prosesi ve diğer proseslerin kodları ve boot süreci ile ilgili utility'ler "init paketleri" denilen 
     paketler biçiminde farklı proje grupları tarafından oluşturulmuştur. Başka bir deyişle "servis yönetim (service management)"
     işlemleri organize bir biçimde bu "init paketleri" tarafından yapılmaktadır. Yaygın olarak kullanılan üç "init paketi" bulunmaktadır:
@@ -38816,20 +39179,22 @@ void exit_sys(const char *msg)
     2) Upstart: 2006 yılında oluşturulmuştur ve 2010'ların ortalarına kadar (bazı dağtımlarda hala) kullanılmaya yaygın biçimde kullanılmıştır.
     3) systemd: 2010 yılında oluşturulmuştur ve son yıllarda pek çok Linux dağıtımında kullanılmaya başlanmıştır. Bugün en yaygın kullanılan 
     init paketi durumundadır.
+
 /*--------------------------------------------------------------------------------------------------------------------------
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Bir deamon programı yazabilmek için öncelikle onun terminal bağlantısının kesilmesi gerekmektedir. Bir programı komut satırından
-    sonuna & getirerek "arka plan proses grubu" biçiminde çalıştırarak servis oluşturamayız. 
-
-    <BURADA KALDIK>
+    sonuna & getirerek "arka plan proses grubu" biçiminde çalıştırarak daemon oluşturamayız. Çünkü bu durumda terminal kapatıldığında
+    bizim prosesimiz de SIGHUP sinyali yüzünden kapatılacaktır. 
 
     Bir daemon programın yazılması tipik olarak şu aşamalardan geçilerek yapılmaktadır:
 
     1) Deamon programlar bir dosya açmak istediklerinde tam olarak belirlenen haklarla bunu yapmalıdırlar. Bu nedenle bu proseslerin
-    umask değerlerinin 0 yapılması uygun olur.
+    umask değerlerinin 0 yapılması uygun olur. Örneğin:
 
-    2) Bir prosesin deamon etkisi yaratması için terminalle bir bağlantısının kalmaması gerekir. Bu da basi tbir biçimde maalesef 0, 1, 2 
+    umsask(0);
+
+    2) Bir prosesin deamon etkisi yaratması için terminalle bir bağlantısının kalmaması gerekir. Bu da basit bir biçimde maalesef 0, 1, 2 
     numaralı terminal betimleyicilerinin kapatılmasıyla sağlanamaz. Bunu sağlamanın en temel yolu setsid fonksiyonunu çağırmaktır. 
     Anımsanacağı gibi setsid fonksiyonu yeni bir oturum (session) ve yeni bir proses grubu oluşturup lgili prosesi bu proses grubunun
     ve oturumun lideri yapmaktadır. Ayrıca setsid fonksiyonu prosesin terminal ilişkisini (controlling terminal) de ortadan kaldırmaktadır. 
@@ -38837,40 +39202,1350 @@ void exit_sys(const char *msg)
     olmaktadır. Yine anımsanacağı gibi kabuk programlar çalıştırdıkları programlar için bir proses grubu yaratıp o programı da proses grup 
     lideri yapıyordu. İşte proses grup lideri olmaktan kurtulmak için bir kez fork yapıp üst prosesi sonlandırabiliriz. Aynı zamanda bu 
     işlem kabuk programının hemen komut satırına yeniden düşmesine yol açacaktır. O halde 2'inci aşamada fork işlemi yapılıp üst proses 
-    sonlandırılmalıdır. Bilindiği gibi terminale bağlı programları kabukta sonuna & getirerek arka planda çalıştırdığımızda yeniden 
-    komut satırına düşsek bile kabuk programları kapatıldığında bu programlar da SIGHUP sinyali gönderilerek sonlandırılmaktadır. Yani 
-    örneğin biz terminal ilişkisini kesmezsek bir kez fork yapıp alt proses arka planda çalışır gibi olur ancak bu durumda terminal 
-    kapatıldığında o alt proses de SIGHUP sinyali gönderilerek sanlandırılır. 
+    sonlandırılmalıdır. Örneğin:
+
+    if ((pid = fork()) == -1)
+        exit_sys("fork");
+
+    if (pid != 0)
+        _exit(EXIT_SUCCESS);
 
     3) Artık alt proses setsid fonksiyonunu uygulayarak yeni bir oturum yaratır ve terminal ilişkisini keser. Terminal ilişkisinin kesilmesi
-    ile artık terminal kapatılsa bile programımız çalışmaya devam eder. Tabii setsid ile terminal bağlantısının kesilmiş olması programın
+    ile artık terminal kapatılsa bile programımız çalışmaya devam edecektir. Tabii setsid ile terminal bağlantısının kesilmiş olması programın
     terminale bir şey yazamayacağı anlamına gelmez. Hala 0, 1, 2 numaralı betimleyiciler açıktır. Terminal açık olduğu sürece oraya yazma
-    yapılabilir. 
+    yapılabilir. Örneğin:
+
+    if (setsid() == -1)
+        _exit(EXIT_FAILURE);
 
     4) Daemon programların çalışma dizinlerinin (current working directory) sağlam bir dizin olması tavsiye eidlir. Aksi takdirde 
-    o dizin silinirse arka plan bu programların çalışmaları bozulur. Bu nedenle daemon programların çoğu kök dizini (silinemeyeceği için) 
+    o dizin silinirse arka plan programların çalışmaları bozulabilir. Bu nedenle daemon programlar çoğu kök dizini (silinemeyeceği için) 
     çalışma dizini yapmaktadır. Tabii bu zorunlu değildir. Bunun yerine varlığı garanti edilmiş olan herhangi bir dizin de çalışma 
-    dizini yapılabilir. 
+    dizini yapılabilir. Örneğin:
+
+    if (chdir("/") == -1)
+        _exit(EXIT_FAILURE);
 
     5) Daemon programın o ana kadar açılmış olan tüm betimleyicileri kapatması uygun olur. Örneğin 0, 1, 2 numaralı betimleyiciler
     ilgili terminale ilişkindir ve artık o terminal kapatılmış ya da kapatılacak olabilir. Program kendini daemon yaptığı 
     sırada açmış olduğu diğer dosyaları da kapatmalıdır. Bunu sağlamanın basit bir yolu prosesin toplam dosya betimleyici tablosunun 
     uzunluğunu elde edip her bir betimleyici için close işlemi uygulamaktır. Çünkü maalesef biz açık betimleyicileri pratik bir 
-    biçimde tespit edememekteyiz. Zaten kapalı bir betimleyiciye close uygulanırsa close başarısz olur ancak program çökmez. 
-    Prosesin toplam betimleyici sayısı sysconf çağrısında _SC_OPEN_MAX argümanıyla ya da getrlimit fonksiyonunda RLIMIT_NOFILE 
-    argümanıyla elde edilebilir. İki fonksiyon da aynı değeri vermektedir. 
+    biçimde tespit edememekteyiz. Zaten kapalı bir betimleyiciye close uygulanırsa close başarısız olur ancak program çökmez. 
+    Anımsanacağı gibi prosesin toplam betimleyici sayısı sysconf çağrısında _SC_OPEN_MAX argümanıyla ya da getrlimit fonksiyonunda 
+    RLIMIT_NOFILE argümanıyla elde edilebilir. İki fonksiyon da aynı değeri vermektedir. Örneğin:
 
-    6) Zorunlu olmamakla birlikte ilk üç betimleyiciyi /dev/null aygıtına yönlendirmek iyi bir fikirdir. Çünkü bir biçimde bazı 
-    fonksiyonlar bu betimleyicileri kullanıyor olabilirler. Anımsanacağı gibi /dev/null aygıtına yazılanlar kaybolmaktadır. Bu aygıttan
-    okume yapılmak istendiğinde ise EOF etkisi oluşur.
+    if ((maxfd = sysconf(_SC_OPEN_MAX)) == -1)
+        _exit(EXIT_FAILURE);
 
-    Pekiyi daemon'lar ne yaparlar? İşte daemon2lar arka planda genellikle sürekli bir biçimde birtakım işler yapmaktadır. Bu anlamda
-    en tipik daemon örnekleri "server" programlardır. Örneğin http server aslında httpd isimli bir daemon'dan ibarettir. Bunun gibi
-    UNIX/Linux sistemlerinde genellikle boot zamanında devreye giren onlarca daemon program vardır. Örneğin belli amanlarda belli işlerin 
-    yapılması için kullanılan cron utility'si aslında bir daemon olarak çalışmaktadır. 
+    for (long i = 0; i < maxfd; ++i)
+        close(i);
 
-    Aşağıda bir prosesi daemon haline getiren bir fonksiyon örneği verilmiştir. Bu fonksiyon main fonksiyonun çağrılmış böylece proses
-    daemon haline getirilmiştir. 
+    6) Zorunlu olmamakla birlikte ilk üç betimleyiciyi "/dev/null" aygıtına yönlendirmek iyi bir fikirdir. Çünkü daemon içerisinde
+    çağıracağımız bazı fonksiyonlar bu betimleyicileri kullanıyor olabilirler. Anımsanacağı gibi "/dev/null" aygıtına yazılanlar 
+    zaten kaybolmaktadır. Bu aygıttan okuma yapılmak istendiğinde ise EOF etkisi oluşmaktadır. Örneğin:
+
+    if ((fd = open("/dev/null", O_RDONLY)) == -1)		/* fd is guaranteed to be 0 */
+        _exit(EXIT_FAILURE);
+
+    if (dup(fd) == -1 || dup(fd) == -1)					/* now descriptor 1 and 2 redirected /dev/null */
+        _exit(EXIT_FAILURE);
+
+    Burada bazı programcılar (örneğin Stevent & Rago ile Kerrisk'in kitaplarında bu biçimde) elde edilen betimleyicilerin 
+    0, 1 ve 2 olduğunu doğrulamaya çalışmaktadır. Tüm betimleyiciler kapatıldığna göre ve open ile dup fonksiyonları 
+    en düşük betimleyicileri verdiğine göre böyle bir kontrolün yapılmasına aslında gerek yoktur. Bu kontrolün tek anlamı
+    çok thread'li uygulamalarda o sırada başka bir thread'in bu noktada dosya açıyor olmasıdır. Böyle bir olasılığı 
+    değerlerndirmek isterseniz kodu şöyle değiştirebilirsiniz:
+
+    Pekiyi daemon'lar ne yaparlar? İşte daemon2lar arka planda genellikle sürekli bir biçimde birtakım işler yapmaktadır. 
+    Bu anlamda en tipik daemon örnekleri "server" programlardır. Örneğin http server aslında httpd isimli bir daemon'dan 
+    ibarettir. Bunun gibi UNIX/Linux sistemlerinde genellikle boot zamanında devreye giren onlarca daemon program vardır. 
+    Örneğin belli zamanlarda belli işlerin yapılması için kullanılan "cron" utility'si aslında bir daemon olarak çalışmaktadır. 
+
+    Yukarıda da belirttiğimiz gibi daemon'lar genellikle yetki gerektiren işlemler yaptıklaır için uygun önceliğe sahip olacak 
+    biçimde (yani root olarak) çalıştırılmaktadırlar. 
+
+    Aşağıdaki örnekte tipik bir daemon program iskeleti oluşturulmuştur. Programın sonuna bir pause çağrısı yerleştirdik. 
+    Daemon'ı sonlandırmak için proses id'sini bulup kill işlemi uygulayabilirsiniz.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* mydaemond.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	pid_t pid;
+	long maxfd;
+	int fd0, fd1, fd2;
+
+	umask(0);
+
+	if ((pid = fork()) == -1)
+		exit_sys("fork");
+
+	if (pid != 0)
+		_exit(EXIT_SUCCESS);
+
+	if (setsid() == -1)
+		_exit(EXIT_FAILURE);
+
+	if (chdir("/") == -1)
+		_exit(EXIT_FAILURE);
+
+	errno = 0;
+	if ((maxfd = sysconf(_SC_OPEN_MAX)) == -1)
+		if (errno == 0)
+			maxfd = DEF_FDT_SIZE;
+		else
+			_exit(EXIT_FAILURE);
+
+	for (long i = 0; i < maxfd; ++i)
+		close(i);
+
+	if ((fd0 = open("/dev/null", O_RDONLY)) == -1)
+		_exit(EXIT_FAILURE);
+
+	if ((fd1 = dup(fd0)) == -1)
+		_exit(EXIT_FAILURE);
+
+	if ((fd2 = dup(fd0)) == -1)
+		_exit(EXIT_FAILURE);
+
+	if (fd0 != 0 || fd1 != 1 || fd2 != 2)
+		_exit(EXIT_FAILURE);
+
+	pause();
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Aslında yukarıdaki işlemleri bir fonksiyona da yaptırabiliriz. Böylece o fonksiyonu çağırdığımızda proses bir daemon 
+    haline getirilir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* mydaemond.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+void exit_sys(const char *msg);
+
+#define DEF_FDT_SIZE		4096
+
+void make_daemon(void)
+{
+	pid_t pid;
+	long maxfd;
+	int fd0, fd1, fd2;
+
+	umask(0);
+
+	if ((pid = fork()) == -1)
+		exit_sys("fork");
+
+	if (pid != 0)
+		_exit(EXIT_SUCCESS);
+
+	if (setsid() == -1)
+		_exit(EXIT_FAILURE);
+
+	if (chdir("/") == -1)
+		_exit(EXIT_FAILURE);
+
+	errno = 0;
+	if ((maxfd = sysconf(_SC_OPEN_MAX)) == -1)
+		if (errno == 0)
+			maxfd = DEF_FDT_SIZE;
+		else
+			_exit(EXIT_FAILURE);
+
+	for (long i = 0; i < maxfd; ++i)
+		close(i);
+
+	if ((fd0 = open("/dev/null", O_RDONLY)) == -1)
+		_exit(EXIT_FAILURE);
+
+	if ((fd1 = dup(fd0)) == -1)
+		_exit(EXIT_FAILURE);
+
+	if ((fd2 = dup(fd0)) == -1)
+		_exit(EXIT_FAILURE);
+
+	if (fd0 != 0 || fd1 != 1 || fd2 != 2)
+		_exit(EXIT_FAILURE);
+}
+
+int main(void)
+{
+	make_daemon();
+
+	pause();
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Pekiyi bir daemon ne zaman ve nasıl sonlandırılmalıdır? Daemon'lar arka planda sessiz sedasız çalıştığından onların 
+    sonlandırılması sinyaller yoluyla yapılabilir. Tipik olarak deamon'lar SIGTERM sinyali ile sonlandırılmaktadır. Anımsanacağı
+    gibi SIGTERM sinyali ele alınabilir bir sinyaldir (SIGKILL sinyalinin ele alınamayacağını anımsayınız). İşte bir daemon 
+    birtakım son işlemler yapacaksa bunu SIGTERM sinyali oluştuğunda bu sinyali set ederek yapabilmektedir. Pekiyi daemon 
+    hiç sonlandırılmazsa ne olur? İşletim sistemi kapanırken bütün proseslere zaten önce SIGTERM sinyali göndermektedir. 
+    dolayısıyla daemon'lar en kötü olasılıkla birtakım son işlemleri sistem kapatılırken SIGTERM sinyali yoluyla yapabilirler. 
+    Ancak sistemler genellikle SIGTERM sinyalinden sonra proseslere belli bir süre bekleyip SIGKILL sinyali de göndermktedir. 
+    Örneğin Linux kaapanırken SIGTERM sinyalindan yaklaşık 5 saniye sonra her ihtimale karşı proseslere SIGKILL sinyali de
+    göndermektedir. Bu durumda daemon programların son işlemlerini bu zaman aralaığı içerisinde yavaş olmayacak biçimde 
+    yapması beklenir. 
+
+    Aşağıdaki daemon programının SIGTERM sinyalini işlemesi örneği verilmiştir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* mydaemond.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <signal.h>
+
+void sigterm_handler(int signo);
+void exit_sys(const char *msg);
+
+#define DEF_FDT_SIZE		4096
+
+void make_daemon(void)
+{
+	pid_t pid;
+	long maxfd;
+	int fd0, fd1, fd2;
+
+	umask(0);
+
+	if ((pid = fork()) == -1)
+		exit_sys("fork");
+
+	if (pid != 0)
+		_exit(EXIT_SUCCESS);
+
+	if (setsid() == -1)
+		_exit(EXIT_FAILURE);
+
+	if (chdir("/") == -1)
+		_exit(EXIT_FAILURE);
+
+	errno = 0;
+	if ((maxfd = sysconf(_SC_OPEN_MAX)) == -1)
+		if (errno == 0)
+			maxfd = DEF_FDT_SIZE;
+		else
+			_exit(EXIT_FAILURE);
+
+	for (long i = 0; i < maxfd; ++i)
+		close(i);
+
+	if ((fd0 = open("/dev/null", O_RDONLY)) == -1)
+		_exit(EXIT_FAILURE);
+
+	if ((fd1 = dup(fd0)) == -1)
+		_exit(EXIT_FAILURE);
+
+	if ((fd2 = dup(fd0)) == -1)
+		_exit(EXIT_FAILURE);
+
+	if (fd0 != 0 || fd1 != 1 || fd2 != 2)
+		_exit(EXIT_FAILURE);
+}
+
+int main(void)
+{
+	struct sigaction sa;
+
+	sa.sa_handler = sigterm_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;
+
+	if (sigaction(SIGTERM, &sa, NULL) == -1)
+		exit_sys("sigaction");
+
+	make_daemon();
+
+	pause();
+
+	return 0;
+}
+
+void sigterm_handler(int signo)
+{
+	/* cleanup processing */
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Daemon programlar genellikle başlatılırken bazı yönergeleri kullanıcıların oluşturduğu konfigürasyon dosyalarından okumaktadır.
+    Bu konfigürasyon dosyaları geleneksel olarak "/etc" dizininin altında uzantısı ".conf" olacak biçimde oluşturulmaktadır. 
+    Örneğin bizim daemon programımız "/etc/mydaemond.conf" dosyasını okuyup yönergeleri oradan alacak olabilir. Bu dosya 
+    henüz daemon'laştırma yapılmadan da okunabilir ya da daemon'laştırma yapıldıktan sonra da okunabilir. Daemon'laştırma 
+    yapıldıktan sonra configüresyon dosyasını açarken ve sonraki işlemlerde başarısızlıklara ilişkin mesajların artık 
+    terminale yazılamayacağına dikkat ediniz. Bunun için log mekanizmaları kullanılmaktadır. Örneğin:
+
+    int main(void)
+    {
+        struct sigaction sa;
+
+        make_daemon();
+        read_config();
+
+        sa.sa_handler = sigterm_handler;
+        sigemptyset(&sa.sa_mask);
+        sa.sa_flags = SA_RESTART;
+
+        if (sigaction(SIGTERM, &sa, NULL) == -1) {
+            /* log mekanizması yoluyla hata mesajı oluşturulabilir */
+            _exit(EXIT_FAILURE);
+        }
+
+        /* ... */
+
+        return 0;
+    }
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Daemon'ların çoğu tek bir proses olarak çalışmak zorundadır. Yani daemon'ın başka kopyasının da çalıştırılabilmesi 
+    problemlere yol açabilmektedir. Daemon yazarken onun tek kopyasının çalıştığına emin olmak isteyebilirsiniz. Bunun nasıl 
+    yapıldığını "dosya kilitleme işelmlerinde" açıklamıştık. Geleneksel olarak daemon'ların bu amaçla oluşturacakları dummy 
+    dosyalar "/run" dizini içerisinde ".pid" uzantılı biçimde oluşturulmaktadır. Bu "/run" dizinine sıradan prosesler tarafından 
+    yazma hakkı verilmemektedir. Yani bu dizinde dosya yaratmak istiyorsanız daemon programınızı uygun önceliğe sahip olacak
+    biçimde (yani root olarak)" çalıştırmalısınız.
+
+    Aşağıda daemon'ın tek bir kopyasının çalıştırılmasının sağlanmasına yönelik bir örnek verilmiştir. Programı sudo ile 
+    çalıştırmayı unutmayınız.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* mydaemond.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/file.h>
+
+void read_config(void);
+void check_instance(void);
+void sigterm_handler(int signo);
+void exit_sys(const char *msg);
+
+#define DEF_FDT_SIZE		4096
+#define LOCK_FILE_PATH		"/run/mydaemond.pid"
+#define CONFIG_FILE			"/etc/mydaemond.conf"
+
+void make_daemon(void)
+{
+	pid_t pid;
+	long maxfd;
+	int fd0, fd1, fd2;
+
+	umask(0);
+
+	if ((pid = fork()) == -1)
+		exit_sys("fork");
+
+	if (pid != 0)
+		_exit(EXIT_SUCCESS);
+
+	if (setsid() == -1)
+		_exit(EXIT_FAILURE);
+
+	if (chdir("/") == -1)
+		_exit(EXIT_FAILURE);
+
+	errno = 0;
+	if ((maxfd = sysconf(_SC_OPEN_MAX)) == -1)
+		if (errno == 0)
+			maxfd = DEF_FDT_SIZE;
+		else
+			_exit(EXIT_FAILURE);
+
+	for (long i = 0; i < maxfd; ++i)
+		close(i);
+
+	if ((fd0 = open("/dev/null", O_RDONLY)) == -1)
+		_exit(EXIT_FAILURE);
+
+	if ((fd1 = dup(fd0)) == -1)
+		_exit(EXIT_FAILURE);
+
+	if ((fd2 = dup(fd0)) == -1)
+		_exit(EXIT_FAILURE);
+
+	if (fd0 != 0 || fd1 != 1 || fd2 != 2)
+		_exit(EXIT_FAILURE);
+}
+
+int main(void)
+{
+	struct sigaction sa;
+
+	make_daemon();
+	check_instance();
+	read_config();
+
+	sa.sa_handler = sigterm_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;
+
+	if (sigaction(SIGTERM, &sa, NULL) == -1) {
+		/* log mekanizması yoluyla hata mesajı oluşturulabilir */
+		_exit(EXIT_FAILURE);
+	}
+
+	pause();
+
+	return 0;
+}
+
+void read_config(void)
+{
+	/* ... */
+}
+
+void check_instance(void)
+{
+	int fd;
+
+	if ((fd = open(LOCK_FILE_PATH, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR)) == -1) {
+		/* log mekanizması ile mesaj oluşturulabilir */
+		_exit(EXIT_FAILURE);
+	}
+
+	if (flock(fd, LOCK_EX|LOCK_NB) == -1) {
+		if (errno == EWOULDBLOCK) {
+				/* log mekanizması ile mesaj oluşturulabilir */
+		}
+		else {
+				/* log mekanizması ile mesaj oluşturulabilir */
+		}
+		_exit(EXIT_FAILURE);
+	}
+}
+
+void sigterm_handler(int signo)
+{
+	/* cleanup processing */
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Daemon programların "reinitialze" edilebilmesi sık karşılaşılan bir uygulamadır. Daemon program configürasyon dosyasını 
+    okuyup çalıştıktan sonra onu durdurmadan adeta reset etmek isteyebiliriz. Örneğin daemon çalışırken konfigürasyon dosyasında
+    bir değişiklik yapabiliriz. O değişiklikten sonra yeniden daemon programının o konfigürasyon dosyasını çalıştırmasını 
+    sağlamak isteyebiliriz. Genel olarak bu işlem için SIGHUP sinyalinden faydalanılmaktadır. SIGHUP sinyali terminal 
+    aygıt sürücüsü ve kabuk programları tarafındna kulalnılan bir sinyaldir. Ancak daemon programının terminal bağlantısı
+    kesildiğinden SIGHUP sinyali daemon programlar için "boşa çıkmış ve kullanılabilir" bir sinyal durumunadır. 
+
+    Aşağıda SIGHUP sinyalinin işlenmesine yönelik bir örnek verilmiştir. Burada configürasyon dosyası sinyal fonksiyonu 
+    içerisinde okunmuştur. Bu durumda bu işlemlerin asenkron sinyal güvenli bir biçimde yapılması gerekir. Tabii buna 
+    alternatifler de söz konusu olabilir. Örneğin sinyal fonksiyonunda bir bayrak set edilip başka bir yerde bu bayrağa
+    bakılabilir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* mydaemond.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/file.h>
+
+void read_config(void);
+void check_instance(void);
+void sigterm_handler(int signo);
+void sighup_handler(int signo);
+void exit_sys(const char *msg);
+
+#define DEF_FDT_SIZE		4096
+#define LOCK_FILE_PATH		"/run/mydaemond.pid"
+#define CONFIG_FILE			"/etc/mydaemond.conf"
+
+void make_daemon(void)
+{
+	pid_t pid;
+	long maxfd;
+	int fd0, fd1, fd2;
+
+	umask(0);
+
+	if ((pid = fork()) == -1)
+		exit_sys("fork");
+
+	if (pid != 0)
+		_exit(EXIT_SUCCESS);
+
+	if (setsid() == -1)
+		_exit(EXIT_FAILURE);
+
+	if (chdir("/") == -1)
+		_exit(EXIT_FAILURE);
+
+	errno = 0;
+	if ((maxfd = sysconf(_SC_OPEN_MAX)) == -1)
+		if (errno == 0)
+			maxfd = DEF_FDT_SIZE;
+		else
+			_exit(EXIT_FAILURE);
+
+	for (long i = 0; i < maxfd; ++i)
+		close(i);
+
+	if ((fd0 = open("/dev/null", O_RDONLY)) == -1)
+		_exit(EXIT_FAILURE);
+
+	if ((fd1 = dup(fd0)) == -1)
+		_exit(EXIT_FAILURE);
+
+	if ((fd2 = dup(fd0)) == -1)
+		_exit(EXIT_FAILURE);
+
+	if (fd0 != 0 || fd1 != 1 || fd2 != 2)
+		_exit(EXIT_FAILURE);
+}
+
+int main(void)
+{
+	struct sigaction sa;
+	int fd;
+
+	make_daemon();
+	check_instance();
+	read_config();
+
+	sa.sa_handler = sigterm_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;
+
+	if (sigaction(SIGTERM, &sa, NULL) == -1) {
+		/* log mekanizması yoluyla hata mesajı oluşturulabilir */
+		_exit(EXIT_FAILURE);
+	}
+
+	sa.sa_handler = sighup_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;
+
+	if (sigaction(SIGHUP, &sa, NULL) == -1) {
+		/* log mekanizması yoluyla hata mesajı oluşturulabilir */
+		_exit(EXIT_FAILURE);
+	}
+
+	/* ... */
+
+	pause();
+
+	return 0;
+}
+
+void read_config(void)
+{
+	/* ... */
+}
+
+void check_instance(void)
+{
+	int fd;
+
+	if ((fd = open(LOCK_FILE_PATH, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR)) == -1) {
+		/* log mekanizması ile mesaj oluşturulabilir */
+		_exit(EXIT_FAILURE);
+	}
+
+	if (flock(fd, LOCK_EX|LOCK_NB) == -1) {
+		if (errno == EWOULDBLOCK) {
+				/* log mekanizması ile mesaj oluşturulabilir */
+		}
+		else {
+				/* log mekanizması ile mesaj oluşturulabilir */
+		}
+		_exit(EXIT_FAILURE);
+	}
+}
+
+void sigterm_handler(int signo)
+{
+	/* cleanup processing */
+}
+
+void sighup_handler(int signo)
+{
+	read_config();		/* read_config asenkron sinyal güvenli bir fonksiyon olmalı */
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Daemon gibi programlarda kernel modüllerinde bir terminal bağlantısı olmadığı için hata mesajlarının ve diğer mesajların 
+    ekrana yazdırılması mümkün olmayabilir ya da uygun olmayabilir. İşte bu tür durumlarda birtakım mesajların bir log'lama
+    mekanizması yoluyla oluşturulması gerekebilmektedir. 
+
+    UNIX/Linux sistemlerinde kernel tarafından desteklenen kapsamlı bir log mekanizması bulunmaktadır. Bu log mekaznizması değişik 
+    kaynaklardan gelen mesajların biriktirilip saklanmasını sağlamaktadır. Bu merkezi log mekanizması aslında ilk BSD sistemlerinde
+    uygulanmıştır. Ancak daha sonra genelleştirilmiştir ve POSIX standartlarına yansıtılmıştır. Bu mekanizmas genel olarak "syslog"
+    ismiyle belirtilmektedir. Öncelikle Linux sistemleri için bu merkezi syslog mekanizmasının çalışma biçimi hakkında bilgi vereceğiz. 
+    Bu çalışma açıklanırken genellikle şekillerden faydalanılmaktadır. Ancak burada text editörde çalıştığımızdan dolayı bu şekli 
+    çizemiyoruz. Bunun için "Linux Programming Environment" kitabının 775'inci sayfasına başvurabilirsiniz. Biz burada sözel 
+    anlatım uygulayacağız. Linux sistemlerindeki merkezi syslog mekanizması ile diğer sistemlerdeki syslog mekanizması bazı 
+    ayrıntılar dışında biribirine benzemektedir.
+
+    Merkezi syslog mekanizasmasının üst seviye önemli bir bileşeni "syslogd" isimli bir daemon programdır. Bu program user modda
+    çalışmaktadır. syslogd daemon programı iki kaynaktan mesajları alarak hedefte oluşturmaktadır. Loglamanın hedefi değiştirilebilmektedir. 
+    syslogd daemon programının mesajları okuduğu iki kaynak şöyledir:
+
+    1) Yerel kullanımlar için /dev/log isimli UNIX domain datagram soket dosyası
+    2) Uzak kullanımlar için UDP 514 portu
+
+    /dev/log isimli UDP UNIX domain soketine temelde iki aktör yazmaktadır. Bunlardan biri normal kullanıclardır. Örneğin 
+    biz bir daemon yazarken mesajları syslog isimli POSIX fonksiyonu ile oluştururuz. Bu POSIX fonksiyonu da aslında bu 
+    sokete yazma yapmaktadır:
+
+    user (syslog POSIX fonksiyonu) ---> /dev/log (UDP UNIX domain soket) <---- syslogd daemon okuyor
+
+    /dev/log dosyasına yazan ikinci aktör ise aygıt sürücüler ve kernel modüllerdir. Bu kodlar kernel fonksiyonları ile 
+
+    "klogd" isimli kernel moddaki daemon programa mesajları aktarmaktadır. Bu kernel mod daemon programı da /dev/log dosaysına 
+    yazma yapmaktadır:
+
+    Aygıt sürücüler ve kernel modüller (printk) <--- klogd daemon'ı okuyor ---> /dev/log <---- syslogd daemon okuyor
+
+    Loglama amacıyla user mod programlarda biz genellikle izleyen paragraflarda açıklayacağımız POSIX fonksiyonlarını kullanırız. 
+    Ancak kernel mod programlarda (kernel modüllerinde ve aygıt sürücülerinde) genellikle printk gibi bir kernek fonksiyonu 
+    kullanılmaktadır. Yukarıdaki şekillerden de gördüğünüz gibi her iki mekanizmada aynı loglama sistemine bilgileri aktarmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												96. Ders 11/11/2023 - Cumartesi
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    User modda loglama işlemleri için üç POSIX fonksiyonu kullanılmaktadır:
+
+    openlog
+    syslog
+    closelog
+
+    openlog fonksiyonu loglama mekanizmasını başlatır, syslog fonksiyonu loglama işlemlerini yapar ve closelog fonksiyonu da 
+    sistemi kapatır. openlog fonksiyonu aslında mekanizma için zorunlu bir fonksiyon değildir. openlog fonksiyonunun prototipi 
+    şöyledir:
+
+    #include <syslog.h>
+
+    void openlog(const char *ident, int logopt, int facility);
+
+    Fonksiyonun birinci parametresi log mesajlarında görüntülenecek program ismini belirtmektedir. Genellikle programcılar bu parametre için
+    program ismini argüman olarak verirler. Linux sistemlerinde bu parametreye NULL geçilebilmektedir. Bu durumda sanki bu parametre için
+    program ismi yazılmış gibi işlem yapılır. Ancak POSIX standartlarında NULL geçme durumu belirtilmemiştir. İkinci parametre aşağıdaki 
+    sembolik sabitlerin bit or işlemine sokulmasıyla oluşturulabilir:
+
+    LOG_PID
+    LOG_CONS
+    LOG_NDELAY
+    LOG_ODELAY
+    LOG_NOWAIT
+
+    Burada LOG_PID log mesajında prosesin proses id'sinin de bulundurulacağını belirtir. LOG_CONS log mesajlarının aynı zamanda 
+    default consola (/dev/console) da yazılacağını belirtmektedir. LOG_NDELAY bayrağı loglama sisteminin hemen açılması geektiğini
+    belirtir. Normal olarak bu sistem ilk loglama yapıldığında açılmaktadır. LOG_ODELAY zaten default durumdur. Loglama sistemi 
+    ilk log işlemi yapıldığında açılır. LOG_NOWAIT alt prosesler söz konusu olduğunda loglama için alt proseslerin yatatılmasının 
+    beklenmeyeceği anlamına gelmektedir. Bu parametre istenirse 0 olarak da geçilebilir. Ancak tipik uygulamalarda LOG_PID 
+    biçiminde geçilmektedir. 
+
+    Fonksiyonun üçüncü parametresi log mesajını yollayan prosesin kim olduğu hakkında temel bir bilgi vermek için düşünülmüştür. 
+    LOG_USER bir user proses tarafından bu loglamanın yapıldığını belirtmektedir. LOG_KERN mesajın kernel tarafından gönderildiğini 
+    belirtir. LOG_DAEMON (POSIX'te yok) mesajın bir sistem daemon programı tarafından gönderildiğini belirtmektedir. LOG_LOCAL0'dan 
+    LOG_LOCAL7'ye kadarki sembolik sabitler özel log kaynaklarını belirtmektedir. Bu parametre de 0 olarak geçilebilir. Ancak 
+    tipik olarak LOG_USER biçiminde geçilmektedir. Bu parametre de 0 geçilebilir. Bu durumda LOG_USER değeri girilmiş gibi 
+    işlem yapılmaktadır. 
+
+    openlog fonksiyonunun başarısı kontrol edilememektedir. Çünkü fonksiyonun geri dönüş değeri void biçimdedir. 
+
+    Örneğin:
+
+    openlog("sample", LOG_PID, LOG_USER);
+
+    Log mesajlarının aktarımı için asıl fonksiyon syslog isimli fonksiyondur. Fonksiyonun prototipi şöyledir:
+
+    #include <syslog.h>
+
+    void syslog(int priority, const char *format, ...);
+
+    Fonksiyonun birinci parametresi mesajın öncelik derecesini (yani önemini) belirtir. Diğer parametreler tamamen printf fonksiyonundaki gibidir. 
+    Öncelik değerleri şunlardır:
+
+    LOG_EMERG
+    LOG_ALERT
+    LOG_CRIT
+    LOG_ERR
+    LOG_WARNING
+    LOG_NOTICE
+    LOG_INFO
+    LOG_DEBUG
+
+    En çok kullanılanlar error mesajları için LOG_ERR, uyarı mesajları için LOG_WARNING ve genel bilgilendirme mesajları 
+    için LOG_INFO değerleridir. Buradaki değerler log mesajlarında görüntülenmektedir. Örneğin:
+
+    syslog(LOG_ERR, "invalid operation");
+
+    Yukarıda openlog fonksiyonunun çağrılmasının zorunlu olmadığını belirtmiştik. Bu durumda openlog fonksiyonundaki belirlemeler
+    için default değerler alınmaktadır. Ancak istenirse openlog fonksiyonunun üçüncü parametresi syslog fonksiyonun birinci 
+    parametresiyle kombine edilebilir. Biz örneklerimizde openlog fonksiyonunu çağıracağız. syslog fonksiyonunun da geri dönüş 
+    değerinin void olduğuna dikkat ediniz. 
+
+    Nihayet loglama mekanizması eğer açılmışsa onu kapatmak için closelog fonksiyonu kullanılmaktadır. Bu fonksiyon eğer loglama 
+    mekanizması henüz açılmadıysa bir şey yapmamaktadır. Fonksiyonun prototipi şöyledir:
+
+    #include <syslog.h>
+
+    void closelog(void);
+
+    Pekiyi log mesajları nereye aktarılmaktadır? İşte aslında işletim sistemlerinde hedef çeşitli biçimlerde değiştirilebilmektedir. 
+    Ancak Linux'un ileri sürümlerinde default hedef "/var/log/syslog" dosyasıdır. Bu dosya sistemi disk tabanlı bir sistem değildir. 
+    Dolayısıyla buradaki bilgiler reboot işleminde kalıcı değildir. Bu dosya uzayabileceği için bir kuyruk sistemi gibi oluşturulmaktadır. 
+    Yani belli süre sonra önce yazılmış olan mesajlar kaybolabilmektedir. Dosyanın sonunu görebilmek için "tail" komutunu 
+    kullanabilirsiniz. tail komutu default olarak dosyanın sonundaki 10 satırı göstermektedir. Ancak -n seçeneği ile daha fazla 
+    satır görüntülenebilmektedir. 
+
+    Aşağıda loglama için basit bir örnek verilmiştir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <syslog.h>
+
+int main(void)
+{
+	openlog("sample", LOG_PID, LOG_USER);
+
+	syslog(LOG_INFO, "This is a test...");
+
+	closelog();
+
+	return 0;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Pekiyi syslog log mesajlarını nereye yazmaktadır? Yukarıda da belirttiğimiz gibi aslında syslog fonksiyonu log mesajlarını 
+    "/dev/log" ismindeki Unıx domain datagram sokete yazmaktadır. Bu soketten okuma yapan "syslogd" isimli bir daemon vardır.
+    Ancak yeni Linux sistemlerinde bu daemon'ın biraz daha gelişmiş biçimi olan "rsyslogd" daemon'ı da kullanılmaktadır. 
+    Kursun yapıldığı zamanlarda Linux sistemlerinde yaygın olarak "rsyslogd" isimli daemon kullanılmaktadır. İşte aslında 
+    log mesajlarının hangi dosyalara yazılacağına "syslogd" ya da "rsyslogd" daemon'ları karar vermektedir. Bu daemon'lar 
+    çalışmaya başladıklarında default durumda "/etc/syslog.conf" ya da "/etc/rsyslog.conf" dosyalarına bakmaktadır. İşte aslında 
+    bu daemon'ların hangi dosyalara yazacağı bu konfigürasyon dosyalarında sistem yöneticisi tarafından belirlenmektedir. 
+    Ancak bu dosyada da belirleme yapılmamışsa default olarak pek çok mesaj grubu (error, warning, info) "/var/log/syslog" 
+    dosyasına yazılmaktadır. O halde programcı syslog mesajları için default durumda bu dosyaya başvurmalıdır. 
+
+    Log dosyalarını incelemek için pek çok utility bulunmaktadır. Örneğin lnav, glogg, ksystemlog gibi. systemd init paketi içerisindeki
+    servis programaları olan systemctl ve journalctl komutları ile de görüntüleme yapılabilmektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Şimdi de log mekanizmasının bir daemon programda kullanımına bir örnek verelim. Merkezi log mekanizması daha çok terminal 
+    ilişkisi olmayan daemon'lar gibi aygıt sürücüler gibi programlar tarafından kullanılmaktadır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* mydaemond.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/file.h>
+#include <syslog.h>
+
+void read_config(void);
+void check_instance(void);
+void sigterm_handler(int signo);
+void sighup_handler(int signo);
+void exit_daemon(const char *msg);
+
+#define DEF_FDT_SIZE		4096
+#define LOCK_FILE_PATH		"/run/mydaemond.pid"
+#define CONFIG_FILE			"/etc/mydaemond.conf"
+
+void make_daemon(void)
+{
+	pid_t pid;
+	long maxfd;
+	int fd0, fd1, fd2;
+
+	umask(0);
+
+	if ((pid = fork()) == -1)
+		exit_daemon("fork");
+
+	if (pid != 0)
+		_exit(EXIT_SUCCESS);
+
+	if (setsid() == -1)
+		exit_daemon("setsid");
+
+	if (chdir("/") == -1)
+		exit_daemon("chdir");
+
+	errno = 0;
+	if ((maxfd = sysconf(_SC_OPEN_MAX)) == -1)
+		if (errno == 0)
+			maxfd = DEF_FDT_SIZE;
+		else
+			exit_daemon("sysconf");
+
+	for (long i = 0; i < maxfd; ++i)
+		close(i);
+
+	if ((fd0 = open("/dev/null", O_RDONLY)) == -1)
+		exit_daemon("open");
+
+	if ((fd1 = dup(fd0)) == -1)
+		exit_daemon("dup");
+
+	if ((fd2 = dup(fd0)) == -1)
+		exit_daemon("dup");
+
+	if (fd0 != 0 || fd1 != 1 || fd2 != 2) {
+		syslog(LOG_ERR, "invalid file descriptors");
+		_exit(EXIT_FAILURE);
+	}
+}
+
+int main(void)
+{
+	struct sigaction sa;
+	int fd;
+
+	openlog("mydaemond", LOG_PID, LOG_USER);
+
+	make_daemon();
+	check_instance();
+	read_config();
+
+	sa.sa_handler = sigterm_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;
+
+	if (sigaction(SIGTERM, &sa, NULL) == -1)
+		exit_daemon("sigaction");
+
+	sa.sa_handler = sighup_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;
+
+	if (sigaction(SIGHUP, &sa, NULL) == -1)
+		exit_daemon("sigaction");
+
+	syslog(LOG_INFO, "ok, daemon is running");
+
+	for (;;)
+		pause();
+
+	closelog();
+
+	return 0;
+}
+
+void read_config(void)
+{
+	syslog(LOG_INFO, "mydaemon is reading configuration file...");
+}
+
+void check_instance(void)
+{
+	int fd;
+
+	if ((fd = open(LOCK_FILE_PATH, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR)) == -1)
+		exit_daemon("open");
+
+	if (flock(fd, LOCK_EX|LOCK_NB) == -1) {
+		if (errno == EWOULDBLOCK) {
+			syslog(LOG_ERR, "Only one instance of this daemon can be run...");
+			_exit(EXIT_FAILURE);
+		}
+		exit_daemon("flock");
+	}
+}
+
+void sigterm_handler(int signo)
+{
+	syslog(LOG_INFO, "mydaemond is terminating...");
+
+	_exit(EXIT_SUCCESS);
+}
+
+void sighup_handler(int signo)
+{
+	syslog(LOG_INFO, "mydaemond got SIGHUP and read config file...");
+
+	read_config();		/* read_config asenkron sinyal güvenli bir fonksiyon olmalı */
+}
+
+void exit_daemon(const char *msg)
+{
+	 syslog(LOG_ERR, "%s: %s", msg, strerror(errno));
+
+	_exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    UNIX/Linux dünyasında boot işleminden sonra sistemin işler hale getirilebilmesi için ve servis yöntemlerinin yapılması için 
+    kullanılan programların bulunduğu paketlere "init paketleri" denilmektedir. Örneğin init prosesinin kodları da bu paketin 
+    içerisindedir. 
+
+    Yukarıda da belirtildiği gibi pek çok daemon aslında sistem boot edilirken çalıştırılmakta ve sistem kapatılana kadar çalışır 
+    durumda kalmaktadır. Fakat bazı daemon'lar ise gerektiğinde çalıştırılıp, gerekmediğinde durdurulabilmektedir. İşte UNIX/Linux 
+    sistemlerinde bu çalıştırma, durdurma gibi falliyetler için "init paketleri" içerisinde daha yüksek seviyeli araçlar bulundurulmaktadır. 
+    Tarihsel süreç içerisinde Linux sistemlerinde boot sonrası işlemlerden ve servis işlemlerinden sorumlu üç önemli init paketi 
+    geliştirilmiştir:
+
+    systemVinit (klasik)
+    upstart
+    systemd
+
+    Kursun yapıldığı zaman diliminde ağırlıklı biçimde init paketi olarak systemd paketi kullanılmaktadır. Upstart paketinin 
+    de sürdürümü artık yapılmamaktadır. Tabii eskiden kurulmuş Linux sistemleri ve bazı dağıtımlar hala bu kaketi kullanıyor 
+    olabilmektedir. Biz kursumuzda "systemd" paketi hakkında temel bilgiler vereceğiz. 
+
+    Sisteminizde hangi init paketinin kurulu oladuğunu çeşitli biçimlerde anlayabilirsiniz. Örneğin:
+
+    sudo ls -l /proc/1/exe
+
+    Buradan aşağıdakine benzer bir çıktı elde edilmiştir:
+
+    lrwxrwxrwx 1 root root 0 Kas 11 11:45 /proc/1/exe -> /usr/lib/systemd/systemd
+
+    Hangi init paketinin kullanıldığının anlaşılması için diğer bir yöntem de şöyle olabilir:
+
+    cat /proc/1/status
+
+    Bunun için ps komutundan da faydalanılabilir:
+
+    ps -p 1 (ya da "ps -p 1 -o comm=")
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    systemd paketi boot sonrasında devreye girecek programlardan ve daemon'lardan ve bazı faydalı komutlardan oluşmaktadır. 
+    Bu komutlar genel olarak xxxctl biçiminde isimlendirilmiştir. Paketin en önemli komutu şüphesiz "systemctl" isimli komuttur.
+    Servis yönetimleri temel olarak bu komut yoluyla yapılmaktadır. Yani "systemctl" komutu adeta systemd paketinin ön yüzü
+    (froentend) gibidir.
+
+    systemd paketi çalışmaya başladığında çeşitli konfigügarsyon dosyalarına başvurmaktadır. Bu konfigürasyon dosyaları 
+    "/etc/systemd" dizini içerisinde bulunmaktadır. Örneğin:
+
+    $ ls -l /etc/systemd
+    toplam 56
+    -rw-r--r--  1 root root  615 Nis  1  2020 coredump.conf
+    -rw-r--r--  1 root root 1042 Nis 22  2020 journald.conf
+    -rw-r--r--  1 root root 1042 Nis 22  2020 logind.conf
+    drwxr-xr-x  2 root root 4096 Nis 22  2020 network
+    -rw-r--r--  1 root root  584 Nis  1  2020 networkd.conf
+    -rw-r--r--  1 root root  529 Nis  1  2020 pstore.conf
+    -rw-r--r--  1 root root  642 Mar 18  2021 resolved.conf
+    -rw-r--r--  1 root root  790 Nis  1  2020 sleep.conf
+    drwxr-xr-x 20 root root 4096 Ara 26  2021 system
+    -rw-r--r--  1 root root 1759 Nis 22  2020 system.conf
+    drwxr-xr-x  2 root root 4096 Tem  3  2021 system.conf.d
+    -rw-r--r--  1 root root  604 Nis 22  2020 timesyncd.conf
+    drwxr-xr-x  4 root root 4096 Tem  3  2021 user
+    -rw-r--r--  1 root root 1185 Nis 22  2020 user.conf
+
+    Buradaki .conf dosyalarının içi genel olurak "değişken=değer" biçiminde satırlardan oluşmaktadır. Kolaylık olsun diye
+    özellikler # ile yorum satırı haline getirilip dosyada bulundurulmuştur. Sistem yönticisi ilgili satırdaki #'i kaldırarak
+    o özelliği değiştirebilir.
+
+    systemd paketi içerisinde pek çok çalıştırıalbilir program da bulunmaktadır. Bu programların bazıları "daemon" biçiminde 
+    yazılmıştır. systemd paketinin çalıştırılabilir (executable) program dosyaları "/lib/systemd" dizini içerisinde bulunmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Yukarıda systemd paketinin aynı zamanda bir "servis yöneticiliği" yaptığını da belirtmiştik. İşte bizim bir servisimizin 
+    (daemon'umuzun) systemd yönetiminin komtrolüne girebilmesi için ismine "unit dosyası (unif file)" denilen bir dosyanın 
+    hazırlanması gerekmektedir. Çeşitli amaçlar için çeşitli unit dosyaları kullanılmaktadır. Bu unit dosyalarının türlerine 
+    göre uzantıları farklı olabilmektedir. Önemli unit dosya türleri şunlardır:
+
+    - Service unit dosyası (.service)
+    - Socket unit dosyası (.socket)
+    - Slice unit dosyası (.slice)
+    - Mount ve Automount unit dosyası (.mount, .automount)
+    - Target unit dosyası (.target)
+    - Timer unit dosyası (.timer)
+    - Path unit dosyası (.path)
+    - Swap unit dosyası (.swap)
+
+    Programcının kendi daemon'ları için "service unit dosyası" oluşturması gerekmektedir. Unit dosyaları genel olarak
+    "/lib/systemd/system" dizini içerisindedir. Programcı kendi unit dosyasını bu dizine kopyalamalıdır. Aslında "systemd"
+    paketinin unit dosyaları için hangi dizinlere bakaacağı konfigürasyon dosyalarında ayarlanabilmektedir. Default bakılan 
+    dizinler sırasıyla şunlardır:
+
+    /lib/systemd/system
+    /etc/systemd/system
+    /run/systemd/system
+    /usr/lib/systemd/system
+    /usr/local/lib/systemd/system
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Sistem boot edildiğinde belli çalışma modellerinde belli servislerin aktive edilmesi ya da aktive edilmemesi gerekebilmektedir. 
+    Örneğin sistem grafik modda açılmayacaksa XWindow sistemine ilişkin daemon'ların aktif hale getirilmesi anlamsızdır. Benzer 
+    biçimde sistemde bir network kartı yoksa ve wireless özelliği yoksa bunlara yönelik daemon'ların (inetd gibi) aktif hale
+    getirilmesi gereksizdir. 
+
+    Eskiden klasik systemVinit paketlerinde "run level" denilen boot seçenekleri bulunuyordu. Sistem yöneticisi de hangi servisin 
+    hangi, run level'da aktive edeceğini belirtiyordu. Böylece sistem bir run level'da boot edildiğinde yalnızca o run level'da
+    aktif edilmesi gereken servisler (daemon'lar) aktive ediliyordu. Ancak bu run level sistemi kısıtlı bir seçenek oluşturmaktaydı.
+    systemd paketinde bu "run level" kullanımı kaldırılmıştır. Bunun yerine "target unit dosyası" yöntemi kullanılmaya başlanmıştır. 
+    Bu sistemlerde "run level" yerine ismine "terget unit" denilen ve bir boot seçeneğini belirten bir unit dosyası bulundurulur.
+    Servisler de hangi target unit için aktive edileceklerini kendileri belirtirler.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Unit dosyalarının içerikleri konusunda çeşitli ayrıntılar vardır. Ancak biz burada bu ayrıntılarırn üzerinde durmayacağız. 
+    Tipik bir "service unit dosyası" minimalist biçimde şöyle oluşturulmaktadır:
+
+    # mydaemon.service
+
+    [Unit]
+    Description=Mydaemon Unit
+    [Service]
+    Type=forking
+    ExecStart=/usr/bin/mydaemond
+    [Install]
+    WantedBy=multi-user.target
+
+    Burada "Description" bizim unit dosyamızı temsil eden bir yazıdır. Type daemon'ın nasıl çalıştırılacağını belirtir. 
+    Burada "forking" normal fork mekaznizmasıyla çalıştırma anlamına gelmektedir. ExecStart daemon dosyasının nereden olduğunu 
+    belirtmektedir. Daemon dosyaları tipik olarak "/usr/bin" dizinine ya da "usr/local/bin" dizinlerine yerleştirilmelidir. 
+    WantedBy hangi target ile sistem boot edildiğinde bu daemon'ın yükleneceğini belirtir. Buradaki "multi-user.target" isimli
+    target unit klasik ve tipik boot işlemini belirtmektedir. 
+
+    Biz burada minimalist bir service unit dosyası oluşturduk. Servis unit dosyalarının içeriğine yönelik pek çok ayrıntı 
+    vardır. Bunun resmi dokümanları için "man systemd.service" sayfasına başvurabilirsiniz. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												97. Ders 12/11/2023 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Yukarıdaki adımları sırasıyla bir daha özetlemek istiyoruz. Daemon'ımızı systemd kontrolüne verebilmek için sırasıyla
+    şu işlemlerin yapılması gerekmektedir. 
+
+    1) Bir service unit dosyası oluşturulmalıdır. Bu dosyanın uzantısı ".service" biçiminde olmalıdır.Bu dosyada daemon 
+    programının yol ifadesi ExecStart ismiyle bulunmaktadır.
+    2) Bu service unit dosyası "/lib/systemd/system" dizinine kopyalanmalıdır. 
+    3) Daemon programı "/usr/bin" ya da "usr/local/bin" dizinine kopyalanmalıdır. (Tabii bu dizin servis unit dosyasındaki
+    ExecStart ile aynı olmalıdır.)
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Yukarıdaki işlemler yapıldıktan sonra artık servis yönetimi "systemctl" komutuyla yapılabilir. Bu komutun çeşitli parametreleri
+    vardır. Burada biz bazı bazı parametreleri üzerinde açıklamalar yapacağız. 
+
+    - Daemon'ımızın boot zamanında devreye sokulması için "systemctl enable" komutunun kullanılması gerekmektedir. Komutun 
+    genel biçimi şöyledir:
+
+    sudo systemctl enable <daemon_ismi>
+
+    Burada <daemon_ismi> service unit dosyasının ismidir. Uzantı belirtilmeyebilir. Örneğin:
+
+    sudo systemctl enable mydaemon
+
+    Eğer daemon'ın o anda yüklenmesi isteniyorsa ayrıca komuta --now seçeneği de eklenmelidir. Örneğin:
+
+    sudo systemctl enable mydaemon --now
+
+    - Daemon'ımızın boot sırasında devreye sokulmasının kaldırılması için "systemctl disable" komutu kullanılmaktadır. 
+    Komutun genel biçimi şöyledir:
+
+    sudo systemctl disable <daemon_ismi>
+
+    Örneğin:
+
+    sudo systemctl disable mydaemon
+
+    - Daemon'ı çalıştırmak için "systemctl start" komutu kullanılmaktadır. Komutun genel biçimi şöyledir:
+
+    sudo systemctl start <daemon_ismi>
+
+    - Daemon'ı durdurmak için "systemctl stop" komutu kullanılmalıdır. Komutun genel biçimi şöyledir:
+
+    sudo systemctl stop <daemon_ismi>
+
+    Daemon durdurulurken ona default SIGTERM sinyali gönderilmektedir. systemd SIGTERM sinyalini gönderdikten sonra bir süre
+    bekler daemon hala sonlanmamışsa bu kez ona SIGKILL sinyalini gönderir. 
+
+    - Daemon'ımızın durumunu anlamak için "systemctl status" komutu kullanılır. Komutun genel biçimi şöyledir:
+
+    systemctl status [daemon_ismi]
+
+    Örneğin:
+
+    systemctl status mydaemon
+
+    - Bazen daemon'ımızı "restart" etmek isteyebiliriz. restart önce durdurup sonra çalıştırmak anlamına gelmektedir. Komutun
+    genel biçimi şöyledir:
+
+    sudo systemctl restart <daemon_ismi>
+
+    Örneğin:
+
+    sudo systemctl restart mydaemon
+
+    - Daemon'ımızın boot zamanında devreye girip girmeyeceğini "systemctl status" komutunun yanı sıra "systemctl is-enabled"
+    komutuyla da anlayabiliriz. Örneğin:
+
+    systemctl is-enabled mydaemon
+
+    - systemd tüm unit dosyalarını inceleyerek bir çalıştırma ağacı oluşturmaktadır. Biz bir unit dosyasını değiştirdiğimizde
+    bu ağacın yeniden oluşturulması gerekmektedir. Bunun için "systemctl daemon-reload" komutu kullanılmaktadır. Komutun genel 
+    biçimi şöyledir:
+
+    sudo systemctl daemon-realod
+
+    Komutun parametresiz olduğuna dikkat ediniz. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Biz proseslerarası haberleşmeyi iki grubu ayırmıştık:
+
+    1) Aynı makinenin prosesleri arasında haberleşme
+    2) Farklı makineelerin prosesleri arasında haberleşme
+
+    Kurusumuzda aynı makinenin prosesleri arasındaki haberleşmeleri (boru haberleşmeleri, mesaj kuyrukları) görmüştük. Şimdi farklı 
+    makinelerin prosesleri arasındaki haberleşmeler üzerinde duracağız.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Farklı makinelerin prosesleri arasında haberleşme (yani bir ağ içerisinde haberleşme) aynı makinenin prosesleri arasındaki 
+    haberleşmeye göre daha karmaşık unsurlar içermektedir. Çünkü burada ilgili işletim sisteminin dışında pek çok belirlemelerin 
+    önceden yapılmış olması gerekir. İşte ağ haberleşmesinde önceden belirlenmiş kurallar topluluğuna "protokol" denilmektedir. 
+    Ağ haberleşmesi için tarihsel süreç içerisinde pek çok protokol ailesi gerçekletirilmiştir. Bunların bazıları büyük şirketlerin 
+    kontrolü altındadır ve hala kullanılmaktadır. Ancak açık bir protokol ailesi olan "IP protokol ailesi" günümüzde farklı makinelerin 
+    prosesleri arasındaki haberleşmede hemen her zaman tercih edilen protokol ailesidir. 
+
+    Protokol ailesi (protocol family) denildiğinde birbirleriyle ilişkili bir grup protokol anlaşılmaktadır. Yani bir protokol 
+    ailesinin pek çok protokolü başka protokollerin üzerine konumlandırılmış olabilmektedir. Böylece protokol aileleri katmanlı (layered) 
+    bir yapıya sahip olmuştur. Üst seviye bir protokol alt seviye protokolün "zaten var olduğu fikriyle" o alt seviye protokol 
+    kullanılarak oluşturulmaktadır. Bu katmanlı yapıyı prosedürel programlama tekniğinde "zaten var olan bir fonksiyonu kullanarak
+    daha yüksek seviyeli birfonksiyon yazmaya" benzetebiliriz. 
+
+    Ağ haberleşmesi için katmanlı bir protokol yapısının kavramsal olarak nasıl oluşturulması gerektiğine yönelik ISO tarafından 
+    80'li yılların başlarında "OSI Model (Open System Interconnection Model)" isimli bir referans dokğmanı oluşturulmuştur. 
+    OSI model bir gerçekleştirim değildir. Kavramsal bir referans dokğmanıdır. Ancak bu referans dokümanı pek çok çalışma için 
+    bir zemin oluşturmuştur. OSI referasn modeline göre bir protokol ailesinde tipik olarak 7 katman bulunmalıdır. Bu katmanlar 
+    aşağıdaki gibi brbirlerini üzerine oturtulmuştur:
+
+    Uygulama Katmanı (Application Layer)
+    Sunum Katmanı (Presentaion Layer)
+    Oturum Katmanı (Session Layer)
+    Aktarım Katmanı (Transort Layer)
+    Network Katmanı (Network Layer)
+    Veri Bağlantı Katmanı (Data Link Layer)
+    Fiziksel Katman (Physical Layer)
+
+    - En aşağı seviyeli elektriksel tanımlamaların yapıldığı katmana "fiziksel katman (physical layer)" denilmektedir. (Örneğin 
+    kabloların, konnektörlerin özellikleri vs. gibi.) Yani bu katman iletişim için gereken ortamı betimlemektedir. 
+
+    - Veri bağlantı katmanı (data link layer) artık bilgisayarlar arasında fiziksel bir adreslemenin yapıldığı ve bilgilerin 
+    paketlere ayrılarak gönderilip alındığı bir ortam tanımlarlar. Yani bu katmanda bilgilerin gönderildiği ortam değil gönderilme 
+    biçimi ve fiziksel adresleme tanımlanmaktadır. Ağ üzerinde her birimin donanımsal olarka tanınabilen fiziksel bir adresinin 
+    olması gerekir. Örneğin bugün kullandığımız Ethernet kartları "Ethernet Protocol" denilen bir protokole uygun tasarlanmıştır. 
+    Bu ethernet protokolü OSI'nin fiziksel ve veri bağlantı katmanına karşılık gelmektedir. Ethernet protokolünde ağa bağlı olan 
+    her birimin ismine "MAC adresi" denilen 6 byte'lık fiziksel bir adresi vardır. Ethernet protokolünde MAC adresini bildiğimiz 
+    ağa bağlı bir birime bilgi gönderebiliriz. Bilgiler "paket anahtarlaması (packet switching)" denilen teknikle gönderilip alınmaktadır. 
+    Bu teknikte bilgiler bir paket adı altında bir araya getirilir sonra ilgili fiziksel katmanla seri bir biçimde gönderilir. 
+
+    - Ağ Katmanı (Network layer) artık "inernetworking" yapmak için gerekli kuralları tanımlamaktadır. "Internetworking" terimi 
+    "network'lerden oluşan network'ler" anlamına gelir. Aynı fiziksel ortamda bulunan ağlara "Yerel Ağlar (Local Area Netwroks)"
+    denilmektedir. Bu yerel ağlar "router" denilen aygıtlarla birbirilerine bağlanmaktadır. Böylece "internetworking" ortamı 
+    oluşturulmaktadır. Tabii böyle bir ortamda artık ağa birimler için fiziksel adresler kullanılamaz. Bu ortamlarda ağa birimlere 
+    mantıksal bir adres ataması yapılmalıdır. İşte "network katmanı" internetworking ortamı içerisinde bir birimden diğerine bir paket 
+    bilginin gönderilmesi için gereken tanımlamaları içermektedir. Ağ katmanı bu nedenle en önemli katmandır. Ağ katmanında artık 
+    fiziksel bir adresleme değil, mantıksal adresleme sistemi kullanılmaktadır. Ayrıca bilgilerin paketlere ayrılarak router'lardan 
+    dolaşıp hedefe varması için rotalama mekanizması da bu katmanda tanımlanmaktadır. Yani elimizde yalnızca network katmanı varsa 
+    biz yalnızca "internetworking" ortamında belli bir kaynaktan hedefe bir paket yollayabiliriz. 
+
+    - Aktarım katmanı (transport layer) network katmanının üzerindedir. Aktarım katmanında artık kaynak ile hedef arasında bir bağlantı 
+    oluşturulabilmekte ve veri aktarımı daha güvenli olarak yapılabilmektedir. Aynı zamanda aktarım kavramı "multiplex" bir kaynak 
+    hedef yapısı da oluşturmaktadır. Bu sayede bilgiler hedefteki spesifik bir programa gönderilebilmektedir. Bu işleme "port numaralandırması"
+    da denilmektedir. 
+
+   - Oturum katmanı (session) katmanı pek çok protokol ailesinde yoktur. Görevi oturum açma kapama gibi yüksek seviyeli bazı belirlemeleri 
+    yapmaktır. 
+
+    - Sunum katmanı (presentation layer) verilerin sıkıştırılması, şifrelenemesi gibi tanımlamalar içermektedir. 
+
+    - Nihayet bu protokolü kullanan bütün programlar aslında uygulama katmanını oluşturmaktadır. Yani ağ ortamında haberleşen her 
+    program zaten kendi içerisinde açık ya da gizli bir protokol oluşturmuş durumdadır. Örneğin IP protokol ailesindeki somut işleri 
+    yapmakta kullanılan Telnet, SSH, HTTP, POP3 gibi protokoller uygulama katmanı protokolleridir. 
+
+    IP ailesi neden bu kadar popüler olmuştur? Bunun en büyük nedeni 1983 yılında hepimizin katıldığı Internet'in (I'nin büyük yazıldığına 
+    dikkat ediniz) bu aileyi kullanmaya başlamasındadır. Böylece IP ailesini kullanarak yazdığımız programlar hem aynı bilgisayarda 
+    hem yerel ağımızdaki bilgisayarlarda hem de Internet'te çalışabilmektedir. Aynı zamanda IP ailesinin açık bir (yani bir şirketin 
+    malı değil) protokol olması da cazibeyi çok artırmıştır. 
+
+    IP ailesi 70'li yıllarda Vint Cerf ve Bob Kahn tarafından geliştirilmiştir. IP ismi Internet Protocol'den gelmektedir. Burada internet 
+    "internetworking" anlamında kullanılmıştır. Cerf ve Kahn 1974 yılında önce TCP üzerinde sonra da IP protokolü üzerinde çalışmışar ve 
+    bu protokollerin ilk versiyonlarını oluşturmuşlardır. 
+
+    Bugün hepmizin bağlandığı büyük ağa "Internet" denilmektedir. Bu ağ ilk kez 1969 yılında Amerika'da Amerikan Savunma Bakanlığının 
+    bir soğuk savaş projesi biçiminde başlatıldı. O zamana kadar yalnızca kısıtlı ölçüde yerel ağlar vardı. 1969 yılında ilk kez bir 
+    "WAN (Wide Area Network)" oluşturuldu. Bu proje Amerikan savunma bakanlığının DARPA isimli araştırma kurumu tarafından başlatılmıştır 
+    ve projeye "ARPA.NET" ismi verilmiştir. Daha sonra bu ağa Amerika'daki çeşitli devlet kurumları ve üniversiteler katıldı. Sonra 
+    ağ Avrupa'ya sıçradı. 1983 yılında bu ağ NCP protokolünden IP protokol ailesine geçiş yaptı. Bundan sonra artık APRA.NET ismi 
+    yerine "Internet" ismi kullanılmaya başlandı. (Internet sözcüğü I herfi küçük harfle yazılırsa "internetworking" anlamında büyük 
+    harfle yazılırsa bugün katıldığımız dev ağ anlamında kullanılmaktadır.) Biz de IP ailesini kullanarak kende "internetworking" ortamımızı
+    oluşturabiliriz. Örneğin bir şirket hiç Internet'e bağlanmadan kendi internet'ini oluşturabilir. Buna eskiden "intranet" denirdi. IP
+    protokol ailesi herkesin kendi internet'ini oluşturabilmesi için bütün gerekli protokolleri barındırmaktadır. Tabii sinerji bakımından 
+    herkes zaten var olan ve Inter denilen bu dev ağa bağlanmayı tercih etmektedir.
+
+    IP prtokol ailesi 4 katmanlı bir ailedir. Bu ailede "fiziksel ve veri bağlantı katmanı" bir arada düşünülebilir. Bugün bunlar 
+    Ethernet ve Wireless protokolleri biçiminde kullanılmaktadır. IP ailesinin ağ katmanı aileye ismini veren IP protokolünden oluşmaktadır. 
+    Aktarım katmanı ise TCP ve UDP protokollerinden oluşur. Nihayet TCP üzerine oturtulmuş olan HTTP, TELNET, SSH, POP3, IMAP gibi pek 
+    çok protokol ailenin uygulama katmanını oluşturmaktadır. Tabii IP protokol ailesinde bu hiyerarşik yapıyla ilgili olmayan irili ufaklı pek 
+    çook protok de bulunmaktadır. 
+
+    HTTP, SSH, POP3, IMAP, ...                                      (Application Layer)
+    TCP                                                     UDP     (Transport Katmanı)
+                             IP                                     (Network Katmanı)
+
+                Ethernet / Wireless                                 (Physical / Data Ling Layer)
+
+    IP protokolü tek başına kullanılırsa ancak bir paket gönderip alma işini yapar. Bu nedenle bu protokolün tek başına kullanılması 
+    çok seyrektir. Uygulamada genellikle transport katmanına ilişkin TCP ve UDP ptotokolleri kullanılmaktadır. IP ailesinin uygulama 
+    katmanındaki HTTP, SSH, POP3, IMAP gibi önemli protokollerinin hepsi TCP protokolü üzerine oturulmuştur. Ailede genellikle TCP 
+    protokolü kullanıldığı için buna kısaca "TCP/IP" de denilmektedir. 
+
+    IP proptokolü ailenin en önemli ve taban protokolüdür. IP protokolünde ağa bağlı olan her birime "host" denilmektedir. IP protokolü 
+    bir host'tan diğerine bir paket (buna IP paketi denilmektedir) bilginin gönderimine ilişkin tanımlamaları içermektedir. IP protokolünde
+    her hots'un ismine "IP adresi" denilen mantıksal bir adresi vardır. Paketler belli bir IPadresinden diğerine gönderilmektedir. IP protokolünün
+    iki önemli versiyonu vardır: IPV4 ve IPV6. Bugün her iki versiyon da aynı anda kullanılmaktadır. IPV4'te IP adresleri 4 byte uzunluktadır. 
+    (Protokoln tasarlandığı 70'li yıllarda 4 byte adres alanı çok geniş sanılmaktaydı). IPV6'da ise IP adresleri 16 byte uzunluğundadır. 
+
+    TCP bağlantılı (connection-oriented) UDP bağlantısız (connectionless) bir protokoldür. Buradaki bağlantı IP paketleriyle yapılan
+    mantıksal bir bağlantıdır. Bağlantı sırasında gönderici ve alıcı birbirlerini tanır ve haberleşme boyunca haberleşmenin güvenliği için 
+    birbirleriyle konuşabilirler. Bağlantılı protokol "client-server" tarzı bir haberleşmeyiakla getirmektedir. Bu nedenle TCP/IP denildiğinde
+    akla "client-server" haberleşme gelmektedir. TCP modelinde client önce server'a bağlanır. Sonra iletişim güvenli bir biçimde karşılıklı
+    konuşmalarla sürüdürürlür. Tabii TCP bunu yaparken IP paketlerini yani IP protokolünü kullanmaktadır. UDP protokolü bağlantısızıdır. Yani
+    UDP protokolünde bizim bir host'a UDP paketi gönderebilmemiz için bir bağlantı kurmamıza gerek kalmaz. Örneğin biz televizyon yayını UDP
+    modeline benzemektedir. Verici görüntüyü yollar ancak alıcının alıp almadığıyla ilgilenmez. Vericinin görüntüyü yollaması için alıcıyla 
+    bağlantı kurması gerekmemektedir. 
+
+    TCP "stream tabanlı", UDP ise "datagram (paket) tabanlı" bir protokoldür. Stream tabanlı protokol demek tamamen boru haberleşmesinde 
+    olduğu gibi gönderen tarafın bilgilerinin bir kuyruk sistemi eşliğinde oluşturulması ve alıcının istediği kadar byte'ı parça parça 
+    okuyabilmesi demektir. Datagram tabanlı haberleşme demek tamamen mesaj kuyruklarında olduğu gibi bilginin paket paket iletilmesi 
+    demektir. Yani datagram haberleşmede alıcı taraf gönderen tarafın tüm paketini tek hamlede almak zorundadır. Stream tabanlı haberleşmenin 
+    oluşturulabilmesi için IP paketlerine bir numara verilmesi ve bunların hedefte birleştirilmesi gerekmektedir. Örneğin biz bir host'tan
+    diğerine 10K'lık bir bilgi dönderelim. TCP'de bu bilgi IP paketlerine ayrılıp numaralandırılır. Bunlar hedefte birleştirilir ve sanki
+    10000 byte'lık ardışıl bir bilgiymiş gibi gösterilir. Halbuki UDP'de paketler biribirinden bağımsızdır. Dolayısıyla bunların hedefte 
+    birleştirilmesi zorunlu değildir. IP protokolünde bir host birtakım paketleri diğer host'a gönderdiğinde alıcı taraf bunları aynı 
+    sırada almayabilir. Bu özelliğinden dolayı TCP ailenin en çok kullanılan transport katmanı durumundadır.
+
+    TCP güvenilir (reliable) UDP güvenilir olmayan (unreliable) bir protokoldür. TCP'de mantıksal bir bağlantı oluşturulduğu için 
+    yolda kaybolan paketlerin telafi edilmesi mümkündür. Alıcı taraf gönderenin bilgilerini eksiksiz ve bozulmadan aldığını bilir.
+    Aynı zamanda TCP'de "bir akış kontrolü (flow control)" de uygulanmaktadır. Akış kontrolü sayesinde alıcı taraf tampon taşması 
+    durumuna karşı gönderici tarafı durdurabilmektedir. Halbuki UDP'de böyle bir mekanizma yoktur. Gönderen taraf alıcının bilgiyi 
+    alıp almadığını bilmez. 
+
+    Tüm bunlar eşliğinde IP ailesinin en çok kullanılan transport katmanının neden TCP olduğunu anlayabilirsiniz. Uygulama katmanındaki
+    protokoller hep TCP kullanmaktadır. 
+
+    <BURADA KALDIk>
+
+    Yukarıda da belirttiğimiz gibi IP protokol ailesinde ağa bağlı olan birimlere "host" denilmektedir. Host bir bilgisayar olmak 
+    zorunda değildir. İşte bu protokolde her host'un mantıksal bir adresi vardır. Bu adrese IP adresi denilmektedir. IP adresi IPV4'te 4 byte uzunlukta, IPV6'da 16 byte 
+    uzunluktadır. Ancak bir host'ta farklı programlar farklı host'larla haberleşiyor olabilir. İşte aynı host'a gönderilen IP paketlerinin
+    o host'ta ayrıştırılması için "protokol port numarası" diye içsel bir numara uydurulmuştur. Port numarası bir şirketin içerisinde çalışanların
+    dahili numarası gibi düşünülebilir. Port numaraları IPV4'te 2 byte'la, IPV6'da 4 byte'la ifade edilmektedir. İlk 1024 port numarası IP 
+    ailesinin uygulama katmanındaki protokoller için ayrılmıştır. Bunlara "well known ports" denilmektedir. Bu nedenle prograöcıların port numaralarını
+    1024'ten büyük olacak biçimde almaları gerekir. Bu udurmda TCP ve UDP'de bilgiler belirli bir IP adresindeki host'un belirli bir portuna gönderilir. 
+    Gönderilen bu bilgiler de o portla ilgilenen programlar tarafından alınmaktadır. 
+
+    IP haberleşmesi (yani paketlerin, oluşturulması, gönderilmesi alınması vs.) işletim sistemlerinin çekirdekleri tarafından yapılmaktadır. 
+    Tabii User mod programlar için sistem çağrılarını yapana API fonksiyonlarına ve kütüphanelerine gereksinim vardır. İşte bunların en yaygın
+    kullanılanı "soket kütüphanesi" denilen kütüphanedir. Bu kütüphane ilk kez 1983 yılında 4.2BSD'de gerçekleştirilmiştir ve pek çok UNIX türevi
+    sistem bu kütüphaneyi aynı biçimde benimsemiştir. Microsoft'un Windows sistemleri de bu APı kütüpahanesini desteklemektedir. Bu kütüphaneye "Winsock"
+    ya da "WSA (Windows Socket API)" denilmektedir. Microsoft'un Winsock kütüphanesinde hem BSD fonksiyonları orijinal haliyle bulunmakta hem de 
+    başı WSAXXX ile başlayan Wibndows'a özgü fonksiyonlar bulunmaktadır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
