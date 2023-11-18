@@ -40394,14 +40394,14 @@ void exit_daemon(const char *msg)
     Biz proseslerarası haberleşmeyi iki grubu ayırmıştık:
 
     1) Aynı makinenin prosesleri arasında haberleşme
-    2) Farklı makineelerin prosesleri arasında haberleşme
+    2) Farklı makinelerin prosesleri arasında haberleşme
 
-    Kurusumuzda aynı makinenin prosesleri arasındaki haberleşmeleri (boru haberleşmeleri, mesaj kuyrukları) görmüştük. Şimdi farklı 
+    Kursumuzda aynı makinenin prosesleri arasındaki haberleşmeleri (boru haberleşmeleri, mesaj kuyrukları) görmüştük. Şimdi farklı 
     makinelerin prosesleri arasındaki haberleşmeler üzerinde duracağız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Farklı makinelerin prosesleri arasında haberleşme (yani bir ağ içerisinde haberleşme) aynı makinenin prosesleri arasındaki 
+    Farklı makinelerin prosesleri arasında haberleşme (yani bir ağ içerisinde haberleşme), aynı makinenin prosesleri arasındaki 
     haberleşmeye göre daha karmaşık unsurlar içermektedir. Çünkü burada ilgili işletim sisteminin dışında pek çok belirlemelerin 
     önceden yapılmış olması gerekir. İşte ağ haberleşmesinde önceden belirlenmiş kurallar topluluğuna "protokol" denilmektedir. 
     Ağ haberleşmesi için tarihsel süreç içerisinde pek çok protokol ailesi gerçekletirilmiştir. Bunların bazıları büyük şirketlerin 
@@ -40412,16 +40412,16 @@ void exit_daemon(const char *msg)
     ailesinin pek çok protokolü başka protokollerin üzerine konumlandırılmış olabilmektedir. Böylece protokol aileleri katmanlı (layered) 
     bir yapıya sahip olmuştur. Üst seviye bir protokol alt seviye protokolün "zaten var olduğu fikriyle" o alt seviye protokol 
     kullanılarak oluşturulmaktadır. Bu katmanlı yapıyı prosedürel programlama tekniğinde "zaten var olan bir fonksiyonu kullanarak
-    daha yüksek seviyeli birfonksiyon yazmaya" benzetebiliriz. 
+    daha yüksek seviyeli bir fonksiyon yazmaya" benzetebiliriz. 
 
     Ağ haberleşmesi için katmanlı bir protokol yapısının kavramsal olarak nasıl oluşturulması gerektiğine yönelik ISO tarafından 
-    80'li yılların başlarında "OSI Model (Open System Interconnection Model)" isimli bir referans dokğmanı oluşturulmuştur. 
-    OSI model bir gerçekleştirim değildir. Kavramsal bir referans dokğmanıdır. Ancak bu referans dokümanı pek çok çalışma için 
-    bir zemin oluşturmuştur. OSI referasn modeline göre bir protokol ailesinde tipik olarak 7 katman bulunmalıdır. Bu katmanlar 
-    aşağıdaki gibi brbirlerini üzerine oturtulmuştur:
+    80'li yılların başlarında "OSI Model (Open System Interconnection Model)" isimli bir referans dokümanı oluşturulmuştur. 
+    OSI model bir gerçekleştirim değildir. Kavramsal bir referans dokümanıdır. Ancak bu referans dokümanı pek çok çalışma için 
+    bir zemin oluşturmuştur. OSI referans modeline göre bir protokol ailesinde tipik olarak 7 katman bulunmalıdır. Bu katmanlar 
+    aşağıdaki gibi birbirlerini üzerine oturtulmuştur:
 
     Uygulama Katmanı (Application Layer)
-    Sunum Katmanı (Presentaion Layer)
+    Sunum Katmanı (Presentation Layer)
     Oturum Katmanı (Session Layer)
     Aktarım Katmanı (Transort Layer)
     Network Katmanı (Network Layer)
@@ -40432,17 +40432,17 @@ void exit_daemon(const char *msg)
     kabloların, konnektörlerin özellikleri vs. gibi.) Yani bu katman iletişim için gereken ortamı betimlemektedir. 
 
     - Veri bağlantı katmanı (data link layer) artık bilgisayarlar arasında fiziksel bir adreslemenin yapıldığı ve bilgilerin 
-    paketlere ayrılarak gönderilip alındığı bir ortam tanımlarlar. Yani bu katmanda bilgilerin gönderildiği ortam değil gönderilme 
-    biçimi ve fiziksel adresleme tanımlanmaktadır. Ağ üzerinde her birimin donanımsal olarka tanınabilen fiziksel bir adresinin 
+    paketlere ayrılarak gönderilip alındığı bir ortam tanımlarlar. Yani bu katmanda bilgilerin gönderildiği ortam değil, gönderilme 
+    biçimi ve fiziksel adresleme tanımlanmaktadır. Ağ üzerinde her birimin donanımsal olarak tanınabilen fiziksel bir adresinin 
     olması gerekir. Örneğin bugün kullandığımız Ethernet kartları "Ethernet Protocol" denilen bir protokole uygun tasarlanmıştır. 
     Bu ethernet protokolü OSI'nin fiziksel ve veri bağlantı katmanına karşılık gelmektedir. Ethernet protokolünde ağa bağlı olan 
     her birimin ismine "MAC adresi" denilen 6 byte'lık fiziksel bir adresi vardır. Ethernet protokolünde MAC adresini bildiğimiz 
     ağa bağlı bir birime bilgi gönderebiliriz. Bilgiler "paket anahtarlaması (packet switching)" denilen teknikle gönderilip alınmaktadır. 
     Bu teknikte bilgiler bir paket adı altında bir araya getirilir sonra ilgili fiziksel katmanla seri bir biçimde gönderilir. 
 
-    - Ağ Katmanı (Network layer) artık "inernetworking" yapmak için gerekli kuralları tanımlamaktadır. "Internetworking" terimi 
+    - Ağ Katmanı (network layer) artık "internetworking" yapmak için gerekli kuralları tanımlamaktadır. "Internetworking" terimi 
     "network'lerden oluşan network'ler" anlamına gelir. Aynı fiziksel ortamda bulunan ağlara "Yerel Ağlar (Local Area Netwroks)"
-    denilmektedir. Bu yerel ağlar "router" denilen aygıtlarla birbirilerine bağlanmaktadır. Böylece "internetworking" ortamı 
+    denilmektedir. Bu yerel ağlar "router" denilen aygıtlarla birbirlerine bağlanmaktadır. Böylece "internetworking" ortamı 
     oluşturulmaktadır. Tabii böyle bir ortamda artık ağa birimler için fiziksel adresler kullanılamaz. Bu ortamlarda ağa birimlere 
     mantıksal bir adres ataması yapılmalıdır. İşte "network katmanı" internetworking ortamı içerisinde bir birimden diğerine bir paket 
     bilginin gönderilmesi için gereken tanımlamaları içermektedir. Ağ katmanı bu nedenle en önemli katmandır. Ağ katmanında artık 
@@ -40455,10 +40455,10 @@ void exit_daemon(const char *msg)
     hedef yapısı da oluşturmaktadır. Bu sayede bilgiler hedefteki spesifik bir programa gönderilebilmektedir. Bu işleme "port numaralandırması"
     da denilmektedir. 
 
-   - Oturum katmanı (session) katmanı pek çok protokol ailesinde yoktur. Görevi oturum açma kapama gibi yüksek seviyeli bazı belirlemeleri 
+    - Oturum katmanı (session) katmanı pek çok protokol ailesinde yoktur. Görevi oturum açma kapama gibi yüksek seviyeli bazı belirlemeleri 
     yapmaktır. 
 
-    - Sunum katmanı (presentation layer) verilerin sıkıştırılması, şifrelenemesi gibi tanımlamalar içermektedir. 
+    - Sunum katmanı (presentation layer) verilerin sıkıştırılması, şifrelenmesi gibi tanımlamalar içermektedir. 
 
     - Nihayet bu protokolü kullanan bütün programlar aslında uygulama katmanını oluşturmaktadır. Yani ağ ortamında haberleşen her 
     program zaten kendi içerisinde açık ya da gizli bir protokol oluşturmuş durumdadır. Örneğin IP protokol ailesindeki somut işleri 
@@ -40470,48 +40470,53 @@ void exit_daemon(const char *msg)
     malı değil) protokol olması da cazibeyi çok artırmıştır. 
 
     IP ailesi 70'li yıllarda Vint Cerf ve Bob Kahn tarafından geliştirilmiştir. IP ismi Internet Protocol'den gelmektedir. Burada internet 
-    "internetworking" anlamında kullanılmıştır. Cerf ve Kahn 1974 yılında önce TCP üzerinde sonra da IP protokolü üzerinde çalışmışar ve 
+    "internetworking" anlamında kullanılmıştır. Cerf ve Kahn 1974 yılında önce TCP üzerinde sonra da IP protokolü üzerinde çalışmışlar ve 
     bu protokollerin ilk versiyonlarını oluşturmuşlardır. 
 
-    Bugün hepmizin bağlandığı büyük ağa "Internet" denilmektedir. Bu ağ ilk kez 1969 yılında Amerika'da Amerikan Savunma Bakanlığının 
+    Bugün hepimizin bağlandığı büyük ağa "Internet" denilmektedir. Bu ağ ilk kez 1969 yılında Amerika'da Amerikan Savunma Bakanlığı'nın 
     bir soğuk savaş projesi biçiminde başlatıldı. O zamana kadar yalnızca kısıtlı ölçüde yerel ağlar vardı. 1969 yılında ilk kez bir 
-    "WAN (Wide Area Network)" oluşturuldu. Bu proje Amerikan savunma bakanlığının DARPA isimli araştırma kurumu tarafından başlatılmıştır 
+    "WAN (Wide Area Network)" oluşturuldu. Bu proje Amerikan Savunma Bakanlığı'nın DARPA isimli araştırma kurumu tarafından başlatılmıştır 
     ve projeye "ARPA.NET" ismi verilmiştir. Daha sonra bu ağa Amerika'daki çeşitli devlet kurumları ve üniversiteler katıldı. Sonra 
     ağ Avrupa'ya sıçradı. 1983 yılında bu ağ NCP protokolünden IP protokol ailesine geçiş yaptı. Bundan sonra artık APRA.NET ismi 
     yerine "Internet" ismi kullanılmaya başlandı. (Internet sözcüğü I herfi küçük harfle yazılırsa "internetworking" anlamında büyük 
-    harfle yazılırsa bugün katıldığımız dev ağ anlamında kullanılmaktadır.) Biz de IP ailesini kullanarak kende "internetworking" ortamımızı
+    harfle yazılırsa bugün katıldığımız dev ağ anlamında kullanılmaktadır.) Biz de IP ailesini kullanarak kendi "internetworking" ortamımızı
     oluşturabiliriz. Örneğin bir şirket hiç Internet'e bağlanmadan kendi internet'ini oluşturabilir. Buna eskiden "intranet" denirdi. IP
     protokol ailesi herkesin kendi internet'ini oluşturabilmesi için bütün gerekli protokolleri barındırmaktadır. Tabii sinerji bakımından 
-    herkes zaten var olan ve Inter denilen bu dev ağa bağlanmayı tercih etmektedir.
+    herkes zaten var olan ve Internet denilen bu dev ağa bağlanmayı tercih etmektedir.
 
-    IP prtokol ailesi 4 katmanlı bir ailedir. Bu ailede "fiziksel ve veri bağlantı katmanı" bir arada düşünülebilir. Bugün bunlar 
+    IP protokol ailesi 4 katmanlı bir ailedir. Bu ailede "fiziksel ve veri bağlantı katmanı" bir arada düşünülebilir. Bugün bunlar 
     Ethernet ve Wireless protokolleri biçiminde kullanılmaktadır. IP ailesinin ağ katmanı aileye ismini veren IP protokolünden oluşmaktadır. 
     Aktarım katmanı ise TCP ve UDP protokollerinden oluşur. Nihayet TCP üzerine oturtulmuş olan HTTP, TELNET, SSH, POP3, IMAP gibi pek 
     çok protokol ailenin uygulama katmanını oluşturmaktadır. Tabii IP protokol ailesinde bu hiyerarşik yapıyla ilgili olmayan irili ufaklı pek 
-    çook protok de bulunmaktadır. 
+    çok protokol de bulunmaktadır. 
 
-    HTTP, SSH, POP3, IMAP, ...                                      (Application Layer)
-    TCP                                                     UDP     (Transport Katmanı)
-                             IP                                     (Network Katmanı)
-
-                Ethernet / Wireless                                 (Physical / Data Ling Layer)
+    +---------------------+-------------------------------+
+    |  Application Layer  |   HTTP, SSH, POP3, IMAP, ...  |
+    +---------------------+---------------+---------------+
+    |    Transport Layer  |      TCP      |      UDP      |
+    +---------------------+---------------+---------------+
+    |     Network Layer   |               IP              |
+    +---------------------+-------------------------------+
+    |  Physical/Data Link |           Ethernet            |
+    |       Layer         |           Wireless            |
+    +---------------------+-------------------------------+
 
     IP protokolü tek başına kullanılırsa ancak bir paket gönderip alma işini yapar. Bu nedenle bu protokolün tek başına kullanılması 
     çok seyrektir. Uygulamada genellikle transport katmanına ilişkin TCP ve UDP ptotokolleri kullanılmaktadır. IP ailesinin uygulama 
-    katmanındaki HTTP, SSH, POP3, IMAP gibi önemli protokollerinin hepsi TCP protokolü üzerine oturulmuştur. Ailede genellikle TCP 
+    katmanındaki HTTP, SSH, POP3, IMAP gibi önemli protokollerinin hepsi TCP protokolü üzerine oturtulmuştur. Ailede genellikle TCP 
     protokolü kullanıldığı için buna kısaca "TCP/IP" de denilmektedir. 
 
-    IP proptokolü ailenin en önemli ve taban protokolüdür. IP protokolünde ağa bağlı olan her birime "host" denilmektedir. IP protokolü 
+    IP protokolü ailenin en önemli ve taban protokolüdür. IP protokolünde ağa bağlı olan her birime "host" denilmektedir. IP protokolü 
     bir host'tan diğerine bir paket (buna IP paketi denilmektedir) bilginin gönderimine ilişkin tanımlamaları içermektedir. IP protokolünde
-    her hots'un ismine "IP adresi" denilen mantıksal bir adresi vardır. Paketler belli bir IPadresinden diğerine gönderilmektedir. IP protokolünün
-    iki önemli versiyonu vardır: IPV4 ve IPV6. Bugün her iki versiyon da aynı anda kullanılmaktadır. IPV4'te IP adresleri 4 byte uzunluktadır. 
-    (Protokoln tasarlandığı 70'li yıllarda 4 byte adres alanı çok geniş sanılmaktaydı). IPV6'da ise IP adresleri 16 byte uzunluğundadır. 
+    her hots'un ismine "IP adresi" denilen mantıksal bir adresi vardır. Paketler belli bir IP adresinden diğerine gönderilmektedir. IP protokolünün
+    iki önemli versiyonu vardır: IPv4 ve IPv6. Bugün her iki versiyon da aynı anda kullanılmaktadır. IPv4'te IP adresleri 4 byte uzunluktadır. 
+    (Protokolün tasarlandığı 70'li yıllarda 4 byte adres alanı çok geniş sanılmaktaydı). IPv6'da ise IP adresleri 16 byte uzunluğundadır. 
 
-    TCP bağlantılı (connection-oriented) UDP bağlantısız (connectionless) bir protokoldür. Buradaki bağlantı IP paketleriyle yapılan
+    TCP bağlantılı (connection-oriented), UDP bağlantısız (connectionless) bir protokoldür. Buradaki bağlantı IP paketleriyle yapılan
     mantıksal bir bağlantıdır. Bağlantı sırasında gönderici ve alıcı birbirlerini tanır ve haberleşme boyunca haberleşmenin güvenliği için 
-    birbirleriyle konuşabilirler. Bağlantılı protokol "client-server" tarzı bir haberleşmeyiakla getirmektedir. Bu nedenle TCP/IP denildiğinde
+    birbirleriyle konuşabilirler. Bağlantılı protokol "client-server" tarzı bir haberleşmeyi akla getirmektedir. Bu nedenle TCP/IP denildiğinde
     akla "client-server" haberleşme gelmektedir. TCP modelinde client önce server'a bağlanır. Sonra iletişim güvenli bir biçimde karşılıklı
-    konuşmalarla sürüdürürlür. Tabii TCP bunu yaparken IP paketlerini yani IP protokolünü kullanmaktadır. UDP protokolü bağlantısızıdır. Yani
+    konuşmalarla sürdürürlür. Tabii TCP bunu yaparken IP paketlerini yani IP protokolünü kullanmaktadır. UDP protokolü bağlantısızdır. Yani
     UDP protokolünde bizim bir host'a UDP paketi gönderebilmemiz için bir bağlantı kurmamıza gerek kalmaz. Örneğin biz televizyon yayını UDP
     modeline benzemektedir. Verici görüntüyü yollar ancak alıcının alıp almadığıyla ilgilenmez. Vericinin görüntüyü yollaması için alıcıyla 
     bağlantı kurması gerekmemektedir. 
@@ -40521,12 +40526,12 @@ void exit_daemon(const char *msg)
     okuyabilmesi demektir. Datagram tabanlı haberleşme demek tamamen mesaj kuyruklarında olduğu gibi bilginin paket paket iletilmesi 
     demektir. Yani datagram haberleşmede alıcı taraf gönderen tarafın tüm paketini tek hamlede almak zorundadır. Stream tabanlı haberleşmenin 
     oluşturulabilmesi için IP paketlerine bir numara verilmesi ve bunların hedefte birleştirilmesi gerekmektedir. Örneğin biz bir host'tan
-    diğerine 10K'lık bir bilgi dönderelim. TCP'de bu bilgi IP paketlerine ayrılıp numaralandırılır. Bunlar hedefte birleştirilir ve sanki
+    diğerine 10K'lık bir bilgi gönderelim. TCP'de bu bilgi IP paketlerine ayrılıp numaralandırılır. Bunlar hedefte birleştirilir ve sanki
     10000 byte'lık ardışıl bir bilgiymiş gibi gösterilir. Halbuki UDP'de paketler birbirinden bağımsızdır. Dolayısıyla bunların hedefte 
     birleştirilmesi zorunlu değildir. IP protokolünde bir host birtakım paketleri diğer host'a gönderdiğinde alıcı taraf bunları aynı 
-    sırada almayabilir. Bu özelliğinden dolayı TCP ailenin en çok kullanılan transport katmanı durumundadır.
+    sırada almayabilir. Bu özelliğinden dolayı TCP, ailenin en çok kullanılan transport katmanı durumundadır.
 
-    TCP güvenilir (reliable) UDP güvenilir olmayan (unreliable) bir protokoldür. TCP'de mantıksal bir bağlantı oluşturulduğu için 
+    TCP güvenilir (reliable), UDP güvenilir olmayan (unreliable) bir protokoldür. TCP'de mantıksal bir bağlantı oluşturulduğu için 
     yolda kaybolan paketlerin telafi edilmesi mümkündür. Alıcı taraf gönderenin bilgilerini eksiksiz ve bozulmadan aldığını bilir.
     Aynı zamanda TCP'de "bir akış kontrolü (flow control)" de uygulanmaktadır. Akış kontrolü sayesinde alıcı taraf tampon taşması 
     durumuna karşı gönderici tarafı durdurabilmektedir. Halbuki UDP'de böyle bir mekanizma yoktur. Gönderen taraf alıcının bilgiyi 
@@ -40538,10 +40543,10 @@ void exit_daemon(const char *msg)
     <BURADA KALDIk>
 
     Yukarıda da belirttiğimiz gibi IP protokol ailesinde ağa bağlı olan birimlere "host" denilmektedir. Host bir bilgisayar olmak 
-    zorunda değildir. İşte bu protokolde her host'un mantıksal bir adresi vardır. Bu adrese IP adresi denilmektedir. IP adresi IPV4'te 4 byte uzunlukta, IPV6'da 16 byte 
+    zorunda değildir. İşte bu protokolde her host'un mantıksal bir adresi vardır. Bu adrese IP adresi denilmektedir. IP adresi IPv4'te 4 byte uzunlukta, IPv6'da 16 byte 
     uzunluktadır. Ancak bir host'ta farklı programlar farklı host'larla haberleşiyor olabilir. İşte aynı host'a gönderilen IP paketlerinin
     o host'ta ayrıştırılması için "protokol port numarası" diye içsel bir numara uydurulmuştur. Port numarası bir şirketin içerisinde çalışanların
-    dahili numarası gibi düşünülebilir. Port numaraları IPV4'te 2 byte'la, IPV6'da 4 byte'la ifade edilmektedir. İlk 1024 port numarası IP 
+    dahili numarası gibi düşünülebilir. Port numaraları IPv4'te 2 byte'la, IPv6'da 4 byte'la ifade edilmektedir. İlk 1024 port numarası IP 
     ailesinin uygulama katmanındaki protokoller için ayrılmıştır. Bunlara "well known ports" denilmektedir. Bu nedenle prograöcıların port numaralarını
     1024'ten büyük olacak biçimde almaları gerekir. Bu udurmda TCP ve UDP'de bilgiler belirli bir IP adresindeki host'un belirli bir portuna gönderilir. 
     Gönderilen bu bilgiler de o portla ilgilenen programlar tarafından alınmaktadır. 
