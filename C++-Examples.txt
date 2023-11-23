@@ -725,8 +725,7 @@ int main(void)
 
 	int a(10);		// C++'a özgü, C'de böyle bir ilkdeğer verme sentaksı yok
 
-	Böyle ilkdeğer verme C'de yoktur. Bu normal parantez sentaksı C++'ta sınıflar için düşünülmüştür. Ancak temel türler için de kullanılabilmektedir. Ancak parantezlerin 
-	içini boş bırakmak "fonksiyon prototipi" anlamına gelmektedir. Örneğin:
+	Böyle ilkdeğer verme C'de yoktur. Bu normal parantez sentaksı C++'ta sınıflar için düşünülmüştür. Ancak temel türler için de kullanılabilmektedir. Ancak parantezlerin içini boş bırakmak "fonksiyon prototipi" anlamına gelmektedir. Örneğin:
 
 	int b();		// bu ilkdeğer verme sentaksı değil! Fonksiyon prototipi
 
@@ -747,6 +746,8 @@ int main(void)
 	verilebilir:
 
 	int a = 10;
+
+	Böyle ilkdeğer verme C'de yoktur. Bu normal parantez sentaksı C++'ta sınıflar için düşünülmüştür. Ancak temel türler için de kullanılabilmektedir. 
 
 	Bir diziye küme parantezleriyle ilkdeğer verilebilmektedir. Örneğin:
 
@@ -1236,6 +1237,26 @@ int main(void)
 	int k = square2(z);			// geçersiz!
 
 	Buradan da görüldüğü gibi önemli olan consteval fonksiyonunun çağrısının derleme aşamasında sabit ifadesi oluşturma zorunluluğudur.
+
+	consteval bir fonksiyon için prototip bulundurulabilir. Eğer fonksiyonun prototipinde consteval anahtar sözcüğü kullanılmışsa tanımlamasında da consteval
+	anahtar sözcüğünün kullanılması zorunludur. consteval bir fonksiyonun henüz tanımlama görülmeden kullanılması geçerli bir durum oluşturmamaktadır. Örneğin:
+
+	consteval int square(int a);
+
+	int main()
+	{
+		int result = square(5);		// geçersiz! henüz tanımlama görülmedi
+		//...
+
+		return 0;
+	}
+
+	consteval int square(int a)
+	{
+		return a * a;
+	}
+
+	consteval fonksiyonların adresleri alınamamaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -2773,6 +2794,36 @@ int main(void)
 	tek kopyası bulundurulmaktadır. 
 
 	constexpr fonksiyonların otomatik olarak inline kabul edildiklerini anımsayınız.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	inline anahtar sözcüğü fonksiyon prototiplerine yerleştirilebilir. Bu durumda fonksiyon tanımlanırken inline anahtar sözcüğü yazılabilir ya da yazıalmayabilir. 
+	Örneğin:
+
+	inline void foo();
+	//...
+
+	void foo()		// burada inline yazılmamış olsa bile prototipte inline belirtildiği için fonksiyon inline durumdadır. 
+	{
+		//...
+	}
+
+	Derleyici bir fonksiyon prototipini inline olarak gördükten sonra henüz fonksiyonun tanımlamasını görmeden fonksiyon çağrılırsa onu inline olarak açabilir 
+	ya da açmayabilir. Genel olarak derleyiciler bu durumda fonksiyonu inline açmamaktadır. Örneğin:
+
+	inline void foo();
+
+	int main()
+	{
+		foo();		// derleyici inline açım yapamayabilir
+
+		return 0;
+	}
+
+	void foo()
+	{
+		//...
+	}
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -5151,6 +5202,17 @@ int main()
 	g++ ve clang++ derleyicilerinin isim dekorasyonları için de aşağıdaki bağlantıyı kullanabilirsiniz:
 
 	https://itanium-cxx-abi.github.io/cxx-abi/abi.html#mangling
+
+	Microsoft dekore edilmiş isimlerin aslında hangi parametrik yapıya sahip fonksiyonlara karşılık geldiğini anlayabilmek için "undname" ismi bir utility 
+	program da bulundurmaktadır. Örneğin:
+
+	F:\Dropbox\Kurslar\SysProg-1\Src>undname ?foo@@YAXHH@Z
+	Microsoft (R) C++ Name Undecorator
+	Copyright (C) Microsoft Corporation. All rights reserved.
+
+	Undecoration of :- "?foo@@YAXHH@Z"
+	is :- "void __cdecl foo(int,int)"
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -6822,32 +6884,84 @@ int main()
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+											20. Ders 23/10/2023 - Pazartesi
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
 	39) Gereksiz niteliklendirmeyi elimine edebilmek için "using namespace direktifi" denilen bir direktiften faydalanılmaktadır. using namespace direktifinin 
 	genel biçimi şöyledir:
 
 	using namespace <isim_alanı_ismi>;
 
-	Burada isim alanı ismi tek bir isimden olabileceği gibi :: operatörü kullaılarak oluşturulan iç bir isim alanı da olabilir. Örneğin:
+	Burada isim alanı ismi tek bir isimden oluşabileceği gibi :: operatörü kullanılarak oluşturulan iç bir isim alanı da olabilir. Örneğin:
 
 	using namespace CSD;
-	using namespace CSD::Util
+	using namespace CSD::Util::Test
 	using namespace std;
 
 	using namespace direktiflerinin ayrı ayrı oluşturulması gerekmektedir. Aşağıdaki gibi bir arada oluşturulamamaktadır:
 
 	using namespace CSD, CSD::Util, std;		// geçersiz! böyle bir sentaks yok
 
+	Bu direktiflerin aşağıdaki gibi ayrı ayrı oluşturulması gerekir:
+
+	using namespace CSD;
+	using namespace CSD::Util;
+	using namespace std;
+
 	using namespace direktifi bir isim alanına ya da yerel bir bloğa yerleştirilebilir (bir sınıf içerisine yerleştirilemez). Tabii using namespace direktifinde 
 	belirtilen isim alanının daha önce derleyici tarafından görülmüş olması gerekmektedir. Yani önce isim alanı bildirimi yapılmalı daha sonra o isim alanı için 
 	using namespace direktifi kullanılmalıdır. Olmayan bir isim alanına using namespace direktifi uygulanamaz. 
 
-	<BURADA KALDIK>
+	using namespace direktifini ele almadan önce "isim araması (namelookup)" denilen bir kavramdan kısaca bahsedeceğiz. İsim araması kavramı C standratlarınd olmayan 
+	C++'ın karmaşıklığı nedeniyle C++ standartlarına bulunan bir kavramdır. Derleyici bir isim ile karşılaştığında o isme ilişkin bir bildirimi bulmaya çalışır. 
+	Çünkü her ismin bir bildirimi olmak zorundadır. İşte derleyici isimleri sırasıyla bazı faaliyet alanlarında aramaktadır. İsim bir faaliyet alanında bulunursa
+	başka bir faaliyet alanına bakılmamaktadır. Yani arama isim bulunamadığı sürece devam ettirilmektedir. Örneğin C'de (her ne kadar bu kavram C'de yoksa da)
+	yerel bir blokte bir isim kullanıldığında önce o ismin bildirimi içten dışa doğru yerel bloklarda aranmaktadır. Nihayet bu yerel bloklarda bulunamazsa global 
+	alana da bakılmaktadır. C++'ta isim araması iki grubua ayrılmaktadır:
 
-	using namepspace direktifinde iki isim alanı söz konusudur. Birincisi direktifin yerleştirildiği isim alanı, ikincisi direktifte belirtilen isim alanı. 
-	Eğer direktif bir yerel bloğa yerleştirilmişse direktifin yerleştirildiği isim alanı o yerel bloğu kapsayan isim alanıdır. 
+	1) Niteliksiz isim araması (unqualified name lookup)
+	2) Nitelikli isim arama (qualified name lookup)
 
-	Derleyici using namespace direktifini gördüğünde önce direktifin yerleştirildiği isim alanı ile direktifte belirtilen isim alanını kapsayan en dar isim alanını tespit eder. 
-	Örneğin:
+	Çözünürlük operatörü olmadan yazılmış isimlerin aranması ve çözünürlük operatörlerinin en solundaki isimlerin aranması niteliksiz isim arama kurallarına göre 
+	yapılmaktadır. Örneğin:
+
+	a = 10;
+	CSD::Util::foo();
+
+	Burada a ve CSD isimleri niteliksiz isim arama kurallarına göre aranmaktadır. 
+
+	Çözünürlük operatörünün sağındaki isimler nitelikli isim arama kurallarına göre aranmaktadır. Örneğin:
+
+	std::cout << "test" << std::endl;
+
+	Burada std niteliksiz isim arama kurallarına göre cout ve endl nitelikli isim arama kurallarına göre aranmaktadır. İsim araması biraz karmaşık bir konudur. 
+	Çünkü ileride görülecek başka konular da devreye girdiğinde konu biraz da ayrıntılı hale gelmektedir. Ancak biz bu aşamada en basit bir biçimde diğer konuları 
+	hiç dikkate almadan isim araması konusunda bazı şeyler söylmek istiyoruz. Niteliksiz isim araması kabaca şu aşamalarla yapılmaktadır (else-if biçiminde):
+
+	1) İsim kullanıldığı bloğun içerisinde kullanım yerine kadar olan yerel bölgede aranır. 
+	2) İsim yerel bloğu kapsayan yerel bloklarda içten dışa doğru değişkenin kullanıldığı bölgede sırasyla aranır. 
+	3) İsim yerel bloğun ilişkin olduğu fonksiyonun içinde bulunduğu isim alanında kullanım yerine kadarki bölgede aranır.
+	4) İsim kapsayan isim alanlarında içten dışa doğru kullanım yerine kadarki bölgede aranır. 
+	5) İsim nihayet global isim alanında kullanım yerine kadarki bölgede aranır.
+
+	Niteliksiz isim aramasını şuna benzetebiliriz: "Biz arkadaşımıza Ahmet'i gördün mü?" diye bir soru soralım. Arkadaşımız Ahmet'i önce arkadaş çevresinde, bulamazsa
+	okulda, bulamazsa şehirde, bulamazsa ülkede, bulamazsa dünyada bulamazsa evrende arayacaktır. 
+
+	Nitelikli isim aramada isim kabaca (ayrıntıları vardır) ilgili isim alanında aranmaktadır. Eğer isim o isim alanında bulunamazsa kapsayan isim alanlarına 
+	bakılmamaktadır. Örneğin:
+
+	CSD::a = 10;
+
+	Burada a değişkeni CSD isim alanında aranır. Eğer orada bulunmazsa CSD'yi kapsayan isim alanlarında arama yapılmamaktadır. Nitelikli isim aramayı da şuna 
+	benzetebiliriz: Biz arkdaşımıza "Okuldaki Ahmet'i gördün mü?" diye sorsaydık. Arkadaşımız Ahmet'i yalnızca okulda arardı. Okulda bulmazsa şehre bakmazdı. 
+	Çünkü biz zaten onun okulda olması gerektiğini söylemiş olmaktayız. 
+
+	using namepspace direktifinde iki isim alanı söz konusudur. Birincisi direktifin yerleştirildiği isim alanı, ikincisi direktifte belirtilen isim alanı. Eğer 
+	direktif bir yerel bloğa yerleştirilmişse direktifin yerleştirildiği isim alanı o yerel bloğu kapsayan isim alanıdır. 
+
+	Derleyici using namespace direktifini gördüğünde önce direktifin yerleştirildiği isim alanı ile direktifte belirtilen isim alanını kapsayan en dar isim alanını 
+	tespit eder. Örneğin:
 
 	namespace A
 	{
@@ -6882,9 +6996,11 @@ int main()
 	}
 
 	Burada direktifin yerleştirildiği isim alanı A, direktifte belirtilen isim alanı A::B::C'dir. İki isim alanını kapsayan en dar isim alanı A'dır.
-	Direktif şöyle etki gösterir: Sanki direktifte belirtilen isim alanının içerisindekiler direkttifin yerleştirildiği ve direktifte belirtilen isim alanı kapsana en 
-	dar isim alanına enjekte edilmektedir. Ancak bu enjekte edilme niteliksiz isim aramaları (unqualified name lookup) sırasında (yani doğrudan yazılan isimlerin aranması sırasında)
-	etkili olmaktadır. Ayrıca bu etki yalnızca direktifin yerleştirildiği faaliyet alanında oluşturulmaktadır. Örneğin:
+
+	using direktif şöyle etki göstermektedir: Niteliksiz isim araması (unqualified name lokkup) sırasında sanki direktifte belirtilen isim alanının 
+	içerisindekiler direktifin yerleştirildiği ve direktifte belirtilen isim alanı kapsana en dar isim alanına enjekte edilmiş gibi olmaktadır. Ancak 
+	bu enjekte edilme niteliksiz isim aramaları (unqualified name lookup) sırasında (yani doğrudan yazılan isimlerin aranması sırasında) ve yalnızca
+	direktifin yerleştirildiği faaliyet alanında etkili olmaktadır. Örneğin:
 
 	#include <iostream>
 
@@ -6897,45 +7013,492 @@ int main()
 		return 0;
 	}
 
-	Burada sanki std isim alanı içerisindeki her şey global isim alanındaymış gibi bir etki oluşturulmuştur. Böylece cout ve endl isimleri aslında std isim alanında olduğu 
-	halde derleyici tarafından bulunacaktır.
+	Burada cout ve endl isimleri aranırken sanki std isim alanı içerisindeki her şey global isim alanındaymış gibi bir etki oluşmaktadır. Böylece cout ve endl 
+	isimleri aslında std isim alanında olduğu halde derleyici tarafından global isim alanında bulunacaktır.
 
-	Aşağıdaki örnekte direktifin yerleştirildiği isim alanı A::B::C isim alanıdır. Direktifite belirtilen isim alanı std isim alanıdır. İki isim alanını kapsayan en dar 
-	isim alanı global isim alanıdır. O halde std isim alanı içerisindeki isimler sanki global isim alanındaymış gibi bir etki oluşturulacaktır. Ancak bu etki
-	yalnızca direktifin yerleştirildiği (A::B::C) isim alanındaki armalar için oluşturulmaktadır.
----------------------------------------------------------------------------------------------------------------------------*/
+	Tabii niteliksiz isim araması sırasında aranan isim using direktifinin yerleştirildiği isim alanı ile direktifte belirtilen isim alanını kapsayan en dar isim
+	alanına kadar bulunursa zaten direktifin bir etkisi kalmamaktadır. Örneğin:
 
-#include <iostream>
-
-namespace A
-{
-	namespace B
+	namespace CSD
 	{
-		namespace C
-		{
-			using namespace std;
+		int a;
+	}
 
-			void foo()
+	using namespace CSD;
+
+	int main()
+	{
+		int a;
+
+		a = 10;				// yerel a, CSD isim alanındaki a değil
+
+		return 0;
+	}
+
+	Burada main fonksiyonunun içerisindeki a ismi (a = 10'daki a ismi) zaten yerel blokta bulunacaktır. Dolayısıyla CSD içerisndeki a sanki global isim alanı 
+	içerisindeymiş gibi oluşan etki burada bir fayda sağlamayacaktır. 
+
+	using namespace direktifinin etki göstermesi için niteliksiz isimlerin aranmasında direktifin yerleştirildiği isim alanına baklıyor olması gerekmektedir. 
+	Aksi takdirde bu direktif ilgili ismin aranmasında bir etki göstermemektedir. Örneğin:
+
+	namespace A
+	{
+		namespace B
+		{
+			namespace C
 			{
-				cout << "A::B::C::foo" << endl;		// geçerli
+				using namespace std;
+
+				void foo()
+				{
+					cout << "A::B::C::foo" << endl;		// geçerli
+				}
 			}
 		}
 	}
-}
 
-int main(void)
-{
+	int main()
+	{
+		cout << "this is a test" << endl;		// error!
 
-	cout << "this is a test" << endl;		// error!
+		return 0;
+	}
 
-	return 0;
-}
+	Burada A::B::C içerisine yerleştirilmiş olan using namespace direktifi main fonksiyonundaki isimlerin aranmasında etkili olmaz. Çünkü main fonksiyonundaki 
+	isimlerin aranması sırasında using namespace direktifi görülmemektedir. Örneğin:
+
+	using namespace std;
+
+	namespace A
+	{
+		namespace B
+		{
+			namespace C
+			{
+				void foo()
+				{
+					cout << "A::B::C::foo" << endl;		// geçerli
+				}
+			}
+		}
+	}
+
+	int main()
+	{
+		cout << "this is a test" << endl;		// geçerli
+
+		return 0;
+	}
+
+
+	Artık hem A::B::C::foo içerisindeki hem de main içerisindeki isimlerin aranmasında direktif etkili olacaktır. 
+
+	using namespace direktifi bir yerel bloğa yerleştirilirse yalnızca o yerel bloktaki niteliksiz aramalarda direktif görüleceği için etki yalnızca o yerel 
+	blokta oluşacaktır. Örneğin:
+
+	int main()
+	{
+		using namespace std;
+
+		cout << "this is a test" << endl;		// geçerli
+
+		return 0;
+	}
+
+	void foo()
+	{
+		cout << "this is a test" << endl;	// geçersiz'
+	}
+
+	main fonksiyonu içerisindeki direktifin foo fonksiyonunda bir etkisi yoktur. 
+
+	İsim hem direktifte belirtilen isim alanında hem de direktifin yerleştirildiği isim alanı ile direktifte belirtilen isim alanını kapsayan en dar isim alanında 
+	bulunursa bu durum geçersizdir. Örneğin:
+
+	namespace CSD
+	{
+		int a = 10;
+	}
+
+	int a = 20;
+
+	int main()
+	{
+		using namespace CSD;
+
+		cout << a << endl;		// ambigous? Hangi a?
+
+		return 0;
+	}
+
+	Tabii bu örnekte eğer isim global isim alanına kadar isim araması sırasında bulunsaydı herhangi bir sorun oluşmayacaktı. Örneğin:
+
+	#include <iostream>
+
+	using namespace std;
+
+	namespace CSD
+	{
+		int a = 10;
+	}
+
+	int a = 20;
+
+	int main()
+	{
+		int a = 100;
+
+		using namespace CSD;
+
+		cout << a << endl;		// main fonksiyonundaki a
+
+		return 0;
+	}
+
+	Burada CSD içerisindeki a sanki global isim alanındaymış gibi etki göstermektedir. Oysa global isim alanında da bir a değişkeni bulunmaktadır. Bu durumda 
+	isim araması başarısz olacaktır. Benzer biçimde isim birden fazla using namespace direktifi ile belirtilen isim alanında bulunyorsa bu durumda da isim araması
+	başarısız olur. Örneğin:
+
+	namespace A
+	{
+		int x;
+		int y;
+	}
+
+	namespace B
+	{
+		int x;
+		int z;
+	}
+
+	using namespace A;
+	using namespace B;
+
+	int main()
+	{
+		x = 10;		// geçersiz! hangi x?
+		y = 20;		// sorun yok, A::y nalaşılır
+		z = 30;		// sorun yok B::z anlaşılır
+
+		return 0;
+	}
+
+	Tabii burada using namespace direktiflerinin yerleştirilmesinde bir sorun yoktur. Sorun a isminin niteliksiz biçimde kullanılması sırasında oluşmaktadır. 
+	Bu tür durumlarda çakışma olmadığı sürece isimleri niteliksiz bir biçimde, çakışma durumda da nitelikli bir biçimde kullanabiliriz. Örneğimizde x değişkenini
+	niteliksiz kullanamadığımıza göre A::x ve B::x biçiminde nitelikli kullanma yoluna gidebiliriz. 
+
+	Niteliksiz isim aramsı sırasında using namespace direkifi ile bleirtilen isim alanında da using namespace direktifi varsa etki geçişli olarak devam eder. Örneğin:
+
+	namespace A
+	{
+		int x;
+		//...
+
+	}
+
+	namespace B
+	{
+		using namespace A;
+
+		int y;
+		//...
+	}
+
+	using namespace B;
+
+	int main()
+	{
+		x = 10;			// geçerli
+
+		return 0;
+	}
+
+	Burada etki şöyle düşünülmelidir. "using namespace B" direktifi ileB isim alanı içerisindeki isimler global isim alanına enjekte edilmiş gibi olmaktadır. 
+	Böylece isim alanındaki "using namespace A" direktifi de sanki global isim alanındaymış gibi etkiye sahip olacaktır. Bu etki de A isim alanı içerisindekilerin
+	global isim alanına enjekte edilmesine yol açacaktır. 
+
+	Oveload resolution işlemi sırasında aday fonksiyonların seçilmesinde using namespace direktifi etkili olmaktadır. Aşağıdaki örneği inceleyiniz:
+
+	using namespace std;
+
+	namespace A
+	{
+		void foo(int a)
+		{
+			cout << "A::foo(int)" << endl;
+		}
+	}
+
+	namespace B
+	{
+		using namespace A;
+
+		void foo(long a)
+		{
+			cout << "B::foo(long)" << endl;
+		}
+	}
+
+	void foo(double a)
+	{
+		cout << "::foo(double)" << endl;
+	}
+
+	using namespace B;
+
+	int main()
+	{
+		foo(10);		// A::foo çağrılır
+		foo(10L);		// B::foo çağrılır
+		foo(3.14);		// ::foo çağrılacak
+
+		return 0;
+	}
+
+	Burada tüm foo fonksiyonları aslında global isim alanındaymış gibi düşünülmelidir. Dolayısıyla bu fonksiyonların hepsi aday fonksiyon olarak seçilecektir. 
+
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	using namespace direktifinin yerleştirildiği isim alanı ile direktifteki isim alanında aynı isimler bulunursa ve bu isimler kullanılırsa bu durumda isim araması sırasında
-	sorun ortaya çıkar. Örneğin std isim alanı içerisinde bulunan cout ismi global isim alanında olsaydı. Bu durumda using namespace std direktifi uygulandığında
-	cout isminin hangi cout olduğu anlaşılamayacaktı. Bu tür durumlarda using namespace direktifini kullanmayıp ve açıkça niteliklendirme yapılabilir. Ya da yalnızca çalışan isimler 
-	için niteliklendirme yapılabilir. 
+	Nitelikli isim araması sırasında yalnızca belirtilen isim alanına bakıldığına dikkat ediniz. Örneğin:
+
+	int a = 10;
+
+	namespace CSD
+	{
+		int b = 20;
+		//...
+	}
+
+	int main()
+	{
+		CSD::a = 10;		// geçersiz!
+
+		return 0;
+	}
+
+	Burada CSD::a ifadesindeki a ismi nilikli bir biçimde yalnızca CSD isim alanında aranacaktır. Eğer orada bulunmazsa kapsayan isim alanlarına bakılmayacaktır.
+
+	Nitelikli isim araması sırasında "isim ilgili isim alanında bulunamazsa" o isim alanındaki using namespace direktiflerinde belirtilen isim alanlarında da
+	nitelikli arama yapılmaktadır. (Burada en dar isim alanı tanımı kullanılmamaktadır.)
+
+	Örneğin:
+
+	namespace A
+	{
+		int x = 10;
+		//...
+	}
+
+	namespace B
+	{
+		using namespace A;
+
+		int y = 20;
+		//...
+	}
+
+	int main()
+	{
+		cout << B::x << endl;		// geçerli A::x anlaşılır
+
+		return 0;
+	}
+
+	Burada B::x ifadesindeki x ismi B isim alanında bulunamadığı için A isim alanına da bakılacak ve orada bulunacaktır. Eğer isim ilgili isim alanında bulunsaydı 
+	o isim alanındaki using namespace direktifleri etkili olmayacaktı. Örneğin:
+
+	namespace A
+	{
+		int x = 10;
+		//...
+	}
+
+	namespace B
+	{
+		using namespace A;
+
+		int y = 20;
+		int x = 30;
+		//...
+	}
+
+	int main()
+	{
+		cout << B::x << endl;		// geçerli, B::x anlaşılır
+
+		return 0;
+	}
+
+	Burada B::x ifadesindeki x ismi B'de bulunduğu için A'da aranmayacaktır. Aşağıdaki örneği inceleyiniz:
+
+	namespace A
+	{
+		int x = 10;
+		//...
+	}
+
+	namespace B
+	{
+		using namespace A;
+
+		int x = 20;
+		//...
+	}
+
+	namespace C
+	{
+		using namespace B;
+
+		//...
+	}
+
+	int main()
+	{
+		cout << C::x << endl;		// geçerli, B::x anlaşılır
+
+		return 0;
+	}
+
+	Buradaki C::x ifadesinde x'in aranması sırasında bir sorun oluşmayacaktır. Çünkü standartlara göre isim C isim alanında bulunamadığında sanki B::x gibi 
+	aranacaktır. Dolayısıyla isim B isim alanında bulunduğu için sorun çıkmayacaktır. 
+
+	Aşağıdaki örnekte ise C::x ifadesindeki x birden fazla isim alanında buulunacağı için isim araması başarısız olacaktır. Bu tür durumlarda using namespace 
+	direkt,flerinin sırasının hiçbir önemi yoktur:
+
+	namespace A
+	{
+		int x = 10;
+		//...
+	}
+
+	namespace B
+	{
+		int x = 20;
+		//...
+	}
+
+	namespace C
+	{
+		using namespace A;
+		using namespace B;
+
+		//...
+	}
+
+	int main()
+	{
+		cout << C::x << endl;	// geçersiz! ambiguity, A::x ve B::x arasında seçim yapılamaz
+
+		return 0;
+	}
+
+	Bu tür durumlarda isimlerin farklı isim alanlarında bulunuyor olmaması gerekir. Bulunma derinliğinin bir önemi yoktur. Örneğin:
+
+	namespace CSD
+	{
+		int x;
+		//...
+	}
+
+	namespace A
+	{
+		using namespace CSD;
+		//...
+	}
+
+	namespace B
+	{
+		int x = 20;
+		//...
+	}
+
+	namespace C
+	{
+		using namespace A;
+		using namespace B;
+		//...
+	}
+
+	int main()
+	{
+		cout << C::x << endl;	// geçersiz! ambiguity, B::x ve CSD::x arasında seçim yapılamaz
+
+		return 0;
+	}
+
+	Burada C::x isminin aranması yine başarısızlıkla sonuçlanacaktır. 
+
+	using namespace direktifindeki isim alanlarına ilişkin isimler de isim aramsına sokulmaktadır. Örneğin:
+
+	using namespace CSD::Util
+
+	Burada derleyici CSD ismini "niteliksiz olarak", Util ismini de CSD içerisinde nitelikli olarak arayacaktır. Direktifin geçerli olması için burada belirtilen 
+	isim alanı isimlerinin bulunuyor olması gerekir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+													21. Ders 25/10/2023 - Çarşamba
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    40) using namespace direktifinin dışında C++'ta ayrıca bir de "using bildirimi" denilen bir bildirim de vardır. using bildirimi bir isim alanındaki ismi 
+	bir faaliyet alanına sokmak için kullanılmaktadır. Bu nedenle bu bir direktif değil bildirimdir. Çünkü bildirimlerde yeni bir isim bir faaliyet alanına 
+	katılmaktadır. using bildiriminin genel biçimi şöyledir:
+
+	using <isim_alanı_ismi>::<isim>, [<isim_alanı_ismi>::<isim>], [...];
+
+	Buradaki isim_alanı_ismi iç bir isim alanı (nested namespace) belirtebilir. Örneğin:
+
+	using std::cout, std::endl;
+	using CSD::Util::test
+
+	//...
+	cout << "this is a test" << endl;
+	test();
+
+	Tabii using bildirimi bir faaliyet alanına yenibir ismi soktuğuna göre o faaliyet alanında o ismin tek olması gerekmektedir. Örneğin:
+
+	namespace CSD
+	{
+		int a;
+		//...
+	}
+
+	void foo()
+	{
+		using CSD::a;
+		int a;				// geçersiz! aynı faaliyet alanında aynı isim birden fazla kez bildirilemez
+		//...
+	}
+
+	using bildirimi bir fonksiyona uygulandığında o isim alanındaki aynı isimli tüm fonksiyonlar ilgili faaliyet alanına sokulmuş olur.  Yalnızca aynı 
+	isimli tek bir fonksiyonunun using bildirimi ile faaliyet alanına sokulması mümkün değildir. Örneğin:
+
+	namespace CSD
+	{
+		void foo()
+		{
+			//...
+		}
+
+		void foo(int a)
+		{
+			//...
+		}
+		//...
+	}
+
+	int main()
+	{
+		using CSD::foo;
+
+		foo();				// geçerli
+		foo(10);			// geçerli
+
+		return 0;
+	}
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -6944,9 +7507,16 @@ using namespace std;
 
 namespace CSD
 {
+	int x, y, z;
+
 	void foo()
 	{
-		cout << "CSD::foo" << endl;
+		cout << "CSD::foo()" << endl;
+	}
+
+	void foo(int a)
+	{
+		cout << "CSD::foo(int)" << endl;
 	}
 
 	void bar()
@@ -6955,310 +7525,704 @@ namespace CSD
 	}
 }
 
-void foo()
+void foo(double a)
 {
-	cout << "foo" << endl;
+	cout << "CSD::foo(double)" << endl;
 }
 
-using namespace CSD;
-
-int main(void)
+int main()
 {
-	bar();			// geçerli
-	foo();			// error! Hangi foo anlaşılamaz!
-	CSD::foo();		// geçerli
-	CSD::foo();
+	using CSD::foo, CSD::x;
+
+	foo();				// CSD::foo()
+	foo(10);			// CSD::foo(int)
+	foo(3.14);			// CSD::foo(int)
+
+	x = 10;				// geçerli
+	CSD::y = 20;		// geçerli
+	CSD::z = 30;		// geçerli
 
 	return 0;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	using namespace direktifi yerel bloklara da yerleştirilebilir. Bu durumda yukarıda açıkladığımız etki yalnızca o yerel blokta etki gösterir.
+	41) İsim alanlarına ilişkin diğer bir bildirim de "namespace alias" denilen bildirimdir. Bu bildirim bir isim alanı ismini daha kolay kullanmak için düşünülmüştür. 
+	Örneğin isim alanı ismi uzun olabilir. Biz bunu kısa bir biçimde kullanmak isteyebiliriz. Ya da örneğin iç bir isim alanınını tek bir isim iel kullanmak isteyebiliriz. 
+	bildirimin genel biçimi şöyledir:
+
+	namespace <isim> = <isim_alanı_ismi>;
+
+	Burada '=' atomunun sağında bir isim alanı bulunmak zorundadır. Bir tür ismi bulunamaz. Tabii buradaki isim alanı iç bir isim alanı olabilir. Örneğin:
+
+	namespace U = CSD::Util;
+
+	Artık burada U demekle CSD::Util demek tamamen aynı anlama gelmektedir. Bu işlemin bir typedef işlemi olmadığında dikkat ediniz. typedef işleminde ya da 
+	onun modern biçimi olan using işleminde bir türe alternatif isim verilmektedir. İsim alanları tür belirtmemektedir. Bu nedenle bu bildirime "namespace alias"
+	bildirimi denilmektedir.
+
+	namespace alias bildirimi herhangi bir isim alanına ya da herhangi bir bloğa yerleştirilebilir. Tabii ismin faaliyet alanı yerleştirildiği yere bağlı olarak 
+	değişmektedir. 
+
+	namespace alias bildirimi tek tek yapılma zorundadır. Örneğin:
+
+	namespace U = CSD::Util
+	namespace T = CSD::Test
+
+	Aşağıdaki gibi yapılamaz:
+
+	namespace U = CSD::Util, T = CSD::Test
 ---------------------------------------------------------------------------------------------------------------------------*/
-
-#include <iostream>
-
-int main(void)
-{
-	using namespace std;
-
-	cout << "this is a test" << endl;
-
-	return 0;
-}
-
-void foo()
-{
-	cout << "this is a test" << endl;		// error!
-}
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Tabii niteliksiz isim arama sırasında (bu konuda ileride ele alınacaktır) isimlerin enjekte edildiği isim alanına sıra gelene kadar isim daha önceki isim alanlarında 
-	bulunuyor olabilir. 
+	42) C++11 ile birlikte diğer bazı dillerde çeşitli biçimlerde bulunan "öznitelikler (attributes)" konusu dile eklenmiştir. Öznitelikler derleyici için 
+	kullanılan direktiflerdir. Özniteliklerin temel amacı derleyicinin daha iyi kod üretmesini sağlamak, uyarı mekanizması üzerinde etkili olmak ve derleyicinin 
+	bazı davranışlarını değiştirmektir. 
+
+	C'de derleyicinin kimi davranışları komut satırı argümanlarıyla ya da #pragma direktifi yardımıyla değiştirilebilmektedir. #pragma direktifi C'de standart 
+	bir direktif olmasına karşın direktifin	yanındaki komutlar derleyiciden derleyiciye değişebilmektedir. Örneğin:
+
+	#pragma pack(1)
+
+	struct SAMPLE {
+		char a;
+		short b;
+		int c;
+	};
+
+	#pragma pack komutu yapı elemanlarının hizalanması üzerinde etkili olmaktadır. Bu pragma komutu pek çok derleyici tarafından desteklenmektedir. Ancak pek çok 
+	pragma direktifi ilgili derleyiciye hatta ilgili platforma özgü olabilmektedir. C'de pragma direktifleri önişlemci aşamasında parse edilmektedir. Dolayısıyla
+	zayıf bir kullanım alanına sahiptir. İşte öznitelikler bu pragram direktiflerinin standart ve genel bir biçimi gibi düşünülebilir. 
+
+	C++11 ile dile eklenen öznitelikler zaman içerisinde neredeyse tüm sentaktik öğelerde kullanılabilir duruma getirilmiştir. İzleten paragraflarda tipik olarak 
+	bu özniteliklerin hangi sentaktik öğelerde kullanılabileceğinin bir listesini (ayrıntılı olmayan listesini) vereceğiz. 
+
+	Bir öznitelik oluşturmanın genel biçimleri şöyledir:
+
+	[[öznitelik_ismi]]
+	[[öznitelik_ismi()]]
+	[[öznitelik_ismi(argüman_listesi)]]
+	[[öznitelik_isim_alanı::öznitelik_ismi]]
+	[[öznitelik_isim_alanı::öznitelik_ismi()]]
+	[[öznitelik_isim_alanı::öznitelik_ismi(argüman_listesi)]]
+	[[using öznitelik_isim_alanı: öznitelik_ismi, öznitelik_ismi, ...]]
+
+	Yukarıdaki iki köşeli parantezler içerisindeki çznitelik isimleri birden fazla olabilir. Bu durumda öznitelikler ',' atomu ile ayrılmalıdır. Aşağıda 
+	bazı geçerli öznitelik oluşturma örnekleri vermek istiyoruz:
+
+	[[xxx]]
+	[[xxx, yyy]]
+	[[xxx(aaa, bbb)]]
+	[[xxx(), yyy(aaa, bbb)]]
+	[[nnn::xxx]]
+	[[nnn::xxx(aaa, bbb)]]
+	[[nnn::xxx(aaa, bbb), kkk::yyy(cccc)]]
+	[[using N: xxx, yyy]]
+
+	Burada xxx, yyy, aaa, bbb, ccc gibi isimler herhangi bir isim olarak kullanılmıştır. Öznitelik isim alanı iç içe olamamaktadır. Örneğin:
+
+	[[nnn::kkk::xxx]]
+
+	Böyle bir öznitelik isim alanı geçerli değildir. Yani öznitelik bildiriminde en fazla bir tane :: atomu kullanılmalıdır. 
+
+	Bir sentaktik öğeye tek bir [[...]] yerleştirilmek zorunluluğu da yoktur. Birden fazla [[...]] aralarına başka bir atom bulundurulmadan yerleştirilebilir. 
+
+	Yukarıda da belrttiğimiz gibi öznitelikler (attributes) pek çok sentaktik öğede kullanılabilmektedir. Özniteliğin sentakstaki yerine göre kimin için yazıldığı 
+	belirlenebilmektedir. Örneğin:
+
+	[[xxx::yyy]] void foo()
+	{
+		//...
+	}
+
+	Burada öznitelik fonksiyonun kendisi bulundurulmuştur. Örneğin:
+
+	[[xxx::yyy]] int a, b, c;
+
+	Burada öznitelik bildirimin tamamı için bulundurulmuştur. Örneğin:
+
+	int a [[xxx::yyy]], b, c;
+
+	Burada öznitelik a değişkeni için bulundurulmuştur. Örneğin:
+
+	namespace [[xxx::yyy]] CSD
+	{
+		//...
+	}
+
+	Burada öznitelik CSD isim alanı için bulundurulmuştur. Özetle özniteliğin bulundurulduğu yer o özniteliğin sentaksın hangi parçasını nitelediğini belirtmektedir. 
+
+	Öznitelikler kabaca şu sentaktik öğelerde kullanılabilmektedir:
+
+	- İsim alanlarında isim alanı isimlerinden önce. Örneğin:
+
+	namespace [[xxx::yyy]] CSD
+	{
+		//...
+	}
+
+	- Bildirimlerde tür belirleyicilerinden ve niteleyicilerinden önce (yani bildirimlerin başında). Örneğin:
+
+	[[xxx::yyy]] int a, b, c;
+
+	- Bildirimlerde dekleratördeki isimlerden sonra. Örneğin:
+
+	int a [[xxx::yyy]], b;
+
+	- Dizi dekleratörlerinde diziyi belirten köşeli parantezlerden sonra. Örneğin:
+
+	int a[10] [[xxx::yyy]];
+
+	- Gösterici ve referanslarda *, & ve && atomlarından sonra. Örneğin:
+
+	int * [[xxx::yyy]]pi;
+	int & [[xxx::yyy]] r = x;
+
+	- Fonksiyonlarda bildirimin başında. Örneğin:
+
+	[[xxx::yyy]] void foo()
+	{
+		//...
+	}
+
+	- Fonksiyonlarda fonksiyonun parantezlerinden sonra. Örneğin:
+
+	void foo() [[xxx::yyy]]
+	{
+		//...
+	}
+
+	- Fonksiyonlarda fonksiyon isimlerinden sonra. Örneğin:
+
+	void foo [[xxx::yyy]]()
+	{
+		//...
+	}
+
+	- Parametre değişkenlerinde tür belirleyicisndne önce. Örneğin:
+
+	void foo([[xxx::yyy] int a, int b)
+	{
+		//...
+	}
+
+	- Parametre değişkenlerinde değişken isminden sonra. Örneğin:
+
+	void foo(int a [[xxx::yyy], int b)
+	{
+		//...
+	}
+
+	- Deyimlerin başlarında. Örneğin:
+
+	[[xxx::yyy]]
+	if (ifade) {
+		//...
+	}
+
+	[[xxx::yyy]]
+	{
+		ifade1;
+		ifade2;
+		ifade3;
+	}
+
+	[[xxx::yyy]]
+	for (int i = 0; i < 10; ++i) {
+		//...
+	}
+
+	- Boş deyimlerde. Örneğin:
+
+	[[xxx::yyy]];
+
+/*--------------------------------------------------------------------------------------------------------------------------
+														22. Ders 30/10/2023 - Pazartesi
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-#include <iostream>
+/*--------------------------------------------------------------------------------------------------------------------------
+	Belli bir sentaktik öğeye yerleştirilen özniteliklerin ne anlam ifade ettiği (yani semantiiği) derleyicileri yazanların isteğine bırakılmıştır. Yani 
+	derleyicilerin farklı öznitelikleri olabilmektedir. Her öznitelik her sentaktik öğede geçerli olmayabilir. Örneğin bazı öznitelikler yalnızca fonksiyon 
+	bidiriminde ya da tanımlamasında kullanılabilir. Bazı öznitelikler değişken tanımlamasında kullanılabilir. C++ standartlarında her derleyicinin desteklemesi 
+	gereken az sayıda öznitelik baştan belirlenmiştir. (C++'ın çeşitli sürümlerinde bu listeye eklemeler yapılmıştır.) Bunlara "standart öznitelikler" diyebiliriz. 
+	Standanrtlara göre isim alanı içermeyen tüm öznitelikler ve std isim alanı içeren öznitelikler "reserved" bırakılmıştır. Yani bunların programcılar tarafından 
+	ve derleyiciler tarafından kullanılması yasaklanmıştır. (Genel olarak standartlarda "reserved" özelliklerin kullanılması "tanımsız davranış" olarak ele 
+	alınmaktadır.) Örneğin [[xxx]] biçiminde isim alanı içermeyen bir öznitelik programcılar tarafından da derleyicleri yazanlar tarafından da kullanılmamalıdır. 
+	Benzer biçimde [[std:xxx]] biçimindeki bir öznitelik de "reserved" durumdadır. O halde derleyicileri yazanlar kendileri öznitelik isim alanı uydurup kendi 
+	özniteliklerini bu öznitelik isim alanı ile oluşturmalıdırlar. Örneğin [[gnu::xxx]] gibi, [[msvc::xxx] gibi. Ayrıca standartlar "derleyici tarafından tanınmayan"
+	bütün özniteliklerin derleyici tarafından "görmezden gelinmesi (ignore) gerektiğini" belirtmektedir. Bu durumda biz derleyicilerde olmayan bir öznitelik ismi 
+	uydursak programda herhangi bir hata ortaya çıkmayacaktır. (Tabii derleyiciler tanıyamadıkları öznitelikler için uyarı mesajları verebilirler.)
+---------------------------------------------------------------------------------------------------------------------------*/
 
-using namespace std;
+/*--------------------------------------------------------------------------------------------------------------------------
+	Pekiyi özniteliklere neden gereksinimn duyulmaktadır? Temel nedenleri şöyle ifade edebiliriz:
 
-namespace CSD
-{
-	void foo()
+	- Derleyicilerde bazı davranışların değiştirilmesini sağlamak için
+	- Derleyiciye ipucu vererek daha etkin kod üretimini sağlamak için
+	- Derleyicilerin uyarı mekanizmalarında etkili olabilmek için
+	- Derleyicilerin bazı "implementation defined" durumlarına yönelik açıklama yapmak için
+	- Kodun okunabilirliğini artırmak için
+
+	Konunun başında de belirttiğimiz gibi yukarıdaki amaçların bazıları komut satırı argümanlarıyla ve #pragma direktifleriyle kısmen sağlanabilmektedir. Ancak
+	öznitelikler "daha genel ve çok daha spesifik" bir yöntem sunmaktadır. Öznitelikler neredeyse her sentaktik öğeye getirilebildiği için çok daha ince belirlemelerin
+	yapılmasına olanak sağlamaktadır. Standart özniteliklerin yanı sıra çalıştığınız derleyiciye özgü özniteliklere göz gezdirebilirsiniz. Biz bu bölümde 
+	bazı standart öznitelikleri gözden geçireceğiz. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	Standart [[noreturn]] özniteliği yalnızca fonksiyonlarda kullanılabilmektedir. Bir fonksiyonu bu biçimde özniteliklendirirsek derleyiciye bu fonksiyonun 
+	geri dönmeyeceğini söylemiş oluruz. Böyle fonksiyonların geri dönmesi "tanımsız davranış" oluşturmaktadır. noreturn özniteliği herhangi bir argüman almamaktadır. 
+	Bu öznitelik C++11'den beri bulunmaktadır. Bir fonksiyonun prototipinde ya da tenımlamasında [[noreturn]] özniteliği kullanılmışsa bütün prototiplerinde ve
+	tanımlamasında bu özniteliğin kullanılması gerekmektedir. 
+
+	Pekiyi bir fonksiyonun geri dönmemesi nasıl mümkün olabilir? İşte aşağıda bazı senaryolaır görüyorsunuz:
+
+	[[noreturn]] void foo()
 	{
-		cout << "CSD::foo" << endl;
+		//...
+
+		exit(EXIT_SUCCESS);
 	}
-}
 
-namespace A
-{
-	void foo()
+	[[noreturn]] void bar()
 	{
-		cout << "A::foo" << endl;
-	}
+		//...
 
-	namespace B
-	{
-		using namespace CSD;
-
-		namespace C
-		{
-			void bar()
-			{
-				foo();			// A::foo()
-			}
+		for (;;) {		// sonsuz dönü
+			//...
 		}
 	}
-}
 
-int main(void)
-{
+	[[noreturn]] void tar()
+	{
+		//...
 
-	A::B::C::bar();
+		throw exception();
+	}
 
-	return 0;
-}
+	Öte yandan standrat kütüphanedeki bazı fonksiyonlar da artık [[noreturn]] ile bildirilmiştir. Örneğin exit fonksiyonu böyledir:
 
-void foo()
-{
-	cout << "this is a test" << endl;		// error!
-}
+	[[noreturn]] void exit(int exit_code);
 
-/*--------------------------------------------------------------------------------------------------------------------------
-	using namespace direktifi yerel bloğa da yerleştirilebilir. Bu durumda direktifin yerleştirildiği isim alanı yerel bloğun içinde bulunduğu isim alanıdır. 
-	Ancak bu etki yalnızca o yerel blokta geçerli olur. 
+	Pekiyi bir fonksiyonun geri dönmeyeceğini derleyiciye söylemekle kim ne kazanmış olmaktadır? Derleyiciler fonksiyonları geri döndürebilmek için bazı makine
+	komutlarını üretilen koda yerleştirmek zorundadır. (Örneğin pek çok işlemcide geri dönüşü "ret" isimli makine komutu sağlamaktadır. Ancak tek başına bu "ret")
+	makine komutu yeterli de olmayabilir. Derleyici bazı yazmaçları geri dönmeden önce girişteki değerlerle yeniden yüklemek zorunda kalabilmektedir. Dolayısıyla
+	fonksiyonun geri dönmeyeceğini anlayan derleyici bu kodları fonksiyona eklemeyebilir. Bu da daha etkin bir kod üretimi anlamına gelmektedir. Öte yandan 
+	fonksiyon çağrısında da kodun geri dönmeyeceğini anlayan derleyici orada da bazı optimizasyonları yapabilmektedir. [[noreturn]] programcılar için okunabilirliği 
+	de artırmaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-#include <iostream>
-
-int main()
-{
-	using namespace std;
-
-	cout << "test1" << endl;		// geçerli
-
-	return 0;
-}
-
-void foo()
-{
-	cout << "test2" << endl;		// error!
-}
-
 /*--------------------------------------------------------------------------------------------------------------------------
-	using namespace direktifi geçişlidir. A isim alanında B isim alanı için using namespace direktifi yapılmış olsun. Biz de A isim alanına using namespace direktifi uygulayalım. 
-	Bu durumda sanki biz hem A isim alanına hem de B isim alanına using namespace direktifi uygulamış gibi oluruz. Örneğin:
+	Standart [[deprecated]] özniteliği pek çok sentaktik öğeye getirilebilmektedir. Bu öznitelik ilgili özelliğin "deprecated" yapıldığını belirtir. Bu öznitelik 
+	C++14 ile eklenmiştir. Örneğin:
 
-	namespace A
-	{
-		//...
-	}
+	[[deprecated]] void foo();
 
-	namespace B
-	{
-		using namespace A;
-		//...
-	}
-
-	using namespace B;
-
-	İşlemi aşağıdaki ile eşdeğerdir:
-
-	namespace A
-	{
-		//...
-	}
-
-	namespace B
-	{
-		//...
-	}
-
-	using namespace B;
-	using namespace A;
-
-	Bu biçimde geçişlilik devam eder. 
+	Burada foo fonksiyonunun ilgili kütüphanede artık "deprecated" yapıldığı belirtilmiştir. Deprecated sözcüğü "hala desteklenen ancak ileri verisyonlarda 
+	artık kaldırılabilecek olan" öğeleri belirtmektedir. Yukarıdaki örnekte foo fonksiyonunu biz hala kullanabiliriz. Ancak ileride bu fonksiyon kaldırılabileceğine
+	göre bunu kullanmamaız daha uygun olacaktır. Genellikle "deprecated" öğeler için "daha iyi" alternatifler bulundurulmaktadır. Programcının bu daha iyi olan 
+	alternatifleri kullanması uygun olacaktır. Tipik olarak derleyiciler "deprecated" özellikleri gördüklerinde bir uyarı mesajıyla durumu programcıya bildirmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-#include <iostream>
+/*--------------------------------------------------------------------------------------------------------------------------
+	Standart [[likely]] ve [[unlikely]] öznitelikleri deyimlerde ve etiketlerde (labels) kullanılabilmektadır. Bu öznitelik C++20 ile eklenmiştir. Örneğin:
 
-using namespace std;
-
-namespace A
-{
-	void foo()
-	{
-		cout << "A::foo" << endl;
+	if (koşul) [[likely]] {
+		//...
 	}
-}
-
-namespace B
-{
-	using namespace A;
-
-	void foo()
-	{
-		cout << "B::foo" << endl;
+	else {
+		//...
 	}
 
-	namespace C
-	{
-		using namespace B;
+	Burada if deyimim doğruysa ksımından sapması çok daha muhtemel bir durum olarak belirtilmiştir. derleyiciler bu tür durumlarda daha iyi makine komutları 
+	üretebilmektedir. Bu konu "instruction scheduling", "instruction reordering" ve "jump prediction" denilen optimizasyon temalarıyla ilgilidir. İşlemciler bir
+	makine komutunu yaparken aynı zamanda sonraki komutlar üzerinde de birtakım hazırlık işlemlerini yapabilmektedir. Bu nedenle if deyimlerinde mümkün olan 
+	durumun makine komutları olarak öne yerleştirilmesi önemlidir. Örneğin:
 
-		void bar()
-		{
-			foo();		// B::foo
+	if (foo() == -1) [[unlikely]] {
+		//...
+	}
+
+	Burada foo başarısız olduğunda -1 değerine geri dönüyor olsun. Programcı derleyiciye "bu fonksiyonun başarsız olma olasılığı çok düşük" demek istemektedir.
+	Bu bilgiyi elde eden derleyici daha etkin makine komutları üretebilmektedir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	Standat [[assume(ifade)]] özniteliği belli bir noktada belli bir koşulun kesinlikle sağlanması gerektiğini belirtmktedir. Bu öznitelik boş deyime uygulanabilir. 
+	(Yani bu öznitelikten sonra ';' atomunun gelmesi gerekir.) Eğer söz konusu koşul sağlanmazsa "tanımsız davranış" oluşmaktadır. Örneğin:
+
+	void foo(int a)
+	{
+		[[assume(a > 0)]];
+		//...
+	}
+
+	Burada fonksiyonun pozitif bir argümanla çağrılacağı derleyiciye bildirilmiştir. Derleyici bu varsayımı kullanarak daha etkin kod üretebilir. Eğer assume
+	özniteliğine geçirilen argüman virgül operatörü içeriyorsa bu virgül operatörü paranteze alınmalıdır. Bu durumda virgül operatörünün sol tarafı öncül işlemi
+	sağ tarafı koşulu belirtir. Örneğin:
+
+	[[assume((foo(), x > 0))]]
+
+	Burada foo çağrıldıktan sonra x değişkeninin değerinin pozitif olacağı belirtilmiştir. Tabii assume özniteliğindeki ifade işletilmez. Yai bu örnekte foo 
+	çağrılmayacaktır. Derleyici ileride foo çağrıldığında bu çağrıdan sonra x'in 0'dan büyük olacağını anlayacaktır. Örneğin (cppreference.com sitesinden 
+	alınmıştır):
+
+	x = 3;
+	int z = x;
+
+	[[assume((h(), x == z))]];
+
+	h();
+	g(x); // Derleyici bu işlemi g(3) ile eşdeğer olarak ele alabilir
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	Standart [[fallthrough]] özniteliği swith deyimlerinde case etiketleri için kullanılmaktadır. Öznitelik boş deyimlere uygulanabilmektedir. Fallthroug işleminin 
+	kasten yapıldığını belirtmektedir. Dolayısıyla derleyiciler bu tür durumlarda "yanlışlıkla yapılan fallthrough işlemlerinde" verdikleri uyarı mesajlarını 
+	vermezler. Bu öznitelik C++17 ile birlikte standartlara eklenmiştir. Örneğin:
+
+	void f(int n)
+	{
+		void g(), h();
+
+		switch (n) {
+			case 1:
+			case 2:
+				g();
+				[[fallthrough]];
+			case 3:
+				h();
 		}
 	}
-}
-
-int main()
-{
-	B::C::bar();
-
-	return 0;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------------
-	İsim :: operatörü ile nitelikli olarak bir isim alanında aranıyorsa ve isim o isim alanında bulunamazsa o isim alanındaki using direktifleri 
-	ile belirtilen isim alanlarında da aranır. (Eğer isim o isim alanında bulunursa using direktifinde belirtilen isim alanlarına hiç bakılmaz.)
-	Burada da kademeli geçişlilik söz konusudur.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-#include <iostream>
+/*--------------------------------------------------------------------------------------------------------------------------
+	standart [[maybe_unused]] özniteliği bildirilen bir değişkenin kullanılmadığında oluşabilecek uyarıyı ortadan kaldırmak için kullanılmaktadır. Bu öznitelik
+	değişken bildirimlerinde, sınıf bildirimlerinde enum bildirimlerinde, enum sabit bildiriminde, typedef isimlerinin bildiriminde sınıfın veri elemanlarının,
+	global fonksiyonların ve üye fonksiyonların (ileride görülecek) bildirimlerinde kullanılabilir. Örneğin:
 
-using namespace std;
+	[[maybe_unused]] int a;
 
-namespace A
-{
-
-	void foo()
+	void foo(int a, [[maybe_unused]] b)
 	{
-		cout << "A::foo" << endl;
+		//...
 	}
-}
 
-namespace B
-{
-	using namespace A;
-
-	void foo()
-	{
-		cout << "B::foo" << endl;
-	}
-}
-
-namespace C
-{
-	using namespace B;
-
-	void foo()
-	{
-		cout << "C::foo" << endl;
-	}
-}
-
-int main()
-{
-	C::foo();		// C::foo çağrılacak. C'de foo olmasaydı B::foo çağrılırdı, B'de de foo olmasaydı A::foo çağrılırdı
-
-	return 0;
-
-}
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	26) using namespace direktifinin dışında C++'ta ayrıca bir de "using bildirimi" denilen bir bildirim de vardır. using bildirimi bir isim alanındaki ismi bir faaliyet alanına
-	sokmak için kullanılmaktadır. Bu nedenle bu bir direktif değil bildirimdir. Çünkü bildirimlerde yeni bir isim bir faaliyet alanına katılmaktadır. using bildiriminin 
-	genel biçimi şöyledir:
+	43) C++'ın çeşitli versyonlarında deyimlerde de bazı eklemeler yapılmıştır. 
 
-	using <isim alanı ismi>::<isim>, [...];
+	C++17 ile birlikte if deyimine isteğe bağlı bir "init kısmı" eklenmiştir. Bu init kısmı bir ifade içerir. İfadeden sonra ';' atomunun bulunması gerekir. 
+	Yukarıda da belirttiğimiz gibi bu "init" kısmı deyidme bulundurulmak zorunda değildir. Dolayısıyla deyim eski biçimiyle uyumludur. Örneğin:
 
-	Buradaki isim alanı ismi iç bir isim alanı (nested namespace) belirtebilir. Örneğin:
+	if (ifade; koşul) {
+		//...
+	}
+	else {
+		//...
+	}
 
-	using std::cout, std::endl;
+	Bu deyim aşağıdaki ile eşdeğerdir:
+
+	{
+		ifade;
+
+		if (koşul) {
+			//...
+		}
+		else {
+			//...
+		}
+	}
+
+	if deyim,ne eklenen bu "init" kısmının adeta for döngüsünün birinci kısmı gibi deyime girişte yapıldığına dikkat ediniz. if deyiminin init ksımında bir bildirim 
+	de bulunabilmektedir. Bu durumda bildirilen değişken if deyimi içerisinde kullanılabilir. Örneğin:
+
+	if (char buf[32]; fgets(buf, 32, stdin) != NULL) {
+		//...
+	}
+
+	Burada if deyiminin "init" kısmında buf dizisi bildirilmiş ve if içerisinde kullanılmıştır. Buradaki buf dizisinin faaliyet alanı if ile sınırlıdır. "init"
+	kısmı boş da bırakılabilir. Tabii böyle bir kullanımın anlamı yoktur. Örneğin:
+
+	if (; koşul) {		// geçerli ama anlamsız
+		//...
+	}
+
+	Benzer biçimde switch deyimine de "init" kısmı eklenmiştir. Genel kullanım if deyiminde belirttiğimiz gibidir. Örneğin:
+
+	switch (int x = foo(); x) {
+		//...
+	}
+
+	C++20 ile birlikte Aralık tabanlı for döngülerine de "init" kısmının eklendiğini aralık tabanlı for döngülerini anlattığımız kısımda belirtmiştik. 
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	44) C++17 ile birlikte "constexpr if" C++23 ile de "consteval if" deyimi biçiminde yeni iki if deyimi varyasyonu eklenmiştir. constexpr if deyiminin genel biçimi şöyledir:
+
+	if constexpr ([init;] koşul)
+		<deyim>
+	[
+		else
+			<deyim>
+	]
+
+	constexpr if deyiminde koşul ifadesinin sabit ifadesi olması gerekmektedir. Aslında constexpr if deyimi #if önişlemci komutunu çağrıştırmaktadır. Anısanacağı
+	gibi #if komutunda #if anahtar sözcüğünün yanınadaki sabit ifadesi sıfırdan farklı ise #else anahtar sözcüğüne kadarki kısım derleme modülüne veriliyordu, 
+	eğer #if anahtar sözcüğünün yanındaki ifade 0 ise #else ile #endif arasındaki kod bölümü derleme modülüne veriliyordu. Başka bir deyişle #if deyiminin koşula 
+	göre bir kısmı koddan atılmaktaydı. İşte constexpr if deyimi de bunun bir benzerini yapmaktadır. Ancak bu işlem önişlemci aşamasında değil derleme aşamasında
+	yapılmaktadır. Örneğin:
+
+	constexpr int x = 10;
 	//...
-	cout << "this is a test" << endl;
 
+	if constexpr (x > 0)
+		foo();
+	else
+		bar();
+
+	Burada if deyiminin else kısmı tamamen koddan kaldırılacaktır. consexpr if deyimi #if önişlemci komutunu çağrıştırıyor olsa da aralarında önemli farklılıklar 
+	vardır. constexpr if deyiminin derleme aşamasında derleme modülü tarafından yapılıyor olması çeşitli durumlarda esneklikler sağlamaktadır. constexpr if 
+	deyimi özellikle şablonlarla birlikte kullanılmaktadır. constexpr if deyiminde deyimin bir kısmı kodda atılıyor olsa bile atılan kısmın yine de sentaks ve 
+	semantik kısıtları sağlıyor olması gerekmektedir. Örneğin:
+
+	constexpr int x = 10;
+	int *pi;
+	//...
+
+	if constexpr (x > 0) {
+		foo();
+	}
+	else {
+		pi = 10;			// geçersiz!
+	}
+
+	Burada constexpr if deyiminin yanlışsa kısmı koddan atılacak olsa da buradaki deyimler üzerinde sentaks ve semantik kontroller yine yapılacaktır.
+
+	C++23 ile birlikte consteval if deyimi de dile eklenmiştir. 
+
+	consteval if deyiminin işlevi ve gerekliliği biraz daha karmaşıktır. Deyimin genel biçimi şöyledir:
+
+	1)
+
+	if consteval {
+		<deyim>
+	}
+	[ else {
+		<deyim>
+	  }]
+
+	2)
+
+	if consteval {
+		<deyim>
+	}
+	[ else {
+		<deyim>
+	  }]
+
+	Bu özellik C++'a çok yeni eklendiği için derleyicileriniz bu özelliği desteklemiyor olabilir. Bu if deyimi şu anlama gelmektedir: "Eğer söz konusu kod parçası 
+	sabit ifadesi gereken bir bağlamda kullanılmışsa buradaki if deyimi doğruysa biçimde sapacak, eğer söz konusu kod parçası sabit ifadesi gereken bir bağlamda 
+	kullanılmadıysa buradaki if deyimi yanlışsa biçiminde sapacaktır." Örneğin:
+
+	constexpr int cube(int a)
+	{
+		if consteval {
+			return a * a * a;
+		}
+		else {
+			return pow(a, 3);
+		}
+	}
+
+	Burada cube fonksiyonu parametresi ile aldığı sayının kübüyle geri dönmektedir. Ancak bu constexpr fonksiyon sabit ifadesi gereken bir bağlamda da çağrılmış 
+	olabilir, sabit ifadesi gerekmeyen bir bağlamda da çağrılmış olabilir. Eğer bu fonksiyon sabit ifadesi gereken bir bağlamda çağrılmışsa bu durumda consteval if 
+	deyimim doğruysa kısmı derleme aşamasında devreye girecek ve a * a * a işlemi ile derleme aşamsında değer hesaplanacaktır. Eğer bu fonksiyon sabit ifadesi gerekmeyen 
+	bir bağlamda çağrılmışsa bu durumda consteval if deyiminin yanlışsa kısmı devreye girecek ve küp alma işlemi derleme zanında değil fonksiyon çağrılarak 
+	yapılacaktır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-#include <iostream>
+/*--------------------------------------------------------------------------------------------------------------------------
+	45) C++'ta ilk standartlardan beri "anonim birlik (anonymous union)" oluşturma özelliği bulunmaktadır. Anonim birlik oluşturabilmek için birliğe bir isim 
+	verilmemesi ve birlik bildiriminde aynı zamanda nesne tanımlamanın yapılmamış olamsı gerekmektedir. Örneğin:
 
-using std::cout, std::endl;
+	union {
+		int a;
+		long b;
+		double c;
+	};
 
-int main(void)
-{
+	Burada biz a, b, ve c değişkenlerini doğrudan kullanabiliriz. Bu değişkenler çakışık yerleştirilmektedir. Yani burada yapılmak istenen şey aşağıdakiyle 
+	eşdeğerdir:
+
+	union SomeName {
+		int a;
+		long b;
+		double c;
+	};
+
+	SomeName sn;
+
+	Biz burada sn.a, sn.b ve sn.c ile çakışık yerleştirilen birlik elemanlarını kullanabiliriz. Ancak anonim birliklerde buna hiç gerek yoktur. 
+
+	Yukarıda da belirttiğimiz gibi anonim birlik oluşturabilmek için birliğe isim verilmemiş olamsı gerekmektedir. Örneğin:
+
+	union U {
+		int a;
+		long b;
+		double c;
+	};
+
+	Burada artık biz a, b, ve c değişkenlerini doğrudan kullanamayız. Benzer biçimde:
+
+	union {
+		int a;
+		long b;
+		double c;
+	} x;
+
+	Burada da biz a, b ve c değişkenlerini doğrudan kullanamayız. 
+
+	Birlikler C++'ta aslında sınıflar gibi özelliklere sahiptir. Dolayısıyla anonim birlikler sınıflara ilişkin özleliklere sahip olamazlar. (Örneğin ileride
+	birliklerin içerisinde üye fonksiyonların bulunabileceğini göreceğiz. Ancak anonim birliklerde üye fonksiyonlar bulunamamaktadır.)
+
+	Anonim birliklerin yazım kolaylığı sağladığına dikkat ediniz. Örneğin:
+
+	union {
+		int a;
+		double;
+	};
+
+	ile aşağıdaki tanımlamalara dikkat ediniz:
+
 	int a;
+	double b;
 
-	cout << "this is a test" << endl;
+	Bu ikisi tanımlama arasındaki tek fark anonim birlik tanımlamasında a ve b nesnelerinin çakışık yerleştirilmesidir. 
 
-	cin >> a;		// error!
+	Anonim birlikler bir isim alanının içerisinde (yani global düzeyde) tanımlanacaksa union anahtar sözcüğünün önüne static anahtar sözcüğünün getirilmesi 
+	gerekmektedir. Örneğin:
 
-	return 0;
-}
+	static union {
+		int a;
+		double b;
+	};
+
+	Ancak anonim birlik sisimsiz isim alanı içerisine yerleştirilirse bu static belirleyicisine gerek kalmamaktadır. Anom birliklerin elemanlarının birliğin 
+	yerleştirildiği faaliyet alanına enjekte edildiğine dikkat ediniz. 
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	namespace alias direktifi
+	46) C++11 ile birlikte dile static_assert isimli bir bildirim (decalartion) eklenmiştir. static_assert bildirimi derleme zamanında assert kontrolü yapmaktadır. 
+	Bilindiği gibi standart assert fonksiyonu programın çalışma zamanı sırasında işleme sokulmkatadır. Halbuki static_assert bildirimi derleme aşamsında işleme 
+	sokulur. Derleme aşamasında #if önişlemci komutuyla da bazı kontroller yapılıp #error önişlemci komutuyla derleme işlemi sonlandırılabilmektedir. 
+	Ancak önişlemci aşamasında yapılacek kontroller oldukça sınırlıdır. assert bildiriminin genel biçimi şöyedidr:
+
+	static_assert(sabit_ifadesi_koşulu, "mesaj");
+
+	Derleme aşamasında eğer buradaki koşul sağlanmazsa derleyici derleme işlemini keser ve ikinci argümanla girilen hata mesajını yazdırır. Örneğin.
+
+	static_assert(sizeof(int) >= 4, "int type too small");
+
+	Burada programcı int türünün 4 byte'tan küçük olmamasını istemektedir. sizeof bir derleme zamanı operatörü olduğu için kontrolün bizzat derleme aşamasında 
+	yapılması gerekmektedir. C++17 ile birlikte buradaki ikinci parametre artık bulundurulmak zorunda değildir. Örneğin:
+
+	static_assert(sizeof(int) >= 4);
+
+	Tabii static_assert bildiriminde koşulun sabit ifadesi biçiminde oluşturulması gerekmektedir. 
+
+	Her ne kadar semantik olarak static_assert bir bildirime benzemiyorsa da static_assert C++ standartlarında bir "bildirim (declaration)" olarak gramere eklenmiştir. 
+
+	static_assert özellikle şablonlarla birlikte sıkça kullanılmaktadır. 
+
+	static_assert bildiriminin derleme aşmasında ele alındığına dikkat ediniz. Bu bildirim bir fonksiyonun içerisine yerleştirilirse etki göstermesi için 
+	o fonksiyonun çağrılmasına gerek yoktur. Çünkü fonksiyonun çağrılması çalışma zamanına ilişkin bir etkinliği belirtir. 
+
+	İleride göreceğimiz şablon işlemlerinde "şablon açımları (template instantiation)" derleme aşamasında yapılmaktadır. Eğer static_assert fonksiyon şablonlarında
+	kullanılırsa bunların devreye girmesi "açım (instantiation)" yapılacaktır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	47) C99 ile birlikte C'ye "designated initializer" denilen ilkdeğer verme biçimi eklenmişti. Bu sayede artık C99 ve sonrasında yapıların ve dizilerin 
+	elemanlarına sırasıyla ilkdeğer verme zorunluğu kaldırılmış oldu. C'de sentaks aşağıdaki gibidir:
+
+	struct SAMPLE {
+		int a, b, c, d;
+	};
+
+	struct SAMPLE s = {.c = 10, .a = 20};
+	int a[10] = {[5] = 20, [3] = 30, 40};
+
+	İşte bu "designated initiaizer" sentaksı daraltılarak C++20 ile C++'a da sokulmuştur. Ancak C99'da olmayan aşağıdaki kısıtlar oluşturulmuştur:
+
+	- C++'ta dizilerde designated initializer kullanımı yoktur.
+
+	- Bazı koşulları sağlayan C ile uyumlu yapılarda ve sınıflarda (C++'ta yapılar da birer sınıftır) designated initializer kullanılabilmektedir. Ancak yapıların 
+	ve sınıfların sıralı elemanlarına bu biçimde değer verilebilmektedir. 
+
+	struct Sample {
+		int a, b, c, d;
+	};
+
+	Sample s = {.b = 10, .d = 20};		// geçerli
+	Sample k = {.d = 20, .b = 10};		// geçersiz!
+
+	Burada yapı (ya da sınıf) elemanlarına önceki eleman önde olacak biçimde ilkdeğer verilmek zorundadır. Halbuki C99'da böyle bir zorunluluk yoktur. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+													24. Ders 06/11/2023 - Pazartesi
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
 							C++'ın Nesne Yönelimli Programlama Tekniği İle Doğrudan İlgili Olan Farklılıkları ve fazlalıkları
-
-	Bu bölümde biz artık C++'ı "nesne yönelimli (object oriented)" bir dil yapan sınıf ve onunla ilgili konuları ele alacağız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	C++'ı Nesne Yönelimli bir dil yapan en önemli özellik "sınıflar (classes)" konusudur. Sınıflar C'deki yapılara benzer olmakla birlikte yalnızca data değil aynı zamanda
-	fonksiyon da içeren veri yapılarıdır. Yani C'deki yapılar yalnızca data içerirken C++'taki sınıflar aynı zamanda fonksiyon da içermektedir. Zaten C'deki yapılar da artık C++'ta
-	sınıf ile aynı anlamdadır. C++'ta bir sınıf hem data hem fonksiyon içermek zorunda değildir. Bu durumda sınıf kavramı aslında C'deki yapılar üzerinde bir fazlalık
-	gibi değerlendirilebilir. 
+	Biz şimdiye kadar "C++'ın C'den Nesne Yönelimli Programalama Tekniği İle Doğrudan İlgili Olamayan Farklılıkları ve Fazlalıkları" üzerinde durduk. Artık
+	C++'ı "nesne yönelimli (object oriented)" bir dil yapan sınıflar ve onlarla ilgili konuları ele alacağız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Bir sınıf bildiriminin genel biçimi şöyledir:
+    C++'ı nesne yönelimli bir dil yapan en önemli özellik "sınıflar (classes)" konusudur. Sınıflar C'deki yapılara benzer olmakla birlikte yalnızca data değil 
+	aynı zamanda fonksiyon da içeren veri yapılarıdır. Yani C'deki yapılar yalnızca data içerirken C++'taki sınıflar aynı zamanda fonksiyon da içermektedir. 
+	Zaten C'deki yapılar ve birlikler de artık C++'ta sınıf anlamına gelmektedir. C++'ta "sınıf türü (class type)" denildiğinde yalnızca sınıflar değil, yapılar 
+	ve birlikler de anlaşılmalıdır. C++'ta bir sınıf hem data hem fonksiyon içermek zorunda değildir. Yalnızca data ya da yalnızca fonksiyon da içerebilir. Bu 
+	durumda sınıf kavramı aslında C'deki yapılar üzerinde bir fazlalık gibi değerlendirilebilir. 
+
+	Sınıflar nesne yönelimli programlama tekniğinin yapı taşlarıdır. Tüm nesne yönelimli dillerde sınıf isminde ya da bu işlevde bir veri yapısı bulunmaktadır. 
+	Tabii diller arasında bu veri yapıları arasında temel özellikleri aynı olmak üzere farklılıklar bulunabilmektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir sınıf bildiriminin genel biçimi şöyledir:
 
 	class <isim> {
-		<data ve fonskiyon bildirimleri>
+		[data ve fonskiyon bildirimleri ve tür tanımlamaları]
 	};
 
 	struct <isim> {
-		<data ve fonksiyon bildirimleri>
+		[data ve fonksiyon bildirimleri ve tür tanımlamaları]
 	};
 
 	Örneğin:
 
 	class Sample {
-	//...
+		//...
 	};
 
-	struct Sample {
+	struct Mample {
 		//...
 	};
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	C++'ta bir sınıfın içerisindeki fonksiyonlara "üye fonksiyon (member function)" denilmektedir. Halbuki Java, C#, Python gibi dillerde buna "metot (method)" denilmektedir. 
-	C++'ta bir sınıf "public", "protected" ve "private" olmak üzere üç bölümden oluşmaktadır. Bir bölüm, bölüm belirten anahtar sözcük ve ':' atomu ile başlatılır, 
-	başka bir bölüm belirten anahtar sözcüğe kadar devam eder. Sınıf bildirimi içerisinde bu bölüm belirten anahtar sözcükler birden fazla kez kullanılabilirler. Örneğin:
+    C++'ta bir sınıfın içerisindeki fonksiyonlara "üye fonksion (member function)" denilmektedir. Halbuki Java, C#, Python gibi dillerde buna "metot (method)" 
+	denilmektedir. C++'ta bir sınıf "public", "protected" ve "private" olmak üzere üç bölümden oluşmaktadır. Bir bölüm, bölüm belirten anahtar sözcük ve ':' atomu 
+	ile başlatılır, başka bir bölüm belirten anahtar sözcüğe kadar devam eder. Sınıf bildirimi içerisinde bu bölüm belirten anahtar sözcükler birden fazla kez 
+	kullanılabilirler. Örneğin:
 
 	class Sample {
 	public:
@@ -7273,26 +8237,148 @@ int main(void)
 		//...
 	};
 
-	Sınıf isimleri pek çok programcı tarafından "Pascal tarzı (Pascal casting)" ile isimlendirilmektedir. Pascal tarzında her sözcüğün ilk harfi büyük harf ile yazılır.
-	Biz de kursumuzda bu isimlendirmeyi tercih edeceğiz. Ancak C++'ın standart kütüphanesindeki sınıf isimleri "klasik C tarzı (snake casting)" ile isimlendirilmiştir.
+	Sınıf isimleri pek çok programcı tarafından "Pascal tarzı (Pascal casting)" ile harflendirilmektedir. Pascal tarzında her sözcüğün ilk harfi büyük harf 
+	ile yazılır. Biz de kursumuzda bu isimlendirmeyi tercih edeceğiz. Ancak C++'ın standart kütüphanesindeki sınıf isimleri "klasik C tarzı (snake casting)" 
+	ile isimlendirilmiştir.
 
-	Bir sınıf bildirimine hiçbir bölüm belirten anahtar sözcük ile başlanmazsa bu durumda sınıf bildirimi class anahtar sözcüğü ile yapılmışsa default bölüm "private",
-	struct anahtar sözcüğü ile yapılmışsa default bölüm "public" biçimdedir. Bunun dışında sınıf bildiriminin class ya da struct anahtar sözcüğüyle yapılmasının bir farkı yoktur.
-	struct bildiriminde C ile uyumu korumak amacıyla default bölüm public yapılmıştır.
+	Bir sınıf bildirimine hiçbir bölüm belirten anahtar sözcük ile başlanmazsa bu durumda sınıf bildirimi "class" anahtar sözcü ile yapılmışsa default bölüm "private",
+	"struct" anahtar sözcüğü ya da "union" ile yapılmışsa default bölüm "public" biçimdedir. Bunun dışında sınıf bildiriminin class ya da struct anahtar sözcüğüyle 
+	yapılmasının bir farkı yoktur. struct ve union bildirimlerinde C ile uyumu korumak amacıyla default bölüm public yapılmıştır. Örneğin:
+
+	class Sample {
+		// buradaki elemanlar private bölümde
+	public:
+		// buradaki elemanlar public bölümde
+
+	protected:
+		// buradaki elemanlar protected bölümde
+	};
+
+	Örneğin:
+
+	struct Test {
+		// buradaki elemanlar public bölümde
+	private:
+		// buradaki elemanlar private bölümde
+	protected:
+		// buradaki elemanlar protected bölümde
+	};
+
+	Sınıf içerisinde bölümlerin oluşturulma sırasının hiçbir önemi yoktur. Ancak ağırlıkı tercih edilen durum önce public, sonra protected, sonra da private
+	bölümdür. Örneğin:
+
+	class Sample {
+	public:
+		//...
+	protected:
+		//...
+	private:
+		//...
+	};
+
+	Tabii sınıf bildiriminde bu bölümlerin hepsi olmak zorunda değildir. Herhangi biri ya da birden fazlası olabilir. C'deki struct ve union türleri C++'ta
+	birer sınıf belirtmekle birlikte C uyumunun korunması için onların default bölümü public yapılmıştır. Örneğin:
+
+	struct Sample {
+		int a, b, c;		// bu elemanlar public bölümde
+	};
 
 	Biz bu bölümlerin ne anlam ifade ettiğini görene kadar sınıf elemanlarını hep public bölüme yerleştireceğiz. 
+
+	Diğer bazı nesne yönelimli dillerde public, protected ve private bölümlerin dışında başka bölümler de olabilmektedir. (MÖrneğin C#'ta "internal" ve "protected 
+	internal" bölümler vardır.) Python gibi bazı dilelrde sınıflarda bölümler yoktur. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Bir sınıfın üye fonksiyonlarının yalnızca prototipleri sınıf bildirimi içerisinde belirtilebilir. Tanımlamaları o sınıfın içinde bulunduğu isim alanında ya da o isim alanını 
-	kapsayan isim alanlarından birinde yapılabilir. Fonksiyon tanımlaması sınıf dışında yapılırken fonksiyon isminin sınıf ismi ile :: operatörü ile niteliklendirilmesi gerekir. 
-	Genel biçim şöyledir:
+	C++'ta sınıflar global ya da yerel biçimde bildirilebilirler. Ancak C'deki yapılarda olduğu gibi hemen her zaman sınıflar yerel değil global olarak bir 
+	isim alanının içerisinde bildirilmektedir. (Hiçbir isim alanının içinde olmayan global bölgenin de "global isim alanı" denilen bir isim alanı belirttiğini 
+	anımsayınız.)
+---------------------------------------------------------------------------------------------------------------------------*/
 
-	<geri dönüş değerinin türü> <sınıf ismi>::<fonksiyon ismi>([parametre bildirimi])
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir sınıfın üye fonksiyonlarının yalnızca prototipleri sınıf bildirimi içerisinde belirtilebilir. Tanımlamaları o sınıfın içinde bulunduğu isim alanında 
+	ya da o isim alanını kapsayan isim alanlarından birinde yapılabilir. Üye fonksiyon tanımlaması sınıf dışında yapılırken fonksiyon isminin sınıf ismi ile 
+	:: operatörü kullanılarak niteliklendirilmesi gerekir. Üye fonksiyonu dışarıda tanımlamanın genel biçimi şöyledir:
+
+	<geri dönüş değerinin türü> <[isim alanı isimleri::]sınıf ismi>::<fonksiyon ismi>([prametre bildirimi])
 	{
 		//...
 	}
 
+	Örneğin:
+
+	class Sample {
+	public:
+		void foo();
+		void bar();
+		//...
+	};
+
+	void Sample::foo()
+	{
+		//...
+	}
+
+	void Sample::bar()
+	{
+		//...
+	}
+
+	Standratlara göre üye fonksiyon tanımalamaları sınıf bildirimini kapsayan daha dış bir isim alanında isim alanını ismi de bedlirtilerek yapılabilir. Örneğin:
+
+	namespace CSD
+	{
+		class Sample {
+		public:
+			void foo();
+			void bar();
+			//...
+		};
+
+		void Sample::foo()		// geçerli
+		{
+			//...
+		}
+	}
+
+	void CSD::Sample::bar()		// geçerli
+	{
+		//...
+	}
+
+	int main()
+	{
+		//...
+
+		return 0;
+	}
+
+	Tabii en normal durum sınıf bildirimi hangi isim alanı içerisinde yapılmışsa üye fonksiyon tanımalamarının da o isim alanının içerisinde yapılmasıdır. Tabii 
+	using namespace direktifi ile yine sınıf isminin görülmesi sağlanabilir. Örneğin:
+
+	namespace CSD
+	{
+		class Sample {
+		public:
+			void foo();
+			void bar();
+			//...
+		};
+
+		void Sample::foo()		// geçerli
+		{
+			//...
+		}
+	}
+
+	using namespace CSD;
+
+	void Sample::bar()		// geçerli
+	{
+		//...
+	}
+
+	Burada Sample ismi CSD ile niteliklendirilmemiştir. Çünkü zaten derleyici tarafından Sample ismi görülmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -7326,7 +8412,75 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Bir üye fonksiyonun tanımlaması sınıf içerisinde yapılabilir. Ancak bu durumda üye fonksiyon inline kabul edilir. 
+    Bir üye fonksiyonun tanımlaması sınıf içerisinde yapılabilir. Ancak bu durumda üye fonksiyon inline kabul edilmektedir. Örneğin:
+
+	class Sample {
+	public:
+		int a;
+		int b;
+
+		void foo()		// foo inline
+		{
+			//...
+		}
+
+		void bar()		// bar inline
+		{
+			//...
+		}
+	};
+
+	Bu nedenle programcılar inline olarak açılmasını istedikleri küçük küçük üye fonksiyonların tanımlamalarını doğrudan sınıf bildirimi içerisinde yapabilmektedir. 
+	Tabii üye fonksiyonun prototipinin önüne inline anahtar sözcüğü getirilip fonksiyon yine dışarıda tanımlanırsa da inline olur. Ancak bu biçim pek tercih 
+	edilmemektedir. Örneğin:
+
+	class Sample {
+	public:
+		int a;
+		int b;
+
+		inline void foo();		// foo inlile
+		inline void bar();		// bar inline
+	};
+
+	void Sample::foo()
+	{
+		//...
+	}
+
+	void Sample::bar()
+	{
+		//...
+	}
+
+	Java ve C# gibi dillerde prototip olmadığı için mecburen sınıfın metotları sınıf içerisinde tanılanmaktadır. Bu dillerde inline diye bir kavram da yoktur. 
+	Bu dillerde metotlar sınıfın içerisinde yazılmak zorunda olduğu için bölüm C++'taki gibi bölüm kavramının okunabilirliği azaltacağı düşünülmüştür. Bu nedenle 
+	bu dillerde bölüm belirten anahtar sözcükler ayrıca her alan'da ve metotta belirtilmektedir. Örneğin:
+
+	// Dikkat C#/Java örneği
+
+	class Sample {
+		private int a;
+		private int b;
+
+		public void foo()
+		{
+			//..
+		}
+
+		public void bar()
+		{
+			//...
+		}
+
+		void tar()			// C#'ta private, java'da internal
+		{
+			//...
+		}
+	}
+
+	Bu dillerde alan ya da metotlarda erişim belirleyici anahtar sözcükler yazılmazsa default durum C#'ta private, Java'da ise internal kabul 
+	edilmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -7357,7 +8511,68 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	C++'ta her sınıf bir tür de belirtir. Sınıflar türünden nesneler tanımlanabilir. Örneğin:
+	Yukarıda da belirttiğimiz gibi C++'ta bir fonksiyon ya sınıfların dışında yani global bölgede bulunabilir ya da sınıfların içerisinde bulnabilir. Sınıfların 
+	içerisinde bulunan fonksiyonlara "üye fonksiyon (member function)" dendiğini söylemiştik. Biz kurusuuzda sınıfların içerisinde olmayan C'de ki gibi fonksiyonlara 
+	"global fonksiyonlar (global functions)" da diyeceğiz. Tabii global fonksiyon dendiğinde global isim alanındaki fonksiyonlar anlaşılmamlıdır. Global fonksiyonlar
+	sınıfların içerisinde bulunmayan fonksiyonlardır. Yani herhangi bir isim alanın içerisinde bulunan ancak bir sınıfın içerisinde bulunmayan fonksiyonlara 
+	"global fonksiyon" diyeceğiz. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	C++'ta sınıflar (yapıların ve birliklerin de bir sınıf olduğunu anımsayınız) bir "faaliyet alanı (scaope)" da belirtmektedir. Dolayısıyla C++'ta farklı 
+	sınıflarda aynı isimli ve aynı parametrik yapıya sahip fonksiyonlar bulunabilir. Bunlar farklı faaliyet alanlarında bulundurklarından sorun oluşturmazlar. 
+	Tabii aynı zamanda aynı isimli ve aynı parametrik yapıya sahip bir global fonksiyon da bulunabilmektedir. Örneğin:
+
+	class Sample {
+	public:
+		void foo();
+		//...
+	};
+
+	class Test {
+	public:
+		void foo();
+		//...
+	};
+
+	void Sample::foo()
+	{
+		//...
+	}
+
+	void Test::foo()
+	{
+		//...
+	}
+
+	void foo()
+	{
+		//...
+	}
+
+	Örnekteki bu fonksiyonların hepsinin birlikte bulunmasında hiçbir sakınca yoktur. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	Sınıflar hem data hem de fonksiyonlara sahip olabiliyordu. C++'ta sınıflar içerisindeki fonksiyonların "üye fonksiyon (member function)" biçiminde isimlendirildiğini 
+	belirtmiştik. İşte C++'ta sınıftaki data elemanlarına da "veri elemanları (data member)" denilmektedir. Hem üye fonksiyonlar hem de veri elemanları sınıfın 
+	elemanlarıdır. Örneğin:
+
+	class Sample {
+	public:
+		int a;
+		int b;
+
+		void foo();
+		void bar();
+	};
+
+	Burada a ve b Sample sınıfının veri elemanlarıdır. foo ve bar ise üye fonksiyonlarıdır. Sınıflardaki veri elemanlarının isimlendirilmesi dilden dile 
+	değişebilmektedir. Örneğin C# ve Java'da bunlara "alan (field)" denilmektedir. Python'da ise "öznitelik (attribute)" denilmektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    C++'ta her sınıf bir tür de belirtmektedir. Sınıflar türünden nesneler tanımlanabilir. Örneğin:
 
 	class Sample {
 		//...
@@ -7366,18 +8581,57 @@ int main(void)
 	Sample s;			// s nesnesi Sample türünden
 	class Sample k;		// tür isminde class ve struct sözcükleri de kullanılabilir, ancak gereksizdir.
 
+	Sınıfların tür isimleri yalnızca sınıf isimleriyle belirtilebilmektedir. Ancak tür isminde class anahtar sözcüğü de kullanılabilir. Örneğin:
+
+	class Sample {
+		//...
+	};
+
+	int Sample;			// geçerli
+	Sample s;			// geçersiz!
+	class Sample k;		// geçerli
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Bir sınıf nesnesi içerisinde sınıfın üye fonksiyonları (member functions) yer kaplamaz. Üye fonksiyonlar mantıksal bakımdan sınıfla ilişkilendirilmiş durumdadır. 
-	Üye fonksiyonlar tıpkı global fonksiyonlar gibi programın ".text" denilen bölümünde yer kaplarlar. Sınıf nesnesi içerisinde yalnızca sınıfın 
-	"static olmayan veri elemanları (nonstatic data member)" yer kaplamaktadır. C++'ta sınıf içerisindeki data elemanlarına "veri elemanları (data member)" denilmektedir.
-	Veri elemanları static olabilir ya da static olmayabilir. Static veri elemanları ileride ele alınacaktır.
+    Bir sınıf nesnesi içerisinde sınıfın üye fonksiyonları (member functions) yer kaplamaz. Üye fonksiyonlar mantıksal bakımdan sınıfla ilişkilendirilmiş durumdadır. 
+	Üye fonksiyonlar tıpkı global fonksiyonlar gibi programın ".text" denilen bölümünde yer kaplarlar. Sınıf nesnesi içerisinde yalnızca sınıfın "static olmayan 
+	veri elemanları (nonstatic data member)" yer kaplamaktadır. C++'ta veri elemnanları ve üye fonksiyonlar static olabilir ya da static olmayabilir. 
+	Static veri elemanları ve static üye fonksiyonlar ileri ele alınacaktır. Örneğin:
 
-	Sınıf türünden nesneler veri elemanlarından oluşan bileşik nesnelerdir. C++ standartlarına göre aynı bölüm içerisindeki veri elemanları ilk yazılan eleman 
-	düşük adreste olacak biçimde ardışıl bir biçimde yerleştirilir. Ancak farklı bölümlerdeki elemanların birbirlerine göre durumu standartlarda derleyicileri
-	yazanların isteğine bırakılmıştır. Fakat yaygın olarak tüm derleyiciler bölüm farkı gözetmeksizin ilk yazılan eleman düşük adreste olacak biçimde ardışıl bir yerleşim 
-	uygulamaktadır. Tabii yine derleyiciler C'de olduğu gibi elemanlar arasında hizalama amaçlı kontrollü boşluklar bırakabilmektedir. 
+	class Sample {
+	public:
+		int a;				// nesne içerisinde yer kaplar
+		int b;				// nesne içerisinde yer kaplar
+		static int c;		// nesne içerisinde yer kaplamaz! static veri elemanları ileride ele alınacak
+
+		void foo();			// nesne içerisinde yer kaplamaz
+		void bar();			// nesne içerisinde yer kaplamaz
+		static void tar();	// nesne içerisinde yer kaplamaz! static üye fonksiyonlar ileride ele alınacaktır.
+	};
+
+	Pekiyi bir sınıf nesnesi içerisindeki eleman organizasyonu nasıldır? İşte sınıf türünden türünden nesneler statik olmayan veri elemanlarından oluşan bileşik 
+	nesnelerdir. C++ standartlarına göre "iki bölüm belirten anahtar sözcük arasındaki veri elemanları ilk yazılan eleman düşük adreste olacak biçimde ardışıl 
+	bir biçimde" yerleştirilir. Ancak farklı bölümlerdeki elemanların birbirlerine göre durumu standartlarda derleyicileri yazanların isteğine bırakılmıştır. 
+	Fakat yaygın tüm derleyiciler bölüm farkı gözetmeksizin ilk yazılan eleman düşük adreste olacak biçimde ardışıl bir yerleşim uygulmaktadır. Tabii yine 
+	derleyiciler C'de olduğu gibi elemanlar arasında hizalama amaçlı kontrollü boşluklar (padding) bırakabilmektedir. Örneğin:
+
+	class Sample {
+	public:
+		int a;
+		int b;
+	private:
+		int c;
+		int d;
+	};
+
+	Burada a ile b ve c ile d ilk yazılan eleman düşük adreste olacak biçimde ardışıl yerleştirilmek zorundadır. Ancak hangi bölümün nesnenin düşük adresinde 
+	bulunacağı standartlarda derleyicileri yazanların isteğine bırakılmıştır. Yaygın derleyicilerin hepsi bölümleri dikkate almaksızın tıpkı yapılarda 
+	olduğu gibi elemanları yukarıdan aşağıya doğru ardışıl dizmektedir. Standartlardaki anlatıma göre biz bir sınıf nesneninin adresini aldığımızda bu adres ile
+	sınıfın ilk veri elemanının adresi aynı olmak zorunda olmak zorunda değildir. (Halbuki C'deki yapılarda bir yapı nesnesinin adresi onun ilk elemanının adresi 
+	ile aynı olmak zorundadır. C'de yapı nesnelerinin başında derleyiciler padding uygulayamazlar.)
+
+	Biz kurusmuzda gösterimlerde sınıfın veri elemanlarını ilk yazılan eleman düşük adreste olacak biçimde peşi sıra geliyormuş diziliyormuş gibi göstereceğiz. 
+	Böylece bazı açıklamaları daha anlaşılabilir bir hale getirebileceğiz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 include <iostream>
@@ -7411,18 +8665,42 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Madem ki C++'ta artık fonksiyonlar sınıfların da içerisinde bulunabiliyorlar o zaman biz sınıfların içerisinde bulunmayan fonksiyonları vurgulamak için
-	"global fonksiyonlar" diyeceğiz. Global fonksiyon demekle global isim alanı içerisinde bulunan fonksiyonları değil, sınıf içerisinde bulunmayan herhangi bir isim alanı içerisinde bulunan fonksiyonları kastedeceğiz.
+																25. Ders 08/11/2023 - Çarşamba
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Üye fonksiyonlar global fonksiyonlar gibi doğrudan isim belirtilerek çağrılmazlar. Üye fonksiyonlar ilgili sınıf türünden bir nesne ile "." operatörü kullanılarak
-	çağrılırlar. Örneğin:
+    Üye fonksiyonlar global fonksiyonlar gibi doğrudan isim belirtilerek çağrılamazlar. Üye fonksiyonlar ilgili sınıf türünden bir nesne ile "." operatörü 
+	kullanılarak çağrılırlar. Örneğin:
 
-	Sample s;
+	class Sample {
+	public:
+		int a;
+		int b;
 
-	s.foo();
+		void foo();
+		void bar();
+	};
 
+	void Sample::foo()
+	{
+		//...
+	}
+
+	void Sample::bar()
+	{
+		//...
+	}
+
+	Sample s;			// s Sample sınıfı türünden bir nesne
+
+	s.foo();			// üye fonksiyonlar ilgili sınıf türünden bir nesne ile çağrılabilir
+	s.bar();			// üye fonksiyonlar ilgili sınıf türünden bir nesne ile çağrılabilir
+
+	Görüldüğü gibi bir üye fonksiyonu çağırabilmek için önce ilgili sınıf türünden bir nesnenin tanımlanmış olması gerekmektedir. 
+
+	Burada üye fonksiyonların Sample::foo() ve Sample::bar() biçiminde çağrılmadığına, ilgili sınıf türünden bir nesne kullanılarak çağrıldığına dikkat ediniz. 
+	İleri üye fonksiyonların static de olabileceğini göreceğiz. static üye fonksiyonlar nesne olmadan sınıf ismiyle niteliklendirilerek (yani Sample::tar() gibi)
+	çağrılabilmektedir. Ancak biz bu konuyu anlatana kadar zaten üye fonksiyonların static olmayan (nonstatic) üye fonksiyonlar olduğunu varsayacağız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -7472,55 +8750,26 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	C++'ta "sınıf faaliyet alanı (class scope)" isminde yeni bir faaliyet alanı daha vardır. Sınıf faaliyet alanı sınıf bildiriminin içerisinde ve
-	sınıfın tüm üye fonksiyonları içerisinde bir ismin doğrudan kullanılabilirliğini anlatmaktadır. Bu durumda C++'ta faaliyet alanları genişten dara doğru 
-	şöyledir:
+	Sınıfların veri elemanlarına da yine ilgili sınıf türünden bir nesne ile "." operatörü kullanılarak erişilmektedir. Bu erişim biçimi zaten C'deki yapılarda 
+	da böyledir. Örneğin:
 
-	- Dosya faaliyet alanı (file scope)
-	- Sınıf faaliyet alanı (class scope)
-	- Fonksiyon faaliyet alanı (function scope)
-	- Block faaliyet alanı (block scope)
+	class Sample {
+	public:
+		int a;
+		int b;
 
-	Sınıfın tüm elemanları yani sınıf bildirimi içerisinde bildirilen tüm isimler sınıf faaliyet alanı kuralına uyarlar. 
----------------------------------------------------------------------------------------------------------------------------*/
-
-#include <iostream>
-
-using namespace std;
-
-class Sample {
-public:
-	int a;
-	int b;
-
-	void foo();
-	void bar();
-};
-
-void Sample::foo()
-{
-	a = 10;		// geçerli, a sınıf faaliyet alanına ilişkin
-	b = 20;		// geçerli, b sınıf faaliyet alanına ilişkin
-}
-
-void Sample::bar()
-{
-	cout << a << endl;		// geçerli, a sınıf faaliyet alanına ilişkin
-	cout << b << endl;		// geçerli, b sınıf faaliyet alanına ilişkin
-
-	foo();					// geçerli foo sınıf faaliyet alanına ilişkin
-}
-
-int main(void)
-{
+		void foo();
+		void bar();
+	};
 	//...
 
-	return 0;
-}
+	Sample s;
 
-/*--------------------------------------------------------------------------------------------------------------------------
-	Bir sınıf elemanlarına (yani veri elemanları ve üye fonksiyonları) o sınıf türünden bir nesneyle ve nokta operatörü kullanılarak nitelikli bir biçimde de 
-	erişilebilir. 
+	s.a = 10;			// geçerli
+	s.b = 20;			// geçerli
+
+	s.foo();			// geçerli
+	s.bar();			// geçerli
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -7546,7 +8795,7 @@ void Sample::bar()
 	cout << "Sample::bar" << endl;
 }
 
-int main(void)
+int main()
 {
 	Sample s;
 
@@ -7563,8 +8812,45 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Bir üye fonksiyonun içerisinde kullanılan sınıfın veri elemanları aslında o üye fonksiyon hangi nesne ile çağrılmışsa o nesnenin veri elemanlarıdır. 
-	Zaten üye fonksiyonların nesne ile çağrılmasının nedeni budur. 
+    C++'ta "sınıf faaliyet alanı (class scope)" isminde yeni bir faaliyet alanı daha vardır. Sınıf faaliyet alanı sınıf bildiriminin içerisinde ve
+	sınıfın tüm üye fonksiyonların içerisinde bir ismin doğrudan kullanılabilirliğini anlatmaktadır. Bu durumda C++'ta faaliyet alanları genişten dara doğru 
+	şöyledir:
+
+	- Dosya faaliyet alanı (file scope)
+	- Sınıf faaliyet alanı (class scope)
+	- Fonksiyon faaliyet alanı (function scope)
+	- Block faaliyet alanı (block scope)
+
+	Sınıfın tüm elemanaları yani sınıf bildirimi içerisinde bildirilen tüm isimler sınıf faaliyet alanı kuralına uyarlar. Biz bu isimleri doğrudan üye fonksiyonlar 
+	içerisinden kullanabiliriz. Örneğin:
+
+	class Sample {
+	public:
+		int a;
+		int b;
+
+		void foo();
+		void bar();
+	};
+
+	void Sample::foo()
+	{
+		a = 10;			// geçerli, a sınıf faaliyet alanına ilişkin
+		b = 20;			// geçerli b sınıf faaliyet alanına ilişkin
+	}
+
+	void Sample::bar()
+	{
+		cout << a << endl;	// geçerli, a sınıf faaliyet alanına ilişkin
+		cout << b << endl;	// geçerli b sınıf faaliyet alanına ilişkin
+
+		foo();				// geçerli foo sınıf faaliyet alanına ilişkin
+	}
+
+	Burada sınıf bildiriminin içerisinde bildirilmiş olan a, b, foo ve bar değişkenleri "sınıf faaliyet alanı (class scope)" kuralına uymaktadır. Bu nedenle 
+	bu isimler Sample sınıfının üye fonksiyonları içerisinde doğrudan (yani niteliklendirilmeden) kullanılabilirler. Sınıf faaliyet alanının "bir grup fonksiyon
+	içerisinde" tanınma aralığı anlamına geldiğine ve bu nedenle fonksiyon faaliyet alanından daha geniş ancak dosya faaliyet alanından daha dar bir faaliyet
+	alanı belirttiğine dikkat ediniz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -7582,36 +8868,66 @@ public:
 
 void Sample::foo()
 {
-	a = 10;
-	b = 20;
+	a = 10;			// geçerli, a sınıf faaliyet alanına ilişkin
+	b = 20;			// geçerli b sınıf faaliyet alanına ilişkin
 }
 
 void Sample::bar()
 {
-	cout << a << endl;
-	cout << b << endl;
+	cout << a << endl;	// geçerli, a sınıf faaliyet alanına ilişkin
+	cout << b << endl;	// geçerli b sınıf faaliyet alanına ilişkin
+
+	foo();				// geçerli foo sınıf faaliyet alanına ilişkin
 }
 
 int main(void)
 {
-	Sample s;
-
-	s.foo();		// foo'nun içerisinde kullanılan a ve b, s'nin a ve b'si
-	s.bar();		// bar'ın içerisinde kullanılan a ve b, s'nin a ve b'si
-
-	cout << s.a << " " << s.b << endl;
+	//...
 
 	return 0;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Yukarıda da belirtildiği gibi bir üye fonksiyonun içerisinde kullanılan sınıfın veri elemanlarının hangi nesnenin elemanları olduğu o fonksiyon çağrılmadan 
-	bilinmemektedir. Biz üye fonksiyonu hangi nesne ile çağırırsak onun içerisindeki veri elemanları o nesnenin veri elemanları olur. Örneğin:
+	Bir üye fonksiyonun içerisinde kullanılan sınıfın veri elemanları aslında o üye fonksiyon hangi nesne ile çağrılmışsa o nesnenin veri elemanlarıdır. 
+	Zaten üye fonksiyonların nesne ile çağrılmasının nedeni budur. Örneğin:
 
-	s.foo();
-	k.foo();
+	class Sample {
+	public:
+		int a;
+		int b;
 
-	Burada foo içerisindeki veri elemanları birinci çağrıda s nesnesinin elemanları iken ikinci çağrıda k nesnesinin elemanları olmaktadır. 
+		void set(int x, int y);
+		void disp();
+	};
+
+	void Sample::set(int x, int y)
+	{
+		a = x;
+		b = y;
+	}
+
+	void Sample::disp()
+	{
+		cout << a << ", " << b << endl;
+	}
+
+	Buradaki set ve disp iye fonksiyonlarının içerisinde a ve b değişkenleri aslında bu üye fonksiyonlar hangi nesneyle çağrılırsa onun a ve b veri elemanlarıdır.
+	Örneğin:
+
+	Sample s, k;
+
+	s.set(10, 20);
+	k.set(30, 40);
+
+	Burada s.set(10, 20) çağırısında 10 değeri s'in a elemanına, 20 değeri ise s'in b elemanına atanmaktadır. Benzer biçimde k.set(30, 40) çağrısında da 30 ve 40
+	k nesnesinin a ve b elemanlarına atanmaktadır. Örneğin:
+
+	s.disp();
+	k.disp();
+
+	Burada s.disp() çağrısındaki a ve b s nesnesinin a ve b elemanlarıdır. Bunların içeisinde 10 ve 20 bulunduğuna göre ekrana 10 ve 20 basılacaktır. k.disp()
+	çağrısındaki a ve b ise k nesnesinin a ve b elemanlarıdır. k nesnesinin a ve b elemanlarında 30 ve 40 değerleri vardır. Bu durumda 30 ve 40 değerleri 
+	ekrana basılacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -7635,12 +8951,13 @@ void Sample::set(int x, int y)
 
 void Sample::disp()
 {
-	cout << "a = " << a << ", b = " << b << endl;
+	cout << a << ", " << b << endl;
 }
 
-int main(void)
+int main()
 {
-	Sample s, k;
+	Sample s;
+	Sample k;
 
 	s.set(10, 20);
 	k.set(30, 40);
@@ -7652,14 +8969,57 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Sınıfın bir üye fonksiyonu başka bir üye fonksiyonunu doğrudan çağırabilir. Bu durumda çağıran üye fonksiyon hangi nesneyle çağrılmışsa
-	çağrılan üye fonksiyonun da aynı nesneyle çağrılmış olduğu kabul edilir. 
+	Pekiyi bu durumda sınıfın veri elemanları ve üye fonksiyonları ne anlama gelmektedir? İşte sınıfın veri elemanları aslında üye fonksiyonlar tarafından ortak
+	bir biçimde kullanılan data'ları temsil etmektedir. Sınıfın üye fonksiyonları aynı nesnenin veri elemanlarını ortak olarak kullanmaktadır. Bir üye 
+	fonksiyon o elemanlara değer yerleştirdiğinde diğer bir üye fonksiyon o değerleri kullanabilmektedir. Sınıflar belli bir konuda faydalı işlemler yapan 
+	üye fonksiyonlardan oluşmaktadır. Üye fonksiyonların da bu faydalı işlemleri yapabilmesi için ortak veri elemanlarını kullanması gerekmektedir. 
 
-	Aşağıdaki örnekte set üye fonksiyonu s nesnesi ile çağrılmıştır. Bu durumda set üye fonksiyonu içerisinde çağrılan disp üye fonksiyonunun da 
-	s nesnesi ile çağrıldığı kabul edilir. 
+	NYPT'de sınıflar belli bir konu (kavram) üzerinde işlemler yapan üye fonksiyonlar gibi değerlendirilebilir. Örneğin Date isimli bir sınıf tarih konusunda 
+	yararlı birtakım işlemleri yapan üye fonksiyonlara sahip olabilir. String isimli bir sınıf bir yazı üzerinde işelmler yapan üye fonksiyonlara sahip olabilir. 
+	Benzer biçimde SerialPort isimli bir sınıf seri port işlemlerini yapan üye fonksiynlara sahip olabilir. 
+
+	NYPT'de artık fonksiyonlar temelinde konuşmak yerine sınıflar temelinde konuşulur. Böylece "birbirinden farklı çok sayıda fonksiyon var" algısı yerine 
+	"belli işlemleri yapan belli sınıflar var" oluşturulmaktadır. Bu da tasarım ve yazım işlemlerini algısal bakımdan kolaylaştırmaktadır. 
+
+	O halde biz NYPT'de bir sınıf ile karşılaştığımıuzda "bu sınıfın belli bir konu üzerinde faydalı işlemler yapan üye fonksiyonlara sahip olduğunu, bu üye 
+	fonksiyonların da sınıfın veri elemanlarını (yani nesnesinin parçalarını) ortak biçimde kullanıdığını" anlamalıyız. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-#include <iostream>
+/*--------------------------------------------------------------------------------------------------------------------------
+    Sınıfın bir üye fonksiyonu başka bir üye fonksiyonunu doğrudan (niteliklendirmeden) çağırabilir. Çünkü üye fonksiyonlar da sınıf faaliyet alanındadır. Bu durumda 
+	çağıran üye fonksiyon hangi nesneyle çağrılmışsa çağrılan üye fonksiyonun da aynı nesneyle çağrılmış olduğu kabul edilir. Örneğin:
+
+	class Sample {
+	public:
+		int a;
+		int b;
+
+		void set(,nt x, int y);
+		void disp();
+	};
+
+	void Sample::set(int x, int y)
+	{
+		a = x;
+		b = y;
+
+		disp();		// set hangi nesneyle çağrılmışsa disp de o nesneye çağrılmış gibi işlem görür
+	}
+
+	void Sample::disp()
+	{
+		cout << a << ", " << b << endl;
+	}
+
+	Burada set fonksiyonu şöyle çağrılmış olsun:
+
+	Sample s;
+
+	s.set(10, 20);
+
+	Bu durumda set içerisindeki a ve b elemanları s nesnesinin a ve b elemanlarıdır. set üye fonksiyonu disp üye fonksiyonunu çağırmıştır. İşte burada sanki 
+	disp üye fonksiyonu da s ile çağrılmış gibi bir etki oluşacaktır. 
+---------------------------------------------------------------------------------------------------------------------------*/
 
 using namespace std;
 
@@ -7682,10 +9042,10 @@ void Sample::set(int x, int y)
 
 void Sample::disp()
 {
-	cout << "a = " << a << ", b = " << b << endl;
+	cout << a << ", " << b << endl;
 }
 
-int main(void)
+int main()
 {
 	Sample s;
 
@@ -7695,8 +9055,27 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Sınıfın üye fonksiyonları da overload edilebilir. Yani bir sınıf içerisinde parametrik yapıları farklı olan aynı isimli üye fonksiyonlar bulunabilir. 
-	Bu durumda "overload resolution" işlemi daha önce açıkladığımız kurallarla yürütülmektedir. Örneğin:
+															26. Ders 13/11/2023 - Pazartesi
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Sınıfın üye fonksiyonları da overload edilebilir. Yani bir sınıf içerisinde parametrik yapıları farklı olan aynı isimli üye fonksiyonlar bulunabilir. 
+	Sınıfların da birer faaliyet alanı belirttiğini anımsayınız. Dolayısıyla farklı faaliyet alanlarında aynı isimli ve parametrik yapıya ilişkin (aynı imzaya 
+	ilişkin) fonksiyonlar bulunabildiğine göre farklı sınıflarda aynı isimli ve aynı parametrik yapıya sahip üye fnksiyonlar buunabilir. Örneğin:
+
+	class Sample {
+		public:
+			void foo(int a);
+			void foo(double a);
+			void foo(const char *str);
+			//...
+	};
+
+	Bu durumda "overload resolution" işlemi daha önce açıkladığımız kurallarla yürütülmektedir. Yani önce aday fonksiyonlar seçilmekte, sonra onların arasından 
+	uygun fonksiyonlar ve nihayet en uygun fonksiyon seçilmeye çalışılmaktadır. Biz üye fonksiyonu aynı türden bir sınıf nesnesi ile çağırdığımızda sınıftaki 
+	aynı isimli tüm üye fonksiyonlar aday fonksiyonlar olarak seçilmektedir. 
+
+	Örneğin:
 
 	class Sample {
 		public:
@@ -7710,23 +9089,9 @@ int main(void)
 
 	s.foo(10);		// foo(int)
 	s.foo(12.3);	// foo(double)
----------------------------------------------------------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------------------------------------------------------------
-	Sınıfın üye fonksiyonları sınıfın veri elemanları üzerinde işlem yapan fonksiyonlardır. Başka bir deyişle sınıfın veri elemanları aslında üye fonksiyonlar
-	tarafından ortak kullanılan elemanlardır. Eğer bir üye fonksiyon sınıfın veri elemanları ile ilgili işlem yapmasaydı bu durumda o üye fonksiyon global bir fonksiyon gibi de
-	yazılabilirdi.
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-	Bir sınıf nesnesi yaratıldığında derleyici tarafından otomatik olarak çağrılan sınıfın özel üye fonksiyonlarına "yapıcı fonksiyonlar (constructors)" denilmektedir. 
-	Yapıcı fonksiyonlar tipik olarak birtakım ilk işlemleri yapmak ve sınıfın veri elemanlarına birtakım ildeğerleri vermek için kullanılmaktadır. 
-
-	Yapıcı fonksiyonlar sınıf ismiyle aynı isimli olan üye fonksiyonladır. Yapıcı fonksiyonlar da overload edilebilirler. Sınıfın parametresiz yapıcı fonksiyonuna özel olarak
-	"default yapıcı fonksiyon (default constructor)" denilmektedir. 
-
-	Yapıcı fonksiyonların geri dönüş değerleri diye bir kavramları yoktur. Bu nedenle yapıcı fonksiyonlarda geri dönüş değerlerinin türü yerine hiçbir şey yazılmaz.
-	Geri dönüş değerinin türü yerine void yazmak da geçerli bir durum değildir. 
+	(Daha ileride sınıflarda türetme işlemlerini göreceğiz. Overload resolution sürecinde aday fonksiyonlar aşağıdan yukarı ismin ilk bulunduğu sınıftan 
+	seçilmektedir. Taban sınıflardaki aynı isimli fonksiyonlar aday fonksiyon olarak alınmamaktadır. C++'taki Java ve C# dillerindne bu bakımdan farklıdır.)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -7735,55 +9100,226 @@ using namespace std;
 
 class Sample {
 public:
-	int a;
-	int b;
-
-	Sample();
-	Sample(int x, int y);
+	void foo(int a);
+	void foo(double a);
+	void foo(const char *str);
 };
 
-Sample::Sample()
+void Sample::foo(int a)
 {
-	a = 0;
-	b = 0;
+	cout << "foo(int)" << endl;
 }
 
-Sample::Sample(int x, int y)
+void Sample::foo(double a)
 {
-	a = x;
-	b = y;
+	cout << "foo(double)" << endl;
 }
 
-int main(void)
+void Sample::foo(const char *tr)
 {
+	cout << "foo(const char *)" << endl;
+}
+
+int main()
+{
+	Sample s;
+
+	s.foo('a');			// Sample::foo(int) çağrılır
+	s.foo(3.14);		// Sample::foo(double) çağrılır
+	s.foo("ankara");	// Sample::foo(const char *) çağrılır
+
 	return 0;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Bir sınıf nesnesi eğer isimden sonra hiç parantez açılmadan tanımlanırsa bu durumda derleyici nesne için sınıfın default yapıcı fonksiyonunu (default constructor)
-	çağırır. Örneğin:
+    Bir sınıf nesnesi yaratıldığında derleyici tarafından otomatik olarak çağrılan sınıfın özel üye fonksiyonlarına "yapıcı fonksiyonlar (constructors)" denilmektedir. 
+	Yapıcı fonksiyonlar tipik olarak birtakım ilk işlemleri yapmak ve sınıfın veri elemanlarına birtakım ildeğerleri vermek için kullanılmaktadır. 
+
+	Yapıcı fonksiyonlar sınıf ismiyle aynı isimli olan üye fonksiyonladır. Örneğin
+
+	class Sample {
+	public:
+		Sample();			// yapısı fonksiyon
+		void foo();			// normal bir üye fonksiyon
+		//...
+	};
+
+	Sample::Sample()
+	{
+		//...
+	}
+
+	void Sample::foo()
+	{
+		//...
+	}
+
+	Yapıcı fonksiyonların geri dönüş değerleri diye kavramları yoktur. Bu nedenle yapıcı fonksiyonlarda geri dönüş değerlerinin türü yerine hiçbir şey yazılmaz.
+	Geri dönüş değerinin türü yerine void yazmak da geçerli bir durum değildir. Çünkü "void" ger i dönüş değerinin olmadığı anlamına gelmektedir. Halbuki yapıcı
+	fonksiyonların böyle bir kavramları yoktur. 
+
+	Yapıcı fonksiyonlar içerisinde return deyimini kullanabiliriz. Ancak onun yanına bir ifade yazamayız. 
+
+	Yapıcı fonksiyonlar ilgili sınıf türündne bir nesne yaratıldığında derleyici tarafından otomatik olarak çağrılmaktadır. Örneğin:
+
+	Sample s;		// yapıcı fonksiyon çağrılacaktır
+
+	Böylece bir nesne yaratıldığında o nesnenin ilişkin olduğu sınıfın hedeflediği amaçlar için birtakım ilk işlemler arka planda yapılmış olur. Örneğin:
+
+	class SerialPort {
+		//...
+	};
+	//...
+
+	SerailPort sp;
+
+	Burada yaratılan SerialPort nesnesi için yapıcı fonksiyon çağrılacaktır. Bu fonksiyon da seri port işlemleri için gerekli birtakım ilk işlemleri yapabilecektir. 
+
+	Yapıcı fonksiyon içerisinde kullanolan sınıfın veri elemanarı o anda yaratılmış olan nesnenin veri elemanlarıdır. Örneğin:
+
+	class Sample {
+	public:
+		Sample();
+		void disp();
+
+		int a;
+		int b;
+	};
+
+	Sample::Sample()
+	{
+		a = 10;
+		b = 20;
+	}
+
+	void Sample::disp()
+	{
+		cout << a << ", " << b << endl;
+	}
+	//...
 
 	Sample s;
 
-	Eğer isimden sonra parantezler açılırsa parantezlerin içerisine argümanlar yerleştirilir. Bu durumda overload resolution kuralına göre çağrılacak yapıcı fonksiyon
-	tespit edilir. Örneğin:
+	s.disp()
 
-	Sample s(10, 20);
+	Burada s nesnesi yaratıldığında yapıcı fonksiyon çağrılacaktır. Onun içerisindeki a ve b elemanları s nesnesinin veri elemanıdır. 
 
-	Bu durumda tüm aday fonksiyonlar sınıfın yapıcı üye fonksiyonlardır. Bunlar arasından uygun olanlar ve nihayet en uygun yapıcı fonksiyon seçilmeye çalışılır. 
-	C++11 ile birlikte "uniform initializer" sentaks ile burada küme parantezleri de kullanılabilmektedir. Ancak uniform initializer sentaksında "narrowing conversion"a 
-	izin verilmediğini anımsayınız. Örneğin:
+---------------------------------------------------------------------------------------------------------------------------*/
 
-	Sample s{10, 20};
+#include <iostream>
 
-	Burada "narrowing conversion" dikkate alınarak uygun fonksiyonlar tespit edilmemektedir. Önce en uygun fonksiyon overload resolution kurallarına göre bulunmakta 
-	eğer bu en uygun fonksiyon narrowing conversion gerektiriyorsa error oluşmaktadır. 
+using namespace std;
+
+class Sample {
+public:
+	Sample();
+	void disp();
+
+	int a;
+	int b;
+};
+
+Sample::Sample()
+{
+	a = 10;
+	b = 20;
+}
+
+void Sample::disp()
+{
+	cout << a << ", " << b << endl;
+}
+
+int main()
+{
+	Sample s;
+
+	s.disp();
+
+	return 0;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	Sınıfın yapıcı fonksiyonları overload edilebilir. Yani sınıfta birden fazla yapıcı fonksiyon bulunabilir. Örneğin:
+
+	class Sample {
+	public:
+		Sample();
+		Sample(int a);
+		Sample(double a);
+		Sample(const char *str);
+		//...
+	};
+
+	Parametresi olmayan yapıcı fonksiyona "default yapıcı fonksiyon (default constructor)" denilmektedir. Örneğin:
+
+	class Sample {
+	public:
+		Sample();						// default constructor
+		Sample(int a);
+		Sample(double a);
+		Sample(const char *str);
+		//...
+	};
+
+	Eğer yapıcı fonksiyonun bütün parametreleri default değer almışsa bu yapıcı fonksiyon da "default yapıcı fonksiyon" olarak kullanılabilmektedir. Örneğin:
+
+	class Sample {
+	public:
+		Sample(int a = 0);			// bu yapıcı fonksiyon parametre aldığı halde defauult yapıcı fonksiyon olarka da kullanılabilir
+		Sample(double a);
+		Sample(const char *str);
+		//...
+	};
+
+	Bir sınıf nesnesi yaratılırken eğer isimden sonra hiç parantez açılmamışsa bu durumda derleyici nesne için sınıfın default yapıcı fonksiyonunu (default constructor)
+	çağırır. Örneğin:
+
+	Sample s;		// default yapıcı fonksiyonu çağrılır
+
+	Eğer değişken isminden sonra parantezler açılırsa parantezlerin içerisine argümanlar yerleştirilir. Bu durumda çağrılacak yapıcı fonksiyon overload resolution 
+	kuralına göre tespit edilir. Örneğin:
+
+	class Sample {
+	public:
+		Sample();						// default constructor
+		Sample(int a, int b);
+		Sample(double a, double b);
+		//...
+	};
+	//...
+
+	Sample s(10, 20);		// int, int parametreye sahip yapıcı fonksiyon çağrılacaktır
+
+	Bu durumda sınıfın bütün yapıcı fonksiyonları aday fonksiyonlardır. Bunlar arasından uygun olanlar seçilir ve uygun olanlar arasından da en uygun yapıcı fonksiyon 
+	seçilmeye çalışılır. 
+
+	C++11 ile birlikte "uniform initializer" sentaks dile eklendikten sonra nesne yaratırken normal parantezler yerine kğme parantezleri de kullanılabilmektedir. 
+	Örneğin:
+
+	Sample a{10, 20};		// C++11 ve sonrasında geçerli
+
+	Ancak uniform initializer sentaksında "daraltıcı dönüştürmelere (narrowing conversion)" izin verilmediğini anımsayınız. Tabii daha önceden de belirttiğimiz gibi
+	önce overload resolution işlemi yapılıp en uygun fonksiyon tespit edilir. Sonra bu fonksiyonun daraltıcı dönüştürmeye yol açıp açmadığına bakılır. Örneğin:
+
+	class Sample {
+	public:
+		Sample();
+		Sample(int a);
+		//...
+	};
+	//...
+
+	Sample s{3.14};
+
+	Burada overload resolution işlemi sonucunda int parametreli fonksiyon seçilecektir. Ancak bu fonksiyon daraltıcı dönüştürme uyguladağı için tanımlama error ile 
+	sonuçlanacaktır. Verilen hata mesajının bu biçimde olduğuna dikkat ediniz.
 
 	Default yapıcı fonksiyon çağrılacak biçimde nesne yaratma işlemi aşağıdaki gibi yapılamamaktadır:
 
 	Sample s();
 
-	Çünkü bu bir prototip bildirimidir. Tabii C++11 ile birlikte aşağıdaki tanımlama default yapıcı fonksiyonun çağrılması için geçerlidir:
+	Çünkü bu bir nesne tanımlaması değil bir prototip bildirimidir. Tabii C++11 ile birlikte aşağıdaki tanımlama default yapıcı fonksiyonun çağrılması için geçerlidir:
 
 	Sample s{};
 
@@ -7821,8 +9357,8 @@ Sample::Sample(int x, int y)
 
 int main(void)
 {
-	Sample s;
-	Sample k(10, 20);
+	Sample s;					// default constructor
+	Sample k(10, 20);			// int parametreli constructor
 
 	cout << "ok" << endl;
 
@@ -7830,9 +9366,57 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Yerel sınıf nesneleri için yapıcı fonksiyonlar programın akışı nesnenin tanımlandığı noktaya geldiğinde çağrılmaktadır. Ancak global sınıf nesneleri için yapıcı 
-	fonksiyonlar akış main fonksiyonuna girmeden önce çalıştırılır. Global sınıf nesneleri için yapıcı fonksiyonların çağrılma sırası yukarıdan aşağıya doğrudur. 
-	Ancak program birden fazla kaynak dosyadan oluşuyorsa bunlar arasındaki sıra "belirsiz (unspecified)" bırakılmıştır. 
+    Yerel sınıf nesneleri için yapıcı fonksiyonlar programın akışı nesnenin tanımlandığı noktaya geldiğinde çağrılmaktadır. Örneğin:
+
+	int main()
+	{
+		//...
+		Sample s;			// akış bu noktaya geldiğinde s için default yapıcı fonksiyon çağrılır
+		//...
+		Sample k;			// akış bu noktaya geldiğinde k için default yapıcı fonksiyon çağrılır
+		//....
+
+		return 0;
+	}
+
+	Tabii birden fazla nesne aynı bildirimde de tanımlanabilir. Bu durumda yapıcı fonksiyonlar tanımlama sırasına göre çağrılacaktır. Örneğin:
+
+	Sample s, k;		// önce s için sonra k için yapısı fonksiyon çağrılır
+
+	Burada önce s için sonra k için yapısı fonksiyon çağrılacaktır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	Global sınıf nesneleri için yapıcı fonksiyonlar akış henüz main fonksiyonuna girmeden çağrılmaktadır. Çağrılma sırası kaynak dosyadaki (translation unit) 
+	yuakarıdan aşağıya ve soldan sağa yönüne göredir. Yani kaynak kodda daha önce tanımlanan nesnenin yapıcı fonksiyonu daha sonra tanımlanandna önce çağrılır. 
+	Ancak proje birden fazla kaynak dosyadan oluşyorsa kaynak dosyalardaki global nesneler birbirilerine göre yapıcı fonksiyon çağrılma sırası standartlarda 
+	"belirsiz (unspecified)" bırakılmıştır. Örneğin:
+
+	// a.cpp
+
+	Sample g_a;
+	Sample g_b;
+
+	// b.cpp
+
+	Sample g_x
+	Sample g_y;
+
+	Burada g_a nesnesi için yapıcı fonksiyon g_b nesnesi için yapıcı fonksiyondan daha önce çağrılır. Benzer biçimde g_x için yapıcı fonksiyon g_y için yapıcı 
+	fonksiyondan daha önce çağrılacaktır. Ancak kaynak doslayar arasındaki sıra konusunda bir belirleme yapılmamıştır. 
+
+	Aşağıdaki örneği çalıştırarak durumu inceleyiniz. Ekranda şunları göreceksiniz:
+
+	Sample(int): 100
+	Sample(int): 200
+	Sample(int): 300
+	main begins...
+	Sample(int): 10
+	Sample(int): 20
+	main continues...
+	Sample(int): 30
+	main ends...
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -7841,82 +9425,157 @@ using namespace std;
 
 class Sample {
 public:
-	int a;
-	int b;
-
-	Sample();
-	Sample(int x, int y);
+	Sample(int x);
+	//...
 };
 
-Sample::Sample()
+Sample::Sample(int x)
 {
-	cout << "default constructor" << endl;
-
-	a = 0;
-	b = 0;
+	cout << "Sample(int): " << x << endl;
 }
 
-Sample::Sample(int x, int y)
-{
-	cout << "int, int constructor" << endl;
-	a = x;
-	b = y;
-}
+Sample x{100};
+Sample y{200};
 
-Sample x;
-Sample y(10, 20);
-
-int main(void)
+int main()
 {
 	cout << "main begins..." << endl;
 
-	Sample k(30, 40);
+	Sample s{10}, k{20};
+
+	cout << "main continues..." << endl;
+
+	Sample m{30};
+
+	cout << "main ends..." << endl;
 
 	return 0;
 }
 
+Sample z{300};
+
 /*--------------------------------------------------------------------------------------------------------------------------
-	Yapıcı fonksiyonların içerisinde kullandığımız sınıfın veri elemanlarının o anda henüz yaratılmış olan nesnenin veri elemanları olduğuna dikkat ediniz. 
+    Pekiyi static yerel sınıf nesneleri için yapıcı fonksiyonlar ne zaman çağrılmaktadır? İşte static yerel sınıf nesneleri için yapıcı fonksiyonlar "programın 
+	akışı nesnenin tanımlandığı noktaya ilk kez geldiğinde yalnızca bir kez" çağrılmaktadır. Bu cümleden iki sonuç çıkmaktadır:
+
+	1) Eğer akış static yerel sınıf nesnesinin tanımlandığı noktaya hiç gelmezse onun yapıcı fonksiyon hiç çağrılmayacaktır.
+	2) Akış static yerel sınıf nesnelerinin tanımlandığı noktaya birden fazla kez gelirse yalnızca ilk gelişinde nesne için yapıcı fonksiyon çağrılacaktır.
+
+	Aşağıdaki örneği çalıştırarak sonucu inceleyiniz. Ekrana şunları göreceksiniz:
+
+	Sample(int): 100
+	Sample(int): 200
+	Sample(int): 300
+	main begins...
+	Sample(int): 10
+	Sample(int): 20
+	main continues...
+	Sample(int): 30
+	foo begins...
+	Sample(int): 1000
+	foo ends...
+	foo begins...
+	foo ends...
+	main ends...
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
 
 using namespace std;
 
-class Date {
+class Sample {
 public:
-	int day, month, year;
-
-	Date(int d, int m, int y);
-	void disp();
+	Sample(int x);
+	//...
 };
 
-Date::Date(int d, int m, int y)
+Sample::Sample(int x)
 {
-	day = d;
-	month = m;
-	year = y;
+	cout << "Sample(int): " << x << endl;
 }
 
-void Date::disp()
+Sample x{100};
+Sample y{200};
+
+void foo()
 {
-	cout << day << '/' << month << '/' << year << endl;
+	cout << "foo begins..." << endl;
+
+	static Sample s{1000};
+
+	cout << "foo ends..." << endl;
 }
 
-int main(void)
+int main()
 {
-	Date d{ 10, 12, 2007 };
+	cout << "main begins..." << endl;
 
-	d.disp();
+	Sample s{10}, k{20};
+
+	cout << "main continues..." << endl;
+
+	Sample m{30};
+
+	foo();
+	foo();
+
+	cout << "main ends..." << endl;
 
 	return 0;
 }
 
+Sample z{300};
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	Fonksiyonun parametre değişkeni bir sınıf türünden olabilir. Örneğin:
+
+	void foo(Sample k)
+	{
+		//...
+	}
+
+	Bu durumda biz fonksiyonu tipik olarak aynı sınıf türünden bir nesneyle çağırırız. Örneğin:
+
+	Sample s;
+
+	foo(s);
+
+	Parametre değişikenlerinin fonksiyon çağrıldığında yaratıldığını anımsayınız. O zaman bu örnekte foo fonksiyonunun k isimli parametre değişkeni için 
+	yapıcı fonksiyon bu fonksiyon çağrıldığında çağrılacaktır. Tabii fonksiyon her çağrıldığında yeni bir parametre değişkeni yaratıldığına göre yine yapıcı 
+	fonksiyon çağrılacaktır. Ancak bu tür durumlarda parametre değişkenleri için ismine "kopya yapıcı fonksiyonu (copy constructor)" denilen özel bir yapıcı 
+	fonksiyon çağrılmaktadır. Bu konu ileride ele alınacaktır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+
 /*--------------------------------------------------------------------------------------------------------------------------
 	Eğer programcı sınıf için hiçbir yapıcı fonksiyon yazmamışsa (standart terminolojisi ile sınıfın "user provided" yapıcı fonksiyonu yoksa) bu durumda derleyici 
-	sınıf için default yapıcı fonksiyonu public bölümde içi boş olarak inline biçimde kendisi tanımlar. Böylece biz bir sınıf için hiçbir yapıcı fonksiyon yazmadıysak
-	o sınıf türünden default yapıcı fonksiyonun çağrılacağı bir nesne tanımlayabiliriz. Eğer biz bir sınıf için herhangi bir yapıcı fonksiyon yazmışsak bu durumda
-	derleyici default yapıcı fonksiyonu kendisi yazmamaktadır. 
+	sınıf için default yapıcı fonksiyonu public bölümde içi boş olarak inline biçimde (mümkünse aynı zamanda constexpr biçiminde) kendisi tanımlamaktadır. Böylece 
+	biz bir sınıf için hiçbir yapıcı fonksiyon yazmadıysak o sınıf türünden default yapıcı fonksiyonun çağrılacağı bir nesne tanımlayabiliriz. Eğer biz bir sınıf 
+	için herhangi bir yapıcı fonksiyon yazmışsak bu durumda	derleyici default yapıcı fonksiyonu kendisi yazmamaktadır. Örneğin:
+
+	class Sample {
+	public:
+		Sample (int a);
+		//...
+	};
+	//...
+
+	Sample s;		// geçersiz! programcı sınıf için bir yapıcı fonksiyon yazmış, derleyici default yapıcı fonksiyonu yazmaz
+
+	Burada programcı sınıf için bir yapıcı fonksiyon tanımladığından dolayı derleyici default yapıcı fonksiyonu kendisi tanımlamayacaktır. Örneğin:
+
+	class Sample {
+	public:
+		void foo();
+		void bar();
+		//...
+	};
+	//...
+
+	Sample s;			// geçerli! programcı sınıf için bir yapıcı fonksiyon yazmamış, derleyici default yapıcı fonksiyonu içi boş olarak kendisi yazacak,
+	Sample k{10};		// geçersiz! derleyici yalnızca default yapıcı fonksiyonu biizm için yazmaktadır
+
+	Burada programcı sınıf için hiçbir yapıcı fonksiyon yazmadığından derleyici default yapıcı fonksiyonu kendisi içi boş olarak yazmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -7945,8 +9604,31 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	C++11 ile birlikte "explicitly defaulted constructor" biçiminde bir kavram dile eklenmiştir. Bir default yapıcı fonksiyon için prototipten sonra " = default"
-	sentaksı kullanılırsa bu sentaks derleyiciye "default yapıcı fonksiyonu içi boş olarak sen yaz" anlamına gelmektedir. Örneğin:
+	Yapıcı fonksiyonlar da default argüman alabilmektedir. Default argümanların imzayı değiştirmediğini anımsayınız. Örneğin:
+
+	class Sample {
+	public:
+		Sample();				// default constructor
+		Sample(int a = 0);		// default constructor olarak kullanılabilir
+		//...
+	};
+
+	Burada bu iki üye fonksiyonun birlikte bulunmasının bir sakıncası yoktur. Çünkü bunların parametrik yapıları farklıdır. Fakat örneğin:
+
+	Sample s;		// geçersiz! iki constructor da en uygun ve en uygun
+
+	Burada derleyici iki yapıcı fonksiyondan birini tercih etmez. Overload resolution kurallarına göre bu durum "ambiguity" oluşturmaktadır. Tabii bu durumda
+	int parametreli yapıcı fonksiyonun default değer almasının da bir anlamı yoktur.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	C++'ta sınıfların yapıcı fonksiyonları programcı tarafından çağrılabilen fonksiyonlar değildir. Yine C++'ta yapıcı fonksiyonların adresleri de alınamamaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    C++11 ile birlikte "açıkça default hale getirilmiş default yapıcı fonksiyon (explicitly defaulted default constructor)" biçiminde bir kavram da dile eklenmiştir. 
+	Bir default yapıcı fonksiyon için prototipten sonra " = default" sentaksı kullanılırsa bu sentaks "default yapıcı fonksiyonu içi boş olarak derleyici tarafından 
+	yazılsın" anlamına gelmektedir. Örneğin:
 
 	class Sample {
 	public:
@@ -7955,21 +9637,70 @@ int main(void)
 		//...
 	};
 
-	Burada sınıfın başka bir yapıcı fonksiyonu olduğu için derleyici default yapıcı fonksiyonu kendiliğinden yazmayacaktır. İşte " = default" 
-	sentaksı bunu sağlamaktadır. Tabii "= default" dentaksı yerine bir zaten içi boş bir default yapıcı fonksiyonu kendimiz de oluşturabilirdik. Ancak teknik anlamda 
-	aşağıdaki yazım arasında bazı ince farklılıklar vardır:
+	Burada sınıfın başka bir yapıcı fonksiyonu olduğu için derleyici default yapıcı fonksiyonu kendiliğinden yazmayacaktır. İşte " = default" sentaksı bunu 
+	sağlamaktadır. Tabii "= default" dentaksı yerine biz zaten içi boş bir default yapıcı fonksiyonu kendimiz de oluşturabilirdik. Ancak teknik anlamda aşağıdaki 
+	iki tanımlama arasında bazı ince farklılıklar vardır:
 
 	Sample() = default;
 	Sample() {}
 
-	Bu farklılıklar hakkında henüz bir açıklama yapmayacağız.
+	Gövdesi boş default yapıcı fonksiyon teknik olarak "programcı tarafından yazılmış (user provided)" yapıcı fonksiyon olarak ele alınmaktadır. Halbuki açıkça
+	default hale getirilmiş yapıcı fonksiyon bu biçimde ele alınmamaktadır. Bu ayrım da bazı konularda bazı ince anlam farklılıklarına yol açmaktadır. Bu konu 
+	ileride başka konular içerisinde ele alınacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Yine C++11 ile birlikte "deleted constructor" sentaksı da dile eklenmiştir. Bir default yapıcı fonksiyonda " = delete" sentaksı kullanılırsa artık derleyici 
-	sınıfın programcı tarafından yazılmış olan bir yapıcı fonksiyonu olmasa bile sınıfın default yapıcı fonksiyonunu kendisi yazmaz. 
+													27. Ders 15/11/2023 - Çarşamba
+---------------------------------------------------------------------------------------------------------------------------*/
 
-	Tabii default yapıcı fonksiyonun bu biçimde silinmesi fazlaca karşılaşılan bir durum değildir ve böyle bir duruma çok seyerek gereksinim duyulmaktadır.
+/*--------------------------------------------------------------------------------------------------------------------------
+    C++11 ile birlikte "açıkça silinmiş default yapıcı fonksiyon (explicitly deleted default constructor)" sentaksı da dile eklenmiştir. Bir default yapıcı 
+	fonksiyonda " = delete" sentaksı kullanılırsa artık derleyici sınıfın programcı tarafından yazılmış olan bir yapıcı fonksiyonu olmasa bile default yapıcı 
+	fonksiyonunu kendisi yazmaz. Örneğin:
+
+	class Sample {
+	public:
+		void foo();
+		void bar();
+		//...
+	};
+
+	Burada sınıf için hiçbir yapıcı fonksiyon yazılmadığı için derleyici defauşt yapıcı fonksiyonu içi boş olarak yazacaktır. Ancak biz default yapıcı fonksiyonu
+	açıkça silinmiş hale getirirsek derleyici artık default yapıcı fonksiyonu biizm yazmaz. Örneğin:
+
+	class Sample {
+	public:
+		Sample() = delete;		// açıkça silinmiş default yapıcı fonksiyon
+		void foo();
+		void bar();
+		//...
+	};
+
+	Tabii bu durumda biz bu sınıf türünden nesne de yaratamayız. Çünkü nesne yaratımı sırasında sınıfın yapıcı fonksiyonu çağrılacaktır. Bu sınıfta yapıcı fonksiyon 
+	olmadığı için yaratım girişimi error ile sonuçlanacaktır. Örneğin:
+
+	Sample s;		// geçersiz! sınıfın default yapıcı fonksiyonu yok
+
+	Pekiyi açıkça silinmiş default yapıcı fonksiyon oluşturmaya ne gerek vardır? Bir sınıf türürnden hiçbir nesne tanımlayamadıktan sonra sınıfın bulumasının 
+	bir anlamı olabilir mi? Şimdiye kadar gördüğümüz konular dikkate alındığında sanki bunun bir anlamı yokmuş gibi bir fikir oluşabilir. Ancak ileride görülecek 
+	bazı konulardan sonra bunun bazı kullanımlarının olabileceğini göreceksiniz. Aşağıdaki sınıf bildiriminde default yapıcı fonksiyonun açıkça silinmesi 
+	geçerli bir durum oluştursa da anlamsızdır:
+
+	class Sample {
+	public:
+		Sample() = delete;		// geçerli ama anlamsız
+		Sample(int a);
+		void foo();
+		void bar();
+		//...
+	};
+
+	Burada zaten programcı sınıfa bir yapıcı yerleştirdiği için default yapıcı fonksiyon derleyici tarafından yazılmayacaktır. Zaten yazılmayacak olan fonksiyonun 
+	yazılmamasını istemenin bir anlamı yoktur.
+
+	Açıkça deleted hale getirme dışında C++11 ve sonrasında standartlarda bazı anlatım değişikliklerine gidilmiş ve "özel üye fonksiyonların (special member functions)"
+	bazı durumlarda derleyici tarafından "deleted" yapılacağı standartlara eklenmiştir. Yani örneğin biz sınıfın default yapıcı fonksiyonunu açıkça deleted yapmasak
+	bile bazı koşullar altında derleyici kendisinin yazdığı bu default yapıcı fonksiyonu deleted hale getirmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -7990,15 +9721,604 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Bir sınıf nesnesinin yaşamı sona ererken yani sınıf nesnesi bellekten yok edilirken derleyici tarafından otomatik olarak çağrılan üye fonksiyona
+	Pekiyi bir sınıf için hiçbir yapıcı fonksiyon yazmamışsak ya da bir yapıcı fonksiyon içerisinde sınıfın veri elemanlarına hiç değer atamadıysak nesnenin bu 
+	veri elemanlarında hangi değerler bulunacaktır? Örneğin:
+
+	class Sample {
+	public:
+		int a, b;
+		void foo();
+		void bar();
+	};
+	//...
+
+	Sample s;		// s'in a ve b elemanlarında hangi değerler vardır?
+
+	Bu konu ileride MIL sentaksı içerisinde haada detaylı bir biçimde açıklanacaktır. Ancak burada pratik bazı şeyler söylmek istiyoruz. Eğer sınıfın yapıcı 
+	fonksiyonlarında veri elemanlarına değer atanmamışsa kabaca (ayrıntılar ileride ele alınacak) şu durumlar söz konusudur:
+
+	1) Eğer sınıf nesnesi yerel ise sınıfın temel türlere ilişkin veri elemanlarına herhangi bir değer atanmaz. Dolayısıyla o elemanlarda çöp değer bulunur. 
+	Yani yukarıdaki örnekte s nesnesi yerel ise tanımlama sonrasında a ve b veri elemanlarında çöp değerler (indeterminate values) bulunacaktır. (Buna standartlarda 
+	"default-initilize" denilmektedir: 9.4.1-6)
+
+	2) Eğer sınıf nesnesi statik ömürlüyse (global ya da static yerel) sınıfın tmel türlere ilişkin veri elemanlarına 0 değeri yerleştirilmektedir. (Buna da 
+	standartlarda "zero-initialize" denilmektedir: 9.4.1-6).
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	Standartlarda "kullanıcı tarafından yazılmış olan default yapıcı fonksiyon (user-provided default constructor)" terimi default yapıcı fonksiyonun programcı 
+	tarafından açıkça yazıldığını belirtmektedir. Açıkça default hale getirilmiş (explicitly defaulted) ve silinmiş (deleted) default yapıcı fonksiyonlar 
+	"user-provided" yapıcı fonksiyon" değillerdir. Bir sınıfta hiçbir yapıcı fonksiyon yoksa derleyicinin yazdığı default yapıcı
+	fonksiyon da "user-provided" değildir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	Sınıfların yapıcı üye fonksiyonlarının temelde iki işlevi vardır:
+
+	1) Sınıfın konusuyla ilgili bazı ilk işlemleri yapmak.
+	2) Sınıfın veri elemanlarına bazı ilkdeğeri vermek.
+
+	Sınıfın yapıcı fonksiyonlarının programcıdan aldığı değerleri sınıfın veri elemanlarına yerleştirmesi çok karşılaşılan bir durumdur. Bu biçimde basit set
+	işlemleri yapan yapıcı fonksiyonların inline biçimde tanımlanması iyi bir tekniktir.
+
+	Aşağıdaki örnekte Date sınıfının yapıcı fonksiyonları sınıfın veri elemanlarına ilkdeğerlerini vermektedir. Bu örnekte üç parametreli yapıcı fonksiyonun 
+	aldığı bu değerleri sınıfın veri elemanlarına yerleştirdiğine dikkat ediniz.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <iostream>
+
+using namespace std;
+
+class Date {
+public:
+	Date()
+	{
+		day = 1;
+		month = 1;
+		year = 1900;
+	}
+	Date(int d, int m, int y)
+	{
+		day = d;
+		month = m;
+		year = y;
+	}
+
+	void disp();
+
+	int day, month, year;
+};
+
+void Date::disp()
+{
+	cout << day << '/' << month << '/' << year << endl;
+}
+
+int main()
+{
+	Date d;
+	Date k(15, 11, 2023);
+
+	d.disp();
+	k.disp();
+
+	return 0;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte Complex sınıfının real ve imag isimli iki veri elemanı bulunmaktadır. Sınıfın iki parametreli yapıcı fonksiyonunun dış dünyadan aldığı 
+	değerleri bu veri elemanlarına yerleştirdiğine dikkat ediniz. Sınıfın defautl yapıcı fonksiyonu açıkça defaulted hale getirilmiştir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <iostream>
+
+using namespace std;
+
+class Complex {
+public:
+	Complex() = default;
+	Complex(double r, double i)
+	{
+		real = r;
+		imag = i;
+	}
+
+	void disp();
+
+	double real;
+	double imag;
+};
+
+void Complex::disp()
+{
+	cout << real << "+" << imag << 'i' << endl;
+}
+
+int main()
+{
+	Complex z;				// dikkat! veri elemanlarında çöp değerler var
+	Complex k{2, 4};
+
+	k.disp();
+
+	return 0;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	C++11 ile birlikte "default member initializer" ismiyle sınıfın veri elemanlarına sınıf bildirimi içerisinde ilkdeğer verme sentaksı da dile eklenmiştir. 
+	Aslında sınıfın veri elemanalrına sınıf bildirimi içerisinde ilkdeğer verme zaten Java ve C# gibi dillerde çok önceden beri bulunyordu. C++ bu özelliği 
+	C++11 ile bünyesine katmıştır. Bu özelliğe göre biz sınıfın veri elemanalrına yapıcı fonksiyonun yanı sıra istersek artık sınıf bildirimi içerisinde de 
+	ilkdeğer verebiliriz. Örneğin:
+
+	class Complex {
+	public:
+		Complex()
+		{}
+		double real = 0;
+		double imag = 0;
+	};
+
+	Anımsanacağı gibi C'de yapılar için böyle bir sentaks yoktur. Pekiyi bu sentaks ne anlama gelmektedir? Aslında derleyiciler bu durumda veri elemanına verilen 
+	ilkdeğerlerin hepsini bildirim sırasına göre atama deyimlerine dönüştürerek sınıfın tüm yapıcı fonksiyonlarının ana bloğunun başına gizli bir biçimde 
+	yerleştirmektedir. Yani bu ilkdeğerler aslında sınıfın tüm yapıcı fonksiyonlarında ilgili veri elemanına verilmiş gibi bir işlem söz konusu olmaktadır. 
+	Standartlar bir veri elemanına hem sınıf bildirimi içerisinde hem de yapıcı fonksiyonda ilkdeğer verildiğinde sınıf bildirimind everilen ilkdeğerin dikkate
+	alınmayacağını (ignore edileceğini) belirtmektedir. Bu anlatım verilen ilkdeğerilerin atama deyimlerine dönüştürülerek tüm yapıcı fonksiyonların başına 
+	yerleştirilmesi anlatımı ile aynı anlama gelmektedir. 
+
+	Pekiyi eskiden olmayan bu zöelliğin C++11 ile eklenmesinin ne amacı vardır? İşte sınıfın çok veri elemanı ve çok yapıcı fonksiyonu olabilir. Bazı veri 
+	elemanlarına her yapıcı fonksiyonda aynı ilkdeğerler veriliyor olabilir. Bu özellik sayesinde programcı bu elemanlara tüm yapıcı fonksiyonalar içerisinde 
+	aynı değeri atamak yerine sınıf bildirimi içerisinde bir kez bu atamayı yapabilir. 
+
+	Sınıf bildirimi içerisinde veri elemanlarına verilen ilkdeğerlerin sabit ifadesi olması gerekmez. Aslında bu ilkdeğer verme işlemi sanki yapıcı fonksiyon 
+	içerisinde yapılıyormuş gibi düşünülmelidir. Dolayısıyla isim araması buna göre yapılmaktadır. Yani bu atama işlemleri yapıcı fonksiyon içerisinde yapılabiliyorsa
+	sınıf bildirimi içerisinde de yapılabilmektedir. Örneğin:
+
+	class Sample {
+	public:
+		int a = 10;
+		int b = a + 1;
+		//...
+	};
+	//...
+
+	Sample s;
+
+	Burada s nesnesinin a elemanında 10, b elemanında 11 bulunacaktır. Aşağıdaki örnekte s nesnesinin a elemanında 1, k nesnesinin a elemanında 2 değeri 
+	bulunacaktır:
+
+	int g_x = 0;
+
+	class Sample {
+	public:
+		int a = ++g_x;
+		//...
+	};
+
+	int main()
+	{
+		Sample s, k;
+
+		cout << s.a << endl;			// 1
+		cout << k.a << endl;			// 2
+
+		return 0;
+	}
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	C++ standartlarında bir nesneye ilkdeğer verilmesi için kullanılan "default-initialize" terimi kabaca şu anlama gelmektedir:
+
+	1) Eğer nesne bir sınıf türündense nesne için sınıfın default yapıcı fonksiyonu çağrılır.
+	2) Eğer nesne bir dizi türündense dizinin her elemanı için "default ilkdeğer verme" işlemi uygulanır.
+	3) Diğer durumlarda (yani nesne temel türlerdense, enum türündense vs.) nesneye herhangi bir ilkdeğer verilmez. Yani nesnede çöp değer kalır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	C++ standartlarında bir nesneye ilkdeğer verilmesi için kullanılan "zero-initialize" terimi ise kabaca şu anlama gelmektedir:
+
+	1) Eğer nesne temel türlerdense ya da gösterici türündense (standartlarda bu kümeye "scaler types" denilmektedir) nesneye sanki 0 değeri atanıyor gibi işlem
+	yapılır. (Göstericilere 0 değerinin atanmasının onlara NULL adresin atanması anlamına geldiğini anımsayınız.)
+	2) Eğer nesne sınıf türündense nesnenin tüm statik olmayan veri elemanları "zero-initilize" edilir. Ayrıca padding birleri de sıfırlanmaktadır.
+	3) eğer nesne bir dizi ise dizinin her elemanı "zero-initilize" yapılır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	C++ standartlarında bir nesneye ilkdeğer verilmesi için kullanılan "value-initialize" terimi ise kabaca şu anlama gelmektedir:
+
+	1) Eğer nesne bir sınıf türündense ve sınıfın default yapıcı fonksiyonu yoksa ya da default yapıcı"" fonksiyonu silinmişse bu durum geçersizdir (error 
+	oluşturmaktadır).
+	2) Eğer nesne bir sınıf türündense ve sınıfın "user-provided" default yapıcı fonksiyonu varsa nesne default-initilze edilir (yani nesnenin default yapıcı 
+	fonksiyonu çağrılır.)
+	3) Eğer nesne bir dizi türündense dizinin her elemanı "value-initialize" edilir. 
+	4) Diğer bütün durumlarda nesne "zero-initliaze" edilmektedir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	Bu terimlerde en çok "default-initialize" ile "value-initialize" birbirleriyle karışıtırılmaktadır. Default-initialize kabaca "sınıflar için default yapıcı 
+	fonksiyonu çağır, diğer nesneler için ilkdeğer verme" anlamına gelmektedir. Halbuki value-inialize kabaca "sınıflar için eğer user-provided default yapıcı 
+	fonksiyon varsa onu çağır yoksa zero-initiliaze yap" anlamına gelmektedir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	C++ standartlarına göre herhangi bir türden yerel nesne tanımlanırken ilkdeğer verilmezse (yani değişken isminden sonra normal parantez ya da küme parantezi 
+	kullanılmamışsa) nesne "default-initialize" edilmektedir. Örneğin:
+
+	{
+		int a;
+		Sample s;
+		//...
+	}
+
+	Burada a da, s de "default-initialize" edilir. 
+
+	Eğer nesne statik ömürlü ise ve temel türlerdense nesneye ilkdeğer verilmemesi durumunda nesne "zero-initialize" yapılmaktadır. Statik ömürlü sınıf nesneleri 
+	işin başında önce "zero-initialize" yapılır. Sonra onlar için uygun yapıcı fonksiyon çağrılır. Örneğin:
+
+	int g_a;
+	Sample g_s;
+
+	Burada her iki nesnenin de global olduğunu varsayalım. Her iki nesne de başlangıçta "zero-inialize" edilecektir. Ancak g_s nesnesi için default yapıcı fonksiyon 
+	da çağrılacaktır. Böylece bu yapıcı fonksiyon sınıfın temel türlere ilişkin bazı veri elemanlarına değer atamamışsa onların içerisinde de 0 olacaktır. 
+	g_s'nin ilkdeğer verilmesini şöyle de açıklayabiliriz: Bu nesne için önce "zero-initialize" uygulanır sonra hiç parantezler kullanılmadığı için "default-initialize"
+	uygulanır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	C++'ta yapıcı fonksiyonların sınıfın veri elemanlarına ilkdeğerlerini vermesi için ismine "MIL Sentaksı (Member Initializer Syntax)" ya standart terminolojisi ile
+	"ctor-initializer" denilen alternatif bir sentaks da bulunmaktadır. MIL sentaksı başından beri C++'ta zaten vardı. MIL sentaksı bazı durumlarda alternatif 
+	bir ilkdeğer verme biçimi olarak, bazı durumlarda da zorunlu bir ilkdeğer verme biçimi olarak kullanılmaktadır. İleride bu sentaksın semantiğine ilişkin 
+	ayrıntılı bilgiler vereceğiz. Burada yalnızca sentaksın yalın kullanımını ve anlamını açıklayacağız. 
+
+	MIL sentaksı yalnızca yapıcı fonksiyonların tanımlamalarında kullanılabilen bir sentakstır. Bu sentaks başka üye fonksiyonlarda ya da global fonksiyonlarda 
+	kullanılamamaktadır. Sınıfın ismi T olmak üzere sentaksın genel biçimi şöyledir:
+
+	T::T(...) : veri_elemanın_ismi(ilkeğer_ifadesi), veri_elemanın_ismi{ilkdeğer_ifadesi}, veri_elemanın_ismi{ilkdeğer_ifadesi}, ...
+	{
+		//...
+	}
+
+	Görüldüğü gibi yapıcı fonksiyonun kapanış parantezinden sonra önce bir ":" atomu sonra da veri elemanın ismi ve parantezler içerisinde ona verilecek ilkdeğer 
+	belirtilmektedir. C++11'e kadar buradaki parantezler normal parantez olmak zorundaydı. C++11 ile birlikte "uniform initializer syntax" dile eklenince buradaki 
+	parantezler için küme parantezleri de kullanılmaya başlandı. Yine küme parantezleri ile ilkdeğer verilirken "daraltıcı dönüştürmelere (narrowing conversion)" 
+	izin verilmemektedir. 
+
+	Aşağıda MIL sentaksının (ctor-initializer) kullanımına bir örnek verilmiştir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <iostream>
+
+using namespace std;
+
+class Sample {
+public:
+	Sample(int x, int y);
+	void disp();
+public:
+	int a;
+	int b;
+	//...
+};
+
+Sample::Sample(int x, int y) : a(x), b(y)
+{}
+
+void Sample::disp()
+{
+	cout << a << ", " << b << endl;
+}
+
+int main()
+{
+	Sample s(10, 20);
+
+	s.disp();
+
+	return 0;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+														28. Ders 20/11/2023 - Pazartesi
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	MIL sentaksı aslında sınıfın başka sınıf türünden veri elemanlarına ilkdeğer vermek için ve taban sınıfa ilkdeğer vermek için de kullanılmaktadır. Yani 
+	sentaksın semantiği biraz ayrıntılıdır. Biz burada geldiğimiz yere kadarki konuları dikkate alarak bir semantik açıklama yapacağız. 
+
+	MIL sentaksındaki ilkdeğer ifadesinde kullanılan isimler aranması nasıl olmaktadır? Yani biz burada hangi değişkenleri kulanabiliriz? İşte bu ilkdeğer 
+	ifadesinideki değişkenler sanki yapıcı fonksiyonun ana bloğunun hemen başında kullanılıyormuş gibi bir etki oluşturmaktadır. Yani isim araması sanki buradaki 
+	isimler yapıcı fonksiyonun ana bloğunun başına kullanılmış gibi yapılmaktadır. Dolayısıyla biz ilkdeğer ifadesinde parametre değişkenlerini, global değişkenleri
+	ve sınıfın veri elemanlarını kullanabiliriz. Örneğin:
+
+	class Sample {
+	public:
+		Sample(int x);
+		//...
+
+		int a, b;
+	};
+
+	int g_x = 10;
+
+	Sample::Sample(int x) : a(x + 1), b(g_x + 2)		// geçerli
+	{}
+
+	C++'ta önce her zaman MIL sentaksında belirtilen ilkdeğer vermeler yapılır. Sonra yapıcı fonksiyonun ana bloğu çalıştırılır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	C++'ta gelecekteki konuları da kapsayacak biçimde "ilkdeğer verme sırası hiçbir zaman MIL sentaksındaki sıraya göre yapılmamaktadır. Her zaman bildirimdeki
+	sıraya göre yapılmaktadır." Örneğin:
+
+	class Sample {
+	public:
+		Sample();
+		//...
+		int a, b, c;
+	};
+
+	Sample::Sample() : c(10), b(20), a(30)
+	{}
+
+	Burada ilkdeğer verme sırası MIL sentaksındaki sıraya göre yapılmayacaktır. İlkdeğer verme her zaman bildirdimdeki sıraya göre yapılmaktadır. Yani burada 
+	kesinlikle önce a = 30, sonra b = 20 ve sonra da c = 10 işlemi yapılacaktır. 
+
+	Örneğin:
+
+	class Sample {
+	public:
+		Sample();
+		//...
+		int a, b, c;
+	};
+
+	Sample::Sample() : c(10), b(c), a(b)
+	{}
+
+	Biz sınıfın veri elemanlarına MIL sentaksı ile ilkdeğer verirken diğer veri elemanlarını kullanabiliriz. Ancak ilkdeğer verme sırası MIL sentaksındaki 
+	sıraya göre değil bildirimdeki sıraya göre yapılmaktadır. Dolayısıyla burada a ve b değişkenlerine çöp değerler atanacaktır. C'de ve C++'ta genel olarak
+	çöp değerleri kullanmak "tanımsız davranış (undefined behavior)" kabul edilmektedir. 
+
+	Yukarıda da belirttğimiz gibi her zaman önce MIL sentaksındaki ilkdeğer verm işlemi bildirimdeki sıraya göre yapılmakta sonra yapıcı fonksiyonun ana bloğu 
+	çalıştırılmaktadır. Bu durumda biz sınıfın bir veri elemanına hem MIL sentaksında hem de yapıcı fonksiyonun ana bloğunda değer atarsak ana blokta atadığımız
+	değer nihai değer olarak veri elemanında kalacaktır. Örneğin:
+
+	Sample::Sample() : a(10), b(20), c(30)
+	{
+		a = 100;
+	}
+
+	Burada nesnenin a veri elemanında 100 bulunacaktır. 
+
+	C++ derleyicileri tipik olarak MIL sentaksındaki ilkdeğer verme işlemlerini atama deyimlerine dönüştürerek gizlice yapıcı fonksiyonunana bloğunun başına 
+	yerleştirmektedir. Böylece örneğin:
+
+	Sample::Sample() : a(10), b(20), c(30)
+	{
+		a = 100;
+	}
+
+	İşlemi için derleyici aşağıdaki gibi bir kod üretmektedir:
+
+	Sample::Sample()
+	{
+		a = 10;		// derleyici tarafından gizlice yerleştiriliyor
+		b = 20;		// derleyici tarafından gizlice yerleştiriliyor
+		c = 30;		// derleyici tarafından gizlice yerleştiriliyor
+
+		a = 100;
+	}
+
+	C++ standartlarına göre eğer bir veri elemanına MIL sentaksında ilkdeğer verilmemişse o veri elemanı henüz akış yapıcı fonksiyonun ana bloğuna girmeden
+	"default-initialize" edilmektedir. Örneğin:
+
+	class Sample {
+	public:
+		Sample();
+		//...
+		int a, b, c;
+	};
+
+	Sample::Sample() : c(10), a(30)
+	{
+		b = 20;
+	}
+
+	Burada standartlara göre şu işlemler gerçekleşecektir: 
+
+	1) Önce a'ya 30 atanır.
+	2) b deafult-initialize edilir. b temel türlerden olduğu için onun default-initialize edilmesi ona herhangi bir atamanın yapılmayacağı anlamına gelmektedir. 
+	Yani onun içerisinde çöp bir değer olacaktır.
+	3) c'ye 10 atanır.
+	4) Yapıcı fonksiyonun ana bloğu çalıştırılır. Orada b'ye 20 atanmıştır. 
+
+	Buradan birkaç sonuç çıkarabiliriz:
+
+	1) Sınıfın temel türlere ilişkin veri elemanlarına MIL sentaksıyla ilkdeğer verme ile yapıcı fonksiyonun ana bloğu içerisinde ilkdeğer verme arasında 
+	bir farklılık yoktur. (Ancak sınıfın başka sınıf türünden veri elemanları söz konusu olduğunda bu durum değişmektedir.)
+
+	2) Biz sınıfın temel türlere ilişkin veri elemanlarına ne MIL sentaksında ne de yapıcı fonksiyonun ana bloğunda ilkdeğer vermemişsek bu durumda o veri elemanında 
+	çöp değer bulunacaktır. 
+
+	C++11 ile birlikte sınıfın veri elemanlarına sınıf bildirimi içerisinde ilkdeğer verilebiliyordu (default member initializer). Bu ilkdeğerlerin de derleyiciler 
+	tarafından sınıfın yapıcı fonksiyonlarının başına taşındığından bahsetmiştik. Pekiyi hem bir veri elemanına sınıf bildirimi içerisinde ilkdeğer verilmişse hem de 
+	MIl sentaksında ilkdeğer verilmişse veri elemanında hangi değer bulunacaktır? C++ standartları bu durumda sınıf bildiriminde verilen ilkdeğerin dikkate alınmayacağını
+	yani MIL sentaksındaki değerin veri elemanında gözzükeceğini belirtmektedir. Örneğin:
+
+	#include <iostream>
+
+	using namespace std;
+
+	class Sample {
+	public:
+		Sample();
+		void disp();
+	public:
+		int a = 10;
+
+		//...
+	};
+
+	Sample::Sample() : a(100)
+	{}
+
+	void Sample::disp()
+	{
+		cout << a << endl;
+	}
+
+	int main()
+	{
+		Sample s;
+
+		s.disp();			// 100
+
+		return 0;
+	}
+
+	Pekiyi bu durumda sınıfın veri elemanlarına MIL sentaksında ilkdeğer vermeye gerek var mıdır? Yukarıdaki anlatımdan da anlaşılacağı gibi sınıfın temel türlerden 
+	veri elemanları için MIL sentaksının kullanılmasına gerek yoktur. Ancak ileride ele alacağımız konularla birlikte MIL sentaksının bazı durumlarda mecburen 
+	kullanılması gerektiğini göreceksiniz. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	C++11 ile birlikte dile "delege yapıcı fonksiyon çağrımı (delagating constructors)" özelliği de eklenmiştir. Aslında bu özellik Java ve C# gibi dillerde 
+	zaten hep vardı. C++'a C++11 ile eklendi. Delege yapıcı fonksiyon çağrımı aslında bir yapıcı fonksiyonun diğerini çağırabilmesi özelliğidir. Sınıfın çok sayıda
+	yapıcı fonksiyonu varsa ve bu fonksiyonlarda ortak birtakım işlemler ve ilkdeğer vermeler yapılıyorsa eskiden kod tekrarını engellemek için normal üye 
+	fonksiyonlar kullanılıyordu. Delege yapıcı fonksiyon çağırımı sayesinde artık çoğu kez buna gerek kalmamaktadır. Örneğin:
+
+	class Sample {
+	public:
+		Sample();
+		Sample(int x);
+		void disp();
+		//...
+
+		int a;
+	};
+
+	Burada iki yapıcı fonksiyonda da ortak şeylerin yapıldığını varsayalım. Eskiden kod tekrarını engellemek için aşağıdaki gibi bir yöntem kullanılıyrodu:
+
+	Sample::Sample()
+	{
+		common_initialize();
+		//...
+	}
+
+	Sample::Sample(int a)
+	{
+		common_initialize();
+		//...
+	}
+
+	Halbuki artık bir yapıcı fonksiyon diğerini çağırabildiği için böyle bir ortak fonksiyon oluşturmaya gerek kalmamaktadır. 
+
+	Delege yapıcı fonksiyon çağrımı MIL sentaksında yapıcı fonksiyonun belirtilmesiyle sağlanmaktadır. Örneğin:
+
+	Sample::Sample() : Sample(0)
+	{
+		//...
+	}
+
+	Burada default yapıcı fonksiyon int parametreli yapıcı fonksiyonu çağırmıştır.
+
+	MIL sentaksında delege yapıcı fonksiyon kullanılacaksa artık başka hiçbir ilkdeğer verme uygulanamaz. Yani MIL sentaksının yalnızca delege yapıcı fonksiyon
+	çağrımını içermesi gerekmektedir. Örneğin:
+
+	Sample::Sample() : Sample(0), a(10)		// geçersiz! yalnızca delege yapıcı fonksiyon çağrımı bulunabilir
+	{}
+
+	Bir yapıcı fonksiyonun MIL sentaksında delege yapıcı fonksiyon çağrımı varsa önce delege yapıcı fonksiyon çağrılır sonra o yapıcı fonksiyonun ana bloğu işletilir. 
+	Tabii bir yapıcı fonksiyon başka bir yapıcı fonksiyonu o da başka bir yapıcı fonksiyonu çağırabilir. Ancak bu çağrımlar sırasında döngsüsel bir durum durum 
+	oluşursa programın akışı sonsuz döngüye girebilir. Bu durum genel olarak "tanımsız davranış (undefined behavior)" oluşturmaktadır. 
+
+	Yukarıda da belirttiğimiz gibi delege yapıcı fonksiyon çağrımı özellikle sınıfın çok fazla yapıcı fonksiyonu olduğunda ve bu yapıcı fonksiyonlarda orta 
+	birtakım şeyler yapıldığında kullanılmaktadır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <iostream>
+
+using namespace std;
+
+class Sample {
+public:
+	Sample();
+	Sample(int x);
+	Sample(int x, int y);
+	void disp();
+
+	int a;
+	int b;
+	//...
+};
+
+Sample::Sample() : Sample(10, 20)
+{
+	cout << "default constructor" << endl;
+}
+
+Sample::Sample(int x) : Sample(x, 10)
+{
+	cout << "int constructor" << endl;
+}
+
+
+Sample::Sample(int x, int y)
+{
+	// ortak yapılması gereken şeylerü
+	cout << "common codes..." << endl;
+
+	cout << "int, int constructor" << endl;
+
+	a = x;
+	b = y;
+}
+
+void Sample::disp()
+{
+	cout << a << ", " << b << endl;
+}
+
+int main()
+{
+	Sample s;
+	Sample k(10);
+
+	s.disp();
+	k.disp();
+
+	return 0;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+														29. Ders 22/11/2023 - Çarşamba
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir sınıf nesnesinin yaşamı sona ererken yani sınıf nesnesi bellekten yok edilmeden hemen önce derleyici tarafından otomatik olarak çağrılan üye fonksiyona
 	"yıkıcı fonksiyon (destructor)" denilmektedir. Yıkıcı fonksiyonların isimleri ~sınıf_ismi biçimindedir. (~ ile sınıf ismi bitişik yazılmak zorundadır).
-	Yıkcı fonksiyonların da geri dönüş değerleri biçiminde bir kavramları yoktur. Yani bunların da geri dönüş değerleri yerine bir şey yazılmaz. Yıkıcı fonksiyonlar
-	overload edilemezler. Yıkıcı fonksiyonlar parametresiz biçimde bulunurlar. 
+	Yıkıcı fonksiyonların da geri dönüş değerleri biçiminde bir kavramları yoktur. Yani bunların da geri dönüş değerleri yerine bir şey yazılmaz. Yıkıcı fonksiyonlar
+	overload edilemezler. Yıkıcı fonksiyonlar parametresiz biçimde bulunmak zorundadır. Örneğin:
+
+	class Sample {
+	public:
+		Sample();		// default constructor
+		~Sample();		// destructor
+		//...
+	};
+
+	Sample::Sample()
+	{
+		//...
+	}
+
+	Sample::~Sample()
+	{
+		//...
+	}
 
 	Yıkıcı fonksiyonlar yapıcı fonksiyonlar tarafından yapılan birtakım ilk işlemleri geri almak amacıyla kullanılmaktadır. Ancak yıkıcı fonksiyonlara yapıcı 
-	fonksiyonlar kadar gereksinim duyulmamaktadır. Çünkü bir sınıf nesnesi için o nesne yok edilirken yapılacak özel bir şeyler	olmayabilir. 
-	Eğer programcı sınıfı için yıkıcı fonksiyon yazmamışsa sınıf için yıkıcı fonksiyon derleyici tarafından public bölümde inline olarak
-	içi boş bir biçimde yazılmaktadır.
+	fonksiyonlar kadar çok gereksinim duyulmamaktadır. Çünkü bir sınıf nesnesi için o nesne yok edilirken yapılacak özel bir şeyler	olmayabilir. Eğer programcı 
+	sınıf için yıkıcı fonksiyon yazmamışsa derleyici yıkıcı fonksiyonu içi boş olarak public inline biçiminde (ve duruma göre constexpr olacak biçimde) yazmaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -8030,6 +10350,182 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
+	Yerel sınıf nesneleri için yıkıcı fonksiyonlar programın akışı o yerel nesnenin tanımlandığı bloğun sonuna geldiğinde çağrılmaktadır. Örneğin:
+
+	foo()
+	{
+		//...
+		{
+			Sample s;		// default constructor
+			//....
+		}					// ----> destructor
+		//...
+	}
+
+	Global sınıf nesneleri için yıkıcı fonksiyonlar programın akışı main fonksiyonundan çıktıktan sonra çağrılmaktadır. Örneğin:
+
+	Sample g_s;			// default constructor
+
+	main()
+	{
+		//...
+
+		return 0;
+	}
+
+	Burada g_s global sınıf nesnesi için yapıcı fonksiyon akış main fonksiyonuna girmeden, yıkıcı fonksiyon ise akış main fonksiyonundan çıktığında çağrılacaktır.
+
+	static yerel sınıf nesneleri için yıkıcı fonksiyonlar "eğer onlar için yapıcı fonksiyon çağrılmışsa" akış main fonksiyonundan çıktıktan sonra çağrılmaktadır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	C++'ta şimdiye kadar gördümüz konuları ve gelecekte de göreceğimiz konuları kapsayacak biçimde yapıcı ve yıkıcı fonksiyonların çağrılma sıraları hakkında 
+	genel bir kural vardır: "Yapıcı fonksiyonlarla yıkıcı fonksiyonlar her zaman ters sırada çağrılırlar." Yani örneğin x sınıf nesnesi için yapıcı fonksiyon y 
+	sınıf nesnesi için yapıcı fonksiyondan daha önce çağrılmışsa x sınıf nesnesi için yıkıcı fonksiyon y sınıf nesnesi için yıkıcı fonksiyondan daha sonra çağrılacaktır. 
+	Örneğin:
+
+	int main()
+	{
+		Sample s, k;
+		//...
+
+		return;
+	}
+
+	Burada önce s için sonra k için yapıcı fonksiyonlar çağrılır. Ancak yıkıcı fonksiyonlar ters sırada yani önce k için sonra s için çağrılacaktır. Örneğin:
+
+	int main()
+	{
+		Sample s;
+		//...
+
+		{
+			Sample k;
+			//...
+		}
+
+		//...
+
+		return 0;
+	}
+
+	Burada akış gereği önce s için sonra k için yapıcı fonksiyon çağrılır. O halde yıkıcı fonksiyonlar da önce k için sonra s için çağrılacaktır. Örneğin:
+
+	Sample g_x, g_y;
+
+	int main()
+	{
+		//...
+
+		return 0;
+	}
+
+	Burada akış main fonksiyonuna girmeden önce g_x için sonra g_y için yapıcı fonksiyonlar çağrılacaktır. Akış main fonksiyonundan çıktığında ise önce g_y için
+	sonra g_x için yıkıcı fonksiyonlar çağrılacaktır. 
+
+	Aşağıdaki programı derleyerek çalıştırınız. Bu programda hangi sınıf sınıf nesneleri için yapıcı ve yıkıcı fonksiyonların çağrıldığı anlaşılmaktadır. 
+	Programın çıktısına bakarak yukarıda ifade ettiğimiz kuralın geçerli olduğunu doğrulayınız. 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------*
+
+#include <iostream>
+
+using namespace std;
+
+class Sample {
+public:
+	Sample(int x);
+	~Sample();
+
+	int a;
+};
+
+Sample::Sample(int x) : a(x)
+{
+	cout << "int constructor: "  << a << endl;
+}
+
+Sample::~Sample()
+{
+	cout << "destructor: " << a << endl;
+}
+
+void foo()
+{
+	cout << "foo begins..." << endl;
+
+	static Sample s(50);
+
+	cout << "foo ends..." << endl;
+}
+
+Sample s(10), k(20), m(30);
+
+int main()
+{
+	cout << "main begins..." << endl;
+
+	Sample x(100), y(200);
+
+	{
+		cout << "nested block begins..." << endl;
+
+		Sample r(1000), z(2000);
+
+		cout << "nested block ends..." << endl;
+	}
+
+	foo();
+	foo();
+
+	cout << "main ends..." << endl;
+
+	return 0;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	Yukarıda da belirttiğimiz gibi yıkıcı fonksiyonlar "yapıcı fonksiyonlarda yapılan birtakım tahsisatları otomatik geri bırakmak" için kullanılmaktadır. 
+	Eğer yapıcı fonksiyon içerisinde böylesi bir tahsisat yapılmamışsa sınıf için yıkıcı fonksiyon yazmaya da gerek yoktur. Örneğin aşağıdaki gibi bir sınıf
+	için programcının yıkıcı fonksiyonu yazmasına gerek yoktur. Ancak biz sınıfın aslında yıkıcı fonksiyonunun olduğunu düşünmeliyiz. Çünkü biz bir 
+	sınıf için yıkıcı fonksiyon yazmamışsak derleyici onun için yıkıcı fonksiyonu içi boş olarak public inline biçiminde yazmaktadır. (Bazı durumlarda derleyici 
+	yıkıcı fonksiyonu yazamayabilir. C++11 ve sonrasında bu duruma "defaulted" yıkıcı fonksiyonun "deleted" yapılması denilmektedir.) Bu konu ileride ele alınacaktır. 
+
+	#include <iostream>
+
+	using namespace std;
+
+	class Complex {
+	public:
+		Complex(double r = 0, double i = 0)
+		{
+			real = r;
+			imag = i;
+		}
+
+		void disp();
+
+		double real, imag;
+	};
+
+	void Complex::disp()
+	{
+		cout << real << '+' << imag << 'i' << endl;
+	}
+
+	int main()
+	{
+		Complex z{3, 2};
+
+		z.disp();
+
+		return 0;
+	}
+
+	C++20 ile birlikte sınıf şablonlarında alternatif yıkıcı fonksiyonlar bulunabildiği için standart dokğmanlarında bolca "destructor" yerine "prospective destructor"
+	terimi kullanılmaktadır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	Yukarıda da belirtitğimiz yıkıcı fonksiyonlar "yapıcı fonksiyonlar içerisinde yapılan birtakım ilk işlemlerin otomatik yok edilmesi amacıyla" kullanılmaktadır. 
 	Örneğin yapıcı fonksiyon içerisinde new operatörü ile bir bellek tahsisatı yapılmış olabilir, bu tahsisat yıkıcı fonksiyon içerisinde delete operatörüyle
 	free hale getirilebilir. 
 
@@ -8044,19 +10540,13 @@ using namespace std;
 
 class String {
 public:
-	char *str;
-
-	String();
 	String(const char *s);
 	~String();
-
 	void disp();
-};
+	//...
 
-String::String()
-{
-	str = new char[1]{ '\0' };
-}
+	char *str;
+};
 
 String::String(const char *s)
 {
@@ -8074,105 +10564,16 @@ void String::disp()
 	cout << str << endl;
 }
 
-int main(void)
-{
-	String s("ankara");
-
-	s.disp();
-
-	return 0;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------------
-	C++'ta ilerideki konuları da kapsayacak biçimde yapıcı ve yıkıcı fonksiyonların çağrılma sıraları ile ilgili temel bir kural vardır: "C++'ta her zaman yapıcı fonksiyonlarla 
-	yıkıcı fonksiyonlar ters sırada çağrılırlar." Örneğin a, b, c nesnelerinin yapıcı fonksiyonlarının bu sırada çalıştırılmış olduğunu varsayalım.,
-	Bunların yıkıcı fonksiyonları c, b, a biçiminde çağrılacaktır. 
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-	Yerel sınıf nesneleri için yıkıcı fonksiyonlar programın akışı o yerel nesnenin tanımlandığı bloktan çıkarken çağrılmaktadır. Eğer o blokta birden fazla yerel sınıf nesnesi 
-	tanımlanmışsa bunların yıkıcı fonksiyonları ters sıra çağrılacaktır. 
----------------------------------------------------------------------------------------------------------------------------*/
-
-#include <iostream>
-
-using namespace std;
-
-class Sample {
-public:
-	int a;
-
-	Sample(int x);
-	~Sample();
-};
-
-Sample::Sample(int x)
-{
-	a = x;
-	cout << "constructor: " << a << endl;
-}
-
-Sample::~Sample()
-{
-	cout << "destructor: " << a << endl;
-}
-
-int main(void)
-{
-	Sample s(10), k(20);
-
-	{
-		Sample m(30);
-		Sample r(40);
-
-		cout << "nested block ends..." << endl;
-	}
-
-	cout << "main ends..." << endl;
-
-	return 0;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------------
-	Global sınıf nesneleri için yıkıcı fonksiyonlar akış main fonksiyonundan çıktıktan sonra yapıcı fonksiyonlara göre yine ters sırada çağrılmaktadır. 
----------------------------------------------------------------------------------------------------------------------------*/
-
-#include <iostream>
-
-using namespace std;
-
-class Sample {
-public:
-	int a;
-
-	Sample(int x);
-	~Sample();
-};
-
-Sample::Sample(int x)
-{
-	a = x;
-	cout << "constructor: " << a << endl;
-}
-
-Sample::~Sample()
-{
-	cout << "destructor: " << a << endl;
-}
-
-Sample x(100);
-
-int main(void)
+int main()
 {
 	cout << "main begins..." << endl;
 
-	Sample s(10), k(20);
+	String s{"izmir"};
 
 	{
-		Sample m(30);
-		Sample r(40);
+		String k{"ankara"};
 
-		cout << "nested block ends..." << endl;
+		k.disp();
 	}
 
 	cout << "main ends..." << endl;
@@ -8180,14 +10581,162 @@ int main(void)
 	return 0;
 }
 
-Sample y(200);
+/*--------------------------------------------------------------------------------------------------------------------------
+	Örneğin bir sınıfın yapıcı fonksiyonu bir dosya açmış olabilir. Bu dosyanın kapatılması yıkıcı fonksiyon tarafından otomatik yapılabilir. Aşağıdaki örnekte
+	yapıcı fonksiyon içerisinde dosya açılmış, yıkıcı fonksiyon içerisinde dosya kapatılmıştır. Bu örnekte bir noktaya dikkat ediniz. Yapıcı fonksiyon içerisinde
+	dosya açım işleminin başarısını kontrol kontrol ettik ancak başarısızlığın gereğini yapamadık. Bu bir kusurdur. Pekiyi başarısızlık durumunda ne yapabilrdik?
+	Programın tümden sonlandırılması iyi bir teknik değildir. Öte yandan bir mesaj veriyor olsak bile program çalışma devam edecek ve tanımsız davranışlar oluşacaktır. 
+	İşte yapıcı fonksiyonlardaki başarısızlıklarda genel olarak "exception" fırlatılmaktadır. Biz henüz o konuyu görmedik. Örneğimiz cerr nesnesini de kullandık. 
+	cout "stdout dosyasına", cerr ise "stderr dosyasına" yazım yapmaktadır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <iostream>
+#include <cstdio>
+
+using namespace std;
+
+class File {
+public:
+	File(const char *path, const char *mode = nullptr);
+	~File();
+	void type();
+	//...
+
+	FILE *f;
+};
+
+File::File(const char *path, const char *mode)
+{
+	f = fopen(path, mode == nullptr ? "r" : mode);		// başarısızlık kontrol edilip exception fırlatılabilir
+
+	if (f == nullptr)
+		cerr << "cannot open file: " << path << endl;
+}
+
+File::~File()
+{
+	fclose(f);
+}
+
+void File::type()
+{
+	int ch;
+
+	while ((ch = fgetc(f)) != EOF)
+		cout << (char)ch;
+
+	if (ferror(f))
+		cerr << "cannot read file!.." << endl;
+}
+
+int main()
+{
+	//...
+
+	{
+		File file("xxxx.cpp");
+
+		file.type();
+	}
+
+	//...
+
+	return 0;
+}
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	C++11 ile birlikte sınıfların yıkıcı fonksiyonları da "defaulted" ve "deleted" yapılabilmektedir. Zaten bir sınıf için yıkıcı fonksiyon 
-	yazılmamışsa derleyici tarafından onun içi boş olarak yazılacağını belirtmiştik. O halde bir yıkıcı fonksiyonun defaulted yapılmasının anlamı ne olabilir?
-	İşte bazı ince konular için bu durum gerekli olabilmektedir. Yine bir yıkıcı fonksiyonun "deleted" yapılması ise çok seyrek bazı durumlarda gerekebilmektedir.
-	Yıkıcı fonksiyon deleted yapılırsa artık biz o sınıf türünden nesneyi yok edemeyiz. Çünkü yok ederken yıkıcı fonksiyon çağrılmaktadır. Bu tür durumlarda hata 
-	link aşamasında değil derleme aşamasında ortaya çıkmaktadır. 
+	Yukarıdaki sınıfı delege yapıcı fonksiyon çağırma sentaksı ile de aşağıdkai gibi oluşturabilirdik. Genel olarak delege yapıcı fonksiyonu çağırma burada bize
+	önemli bir fayda sağlamamaktadır. Dolayısıyla bu tür durumlarda default argüman kullanmayı tercih edebilirsiniz. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <iostream>
+#include <cstdio>
+
+using namespace std;
+
+class File {
+public:
+	File(const char *path);
+	File(const char *path, const char *mode);
+	~File();
+	void type();
+	//...
+
+	FILE *f;
+};
+
+File::File(const char *path) : File(path, "r")
+{}
+
+File::File(const char *path, const char *mode)
+{
+	f = fopen(path, mode );		// başarısızlık kontrol edilip exception fırlatılabilir
+
+	if (f == nullptr)
+		cerr << "cannot open file: " << path << endl;
+}
+
+File::~File()
+{
+	fclose(f);
+}
+
+void File::type()
+{
+	int ch;
+
+	while ((ch = fgetc(f)) != EOF)
+		cout << (char)ch;
+
+	if (ferror(f))
+		cerr << "cannot read file!.." << endl;
+}
+
+int main()
+{
+	//...
+
+	{
+		File file("sample.cpp");
+
+		file.type();
+	}
+
+	//...
+
+	return 0;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+	Anımsanacağı gibi sınıfın yapıcı fonksiyonları programcı tarafından çağrılamamaktadır. Ancak sınıfın yıkıcı fonksiyonları programcı tarafından çağrılabilir. 
+	Yıkıcı fonksiyonların birdeb fazla kez çağrılması da genel olarak tanımsız davranış oluşturmaktadır. Örneğin:
+
+	{
+		Sample s;
+		//...
+		s.~Sample();			// geçerli
+	}							// ancak blok sonunda yine yıkıcı fonksiyon çağrılacaktır, tanımsız davranış
+
+	Burada sınıfın yıkıcı fonksiyonu iki kez çağrılmış olmaktadır. Dolaysıyla tanımsız davranış söz konusudur. Yıkıcı fonksiyonların açıkça programcı tarafından 
+	çağrılması çok seyrek bir gereklilik oluşturmaktadır. (Örneğin placement new fonksiyonu ile birlikte bu özellik kullanılabilmektedir.) Yıkıcı fonksiyon 
+	ancak bir nesne ya da gösterici yoluyla çağrılabilir. Bir üye fonksiyon tarafından doğrudan çağrılamaz. Örneğin:
+
+	void Sample::foo()
+	{
+		//...
+
+		~Sample();		// geçersiz!
+	}
+
+	Yıkıcı fonksiyonların yine adresleri alınamamaktadır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    C++11 ile birlikte sınıfların yıkıcı fonksiyonları da "defaulted" ve "deleted" yapılabilmektedir. Zaten bir sınıf için yıkıcı fonksiyon yazılmamışsa derleyici 
+	tarafından yıkıcı fonksiyonun içi boş olarak yazıldığını belirtmiştik. O halde bir yıkıcı fonksiyonun "defaulted" yapılmasının anlamı ne olabilir? Aslında 
+	toplamda yıkıcı fonksiyonun açıkça "defaulted" yapılması ancak teorik açıklamalar için kullanılmaktadır. Yıkıcı fonksiyon açıkça "deleted" yapılırsa artık 
+	biz o sınıf türünden nesneyi yok edemeyiz. Çünkü yok ederken yıkıcı fonksiyon çağrılmaktadır. Bu tür durumlarda hata link aşamasında değil derleme aşamasında 
+	ortaya çıkmaktadır. Yine açıkça "deleted" yıkıcı fonksiyonlar ancak "static sınıflar için" anlamlı olabilmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -8209,30 +10758,45 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Sınıfın yapıcı fonksiyonları nesneyle normal bir üye fonksiyon gibi çağrılamaz. Ancak yıkıcı fonksiyonları normal bir üye fonksiyon gibi çağrılabilmektedir. Örneğin:
+    Sınıfın veri elemanları tüm üye fonksiyonlar içerisinden doğrudan kullanılabilmektedir. İşte bu durum faaliyet alanı bakımından bu veri elemanı isimlerinin 
+	yanlışlıkla gizlenmesi sonucunu doğurabilmektedir. Örneğin bir üye fonksiyonun parametre değişkeni sınıfın bir veri elemanının ismiyle aynı olursa biz bu üye 
+	fonksiyon içerisinde artık sınıfın bu veri elemanına erişemeyiz: Çünkü C'de ve C++'ta aynı blokta birden fazla aynı isimli değişken faaliyet gösteriyorsa o 
+	blokta dar faaliyet alanına sahip olan değişkenlere erişilebilmektedir. Örneğin:
 
-	class Sample {
+	class Date {
+	public:
+		Date(int day, int month, int year)
+		{
+			day = day;
+			month = nonth;
+			year = year;
+		}
 		//...
+
+		int day, month, year;
 	};
-	//...
 
-	Sample s;
+	Burada yapıcı fonksiyonda biz parametre değişkenlerini sınıfn veri elemanlarına atamamaktayız. Parametre değişkenlerini kendi kendilerine atamaktayız. 
 
-	s.Sample();		// geçersiz! yapıcı fonksiyonlar açıkça çağrılamazlar
-	s.~Sample();	// geçerli, yıkıcı fonksiyonlar diğer üye fonksiyonlar gibi çağrılabilirler. 
+	Yine bir üye fonksiyonu inceleyen kişi oradaki değişkenin bir veri elemanı olup olmadığını çabuk anlarsa kodu daha iyi anlamlandırabilir. İşte bu nedenlerden 
+	dolayı C++ programcıları genellikle sınıfın veri elemanlarını özel öneklerle ya da soneklerle isimlendirmektedir. Örneğin Microsoft sınıfların veri elemanlarını 
+	m_xxxx biçiminde "m_" öneki ile isimlendirmektedir. Bazı programcılar da "d_" önekini tercih ederler. Bazı programcılar ismin sonuna '_' getirirler. Biz de 
+	kursumuzda bundan sonra sınıfların bütün veri elemanlarını m_xxxx biçiminde "m_" öneki ile isimlendireceğiz. Örneğin:
 
-	Tabii yıkıcı fonksiyonların açıkça çağrılması dikkat edilmesi gereken özel bir durumdur. Çünkü progracı yıkıcı fonksiyonları açıkça çağırdıktan sonra yine 
-	nesne hayatını kaybederken derleyici tarafından çağrılacaktır. Bu durumda bu fonksiyonun iki kez çağrılması sorunlara yol açabilecektir. 
----------------------------------------------------------------------------------------------------------------------------*/
+	class Date {
+	public:
+		Date(int day, int month, int year)
+		{
+			m_day = day;
+			m_month = nonth;
+			m_year = year;
+		}
+		//...
 
-/*--------------------------------------------------------------------------------------------------------------------------
-	Sınıfın veri elemanları tüm üye fonksiyonlar içerisinden doğrudan kullanılabilmektedir. İşte bu durum faaliyet alanı bakımından bu veri elemanı isimlerinin yanlışlıkla
-	gizlenmesi sonucunu doğurabilmektedir. Örneğin bir üye fonksiyonun parametre değişkeni sınıfın bir veri elemanının ismiyle aynı olursa biz bu üye fonksiyon içerisinde
-	artık sınıfın bu veri elemanına erişemeyiz: Çünkü C ve C++'ta aynı blokta birden fazla aynı isimli değişken faaliyet gösteriyorsa o blokta dar faaliyet alanına
-	sahip olan değişkenlere erişilebilmektedir. Yine bir üye fonksiyonu inceleyen kişi oradaki değişkenin bir veri elemanı ya da bir yerel değişken olup olmadığını çabuk anlarsa
-	kodu daha iyi anlamlandırır. İşte bu ndenlerden dolayı C++ programcıları sınıfın veri elemanlarını özel öneklerle ya da soneklerle isimlendirmektedir. Örneğin Microsoft 
-	sınıfların veri elemanlarını m_xxxx biçiminde m_ öneki ile isimlendirmektedir. Bazı programcılar da d_ önekini tercih ederler. Biz de kursumuzda bundan sonra sınıfın bütün 
-	veri elemanlarını m_xxxx biçiminde m_ öneki ile isimlendireceğiz. 
+		int m_day, m_month, m_year;
+	};
+
+	<BURADA KALDIK>
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -8267,6 +10831,8 @@ int main(void)
 
 	return 0;
 }
+
+<BURADA KALDIK>
 
 /*--------------------------------------------------------------------------------------------------------------------------
 	Sınıfların public, protected ve private bölümleri sınıf elemanlarına nereden erişilebileceği üzerinde etkili olmaktadır. Sınıflardaki erişim kuralları şöyledir:
