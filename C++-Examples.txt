@@ -1545,7 +1545,7 @@ int main(void)
 	3) temp yok ediliyor
 
 ---------------------------------------------------------------------------------------------------------------------------*/
-BURADA KALDIM
+
 /*--------------------------------------------------------------------------------------------------------------------------
 	Fonksiyonların parametre değişkenleri sol taraf referansı olabilir. Böyle fonksiyonlar referansla aynı türden bir sol taraf değeri ile (yani nesne
 	belirten ifadeyle) çağrılmalıdır. Bu çağırma sırasında derleyici argümanda belirtilen nesnenin adresini alarak referansa yerleştirir. Artık fonksiyonda
@@ -1680,7 +1680,7 @@ int main()
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	C++'ta C'de olduğu gibi göstericiyi gösteren gösterici (pointer to pointer) söz konusu olabilir. Ancak referansı refere eden referans olamaz. Tabii bunun 
+	C++'ta da C'de olduğu gibi göstericiyi gösteren gösterici (pointer to pointer) söz konusu olabilir. Ancak referansı refere eden referans olamaz. Tabii bunun 
 	olamamasının en açık nedeni aslında referansın kendi adresinin alınamamasıdır. Örneğin:
 
 	int a = 10;
@@ -1694,7 +1694,7 @@ int main()
 	int * const r = &a;
 	int * const k = &*r;
 
-	C++'a C++11 ile birlikte eklenen "sağ taraf değeri referansları (rvalue reference)" C++'a yeni başlayan C programcıları tarafından sanki "referansın referansı"
+	C++'a C++11 ile birlikte eklenen "sağ taraf değeri referansları (rvalue reference)", C++'a yeni başlayan C programcıları tarafından sanki "referansın referansı"
 	sanılmaktadır. Oysa sağ taraf değeri referansının bununla hiçbir ilgisi yoktur. Örneğin:
 
 	int &&r = 10;		// bu tamamen başka bir anlama gelmektedir.
@@ -1730,10 +1730,10 @@ int main()
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Anımsanacağı gibi C'de yapıları genel olarak adres yoluyla fonksiyonlara aktarıyorduk. Bu durumda fonksiyonun parametre değişkeni bir gösteri oluyordu. 
+	Anımsanacağı gibi C'de yapıları genel olarak adres yoluyla fonksiyonlara aktarıyorduk. Bu durumda fonksiyonun parametre değişkeni bir gösterici oluyordu. 
 	Biz de fonksiyonu aynı türden bir yapı nesnesinin adresiyle çağırıyorduk. Fonksiyon içerisinde yapı elemanlarına bu gösterici yoluyla -> operatörünü 
-	kullnarak erişiyorduk. İşte C++'ta bir yapıyı referans yoluyla da fonksiyona aktarabiliriz. Bu durumda yapının elemanlarına referans yoluyla erişirken 
-	ok operatörü değil nokta operatörü kullanılmaktadır. Örneğin:
+	kullanarak erişiyorduk. İşte C++'ta bir yapıyı referans yoluyla da fonksiyona aktarabiliriz. Bu durumda yapının elemanlarına referans yoluyla erişirken 
+	ok operatörü değil, nokta operatörü kullanılmaktadır. Örneğin:
 
 	struct DATE {
 		int day;
@@ -1752,12 +1752,12 @@ int main()
 
 	disp_date(date);
 
-	Bir referansı ilkdeğer verdikten sonra kullandığımızda artık referansın refere ettiği nesneyi kullanmış olmaktayız. Yani biz bu örnekte disp_date içerisinde 
-	r referansını kullandığımızda aslında bütünsel olarak date nesnesini kullanmış gibi oluruz. Bir yapı nesnenin bütünü kullnarak elemanlarına erişmek için 
+	Bir referansı, ilkdeğer verdikten sonra kullandığımızda artık referansın refere ettiği nesneyi kullanmış olmaktayız. Yani biz bu örnekte disp_date içerisinde 
+	r referansını kullandığımızda aslında bütünsel olarak date nesnesini kullanmış gibi oluruz. Bir yapı nesnesinin bütününü kullanarak elemanlarına erişmek için 
 	nokta operatörünün kullanıldığına dikkat ediniz. 
 
-	Bir yapı nesnesinin C++'ta fonksiyona gösterici yoluyla aktarılmasıyla referans yoluyla aktarılması arasında hiçbir etkinlik farklılık yoktur. İkisi de aynı 
-	derecede etkindir.
+	Bir yapı nesnesinin C++'ta fonksiyona gösterici yoluyla aktarılmasıyla referans yoluyla aktarılması arasında hiçbir farklılık yoktur. İkisi de aynı derecede 
+	etkindir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -1770,7 +1770,7 @@ struct DATE {
 	int year;
 };
 
-void disp_date(const DATE &r)
+void disp_date(const struct DATE &r)
 {
 	cout << r.day << '/' << r.month << '/' << r.year << endl;
 }
@@ -1785,7 +1785,7 @@ int main()
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Yukarıdaki kodun eşdeğer gösterici kaşılığı aşağıdaki gibidir:
+	Yukarıdaki kodun eşdeğer gösterici karşılığı aşağıdaki gibidir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -1818,7 +1818,7 @@ int main()
 
 	int g_a = 10;
 
-	int &foo()		// int &temp =g_ a
+	int &foo()		// int &temp = g_a;
 	{
 		return g_a;
 	}
@@ -1826,10 +1826,10 @@ int main()
 
 	foo() = 20;		// temp = 20
 
-	Burada artık fonksiyon çağrısı bir sol taraf değeri belirtmektedir. Görüldüğü gibi C'de fonksiyon çağrıları her zaman sağ taraf değeri belirtir. AncakC++'ta
+	Burada artık fonksiyon çağrısı bir sol taraf değeri belirtmektedir. Anımsanacağı üzere C'de fonksiyon çağrıları her zaman sağ taraf değeri belirtir. Ancak C++'ta
 	fonksiyonun geri dönüş değeri sol taraf değeri referansı ise artık fonksiyon çağrısı sol taraf değeri belirtir. Fonksiyon çağrısına bir değer atadığımızda aslında biz
 	return ifadesindeki nesneye değer atamış oluruz. Tabii nasıl bir fonksiyon yerel bir nesnenin adresi ile geri dönmemeli ise benzer biçimde aynı durum referanslar
-	için de geçerlidir. Yani fonksiyonun geri dönüş değeri bir referans ise biz return ifadesinde yerel bir nense kullanmamalıyız (fonksiyon bittiğinde yerel nesnelerin 
+	için de geçerlidir. Yani fonksiyonun geri dönüş değeri bir referans ise biz return ifadesinde yerel bir nesne kullanmamalıyız. (Fonksiyon bittiğinde yerel nesnelerin 
 	stack'ten boşaltıldığını anımsayınız.) Örneğin:
 
 	int &foo()
@@ -1854,7 +1854,7 @@ int &foo()
 {
 	//...
 
-	return g_a;		// int &temp = g_a
+	return g_a;		// int &temp = g_a;
 }
 
 int main()
@@ -1867,7 +1867,7 @@ int main()
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Yukarıdaki kodun eşedeğer gösterici karşılığı aşağıdaki gibidir:
+	Yukarıdaki kodun eşdeğer gösterici karşılığı aşağıdaki gibidir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -1894,7 +1894,7 @@ int main()
 
 /*--------------------------------------------------------------------------------------------------------------------------
 	C++'ta "geçici nesne (temporary object)" denildiğinde "derleyicinin kendisi tarafından yaratılan ve yok edilen isimsiz nesneler" anlaşılmaktadır. Örneğin 
-	fonksiyonun geri dönüş değerinin oluşturulması bir geçici nesne yolyla yapılmaktadır. İşte C++'ta bazı durumlarda derleyici geçici nesneler yaratılmaktadır.
+	fonksiyonun geri dönüş değerinin oluşturulması bir geçici nesne yoluyla yapılmaktadır. İşte C++'ta bazı durumlarda derleyici tarafından geçici nesneler yaratılmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -1926,15 +1926,15 @@ int main()
 	int temp = 3.14;		// dikkat bilgi kaybı oluşacak ama geçerli
 	const int &r = temp;
 
-	Burada artık r referansının gösterdiği int nesnede 3.14 değeri değil 3 değeri olacaktır. 
+	Burada artık r referansının gösterdiği int nesnede 3.14 değeri değil, 3 değeri olacaktır. 
 
 	Bu örneklerde r referansının artık derleyici tarafından yaratılmış geçici nesneleri gösterdiğine dikkat ediniz. Referans const olduğu için o nesneler üzerinde 
-	değişklik yapamayacağız.
+	değişiklik yapamayacağız.
 
 	C++ standartlarına göre bu biçimde yaratılmış olan geçici nesneler referansın ömrü boyunca yaşamaya devam eder. Referans yaşamını kaybederken bu geçici nesne 
 	de derleyici tarafından yok edilecektir. Bu geçici nesnenin yok edilmesi ile programcının uğraşmadığına dikkat ediniz. 
 
-	Bu biçimde const bir sol taraf değeri referansına sağ taraf değeri ile ilkdeğer verilirken eğer Uniform Initializer Syntax kullanılıyorsa ya da küme parantezi 
+	Bu biçimde const bir sol taraf değeri referansına sağ taraf değeri ile ilkdeğer verilirken eğer "Uniform Initializer Syntax" kullanılıyorsa ya da küme parantezi 
 	sentaksı kullanılıyorsa bu durumda daraltıcı dönüştürmelere izin verilmemektedir. Örneğin:
 
 	const int &r {3.14};		// geçersiz! double -> int dönüştürmesi daraltıcı bir dönüştürme
@@ -1958,7 +1958,7 @@ int main()
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Bir sol taraf değeri referansına bir sol taraf değeri ile ilkdeğer verildiğinde derleyicinin tipik olarak bu ilkdeğer olarak verilen nesnenin adresini 
+	Bir sol taraf değeri referansına, bir sol taraf değeri ile ilkdeğer verildiğinde derleyicinin tipik olarak bu ilkdeğer olarak verilen nesnenin adresini 
 	referansa yerleştirdiğini söylemiştik. Bu durumda bir sol taraf değeri referansına bir dizi ile ilkdeğer verdiğimizde derleyici dizinin adresini referansa 
 	yerleştirecektir. Anımsanacağı gibi C'de bir dizinin adresi alınırsa bu adres "dizi göstericisi (pointer to array)" bir göstericiye yerleştirilebilir. İşte 
 	buradan hareketle C++'ta eğer biz sol taraf değeri referansına bir diziyi bind edersek referansın da "dizi referansı (reference to array)" olması gerekmektedir. 
@@ -1998,12 +1998,12 @@ int main()
 	int temp = a;
 	const int &r = temp;
 
-	Tabii eğer ilkdeğer verme yine "uniform initializer" sektasıyla ya da küme parantezi sentaksıyla yapılıyorsa bilgi kaybına yol açabilen daraltıcı dönüştürmelere 
+	Tabii eğer ilkdeğer verme yine "Uniform Initializer" sentaksıyla ya da küme parantezi sentaksıyla yapılıyorsa bilgi kaybına yol açabilen daraltıcı dönüştürmelere 
 	izin verilmemektedir. Örneğin:
 
 	double a = 10.4;
 	const int &r{a};		// geçersiz!
-	cont int &k = {a};		// geçersiz!
+	const int &k = {a};		// geçersiz!
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -2020,14 +2020,15 @@ int main()
 		/  \	   /  \
 	   /    \     /    \
 	lvalue   xvalue    prvalue
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
 	Yukarıda da belirttiğimiz gibi C++11 ile birlikte ismine "sağ taraf değeri referansları (rvalue references)" denilen başka bir referans türü daha dile eklenmiştir. 
-	Böylece eski referansların da isimleri "sol taraf değeri referansları (lavlue references)" biçiminde değiştirilmiştir. Sağ taraf değeri referansları dekleratörde 
+	Böylece eski referansların da isimleri "sol taraf değeri referansları (lvalue references)" biçiminde değiştirilmiştir. Sağ taraf değeri referansları dekleratörde 
 	&& atomlarıyla belirtilir. (Burada && atomları referansın referansı gibi bir anlama gelmemektedir. Zaten refereransın adresi alınamamaktadır.)
 
-	Bir sağ taraf değeri referansı bir sağ taraf değeri ile (yani nesne belirtmeyen bir ifade ile) ilkdeğer verilerek tanımlanır. Biz nasıl bir (const olmayan) sol 
+	Bir sağ taraf değeri referansı, bir sağ taraf değeri ile (yani nesne belirtmeyen bir ifade ile) ilkdeğer verilerek tanımlanır. Biz nasıl bir (const olmayan) sol 
 	taraf değeri referansına bir sağ taraf değerine ilişkin ifadeyi bind edemiyorsak bir sağ taraf değeri referansına da bir sol taraf değerine ilişkin ifadeyi 
 	bind edemeyiz. Örneğin:
 
@@ -2047,7 +2048,7 @@ int main()
 
 	int &&r = 3.14;			// tuhaf ama geçerli
 	long a = 10, b = 20;
-	int &&k = a + b;		a+ b long türden ama geçerli
+	int &&k = a + b;		// a + b long türden ama geçerli
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -2071,11 +2072,11 @@ int main()
 
 	int &&r = 10;
 
-	r = 20;						// geçerli, geçici nesne değiştiriliyor
+	r = 20;		// geçerli, geçici nesne değiştiriliyor
 
 	const int &k = 10;
 
-	k = 20;						// geçersiz! referans const
+	k = 20;		// geçersiz! referans const
 
 	Sağ taraf değeri referansları kullanıldıklarında artık sol taraf değeri belirtirler. Örneğin:
 
@@ -2107,7 +2108,7 @@ int main(void)
 	ile aynı türden derleyici tarafından yaratılan geçici nesneye yerleştirilir ve geçici nesnenin adresi referansa atanır. Örneğin:
 
 	double d = 3.14;
-	int &&r = d;			// geçerli!
+	int &&r = d;		// geçerli!
 
 	Bu işlemin eşdeğeri şöyledir:
 
@@ -2115,7 +2116,7 @@ int main(void)
 	int temp = d;
 	int &&r = temp'in adresi
 
-	Tabii burada biz referansa yoluyla referansın refere ettiği yeri deştirdiğimizde d'yi değiştirmiş olmayacağız.
+	Tabii burada biz referans yoluyla referansın refere ettiği yeri deştirdiğimizde d'yi değiştirmiş olmayacağız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -2140,7 +2141,7 @@ int main(void)
 /*--------------------------------------------------------------------------------------------------------------------------
 	Pekiyi sağ taraf değeri referansı da const olabilir mi? Tabii sağ taraf değeri referansları da const olabilir. Ancak sağ taraf değeri referanslarının dile
 	eklenmesinin asıl nedeni zaten sağ taraf değerini güncelleyebilmesidir. Yani const bir sağ taraf değeri referansının anlamlı bir kullanımı yoktur. const bir 
-	sağ taraf değeri referası zaten const bir sol taraf değeri referansıyla benzer işleve sahiptir. Özetle sağ taraf değeri referansları const olabilse de bunun 
+	sağ taraf değeri referansı zaten const bir sol taraf değeri referansıyla benzer işleve sahiptir. Özetle sağ taraf değeri referansları const olabilse de bunun 
 	aslında anlamı yoktur. Örneğin:
 
 	const int &&r = 10;		// geçerli
@@ -2150,7 +2151,7 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Yine eğer sağ taraf değeri referansına ilkdeğer verme işlemi Uniform Initializer Syntax ile ya d aküme parantezleri kullanılarak yapılıyorsa daraltıcı 
+	Yine eğer sağ taraf değeri referansına ilkdeğer verme işlemi Uniform Initializer Syntax ile ya da küme parantezleri kullanılarak yapılıyorsa daraltıcı 
 	dönüştürmelere izin verilmemektedir. Örneğin:
 
 	int &&r{3.14};			// geçersiz! double -> int dönüştürmesi daraltıcı dönüştürme
@@ -2159,7 +2160,7 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Bir fonksiyonun parametre değişkeni sağ taraf değeri referansı olabilir. Bu durumda fonksiyon bir sağ taraf değeri argüman yapılarak ya da farklı türden 
+	Bir fonksiyonun parametre değişkeni sağ taraf değeri referansı olabilir. Bu durumda fonksiyon, bir sağ taraf değeri argüman yapılarak ya da farklı türden 
 	sol taraf değeri ile çağrılmak zorundadır. Örneğin:
 
 	void foo(int &&r)
@@ -2171,10 +2172,10 @@ int main(void)
 
 	int a = 10, b = 20;
 
-	foo(10);			// geçerli
-	foo(a + b);			// geçerli
+	foo(10);		// geçerli
+	foo(a + b);		// geçerli
 
-	foo(a);				// geçersiz!
+	foo(a);			// geçersiz!
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -2191,10 +2192,10 @@ int main(void)
 {
 	int a = 10, b = 20;
 
-	foo(10);			// geçerli
-	foo(a + b);			// geçerli
+	foo(10);		// geçerli
+	foo(a + b);		// geçerli
 
-	foo(a);				// geçersiz!
+	foo(a);			// geçersiz!
 
 	return 0;
 }
@@ -2221,8 +2222,8 @@ int main(void)
 	Görüldüğü gibi fonksiyondan çıkıldığında bu geçici nesne yok edilecektir. Böyleci geçici nesnelerin fonksiyon içerisinde onun stack'inde yaratıldığına
 	dikkat ediniz. 
 
-	Yukarıda da belirttiğimiz gibi geri dönüş değeri sağ taraf değeri referansı olan fonksionların çağrı ifadeleri "xvalue" belirtmektedir. "xvalue" bir "glavlue"
-	olmasına karşın "lvalue" değildir. Dolayısıyla bir "xvalue" sol atarf değeri referansına bind edilemez. Örneğin:
+	Yukarıda da belirttiğimiz gibi geri dönüş değeri sağ taraf değeri referansı olan fonksiyonların çağrı ifadeleri "xvalue" belirtmektedir. "xvalue" bir "gvalue"
+	olmasına karşın "lvalue" değildir. Dolayısıyla bir "xvalue" sol taraf değeri referansına bind edilemez. Örneğin:
 
 	int &r = foo();		// geçersiz! xvalue bir lvalue değildir. 
 
@@ -2231,7 +2232,7 @@ int main(void)
 	int &&r = foo();		// geçerli
 
 	Pekiyi bu durumda fonksiyonun geri dönüş değerinin sağ taraf değeri referansı olmasının ne anlamı vardır? İşte aslında ilerideki konularda da görüleceği gibi 
-	bir sol tafa değeri "sanki bir sağ taraf değeri imiş gibi" geri döndürülmektedir. 
+	bir sol taraf değeri "sanki bir sağ taraf değeri imiş gibi" geri döndürülmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -2253,13 +2254,13 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Geri dönüş değeri sağ taraf değeri referansı olan fonksiyonların return ifadelerindeki sağ taraf değeri için yaratılacak yerel değişkeninin o fonksiyonun 
+	Geri dönüş değeri sağ taraf değeri referansı olan fonksiyonların return ifadelerindeki sağ taraf değeri için yaratılacak yerel değişkenin o fonksiyonun 
 	yerel değişkeni gibi olması böyle bir fonksiyonun anlamsız olduğunu akla getirmektedir. Ancak aslında bu tür fonksiyonlar belli bir amaç doğrultusunda 
 	kullanılabilmektedir. Bu tür fonksiyonların kullanımına ilişkin anlamlı örneklerle ilerideki konularda karşılaşacağız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	19) C++'ta dinamik bellek yönetimi için new ve delete isimli iki operatör eklenmiştir. Tabii C++ C'nin standrat kütüphanesini de kapsadığı için biz C++'ta
+	19) C++'ta dinamik bellek yönetimi için new ve delete isimli iki operatör eklenmiştir. Tabii C++, C'nin standrat kütüphanesini de kapsadığı için biz C++'ta
 	C'de kullandığımız malloc, calloc, realloc ve free fonksiyonlarını da kullanabiliriz. Ancak C++'ta dinamik bellek tahsisatı için C++'a özgü new ve delete
 	operatörlerinin kullanılması iyi bir tekniktir. 
 
@@ -2269,7 +2270,7 @@ int main(void)
 	2) new <tür><[uzunluk ifadesi]>
 
 	Birinci biçimde heap'te ilgili türden tek bir elemanlık yer tahsis edilir. İkinci biçimde ilgili türden belirtilen uzunlukta yer tahsis edilir. new
-	operatörü tahsis edilen alanın başlangı adresini ilgi türden bize verir. Örneğin:
+	operatörü tahsis edilen alanın başlangıç adresini ilgili türden bize verir. Örneğin:
 
 	int *pi;
 	char *pc;
@@ -2278,7 +2279,7 @@ int main(void)
 	pc = new char[10];
 
 	Burada birinci satırda heap'te bir int uzunluğunda bir alan tahsis edilip onun başlangıç adresi pi göstericisine atanmıştır. İkinci satırda ise heap'te char 
-	türden 10 elemanlı bir dizi tahsis edilmiş dizinin başlangıç adresi pc göstericisine atanmıştır. 
+	türden 10 elemanlı bir dizi tahsis edilip dizinin başlangıç adresi pc göstericisine atanmıştır. 
 
 	new operatörü ilgili tür türünden bir adres vermektedir. (malloc, calloc ve realloc fonksiyonlarının void adres verdiğini anımsayınız.) Örneğin:
 
@@ -2286,16 +2287,16 @@ int main(void)
 
 	pi = new char[10];		// geçersiz! char türden adres int türden göstericiye atanmış!
 
-	new operatörü ile tahsis etmiş olduğumuz alan içerisinde çöp değerler vardır. new operatörü normal kullanımda başarıszlık durumunda "bad_alloc" isimli bir 
-	exception fırlatmaktadır. Dolayısıyla programcı tahsisatın başarısını NULL gösteri ile kontrol etmez. Böyle bir kontrol yapmayınız. 
+	new operatörü ile tahsis etmiş olduğumuz alan içerisinde çöp değerler vardır. new operatörü normal kullanımda başarısızlık durumunda "bad_alloc" isimli bir 
+	exception fırlatmaktadır. Dolayısıyla programcı tahsisatın başarısını NULL göstericisi ile kontrol etmez. Böyle bir kontrol yapmayınız. 
 
-	Exception sözcüğü programın çalışma zamanı sırasında oluşan problemli durumları anlatmaktadır. C++'ta bir exception oluştuğunda programcı oluşan excception'ı 
-	ele alabilir (handle edebilir) bu durumda çalışma normal bir biçimde başka yerden devam eder. Ancak programcı oluşan exception'ı ele almazsa program çökmektedir. 
-	C++'ta exception ayrıntıları olan geniş bir konudur. Biz de ilerideki bçlümlerde bu konuyu ayrı başlık altında ele alacağız. 
+	Exception sözcüğü programın çalışma zamanı sırasında oluşan problemli durumları anlatmaktadır. C++'ta bir exception oluştuğunda programcı oluşan exception'ı 
+	ele alabilir (handle edebilir). Bu durumda çalışma normal bir biçimde başka yerden devam eder. Ancak programcı oluşan exception'ı ele almazsa program çökmektedir. 
+	C++'ta exception ayrıntıları olan geniş bir konudur. Biz de ilerideki bölümlerde bu konuyu ayrı başlık altında ele alacağız. 
 
-	new her ne kadar bir operatörse de aslında tahsisat işlemi yine programın akışı new yapılan yere geldiğinde çalışma azamanı yapılmaktadır. new operatörü 
-	"operator new" denilen bir tahsisat fonksiyonunu çağırarak athsisatını yapmaktadır. new operatörünün bir operatör olmasının nedeni sınıflar konusuyla ilgilidir. 
-	new operatörüyle bir sınıf türünden tahsisat yapıldığında new operatörü tahsisat yapıldıktan sonra sınıfın "yapısı fonksiyonunun (constructor)" çağrılmasına da
+	new her ne kadar bir operatörse de aslında tahsisat işlemi yine programın akışı new yapılan yere geldiğinde çalışma zamanında yapılmaktadır. new operatörü 
+	"operator new" denilen bir tahsisat fonksiyonunu çağırarak tahsisatını yapmaktadır. new operatörünün bir operatör olmasının nedeni sınıflar konusuyla ilgilidir. 
+	new operatörüyle bir sınıf türünden tahsisat yapıldığında new operatörü tahsisat yapıldıktan sonra sınıfın "yapıcı fonksiyonunun (constructor)" çağrılmasına da
 	yol açmaktadır. 
 
 	T bir tür belirtmek üzere new operatörü ile bir elemanlık yer tahsisatını iki biçimde yapabiliriz:
@@ -2303,7 +2304,7 @@ int main(void)
 	new T
 	new T[1]
 
-	Bu iki new ifadesi de bir elemanlık yer tahsis ediyor olsa da bu iki ifadenin arasında semantik bazı farklılıklar vardır. izleyen paragraflarda bu durum ele 
+	Bu iki new ifadesi de bir elemanlık yer tahsis ediyor olsa da bu iki ifadenin arasında semantik bazı farklılıklar vardır. İzleyen paragraflarda bu durum ele 
 	alınacaktır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -2326,19 +2327,19 @@ int main(void)
 
 	return 0;
 }
-BURADA DUZELTME
+
 /*--------------------------------------------------------------------------------------------------------------------------
 												9. Ders 13/09/2023 - Çarşamba
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	new ile yapılan dinamik tahsisatlar delete operatörü ile serbest bırakılır. delete operatörünün de iki sentaktik biçimi vardır:
+	new ile yapılan dinamik tahsisatlar delete operatörü ile serbest bırakılır. delete operatörünün de iki sentaks biçimi vardır:
 
 	1) delete <adres>
 	2) delete [] <adres>
 
 	Eğer new ile köşeli parantezsiz tahsisat yapılmışsa bunun boşaltımı köşeli parantezsiz delete yapılmalıdır. Eğer new ile köşeli parantezli bir tahsisat 
-	yapılmışsa bunun bhoşaltımı da köşeli parantezli delete ile yapılmalıdır. Örneğin:
+	yapılmışsa bunun boşaltımı da köşeli parantezli delete ile yapılmalıdır. Örneğin:
 
 	int *pi;
 	char *pc;
@@ -2352,8 +2353,8 @@ BURADA DUZELTME
 	delete[] pc;
 	delete pi;
 
-	Tahisa edilen 1 elemanlık bile olsa eğer tahsisat new operatörünün köşeli parantezli biçimi ile yapılmışsa alanı serbest bırakmak için delete operatörünün 
-	yine köşeki panatezli biçimi ile yapılmalıdır. Örneğin:
+	Tahsis edilen alan 1 elemanlık bile olsa eğer tahsisat new operatörünün köşeli parantezli biçimi ile yapılmışsa alanı serbest bırakma işlemi delete operatörünün 
+	yine köşeli parantezli biçimi ile yapılmalıdır. Örneğin:
 
 	int *pi = new int[1];
 	//...
@@ -2362,7 +2363,7 @@ BURADA DUZELTME
 	new operatörü ile tahsis edilen alan delete operatörü ile boşaltılmazsa Windows, macOS, Linux gibi yaygın işletim sistemlerinin hepsinde program bittiğinde 
 	bu alanlar otomatik olarak boşaltılmaktadır. Çünkü işletim sistemlerinde genel olarak "heap alanı prosese özgüdür". Yani her prosesin heap alanı diğerlerinden 
 	farklıdır. Yani bir programda yapılan dinamik tahsisatın diğer çalışmakta olan programlara hiçbir etkisi yoktur. Ancak heap alanının prosese özgü olduğu 
-	C ve C++ standartlarında garanti edilmemiştir. (Yani başka işletim sistemlerinde heap alanı prosese özgü olmayabilit.)
+	C ve C++ standartlarında garanti edilmemiştir. (Yani başka işletim sistemlerinde heap alanı prosese özgü olmayabilir.)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -2375,14 +2376,14 @@ int main(void)
 
 	pi = new int[1];
 
-	delete [] pi;			// doğru
+	delete[] pi;		// doğru
 
 	pi = new int[10];
 
-	delete[] pi;			// doğru
+	delete[] pi;		// doğru
 
 	pi = new int;
-	delete pi;				// doğru
+	delete pi;			// doğru
 
 	return 0;
 }
@@ -2398,27 +2399,28 @@ int main(void)
 	pc = new char[size];
 	//...
 	delete[] pc;
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	C++11 ile birlikte new ile tahsis edilen alana küme paramtezleriyle ilkdeğer verilebilmektedir. Örneğin:
+	C++11 ile birlikte new ile tahsis edilen alana küme parantezleriyle ilkdeğer verilebilmektedir. Örneğin:
 
 	pi = new int[3] {10, 20,30};
 
 	Tabii tahsis edilen dizideki az sayıda elemana bu biçimde ilkdeğer verilebilir. Bu durumda geri kalan elemanların hepsi sıfırlanmaktadır. Örneğin:
 
-	pi = new int[10] {1};		// geri kalanelemanlar 0
+	pi = new int[10] {1};		// geri kalan elemanlar 0
 
 	Küme parantezinin içi boş da bırakılabilir. Bu durumda da tüm elemanlar sıfırlanır. Örneğin:
 
-	pi = new int[10] {};	// tüme elemanlar sıfırlanır
+	pi = new int[10] {};		// tüm elemanlar sıfırlanır
 
 	İlkdeğer verilirken köşeli parantezlerin içi boş bırakılabilir. Bu durumda derleyici verilen ilkdeğerleri sayar ve dinamik dizinin o kadar elemandan 
-	oluştuğnu kabul eder. Örneğin:
+	oluştuğunu kabul eder. Örneğin:
 
 	pi = new int[] {10, 30, 40};		// 3 elemanlık tahsisat yapılıyor
 
-	İlkdeğer verme sentaksında köşeli parantezlerin içerisinin sabit ifadesi olması gerekmemektedir. (Bazı dillerde benzer sentakslarda sabit ifadesi zorunluğu
+	İlkdeğer verme sentaksında köşeli parantezlerin içerisinin sabit ifadesi olması gerekmemektedir. (Bazı dillerde benzer sentakslarda sabit ifadesi zorunluluğu
 	vardır.) Ancak bu durumda tahsisat uzunluğundan fazla ilkdeğer verilirse "tanımsız davranış" oluşmaktadır. Örneğin:
 
 	int size;
@@ -2430,7 +2432,7 @@ int main(void)
 
 	Burada size değeri 5'ten küçükse tanımsız davranış oluşacaktır. size değeri 5'ten büyükse tahsis edilen alandaki diğer değerler sıfırlanacaktır.
 
-	Tabii C++11 ve sonrasında bütün küme parantezi sentakslarında "daraltıcı dönüştüre (narrowing conversion)" yasaklanmıştır. Örneğin:
+	Tabii C++11 ve sonrasında bütün küme parantezi sentakslarında "daraltıcı dönüştürme (narrowing conversion)" yasaklanmıştır. Örneğin:
 
 	int *pi = new int[] = {1, 2, 3.14};		// geçersiz! double -> int dönüştürmesi daraltıcı dönüştürme
 
@@ -2455,7 +2457,7 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	new operatörü ile biz bir gösterici dizisi de tahsis edebiliriz. Tabii bu durumda tahsis edilen gösterici dizisinin adresinin göstericiyi gösteren göstericye 
+	new operatörü ile biz bir gösterici dizisi de tahsis edebiliriz. Tabii bu durumda tahsis edilen gösterici dizisinin adresinin göstericiyi gösteren göstericiye 
 	atanması gerekir. Örneğin:
 
 	int a = 10, b = 20, c = 30;
@@ -2494,10 +2496,11 @@ int main(void)
 
 	pi = new int[3][4];		// geçersiz! tür uyuşmazlığı var!
 
-	new int[3][4] bir tahsisatın adresinin atanacağı göstericisinin int (*)[4] türünden olması gerekmektedir. Örneğin:
+	new int[3][4] biçiminde yapılan bir tahsisatın adresinin atanacağı göstericinin int (*)[4] türünden olması gerekmektedir. Örneğin:
 
 	int (*pa)[4];
 	pa = new int[3][4];		// geçerli
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -2524,11 +2527,11 @@ int main()
 /*--------------------------------------------------------------------------------------------------------------------------
 	C++, C'nin standart kütüphanesini de desteklediğine göre biz C++ programları içerisinde C'nin malloc, calloc, realloc ve free fonksiyonlarını kullanabiliriz. 
 	Ancak bir C++ programı içerisinde hem "new ve delete" hem de "malloc, calloc, realloc ve free" fonksiyonları birlikte kullanılmamalıdır. Tahsisat işlemleri 
-	için tahsisat algoritmaları kullanılmaktadır. İşte C++'ın new ve delete operatörlerinin kullandığı tahsisat algaoritması ile C'nin dinamik bellek fonksiyonlarının 
+	için tahsisat algoritmaları kullanılmaktadır. İşte C++'ın new ve delete operatörlerinin kullandığı tahsisat algoritması ile C'nin dinamik bellek fonksiyonlarının 
 	kullandığı tahsisat algoritması farklı olabilmektedir. Bunun sonucu olarak da C++'ın new operatörü ile tahsis edilmiş olan bir alan C'nin tahsisat 
-	fonksiyonları tarafından tahsis edilmemiş olarak gözükebilmektedir. Tabii tersi de söz konusu olabilmektedir. Bazı C++ derleyicilerinde new işlemi sıreasında
+	fonksiyonları tarafından tahsis edilmemiş olarak gözükebilmektedir. Tabii tersi de söz konusu olabilmektedir. Bazı C++ derleyicilerinde new işlemi sırasında
 	çağrılan operator new fonksiyonu kendi içerisinde malloc fonksiyonu ile tahsisatı yapıyor olabilir. Benzer biçimde delete işlemi ile tahsis edilen alan serbest 
-	bırakılırken operator delete fonksiyonu free fonksiyonu ile bunu yapıyor olabilir. Bu sistemlerde vu iki dilin tahsisat mekanizmasının birlikte kullanılması 
+	bırakılırken operator delete fonksiyonu free fonksiyonu ile bunu yapıyor olabilir. Bu sistemlerde bu iki dilin tahsisat mekanizmasının birlikte kullanılması 
 	soruna yol açmayabilir. Ancak C++ standartları bunun garantisi vermemiştir. Bu nedenle aynı programda bu iki grup tahsisat sistemini birlikte kullanmak 
 	sorunlara yol açabilmektedir. 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -2561,9 +2564,9 @@ int main()
 	bırakılmıştır. Ancak C++'ta biz <x.h> biçimindeki başlık dosyalarını da C'de olduğu gibi include edebiliriz. Bu başlık dosyalarındaki isimler bu durumda
 	global isim alanına yerleştirilmiş olmak zorundadır. Fakat <x.h> dosyalarının aynı zamanda std isim alanına da yerleştirilip yerleştirilmeyeceği derleyicileri 
 	yazanların isteğine bırakılmıştır. Ancak C++'ta C'nin başlık dosyalarının <x.h> biçiminde include edilmesi kötü bir tekniktir. Biz kursumuzda C'nin başlık 
-	dosyalarını <cx> biçimind include edeceğiz ve oradaki isimlerin std isim alanında olduğunu varsayacağız. 
+	dosyalarını <cx> biçiminde include edeceğiz ve oradaki isimlerin std isim alanında olduğunu varsayacağız. 
 
-	Her ne kadar C++ C'nin standart fonksiyonlarını destekliyorsa da ayrıca C++'ın kendine özgü "template" tabanlı bir standart kütüphanesi de vardır. 
+	Her ne kadar C++, C'nin standart fonksiyonlarını destekliyorsa da ayrıca C++'ın kendine özgü "template" tabanlı bir standart kütüphanesi de vardır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <cstdio>
@@ -2581,7 +2584,7 @@ int main()
 	21) C++'ta makrolara benzer ismine "inline fonksiyon" denilen fonksiyonlar da bulunmaktadır. Aslında inline fonksiyon kavramı C'de de çok uzun süredir çeşitli 
 	derleyicilerde birer eklenti (extension) biçiminde bulunuyordu. Ancak inline fonksiyonlar C ailesine ilk kez C++'ta resmi olarak eklenmiştir. C++'tan sonra 
 	inline fonksiyonlar C99 ile birlikte C'ye de sokulmuştur. Ancak C++'ın inline fonksiyonlarıyla C99'un inline fonksiyonları arasında semantik farklılıklar vardır. 
-	Ayrıca C99 ile C'ye eklenmden önce derleyicilerin eklenti biçiminde bulundurduğu inline fonksiyon semantiklerinde de farklılıklar bulunmaktadır. Tabii biz burada
+	Ayrıca C99 ile C'ye eklenmeden önce derleyicilerin eklenti biçiminde bulundurduğu inline fonksiyon semantiklerinde de farklılıklar bulunmaktadır. Tabii biz burada
 	C++'taki inline fonksiyonları ele alacağız. 
 
 	Bir fonksiyon "inline" belirleyici (function specifier) kullanılarak inline yapılabilir. Örneğin:
@@ -2596,7 +2599,7 @@ int main()
 	makine komutuyla çağırmaktadır. CALL işleminden önce argümanlar fonksiyonun parametre değişkenlerine kopyalanır. Fonksiyonda da geri dönüşü sağlamak için RET 
 	makine komutu gerekir. Yine fonksiyonun stack üzerinde işlemler yapabilmesi için "stack frame düzenlemesine" gereksinim duyulabilmektedir. Bu düzenleme de 
 	birkaç makine komutu ile yapılmaktadır. İşte fonksiyonların CALL işlemi yerine iç kodlarının çağrılan yere enjekte edilmesi bu ekstra makine komutlarını elimine 
-	edebilmektedir. Örneğin şağaıdaki gibi bir fonksiyon söz konsu olsun:
+	edebilmektedir. Örneğin aşağıdaki gibi bir fonksiyon söz konusu olsun:
 
 	int add(int a, int b)
 	{
@@ -2607,7 +2610,7 @@ int main()
 
 	result = add(10, 20);
 
-	32 Bit Intel işlemcilerinin kullanıldığı sistemlerde add fonksiyonu için tipi olarak şu makine komutları üretilmektedir:Ç
+	32 bit Intel işlemcilerinin kullanıldığı sistemlerde add fonksiyonu için tipik olarak şu makine komutları üretilmektedir:
 
 	_add:
 		push	ebp
@@ -2650,7 +2653,7 @@ int main()
 
 	#define add(a, b)		((a) + (b))
 
-	Böylece kod enjekte işlemi derleme modülü tarafından değil önişlemci modülü tarafından yapılıyordu. Örneğin:
+	Böylece kod enjekte işlemi derleme modülü tarafından değil, önişlemci modülü tarafından yapılıyordu. Örneğin:
 
 	result = add(10, 20);
 
@@ -2658,12 +2661,12 @@ int main()
 
 	result = ((10) + (20))
 
-	Ancak parametrelerin makroların şu dezavantajları vardır:
+	Ancak parametreli makroların şu dezavantajları vardır:
 
 	1) Yazımları oldukça zordur.
 	2) Tanımsız davranışa yol açabilirler. Bu konuda dikkat edilmesi gerekir. 
 	3) Birkaç satırlık makroların yazımları problemlidir. 
-	4) Önişlemci C'yi bilmemektedir. Dolayısıyla pek kontrolğ önişlemci yapamamaktadır. 
+	4) Önişlemci C'yi bilmemektedir. Dolayısıyla pek çok kontrolü önişlemci yapamamaktadır. 
 
 	Örneğin:
 
@@ -2675,25 +2678,25 @@ int main()
 
 	result = square(++x);
 
-	Burada square bir fonksiyon olsaydı kod gayet normal olarak ele alınacaktı. Ancak makrolarda açım aşağıdaki gibi yapılacağından tanımsız davranış olşuacaktır:
+	Burada square bir fonksiyon olsaydı kod gayet normal olarak ele alınacaktı. Ancak makrolarda açım aşağıdaki gibi yapılacağından tanımsız davranış oluşacaktır:
 
 	result = ((++x) * (++x))
 
 	Ancak tabii inline bir fonksiyonun çokça çağrılması neticesinde bir kod büyümesi söz konusu olabilir. O halde kısa (örneğin bir iki satırlık) fonksiyonların 
 	inline yapılması uygun bir yaklaşımdır. 
 
-	inline belirleyicisi "bir emir değil rica" niteliğindedir. Yani biz bir fonksiyonu inline yaptığımızda derleyici onun iç kodunu enjekte etmek zorunda değildir. 
+	inline belirleyicisi "bir emir değil, rica" niteliğindedir. Yani biz bir fonksiyonu inline yaptığımızda derleyici onun iç kodunu enjekte etmek zorunda değildir. 
 	inline fonksiyona yine derleyici normal fonksiyon muamelesi yapabilir. Bu konuda herhangi bir uyarı mesajı da vermeyebilir. inline konusu derleyicilerde genel 
 	olarak optimizasyon konusu ile ilişkilendirilmiştir. Yani derleyicimizin optimizasyon seçeneklerini yeteri kadar açmazsak derleyicimiz inline açım yapmaz. 
-	Microsoft derleyicilerinde en azından /O2, g++ ve clang++ derleyicilerinde -O2 seçeneği "inline açım (inline expansion) için uygulanmalıdır. 
+	Microsoft derleyicilerinde en azından /O2, g++ ve clang++ derleyicilerinde -O2 seçeneği "inline açım (inline expansion)" için uygulanmalıdır. 
 
-	Biz derleyicilerde optimizasyon seçeneklerini açsak bile derleyiciler "döngü içeren, iç içe çok fazla if deyiminin bulunduğu, uzun kodları" kodları
-	inline olarak açmak istemezler. Bazı kodlar (örneğin özyineleme içeren) yine inline olarak açılamamaktadır. 
+	Biz derleyicilerde optimizasyon seçeneklerini açsak bile derleyiciler "döngü içeren, iç içe çok fazla if deyiminin bulunduğu, uzun kodları" inline olarak açmak 
+	istemezler. Bazı kodlar (örneğin özyineleme içeren) yine inline olarak açılamamaktadır. 
 
-	Derleyiciler kodu inline olarak genellikle açmamışsa herhangi bir uyarı mesajı vermemektedir. Pekiyi biz fonksiyonuninline açılıp açılmadığını nasıl 
+	Genellikle derleyiciler kodu inline olarak açmamışsa herhangi bir uyarı mesajı vermemektedir. Pekiyi biz fonksiyonun inline açılıp açılmadığını nasıl 
 	anlayabiliriz? Bunun en sağlam yolu kodun sembolik makine dili çıktısını incelemek ya da programı debugger altında çalıştırmaktır. Microsoft derleyicilerinde
 	"assembly listing" oluşturmak için /FA seçeneği g++ ve clang++ derleyicilerinde ise -S seçeneği kullanılmaktadır. (Visual Studio IDE'sinde bu işlem) proje
-	ayarlarından "Properties/C-C++/Output Files/Assembly Output" menüsüyle le yapılbilmektedir.)
+	ayarlarından "Properties/C-C++/Output Files/Assembly Output" menüsüyle de yapılabilmektedir.)
 
 	Örneğin:
 
@@ -2730,9 +2733,9 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	inline fonksiyonlar kütüphanelere yerleştirilemezler (yerleştirilmeye çalışılmaları hata oluşturmayabilir ancak anlamlı değildir.) Çünkü her derleme işleminde 
+	inline fonksiyonlar kütüphanelere yerleştirilemezler (yerleştirilmeye çalışılmaları hata oluşturmayabilir, ancak anlamlı değildir.) Çünkü her derleme işleminde 
 	inline açım yapabilmesi için derleyicinin inline fonksiyonun tanımlamasını görmesi gerekir. C++ standartlarına göre bir inline fonksiyon farklı kaynak dosyalardan 
-	kullanılacaksa her kaynak dosyada inline olarak ve tamamen ödeş biçimde tanımlanmalıdır. Örneğin aşağıdaki gibi bir inline fonksiyon olsun:
+	kullanılacaksa her kaynak dosyada inline olarak ve tamamen özdeş biçimde tanımlanmalıdır. Örneğin aşağıdaki gibi bir inline fonksiyon olsun:
 
 	inline int square(int a)
 	{
@@ -2743,17 +2746,17 @@ int main(void)
 	inline olarak aynı biçimde tanımlanmış olması gerekir. 
 
 	Bir inline fonksiyonun projenin farklı kaynak dosyalarında inline olarak aynı biçimde kullanılabilmesinin en pratik yolu bir başlık dosyası oluşturmak, inline 
-	fonksiyonu o başlık dosyasının içerisine yerleştirmek ve dosyayı kullanılacak olan modillerden include etmektir. Yani inline fonksiyonlar tipik olarak projelerde
+	fonksiyonu o başlık dosyasının içerisine yerleştirmek ve dosyayı kullanılacak olan modüllerden include etmektir. Yani inline fonksiyonlar tipik olarak projelerde
 	başlık dosyalarının içerisine yerleştirilirler. 
 
-	inline fonksiyonlar başlık dosyalarına yerleştirildiğinde ve birden fazla modülde o başlık dosyası include edildiğinde inline fonksiyon da bireden fazla modülde 
+	inline fonksiyonlar başlık dosyalarına yerleştirildiğinde ve birden fazla modülde o başlık dosyası include edildiğinde inline fonksiyon da birden fazla modülde 
 	tanımlanmış olacaktır. Pekiyi inline fonksiyonların birden fazla modülde tanımlanmış olması link aşamasında bir problem oluşturmaz mı?
 
 	Yukarıda da belirttiğimiz gibi standartlara göre bir fonksiyon bir modülde inline olarak tanımlanmışsa o fonksiyonu kullanan her modül fonksiyonu yine inline 
 	olarak aynı biçimde tanımlamak zorundadır. Bu "aynı biçimde tanımlama" tipik olarak inline fonksiyonun bir başlık dosyasına yerleştirilip modüllerden include 
 	edilmesi ile sağlanmaktadır. İşte derleyici eğer inline fonksiyonu inline olarak açarsa ve fonksiyonun adresi de herhangi bir biçimde kodda kullanılmadıysa bu 
 	durumda derleyici fonksiyonun derlenmiş halini hiç object dosyaya yazmayabilir. Ancak derleyici inline fonksiyon için inline açım yapmamışsa ya da fonksiyonun 
-	adresi kullanılmışsa mecburen fonksiyonu object dosyaya yazacaktır. Bu biçimde projeyi oluşturan tüm modüllerde bu fonksyion object dosyaya yazılacağına göre 
+	adresi kullanılmışsa mecburen fonksiyonu object dosyaya yazacaktır. Bu biçimde projeyi oluşturan tüm modüllerde bu fonksiyon object dosyaya yazılacağına göre 
 	link aşamasında bir sorun oluşmayacak mıdır? İşte linker farklı object dosyalarda aynı inline fonksiyonun tanımlaması ile karşılaştığında onun herhangi bir 
 	object dosyadaki tek bir kopyasını çalıştırılabilen dosyaya yazmaktadır. Bunun için modern object dosya formatlarında "common" bölümler ya da attribute'lar 
 	bulunmaktadır. 
@@ -2793,7 +2796,7 @@ int main(void)
 
 	auto a = 123;		// int a = 123;
 	auto b = 12.3;		// double b = 12.3;
-	auto c = foo;		// void (*c)() = foo;
+	auto c = foo;		// int (*c)() = foo;
 	auto d = foo();		// int d = foo();
 
 	auto tür belirleyici ile birden fazla değişken tanımlanabilir. Ancak onlara verilen ilkdeğerin hepsinin aynı türden olması gerekir. Örneğin:
@@ -2820,8 +2823,8 @@ int main(void)
 
 	Burada auto tür belirleyicisi int türünü temsil etmektedir. 
 
-	auto belirleyici ile yer belrleyicileri ve tür niteleyicileri (cv qualifers) ve karmaşık dekleratörler birlikte kullanılabilir. Bu durumda tür tespiti 
-	"şablon türlerin tespit edilmesi (template argument deduction)"	sürecinde olduğu gibi yapılmaktadır. Örneğin:
+	auto belirleyici ile yer belirleyicileri ve tür niteleyicileri (cv qualifiers) ve karmaşık dekleratörler birlikte kullanılabilir. Bu durumda tür tespiti 
+	"şablon türlerin tespit edilmesi (template argument deduction)" sürecinde olduğu gibi yapılmaktadır. Örneğin:
 
 	int a = 10;
 	auto &r = a, b = 20;					// auto = int
@@ -2830,9 +2833,9 @@ int main(void)
 
 	Örneğin:
 
-	auto a = "ankara";			// auto = const char *
-	auto *b = "ankara";			// auto = const char
-	const auto *c = "ankara";	// auto = char
+	auto a = "ankara";				// auto = const char *
+	auto *b = "ankara";				// auto = const char
+	const auto *c = "ankara";		// auto = char
 
 	Yukarıda da belirttiğimiz gibi ilkdeğerden hareketle auto tür belirleyicisinin belirttiği türün tespit edilmesi şablonlardaki tür tespitindeki kurallarla 
 	yapılmaktadır. Şablonlar (templates) konusu çok sonra ele alacağımız bir konu olsa da burada yine auto belirleyicisinin şablon eşdeğeri üzerinde bir açıklama
@@ -2849,12 +2852,14 @@ int main(void)
 	}
 
 	foo(ifade);
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
 												11. Ders 20/09/2023 - Çarşamba
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-	auto belirleyici ile tür tespiti yapılırken dekleratöre göre kabaca üç farklı durum oluşmaktadır:
+/*--------------------------------------------------------------------------------------------------------------------------
+	auto belirleyicisi ile tür tespiti yapılırken dekleratöre göre kabaca üç farklı durum oluşmaktadır:
 
 	1) auto ile bildirilen değişkenin referans ya da gösterici olmaması durumu (yani dekleratörde &, && ya da * kullanılmaması durumu)
 	2) auto ile bildirilen değişkenin sol taraf değeri referansı ya da gösterici olması durumu (yani dekleratörde & ya da * kullanılması durumu)
@@ -2864,7 +2869,7 @@ int main(void)
 	olmamaktadır. Örneğin:
 
 	const int a = 10;
-	auto b = a;			// auto = int
+	auto b = a;		// auto = int
 
 	Burada b int türdendir, const int türünden değildir. Örneğin:
 
@@ -2877,25 +2882,25 @@ int main(void)
 	türde etkili olmaktadır. Örneğin:
 
 	const int a = 10;
-	auto &b = a;			// auto = const int
+	auto &b = a;		// auto = const int
 
 	Burada b const int türünden bir referanstır.
 
 	Bu durumda tür tespiti yapılırken üst düzey (top level) olmayan tür niteleyicilerinin de dikkate alındığına dikkat ediniz. Örneğin:
 
 	const volatile int a = 10;
-	auto &b = a;				// auto = const volatile int
+	auto &b = a;		// auto = const volatile int
 
 	Burada b const volatile int türünden referanstır. Örneğin:
 
 	const int a = 10;
-	auto *p = &a;				// auto = cont int *
+	auto *p = &a;		// auto = const int *
 
 	Burada p gösterdiği yer const olan int türden bir göstericidir (yani const int * türündendir). 
 
 	Eğer auto ile bildirilen değişken bir sağ taraf değeri referansı ise bu özel bir durum belirtmektedir. Bu tür referanslara "forwarding reference" ya da 
 	"universial reference" denilmektedir. Bu konu şablon işlemlerinin anlatıldığı bölümde ayrıntılarıyla ele alınacaktır. Ancak burada yine de bazı açıklamalar 
-	yapmak istiyouz. 
+	yapmak istiyoruz. 
 
 	Normal olarak bir sağ taraf değeri referansına bir sol taraf değeri bind edilememektedir. Ancak "forwarding reference" özel ve istisnai bir durumdur. 
 	auto belirleyicisi ile bildirilmiş olan bir sağ taraf değeri referansına bir sol taraf değeri ile ilkdeğer verilirse bildirilen değişken bir sol taraf 
@@ -2909,7 +2914,7 @@ int main(void)
 	const int a = 10;
 	auto &&b = a;
 
-	Burda b const bir sol taraf değeri referansıdır. Yani b const int & türündendir. Ancak örneğin:
+	Burada b const bir sol taraf değeri referansıdır. Yani b const int & türündendir. Ancak örneğin:
 
 	auto &&b = 10;
 
@@ -2922,12 +2927,12 @@ int main(void)
 	int a = 10;
 	const auto &b = a, c = 10;		// auto = int
 
-	Burada b const int & türünden, c ise const int türündendir. Buradaki const belirleyicisinin dekleratöre değil türe ilişkin olduğuna dikkat ediniz. 
+	Burada b const int & türünden, c ise const int türündendir. Buradaki const belirleyicisinin dekleratöre değil, türe ilişkin olduğuna dikkat ediniz. 
 	Örneğin:
 
 	int a[10];
-	auto b = a;				// auto = int *
-	auto c = &a;			// auto = int (*)[10]
+	auto b = a;			// auto = int *
+	auto c = &a;		// auto = int (*)[10]
 
 	Burada b int türünden bir gösterici (yani b int * türünden), c de 10 elemanlı int türden bir dizi göstericisidir (yani c int (*)[10] türündendir). Örneğin:
 
@@ -2941,7 +2946,7 @@ int main(void)
 	int a[10];
 	auto (&b)[10] = a, c = 20;		// auto = int
 
-	Burada auto int türünü temsil etmektedir. Böylece b bir 10 elemanlı bir diziyi temsil eden referans (yani b int (&r)[10] türündendir) c de int türünden bir nesne 
+	Burada auto int türünü temsil etmektedir. Böylece b bir 10 elemanlı bir diziyi temsil eden referans (yani b int (&r)[10] türündendir), c de int türünden bir nesne 
 	belirtmektedir. 
 
 	auto belirleyicisi ile bildirilmiş olan değişkenlere küme parantezleri ile ilkdeğer verildiğinde özel bir durum söz konusu olmaktadır. Bu durumu birkaç madde ile
@@ -2952,11 +2957,11 @@ int main(void)
 
 	auto a{10};					// C++17'ye kadar a initilizer_list<int> türünden
 	auto b = {10};				// b initializer_list<int> türünden
-	auto c = {10, 20 , 30};		// c initializer_list<int> türünden
+	auto c = {10, 20, 30};		// c initializer_list<int> türünden
 	auto d{10, 20, 30};			// geçersiz!
 	auto e(10, 20, 30);			// geçersiz!
 
-	b) C++17 ile birlikte küme parantezi ile tek elemanlı doğrudan (yani '=' olmadan) ilkdeğer vermelerde artık tür initializer_list<T> olarak değil doğurdan T olarak
+	b) C++17 ile birlikte küme parantezi ile tek elemanlı doğrudan (yani '=' olmadan) ilkdeğer vermelerde artık tür initializer_list<T> olarak değil, doğrudan T olarak
 	belirlenmektedir. Örneğin:
 
 	auto a{10};					// a C++17'ye kadar a initializer_list<int> türünden ancak C++17 ve sonrasında int türden
@@ -2971,7 +2976,7 @@ int main(void)
 	auto e(10, 20, 30);			// geçersiz!
 
 	Özetle bu konudaki kurallarda C++17 öncesi ve sonrasındaki tek farklılık "uniform initilizer syntax" ile küme parantezleri kullanıldığındaki durumdur. C++17 
-	öncesiinde bildirilen değişken initializer_list<T> kabul edilirken C++17 ve sonrasında artık T kabul edilmektedir.
+	öncesinde bildirilen değişken initializer_list<T> kabul edilirken C++17 ve sonrasında artık T kabul edilmektedir.
 
 	C++14 ile birlikte fonksiyonun geri dönüş değeri için de auto kullanılabilir hale gelmiştir. Fonksiyonun geri dönüş değerinin türü yerine auto kullanılırsa
 	derleyici geri dönüş değerinin türünü return ifadesindeki türe bakarak belirler. Örneğin:
@@ -2995,7 +3000,7 @@ int main(void)
 	auto void tür tespiti için de kullanılabilir. Eğer fonksiyonda hiç return kullanılmamışsa ya da tüm return deyimlerinde bir ifade bulundurulmamışsa bu durumda
 	fonksiyonun geri dönüş değerinin void olduğu tespit edilir. Örneğin:
 
-	auto foo(int a)			// auto = void
+	auto foo(int a)		// auto = void
 	{
 		if (a < 0)
 			return;
@@ -3003,7 +3008,7 @@ int main(void)
 		cout << "foo" << endl;
 	}
 
-	C++20 ile birlikte fonksiyonun parametre değişkeninde de auto artık kullanılabilmektedir. Ancak bu kullanım fonksiyonun "gizli bir biçimde şablon olduğu" anlamına gelmektedir. 
+	C++20 ile birlikte fonksiyonun parametre değişkeninde de auto kullanılabilmektedir. Ancak bu kullanım fonksiyonun "gizli bir biçimde şablon olduğu" anlamına gelmektedir. 
 	Örneğin:
 
 	auto foo(auto a)
@@ -3013,14 +3018,14 @@ int main(void)
 
 	int main(void)
 	{
-		foo(10);		// auto = int
-		foo(20.2);		// auto = double
-		foo("ankara");	// auto = const char *
+		foo(10);			// auto = int
+		foo(20.2);			// auto = double
+		foo("ankara");		// auto = const char *
 
 		return 0;
 	}
 
-	Burada aslında derleyici bir tane foo değil üç farklı foo oluşturmaktadır. Bu kavrama C++'ta "şablon (template)", Java ve C# gibi diğer dillerde "generic"
+	Burada aslında derleyici bir tane foo değil, üç farklı foo oluşturmaktadır. Bu kavrama C++'ta "şablon (template)", Java ve C# gibi diğer dillerde "generic"
 	denilmektedir. Şablon konusu ileride ayrı bir bölüm olarak ele alınacaktır.
 
 	Buradaki foo fonksiyonunun fonksiyon şablonu olarak eşdeğeri şöyledir:
@@ -3033,7 +3038,7 @@ int main(void)
 
 	C++11 ile eklenen auto tür belirleyicisinin ayrıntıları vardır. Ancak bu ayrıntılar üzerinde daha ileride ilgili konuların içerisinde duracağız. 
 ---------------------------------------------------------------------------------------------------------------------------*/
-
+BURADA KALDIM
 /*--------------------------------------------------------------------------------------------------------------------------
 	23) C++11 ile birlikte C++'a "aralık tabanlı for döngüsü (range based loop)" ismiyle yeni bir for döngüsü eklenmiştir. Aslında bu tarz for döngüleri 
 	zaten C# gibi Java gibi dillerde "foreach" döngüsü ismiyle bulunuyordu. Aralık tabanlı for döngüsünün genel biçimi şöyledir:
@@ -3210,6 +3215,7 @@ int main()
 	for (char ch : __temp) {
 		//...
 	}
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -3240,9 +3246,10 @@ int main(void)
 
 	auto a = {1, 2, 3, 4, 5};		// a initializer_list<int> türünden
 
-	for (int x : a) {	// geçerli
+	for (int x : a) {		// geçerli
 		//...
 	}
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -3289,7 +3296,7 @@ int main()
 
 	return 0;
 }
-
+BURADA DUZELTME
 /*--------------------------------------------------------------------------------------------------------------------------
 												12. Ders 25/09/2023 - Pazartesi
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -3304,7 +3311,7 @@ int main()
 
 	//...
 
-	for (auto x : a) {			// auto = int
+	for (auto x : a) {		// auto = int
 		//...
 	}
 
@@ -3314,17 +3321,17 @@ int main()
 
 	//...
 
-	for (auto x : names) {			// auto = const char *
+	for (auto x : names) {		// auto = const char *
 		//...
 	}
 
-	Burada names dizisi const char * türünden olduğu için auto da cont char * türü olarak belirlenecektir. Örneğin:
+	Burada names dizisi const char * türünden olduğu için auto da const char * türü olarak belirlenecektir. Örneğin:
 
 	vector<int> v{1, 2, 3, 4, 5};
 
 	//...
 
-	for (auto x : v) {		auto = int
+	for (auto x : v) {		// auto = int
 		//...
 	}
 
@@ -3402,6 +3409,7 @@ int main()
 	for (; auto x : a) {
 		//...
 	}
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -3451,6 +3459,7 @@ int main()
 	//...
 
 	pd = (date *)pv;		// geçerli
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -3556,8 +3565,8 @@ int main()
 
 	Direction d;
 
-	d = Green;					// geçersiz!
-	d = (Direction)d;			// geçerli fakat anlamlı olmayabilir
+	d = Green;				// geçersiz!
+	d = (Direction)d;		// geçerli fakat anlamlı olmayabilir
 
 	C++'ta her enum türünün "ilişkin oldu bir tamsayı türü (underlying integer type)" vardır. enum türünün ilişkin olduğu tamsayı türü aslında o enum türünün 
 	gerçekte derleyici tarafından ele alındığı tamsayı türüdür. enum türünün ilişkin olduğu tamsayı türünün bizim için iki önemi vardır:
@@ -3625,8 +3634,8 @@ int main()
 
 	Direction d;
 
-	d = Direction::Up;			// geçerli
-	d = Up;						// geçersiz!
+	d = Direction::Up;		// geçerli
+	d = Up;					// geçersiz!
 
 	Burada enum sabitlerine erişmekte kullanılan :: operatörüne "çözünürlük operatörü (scopre resolution operator)" denilmektedir. Atomlar arasında istenildiği 
 	kadar boşluk karakteri bırakılabileceğine göre aşağıdaki yazım da geçerlidir:
@@ -3657,9 +3666,9 @@ int main()
 	Direction d = Direction::Down;
 	int val;
 
-	val = d;		// Normal enum türleri için geçerli ama faaliyet alanlı enum türleri için geçersiz!
-	val = d + 1;	// Normal enum türleri için geçerli ama faaliyet alanlı enum türleri için geçersiz!
-	d = 1;			// Hem normal enum türleri için hem de faaliyet alanlı enum türleri için geçersiz!
+	val = d;			// Normal enum türleri için geçerli ama faaliyet alanlı enum türleri için geçersiz!
+	val = d + 1;		// Normal enum türleri için geçerli ama faaliyet alanlı enum türleri için geçersiz!
+	d = 1;				// Hem normal enum türleri için hem de faaliyet alanlı enum türleri için geçersiz!
 
 	Görüldüğü gibi faaliyet alanlı enum türleri tür dönüştürmesi bakımından daha katıdır. 
 
@@ -3674,10 +3683,10 @@ int main()
 	Direction d = Direction::Down;
 	int val;
 
-	val = (int)d;				// geçerli
+	val = (int)d;					// geçerli
 	cout << val << endl;
 
-	d = (Direction)(val + 1);	// geçerli
+	d = (Direction)(val + 1);		// geçerli
 
 	Faaliyet alanlı enum türlerinin de ilişkin olduğu tamsayı türü vardır. Bu tamsayı türü yine normal enum türlerinde olduğu gibi ": <tür>" sentaksıyla 
 	belirtilmektedir. Örneğin:
@@ -3688,9 +3697,10 @@ int main()
 
 	Ancak faaliyet alanlı enum türlerinde ilişkin olunan tamsayı türü belirtilmezse default durum "int" kabul edilmektedir. Örneğin:
 
-	enum class Color {			// Color enum türünün ilişkin olduğu tamsayı türü int
+	enum class Color {		// Color enum türünün ilişkin olduğu tamsayı türü int
 		Red, Green, Blue
 	};
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -3779,7 +3789,7 @@ int main()
 
 	a = 1''000'000'000;				// geçersiz!
 
-	Aslında basamak ayırçları pek çok dilde eskiden beri bulunuyordu, bazılarına ise onların çeşitli versiyonlarında eklendi. Örneğin Python, C# ve Java'da
+	Aslında basamak ayıraçları pek çok dilde eskiden beri bulunuyordu, bazılarına ise onların çeşitli versiyonlarında eklendi. Örneğin Python, C# ve Java'da
 	basamak ayıracı olarak _ (alt tire) kullanılmaktadır. 
 
 	Basamak ayıraçları yalnızca 10'luk sistemde belirtilen sabitlerde değil diğer sistemlerde belirtilen sabitlerde de kullanılabilmektedir. Örneğin:
@@ -3793,7 +3803,7 @@ int main()
 
 /*--------------------------------------------------------------------------------------------------------------------------
 	29) C++'ta C'de olmayan uzmanlaşmış tür dönüştürme operatörleri vardır. C'nin "(tür) operand" biçimindeki tür dönüştürme operatörü C++'ta aslında aynı biçimde
-	kullanılabilmektedir. Ancak C'nin tür dönüştürme operatörü değişik dönüştürmeleri bir arada yaptığı için hatalara zaemin hazırlayabilmektedir. İşte C++'ta 
+	kullanılabilmektedir. Ancak C'nin tür dönüştürme operatörü değişik dönüştürmeleri bir arada yaptığı için hatalara zemin hazırlayabilmektedir. İşte C++'ta 
 	farklı tarzda tür dönüştürmeleri için farklı operatörler bulundurulmuştur. C++'ta C tarzı tür dönüştürmesi yerine bu özel operatörlerin kullanılması iyi bir 
 	ekniktir. C++'ın özel tür dönüştürme operatörleri şunlardır:
 
@@ -3899,7 +3909,7 @@ int main(void)
 
 	pc = const_cast<char *>(pci);		// geçerli değil! yalnızca canst'luk atılmıyor
 
-	const_cast adreslerdeki const'luğu atmaktadır. Dolayısıyla const_cast operatörğndeki hedef türün bir adres olması gerekektedir. Örneğin:
+	const_cast adreslerdeki const'luğu atmaktadır. Dolayısıyla const_cast operatöründeki hedef türün bir adres olması gerekmektedir. Örneğin:
 
 	const int a = 10;
 	int b;
@@ -4582,7 +4592,7 @@ int main()
 	putmsg("invalid command");
 	putmsg();
 
-	Parametre değişkenine verilen default değer fonksiyon çağrısının geri dönüş değeri ile ilişklili de olabilir. Örneğin:
+	Parametre değişkenine verilen default değer fonksiyon çağrısının geri dönüş değeri ile ilişkili de olabilir. Örneğin:
 
 	int square(int a)
 	{
@@ -5900,7 +5910,7 @@ int main()
 	isim alanlarındaki aynı isimli fonksiyonlar için "overload" terimi kullanılmaz. Çünkü "overload" aynı faaliyet alanındaki fonksiyonlar için kullanılmaktadır.) 
 	Yerel bir bloğun içerisinde isim alanı oluşturulamamaktadır. İsim alanları global bölgede oluşturulmak zorundadır.
 
-	Bir isim alanı içerisindeki bir isme isim alanı ismi ve :: operatörü ile erişilir. :: operatörü iki operandlı araek bir operatördür. Bu operatöre 
+	Bir isim alanı içerisindeki bir isme, isim alanı ismi ve :: operatörü ile erişilir. :: operatörü iki operandlı araek bir operatördür. Bu operatöre 
 	"çözünürlük operatörü (scope resolution operator)" denilmektedir. Örneğin:
 
 	CSD::foo();
@@ -6763,7 +6773,7 @@ int main()
 
 	Burada aslında CSD isim alanı içerisinde foo ve bar fonksiyonları bulunmaktaymış. Ancak zamanla bu fonksiyonların ileri versiyonları oluşturulmuş. Programcı da
 	eski versiyonları muhafaze ederek yeni versyionları default hale getirmek istemiş olabilir. Burada UtilV2 içerisindeki isimler sanki CSD içerisindeymiş 
-	gibi bir etki oluşmaktadır. Daha ileride bu kütüphanenin üçüncü versiyonu çıkartıldığnda programcı muhtemelen şöyle yapacaktır:
+	gibi bir etki oluşmaktadır. Daha ileride bu kütüphanenin üçüncü versiyonu çıkartıldığında programcı muhtemelen şöyle yapacaktır:
 
 	namespace CSD
 	{
@@ -6850,7 +6860,7 @@ int main()
 		//...
 	}
 
-	Burada direktifin yerlşetirildiği isim alanı A'dır. Direktifte belirtilen isim alanı ise B'dir. İkisini kapsayan en dar isim alanı A'dır. Örneğin:
+	Burada direktifin yerleştirildiği isim alanı A'dır. Direktifte belirtilen isim alanı ise B'dir. İkisini kapsayan en dar isim alanı A'dır. Örneğin:
 
 	using namespace std;
 
@@ -7246,7 +7256,7 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	C++'ta bir sınıfın içerisindeki fonksiyonlara "üye fonksion (member function)" denilmektedir. Halbuki Java, C#, Python gibi dillerde buna "metot (method)" denilmektedir. 
+	C++'ta bir sınıfın içerisindeki fonksiyonlara "üye fonksiyon (member function)" denilmektedir. Halbuki Java, C#, Python gibi dillerde buna "metot (method)" denilmektedir. 
 	C++'ta bir sınıf "public", "protected" ve "private" olmak üzere üç bölümden oluşmaktadır. Bir bölüm, bölüm belirten anahtar sözcük ve ':' atomu ile başlatılır, 
 	başka bir bölüm belirten anahtar sözcüğe kadar devam eder. Sınıf bildirimi içerisinde bu bölüm belirten anahtar sözcükler birden fazla kez kullanılabilirler. Örneğin:
 
@@ -7266,7 +7276,7 @@ int main(void)
 	Sınıf isimleri pek çok programcı tarafından "Pascal tarzı (Pascal casting)" ile isimlendirilmektedir. Pascal tarzında her sözcüğün ilk harfi büyük harf ile yazılır.
 	Biz de kursumuzda bu isimlendirmeyi tercih edeceğiz. Ancak C++'ın standart kütüphanesindeki sınıf isimleri "klasik C tarzı (snake casting)" ile isimlendirilmiştir.
 
-	Bir sınıf bildirimine hiçbir bölüm belirten anahtar sözcük ile başlanmazsa bu durumda sınıf bildirimi class anahtar sözcü ile yapılmışsa default bölüm "private",
+	Bir sınıf bildirimine hiçbir bölüm belirten anahtar sözcük ile başlanmazsa bu durumda sınıf bildirimi class anahtar sözcüğü ile yapılmışsa default bölüm "private",
 	struct anahtar sözcüğü ile yapılmışsa default bölüm "public" biçimdedir. Bunun dışında sınıf bildiriminin class ya da struct anahtar sözcüğüyle yapılmasının bir farkı yoktur.
 	struct bildiriminde C ile uyumu korumak amacıyla default bölüm public yapılmıştır.
 
@@ -7278,7 +7288,7 @@ int main(void)
 	kapsayan isim alanlarından birinde yapılabilir. Fonksiyon tanımlaması sınıf dışında yapılırken fonksiyon isminin sınıf ismi ile :: operatörü ile niteliklendirilmesi gerekir. 
 	Genel biçim şöyledir:
 
-	<geri dönüş değerinin türü> <sınıf ismi>::<fonksiyon ismi>([prametre bildirimi])
+	<geri dönüş değerinin türü> <sınıf ismi>::<fonksiyon ismi>([parametre bildirimi])
 	{
 		//...
 	}
@@ -7362,12 +7372,12 @@ int main(void)
 	Bir sınıf nesnesi içerisinde sınıfın üye fonksiyonları (member functions) yer kaplamaz. Üye fonksiyonlar mantıksal bakımdan sınıfla ilişkilendirilmiş durumdadır. 
 	Üye fonksiyonlar tıpkı global fonksiyonlar gibi programın ".text" denilen bölümünde yer kaplarlar. Sınıf nesnesi içerisinde yalnızca sınıfın 
 	"static olmayan veri elemanları (nonstatic data member)" yer kaplamaktadır. C++'ta sınıf içerisindeki data elemanlarına "veri elemanları (data member)" denilmektedir.
-	Veri elemanları static olabilir ya da static olmayabilir. Static veri elemanları ileri ele alınacaktır.
+	Veri elemanları static olabilir ya da static olmayabilir. Static veri elemanları ileride ele alınacaktır.
 
-	Sınıf türünden türünden nesneler veri elemanlarından oluşan bileşik nesnelerdir. C++ standartlarına göre aynı bölüm içerisindeki veri elemanları ilk yazılan eleman 
+	Sınıf türünden nesneler veri elemanlarından oluşan bileşik nesnelerdir. C++ standartlarına göre aynı bölüm içerisindeki veri elemanları ilk yazılan eleman 
 	düşük adreste olacak biçimde ardışıl bir biçimde yerleştirilir. Ancak farklı bölümlerdeki elemanların birbirlerine göre durumu standartlarda derleyicileri
-	yazanların isteğine bırakılmıştır. Fakat yaygın tüm derleyiciler bölüm farkı gözetmeksizin ilk yazılan eleman düşük adreste olacak biçimde ardışıl bir yerleşim 
-	uygulmaktadır. Tabii yine derleyiciler C'de olduğu gibi elemanlar arasında hizalama amaçlı kontrollü boşluklar bırakabilmektedir. 
+	yazanların isteğine bırakılmıştır. Fakat yaygın olarak tüm derleyiciler bölüm farkı gözetmeksizin ilk yazılan eleman düşük adreste olacak biçimde ardışıl bir yerleşim 
+	uygulamaktadır. Tabii yine derleyiciler C'de olduğu gibi elemanlar arasında hizalama amaçlı kontrollü boşluklar bırakabilmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 include <iostream>
@@ -7402,8 +7412,7 @@ int main(void)
 
 /*--------------------------------------------------------------------------------------------------------------------------
 	Madem ki C++'ta artık fonksiyonlar sınıfların da içerisinde bulunabiliyorlar o zaman biz sınıfların içerisinde bulunmayan fonksiyonları vurgulamak için
-	"global fonksiyonlar" diyeceğiz. Global fonksiyon demekle global isim alanı içerisinde bulunan fonksiyonları değil sınıf içerisinde bulunmayan herhangi bir isim alanı 
-	içerisinde bulunan fonksiyonları kastedeceğiz.
+	"global fonksiyonlar" diyeceğiz. Global fonksiyon demekle global isim alanı içerisinde bulunan fonksiyonları değil, sınıf içerisinde bulunmayan herhangi bir isim alanı içerisinde bulunan fonksiyonları kastedeceğiz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -7413,6 +7422,7 @@ int main(void)
 	Sample s;
 
 	s.foo();
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -7471,7 +7481,7 @@ int main(void)
 	- Fonksiyon faaliyet alanı (function scope)
 	- Block faaliyet alanı (block scope)
 
-	Sınıfın tüm elemanaları yani sınıf bildirimi içerisinde bildirilen tüm isimler sınıf faaliyet alanı kuralına uyarlar. 
+	Sınıfın tüm elemanları yani sınıf bildirimi içerisinde bildirilen tüm isimler sınıf faaliyet alanı kuralına uyarlar. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -7489,16 +7499,16 @@ public:
 
 void Sample::foo()
 {
-	a = 10;			// geçerli, a sınıf faaliyet alanına ilişkin
-	b = 20;			// geçerli b sınıf faaliyet alanına ilişkin
+	a = 10;		// geçerli, a sınıf faaliyet alanına ilişkin
+	b = 20;		// geçerli, b sınıf faaliyet alanına ilişkin
 }
 
 void Sample::bar()
 {
-	cout << a << endl;	// geçerli, a sınıf faaliyet alanına ilişkin
-	cout << b << endl;	// geçerli b sınıf faaliyet alanına ilişkin
+	cout << a << endl;		// geçerli, a sınıf faaliyet alanına ilişkin
+	cout << b << endl;		// geçerli, b sınıf faaliyet alanına ilişkin
 
-	foo();				// geçerli foo sınıf faaliyet alanına ilişkin
+	foo();					// geçerli foo sınıf faaliyet alanına ilişkin
 }
 
 int main(void)
@@ -7586,8 +7596,8 @@ int main(void)
 {
 	Sample s;
 
-	s.foo();		// foo'nun içerisinde kullanıolan a ve b s'nin a ve b'si
-	s.bar();		// bar'ın içerisinde kullanılan a ve b s'nin a ve b'si
+	s.foo();		// foo'nun içerisinde kullanılan a ve b, s'nin a ve b'si
+	s.bar();		// bar'ın içerisinde kullanılan a ve b, s'nin a ve b'si
 
 	cout << s.a << " " << s.b << endl;
 
@@ -7596,7 +7606,7 @@ int main(void)
 
 /*--------------------------------------------------------------------------------------------------------------------------
 	Yukarıda da belirtildiği gibi bir üye fonksiyonun içerisinde kullanılan sınıfın veri elemanlarının hangi nesnenin elemanları olduğu o fonksiyon çağrılmadan 
-	bilinmemektedir. Biz üye fonksiyonu hangi nesne ile çağırırsak onun içerisinde veri elemanları o nesnenin veri elemanları olur. Örneğin:
+	bilinmemektedir. Biz üye fonksiyonu hangi nesne ile çağırırsak onun içerisindeki veri elemanları o nesnenin veri elemanları olur. Örneğin:
 
 	s.foo();
 	k.foo();
@@ -8796,7 +8806,7 @@ int main(void)
 /*--------------------------------------------------------------------------------------------------------------------------
 	Bazen sınıfın bir veri elemanı üzerinde işlem yaparken arka planda başka birtakım işlemlerin de yapılması gerekebilir. Örneğin SerialPort isimli bir sınıfta
 	seri porun hızı sınıfın public bir m_baudrate elemanında tutuluyor olsun. Biz şimdi bu elemana değer yerleşirdiğimizde seri portu hızı değişmeyecektir. 
-	Seri portun hıznını değiştirmek için UART işlemcisinin programlanması gerekir. Ancak biz m_baudrate elemanını private bölümde tutup onu set_baudrate fonksyonu ile
+	Seri portun hıznını değiştirmek için UART işlemcisinin programlanması gerekir. Ancak biz m_baudrate elemanını private bölümde tutup onu set_baudrate fonksiyonu ile
 	set etmeye kullanıcıyı zorlarsak set_baudrate fonksiyonu içerisinde biz UART işlemcisini de programlayabiliriz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -9772,7 +9782,7 @@ int main(void)
 	Bir sınıf nesnesi const yapılabilir. const sınıf nesneleri için çağrılan yapıcı ve yıkıcı fonksiyonlar o nesnenin veri elemanlarında değişiklik yapabilirler. 
 	Ancak bu istisna durum dışında const nesnenin veri elemanları herhangi bir biçimde değiştirilemezler. 
 
-	cont bir sınıf nesnesi ile sınıfın yalnızca const üye fonksiyonları çağrılabilir. Çünkü const üye fonksiyonların sınıfın veri elemanlarını 
+	const bir sınıf nesnesi ile sınıfın yalnızca const üye fonksiyonları çağrılabilir. Çünkü const üye fonksiyonların sınıfın veri elemanlarını 
 	değiştirmeyeceği derleyici tarafından zaten denetlenmiştir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -9883,7 +9893,7 @@ int main(void)
 	İşte geri dönüş değeri için yaratılacak olan geçici nesne için sınıfın kopya yapıcı fonksiyonu çağrılır.
 
 	Sınıfın kopya yapıcı fonksiyonu sınıfın kendi türünden referans parametreli yapıcı fonksiyonudur. Sınıfın ismi T olmak üzere aşağıdaki parametrelere sahip yapıcı foksiyonların 
-	hepsi kopya yapıcı fonksiyon (copy contructor) olarak kullanılabilir:
+	hepsi kopya yapıcı fonksiyon (copy constructor) olarak kullanılabilir:
 
 	- const T &
 	- T &
@@ -9898,7 +9908,7 @@ int main(void)
 	Kopya yapıcı fonksiyonu derleyici tarafından çağrıldığında ilkdeğer olarak verilen nesnenin adresi kopya yapıcı fonksiyonunun referans parametresine aktarılır. 
 	Kopya yapıcı fonksiyonunu yazan programcı da o nesnenin içeriğini yeni yaratılan nesnede oluşturmaya çalışır. 
 
-	Sınıfın başka sınıf türünden veri elemanlarının bulunduğu durumda sınıfın kopya yapıcı fonksyonu bu veri elemanları için kendi sınıflarının kopya yapıcı fonksiyonlarının
+	Sınıfın başka sınıf türünden veri elemanlarının bulunduğu durumda sınıfın kopya yapıcı fonksiyonu bu veri elemanları için kendi sınıflarının kopya yapıcı fonksiyonlarının
 	çağrılmasını sağlamalıdır. Bu işlemin nasıl yapılacağı ileri MIL sentaksı açıklanırken ele alınacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -10113,7 +10123,7 @@ String::String(const char *str)
 	strcpy(m_str, str);
 }
 
-String::String(const String &r)			// copy constructor içerikl kopyalaması yapıyor
+String::String(const String &r)			// copy constructor içerik kopyalaması yapıyor
 {
 	m_str = new char[r.m_len + 1];
 	strcpy(m_str, r.m_str);
@@ -10310,7 +10320,7 @@ int main(void)
 /*--------------------------------------------------------------------------------------------------------------------------
 	C++'ta C++17'ye kadar bazı durumlarda derleyicinin kopya yapıcı fonksiyonunu çağırmayabileceği, nesneyi doğrudan hedefte yaratabileceği belirtilmiştir. Ancak 
 	bu durum derleyicileri yazanların isteğine bırakılmıştır. Buna "kopya yapıcı fonksiyonun elimine edilmesi (copy elision)" denilmektedir. Ancak C++17 ile birlikte 
-	bazı durumlarda artık "copy elision"steğe bağlı olmaktan çıkartılıp zorunlu hale getirilmiştir. (Yani derleyici bu özel durumlarda artık kopya yapıcı 
+	bazı durumlarda artık "copy elision" isteğe bağlı olmaktan çıkartılıp zorunlu hale getirilmiştir. (Yani derleyici bu özel durumlarda artık kopya yapıcı 
 	fonksiyonunu elimine etmek zorundadır.)
 
 	C++17 ile birlikte bir nesne sağ taraf değerine (prvalue) ilişkin bir nesne ile ilkdeğer verilerek yaratıldığında (yani tipik olarak bir geçici nesne ile ilkdeğer verilerek yaratıldığında) 
@@ -10343,7 +10353,7 @@ int main(void)
 	Sample s(foo());
 
 	Burada return işleminde yaratılacak geçici nesne için kopya yapıcı fonksiyonu çalıştırılmaz. Doğrudan bu nesne a, b, c parametreli yapıcı fonksiyonla 
-	yaratlır. Benzer biçimde aslında buradaki kodda yalnızca s için default yapıcı fonksiyon çağrılacaktır. 
+	yaratılır. Benzer biçimde aslında buradaki kodda yalnızca s için default yapıcı fonksiyon çağrılacaktır. 
 
 	Bu biçimdeki "copy elision" C++17 öncesinde zorunlu değildi. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -10835,7 +10845,7 @@ int main(void)
 
 /*--------------------------------------------------------------------------------------------------------------------------
 	MIL sentaksı kopya yapıcı fonksiyonlarında da benzer biçimde kullanılmaktadır. Örneğin bir sınıfın başka sınıf türünden veri elemanları varsa ve biz bu 
-	sınıf için kopya yapıcı fonksiyonunu yazıyorsak bu durumda bu kopya yapıcı fonksiyonu elemanların MIL sentaksıyla kopya yapıcı fonksyonlarını çalıştıracak biçimde
+	sınıf için kopya yapıcı fonksiyonunu yazıyorsak bu durumda bu kopya yapıcı fonksiyonu elemanların MIL sentaksıyla kopya yapıcı fonksiyonlarını çalıştıracak biçimde
 	yazılmalıdır. Aksi takdirde yine elemanlar için default yapıcı fonksiyon çalıştırılır. Tabii derleyicinin kendi yazdığı kopya yapıcı fonksiyonu zaten elemanlar için 
 	onların kopya yapıcı fonksiyonlarını çağırmaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -11290,7 +11300,7 @@ int main()
 /*--------------------------------------------------------------------------------------------------------------------------
 	Bir sınıf türünden bir nesne başka bir sınıf türünden bir nesnenin bir parçasını oluşturuyorsa bu iki sınıf arasında "içerme ilişkisi (compoistion)" 
 	vardır. İçerme ilişkisi bire-bir olabileceği gibi bire-çok biçimde de olabilir. İçerme ilişkisi UML sınıf diyagramlarında içeren sınıf tarafında içi dolu bir 
-	baklavacık (dimaond) ile gösterilmektedir. 
+	baklavacık (diamond) ile gösterilmektedir. 
 
 	İçerme ilişkisinin iki temel özelliği vardır:
 
@@ -11382,7 +11392,7 @@ int main(void)
 	Birleşme (aggregation) ilişkisinde bir sınıf türünden nesne başka bir sınıf türünden nesneyi kullanmaktadır. Ancak kullanılan nesne başka nesneler tarafından da
 	kullnılıyor olabilir. Kullanan nesne ile kullanılanılan nesnenin yaşamları aynı olmayabilir. Genel olarak içerme ilişkisine uymayan kullanma ilişkisi birleşme
 	ilişkisi biçimindedir. Örneğin Hastana ile Doktor sınıfları arasında, Bilgisayar ile Fare sınıfları arasında birleşme ilişkisi vardır. Birleşme ilişkisi 
-	UML sınıf diyagramlarında kullanan sınıf tarafında içi boş bir baklavacık (dimaond) ile gösterilmektedir. Birleşme ilişkisi de bire-bir olabileceği gibi bire-çok
+	UML sınıf diyagramlarında kullanan sınıf tarafında içi boş bir baklavacık (diamand) ile gösterilmektedir. Birleşme ilişkisi de bire-bir olabileceği gibi bire-çok
 	olabilir. 
 
 	Birleşme ilişkisi C++'ta tipik olarak kullanan sınıf içerisinde kulalnılan sınıfa ilişkin bir gösterici tutularak gerçekleştirilir. Tabii bu gösterici dışsarıda
@@ -11921,7 +11931,7 @@ int main()
 
 /*--------------------------------------------------------------------------------------------------------------------------
 	Bir sınıfın "taban sınıfları (base classes)" denildiği zaman yukarıya doğru onun bütün taban sınıfları anlaşılır. Bir sınıfın "doğruan taban sınıfları (direct base class)"
-	denildiğinde ise o sınıfın hemen bir yukarısındaki taban sınıfları anlaşılır. Bir sınıfın "dolaylı taban sınıfları (indirect base classes)" ise o sınıfın doğurdan 
+	denildiğinde ise o sınıfın hemen bir yukarısındaki taban sınıfları anlaşılır. Bir sınıfın "dolaylı taban sınıfları (indirect base classes)" ise o sınıfın doğrudan 
 	taban sınıflarının taban sınıfları anlaşılmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -12086,8 +12096,8 @@ int main()
 
 /*--------------------------------------------------------------------------------------------------------------------------
 	C++'ta her zaman yapıcı fonksiyonlarla yıkıcı fonksiyonlar ters sırada çalıştırılmaktadır. Bu durumda türemiş sınıfın yıkıcı fonksiyonunun ana bloğunun 
-	sonunda derleyici tarafından yerleştirilen gizli bir çağırma kodu yoluyla taban sınıfın yıkıcı fonksiyonu çağrılmaktadır. Yani önce türemiş sınıfın sonra taban 
-	sınıfın yıkıcı fonksiyonları çalıştırılmış olmaktadır.
+	sonunda derleyici tarafından yerleştirilen gizli bir çağırma kodu yoluyla taban sınıfın yıkıcı fonksiyonu çağrılmaktadır. Yani önce türemiş sınıfın 
+	sonra taban sınıfın yıkıcı fonksiyonları çalıştırılmış olmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -12147,7 +12157,7 @@ int main()
 	çağrılma sıraları nasıl olacaktır? İşte her zaman önce taban sınıfın yapıcı fonksiyonu çalıştırılır, sonra elemanlara ilişkin sınıfların yapıcı fonksiyonu çalıştırılır 
 	sonra da türemiş sınıfın yapıcı fonksiyonu çalıştırılır. Tabii yıkıcı fonksiyonların çağrılma sırası ters biçimde olacaktır.
 
-	C++'ta hiçbir zaman MIL sentaksındaki sıranın bir önemi yoktur. Yani örneğin biz MIL sentaksında önce eleman için belitim yapsak bile yine taban sınıfın 
+	C++'ta hiçbir zaman MIL sentaksındaki sıranın bir önemi yoktur. Yani örneğin biz MIL sentaksında önce eleman için belirtim yapsak bile yine taban sınıfın 
 	yapıcı fonksiyonu önce çağrılacaktır. Daha önceden de elemanlar için yapıcı fonksiyonların bildirimdeki sıraya göre çağrıldığını görmüştük.
 
 	Aşağıdaki örnekte B sınıfı A sınıfından türetilmiştir ve X sınıfı türünden bir veri elemanına sahiptir. 
@@ -12320,7 +12330,7 @@ int main()
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Bir dizi türetme söz konusu olduğunda türemiş sınıf nesnesinin adresi o türemiş sınıfın büütn taban sınıfları türünden göstericilere atanabilmektedir. Örneğin
+	Bir dizi türetme söz konusu olduğunda türemiş sınıf nesnesinin adresi o türemiş sınıfın bütün taban sınıfları türünden göstericilere atanabilmektedir. Örneğin
 	C sınıfı B sınıfından B sınıfı da A sınıfından türetilmiş olsun:
 
 	A
@@ -12332,9 +12342,9 @@ int main()
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Referanslar da bir çeşit gösterici olduğuna göre türemiş sınıftan taban sınıfa adres dönüştürmeleri referanslar yoluyla da yapılabilmektedir. Yani taban sınıf
-	türünden bir referans türemiş sınıf türünden bir nesne ile ilkdeğer verilerek tanımlanabilir. Bu durumda taban sınıf türünden referans türemiş sınıf nesnesinin
-	yine taban kısmının adresini tutacaktır. 
+	Referanslar da bir çeşit gösterici olduğuna göre türemiş sınıftan taban sınıfa adres dönüştürmeleri referanslar yoluyla da yapılabilmektedir. 
+	Yani taban sınıf türünden bir referans türemiş sınıf türünden bir nesne ile ilkdeğer verilerek tanımlanabilir. Bu durumda taban sınıf türünden 
+	referans türemiş sınıf nesnesinin yine taban kısmının adresini tutacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -12373,9 +12383,9 @@ int main()
 	Türemiş sınıf nesnesinin adresinin taban sınıf türünden bir göstericiye ya da referansa atanması bir türetme şeması üzerinde genel işlemleri yapabilen fonksiyonların
 	yazılmasını mümkün hale getirmektedir. Aşağıdaki gibi bir türetme şeması olsun:
 
-                           Employee
-              Worker        Manager        SalesPerson
-			               Executive
+							Employee
+			Worker			Manager			SalesPerson
+							Executive
 
 	Burada her sınıf aslında Employee sınıfından türetilmiştir. Aşağıdaki gibi bir fonksiyon olsun:
 
@@ -12528,7 +12538,7 @@ int main()
 
 	Düz yazılan yani ".", "->" ve "::" opereatörü olmadan yazılan isimlerin aranması niteliksiz arama kurallarına göre yapılır. Ancak nokta operatörünün, 
 	ok operatörünün ve :: operatörünün sol tarafındak isimlerin aranması niteliksiz, sağ tarafındaki isimlerin aranması nitelikli isim arama kuralına göre yapılmaktadır. İsim araması sırasıyla bazı faaliyet alanlarına sırasıyla bakılarak yapılır. 
-	İsim sırasıyla çeşitli faaliyet alanlarınd aranır. İsim bulunursa arama devam ettirilmez. İsim bulunmazsa error oluşur. 
+	İsim sırasıyla çeşitli faaliyet alanlarında aranır. İsim bulunursa arama devam ettirilmez. İsim bulunmazsa error oluşur. 
 
 	Niteliksiz isimlerin aranması aşağıdaki sırada yapılmaktadır.
 
@@ -13332,7 +13342,7 @@ int main()
 
 	Burada B sınıfında yalnızca foo override edildiği için B sınıfı da soyuttur ve B sınıfı türünden de nesneler yaratamayız. 
 
-	A soyut sınıfındaki saf sanal fonksiyonların bir bölümü ondan türetilmiş B sınıfında override edilmiş olsun. Bu duurmda B de soyut bir sınıftır. Ancak geri 
+	A soyut sınıfındaki saf sanal fonksiyonların bir bölümü ondan türetilmiş B sınıfında override edilmiş olsun. Bu durumda B de soyut bir sınıftır. Ancak geri 
 	kalan saf sanal fonksiyonlar B'den türetilmiş C override edilirse C artık soyut olmaz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -13717,7 +13727,7 @@ int main()
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Bazen bir üye fonksiyonun geri dönüş değeri kendi sınıfı türünden bir sol taraf değeri referansı olur. Fonksion da *this ifadesiyle geri döner. Bu durumda *this
+	Bazen bir üye fonksiyonun geri dönüş değeri kendi sınıfı türünden bir sol taraf değeri referansı olur. Fonksiyon da *this ifadesiyle geri döner. Bu durumda *this
 	üye fonksiyonun çağrıldığı nesnedir. Dolayısıyla fonksiyon da aslında bize bu nesneyi geri döndürür. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -13764,9 +13774,10 @@ int main()
 	Bazı global fonksiyonlar belli bir konuyla ilgili iş yapıyor olabilirler. Bu durumda o global fonskiyonların o konuya ilişkin sınıf ile ilişkilendirilmeleri 
 	iyi bir tekniktir. Örneğin bir yılın artık yıl olup olmadığını belirleyen isleap isimli bir fonksiyon mantıksal ilgi nedeniyle Date sınıfın static bir üye fonksiyonu
 	yapılmalıdır. static üye fonksiyonlar sınıfın veri elemanlarını kullanamazlar. Eğer sınıfın veri elemanlarını kullanmayan fonksiyonlar sınıfın static olmayan 
-	bir üye fonksiyonu olarak yazılırsa bu durumda gereksiz biçimde onun bir nesne ile çağrılma zorunluluğu ortaya çıkar. Halbuki bu fonksiyonlar sınıfın veri elemanlarını zaten kullanmamaktadır.
-	İşte bir üye fonksiyon static yapılırsa artık o üye fonksiyon bir nesne olmadan sınıf ismi ve :: operatörüyle (tabii public bölümdeyse) çağrılabilmektedir. Bir üye fonksyonu static yapabilmek için
-	sınıf bildirimi içerisindeki prototipin önüne "static" anahtar sözcüğü getirilir. static anahtar sözcüğü tanımlamada kullanılamaz. Örneğin:
+	bir üye fonksiyonu olarak yazılırsa bu durumda gereksiz biçimde onun bir nesne ile çağrılma zorunluluğu ortaya çıkar. Halbuki bu fonksiyonlar sınıfın veri elemanlarını 
+	zaten kullanmamaktadır.
+	İşte bir üye fonksiyon static yapılırsa artık o üye fonksiyon bir nesne olmadan sınıf ismi ve :: operatörüyle (tabii public bölümdeyse) çağrılabilmektedir. Bir üye fonksiyonu 
+	static yapabilmek için sınıf bildirimi içerisindeki prototipin önüne "static" anahtar sözcüğü getirilir. static anahtar sözcüğü tanımlamada kullanılamaz. Örneğin:
 
 	class Sample {
 	public:
@@ -14375,8 +14386,8 @@ int main()
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	C++11 ile birlikte C++'a eklenen "initializer list yapıcı fonksiyonu yoluyla" biz kme pareantezleri içerisinde elemanları belirterek de bir vektörü 
-	oluşturabiliriz. Vektörler aralık tabalı for döngüsüyle dolaşılabilirler. Bu durumda döngünün her yünelenmesinde biz vektörün yeni bir elemanını 
+	C++11 ile birlikte C++'a eklenen "initializer list yapıcı fonksiyonu yoluyla" biz küme pareantezleri içerisinde elemanları belirterek de bir vektörü 
+	oluşturabiliriz. Vektörler aralık tabalı for döngüsüyle dolaşılabilirler. Bu durumda döngünün her yinelenmesinde biz vektörün yeni bir elemanını 
 	elde etmiş oluruz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -14397,7 +14408,7 @@ int main()
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Tabii aralık tabanlı for döngsünde dönü değişkeni bir referans olarak alınabilir burada auto belirleyicisi de kullanılabilir.
+	Tabii aralık tabanlı for döngüsünde döngü değişkeni bir referans olarak alınabilir. Burada auto belirleyicisi de kullanılabilir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -14820,7 +14831,7 @@ int main()
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Operatör fonksiyonları kombine edilebilir. Ancak bu duurmda operatör fonksiyonlarının çağrılma sırası operatör nceliklerine göre yapılmaktadır. Operatör
+	Operatör fonksiyonları kombine edilebilir. Ancak bu durumda operatör fonksiyonlarının çağrılma sırası operatör nceliklerine göre yapılmaktadır. Operatör
 	önceliklerini değiştirmenin bir yolu yoktur. Örneğin:
 
 	result = a + b * c;
@@ -15382,7 +15393,7 @@ int main()
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	En önemli operatör fonksiyonlarından biri de "atama operatör" fonksiyonudur. Bir atama işleminde sol taraftaki nesne bir sınıf türündense bu duurmda atama 
+	En önemli operatör fonksiyonlarından biri de "atama operatör" fonksiyonudur. Bir atama işleminde sol taraftaki nesne bir sınıf türündense bu durumda atama 
 	işlemi sınıfın "atama operatör fonksiyonu" denilen bir fonksiyon çağrılarak yapılır. Yani a bir sınıf nesnesi olmak üzere:
 
 	a = b;
@@ -15392,7 +15403,7 @@ int main()
 	a.operator=(b);
 
 	Atama operatör fonksiyonları "overload" edilebilir. Ancak bir sınıfın kendi sınıfı türünden bir nesneyi atamakta kullanılan operatör fonksiyonuna "kopya atama
-	operatör fonksiyonu" denilmektedir. Kopya atama operatör fonksiyonu sınıfın ismi T olmak üzere aşağıdaki parametrelere sahip atama operatör fonksiyonlarıdır:
+	operatör fonksiyonu" (copy assignment function) denilmektedir. Kopya atama operatör fonksiyonu sınıfın ismi T olmak üzere aşağıdaki parametrelere sahip atama operatör fonksiyonlarıdır:
 
 	T &operator =(const T&r);
 	T &operator =(T &r);
@@ -15405,7 +15416,7 @@ int main()
 
 	T &operator =(const T&r);
 
-	Bu konuda bazı ayrıntılar da vardır. Derleyicinin yazdığı kopya atama operatör fonksiyonu sınıfın karşılıklı veri elemanlarını biribrine atar (memberwise copy).
+	Bu konuda bazı ayrıntılar da vardır. Derleyicinin yazdığı kopya atama operatör fonksiyonu sınıfın karşılıklı veri elemanlarını birbirine atar (memberwise copy).
 	Tabii bir sınıfın gösterici veri elemanı gibi veri elemanları varsa programcı yine kopya atama operatör fonksiyonunu içerik kopyalaması yapacak biçimde kendisi 
 	yazmalıdır. 
 
@@ -15428,7 +15439,7 @@ int main()
 
 	(a = b) = c;		// C'de geçersiz! C++'ta geçerli
 
-	İşte atama operatöründen elde edilen ürünün nesnebelirtmesi için atama operatör fonksiyonunun kendi sınıfı türünden bir referansa geri dönmesi ve return ifadesinde
+	İşte atama operatöründen elde edilen ürünün nesne belirtmesi için atama operatör fonksiyonunun kendi sınıfı türünden bir referansa geri dönmesi ve return ifadesinde
 	de *this bulunması gerekmektedir. 
 
 	Ayrıca a = a gibi bir işlem anlamsız olsa da buna önlem almak gerekebilir. 
@@ -16105,7 +16116,7 @@ int main()
 
 	Buradan da görüldüğü gibi iostream sınıfı istream ve ostream sınıfından çoklu türetilmiştir. istream ve ostream sınıflarının ortak elemanları basic_ios 
 	sınıfından türetilmiş durumdadır. basic_ios sınıfı da ios_base sınıfından türetilmiştir. ostream sınıfının bir grup overload edilmiş << operatör fonksiyonu, 
-	istream sınıfının da overload edilmiş bir grup >> operatör fonksiyonu bulunmaktadır. cout nesnesi ostream sınıfı türünden olduğna göre viz bu nesneyle 
+	istream sınıfının da overload edilmiş bir grup >> operatör fonksiyonu bulunmaktadır. cout nesnesi ostream sınıfı türünden olduğuna göre biz bu nesneyle 
 	yalnızca << operatör fonksiyonlarını, cin nesnesi de istream sınıfı türünden olduğuna göre biz bu nesneyle yalnızca >> ıperatör fonksiyonlarını kullanabiliriz. 
 	Şablonluk özelliği bir yana bırakılırsa bu sınıfların aşağıdaki gibi bir yapıya sahip olduğu söylenebilir:
 
@@ -16667,7 +16678,7 @@ private:
 };
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	-> operatör fonksiyonu bir sınıf türünden gçstriciyi taklit eden sınıflar için kullanılmaktadır. -> operatör fonksiyonu üye fonksiyon biçiminde yazılmak zorundadır. 
+	-> operatör fonksiyonu bir sınıf türünden göstericiyi taklit eden sınıflar için kullanılmaktadır. -> operatör fonksiyonu üye fonksiyon biçiminde yazılmak zorundadır. 
 	-> operatör fonksiyonu bir sol taraf değeri ile değil bizzat sınıf türünden bir adresle geri dönmelidir. Çünkü s bir smart pointer nesnesi olmak üzere:
 
 	s->a
@@ -16795,7 +16806,7 @@ int main()
 		return 0;
 	}
 
-	reset fonksiyonuu default argümanla çağırırsak nesnin içerisindeki göstericiye null adres atanır. Tabii yine nesne daha önce gösterdiği dinamik nesneyi delete 
+	reset fonksiyonuu default argümanla çağırırsak nesnenin içerisindeki göstericiye null adres atanır. Tabii yine nesne daha önce gösterdiği dinamik nesneyi delete 
 	edecektir. Örneğin:
 
 	unique_ptr<string> us(new string("ankara"));
@@ -17132,7 +17143,7 @@ int main()
 /*--------------------------------------------------------------------------------------------------------------------------
 	Exception mekanizması (exception handling) özellikle nesne yönelimli programlama dillerinde karşılaşılan bir hata kontrol mekanizmasıdır. C gibi klasik prosedürel 
 	dillerde hata kontrolleri programcı açısından yorucu olabilmektedir. Programcı başarısız olabilecek her fonksiyonun başarısını kontrol etmek durumunda kalır.
-	İç içe fonksiyonlarda iç bir fonksiyonda hata olşuştuğunda programcının içerden dışa doğru başsrıszlıkla geri dönmesi gerekmeketdir. Bu da programın çok kontrollü bir 
+	İç içe fonksiyonlarda iç bir fonksiyonda hata oluştuğunda programcının içerden dışa doğru başarısızlıkla geri dönmesi gerekmektedir. Bu da programın çok kontrollü bir 
 	biçimde oluşturulmasına yol açmaktadır. Bu bakımdan da okunabilirliği azaltmaktadır. İşte exception mekanizması bu srunları çözmek amacıyla bulundurulmaktadır. 
 	Exception mekanizmasının sağladığı avantajlar şunlardır:
 
@@ -18121,7 +18132,7 @@ int main()
 		//...
 	}
 
-	3) Strong Guarantee: Burada bir üye fonksiyon çağrıldığında eğer üye fonksiyonun içerisinde exception oluşmuşsa akış fonksyondan çıktığında nesnenin durumu 
+	3) Strong Guarantee: Burada bir üye fonksiyon çağrıldığında eğer üye fonksiyonun içerisinde exception oluşmuşsa akış fonksiyondan çıktığında nesnenin durumu 
 	(yani onun içerisindeki veri elemanlarının değerleri) bu üye fonksiyon çağrılmadan önceki değerlerdedir. Başka bir deyişle üye fonksiyonda exception oluşması
 	nesne üzerinde hiçbir etki yaratmaz. Tabii sınızntı vs. gibi durumlar da oluşmaz. Örneğin.
 
@@ -18144,7 +18155,7 @@ int main()
 
 	void foo() noexcept;
 
-	Burada artık biz bu fonksiyonu zaten try-cath içerisinde çağırmak zorunda da değiliz. Çünkü fonksiyon zaten dışarıya throw işlemi yapmayacaktır. Dolaısıyla da bir 
+	Burada artık biz bu fonksiyonu zaten try-catch içerisinde çağırmak zorunda da değiliz. Çünkü fonksiyon zaten dışarıya throw işlemi yapmayacaktır. Dolaısıyla da bir 
 	sızıntı söz konusu olmaz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -18334,7 +18345,7 @@ int main()
 	}
 
 	Burada template parametresinin ismi T'dir. template parametreleri herhangi bir biçimde isimlendirilebilir. Ancak genellikle programcılar tek karakterli T, K
-	gibi harfleri tercih etmektedir. Templatae parametrelerinden önce class anahtar sözcüğü yerine typename anahtar sözcüğü de kullanılabilirdi. Örneğin:
+	gibi harfleri tercih etmektedir. Template parametrelerinden önce class anahtar sözcüğü yerine typename anahtar sözcüğü de kullanılabilirdi. Örneğin:
 
 	template <typename T>
 	T getmax(const T *p, size_t size)
@@ -18576,7 +18587,7 @@ int main()
 
 /*--------------------------------------------------------------------------------------------------------------------------
 	Örneğin sort isimli fonksiyon şablonu yine bizden bir dizinin ilk elemanın ve son elemanından sonraki elemanın adresini alarak o diziyi sıraya dizmektedir. 
-	Biz bu fonksion şablonu yoluyla aslında her türden diziyi sıraya dizebiliriz. 
+	Biz bu fonksiyon şablonu yoluyla aslında her türden diziyi sıraya dizebiliriz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -18944,7 +18955,7 @@ int main()
 		//...
 	};
 
-	Bu duurmda B'nin her bir açılımı A'dan türetilmiş olmaktadır. Örneğin:
+	Bu durumda B'nin her bir açılımı A'dan türetilmiş olmaktadır. Örneğin:
 
 	B<int> x;
 	B<double> y;
@@ -19746,7 +19757,7 @@ int main()
 	olarak yazılmıştır. 
 
 	C standartlarında 2011 yılna kadar thread'ler hiç söz konusu edilmemiştir. C11 ile birlikte C'ye "optional" yalın bir thread kütüphanesi eklenmişse de bu kütüphane 
-	Microsoft ve GNU ve cland derleyicileri tarafından desteklenmemektedir. C++'a thread kütüphanesi C++11 ile birlikte eklenmiştir. Dolayısıyla artık cross-platform 
+	Microsoft ve GNU ve clang derleyicileri tarafından desteklenmemektedir. C++'a thread kütüphanesi C++11 ile birlikte eklenmiştir. Dolayısıyla artık cross-platform 
 	thread işlemleri C++'ın standart kütüphanesi yoluyla yapılır duruma gelmiştir. Şüphesiz C++'ın standart thread kütüphanesi de Windoes'ta Windows'un API fonksiyonları
 	kullanılarak UNIX/Linux ve Mac sistemlerinde POSIX fonksiyonları kullaılarak yazılmış durumdadır. Ancak C++ programcısı thread'leri hep aynı biçimde kullanır. 
 	İşletim sistemi farklılığı kütüphane tarafından gerçekleştirim sırasında kendi içerisinde halledilmektedir. 
@@ -19768,8 +19779,8 @@ int main()
 	toplamda daha hızlı bir çalışma söz konusu olur. 
 
 	Thread'in parçalı çalışma süresi dolduğunda thread akışı zorla işletim sistemi tarafından alınmaktadır. Bu zorla akışın alınmasına İngilizce "preemption" denilmetedir. 
-	Bu tür işletim sistemlerine ise "preemptive" işletim sistemleri denir. Akışın quanta süresi dolduunda zorla alınması donanım kesmeleri yoluyla yapılmaktadır. 
-	Artık işlemcilerde de işlemcisnin kendi içerisinde bu amaçla timer devreleri bulundurulmaktadır. 
+	Bu tür işletim sistemlerine ise "preemptive" işletim sistemleri denir. Akışın quanta süresi dolduğunda zorla alınması donanım kesmeleri yoluyla yapılmaktadır. 
+	Artık işlemcilerde de işlemcisinin kendi içerisinde bu amaçla timer devreleri bulundurulmaktadır. 
 
 	Bir proses çalışmaya tek bir thread'le başlar. Buna prosesin "ana thread'i (main thread)" denilmektedir. Örneğin C'de main'den giren akış ana thread akışıdır. 
 	Diğer thread'ler programcı tarafından yaratılmaktadır. Tabii yukarıda da belirtildiği gibi aslında thread'lerin yaratılması işletim sisteminin sistem fonksiyonları ile 
