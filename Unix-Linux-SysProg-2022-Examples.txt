@@ -37397,7 +37397,7 @@ void exit_sys(const char *msg)
     fonksiyon tarafından yapının revents elemanında set edilmektedir. 
 
     POLLHUP: Fonksiyon tarafından ilgili aygıt ya da boru kapatıldığında set edilmektedir. Bu bayrak yapının events elemanında 
-    set edilmez, fonksiyon tarafından yapının revents elemanında set edilmektedir. (HUP, hangup anlamına gelmektedir.)
+    set edilmez, fonksiyon tarafından yapının revents elemanında set edilmektedir. (HUP, "hang up" anlamına gelmektedir.)
 
     Bu bayraklar bit OR işlemine sokulabilmektedir. Örneğin hem okuma hem de yazma izlemesi için POLLIN|POLLOUT kullanılabilir.
 
@@ -39938,7 +39938,7 @@ void exit_sys(const char *msg)
     LOG_USER bir user proses tarafından bu loglamanın yapıldığını belirtmektedir. LOG_KERN mesajın kernel tarafından gönderildiğini 
     belirtir. LOG_DAEMON (POSIX'te yok) mesajın bir sistem daemon programı tarafından gönderildiğini belirtmektedir. LOG_LOCAL0'dan 
     LOG_LOCAL7'ye kadarki sembolik sabitler özel log kaynaklarını belirtmektedir. Bu parametre de 0 olarak geçilebilir. Bu durumda 
-    LOG_USER değeri girilmiş gibi işlem yapılmaktadır.Ancak tipik olarak LOG_USER biçiminde geçilmektedir.
+    LOG_USER değeri girilmiş gibi işlem yapılmaktadır. Ancak tipik olarak LOG_USER biçiminde geçilmektedir.
 
     openlog fonksiyonunun başarısı kontrol edilememektedir. Çünkü fonksiyonun geri dönüş değeri void biçimdedir. 
 
@@ -40540,58 +40540,642 @@ void exit_daemon(const char *msg)
     Tüm bunlar eşliğinde IP ailesinin en çok kullanılan transport katmanının neden TCP olduğunu anlayabilirsiniz. Uygulama katmanındaki
     protokoller hep TCP kullanmaktadır. 
 
-    <BURADA KALDIk>
-
     Yukarıda da belirttiğimiz gibi IP protokol ailesinde ağa bağlı olan birimlere "host" denilmektedir. Host bir bilgisayar olmak 
-    zorunda değildir. İşte bu protokolde her host'un mantıksal bir adresi vardır. Bu adrese IP adresi denilmektedir. IP adresi IPv4'te 4 byte uzunlukta, IPv6'da 16 byte 
-    uzunluktadır. Ancak bir host'ta farklı programlar farklı host'larla haberleşiyor olabilir. İşte aynı host'a gönderilen IP paketlerinin
-    o host'ta ayrıştırılması için "protokol port numarası" diye içsel bir numara uydurulmuştur. Port numarası bir şirketin içerisinde çalışanların
-    dahili numarası gibi düşünülebilir. Port numaraları IPv4'te 2 byte'la, IPv6'da 4 byte'la ifade edilmektedir. İlk 1024 port numarası IP 
-    ailesinin uygulama katmanındaki protokoller için ayrılmıştır. Bunlara "well known ports" denilmektedir. Bu nedenle prograöcıların port numaralarını
-    1024'ten büyük olacak biçimde almaları gerekir. Bu udurmda TCP ve UDP'de bilgiler belirli bir IP adresindeki host'un belirli bir portuna gönderilir. 
-    Gönderilen bu bilgiler de o portla ilgilenen programlar tarafından alınmaktadır. 
+    zorunda değildir. İşte bu protokolde her host'un mantıksal bir adresi vardır. Bu adrese IP adresi denilmektedir. IP adresi IPv4'te
+    4 byte uzunlukta, IPv6'da 16 byte uzunluktadır. Ancak bir host'ta farklı programlar farklı host'larla haberleşiyor olabilir. İşte 
+    aynı host'a gönderilen IP paketlerinin o host'ta ayrıştırılması için "protokol port numarası" diye isimlendirilen içsel bir numara 
+    uydurulmuştur. Port numarası bir şirketin içerisinde çalışanların dahili numarası gibi düşünülebilir. Port numaraları IPv4'te ve 
+    IPv6'da 2 byte'la ifade edilmektedir. İlk 1024 port numarası IP ailesinin uygulama katmanındaki protokoller için ayrılmıştır. Bunlara 
+    "well known ports" denilmektedir. Bu nedenle programcıların port numaralarını 1024'ten büyük olacak biçimde almaları gerekir. Bir host
+    TCP ya da UDP kullanarak bir bilgi gönderecekse bilginin gönderileceği host'un IP numarasını ve bilginin orada kime gönderileceğini 
+    anlatan port numarasını belirtmek zorundadır. IP numarası ve port numarası çiftine "IP End Point" de denilmektedir. Bilgiyi 
+    almak isteyen program kendisinin hangi portla ilgilendiğini de belirtmek durumundadır. Örneğin biz bir host'ta çalışacak bir
+    TCP/IP ya da UDP/IP program yazmak istiyorsak o host'un belli bir prot numarasına gelen bilgilerle ilgileniriz. Port numarası 
+    kavramının IP protokolünda olmadığına TCP ve UDP protokollerinde bulundurğuna dikkat ediniz. 
 
-    IP haberleşmesi (yani paketlerin, oluşturulması, gönderilmesi alınması vs.) işletim sistemlerinin çekirdekleri tarafından yapılmaktadır. 
-    Tabii User mod programlar için sistem çağrılarını yapana API fonksiyonlarına ve kütüphanelerine gereksinim vardır. İşte bunların en yaygın
-    kullanılanı "soket kütüphanesi" denilen kütüphanedir. Bu kütüphane ilk kez 1983 yılında 4.2BSD'de gerçekleştirilmiştir ve pek çok UNIX türevi
-    sistem bu kütüphaneyi aynı biçimde benimsemiştir. Microsoft'un Windows sistemleri de bu APı kütüpahanesini desteklemektedir. Bu kütüphaneye "Winsock"
-    ya da "WSA (Windows Socket API)" denilmektedir. Microsoft'un Winsock kütüphanesinde hem BSD fonksiyonları orijinal haliyle bulunmakta hem de 
-    başı WSAXXX ile başlayan Wibndows'a özgü fonksiyonlar bulunmaktadır. 
+    TCP ve UDP protokollerinin IP protokolü üzerine oturdulduğunu belirtmiştik. Bu ne anlama gelmektedir? Biz TCP kullanarak 
+    belli bir IP numarası ve port numarası (end point) belirterek bir grup byte'ı göndermiş olalım. Aslında bu byte topluluğu
+    bir TCP paketi oluşturularak bir paket biçiminde yola çıkarılmaktadır. Ancak ana network protokolü IP'dir. O halde bu 
+    paketin aslında bir IP paketi olarak gönderilmesi gerekir. Bir IP paketi iki kısımdan oluşmaktadır: IP Header ve IP data
+
+    |     IP Header         |
+    |     IP Data           |
+
+    IP Header'da söz konusu IP paketinin hedefe ulaştıtılabilmesi için gerekli bilgiler bulunur. Gönderilecek asıl bilgi bu 
+    paketin "IP Data" kısmındadır. İşte bir TCP paketi aslında bir IP paketi olarak IP paketinin "IP Data" kısmına gömülerek
+    gönderilmektedir. Bu durumda TCP paketinin genel görünümü şöyledir:
+
+    |     IP Header         |
+    |     TCP Header        |   IP Data
+    |     TCP Data          |   IP Data
+
+    Yani TCP paketinin header ve data kısmı aslında IP paketinin data kısmı gibi oluşturulmaktadır. Böylece yolculuk eden 
+    paket aslında bir TCP paketi değil IP paketidir. TCP bilgileri bu IP paketinin data kısmında bulunmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												98. Ders 18/11/2023 - Cumartesi
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    IP haberleşmesi (yani paketlerin, oluşturulması, gönderilmesi alınması vs.) işletim sistemlerinin çekirdekleri tarafından 
+    yapılmaktadır. Tabii User mod programlar için sistem çağrılarını yapan API fonksiyonlarına ve kütüphanelerine gereksinim 
+    vardır. İşte bunların en yaygın kullanılanı "soket kütüphanesi" denilen kütüphanedir. Bu kütüphane ilk kez 1983 yılında 
+    4.2BSD'de gerçekleştirilmiştir ve pek çok UNIX türevi sistem bu kütüphaneyi aynı biçimde benimsemiştir. Microsoft'un 
+    Windows sistemleri de bu APı kütüpahanesini desteklemektedir. Bu kütüphaneye "Winsock" ya da kısaca "WSA (Windows Socket API)" 
+    denilmektedir. Microsoft'un Winsock kütüphanesi hem klasik BSD soket API fonksiyonlarını hem de başı WSAXXX ile başlayan 
+    Windows'a özgü API fonksiyonlarını barındırmaktadır. Yani UNIX/linux sistemlerinde yazdığımız soket programlarını küçük 
+    değişikliklerle Windows sistemlerine de port edebiliriz. 
+
+    Soket kütüphanesi yalnızca IP protokol ailesi için tasarlanmış bir kütüphane değildir. Bütün protokollerin ortak kütüphanesidir.
+    Bu nedenle kütüphanedeki fonksiyonlar daha genel biçimde tasarlanmıştır. 
+
+    Biz soket fonksiyonlarını kullanırken aslında arka planda işlemler TCP/IP ve UDP/IP protokollerine uygun bir biçimde 
+    gerçekleştirilmektedir. Örneğin biz send soket fonksiyonu ile bir bilgiyi göndermek istediğimizde aslında bu fonksiyon 
+    arka planda bit TCP paketi dolayısıyla da bir IP paketi oluşturarak protokole uygun bir biçimde bu bilgiyi göndermektedir. 
+    Soket kütüphanesinin yalnızca bir API arayüzü olduğuna dikkat ediniz. 
+
+    Berkeley soket kütüphanesi POSIX tarafından desteklenmektedir. Yani burada göreceğimiz soket fonksiyonları aynı zamanda 
+    birer POSIX fonksiyonudur. Soket fonksiyonlarının prototiplerinin önemli bir bölümü <sys/socket.h> dosyası içerisinde 
+    bulunmaktadır. Ancak bu başlık dosyasının dışında bazı fonksiyonlar için başka başlık dosyalarının da include edilmesi 
+    gerekmektedir.
+
+    Ağ protokollerinde "endian'lık" da önemli olmaktadır. IP ailesi "Big Endian" formata göre tasarlanmıştır. Buna protokolde
+    "network byte ordering" denilmektedir. Dolyısıyla bizim soket API'lerine verdiğimiz birtakım değerlerin big endian formata 
+    dönüştürülmesi gerekmektedir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Biz kursumuzda önce soket kütüphanesi ile TCP/IP client-server programların oluşturulması konusunu ele alacağız. 
+    Sonra TCP/IP haberleşmesinin bazı protokol detaylarından bahsedeceğiz. Sonra da UDP/IP haberleşme üzerinde duracağız. 
+    Berkeley soket kütüphanesinin bazı fonksiyonları hem TCP/IP hem de UDP/IP haberleşmede ortak olarak kullanılmaktadır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir TCP/IP uygulmasında server ve client olmak üzere iki ayrı program yazılır: "TCP Server Program" ve "TCP Client program".
+    Biz önce TCP server programın daha sonra da TCP client ptogramın yazımı üzerinde duracağız. Tabii TCP server programın 
+    üzeirnde dururken zaten bazı ortak soket fonksiyonlarını da göreceğiz. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir TCP server program tipik olarak aşağıdaki soket API'lerinin sırasıyla çağrılmasıyla gerçekleştirilmektedir:
+
+    socket ---> bind ---> listen ---> accept ---> send/recv ya da read/write ---> shutdown ---> close
+
+    Haberleşme için öncelikle bir soket nesnesinin yaratılması gerekmktedir. Bu işlem socket isimli fonksiyonla yapılmaktadır.
+    socket fonksiyonu bir soket nesnesi (handle alanı) yaratır ve bize bir dosya betimleyicisi verir. Biz diğer fonksiyonlarda 
+    soket biçiminde isimlendirilen bu betimleyiciyi kullanırız. socket onksiyonunun prototipi şöyledir:
+
+    #include <sys/socket.h>
+
+    int socket(int domain, int type, int protocol);
+
+    Fonksiyonun birinci parametresi kullanılacak protokol ailesini belirtir. Bu parametre AF_XXX (Address Family) biçimindeki 
+    sembolik sabitlerden biri olarak girilir. IPV4 için bu parametreye AF_INET, IPV6 için AF_INET6 girilmelidir. UNIX domain 
+    soketler için bu parametre AF_UNIX olarak girilmelidir. kullanılır. 
+
+    Fonksiyonun ikinci parametresi kullanılacak protokolün stream tabanlı mı yoksa datagram tabanlı mı olacağını belirtmektedir. 
+    Stream soketler için SOCK_STREAM, datagram soketler için SOCK_DGRAM kullanılmalıdır. Ancak başka soket türleri de vardır. 
+    TCP protokolü stream tabanlı olduğu için TCP uygulamalarında bu paranetre SOCK_STREAM olarak girilmelidir. Ancak UDP datagram 
+    tabanlı oladuğu için UDP uygulamalarında bu parametre SOCK_DGRAM biçiminde girilmelidir. 
+
+    Fonksiyonun üçüncü parametre transport katmanındaki protokolü belirtmektedir. Ancak zaten ikinci parametreden transport 
+    protokolü anlaşılıyorsa üçüncü parametre 0 olarak geçilebilmektedir. Örneğin IP ailesinde üçüncü parametreye gerek duyulmamaktadır. 
+    Çünkü ikinci parametredeki SOCK_STREAM zaten TCP'yi, SOCK_DGRAM ise zaten UDP'yi anlatmaktadır. Fakat yine de bu parametreye 
+    istenirse IP ailesi için IPPROTO_TCP ya da IPPROTO_UDP girilebilir. (Bu sembolik sabitler <netinet/in.h> içerisindedir.) 
+
+    socket fonksiyonu başarı durumunda soket betimleyicisine başarısızsa -1 değerine geri döner ve errno uygun biçimde set 
+    edilir. socket nesnesinin bir dosya gibi kullanıldığına dikkat ediniz. socket fonksiyonu bize open fonksiyonunda olduğu 
+    gibi dosya betimleyici tablosunda indeks belirten en düşük numaralı dosya betimleyicisini vermektedir. 
+
+    Örneğin:
+
+    int server_sock;
+
+    if ((server_sock = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+        exit_sys("socket");
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    Server program soketi yarattıktan sonra onu bağlamalıdır (bind etmelidir). bind işlemi sırasında server'ın hangi portu 
+    dinleyeceği ve hangi network arayüzünden (kartından) gelen bağlantı isteklerini kabul edeceği belirlenir. Ancak bind 
+    fonksiyonu dinleme işlemini başlatmaz. Yalnızca soket nesnesine bu bilgileri yerleştirir. Fonksiyonun prototipi şöyledir:
+
+    #include <sys/socket.h>
+
+    int bind(int socket, const struct sockaddr *addr, socklen_t addrlen);
+
+    Fonksiyonun birinci parametresi yaratılmış olan soket betimleyicisini alır. İkinci parametre her ne kadar sockaddr isimli 
+    yapı türündense de aslında her protokol için ayrı bir yapı adresini almaktadır. Yani sockaddr yapısı genelliği (void gösterici
+    gibi) temsil etmek için kullanılmıştır. IPV4 için kullanılacak yapı sockaddr_in, IPV6 için sockaddr_in6 ve örneğin Unix 
+    domain soketler için ise sockaddr_un biçiminde olmalıdır. Üçüncü parametre ikinci parametredeki yapının uzunluğu olarak 
+    girilmelidir. 
+
+    sockaddr_in yapısı <netinet/in.h> dosyası içerisinde aşağıdaki gibi bildirilmiştir:
+
+    #include <netinet/in.h>
+
+    struct sockaddr_in {
+        sa_family_t     sin_family;
+        in_port_t       sin_port;
+        struct in_addr  sin_addr;
+    };
+
+    Yapının sin_family elemanına protokol ailesini belirten AF_XXX değeri girilmelidir. Bu eleman tipik olarak short biçimde 
+    bildirilmiştir. Yapının sin_port elemanı in_port_t türündendir ve bu tür uint16_t olarak typedef edilmiştir. Bu eleman server'ın 
+    dinleyeceği port numarasını belirtir. Yapının sin_addr elemanı IP numarası belirten bir elemandır. Bu eleman in_addr isimli 
+    bir yapı türündendir. in_addr yapısı <netint/in.h> dosyası içerisinde şöyle bildirilmiştir:
+
+    #include <netinet/in.h>
+
+    struct in_addr {
+        in_addr_t s_addr;
+    };
+
+    in_addr_t 4 byte'lık işaretsiz tamsayı türünü (uint32_t) belirtmektedir. Böylece s_addr 4 byte'lık IP adresini temsil eder. 
+    Eğer biz tüm network kartlarından gelen bağlantı isteklerini kabul etmek istiyorsak IP adresi olarak INADDR_ANY özel değerini 
+    geçmeliyiz.
+
+    Yukarıda da belirttiğimiz gibi IP ailesinde tüm sayısal değerler "big endian" formatıyla belirtilmek zorundadır. Bu ailede 
+    "network byte ordering" denildiğinde "big endian" format anlaşılır. Oysa makinelerin belli bir bölümü (örneğin INTEL ve default ARM) 
+    "little endian" kullanmaktadır. İşte elimzdeki makinenin endian'lığı ne olursa olsun onu big endian formata dönüştüren htons 
+    (host to network byte ordering short) ve htonl (host to network byte ordering long) isimli iki fonksiyon vardır. Bu işlemlerin tersini 
+    yapan da ntohs (network byte ordering to host short) ve ntohl (network byte ordering to host long) fonksiyonları da bulunmaktadır. 
+    Fonksiyonların prototipleri şöyledir:
+
+    #include <arpa/inet.h>
+
+    uint32_t htonl(uint32_t hostlong);
+    uint16_t htons(uint16_t hostshort);
+    uint32_t ntohl(uint32_t netlong);
+    uint16_t ntohs(uint16_t netshort);
+
+    IP adresi olarak INADDR_ANY özel değeri "tüm network kartlarından gelen bağlantı isteklerini kubul et" anlamına gelmektedir. Bu durumda 
+    sockaddr_in yapısı tipik olarak şöyle doldurulabilir:
+
+    struct sockaddr_in sinaddr;
+
+    sinaddr.sin_family = AF_INET;
+    sinaddr.sin_port = htons(SERVER_PORT);
+    sinaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+
+    bind fonksiyonu başarı durumunda sıfır değerine, başarısızlık durumunda -1 değerine geri dönmektedir. Örneğin:
+
+    if (bind(server_sock, (struct sockaddr *)&sin_server, sizeof(sin_server)) == -1)
+        exit_sys("bind");
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    server program bind işleminden sonra soketi aktif dinleme konumuna sokmak için listen fonkiyonunu çağırmalıdır. Fonksiyonun 
+    prototipi şöyledir:
 
+    #include <sys/socket.h>
+
+    int listen(int socket, int backlog);
+
+    Fonksiyonun birinci parametresi soket betimleyicini, ikinci parametresi kuyruk uzunluğunu belirtir. listen işlemi blokeye 
+    yol açmamaktadır. İşletim sistemi listen işleminden sonra ilgili porta gelen bağlantı isteklerini uygulama için oluşturduğu 
+    bir bağlantı kuyruğuna yerleştirmektedir. Kuyruk uzunluğunu yüksek tutmak meeşgul server'larda bağlantı isteklerinin kaçırılmamasını
+    sağlayabilir. Linux'ta default durumda verilebilecek en yüksek değer 128'dir. Ancak /proc/sys/net/core/somaxconn dosyasındaki
+    değer değiştirilerek bu default uzunluk artırılabilir. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine 
+    geri dönmektedir. Örneğin:
+
+    if (listen(server_sock, 8) == -1)
+        exit_sys("listen");
+
+    Bu fonksiyon işletim sistemlerinin "firewall mekanizması" tarafından denetlenebilmektedir. Eğer çalıştığınız sistemde söz konusu 
+    port firewall tarafından kapatılmışsa bunu açmanız gerekir. (Windows sistemlerinde listen fonksiyonu bir pop pencere çıkartarak
+    uyarı mesajı görüntülemektedir.)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    Bağlantıyı sağlayan asıl fonksiyon accept fonksiyonudur. accept fonksiyonu bağlantı kuyruğuna bakar. Eğer orada bir bağlantı 
+    isteği varsa onu alır ve hemen geri döner. Eğer orada bir bağlantı isteği yoksa default durumda blokede bekler. Fonksiyonun 
+    prototipi şöyledir:
 
+    #include <sys/socket.h>
+
+    int accept(int socket, struct sockaddr *address, socklen_t *address_len);
+
+    Fonskiyonun birinci parametresi dinleme soketinin dosya betimleyicisini almaktadır. İkinci parametre bağlanılan client'a 
+    ilişkin bilgilerin yerleştirileceği sockaad_in yapısının adresini almaktadır. Bu parametre yine genel bir sockaddr yapısı 
+    türünden gösterici ile temsil edilmiştir. Bizim bu bu parametre için IPV4'te sockaddr_int türünden, IPV6'da sockaddr_in6 
+    türünden bir yapı nesnesinin adresini argüman olarak vermemiz gerekir. sockaddr_in yapısının üç elemanı olduğunu anımsayınız. 
+    Biz bu parametre sayesinde bağlanan client programın IP adresini ve o host'taki port numarasını elde edebilmekteyiz. Client 
+    program server programa bağlanırken bir IP adresi ve port numarası belirtir. Ancak kendisinin de bir IP adresi ve port numarası
+    vardır. Client'ın port numarası kendi makinesindeki (host'undaki) port numarasıdır. Client'ın IP adresine ve oradaki port 
+    numarasına "remote end point" de denilmektedir. Örneğin 178.231.152.127 IP adresinden bir client programın 52310 port'u ile 
+    server'ın bulunduğu 176.234.135.196 adresi ve 55555 numaralı portuna bağlandığını varsayalım. Burada remote endpoint 
+    "178.231.152.127:52310" biçiminde ifade edilmektedir. İşte biz accept fonksiyonunun ikinci parametresinden client hakkında bu 
+    bilgileri almaktayız. 
+
+    Clent (178.231.152.127:52310) -----> Server (176.234.135.196:55555)
+
+    accept fonksiyonunun üçüncü parametresi yine ikinci parametredeki yapının (yani sockaddr_in yapısının) byte uzunluğunu 
+    belirtmektedir. Ancak bu parametre bir adres olarak alınmaktadır. Yani programcı socklen_t türünden bir nesne tanımlamalı
+    bu nesneye bu sizeof değerini yerleştirmeli ve nesnenin adresini de fonksiyonun üçüncü parametresine geçirmelidir. Fonksiyon 
+    bağlanılan client'a ilişkin soket bilgilerinin byte uzunluğunu yine bu adrese yerleştirmektedir. Tabii IP protok ailesinde 
+    her iki taraf da aynı yapyı kullanıyorsa fonksiyon çıkışında bu sizeof değerinde bir değişilik olmayacaktır. Ancak tasarım 
+    genel yapıldığı için böyle bir yola gidilmiştir. 
+
+    accept fonksiyonu başarı durumunda bağlanılan client'a ilişkin yeni bir soket betimleyicisine geri dönmektedir. Arık bağlanılan
+    client ile bu soket yoluyla konuşulacaktır. accept başarısıszlık durumunda 0 değeri ile geri dönmektedir. Örneğin:
+
+    struct sockaddr_in sin_client;
+    socklen_t sin_len;
+    int client_sock;
+    ...
+
+    sin_len = sizeof(sin_client);
+    if ((client_sock = accept(server_sock, (struct sockaddr *)&sin_client, &sin_len)) == -1)
+        exit_sys("accept");
+
+    Server tarafta temelde iki soket bulunmaktadır. Birincisi bind, listen, accept işlemini yapmakta kullanılan sokettir. 
+    Bu sokete TCP/IP terminolojisinde "passif soket (passive socket)" ya da "dinleme soketi (listening socket)" denilmektedir. 
+    İkinci soket ise client ile konuşmakta kullanılan accept fonksiyonunun geri döndürdüğü sokettir. Buna da "active soket
+    (active socket)" denilmektedir. Tabii server program birden fazla client ile konuşacaksa accept fonksiyonunu bir kez değil
+    çok kez uygulamalıdır. Her accept o anda bağlanılan client ile konuşmakta kullanılabilecek yeni bir soket vermektedir. 
+    bind, listen işlemleri bir kez yapılmaktadır. Halbuki accept işlemi her client bağlantısı için ayrıca uygulanmalıdır. 
+
+    accept fonksiyonu default durumda blokeli modda çalışmaktadır. Eğer accept çağrıldığında o anda bağlantı kuyruğunda hiç
+    bir client isteği yoksa accept fonkisyonu blokeye yol açmaktadır. 
+
+    accept fonksiyonu ile elde edilen client bilgilerindeki IP adresinin ve port numaraları "big endian" formatında yani 
+    "network byte ordering" formatındadır. Bunları sayısal olarak görüntülemek için ntohl ve ntohs fonksiyonlarının kullanılması
+    gerekir. Tabii izleyen paragrafta ele alacağımız gibi aslında IP adresleri genellikle "noktaslı desimal format" denilen 
+    bir format ile yazı biçiminde görüntülenmektedir. 
+
+    Aşağıda accept işlemine kadar olan bir örnek server programı verilmiştir. Tabii programda sonraki paragraflarda göreceğimiz 
+    bazı eksiklikler vardır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+#define SERVER_PORT		55555
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int server_sock, client_sock;
+	struct sockaddr_in sin_server, sin_client;
+	socklen_t sin_len;
+
+	if ((server_sock = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+		exit_sys("socket");
+
+	sin_server.sin_family = AF_INET;
+	sin_server.sin_port = htons(SERVER_PORT);
+	sin_server.sin_addr.s_addr = htonl(INADDR_ANY);
+
+	if (bind(server_sock, (struct sockaddr *)&sin_server, sizeof(sin_server)) == -1)
+		exit_sys("bind");
+
+	if (listen(server_sock, 8) == -1)
+		exit_sys("listen");
+
+	printf("waiting for connection...\n");
+	sin_len = sizeof(sin_client);
+	if ((client_sock = accept(server_sock, (struct sockaddr *)&sin_client, &sin_len)) == -1)
+		exit_sys("accept");
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												99. Ders 19/11/2023 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    IP adresleri sockaddr_in yapısının içerisindeki in_addr yapısında belirtilmiştir. IPV4'te IP adreslerinin 4 byte uzunlukta 
+    olduğunu söylemiştik. sockaddr_in yapısını ve in_addr yapısını yeniden veriyoruz:
 
+    #include <netinet/in.h>
+
+    struct sockaddr_in {
+        sa_family_t     sin_family;
+        in_port_t       sin_port;
+        struct in_addr  sin_addr;
+    };
+
+    struct in_addr {
+        in_addr_t s_addr;
+    };
+
+    Buradaki in_addr_t türü uint32_t biçiminde typedef edilmiştir. Yani 4 byte'lık bir tamsayı türüdür. Elimizde sockaddr_in
+    türünden bir nesne olsun:
+
+    struct sockaddr_in sin_client;
+
+    Biz bu nesne yoluyla 4 byte'lık IP adresini "sin_client.sin_addr.s_addr" ifadesi ile elde ederiz. 
+
+    IPV4 adresleri genellikle kullanıcılar tarafından "noktalı desimal format (dotted decimal format)" denilen bir formatla 
+    gösterilmektedir. Bu formatta IP adresinin her byte'ı arasına "." karakteri getirilir ve IP adresi bir yazı olarak gösterilir. 
+    Örneğin:
+
+    "127.0.0.1"
+    "192.168.1.1"
+    "176.234.135.196"
+
+    İşte 4 byte'lık işaretsiz bir tamsayı biçimindeki IP adresini noktası desimal formata dönüştürmek için inet_ntoa isimli
+    bir POSIX fonksiyonu kullanılmaktadır. Fonksiyonun prototipi şöyledir:
+
+    #include <arpa/inet.h>
+
+    char *inet_ntoa(struct in_addr in);
+
+    Fonksiyon in_addr yapısını almaktadır (yapının tek bir elemanı olduğu için adresini almamaktadır). Fonksiyon başarı durumunda 
+    noktalı desimal formattaki IP adres yazısına geri dönmektedir. Fonksiyon başarısız olamamaktadır. Fonksiyonun geri döndürdüğü 
+    adres statik bir alanın adresidir. Dolayısıyla verilen adres thread güvenli değildir.
+
+    inet_ntoa fonksiyonunun yaptığının terisini yapan inet_addr isimli bir POSIX fonksiyonu da vardır. Fonksiyonun prototipi 
+    şöyledir:
+
+    #include <arpa/inet.h>
+
+    in_addr_t inet_addr(const char *cp);
+
+    Fonksiyon noktalı desimal formattaki yazıyı alarak onu 4 byte'lık IP adresine dönüştürmektedir. Başarı durumunda bu IP adresine
+    başarısızlık durumunda (in_addr_t)-1 değerine geri dönmektedir. (in_addr_t türü işaretsiz ise geri döndürülen değer -1 değil
+    en büyük pozitif sayı olmaktadır. Ancak işaretsiz tamsayı türünü -1 ile karşılaştırırsak zaten -1 değeri de o türe dönüştürüleceği
+    için sorun ortaya çıkmayacaktır.) Başarısızlık durumunda herhangi bir errno değeri set edilmemektedir. 
+
+    inet_ntoa fonksiyonundaki ve bunun tersini yapan inet_addr fonksiyonundaki IP adresleri "big endian" formata göre yani 
+    "network byte ordering" formatına göre verilmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-
+    Bağlantı işleminden sonra artık bilgi dönderip alma işlemi yapılabilir. Sonra da aktif soket düzgün bir biçimde kapatılmalıdır. 
+    Ancak biz önce client programda da belli bir noktaya gelip bu ortak kısımları ondan sonra ele alacağız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    TCP client program server programa bağlanabilmek için tipik bazı adımları uygulamak zorundadır. Bu adımlar sırasında 
+    çağrılacak fonksiyonlar şunlardır:
 
+    socket ---> bind (isteğe bağlı) ---> gethostbyname (isteğe bağlı) ---> connect ---> send/recv ya da read/write 
+    ---> shutdown ---> close
+
+    Client taraf önce yine socket fonksiyonuyla bir soket yaratır. Örneğin:
+
+    int client_sock;
+    ...
+
+    if ((client_sock = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+        exit_sys("socket");
+
+    Soketin bind edilmesi gerekmez. Zaten genellikle client taraf soketi bind etmez. Eğer client taraf belli bir port'tan 
+    bağlanmak istiyorsa bu durumda bind işlemini uygulayabilir. Eğer client bind işlemi yapmazsa zaten işletim sistemi 
+    connect işlemi sırasında sokete boş bir port numarasını atamaktadır. İşletim sisteminin bind edilmemiş client programa 
+    conenct işlemi sırasında atadığı bu port numarasına İngilizce "ephemeral port" denilmektedir. Seyrek olarak bazı server 
+    programlar client için belli bir remote port numarası talep edebilmektedir. Bu durumda client'ın bu remote port'a 
+    sahip olabilmesi için bind işlemini uygulaması gerekir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    Client bağlantı için server'ın IP adresini ve port numarasını bilmek zorundadır. IP adreslerinin akılda turulması zordur. 
+    Bu nedenle IP adresleri ile eşleşen "host isimleri" oluşturulmuştur. Ancak IP protokol ailesi host isimleriyle değil IP
+    numaralarıyla çalışmaktadır. İşte host isimleriyle IP numaralarını eşleştiren ismine DNS (Domain Name Server) denilen 
+    özel server'lar bulunmaktadır. Bu server'lar IP protokol ailesindeki DNS isimli bir protokol ile çalışmaktadır. Dolayısıyla
+    client programın elinde IP adresi yerine host ismi varsa DNS işlemi yaparak o host ismine karşı gelen IP numarasını elde
+    etmesi gerekir. DNS server'lar dağıtık biçimde bulunmaktadır. Bir kayıt bir DNS server'da yoksa başka bir DNS server'a 
+    referans edilmektedir.
 
+    DNS server'larda host isimleriyle IP numaraları bire bir karşılık gelmemektedir. Belli bir host ismine birden fazla IP
+    numarası eşleştirilmiş olabileceği gibi belli bir IP numarasına da bireden fazla host ismi eşleştirilmiş olabilmektedir.
+
+    DNS işlemleri yapan iki geleneksel fonksiyon vardır: gethostbyname ve gethostbyaddr. Bu fonksiyonların kullanımları 
+    kolaydır. Ancak bu fonksiyonlar artık "deprecated" yapılmış ve POSIX standartlarından da silinmiştir. Bunların yerine 
+    getnameinfo ve getaddrinfo fonksiyonları oluşturulmuştur. Bu fonksiyonlar POSIX standartlarında bulunmaktadır. Biz önce 
+    gethostbyname ve gethostbyaddr fonksiyonlarını göreceğiz. (Çünkü ana noktalar üzerinde durmak için vakit kaybetmek 
+    istemiyoruz.) Belli süre sonra da getnameinfo ve getaddrinfo fonksiyonlarını açıklayacağız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    gethostbyname fonksiyonunun prototipi şöyledir:
+
+    #include <netdb.h>
+
+    struct hostent *gethostbyname(const char *name);
+
+    Fonksiyon bizden host ismini alır ve DNS işlemi yaparak bize statik düzeyde tahsis edilmiş olan bir hostent yapı nesnesinin 
+    adresini verir. Fonksiyon errno değişkeni yerine h_errno isimli bir değişkeni set etmektedir. Bu değişkenin değerini yazıya 
+    dönüştürmek için strerror fonksiyonu değil prototipi <netdb.h> içerisinde olan hstrerror fonksiyonu kullanılmaktadır. hostent 
+    yapısı aşağıdaki gibi bildirilmiştir:
+
+    struct hostent {
+        char  *h_name;            /* official name of host */
+        char **h_aliases;         /* alias list */
+        int    h_addrtype;        /* host address type */
+        int    h_length;          /* length of address */
+        char **h_addr_list;       /* list of addresses */
+    };
+
+    Yapının h_name elemanı host'un asıl ismini vermektedir. Her host'un alternatif isimleri de olabilmektedir. Yapının 
+    h_aliases elemanı ise host'un diğer isimlerini belirtmektedir. Bu gösterici dizisinin her eleemanı host'un bir ismini 
+    belirtir. Dizinin sonunda NULL adres verdır. Örneğin:
+
+    h_aliases ----> adres -----> isim
+                    adres -----> isim
+                    adres -----> isim
+                    ...
+                    NULL
+
+    Yapının h_addrtype elemanı adresin ilişkin olduğu protokol ailesini belirtmektedir. h_length elemanı söz konusu adresin 
+    byte uzunluğunu belirtir. Bu genel bir fonksiyon olduğundan ve adresler de değişik uzunluklarda ve türlerde olabileceğinden
+    adresler char türden bir dizi içerisine byte byte kodlanmıştır. IPV4'te bu diziler 4 eleman uzunluğundadır. Buradaki adresler
+    "big endian" formatta yani "network byte ordering" biçimindedir. Yine h_addr_list göstericinin gösterdiği dizinin son elemanı 
+    NULL adres içermektedir. Örneğin:
+
+    h_addr_list ----> adres -----> byte byte byte byte
+                      adres -----> byte byte byte byte
+                      adres -----> byte byte byte byte
+                      ...
+                      NULL
+
+    Biz h_addr_list elemanında belirtilen adreslerden ilkini (0'ıncı indekstekini alabiliriz)
+
+    Tipik olarak client program önce server host isminin noktalı desimal formatta olup olmadığına bakar. Eğer bu host ismi 
+    noktalı desimal formatta ise onu inet_addr fonksiyonu ile IP numarasına dönüştürür. Eğer host ismi noktalı desimal formatta
+    değilse gethostbyname fonksiyonunu uygulayarak bu kez oradan IP adresini elde eder. Örneğin:
+
+    #define SERVER_NAME		"some_host_name or dotted decimal ip name"
+
+    int client_sock;
+    struct sockaddr_in sin_server;
+    struct hostent *hent;
+    ...
+
+    sin_server.sin_family = AF_INET;
+    sin_server.sin_port = htons(SERVER_PORT);
+    if ((sin_server.sin_addr.s_addr = inet_addr(SERVER_NAME)) == -1) {
+        if ((hent = gethostbyname(SERVER_NAME)) == NULL) {
+            fprintf(stderr, "gethostbyname: %s\n", hstrerror(h_errno));
+            exit(EXIT_FAILURE);
+        }
+        memcpy(&sin_server.sin_addr.s_addr, hent->h_addr_list[0], hent->h_length);
+    }
+
+    gethostbyname fonksiyonu isme karşı IP numaralarının elde edilmesi için kullanılmaktadır. Bunun ters olan gethostbyaddr 
+    isimli yine "deprecated" yapılmış bir fonksiyon daha vardır:
+
+    #include <netdb.h>
+
+    struct hostent *gethostbyaddr(const void *addr, socklen_t len, int af);
+
+    Fonksiyonun birinci parametresi "big endian" biçiminde byte dizilime sahip adresi belirtmektedir. İkinci parametre bu 
+    adresin uzunluğunu, üçüncü parametre ise protokol ailesini belirtir. Yine fonksiyon başarı durumudna hostent nesnesnin 
+    adresine, başarısızlık durumunda NULL adrese geri dönmektedir. Bu fonksiyon da errno yerine h_errno değişkeninin set 
+    etmektedir. Yine bu h_errno değerine yazıya dönüştürmek için hstererror fonskiyonu kullanılmaktadır. 
+
+    O anda çalışılan makinenin IPV4 adresi "127.0.0.1" ile temsil edilmektedir. Bu adrese "loopback address" de denilmektedir. 
+    Bazı işletim sistemlerinde (Windows, Linux ve macOS) "localhost" ismi de o anda çalışılan makinenin host ismi olarak 
+    kullanılabilmektedir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Artık client program connect fonksiyonuyla TCP bağlantısını sağlayabilir. conenct fonksiyonunun prototipi şöyledir:
+
+    #include <sys/socket.h>
+
+    int connect(int socket, const struct sockaddr *address, socklen_t address_len);
+
+    Fonksiyonun birinci parametresi soket betimleyicisini belirtir. İkinci parametre bağlanılacak server'a ilişkin sockaddr_in
+    yapı nesnesinin adresini belirtmektedir. Fonksiyonun üçüncü parametresi ikinci parametredeki yapının uzunluğunu almaktadır. 
+    Fonksiyon başarı durumunda sıfır değerine, başarısızlık durumunda -1 değerine geri dönmektedir. 
+
+    Eğer connect fonksiyonu çağrıldığında server program çalışmıyorsa ya da server programın bağlantı kuyruğu doluysa connect
+    belli bir zaman aşımı süresi kadar bekler ve sonra başarısız olur ve errno değeri ECONNREFUSED ("Conenction refused") ile
+    set edilir. Örneğin:
+
+    if (connect(client_sock, (struct sockaddr *)&sin_server, sizeof(sin_server)) == -1)
+        exit_sys("connect");
+
+    Aşağıda örnekte bağlantı için gereken minimum client program verilmiştir. Burada henüz görmediğimiz işlemleri hiç uygulamadık.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+
+#define SERVER_NAME		"127.0.0.1"
+#define SERVER_PORT		55555
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int client_sock;
+	struct sockaddr_in sin_server;
+	struct hostent *hent;
+
+	if ((client_sock = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+		exit_sys("socket");
+
+	/*
+	{
+		struct sockaddr_in sin_client;
+
+		sin_client.sin_family = AF_INET;
+		sin_client.sin_port = htons(50000);
+		sin_client.sin_addr.s_addr = htonl(INADDR_ANY);
+
+		if (bind(client_sock, (struct sockaddr *)&sin_client, sizeof(sin_client)) == -1)
+			exit_sys("bind");
+	}
+	*/
+
+	sin_server.sin_family = AF_INET;
+	sin_server.sin_port = htons(SERVER_PORT);
+	if ((sin_server.sin_addr.s_addr = inet_addr(SERVER_NAME)) == -1) {
+		if ((hent = gethostbyname(SERVER_NAME)) == NULL) {
+			fprintf(stderr, "gethostbyname: %s\n", hstrerror(h_errno));
+			exit(EXIT_FAILURE);
+		}
+		memcpy(&sin_server.sin_addr.s_addr, hent->h_addr_list[0], hent->h_length);
+	}
+
+	if (connect(client_sock, (struct sockaddr *)&sin_server, sizeof(sin_server)) == -1)
+		exit_sys("connect");
+
+	printf("connected...\n");
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bağlantı sağlandıktan sonra artık recv ve fonksiyonlarıyla ya da read ve write fonksiyonlarıyla gönderme alma işlemleri
+    yapılabilir. recv fonksiyonunun prototipi şöyledir:
+
+    #include <sys/socket.h>
+
+    ssize_t recv(int socket, void *buffer, size_t length, int flags);
+
+    Fonksiyonun birinci parametresi aktif soketin betimleycisini beelirtmektedir. İkinci parametre alınacal bilginin 
+    yerleştirileceği dizinin adresini almaktadır. Üçüncü parametre ise okunmak istenen byte sayısını belirtmektedir. 
+    Fonksiyonun son parametresi aşağıdaki üç sembolik sabitin bir OR işlemine sokulmasıyla oluşturulabilir:
+
+    MSG_PEEK
+    MSG_OOB
+    MSG_WAITALL
+
+    Biz şimdilik bu değerlerin anlamlarını açıklamayacağız. Ancak MSG_PEEK değeri bilginin network tamponundan alındıktan sonra
+    oradan atılmayacağını belirtmektedir. Bu parametre 0 da geçilebilir. Zaten recv fonksiyonunun read fonksiyonundan tek farkı
+    bu son parametredir. Bu son parametrenin 0 geçilmesiyle read kullanılması arasında hiçbir farklılık yoktur.
+
+    recv fonksiyonu blokeli modda (default durum blokeli moddur) tıpkı borularda olduğu gibi eğer hazırda en az 1 byte varsa
+    okuyabildiği kadar bilgiyi okur ve okuyabildiği byte sayısına geri döner. Eğer o anda network tamponunda hiç byte yoksa
+    recv fonksiyonu en az 1 byte okuyana kadar blokede bekler. (Yani başka bir deyişle recv tıpkı borularda olduğu gibi eğer 
+    okunacak bir şey yoksa blokede bekler ancak okunacak en az 1 byte varsa okuyabildiğini okur ve beklemeden geri döner.)
+
+    recv fonskiyonu başarı durumunda okunabilen byte sayısına, başarısızlık durumunda -1 değerine geri dönmektedir. 
+
+    send fonksiyonun da parametik yapısı şöyledir:
+
+    #include <sys/socket.h>
+
+    ssize_t send(int socket, const void *buffer, size_t length, int flags);
+
+    Fonksiyonun birinci parametresi aktif soketin betimleyicisini belirtmektedir. İkinci parametre gönderilecek bilgilerin 
+    bulunduğu dizinin adresini belirtir. Üçüncü parametre ise gönderilecek byte miktarını belirtmektedir. Son parametre aşağıdaki
+    sembolik sabitlerin bir düzeyinde OR işlemine sokulmasıyla oluşturulabilir:
+
+    MSG_EOR
+    MSG_OOB
+    MSG_NOSIGNAL
+
+    Biz şimdilik bu bayraklar üzerinde durmayacağız.
+
+    send fonksiyonu bilgileri karşı tarafa o anda göndermez. Onu önce network tamponuna yerleştirir. İşletim sistemi o tampondan 
+    TCP (dolayısıyla IP) paketleri oluşturarak mesajı gönderir. Yani send fonksiyonu geri döndüğünde bilgiler network tamponuna 
+    yazılmıştır ancak henüz karşı tarafa gönderilmemiş olabilir. Pekiyi o anda network tamponu doluysa ne olacaktır? İşte send 
+    fonksiyonu gönderilecek bilginin tamamı network tamponuna aktarılana kadar blokede beklemektedir. 
+
+    <BURADA KALDIK>
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
