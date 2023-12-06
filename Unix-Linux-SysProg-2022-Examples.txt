@@ -40873,6 +40873,8 @@ void exit_daemon(const char *msg)
     bazı eksiklikler vardır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
+/* server.c */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/socket.h>
@@ -40916,6 +40918,8 @@ void exit_sys(const char *msg)
 
 	exit(EXIT_FAILURE);
 }
+
+/* server.c */
 
 /*--------------------------------------------------------------------------------------------------------------------------
 												99. Ders 19/11/2023 - Pazar
@@ -41129,6 +41133,8 @@ void exit_sys(const char *msg)
     Aşağıda örnekte bağlantı için gereken minimum client program verilmiştir. Burada henüz görmediğimiz işlemleri hiç uygulamadık.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
+/* client.c */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -41189,6 +41195,8 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
+/* client.c */
+
 /*--------------------------------------------------------------------------------------------------------------------------
     Tıpkı borularda olduğu gibi soketlerlerde de "blokeli" ve "blokesiz" çalışma söz konusudur. Soketlerde default çalışma 
     biçimi "blokeli" moddur. Blokeli modda gönderme ve alma işlemlerinde aşağıda açıklayacağımız gibi belli koşullarda bloke
@@ -41248,19 +41256,19 @@ void exit_sys(const char *msg)
     Biz şimdilik bu bayraklar üzerinde durmayacağız.
 
     send fonksiyonu bilgileri karşı tarafa o anda göndermez. Onu önce network tamponuna yerleştirir. İşletim sistemi o tampondan 
-    TCP ya da UDP (dolayısıyla IP) paketleri oluşturarak mesajı göndermektedir. Yani send fonksiyonu geri döndüğünde bilgiler network 
-    tamponuna yazılmıştır, ancak henüz karşı tarafa gönderilmemiş olabilir. Pekiyi o anda network tamponu doluysa ne olacaktır? İşte 
-    send fonksiyonu UNIX/Linux sistemlerinde gönderilecek bilginin tamamı network tamponuna aktarılana kadar blokede beklemektedir. 
-    Ancak bu konuda işletim sistemleri arasında farklılıklar olabilmektedir. Örneğin Windows sistemlerinde send fonksiyonu eğer 
-    network tamponununda gönderilmek istenen kadar yer yoksa ancak en az bir byte'lık boş bir yer varsa tampona yazabildiği kadar 
-    byte'ı yazıp hemen geri dönmektedir. UNIX/Linux sistemleri arasında da send fonksiyonunun davranışı bakımından bu yönde farklılıklar 
+    TCP (dolayısıyla IP) paketleri oluşturarak mesajı göndermektedir. Yani send fonksiyonu geri döndüğünde bilgiler network tamponuna 
+    yazılmıştır, ancak henüz karşı tarafa gönderilmemiş olabilir. Pekiyi o anda network tamponu doluysa ne olacaktır? İşte UNIX/Linux 
+    sistemlerinde send fonksiyonu, gönderilecek bilginin tamamı network tamponuna aktarılana kadar blokede beklemektedir. Ancak bu 
+    konuda işletim sistemleri arasında farklılıklar olabilmektedir. Örneğin Windows sistemlerinde send fonksiyonu eğer network 
+    tamponununda gönderilmek istenen kadar yer yoksa ancak en az bir byte'lık boş bir yer varsa tampona yazabildiği kadar byte'ı 
+    yazıp hemen geri dönmektedir. Diğer UNIX/Linux sistemleri arasında da send fonksiyonunun davranışı bakımından bu yönde farklılıklar 
     olabilmektedir. Ancak POSIX standartları blokeli modda tüm bilginin network tamponuna yazılana kadar send fonksiyonunun bloke 
     olacağını belirtmektedir. Linux çekirdeği de buna uygun biçimde çalışmaktadır. 
 
-    send fonksiyonu network tamponuna yazılan byte sayısı ile geri dönmektedir. Blokeli modda bu değer yazılmak istenen değerler
+    send fonksiyonu network tamponuna yazılan byte sayısı ile geri dönmektedir. Blokeli modda bu değer, yazılmak istenen değerle
     aynı olur. send fonksiyonu başarısızlık durumunda -1 değeri ile geri döner ve errno uygun biçimde set edilir. Tıpkı borularda 
     olduğu gibi send fonksiyonunda da eğer karşı taraf soketi kapatmışsa send fonksiyonu default durumda SIGPIPE sinyalinin 
-    oluşmasına yol açmaktadır. Eğer bu sinyalin oluşturulması istenmiyorsa bu durumda send fonksiyonun son parametresi (flags)
+    oluşmasına yol açmaktadır. Eğer bu sinyalin oluşturulması istenmiyorsa bu durumda send fonksiyonunun son parametresi (flags)
     MSG_NOSIGNAL olarak geçilmelidir. Bu durumda karşı taraf soketi kapatmışsa send fonksiyonu başarısız olur ve errno değeri 
     EPIPE olarak set edilir. send fonksiyonunun soketlerdeki davranışının borulardaki davranışa çok benzediğine dikkat ediniz. 
 
@@ -41269,74 +41277,74 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Haberleşmenin sonunda TCP soketi nasıl kapatılmalıdır? Mademki soketler UNIX/Linux sistemlerinde birer dosya betimleyicisi 
-    gibidir o halde soketi kapatma işlemi close ile yapılabilir. Tabii tıpkı dosyalarda olduğu gibi soketlerde de close işlemi 
-    yapılmazsa işletim sistemi proses normal ya da sinyal gibi nedenlerle sonlandığında otomatik olarak betimelyicileri kapatır
-    yani close işlemini kendisi yapar. 
+    gibidir o halde soketi kapatma işlemi "close" ile yapılabilir. Tabii tıpkı dosyalarda olduğu gibi soketlerde de close işlemi 
+    yapılmazsa işletim sistemi proses normal ya da sinyal gibi nedenlerle sonlandığında otomatik olarak betimleyicileri kapatır
+    yani close işlemini kendisi yapar.
 
-    Soket betimleyicileri de dup işlemine sokulabilir. Bu durumda close işlemi uygulnadığında soket nesnesi yok edilmez. Çünkü o 
+    Soket betimleyicileri de "dup" işlemine sokulabilir. Bu durumda close işlemi uygulandığında soket nesnesi yok edilmez. Çünkü o 
     nesneyi gören başka bir betimleyici daha vardır. Benzer biçimde fork işlemi sırasında da betimleyicilerin çiftlendiğine dikkat 
-    ediniz. 
+    ediniz.
 
-    Aktif soketlerin doğrudan close ile kapatılması iyi bir teknik değildir. Bu soketler önce shutdown ile haberleşmeden kesilmeli 
+    Aktif soketlerin doğrudan close ile kapatılması iyi bir teknik değildir. Bu soketler önce "shutdown" ile haberleşmeden kesilmeli 
     sonra close ile kapatılmalıdır. Bu biçimde soketlerin kapatılmasına İngilizce "graceful close (zarif kapatma)" denilmektedir. 
     Pekiyi shutdown fonksiyonu ne yapmaktadır ve neden gerekmektedir? close işlemi ile bir soket kapatıldığında işletim sistemi 
     sokete ilişkin tüm veri yapılarını ve bağlantı bilgilerini siler. Örneğin biz karşı tarafa send ile bir şey gönderdikten hemen 
     sonraki satırda close yaparsak artık send ile gönderdiklerimizin karşı tarafa ulaşacağının hiçbir garantisi yoktur. Çünkü 
     anımsanacağı gibi send aslında "gönderme tamponuna" bilgiyi yazıp geri dönmektedir. Hemen arkasından close işlemi uygulandığında 
     artık bu sokete ilişkin gönderme ve alma tamponları da yok edileceğinden tamponda gönderilmeyi bekleyen bilgiler hiç gönderilmeyebilecektir. 
-    close işlemini bilgisayarımızı "power düğmesine basarak kapatmaya" benzetebiliriz. Bu durumda o anda çalışan tüm programla
+    close işlemini bilgisayarımızı "power düğmesine basarak kapatmaya" benzetebiliriz. Bu durumda o anda çalışan tüm programlar
     ve işletim sistemi aniden yok edilmektedir. shutdown işlemini de "işletim sistemindeki shutdown" mekanizmasına benzetebiliriz. 
     İşletim sistemini shutdown ettiğimizde tüm prosesler uygun biçimde sonlandırılıp sistem stabil olarak kapatılmaktadır. 
-    Tabii soketlerde doğrudan close işlemi çoğu kez önemli bir probleme yol açmayabilir. Ancak doğru teknik aktif soketleri önce 
-    shudown uygulayıp sonra close etmektedir. 
+    Tabii soketlerde doğrudan close işlemi çoğu kez önemli bir probleme yol açmayabilir. Ancak doğru teknik aktif soketlere önce 
+    shutdown uygulayıp sonra close etmektedir.
 
-    shutdown fonksiyonun üç işlevi vardır:
+    shutdown fonksiyonunun üç işlevi vardır:
 
     1) Haberleşmeyi TCP çerçevesinde el sıkışarak sonlandırmak (bu konu ileride ele alınacaktır).
-    2) Göndeme tamponuna yazılan bilgilerin gönderildiğine emin olmak.
-    3) Okuma ya da yazma işlemini sonlandırıp diğer işleme devam edebilmek (half close işlemi)
+    2) Gönderme tamponuna yazılan bilgilerin gönderildiğine emin olmak.
+    3) Okuma ya da yazma işlemini sonlandırıp diğer işleme devam edebilmek (half close işlemi).
 
-    shutdown fonksiyonun prototipi şöyledir:
+    shutdown fonksiyonunun prototipi şöyledir:
 
     #include <sys/socket.h>
 
     int shutdown(int socket, int how);
 
-    Fonksiyonun birinci parametresi sonlandırılacak soketin betimleyicisini, ikinci parametresi biçimini belirtmektedir İkinci parametre
+    Fonksiyonun birinci parametresi sonlandırılacak soketin betimleyicisini, ikinci parametresi biçimini belirtmektedir. İkinci parametre
     şunlardan biri olarak girilebilir:
 
-    SHUT_RD: Bu işlemden sonra artık soketten okuma yapılamaz. Fakat sokete yazma yapılabilir. Bu seçenek pek kullanılmamaktadır. 
+    SHUT_RD: Bu işlemden sonra artık soketten okuma yapılamaz. Fakat sokete yazma yapılabilir. Bu seçenek pek kullanılmamaktadır.
 
     SHUR_WR: Burada artık shutdown daha önce gönderme tamponuna yazılmış olan byte'ların gönderilmesine kadar bloke oluşturabilir. 
-    Bu işlemden sonra artık sokete yazma yapılamaz ancak okuma işlemi devam ettirilebilir. 
+    Bu işlemden sonra artık sokete yazma yapılamaz ancak okuma işlemi devam ettirilebilir.
 
     SHUT_RDWR: En çok kullanılan seçenektir. Burada da artık shutdown daha önce gönderme tamponuna yazılmış olan byte'ların 
-    gönderilmesine kadar bloke oluşturabilir. Artık bundan sonra soketten okuma ya da yazma yapılamamaktadır. 
+    gönderilmesine kadar bloke oluşturabilir. Artık bundan sonra soketten okuma ya da yazma yapılamamaktadır.
 
-    shutdown başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri dönmektedir. 
+    shutdown başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri dönmektedir.
 
     O halde aktif bir soketin kapatılması tipik olarak şöyle yapılmaktadır:
 
     shutdown(sock, SHUT_RDWR);
     close(sock);
 
-    Karşı taraf soketi (peer socket) shutdown ile SHUT_WR ya da SHUT_RDWR ile sonlandrımışsa artık biz o soketten okuma 
-    yaptığımızda recv ya da read fonksiyonları 0 ile geri döner. Benzer biçimde karşı taraf doğurdan soketi close ile katapmışsa 
-    yine recv ya da read fonksiyonları 0 ile geri döner. 
+    Karşı taraf soketi (peer socket) shutdown ile SHUT_WR ya da SHUT_RDWR ile sonlandırmışsa artık biz o soketten okuma 
+    yaptığımızda recv ya da read fonksiyonları 0 ile geri döner. Benzer biçimde karşı taraf doğrudan soketi close ile kapatmışsa 
+    yine recv ya da read fonksiyonları 0 ile geri döner.
 
     Karşı tarafın soketi kapatıp kapatmadığı tipik olarak recv fonksiyonunda anlaşılabilmektedir. Yukarıda da belirttiğimiz 
     gibi karşı taraf soketi kapattıktan sonra biz sokete write ya da send ile bir şeyler yazmak istersek default durumda 
-    UNIX/Linux sistemlerinde SIGPIPE sinyali oluşmaktadır. Programcı send fonksiyonun flags parametresine MSG_NOSIGNAL 
+    UNIX/Linux sistemlerinde SIGPIPE sinyali oluşmaktadır. Programcı send fonksiyonunun flags parametresine MSG_NOSIGNAL 
     değerini girerse bu durumda send başarısız olmakta ve errno değişkeni EPIPE değeri ile set edilmektedir. Karşı taraf 
-    soketi kapatmamış ancak bağlantı kopmuş olabilir. Bu durumda send/write ve recv/read fonksiyonları başarız olur ve -1 
-    ile geri döner.
+    soketi kapatmamış ancak bağlantı kopmuş olabilir. Bu durumda send/write ve recv/read fonksiyonları başarısız olur ve 
+    -1 değeriyle ile geri döner.
 
-    O halde recv ya da read işlemi yapılırken fonksiyonların geri dönüş değerleri -1 ile ve 0 ile kontrol edilmelidir. Örneğin:
+    O halde recv ya da read işlemi yapılırken fonksiyonların geri dönüş değerleri -1 ve 0 ile kontrol edilmelidir. Örneğin:
 
     if ((result = recv(...)) == -1)
         exit_sys("recv");
     if (result == 0) {
-        /* karşı taraf soketi kapatmış gerekli işlemleri yap */
+        // karşı taraf soketi kapatmış, gerekli işlemleri yap
     }
 
     Benzer biçimde send ya da write fonksiyonlarıyla yazma yapılırken fonksiyonların geri dönüş değerleri -1 ile kontrol 
@@ -41348,9 +41356,9 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Aşağıdaki örnekte client program server programa bağlanarak stdin dosyasından okuduğu yazıları send fonksiyonu ile server
+    Aşağıdaki örnekte client program, server programa bağlanarak stdin dosyasından okuduğu yazıları send fonksiyonu ile server
     programa göndermektedir. Server program da bu yazıları alarak stdout dosyasına basmaktadır. Haberleşme normal olarak 
-    client tarafın "quit" girmesiyle sonlandırılmaktadır. 
+    client tarafın "quit" yazısını girmesiyle sonlandırılmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* server.c */
@@ -41422,6 +41430,8 @@ void exit_sys(const char *msg)
 
 	exit(EXIT_FAILURE);
 }
+
+/* server.c */
 
 /* client.c */
 
@@ -41507,21 +41517,23 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
+/* client.c */
+
 /*--------------------------------------------------------------------------------------------------------------------------
     Bu noktada UNIX/Linux sistemlerinde yazılan soket programlarının Windows sistemlerine nasıl port edileceği hakkında bazı 
-    açıklamalarda bulunmak istiyoruz. 
+    açıklamalarda bulunmak istiyoruz.
 
-    Windows sistemlerindeki soket kütüphanesine "Winsock" denilmektedir. Şu anda bu kütüphanenin 2'inci versiyonu kullanımaktadır. 
+    Windows sistemlerindeki soket kütüphanesine "Winsock" denilmektedir. Şu anda bu kütüphanenin 2'inci versiyonu kullanılmaktadır. 
     Winsock API fonksiyonları "UNIX/Linux uyumlu" fonksiyonlar ve Windows'a özgü fonksiyonlar olmak üzere iki biçimde kullanılabilmektedir. 
     Ancak Winsock'un UNIX/Linux uyumlu fonksiyonlarında da birtakım değişiklikler söz konusudur. Bir UNIX/Linux ortamında yazılmış
     soket uygulamasının Windows sistemlerine aktarılması için şu düzeltmelerin yapılması gerekir:
 
-    1) POSIX'in soket sistemine ilişkin tüm başlık dosyaları kaldırılır. Onun yerine <winsock2.h> dosyası include edilir. 
+    1) POSIX'in soket sistemine ilişkin tüm başlık dosyaları kaldırılır. Onun yerine <winsock2.h> dosyası include edilir.
 
     2) xxx_t'li typedef türleri silinir ve onların yerine (dokümanlara da bakabilirsiniz) int, short, unsigned int, unsigned short
     türleri kullanılır. (Örneğin ssize_t türü ve socklen_t türleri yerine int türleri kullanılmalıdır.)
 
-    3) Windows'ta soket sisteminin ilklendirilmesi için WSAStartup fonksiyonu işin başında çağrılır ve işin sonunda da bu işlem
+    3) Windows'ta soket sisteminin başlatılması için WSAStartup fonksiyonu işin başında çağrılır ve işin sonunda da bu işlem
     WSACleanup fonksiyonuyla geri alınır. Bu fonksiyonları şöyle kullanbilirsiniz:
 
     WSADATA wsadata;
@@ -41534,19 +41546,19 @@ void exit_sys(const char *msg)
     4) Windows'ta dosya betimleyicisi kavramı yoktur. (Onun yerine "handle" kavramı vardır.) Dolayısıyla soket türü de int değil,
     SOCKET isimli bir typedef türüdür.
 
-    5) shutdown fonksiyonun ikinci parametresi SD_RECEIVE, SD_SEND ve SD_BOTH biçimindedir. 
+    5) shutdown fonksiyonunun ikinci parametresi SD_RECEIVE, SD_SEND ve SD_BOTH biçimindedir.
 
-    6) close fonksiyonu yerine closesocket fonksiyonu ile soket kapatılır. 
+    6) close fonksiyonu yerine closesocket fonksiyonu ile soket kapatılır.
 
     7) Windows'ta soket fonksiyonları başarısızlık durumunda -1 değerine geri dönmezler. socket fonksiyonu başarısızlık durumunda
-    INVALID_SOCKET değerine, diğerleri ise SOCKET_ERROR değerine geri dönmektedir. 
+    INVALID_SOCKET değerine, diğerleri ise SOCKET_ERROR değerine geri dönmektedir.
 
     8) Visual Studio IDE'sinde default durumda "deprecated" durumlar "error"e yükseltilmiştir. Bunlar için bir makro 
     define edilebilmektedir. Ancak proje ayarlarından "sdl check" disable da edilebilir. Benzer biçimde proje ayarlarından 
-    "Unicode" "not set" yapılmalıdır. 
+    "Unicode" değeri "not set" yapılmalıdır.
 
     9) Projenin linker ayarlarından Input/Additional Dependencies edit alanına Winsock kütüphanesi olan "Ws2_32.lib" import 
-    kütüphanesi eklenir. 
+    kütüphanesi eklenir.
 
     10) Windows'ta son soket API fonksiyonlarının başarısızlık nedenleri WSAGetLastError fonksiyonuyla elde edilmektedir. Yani 
     Windows sistemlerinde errno değişkeni set edilmemektedir. Belli bir hata kodunun yazıya dönüştürülmesi de biraz ayrıntılıdır. 
@@ -41615,7 +41627,7 @@ int main(void)
 
 	for (;;) {
 		if ((result = recv(client_sock, buf, BUFFER_SIZE, 0)) == SOCKET_ERROR)
-			ExitSys("accept", WSAGetLastError());
+			ExitSys("recv", WSAGetLastError());
 		if (result == 0)
 			break;
 		buf[result] = '\0';
@@ -41647,7 +41659,7 @@ void ExitSys(LPCSTR lpszMsg, DWORD dwLastError)
 	exit(EXIT_FAILURE);
 }
 
-/* client.c */
+/* server.c */
 
 /* client.c */
 
@@ -41687,7 +41699,7 @@ int main(void)
 		sin_client.sin_addr.s_addr = htonl(INADDR_ANY);
 
 		if (bind(client_sock, (struct sockaddr *)&sin_client, sizeof(sin_client)) == SOCKET_ERROR)
-			exit_sys("bind");
+			ExitSys("bind", WSAGetLastError());
 	}
 	*/
 
@@ -41740,6 +41752,8 @@ void ExitSys(LPCSTR lpszMsg, DWORD dwLastError)
 	exit(EXIT_FAILURE);
 }
 
+/* client.c */
+
 /*--------------------------------------------------------------------------------------------------------------------------
 												101. Ders 26/11/2023 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -41747,7 +41761,7 @@ void ExitSys(LPCSTR lpszMsg, DWORD dwLastError)
 /*--------------------------------------------------------------------------------------------------------------------------
     Kurstaki denemeleri genellikle sanal makine üzerinden yapmaktayız. Sanal makine programları zaman içerisinde oldukça 
     gelişmiştir. Bunlardan "docker" sistemleri de evrimleştirilmiştir. Sanal makine için bedava iki önemli alternatif
-    "VMware Player" ve "VirtualBox" programlarıdır. Biz kursumuzda ""VMware Player" kullanıyoruz. Ancak "VirtualBox" da 
+    "VMware Player" ve "VirtualBox" programlarıdır. Biz kursumuzda "VMware Player" kullanıyoruz. Ancak "VirtualBox" da 
     problemsiz bir biçimde aynı kalitede işlev görmektedir. 
 
     VMware Player donanım sanallaştırmasını tam olarak yapmaktadır. Yani oluşturulan sanal makine tamamen sanki aynı yerel
@@ -41771,9 +41785,9 @@ void ExitSys(LPCSTR lpszMsg, DWORD dwLastError)
 
     Burada MAC adresine karşı gelen IP adresini elde edebilirsiniz. 
 
-    Benzer biçimde guset sistemden host sisteme erişebilmek için host sistemin guest sistemde kullanılacak IP adresini elde 
+    Benzer biçimde guest sistemden host sisteme erişebilmek için host sistemin guest sistemde kullanılacak IP adresini elde 
     etmeniz gerekir. Bu IP adresi host sistemin LAN üzerindeki yerel IP adresi değildir. Bu IP adresi "arp -a" komutuyla ya da 
-    Windows'taki "ipconfig" komutuyla elde edilebilir. Yukarıdaki çıktıdaki ilk satır saten bunu belirtmektedir. 
+    Windows'taki "ipconfig" komutuyla elde edilebilir. Yukarıdaki çıktıdaki ilk satır zaten bunu belirtmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -41899,6 +41913,8 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
+/* server.c */
+
 /* client.c */
 
 #include <stdio.h>
@@ -42023,6 +42039,8 @@ void exit_sys(const char *msg)
 
 	exit(EXIT_FAILURE);
 }
+
+/* client.c */
 
 /*--------------------------------------------------------------------------------------------------------------------------
     TCP protokolünün gerçekleştirimlerinde tipik olarak işletim sistemleri her soket için "gönderme tamponu (sending buffer)" 
@@ -42346,6 +42364,8 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
+/* server.c */
+
 /* client.c */
 
 #include <stdio.h>
@@ -42474,6 +42494,8 @@ void exit_sys(const char *msg)
 
 	exit(EXIT_FAILURE);
 }
+
+/* client.c */
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Soket bağlantısında kullanılan diğer iki fonksiyon da getpeername ve getsockname fonksiyonlarıdır. getpeername fonksiyonu
