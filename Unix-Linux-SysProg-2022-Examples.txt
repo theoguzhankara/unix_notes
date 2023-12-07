@@ -33914,14 +33914,14 @@ int main(void)
 		exit_sys("sigaction");
 
 	if (read(STDIN_FILENO, &ch, 1) && errno == EINTR)
-		printf("read terminated by signal!..\n");
+		printf("read terminated by signal!...\n");
 
 	return 0;
 }
 
 void sigttin_handler(int sno)
 {
-	printf("SIGTTIN occurred!..\n");		/* UNSAFE */
+	printf("SIGTTIN occurred!...\n");		/* UNSAFE */
 }
 
 void exit_sys(const char *msg)
@@ -37976,7 +37976,7 @@ int main(int argc, char *argv[])
 	int count;
 
 	if (argc == 1) {
-		fprintf(stderr, "too few arguments!..\n");
+		fprintf(stderr, "too few arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -37988,7 +37988,7 @@ int main(int argc, char *argv[])
 	count = 0;
 	for (int i = 1; i < argc; ++i) {
 		 if (count >= MAX_SIZE) {
-			fprintf(stderr, "too many arguments, last arguments ignored!..\n");
+			fprintf(stderr, "too many arguments, last arguments ignored!...\n");
 			break;
 		}
 		if ((fd = open(argv[i], O_RDONLY)) == -1)
@@ -38413,7 +38413,7 @@ int main(int argc, char *argv[])
 	int count;
 
 	if (argc == 1) {
-		fprintf(stderr, "too few arguments!..\n");
+		fprintf(stderr, "too few arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -38422,7 +38422,7 @@ int main(int argc, char *argv[])
 	count = 0;
 	for (int i = 1; i < argc; ++i) {
 		 if (count >= MAX_SIZE) {
-			fprintf(stderr, "too many arguments, last arguments ignored!..\n");
+			fprintf(stderr, "too many arguments, last arguments ignored!...\n");
 			break;
 		}
 		if ((fd = open(argv[i], O_RDONLY)) == -1)
@@ -38728,7 +38728,7 @@ int main(int argc, char *argv[])
 	struct aiocb *cb;
 
 	if (argc == 1) {
-		fprintf(stderr, "too few arguments!..\n");
+		fprintf(stderr, "too few arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -38737,7 +38737,7 @@ int main(int argc, char *argv[])
 	g_count = 0;
 	for (int i = 1; i < argc; ++i) {
 		if (g_count >= MAX_SIZE) {
-			fprintf(stderr, "too many arguments, last arguments ignored!..\n");
+			fprintf(stderr, "too many arguments, last arguments ignored!...\n");
 			break;
 		}
 		if ((fd = open(argv[i], O_RDONLY)) == -1)
@@ -38746,14 +38746,14 @@ int main(int argc, char *argv[])
 		printf("%s opened...\n", argv[i]);
 
 		if ((cb = (struct aiocb *)malloc(sizeof(struct aiocb))) == NULL) {
-			fprintf(stderr, "cannot allocate memory!..\n");
+			fprintf(stderr, "cannot allocate memory!...\n");
 			exit(EXIT_FAILURE);
 		}
 
 		cb->aio_fildes = fd;
 		cb->aio_offset = 0;
 		if ((cb->aio_buf = malloc(BUFFER_SIZE + 1)) == NULL) {
-			fprintf(stderr, "cannot allocate memory!..\n");
+			fprintf(stderr, "cannot allocate memory!...\n");
 			exit(EXIT_FAILURE);
 		}
 		cb->aio_nbytes = BUFFER_SIZE;
@@ -38854,7 +38854,7 @@ int main(int argc, char *argv[])
 	IOCB_INFO *ioinfo;
 
 	if (argc == 1) {
-		fprintf(stderr, "too few arguments!..\n");
+		fprintf(stderr, "too few arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -38863,7 +38863,7 @@ int main(int argc, char *argv[])
 	g_count = 0;
 	for (int i = 1; i < argc; ++i) {
 		if (g_count >= MAX_SIZE) {
-			fprintf(stderr, "too many arguments, last arguments ignored!..\n");
+			fprintf(stderr, "too many arguments, last arguments ignored!...\n");
 			break;
 		}
 		if ((fd = open(argv[i], O_RDONLY)) == -1)
@@ -38872,7 +38872,7 @@ int main(int argc, char *argv[])
 		printf("%s opened...\n", argv[i]);
 
 		if ((ioinfo = (IOCB_INFO *)malloc(sizeof(IOCB_INFO))) == NULL) {
-			fprintf(stderr, "cannot allocate memory!..\n");
+			fprintf(stderr, "cannot allocate memory!...\n");
 			exit(EXIT_FAILURE);
 		}
 
@@ -41792,11 +41792,11 @@ void ExitSys(LPCSTR lpszMsg, DWORD dwLastError)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Client ve server programları yazarken onların ilgili olduğu server ve port numaralarını komut satırı argümanlarıyla 
-    almak iyi bir tekniktir. Örneğin biz clinet programı şöyle çalıştırabilmeyizi:
+    almak iyi bir tekniktir. Örneğin biz client programı şöyle çalıştırabilmeliyiz:
 
-    ./client -s <server_ismi> -h <server_port> -b <kaynak_port>
+    ./client -s <server_ismi> -p <server_port> -b <kaynak_port>
 
-    Tabii buradaki -s ve -h seçeneklerinin default değerleri de söz konusu olacaktır. 
+    Tabii buradaki -s ve -p seçeneklerinin default değerleri de söz konusu olacaktır. 
 
     Benzer biçimde server program da aşağıdaki gibi çalıştırılabilir olmalıdır:
 
@@ -41858,7 +41858,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -41932,7 +41932,7 @@ void exit_sys(const char *msg)
 
 void exit_sys(const char *msg);
 
-/* ./client [-s server] [-p port] */
+/* ./client [-s server] [-p server_port] [-b client_port] */
 
 int main(int argc, char *argv[])
 {
@@ -41976,7 +41976,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -42043,22 +42043,21 @@ void exit_sys(const char *msg)
 /* client.c */
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    TCP protokolünün gerçekleştirimlerinde tipik olarak işletim sistemleri her soket için "gönderme tamponu (sending buffer)" 
-    ve "alma tamponu (receiving buffer)" TCP'de bir akış kontrolünün de uygulandığını anımsayınız. Bu akış kontrolünün nasıl 
-    uygulandığına izleyen paragraflarda değineceğiz. Bizim send ya da write fonksiyonlarıyla karşı tarafa göndermek istediğimiz
+    TCP protokolünün gerçekleştirimlerinde tipik olarak işletim sistemleri her soket için "gönderme tamponu (sending buffer)" ve 
+    "alma tamponu (receiving buffer)" kullanmaktadır. TCP'de bir akış kontrolünün de uygulandığını anımsayınız. Bu akış kontrolünün 
+    nasıl uygulandığına izleyen paragraflarda değineceğiz. Bizim send ya da write fonksiyonlarıyla karşı tarafa göndermek istediğimiz 
     bilgiler önce gönderme tamponuna yazılmakta sonra işletim sistemi tarafından TCP/IP paketi haline getirilip gönderilmektedir. 
-    send ve write fonksiyonları bilgiyi gönderme tamponuna yazıp hemen geri dönmektedir. Bu fonksiyonların geri dönmesi bilgilerin
-    karşı tarafa iletildiği anlamına gelmemektedir. Benzer biçimde işletim sistemi network kartına gelen bilgileri onun ilişkin
-    olduğu soketin alma tamponuna kendisi yerleştirmektedir. recv ve read fonksiyonları bu alma tamponuna bakmaktadır. Default 
-    blokeli modda bu alma tamponu boşsa bu fonksiyonların blokeye yol açtığını belirtmiştik. Benzer biçimde send ve write 
-    fonksiyonları da default blokeli modda gönderme tamponuna bilgi tam olarak yazılamıyorsa bilgi tam olarak tampona yazılana 
-    kadar blokeye yol açmaktadır.
+    send ve write fonksiyonları bilgiyi gönderme tamponuna yazıp hemen geri dönmektedir. Bu fonksiyonların geri dönmesi bilgilerin 
+    karşı tarafa iletildiği anlamına gelmemektedir. Benzer biçimde işletim sistemi network kartına gelen bilgileri onun ilişkin olduğu 
+    soketin alma tamponuna kendisi yerleştirmektedir. recv ve read fonksiyonları bu alma tamponuna bakmaktadır. Default blokeli modda 
+    bu alma tamponu boşsa bu fonksiyonların blokeye yol açtığını belirtmiştik. Benzer biçimde send ve write fonksiyonları da default 
+    blokeli modda gönderme tamponuna bilgi tam olarak yazılamıyorsa bilgi tam olarak tampona yazılana kadar blokeye yol açmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Soket programlamada bir tarafın tek bir send ya da write ile gönderdiklerni diğer tarafın tek bir recv ya da read ile 
-    okuması garanti değildir. Örneğin biz tel bir send ile 10000 byte göndermiş olalım. Karşı taraf da recv fonksiyonu ile 
-    bir göngüde sürekli okuma yapıyor olsun. Örneğin karşı taraf önce recv ile 4096 byte okuyabilir. Sonra diğer recv ile 
+    Soket programlamada bir tarafın tek bir send ya da write ile gönderdiklerini diğer tarafın tek bir recv ya da read ile 
+    okuması garanti değildir. Örneğin biz tek bir send ile 10000 byte göndermiş olalım. Karşı taraf da recv fonksiyonu ile 
+    bir döngüde sürekli okuma yapıyor olsun. Örneğin karşı taraf önce recv ile 4096 byte okuyabilir. Sonra diğer recv ile 
     kalan byte'ları okuyabilir. Bu durum soket programlarının organizasyonunu biraz karışık hale getirmektedir. Bu nedenle 
     örneğin biz 10000 byte gönderen bir tarafın gönderdiği 10000 byte'ı okuyabilmek için bir döngü kullanmamız gerekir. 
     Soketten belli miktarda byte okuyana kadar okumayı devam ettiren bir fonksiyon aşağıdaki gibi yazılabilir:
@@ -42082,12 +42081,12 @@ void exit_sys(const char *msg)
         return (ssize_t) index;
     }
 
-    Bu fonksiyonun çalışması oldukça basittir. recv ile her defasında left kadar byte okunmak istenmiştir. Ancak lft 
-    kadar değil result kadar byte okunmuş olabilir. Bu durumda left okunan miktar kadar azaltılmış index ise o miktar 
-    kadar artırılmıştır. Yukarıdaki fonksiyonundan üç nedenle çıkılabilir:
+    Bu fonksiyonun çalışması oldukça basittir. recv ile her defasında left kadar byte okunmak istenmiştir. Ancak left 
+    kadar değil, result kadar byte okunmuş olabilir. Bu durumda left okunan miktar kadar azaltılmış index ise o miktar 
+    kadar artırılmıştır. Yukarıdaki fonksiyondan üç nedenle çıkılabilir:
 
-    1) Bağlantı kopmutur ve recv başarısız olur.
-    2) Karşı taraf soketi kaapatmıştır. recv 0 ile geri döner.
+    1) Bağlantı kopmuştur ve recv başarısız olur.
+    2) Karşı taraf soketi kapatmıştır. recv 0 ile geri döner.
     3) İstenen kadar miktar okunmuştur.
 
     Yeniden vurgulamak gerekirse bir soketten n byte okuma işlemi tek bir recv ile başarılmak zorunda değildir. Soket programlamaya
@@ -42114,9 +42113,9 @@ void exit_sys(const char *msg)
 
     Fonksiyonun birinci parametresi AF_INET (IPv4) ya da AF_INET6 (IPv6) olarak girilmelidir. İkinci parametre dönüştürülecek 
     nümerik IPv4 ya da IPv6 adresinin bulunduğu nesnenin adresini belirtmektedir. Fonksiyon dönüştürme sonucunda elde edilecek 
-    yazısal noktalı desimal formatı üçüncü parametresiyle belirtilen adresten itibaren yerleştirir. Son parametre üçüncü parametredeki 
+    yazısal noktalı desimal formatı üçüncü parametreyle belirtilen adresten itibaren yerleştirir. Son parametre üçüncü parametredeki 
     dizinin uzunluğunu belirtir. Bu parametre INET_ADDRSTRLEN ya da INET6_ADDRSTRLEN biçiminde girilebilir. Fonksiyon başarı 
-    durumunda üçüncü parametreyle belirtilen adrese başarısızlık durumunda NULL adrese geri döner. Örneğin bu fonksiyon server 
+    durumunda üçüncü parametreyle belirtilen adrese, başarısızlık durumunda NULL adrese geri döner. Örneğin bu fonksiyon server 
     programda şöyle kullanılabilir:
 
     char ntopbuf[INET_ADDRSTRLEN];
@@ -42131,10 +42130,10 @@ void exit_sys(const char *msg)
     int inet_pton(int af, const char *src, void *dst);
 
     Fonksiyonun birinci parametresi yine AF_INET ya da AF_INET6 biçiminde geçilir. İkinci parametre noktalı desimal formatın 
-    bulunduğu yazının adresini üçüncü parametre ise nümerik adresin yerleştirileceği adresi almaktadır. Bu parametreye IPv4 için 
-    4 byte'lık, IPv6 için 16 byte'lık yerleştirme yapılmaktadır. Fonksiyon başarı durumunda 1 değerine, başarısızlık durumundurumunda 
-    0 ya da -1 değerine geri döner. Başarısızlık birinci parametreden kaynaklanıyorsa -1, ikinci parametreden yanaklanıyorsa 0)
-    Bu durumda örneğin client programda inet_addr yerine inet_ptoa fonksiyonunu şöyle çağırabilirdik:
+    bulunduğu yazının adresini, üçüncü parametre ise nümerik adresin yerleştirileceği adresi almaktadır. Bu parametreye IPv4 için 
+    4 byte'lık, IPv6 için 16 byte'lık yerleştirme yapılmaktadır. Fonksiyon başarı durumunda 1 değerine, başarısızlık durumunda 
+    0 ya da -1 değerine geri döner. Eğer başarısızlık birinci parametreden kaynaklanıyorsa -1, ikinci parametreden kaynaklanıyorsa 
+    0 değerine geri dönmektedir. Bu durumda örneğin client programda inet_addr yerine inet_ptoa fonksiyonunu şöyle çağırabilirdik:
 
     if (inet_pton(AF_INET, argv[1], &sin_server.sin_addr.s_addr) == 0) {
         ...
@@ -42309,7 +42308,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -42383,7 +42382,7 @@ void exit_sys(const char *msg)
 
 void exit_sys(const char *msg);
 
-/* ./client [-s server] [-p port] */
+/* ./client [-s server] [-p server_port] [-b client_port] */
 
 int main(int argc, char *argv[])
 {
@@ -42430,7 +42429,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
