@@ -3018,7 +3018,7 @@ void disp_mode(mode_t mode)
 	*/
 
 	for (int i = 0; i < 9; ++i)
-		 putchar(mode & modes[i] ? "rwx"[i % 3] : '-');
+		putchar(mode & modes[i] ? "rwx"[i % 3] : '-');
 	putchar('\n');
 }
 
@@ -3124,7 +3124,7 @@ int main(int argc, char *argv[])
 	int fd;
 	struct stat finfo;
 
-	 if (argc != 2) {
+	if (argc != 2) {
 		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
@@ -6542,7 +6542,7 @@ int main(void)
 	if ((fd = open("test.txt", O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)) == -1)
 		exit_sys("open");
 
-	 if ((fd_stdout = dup(1)) == -1)
+	if ((fd_stdout = dup(1)) == -1)
 		exit_sys("dup2");
 
 	if (dup2(fd, 1) == -1)
@@ -10703,7 +10703,7 @@ int main(int argc, char *argv[])
     Görüldüğü gibi burada exec işlemini kabuk uygulamıştır. Kabuk exec uygularken dosya ismini yine exec'te ilk komut satırı argümanı 
     olarak kullanır. Ancak exec bunu shebang'te belirtilen programa aktarmamaktadır. 
 
-    Aşağıda shebag programına parametre aktarımının test edilmesi için bir örnek verilmiştir. Burada script (test.txt) programına
+    Aşağıda shebang programına parametre aktarımının test edilmesi için bir örnek verilmiştir. Burada script (test.txt) programına
     chmod ile "x" hakkı vermeyi unutmayınız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -13730,7 +13730,7 @@ void exit_sys(const char *msg)
     client'a bir bilgi göndermektedir. 
 
     Client-Server tarzı haberleşme en çok TCP/IP protokolü ile yapılıyor olsa da borular yoluyla da yapılabilmektedir. 
-    Pekiyi borular yoluyla çok client'lı (multiclient) bir client-server uygulama yapmak için kaç boruya ihtiyaç vardır?
+    Pekiyi borular yoluyla çok client'lı (multi-client) bir client-server uygulama yapmak için kaç boruya ihtiyaç vardır?
     Client programların isteklerini farklı borularla server programa iletmesine gerek yoktur. Client ptogramlar ortak tek bir 
     boru kullanarak isteklerini server programa iletebilirler. Bu durumda server program da belli uzunluktaki kayıtları okuyarak istekleri elde 
     eder. O isteklerin hangi client'tan geldiğini mesajın içerisinden öğrenebilir. Ancak server programın isteğin yanıtını tek bir 
@@ -14677,7 +14677,7 @@ int main(void)
 	if (fcntl(fdpipe, F_SETFL, fcntl(fdpipe, F_GETFL) | O_NONBLOCK) == -1)
 		exit_sys("fcntl");
 
-	 while ((result = read(fdpipe, &val, sizeof(int))) != 0) {
+	while ((result = read(fdpipe, &val, sizeof(int))) != 0) {
 			if (result == -1)
 				if (errno == EAGAIN) {
 					printf("child background processing...\n");
@@ -21424,7 +21424,7 @@ int main(void)
 
 		++shminfo->count;
 
-		 if ((result = pthread_mutex_unlock(&shminfo->mutex)) != 0)
+		if ((result = pthread_mutex_unlock(&shminfo->mutex)) != 0)
 			exit_sys_errno("pthread_mutex_unlock", result);
 	}
 
@@ -22633,7 +22633,7 @@ int main(void)
 		++val;
 	}
 
-	 if ((result = pthread_mutex_lock(&shminfo->mutex)) != 0)
+	if ((result = pthread_mutex_lock(&shminfo->mutex)) != 0)
 			exit_sys_errno("pthread_mutex_lock", result);
 
 	while (shminfo->count != 0 )
@@ -23063,7 +23063,7 @@ int main(void)
 	}
 
 	if ((result = pthread_mutex_destroy(&g_resources.mutex)) != 0)
-		 exit_sys_errno("pthread_mutex_destroy", result);
+		exit_sys_errno("pthread_mutex_destroy", result);
 
 	if (sem_destroy(&g_resources.sem) == -1)
 		exit_sys("sem_destroy");
@@ -30527,7 +30527,7 @@ void exit_sys(const char *msg)
     void signal_handler(int sno)
     {
         if (signal(SIGXXX, signal_handler) == SIG_ERR)
-		    exit_sys("signal");
+            exit_sys("signal");
         ...
     }
 
@@ -36984,6 +36984,7 @@ void exit_sys(const char *msg)
     for (int fd = 0; fd <= maxfds; ++fd)
         if (FD_ISSET(fd, &rset)) {
             read(fd, ...);
+			...
         }
 
     Burada 0'dan maxfds değerine kadar rset nesnesindeki tüm bitlere bakılmış ve set edilen bitlere ilişkin betimleyicilerden okuma
@@ -37577,7 +37578,7 @@ int main(int argc, char *argv[])
 
 	count = 0;
 	for (int i = 1; i < argc; ++i) {
-		 if (count >= MAX_SIZE) {
+		if (count >= MAX_SIZE) {
 			fprintf(stderr, "too many arguments, last arguments ignored!...\n");
 			break;
 		}
@@ -37661,7 +37662,7 @@ int main(int argc, char *argv[])
 
 	count = 0;
 	for (int i = 1; i < argc; ++i) {
-		 if (count >= MAX_SIZE) {
+		if (count >= MAX_SIZE) {
 			fprintf(stderr, "too many arguments, last arguments ignored!...\n");
 			break;
 		}
@@ -37987,7 +37988,7 @@ int main(int argc, char *argv[])
 
 	count = 0;
 	for (int i = 1; i < argc; ++i) {
-		 if (count >= MAX_SIZE) {
+		if (count >= MAX_SIZE) {
 			fprintf(stderr, "too many arguments, last arguments ignored!...\n");
 			break;
 		}
@@ -38421,7 +38422,7 @@ int main(int argc, char *argv[])
 
 	count = 0;
 	for (int i = 1; i < argc; ++i) {
-		 if (count >= MAX_SIZE) {
+		if (count >= MAX_SIZE) {
 			fprintf(stderr, "too many arguments, last arguments ignored!...\n");
 			break;
 		}
@@ -40160,7 +40161,7 @@ void sighup_handler(int signo)
 
 void exit_daemon(const char *msg)
 {
-	 syslog(LOG_ERR, "%s: %s", msg, strerror(errno));
+	syslog(LOG_ERR, "%s: %s", msg, strerror(errno));
 
 	_exit(EXIT_FAILURE);
 }
@@ -42528,7 +42529,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    TCP/IP client-server programlamada en önemli konulardan biri "çok client'lı (multiclient)" server programların yazılmasıdır.
+    TCP/IP client-server programlamada en önemli konulardan biri "çok client'lı (multi-client)" server programların yazılmasıdır.
     Server program birden fazla client ile haberleşme yaparken bir client için recv ya da read fonksiyonunu kullandığında 
     eğer o client'a bilgi gelmemişse bloke oluşacağından dolayı diğer client'lardan bilgi okuyamayacaktır. Bu durumda daha önce
     görmüş olduğumuz ileri IO tekniklerinin uygulanması gerekmektedir. Biz daha önce bu ileri IO tekniklerini borular üzerinde
@@ -42539,7 +42540,7 @@ void exit_sys(const char *msg)
     2) Sinyal Tabanlı (Signal Driven) IO
     3) Asenkron IO
 
-    İşte biz bu bölümde bu IO tekniklerini de kullanarak çok client'lı TCP server uygulamalarının nasıl yazılabileceği üzeinde
+    İşte biz bu bölümde bu IO tekniklerini de kullanarak çok client'lı TCP server uygulamalarının nasıl yazılabileceği üzerinde
     duracağız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -42562,10 +42563,1297 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Multiclient programlar için en basit ancak en verimsiz yöntemmodel "fork modeli"dir. Eğer az sayıda client söz konusu ise 
+												103. Ders 03/12/2023 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Multi-client programlar için en basit ancak en verimsiz yöntemmodel "fork modeli"dir. Eğer az sayıda client söz konusu ise 
     bu model basitliğinden dolayı tercih edilebilir. Bu modelde her accept işleminde bir fork yapılır. Alt proses bağlanılan
-    client ile konuşur. 
+    client ile konuşur. Ancak her client için yeni bir prosesin yaratılması aslında verimsiz bir yöntemdir. Tabii az client
+    söz konusu ise basitliğinden dolayı bu yöntem yine de kullanılabilir. 
+
+    Aşağıda fork modeliyle multi-client bir server örneği verilmiştir. Örnekte client programlar server ile bağlanıp ona yazı 
+    göndermekte server program da bu yazıyı ters çevirerek client programlara geri yollamaktadır. Örneği test etmek için 
+    birden fazla terminal penceresi açmalısınız. Bu programda fork işlemi yapıldığında üst prosesin o andaki bellek alanının 
+    alt prosese kopyalandığına dolayısıyla alt prosesin son accept yapılan client sokete sahip olduğuna dikkat ediniz. 
+    Örneğimizde server program sonsuz döngüde çalışmaktadır. Server programı sonlandırmak için Ctrl+c tuşlarıyla ona SIGINT
+    sinyalini gönderebilirsiniz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
+
+/* server.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+#define DEF_SERVER_PORT		55555
+#define BUFFER_SIZE			4096
+
+void client_proc(int sock, struct sockaddr_in *sin);
+char *revstr(char *str);
+void exit_sys(const char *msg);
+
+/* ./server [-p port] */
+
+int main(int argc, char *argv[])
+{
+	int server_sock, client_sock;
+	struct sockaddr_in sin_server, sin_client;
+	socklen_t sin_len;
+	char ntopbuf[INET_ADDRSTRLEN];
+	int option;
+	int server_port;
+	int p_flag, err_flag;
+	pid_t pid;
+	struct sigaction sa;
+
+	p_flag = err_flag = 0;
+
+	opterr = 0;
+	while ((option = getopt(argc, argv, "p:")) != -1) {
+		switch (option) {
+			case 'p':
+				p_flag = 1;
+				server_port = atoi(optarg);
+				break;
+			case '?':
+				if (optopt == 'p')
+					fprintf(stderr, "-%c option must have an argument!\n", optopt);
+				else
+					fprintf(stderr, "-%c invalid option!\n", optopt);
+				err_flag = 1;
+		}
+	}
+
+	if (err_flag)
+		exit(EXIT_FAILURE);
+
+	if (optind - argc != 0) {
+		fprintf(stderr, "too many arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if (!p_flag)
+		server_port = DEF_SERVER_PORT;
+
+	sa.sa_handler = SIG_IGN;
+
+	if (sigaction(SIGCHLD, &sa, NULL) == -1)
+		exit_sys("sigaction");
+
+	if ((server_sock = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+		exit_sys("socket");
+
+	sin_server.sin_family = AF_INET;
+	sin_server.sin_port = htons(server_port);
+	sin_server.sin_addr.s_addr = htonl(INADDR_ANY);
+
+	if (bind(server_sock, (struct sockaddr *)&sin_server, sizeof(sin_server)) == -1)
+		exit_sys("bind");
+
+	if (listen(server_sock, 8) == -1)
+		exit_sys("listen");
+
+	printf("listening port %d\n", server_port);
+
+	for (;;) {
+		printf("waiting for connection...\n");
+		sin_len = sizeof(sin_client);
+		if ((client_sock = accept(server_sock, (struct sockaddr *)&sin_client, &sin_len)) == -1)
+			exit_sys("accept");
+
+		printf("connected client ===> %s : %u\n", inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN), (unsigned)ntohs(sin_client.sin_port));
+
+		if ((pid = fork()) == -1)
+			exit_sys("fork");
+
+		if (pid == 0) {
+			client_proc(client_sock, &sin_client);
+			exit(EXIT_SUCCESS);
+		}
+	}
+
+	close(server_sock);
+
+	return 0;
+}
+
+void client_proc(int sock, struct sockaddr_in *sin)
+{
+	char buf[BUFFER_SIZE + 1];		// BUFFER_SIZE is enough
+	char ntopbuf[INET_ADDRSTRLEN];
+	unsigned port;
+	ssize_t result;
+
+	inet_ntop(AF_INET, &sin->sin_addr, ntopbuf, INET_ADDRSTRLEN);
+	port = (unsigned)ntohs(sin->sin_port);
+
+	for (;;) {
+		if ((result = recv(sock, buf, BUFFER_SIZE, 0)) == -1)
+			exit_sys("recv");
+		if (result == 0)
+			break;
+		buf[result] = '\0';
+		if (!strcmp(buf, "quit"))
+			break;
+		printf("%jd byte(s) received from %s : %u: \"%s\"\n", (intmax_t)result, ntopbuf, port, buf);
+		revstr(buf);
+		if (send(sock, buf, result, 0) == -1)
+			exit_sys("send");
+	}
+
+	printf("client disconnected %s : %u\n", ntopbuf, port);
+
+	shutdown(sock, SHUT_RDWR);
+	close(sock);
+}
+
+char *revstr(char *str)
+{
+	size_t i, k;
+	char temp;
+
+	for (i = 0; str[i] != '\0'; ++i)
+		;
+
+	for (--i, k = 0; k < i; ++k, --i) {
+		temp = str[k];
+		str[k] = str[i];
+		str[i] = temp;
+	}
+
+	return str;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/* client.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+
+#define DEF_SERVER_NAME		"127.0.0.1"
+#define DEF_SERVER_PORT		"55555"
+#define BUFFER_SIZE			4096
+
+void exit_sys(const char *msg);
+
+/* ./client [-s server] [-p port] */
+
+int main(int argc, char *argv[])
+{
+	int client_sock;
+	struct sockaddr_in sin_client;
+	struct addrinfo hints = {0, AF_INET, SOCK_STREAM};
+	struct addrinfo *res, *ri;
+	int gai_result;
+	char buf[BUFFER_SIZE + 1];		// BUFFER_SIZE is enough
+	char *str;
+	int option;
+	int s_flag, p_flag, b_flag, err_flag;
+	const char *server_name;
+	int bind_port;
+	const char *server_port;
+	ssize_t result;
+
+	s_flag = p_flag = b_flag = err_flag = 0;
+
+	opterr = 0;
+	while ((option = getopt(argc, argv, "s:p:b:")) != -1) {
+		switch (option) {
+			case 's':
+				s_flag = 1;
+				server_name = optarg;
+				break;
+			case 'p':
+				p_flag = 1;
+				server_port = optarg;
+				break;
+			case 'b':
+				b_flag = 1;
+				bind_port = atoi(optarg);
+				break;
+			case '?':
+				if (optopt == 's' || optopt == 'p' || optopt == 'b')
+					fprintf(stderr, "-%c option must have an argument!\n", optopt);
+				else
+					fprintf(stderr, "-%c invalid option!\n", optopt);
+				err_flag = 1;
+		}
+	}
+
+	if (err_flag)
+		exit(EXIT_FAILURE);
+
+	if (optind - argc != 0) {
+		fprintf(stderr, "too many arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if (!s_flag)
+		server_name = DEF_SERVER_NAME;
+	if (!p_flag)
+		server_port = DEF_SERVER_PORT;
+
+	if ((client_sock = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+		exit_sys("socket");
+
+	if (b_flag) {
+		sin_client.sin_family = AF_INET;
+		sin_client.sin_port = htons(bind_port);
+		sin_client.sin_addr.s_addr = htonl(INADDR_ANY);
+
+		if (bind(client_sock, (struct sockaddr *)&sin_client, sizeof(sin_client)) == -1)
+			exit_sys("bind");
+	}
+
+	if ((gai_result = getaddrinfo(server_name, server_port, &hints, &res)) != 0) {
+		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(gai_result));
+		exit(EXIT_FAILURE);
+	}
+
+	for (ri = res; ri != NULL; ri = ri->ai_next)
+		if (connect(client_sock, ri->ai_addr, ri->ai_addrlen) != -1)
+			break;
+
+	if (ri == NULL)
+		exit_sys("connect");
+
+	freeaddrinfo(res);
+
+	printf("connected server...\n");
+
+	for (;;) {
+		printf("csd>");
+		fflush(stdout);
+
+		if (fgets(buf, BUFFER_SIZE, stdin) == NULL)
+			continue;
+		if ((str = strchr(buf, '\n')) != NULL)
+			*str = '\0';
+
+		if (send(client_sock, buf, strlen(buf), 0) == -1)
+			exit_sys("send");
+		if (!strcmp(buf, "quit"))
+			break;
+		if ((result = recv(client_sock, buf, BUFFER_SIZE, 0)) == -1)
+			exit_sys("recv");
+		if (result == 0)
+			break;
+
+		buf[result] = '\0';
+		printf("%s\n", buf);
+	}
+
+	shutdown(client_sock, SHUT_RDWR);
+	close(client_sock);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Thread modeli fork modeline benzemektedir. Ancak thread yaratmak proses yaratmaktan daha kolay olduğu için proses modeline
+    göre daha az maliyetlidir. Bu modelde her accept işleminde bir proses değil thread yaratılmaktadır. Tabii thread'ler aynı 
+    adres alanını kullandığı için onlara gerekli parametreler uygun biçimde geçirilmelidir. 
+
+    Aşağıdaki örnekte fork işlemi ile proses yaratmak yerine pthread_create fonksiyonu ile thread yaratılmıştır. Yaratılan 
+    thread'e client bilgileri CLIENT_INFO yapısı eşliğinde geçirilmiştir. CLIENT_INFO yapı nesnesi dinamik olarak tahsis edilmiş 
+    thread fonskiyonu içerisinde free işlemi uygulanmıştır. UNUIX/Linux sistemlerinde nasıl "zombie proses" oluyorsa "zombie
+    thread" de oluşabilmektedir. Zombie thread oluşumunu engellemek için örneğimizde thread yaratılır yaratılmaz pthread_detach
+    fonksiyonu ile thread detach moda sokulmuştur. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* server.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <unistd.h>
+#include <pthread.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+#define DEF_SERVER_PORT		55555
+#define BUFFER_SIZE			4096
+
+void *client_thread_proc(void *param);
+char *revstr(char *str);
+void exit_sys(const char *msg);
+
+typedef struct tagCLIENT_INFO {
+	int sock;
+	struct sockaddr_in sin;
+} CLIENT_INFO;
+
+/* ./server [-p port] */
+
+int main(int argc, char *argv[])
+{
+	int server_sock, client_sock;
+	struct sockaddr_in sin_server, sin_client;
+	socklen_t sin_len;
+	char ntopbuf[INET_ADDRSTRLEN];
+	int option;
+	int server_port;
+	int p_flag, err_flag;
+	pthread_t tid;
+	CLIENT_INFO *ci;
+	int result;
+
+	p_flag = err_flag = 0;
+
+	opterr = 0;
+	while ((option = getopt(argc, argv, "p:")) != -1) {
+		switch (option) {
+			case 'p':
+				p_flag = 1;
+				server_port = atoi(optarg);
+				break;
+			case '?':
+				if (optopt == 'p')
+					fprintf(stderr, "-%c option must have an argument!\n", optopt);
+				else
+					fprintf(stderr, "-%c invalid option!\n", optopt);
+				err_flag = 1;
+		}
+	}
+
+	if (err_flag)
+		exit(EXIT_FAILURE);
+
+	if (optind - argc != 0) {
+		fprintf(stderr, "too many arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if (!p_flag)
+		server_port = DEF_SERVER_PORT;
+
+	if ((server_sock = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+		exit_sys("socket");
+
+	sin_server.sin_family = AF_INET;
+	sin_server.sin_port = htons(server_port);
+	sin_server.sin_addr.s_addr = htonl(INADDR_ANY);
+
+	if (bind(server_sock, (struct sockaddr *)&sin_server, sizeof(sin_server)) == -1)
+		exit_sys("bind");
+
+	if (listen(server_sock, 8) == -1)
+		exit_sys("listen");
+
+	printf("listening port %d\n", server_port);
+
+	for (;;) {
+		printf("waiting for connection...\n");
+		sin_len = sizeof(sin_client);
+		if ((client_sock = accept(server_sock, (struct sockaddr *)&sin_client, &sin_len)) == -1)
+			exit_sys("accept");
+
+		printf("connected client ===> %s : %u\n", inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN), (unsigned)ntohs(sin_client.sin_port));
+
+		if ((ci = (CLIENT_INFO *)malloc(sizeof(CLIENT_INFO))) == NULL) {
+			fprintf(stderr, "cannot allocate memory!..\n");
+			exit(EXIT_FAILURE);
+		}
+
+		ci->sock = client_sock;
+		ci->sin = sin_client;
+
+		if ((result = pthread_create(&tid, NULL, client_thread_proc, ci)) != 0) {
+			fprintf(stderr, "pthread_create: %s\n", strerror(result));
+			exit(EXIT_FAILURE);
+		}
+
+		if ((result = pthread_detach(tid)) != 0) {
+			fprintf(stderr, "pthread_detach: %s\n", strerror(result));
+			exit(EXIT_FAILURE);
+		}
+	}
+
+	close(server_sock);
+
+	return 0;
+}
+
+void *client_thread_proc(void *param)
+{
+	char buf[BUFFER_SIZE + 1];		// BUFFER_SIZE is enough
+	char ntopbuf[INET_ADDRSTRLEN];
+	unsigned port;
+	ssize_t result;
+	CLIENT_INFO *ci = (CLIENT_INFO *)param;
+
+	inet_ntop(AF_INET, &ci->sin.sin_addr, ntopbuf, INET_ADDRSTRLEN);
+	port = (unsigned)ntohs(ci->sin.sin_port);
+
+	for (;;) {
+		if ((result = recv(ci->sock, buf, BUFFER_SIZE, 0)) == -1)
+			exit_sys("recv");
+		if (result == 0)
+			break;
+		buf[result] = '\0';
+		if (!strcmp(buf, "quit"))
+			break;
+		printf("%jd byte(s) received from %s : %u: \"%s\"\n", (intmax_t)result, ntopbuf, port, buf);
+		revstr(buf);
+		if (send(ci->sock, buf, result, 0) == -1)
+			exit_sys("send");
+	}
+
+	printf("client disconnected %s : %u\n", ntopbuf, port);
+
+	shutdown(ci->sock, SHUT_RDWR);
+	close(ci->sock);
+
+	free(ci);
+
+	return NULL;
+}
+
+char *revstr(char *str)
+{
+	size_t i, k;
+	char temp;
+
+	for (i = 0; str[i] != '\0'; ++i)
+		;
+
+	for (--i, k = 0; k < i; ++k, --i) {
+		temp = str[k];
+		str[k] = str[i];
+		str[i] = temp;
+	}
+
+	return str;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/* client.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+
+#define DEF_SERVER_NAME		"127.0.0.1"
+#define DEF_SERVER_PORT		"55555"
+#define BUFFER_SIZE			4096
+
+void exit_sys(const char *msg);
+
+/* ./client [-s server] [-p port] */
+
+int main(int argc, char *argv[])
+{
+	int client_sock;
+	struct sockaddr_in sin_client;
+	struct addrinfo hints = {0, AF_INET, SOCK_STREAM};
+	struct addrinfo *res, *ri;
+	int gai_result;
+	char buf[BUFFER_SIZE + 1];		// BUFFER_SIZE is enough
+	char *str;
+	int option;
+	int s_flag, p_flag, b_flag, err_flag;
+	const char *server_name;
+	int bind_port;
+	const char *server_port;
+	ssize_t result;
+
+	s_flag = p_flag = b_flag = err_flag = 0;
+
+	opterr = 0;
+	while ((option = getopt(argc, argv, "s:p:b:")) != -1) {
+		switch (option) {
+			case 's':
+				s_flag = 1;
+				server_name = optarg;
+				break;
+			case 'p':
+				p_flag = 1;
+				server_port = optarg;
+				break;
+			case 'b':
+				b_flag = 1;
+				bind_port = atoi(optarg);
+				break;
+			case '?':
+				if (optopt == 's' || optopt == 'p' || optopt == 'b')
+					fprintf(stderr, "-%c option must have an argument!\n", optopt);
+				else
+					fprintf(stderr, "-%c invalid option!\n", optopt);
+				err_flag = 1;
+		}
+	}
+
+	if (err_flag)
+		exit(EXIT_FAILURE);
+
+	if (optind - argc != 0) {
+		fprintf(stderr, "too many arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if (!s_flag)
+		server_name = DEF_SERVER_NAME;
+	if (!p_flag)
+		server_port = DEF_SERVER_PORT;
+
+	if ((client_sock = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+		exit_sys("socket");
+
+	if (b_flag) {
+		sin_client.sin_family = AF_INET;
+		sin_client.sin_port = htons(bind_port);
+		sin_client.sin_addr.s_addr = htonl(INADDR_ANY);
+
+		if (bind(client_sock, (struct sockaddr *)&sin_client, sizeof(sin_client)) == -1)
+			exit_sys("bind");
+	}
+
+	if ((gai_result = getaddrinfo(server_name, server_port, &hints, &res)) != 0) {
+		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(gai_result));
+		exit(EXIT_FAILURE);
+	}
+
+	for (ri = res; ri != NULL; ri = ri->ai_next)
+		if (connect(client_sock, ri->ai_addr, ri->ai_addrlen) != -1)
+			break;
+
+	if (ri == NULL)
+		exit_sys("connect");
+
+	freeaddrinfo(res);
+
+	printf("connected server...\n");
+
+	for (;;) {
+		printf("csd>");
+		fflush(stdout);
+
+		if (fgets(buf, BUFFER_SIZE, stdin) == NULL)
+			continue;
+		if ((str = strchr(buf, '\n')) != NULL)
+			*str = '\0';
+
+		if (send(client_sock, buf, strlen(buf), 0) == -1)
+			exit_sys("send");
+		if (!strcmp(buf, "quit"))
+			break;
+		if ((result = recv(client_sock, buf, BUFFER_SIZE, 0)) == -1)
+			exit_sys("recv");
+		if (result == 0)
+			break;
+
+		buf[result] = '\0';
+		printf("%s\n", buf);
+	}
+
+	shutdown(client_sock, SHUT_RDWR);
+	close(client_sock);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Multi-client server uygulamaları için diğer model de select modelidir. Biz daha önce bu modeli zaten görmüştük ve borular
+    üzerinde bu modeli kullanmıştık. Soketler üzerinde de select modelinin kullanılması borulara çok benzerdir. Burada dikkat 
+    edilmesi gereken noktalar şunlardır:
+
+    1) Sokete bilgi geldiğinde, karşı taraf soketi kapattığında ve yeni bir bağlantı isteği oluştuğunda bu durum select tarafından 
+    bir "okuma olayı" olarak ele alınmaktadır. 
+
+    2) İşin başında dinleme soketi (pasif soket) select fonksiyonunun okuma kümesine yerleştirilmelidir. select fonksiyonunun 
+    blokesi çözüldüğünde eğer söz konusu okuma olayı dinleme soketi üzerinde gerçekleşmişse bu durumda yeni bir bağlantı isteği
+    söz konusudur. Bizim de accept fonksiyonunu çağırıp buradan elde ettiğimiz yeni soketi de select fonksiyonunun okuma kümesine
+    dahil etmemiz gerekir. 
+
+    3) Karşı taraf soketi kapattığında bu durum recv fonksiyonunda anlaşılmaktadır. Dolayısıyla programcının soketi kapatıp ilgili 
+    betimleyiciyi select fonksiyhonunun okuma kümesinden çıkarması da gerekir. 
+
+    Aşağıda select modeli ile bir TCP server örneği verilmiştir. Bu örnekte select fonksiyonunun blokesi çözüldüğünde
+    önce betimleyicinin dinleme soketine ilişkin betimleyici olup olmadığına bakılmıştır. Eğer betimleyici dinleme soketine
+    ilişkince accept işlemi uygulanmıştır. Değilse recv işlemi uygulanmıştır. Karşı taraf soketi kapattığında recv fonksiyonu 
+    0 ile geri dönecektir. Bu durumda ilgili soket okuma kümesinden çıkartılmıştır. Örneğimizdeki server kodunda iç içe 
+    birkaç if deyimi kullanılmıştır. Kod aslında fonksiyonlar yoluyla daha anlaşılabilir biçimde de düzenlenebilirdi. 
+
+    Server program için diğer bir taarım şöyle de olabilirdi: Bağlanılan her client için yine bir CLIENT_INFO yapısı tahsis 
+    edilebilirdi. Client bilgileri bu yapının içinde saklanabilirdi. Sonra da dosya betimleyicisinden hareketle CLIENT_INFO 
+    nesnesine hızlı bir biçimde erişmek için "hash tablosu" oluşturulabilirdi. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* server.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <unistd.h>
+#include <sys/select.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+#define DEF_SERVER_PORT		55555
+#define BUFFER_SIZE			4096
+
+char *revstr(char *str);
+void exit_sys(const char *msg);
+
+/* ./server [-p port] */
+
+int main(int argc, char *argv[])
+{
+	int server_sock, client_sock;
+	struct sockaddr_in sin_server, sin_client;
+	socklen_t sinaddr_len;
+	char buf[BUFFER_SIZE + 1];		/* BUFFER_SIZE is enough */
+	socklen_t sin_len;
+	char ntopbuf[INET_ADDRSTRLEN];
+	int option;
+	int server_port;
+	int p_flag, err_flag;
+	fd_set rset, tset;
+	int maxfds;
+	ssize_t result;
+
+	p_flag = err_flag = 0;
+
+	opterr = 0;
+	while ((option = getopt(argc, argv, "p:")) != -1) {
+		switch (option) {
+			case 'p':
+				p_flag = 1;
+				server_port = atoi(optarg);
+				break;
+			case '?':
+				if (optopt == 'p')
+					fprintf(stderr, "-%c option must have an argument!\n", optopt);
+				else
+					fprintf(stderr, "-%c invalid option!\n", optopt);
+				err_flag = 1;
+		}
+	}
+
+	if (err_flag)
+		exit(EXIT_FAILURE);
+
+	if (optind - argc != 0) {
+		fprintf(stderr, "too many arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if (!p_flag)
+		server_port = DEF_SERVER_PORT;
+
+	if ((server_sock = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+		exit_sys("socket");
+
+	sin_server.sin_family = AF_INET;
+	sin_server.sin_port = htons(server_port);
+	sin_server.sin_addr.s_addr = htonl(INADDR_ANY);
+
+	if (bind(server_sock, (struct sockaddr *)&sin_server, sizeof(sin_server)) == -1)
+		exit_sys("bind");
+
+	if (listen(server_sock, 8) == -1)
+		exit_sys("listen");
+
+	FD_ZERO(&rset);
+	FD_SET(server_sock, &rset);
+	maxfds = server_sock;
+
+	printf("listening port %d\n", server_port);
+
+	for (;;) {
+		printf("waiting for connection...\n");
+
+		tset = rset;
+		if (select(maxfds + 1, &tset, NULL, NULL, NULL) == -1)
+			exit_sys("select");
+
+		for (int fd = 0; fd <= maxfds; ++fd)
+			if (FD_ISSET(fd, &tset)) {
+				if (fd == server_sock) {
+					sin_len = sizeof(sin_client);
+					if ((client_sock = accept(server_sock, (struct sockaddr *)&sin_client, &sin_len)) == -1)
+						exit_sys("accept");
+					FD_SET(client_sock, &rset);
+					if (client_sock > maxfds)
+						maxfds = client_sock;
+
+					inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN);
+					printf("connected client ===> %s:%u\n", ntopbuf, (unsigned)ntohs(sin_client.sin_port));
+				}
+				else {
+					sinaddr_len = sizeof(sin_client);
+					if (getpeername(fd, (struct sockaddr *)&sin_client,&sinaddr_len) == -1)
+						exit_sys("getpeername");
+					inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN);
+
+					if ((result = recv(fd, buf, BUFFER_SIZE, 0)) == -1)
+						exit_sys("recv");
+					if (result > 0) {
+						buf[result] = '\0';
+						if (!strcmp(buf, "quit"))
+							goto DISCONNECT;
+
+						printf("%jd byte(s) received from %s : %u: \"%s\"\n", (intmax_t)result, ntopbuf, (unsigned)ntohs(sin_client.sin_port), buf);
+
+						revstr(buf);
+						if (send(fd, buf, result, 0) == -1)
+							exit_sys("send");
+					}
+					else {		/* result == 0 */
+					DISCONNECT:
+						shutdown(fd, SHUT_RDWR);
+						close(fd);
+						FD_CLR(fd, &rset);
+
+						printf("client disconnected ===> %s:%u\n", ntopbuf, (unsigned)ntohs(sin_client.sin_port));
+					}
+				}
+			}
+	}
+
+	close(server_sock);
+
+	return 0;
+}
+
+char *revstr(char *str)
+{
+	size_t i, k;
+	char temp;
+
+	for (i = 0; str[i] != '\0'; ++i)
+		;
+
+	for (--i, k = 0; k < i; ++k, --i) {
+		temp = str[k];
+		str[k] = str[i];
+		str[i] = temp;
+	}
+
+	return str;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/* client.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+
+#define DEF_SERVER_NAME		"127.0.0.1"
+#define DEF_SERVER_PORT		"55555"
+#define BUFFER_SIZE			4096
+
+void exit_sys(const char *msg);
+
+/* ./client [-s server] [-p port] */
+
+int main(int argc, char *argv[])
+{
+	int client_sock;
+	struct sockaddr_in sin_client;
+	struct addrinfo hints = {0, AF_INET, SOCK_STREAM};
+	struct addrinfo *res, *ri;
+	int gai_result;
+	char buf[BUFFER_SIZE + 1];		// BUFFER_SIZE is enough
+	char *str;
+	int option;
+	int s_flag, p_flag, b_flag, err_flag;
+	const char *server_name;
+	int bind_port;
+	const char *server_port;
+	ssize_t result;
+
+	s_flag = p_flag = b_flag = err_flag = 0;
+
+	opterr = 0;
+	while ((option = getopt(argc, argv, "s:p:b:")) != -1) {
+		switch (option) {
+			case 's':
+				s_flag = 1;
+				server_name = optarg;
+				break;
+			case 'p':
+				p_flag = 1;
+				server_port = optarg;
+				break;
+			case 'b':
+				b_flag = 1;
+				bind_port = atoi(optarg);
+				break;
+			case '?':
+				if (optopt == 's' || optopt == 'p' || optopt == 'b')
+					fprintf(stderr, "-%c option must have an argument!\n", optopt);
+				else
+					fprintf(stderr, "-%c invalid option!\n", optopt);
+				err_flag = 1;
+		}
+	}
+
+	if (err_flag)
+		exit(EXIT_FAILURE);
+
+	if (optind - argc != 0) {
+		fprintf(stderr, "too many arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if (!s_flag)
+		server_name = DEF_SERVER_NAME;
+	if (!p_flag)
+		server_port = DEF_SERVER_PORT;
+
+	if ((client_sock = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+		exit_sys("socket");
+
+	if (b_flag) {
+		sin_client.sin_family = AF_INET;
+		sin_client.sin_port = htons(bind_port);
+		sin_client.sin_addr.s_addr = htonl(INADDR_ANY);
+
+		if (bind(client_sock, (struct sockaddr *)&sin_client, sizeof(sin_client)) == -1)
+			exit_sys("bind");
+	}
+
+	if ((gai_result = getaddrinfo(server_name, server_port, &hints, &res)) != 0) {
+		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(gai_result));
+		exit(EXIT_FAILURE);
+	}
+
+	for (ri = res; ri != NULL; ri = ri->ai_next)
+		if (connect(client_sock, ri->ai_addr, ri->ai_addrlen) != -1)
+			break;
+
+	if (ri == NULL)
+		exit_sys("connect");
+
+	freeaddrinfo(res);
+
+	printf("connected server...\n");
+
+	for (;;) {
+		printf("csd>");
+		fflush(stdout);
+
+		if (fgets(buf, BUFFER_SIZE, stdin) == NULL)
+			continue;
+		if ((str = strchr(buf, '\n')) != NULL)
+			*str = '\0';
+
+		if (send(client_sock, buf, strlen(buf), 0) == -1)
+			exit_sys("send");
+		if (!strcmp(buf, "quit"))
+			break;
+		if ((result = recv(client_sock, buf, BUFFER_SIZE, 0)) == -1)
+			exit_sys("recv");
+		if (result == 0)
+			break;
+
+		buf[result] = '\0';
+		printf("%s\n", buf);
+	}
+
+	shutdown(client_sock, SHUT_RDWR);
+	close(client_sock);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    poll modeli de select modeline benzer biçimde uygulanabilir. Bu modelde dikkat edilmesi gereken noktalar şunlardır:
+
+    1) İşin başında yine dinleme soketi (pasif soket) pollfd dizisi içerisine yerleştirilmiş olmalıdır. 
+    2) pollfd yapısının izlenecek olayı belirten events elemanı POLLIN olarak girilebilir. 
+    3) poll geri döndüğünde pollfd dizisinin revents elemanlarına bakılmalı ve bu elemanlar üzerinde POLLIN olayının 
+    gerçekleşip gerçekleşmediği kontrol edilmelidir. 
+    4) Yeni bağlantı isteği geldiğinde dinleme soketi üzerinde POLLIN olayı oluşmaktadır. Bu durumda programcının accept işlemini
+    yapması gerekir. Yeni accept bağlantı kurulan client'ın pollfd bilfgileri yine diziye eklenmelidir. 
+    5) Karşı taraf soketi kapattığında yine POLLIN olayı gerçekleşmektedir. Bu durumda recv fonksiyonu ile 0 byte okunursa 
+    soketin kapatıldığı anlaşılmaktadır. Tabii bu durumda programcının bu pollfd dizisinden bu elemanı çıkarması gerekir. 
+
+    Aşağıda multi-client server için poll modeline bir örnek verilmiştir. Burada pfds isimli bir pollfd dizisini oluşturulmuştur. 
+    Bu dizinin makismum uzunluğu MAX_CLIENT kadardır. Her bağlantı sağlandığında yeni client için bu pollfd dizisine bir eleman 
+    eklenmiştir. Bir client disconnect olduğunda bu diziden ilgili eleman silinmiştir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* server.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <unistd.h>
+#include <poll.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+#define DEF_SERVER_PORT		55555
+#define BUFFER_SIZE			4096
+#define MAX_CLIENT			1000
+
+char *revstr(char *str);
+void exit_sys(const char *msg);
+
+/* ./server [-p port] */
+
+int main(int argc, char *argv[])
+{
+	int server_sock, client_sock;
+	struct sockaddr_in sin_server, sin_client;
+	socklen_t sinaddr_len;
+	char buf[BUFFER_SIZE + 1];		/* BUFFER_SIZE is enough */
+	socklen_t sin_len;
+	char ntopbuf[INET_ADDRSTRLEN];
+	int option;
+	int server_port;
+	int p_flag, err_flag;
+	struct pollfd pfds[MAX_CLIENT];
+	int npfds, count;
+	ssize_t result;
+
+	p_flag = err_flag = 0;
+
+	opterr = 0;
+	while ((option = getopt(argc, argv, "p:")) != -1) {
+		switch (option) {
+			case 'p':
+				p_flag = 1;
+				server_port = atoi(optarg);
+				break;
+			case '?':
+				if (optopt == 'p')
+					fprintf(stderr, "-%c option must have an argument!\n", optopt);
+				else
+					fprintf(stderr, "-%c invalid option!\n", optopt);
+				err_flag = 1;
+		}
+	}
+
+	if (err_flag)
+		exit(EXIT_FAILURE);
+
+	if (optind - argc != 0) {
+		fprintf(stderr, "too many arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if (!p_flag)
+		server_port = DEF_SERVER_PORT;
+
+	if ((server_sock = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+		exit_sys("socket");
+
+	sin_server.sin_family = AF_INET;
+	sin_server.sin_port = htons(server_port);
+	sin_server.sin_addr.s_addr = htonl(INADDR_ANY);
+
+	if (bind(server_sock, (struct sockaddr *)&sin_server, sizeof(sin_server)) == -1)
+		exit_sys("bind");
+
+	if (listen(server_sock, 8) == -1)
+		exit_sys("listen");
+
+	pfds[0].fd = server_sock;
+	pfds[0].events = POLLIN;
+	npfds = 1;
+
+	printf("listening port %d\n", server_port);
+
+	for (;;) {
+		printf("waiting for connection...\n");
+
+		if (poll(pfds, npfds, -1) == -1)
+			exit_sys("poll");
+
+		count = npfds;
+
+		for (int i = 0; i < count; ++i) {
+			if (pfds[i].revents & POLLIN) {
+				if (pfds[i].fd == server_sock) {
+					if (npfds >= MAX_CLIENT) {
+						fprintf(stderr, "number of clints exceeds %d limit!..\n", MAX_CLIENT);
+						continue;
+					}
+					sin_len = sizeof(sin_client);
+					if ((client_sock = accept(server_sock, (struct sockaddr *)&sin_client, &sin_len)) == -1)
+						exit_sys("accept");
+					pfds[npfds].fd = client_sock;
+					pfds[npfds].events = POLLIN;
+					++npfds;
+
+					inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN);
+					printf("connected client ===> %s:%u\n", ntopbuf, (unsigned)ntohs(sin_client.sin_port));
+				}
+				else {
+					sinaddr_len = sizeof(sin_client);
+					if (getpeername(pfds[i].fd, (struct sockaddr *)&sin_client,&sinaddr_len) == -1)
+						exit_sys("getpeername");
+					inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN);
+
+					if ((result = recv(pfds[i].fd, buf, BUFFER_SIZE, 0)) == -1)
+						exit_sys("recv");
+					if (result > 0) {
+						buf[result] = '\0';
+						if (!strcmp(buf, "quit"))
+							goto DISCONNECT;
+
+						printf("%jd byte(s) received from %s : %u: \"%s\"\n", (intmax_t)result, ntopbuf, (unsigned)ntohs(sin_client.sin_port), buf);
+
+						revstr(buf);
+						if (send(pfds[i].fd, buf, result, 0) == -1)
+							exit_sys("send");
+					}
+					else {
+					DISCONNECT:
+						shutdown(pfds[i].fd, SHUT_RDWR);
+						close(pfds[i].fd);
+						pfds[i] = pfds[npfds - 1];
+						--npfds;
+
+						printf("client disconnected ===> %s:%u\n", ntopbuf, (unsigned)ntohs(sin_client.sin_port));
+					}
+				}
+			}
+		}
+	}
+
+	close(server_sock);
+
+	return 0;
+}
+
+char *revstr(char *str)
+{
+	size_t i, k;
+	char temp;
+
+	for (i = 0; str[i] != '\0'; ++i)
+		;
+
+	for (--i, k = 0; k < i; ++k, --i) {
+		temp = str[k];
+		str[k] = str[i];
+		str[i] = temp;
+	}
+
+	return str;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/* client.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+
+#define DEF_SERVER_NAME		"127.0.0.1"
+#define DEF_SERVER_PORT		"55555"
+#define BUFFER_SIZE			4096
+
+void exit_sys(const char *msg);
+
+/* ./client [-s server] [-p port] */
+
+int main(int argc, char *argv[])
+{
+	int client_sock;
+	struct sockaddr_in sin_client;
+	struct addrinfo hints = {0, AF_INET, SOCK_STREAM};
+	struct addrinfo *res, *ri;
+	int gai_result;
+	char buf[BUFFER_SIZE + 1];		// BUFFER_SIZE is enough
+	char *str;
+	int option;
+	int s_flag, p_flag, b_flag, err_flag;
+	const char *server_name;
+	int bind_port;
+	const char *server_port;
+	ssize_t result;
+
+	s_flag = p_flag = b_flag = err_flag = 0;
+
+	opterr = 0;
+	while ((option = getopt(argc, argv, "s:p:b:")) != -1) {
+		switch (option) {
+			case 's':
+				s_flag = 1;
+				server_name = optarg;
+				break;
+			case 'p':
+				p_flag = 1;
+				server_port = optarg;
+				break;
+			case 'b':
+				b_flag = 1;
+				bind_port = atoi(optarg);
+				break;
+			case '?':
+				if (optopt == 's' || optopt == 'p' || optopt == 'b')
+					fprintf(stderr, "-%c option must have an argument!\n", optopt);
+				else
+					fprintf(stderr, "-%c invalid option!\n", optopt);
+				err_flag = 1;
+		}
+	}
+
+	if (err_flag)
+		exit(EXIT_FAILURE);
+
+	if (optind - argc != 0) {
+		fprintf(stderr, "too many arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if (!s_flag)
+		server_name = DEF_SERVER_NAME;
+	if (!p_flag)
+		server_port = DEF_SERVER_PORT;
+
+	if ((client_sock = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+		exit_sys("socket");
+
+	if (b_flag) {
+		sin_client.sin_family = AF_INET;
+		sin_client.sin_port = htons(bind_port);
+		sin_client.sin_addr.s_addr = htonl(INADDR_ANY);
+
+		if (bind(client_sock, (struct sockaddr *)&sin_client, sizeof(sin_client)) == -1)
+			exit_sys("bind");
+	}
+
+	if ((gai_result = getaddrinfo(server_name, server_port, &hints, &res)) != 0) {
+		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(gai_result));
+		exit(EXIT_FAILURE);
+	}
+
+	for (ri = res; ri != NULL; ri = ri->ai_next)
+		if (connect(client_sock, ri->ai_addr, ri->ai_addrlen) != -1)
+			break;
+
+	if (ri == NULL)
+		exit_sys("connect");
+
+	freeaddrinfo(res);
+
+	printf("connected server...\n");
+
+	for (;;) {
+		printf("csd>");
+		fflush(stdout);
+
+		if (fgets(buf, BUFFER_SIZE, stdin) == NULL)
+			continue;
+		if ((str = strchr(buf, '\n')) != NULL)
+			*str = '\0';
+
+		if (send(client_sock, buf, strlen(buf), 0) == -1)
+			exit_sys("send");
+		if (!strcmp(buf, "quit"))
+			break;
+		if ((result = recv(client_sock, buf, BUFFER_SIZE, 0)) == -1)
+			exit_sys("recv");
+		if (result == 0)
+			break;
+
+		buf[result] = '\0';
+		printf("%s\n", buf);
+	}
+
+	shutdown(client_sock, SHUT_RDWR);
+	close(client_sock);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
 
 /*--------------------------------------------------------------------------------------------------------------------------
 
@@ -42575,6 +43863,9 @@ void exit_sys(const char *msg)
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
+
 /*--------------------------------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------------------------------*/
+
+
