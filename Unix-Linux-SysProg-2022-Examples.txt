@@ -37385,17 +37385,46 @@ void exit_sys(const char *msg)
 
     İzlenecek olayların bazıları bazı aygıtlara ilişkindir. En önemli izleme olayları şunlardır:
 
-    POLLIN: Okuma amaçlı izlemeyi belirtir.
+    POLLIN: Okuma amaçlı izlemeyi belirtir. Boruda ya da sokette okunacak bilgi oluştuğunda fonksiyon tarafından bu bayrak 
+    set edilmektedir. Soketlerde accept yapan tarafta bir bağlantı istedği oluştuğunda da POLLIN bayrağı set edilmektedir. 
+    Aynı zamanda soketlerde karşı taraf soketi kapattığında da POLLIN bayrağı set edilmektedir. 
 
-    POLLOUT: Yazma amaçlı izlemeyi belirtir.
+    POLLOUT: Yazma amaçlı izlemeyi belirtir. Boruya ya da sokete yazma durumu oluştuğunda (yani boruda ya da network tamponunda yazma 
+    için yer açıldığında) fonksiyon tarafından bu bayrak set edilmektedir. Aynı zamanda soketlerde karşı taraf soketi kapattığında da 
+    POLLOUT bayrağı set edilmektedir. 
 
-    POLLERR: Hata amaçlı izlemeyi belirtir. Bu konuda bazı ayrıntılar vardır. Bu bayrak yapının events elemanında set edilmez, 
-    fonksiyon tarafından yapının revents elemanında set edilmektedir. 
+    POLLERR: Hata amaçlı izlemeyi belirtir. Bu bayrak yapının events elemanında set edilmez, fonksiyon tarafından yapının revents 
+    elemanında set edilmektedir. Bu bayrak borularda okuma yapan tarafın boruyu kapatmasıyla yazma yapan tarafta set edilmektedir. 
+    (Normal olarak okuyan tarafın boruyu kapattığı durumda boruya yazma yapıldığında SIGPIPE sinyalinin oluştuğunu anımsayınız.) 
+    Eğer okuyan taraf boruyu kapattığında boruya yazma için yer varsa yazma yapan tarafta aynı zamanda POLLOUT bayrağı da set edilmektedir. 
+    POLLERR bayrağı soketlerde kullanılmamaktadır.
 
-    POLLHUP: Fonksiyon tarafından ilgili aygıt ya da boru kapatıldığında set edilmektedir. Bu bayrak yapının events elemanında 
-    set edilmez, fonksiyon tarafından yapının revents elemanında set edilmektedir. (HUP, "hang up" anlamına gelmektedir.)
+    POLLHUP: Boruya yazan tarafın boru betimleyicisini kapattığında okuma yapan tarafta bu bayrak set edilmektedir. Bu bayrak yapının 
+    events elemanında set edilmez, fonksiyon tarafından yapının revents elemanında set edilmektedir. (HUP, "hang up" anlamına gelmektedir.) 
+    Eğer boruya yazma yapan taraf boruyu kapattığında hala boruda okunacak bilgi varsa okuma yapan tarafta aynı zamanda POLLIN bayrağı 
+    da set edilmektedir. POLLHUP bayrağı soketlerde kullanılmamaktadır.
+
+    POLLRDHUP: Soketlerde karşı taraf soketi kapattığında ya da shutdown fonksiyonu SHUT_WR argümanıyla çağrıldığında oluşur. 
+
+    POLLNVAL: Bu bayrak yapının events elemanında set edilmez. Fonksiyon tarafından eğer izlenen bir betimelyici kapalıysa 
+    yapının revents elemanında fonksiyon tarafından set edilmektedir. 
 
     Bu bayraklar bit OR işlemine sokulabilmektedir. Örneğin hem okuma hem de yazma izlemesi için POLLIN|POLLOUT kullanılabilir.
+
+    Bayrakların anlamları için "The Linux Programming Interface" kitabından şu tabloları da vermek istiyoruz:
+
+    Boruda bilgi yok ve yazan tarafın betimleyicisi kapalı ===> Okuyan tarafta POLLHUP
+    Boruda bilgi var ve yazan tarafın betimleyicisi kapalı ===> Okuyan tarafta POLLIN|POLLHUP
+    Boruda bilgi var ve yazan tarafın betimleyicisi açık ===> Okuyan tarafta POLLIN 
+
+    Boruda yazma için yer yok ve okuyan tarafın betimleyicisi kapalı ===> Yazan tarafta POLLERR
+    Boruda yazma için yer var ve okuyan tarafın betimleyicisi kapalı ===> Yazan tarafta POLLOUT|POLLERRR
+    Boruda yazma için yer var ve okuyan tarafın betimleyicisi açık ===> Yazan tarafta POLLOUT 
+
+    Sokette bilgi var ===> Okuyan tarafta POLLIN
+    Network tamponunda yazacak yer var ===> Yazan tarafta POLLOUT
+    accept yapan tarafta bağlantı isteği oluştuğunda ===> accept yapan tarafta POLLIN
+    Karşı taraf soketi kapattığında ===> karşı tarafta POLLIN|POLLOUT|POLLRDHUP
 
     Geri döndürülen olayların birden fazlası birlikte gerçekleşmiş olabilir. Bu nedenle programcının kontrolü else-if ile 
     değil, ayrık if deyimleriyle yapması gerekir. Okuyan taraf boruları ve soketleri kapatırsa bu durum poll fonksiyonunda POLLERR 
@@ -37805,20 +37834,49 @@ void exit_sys(const char *msg)
         epoll_data_t data;
     };
 
-    Yapının events elemanı tıpkı poll fonksiyonunda olduğu gibi izlenecek olayları belirten bayrak değerlerini almaktadır. Burada 
-    kullanılacak tipik değerler EPOLLIN ve EPOLLOUT değerleridir. EPOLLIN okuma amaçlı izleme için, EPOLLOUT ise yazma amaçlı izleme 
-    için kullanılmaktadır. Örneğin:
+    Yapının events elemanı tıpkı poll fonksiyonunda olduğu gibi izlenecek olayları belirten bayrak değerlerini almaktadır. Bu bayrak değerleri 
+    epoll_ctl fonksiyonunda izlenecek olayları belirtir. İzleyen paragraflarda göreceğimiz epoll_wait fonksiyonunda da gerçekleşen olayları 
+    belirtmektedir. İzleme amacıyla kullanılan tipik bayraklar şunlardır:
 
-    struct epoll_events ee;
+    EPOLLIN: Okuma amaçlı izlemeyi belirtir. Boruda ya da sokette okunacak bilgi oluştuğunda epoll_wait tarafından bu bayrak set 
+    edilir. Soketlerde accept yapan tarafta bir bağlantı istedği oluştuğunda da EPOLLIN bayrağı epoll_wait tarafından set 
+    edilmektedir. EPOLLIN bayrağı aynı zamanda karşı taraf soketi kapattığnda da oluşmaktadır. 
 
-    ee.events = EPOLLIN|EPOLLOUT;
+    EPOLLOUT: Yazma amaçlı izlemeyi belirtir. Boruya ya da sokete yazma durumu oluştuğunda (yani boruda ya da network tamponunda yazma 
+    için yer açıldığında) fonksiyon tarafından bu bayrak set edilmektedir. EPOLLOUT bayrağı aynı zamanda karşı taraf soketi kapattığnda 
+    da oluşmaktadır. 
 
-    Geri döndürülen olay da yine EPOLLIN, EPOLLOUT, EPOLLERR ve EPOLLHUP gibi olaylardır. EPOLLIN olayı okumanın mümkün olacağını, 
-    EPOLLOUT yazmanın mümkün olacağını belirtmektedir. EPOLLHUP olayı borularda karşı tarafın boruyu kapattığını belirtmektedir. 
-    EPOLLERR olayı ise borularda ve soketlerde karşı taraf boruyu ya da soketi kapatmışsa oluşmaktadır. 
+    EPOLLERR: Hata amaçlı izlemeyi belirtir. Bu bayrak epoll_ctl fonksiyonunda set edilmez, epoll_wait fonksiyonu tarafından set 
+    edilmektedir. Bu bayrak borularda okuma yapan tarafın boruyu kapatmasıyla yazma yapan tarafta set edilmektedir. (Normal olarak 
+    okuyan tarafın boruyu kapattığı durumda boruya yazma yapıldığında SIGPIPE sinyalinin oluştuğunu anımsayınız.) Eğer okuyan taraf 
+    boruyu kapattığında boruya yazma için yer varsa yazma yapan tarafta aynı zamanda EPOLLOUT bayrağı da set edilmektedir. 
+    EPOLLERR bayrağı soketlerde kullanılmamaktadır.
 
-    Yapının data elemanı aslında çekirdek tarafından saklanıp epoll_wait fonksiyonu yoluyla bize geri verilmektedir. Bu eleman bir 
-    birlik biçiminde bildirilmiştir (yani programcı tarafından bu birliğin yalnızca tek elemanı set edilmelidir):
+    EPOLLHUP: Boruya yazan tarafın boru betimeleyicisini kapattığında okuma yapan tarafta bu bayrak set edilmektedir. Bu bayrak 
+    epoll_ctl fonksiyonunda set edilmez, epoll_wait tarafından yapının set edilmektedir. (HUP, "hang up" anlamına gelmektedir.) 
+    Eğer boruya yazma yapan taraf boruyu kapattığında hala boruda okunacak bilgi varsa okuma yapan tarafta aynı zamanda EPOLLIN bayrağı 
+    da set edilmektedir. EPOLLHUP bayrağı soketlerde kullanılmamaktadır.
+
+    EPOLLRDHUP: Bu olay soketlerde karşı taraf soketi kapattığında ya da shutdown fonksiyonu SHUT_WR argümanıyla çağrıldığında oluşur. 
+    Bayrak hem epoll_ctl fonksiyonunda set edilebilir hem de epoll_wait tarafından set edilebilir.
+
+    Daha önce poll bayrakları için verdiğimiz tabloyu epoll bayrakları için de benzer biçimde vermek istiyoruz:
+
+    Boruda bilgi yok ve yazan tarafın betimleyicisi kapalı ===> Okuyan tarafta EPOLLHUP
+    Boruda bilgi var ve yazan tarafın betimeleyicisi kapalı ===> Okuyan tarafta EPOLLIN|EPOLLHUP
+    Boruda bilgi var ve yazan tarafın betimleyicisi açık ===> Okuyan tarafta EPOLLIN 
+
+    Boruda yazma için yer yok ve okuyan tarafın betimleyicisi kapalı ===> Yazan tarafta EPOLLERR
+    Boruda yazma için yer var ve okuyan tarafın betimeleyicisi kapalı ===> Yazan tarafta EPOLLOUT|EPOLLERRR
+    Boruda yazma için yer var ve okuyan tarafın betimleyicisi açık ===> Yazan tarafta EPOLLOUT 
+
+    Sokette bilgi var ===> Okuyan tarafta EPOLLIN
+    Network tamponunda yazacak yer var ===> Yazan tarafta EPOLLOUT
+    accept yapan tarafta bağlantı isteği oluştuğunda ===> accept yapan tarafta POLLIN
+    Karşı taraf soketi kapattığında ===> karşı tarafta E |EPOLLOUT|EPOLLRDHUP
+
+    epoll_event yapısının data elemanı aslında çekirdek tarafından saklanıp epoll_wait fonksiyonu yoluyla bize geri verilmektedir.
+    Bu eleman bir birlik biçiminde bildirilmiştir (yani programcı tarafından bu birliğin yalnızca tek elemanı set edilmelidir):
 
     typedef union epoll_data {
         void *ptr;
@@ -37827,26 +37885,30 @@ void exit_sys(const char *msg)
         uint64_t u64;
     } epoll_data_t;
 
-    Programcının tipik olarak olayın gerçekleştiği dosya betimleyicisinin hangisi olduğunu bilmesi gerekmektedir. Dolayısıyla genellikle 
-    birliğin fd elemanı set edilmektedir. Tabii programcı daha fazla bilgi set etmek istiyorsa bir yapı oluşturabilir. Betimleyiciyi ve 
-    diğer bilgileri bu yapının içerisine yerleştirebilir. Yapı nesnesinin adresini de birliğin ptr elemanına atayabilir. 
+    Programcının tipik olarak olayın gerçekleştiği dosya betimleyicisinin hangisi olduğunu bilmesi gerekmektedir. Dolayısıyla 
+    genellikle birliğin fd elemanı set edilmektedir. Tabii programcı daha fazla bilgi set etmek istiyorsa bir yapı oluşturabilir. 
+    Betimleyiciyi ve diğer bilgileri bu yapının içerisine yerleştirebilir. Yapı nesnesinin adresini de birliğin ptr elemanına 
+    atayabilir. 
 
-    epoll_ctl fonksiyonu başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri dönmektedir. errno değişkeni uygun biçimde 
-    set edilmektedir. 
+    epoll_ctl fonksiyonu başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri dönmektedir. errno değişkeni uygun 
+    biçimde set edilmektedir. 
 
-    Kenar tetiklemeli (edge triggered) ve düzey tetiklemeli (level triggered) kavramları lojik eletronikte kullanılmaktadır. Kenar tetikleme
-    belli bir olay ilk gerçekleştiğinde birtakım değişiklerin yapıldığını, düzey tetikleme ise belli bir olay devam ettiği sürece 
-    değişiklerin sürekli yapıldığını anlatmaktadır. Her ne bu terimler elektronikten geçtiyse de yazılımda da anlatımları kolaylaştırmak için
-    kullanılmaktadır. Örneğin select ve poll fonksiyonları "düzey tetiklemeli (level triggered)" olarak çalışmaktadır. Yani bir boruya bilgi 
-    geldiği zaman bu fonksiyonlar çağrıldığında durumu bize bildirirler. O bilgi borudan okunmadığı sürece bu fonksiyonları tekrar çağırdığımızda
-    bu fonksiyonlar yine durumu bize bildirmektedir. epoll fonksiyonu ise default durumda yine düzey tetiklemeli çalışırken özel olarak 
-    epoll_event yapısının events elemanına EPOLLET eklenirse o betimleyici için "kenar tetiklemeli (edge triggered)" mod kullanılır.
+    Kenar tetiklemeli (edge triggered) ve düzey tetiklemeli (level triggered) kavramları lojik elektronikte kullanılmaktadır. 
+    Kenar tetikleme belli bir olay ilk gerçekleştiğinde birtakım değişikliklerin yapıldığını, düzey tetikleme ise belli bir olay 
+    devam ettiği sürece değişiklerin sürekli yapıldığını anlatmaktadır. Her ne bu terimler elektronikten geçtiyse de yazılımda da 
+    anlatımları kolaylaştırmak için kullanılmaktadır. Örneğin select ve poll fonksiyonları "düzey tetiklemeli (level triggered)" 
+    olarak çalışmaktadır. Yani bir boruya bilgi geldiği zaman bu fonksiyonlar çağrıldığında durumu bize bildirirler. O bilgi borudan 
+    okunmadığı sürece bu fonksiyonları tekrar çağırdığımızda bu fonksiyonlar yine durumu bize bildirmektedir. epoll fonksiyonu 
+    ise default durumda yine düzey tetiklemeli çalışırken özel olarak epoll_event yapısının events elemanına EPOLLET eklenirse o 
+	     için "kenar tetiklemeli (edge triggered)" mod kullanılır.
 
-    Yukarıda da belirtildiği gibi düzey tetiklemeli mod demek (select, poll'daki durum ve epoll'daki default durum) bir okuma ya da yazma olayı açılıp 
-    bloke çözüldüğünde programcı eğer okuma ya da yazma yapmayıp yeniden bu fonksiyonları çağrırsa bekleme yapılmayacak demektir. Yani örneğin 
-    biz select ya poll ile stdin dosyasını izliyorsak ve klavyeden bir giriş yapıldıysa bu fonksiyonlar blokeyi çözer. Fakat biz read ile okuma 
-    yapmazsak ve yeniden select ve poll fonksiyonlarını çağırırsak artık bloke oluşmaz. Halbuki kenar tetiklemeli modda biz okuma yapmasak bile 
-    yeni okuma eylemi oluşana kadar yine blokede kalırız.
+    Yukarıda da belirtildiği gibi düzey tetiklemeli mod demek (select, poll'daki durum ve epoll'daki default durum) bir okuma 
+    ya da yazma olayı açılıp bloke çözüldüğünde programcı eğer okuma ya da yazma yapmayıp yeniden bu fonksiyonları çağrırsa 
+    bekleme yapılmayacak demektir. Yani örneğin biz select ya poll ile stdin dosyasını izliyorsak ve klavyeden bir giriş yapıldıysa 
+    bu fonksiyonlar blokeyi çözer. Fakat biz read ile okuma yapmazsak ve yeniden select ve poll fonksiyonlarını çağırırsak artık bloke 
+    oluşmaz. Halbuki kenar tetiklemeli modda biz okuma yapmasak bile yeni okuma eylemi oluşana kadar yine blokede kalırız. Biz buradaki 
+    örneklerimizde epoll fonksiyonunu düzey tetiklemeli olarak kullanacağız. Soketler konusunda epoll fonksiyonunun kenar tetiklemeli 
+    kullanımı üzerinde duracağız.
 
     Tabii programcının izleyeceği her betimleyici için epoll_ctl fonksiyonunu çağırması gerekir. Örneğin biz 3 farklı betimleyiciyi 
     izleyeceksek bizim üç kere epoll_ctl fonksiyonunu çağırmamız gerekir. 
@@ -37859,7 +37921,7 @@ void exit_sys(const char *msg)
 
     int epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout);
 
-    Fonksiyonun birinci parametresi epoll_create ya da epoll_create1 fonksiyonundan elde edilmiş olan handle değeridir. İkinci 
+    Fonksiyonun birinci parametresi epoll_create ya da epoll_create1 fonksiyonundan elde edilmiş olan betimleyici değeridir. İkinci 
     parametre oluşan olayların depolanacağı yapı dizisinin adresidir. Biz bu yapının events elemanından oluşan olayın ne olduğunu 
     anlarız. Yapının data elemanı epoll_ctl sırasında verdiğimiz değeri belirtir. Bizim en azından epoll_ctl fonksiyonunda ilgili 
     betimleyiciyi bu data elemanında girmiş olmamız gerekir. Fonksiyonun üçüncü parametresi, ikinci parametresiyle belirtilen 
@@ -38548,7 +38610,8 @@ void exit_sys(const char *msg)
     olabilmektedir. SIGEV_NONE IO olayı bittiğinde bir bildirimin yapılmayacağını, SIGEV_SIGNAL bir sinyal ile bildirimin yapılacağını, 
     SIGEV_THREAD ise bildirimin kernel tarafından yaratılan bir thread yoluyla yapılacağını belirtmektedir. Yapının sigev_signo elemanı 
     ise eğer sinyal yoluyla bildirimde bulunulacaksa sinyalin numarasını belirtmektedir. Yapının sigev_value elemanı sinyal fonksiyonuna 
-    ya da thread fonksiyonuna gönderilecek kullanıcı tanımlı bilgiyi temsil etmektedir. Buradaki birliğin aşağıdaki gibi bildirildiğini anımsayınız:
+    ya da thread fonksiyonuna gönderilecek kullanıcı tanımlı bilgiyi temsil etmektedir. Buradaki birliğin aşağıdaki gibi bildirildiğini 
+    anımsayınız:
 
     #include <signal.h>
 
@@ -38614,10 +38677,12 @@ void exit_sys(const char *msg)
     IO işlemi gerçekleştiğinde, biz yeniden IO işlemi için bu fonksiyonların çağrılmasını sağlamalıyız.
 
     Aşağıda asenkron IO modelinin uygulanmasına ilişkin bir örnek verilmiştir. Örnekte stdin dosyasından sürekli okuma yapılmak 
-    istenmiştir. Burada bildirim SIGEV_THREAD ile kernel tarafından yaratılan bir thread yoluyla yapılmaktadır. Okuma olayı 
-    bittiğinde kernel bizim belirlediğimiz fonksiyonu çağırmaktadır. Biz de bu fonksiyon içerisinde aio_return fonksiyonu ile 
-    kaç byte okunduğunu belirleyip işlemin devam etmesi için aio_read fonksiyonunu yeniden çağırmaktayız. Burada thread fonksiyonuna
-    bizim aiocb yapısını nasıl geçirdiğimize dikkat ediniz:
+    istenmiştir. Burada bildirim SIGEV_THREAD ile kernel tarafından yaratılan bir thread yoluyla yapılmaktadır. Okuma olayı bittiğinde 
+    kernel tarafından yaratılmış olan thread bizim belirlediğimiz fonksiyonu çağırmaktadır. Ancak bu işlemlerin kaç thread'in yaratılacağı 
+    gibi özellikler sistemden sisteme değişebilmektedir. Örneğin Linux genellikle tek bir thread yaratıp tüm olayları bu thread'e 
+    yaptırmaktadır. Biz de bu fonksiyon içerisinde aio_return fonksiyonu ile kaç byte okunduğunu belirleyip işlemin devam etmesi 
+    için aio_read fonksiyonunu yeniden çağırmaktayız. Burada thread fonksiyonuna  bizim aiocb yapısını nasıl geçirdiğimize 
+    dikkat ediniz:
 
     cb.aio_sigevent.sigev_value.sival_ptr = &cb;
 
@@ -38773,6 +38838,8 @@ int main(int argc, char *argv[])
 	printf("waiting at pause, press Ctrl+C to exit...\n");
 
 	pause();
+
+	free(cb);
 
 	return 0;
 }
@@ -39168,13 +39235,13 @@ void exit_sys(const char *msg)
     önceliklerle (yani sudo ile root hakkıyla) çalıştırılırlar.
 
     Daemon programlar pek çok modern UNIX/Linux sisteminde "init paketleri" içerisindeki özel utility'ler tarafından başlatılıp, 
-    sürdürülüp, sonlandırılmaktadır. Yani ilgili dağıtımın bu dameon'ları idare etmek için özel komutları bulunabilmektedir. Linux 
+    sürdürülüp, sonlandırılmaktadır. Yani ilgili dağıtımın bu daemon'ları idare etmek için özel komutları bulunabilmektedir. Linux 
     sistemlerinde init prosesi ve diğer proseslerin kodları ve boot süreci ile ilgili utility'ler "init paketleri" denilen 
     paketler biçiminde farklı proje grupları tarafından oluşturulmuştur. Başka bir deyişle "servis yönetim (service management)"
     işlemleri organize bir biçimde bu "init paketleri" tarafından yapılmaktadır. Yaygın olarak kullanılan üç "init paketi" bulunmaktadır:
 
     1) sysvinit: Klasik System5'teki işlevleri yapan init paketidir. Linux uzun bir süre bu paketi kullanmıştır.
-    2) Upstart: 2006 yılında oluşturulmuştur ve 2010'ların ortalarına kadar (bazı dağtımlarda hala) kullanılmaya yaygın biçimde kullanılmıştır.
+    2) Upstart: 2006 yılında oluşturulmuştur ve 2010'ların ortalarına kadar (bazı dağıtımlarda hala) kullanılmaya yaygın biçimde kullanılmıştır.
     3) systemd: 2010 yılında oluşturulmuştur ve son yıllarda pek çok Linux dağıtımında kullanılmaya başlanmıştır. Bugün en yaygın kullanılan 
     init paketi durumundadır.
 
@@ -40239,7 +40306,7 @@ void exit_daemon(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Yukarıda systemd paketinin aynı zamanda bir "servis yöneticiliği" yaptığını da belirtmiştik. İşte bizim bir servisimizin 
-    (daemon'umuzun) systemd yönetiminin komtrolüne girebilmesi için ismine "unit dosyası (unit file)" denilen bir dosyanın 
+    (daemon'umuzun) systemd yönetiminin kontrolüne girebilmesi için ismine "unit dosyası (unit file)" denilen bir dosyanın 
     hazırlanması gerekmektedir. Çeşitli amaçlar için çeşitli unit dosyaları kullanılmaktadır. Bu unit dosyalarının türlerine 
     göre uzantıları farklı olabilmektedir. Önemli unit dosya türleri şunlardır:
 
@@ -42090,9 +42157,14 @@ void exit_sys(const char *msg)
     2) Karşı taraf soketi kapatmıştır. recv 0 ile geri döner.
     3) İstenen kadar miktar okunmuştur.
 
+    Aslında recv fonksiyonunun talep edilen miktarda byte'ların hepsinin okunabilmesi için MSG_WAITALL biçiminde bir flags parametresi
+    de vardır. Ancak MSG_WAITALL flags parametresi alma tamponundan daha yüksek miktarda verilerin okunması için uygun olmayabilmektedir.
+    Bu konu ileride ele alınacaktır. 
+
     Yeniden vurgulamak gerekirse bir soketten n byte okuma işlemi tek bir recv ile başarılmak zorunda değildir. Soket programlamaya
-    yeni başlayanlar sanki bir disk dosyasından ya da borudan bilgi okunuyor gibi tek bir okuma çağrısı ile bunu yapma 
-    eğilimindedirler. Halbuki bu işlem yukarıdaki gibi bir döngüyle yapılmak zorundadır. 
+    yeni başlayanlar sanki bir disk dosyasından ya da borudan bilgi okunuyor gibi tek bir okuma çağrısı ile bunu yapma eğilimindedirler. 
+    Halbuki bu işlem yukarıdaki gibi bir döngüyle ya da recv fonksiyonuna MSG_WAITALL flags parametresi girilerek yapılmak 
+    zorundadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -42134,9 +42206,9 @@ void exit_sys(const char *msg)
     bulunduğu yazının adresini, üçüncü parametre ise nümerik adresin yerleştirileceği adresi almaktadır. Bu parametreye IPv4 için 
     4 byte'lık, IPv6 için 16 byte'lık yerleştirme yapılmaktadır. Fonksiyon başarı durumunda 1 değerine, başarısızlık durumunda 
     0 ya da -1 değerine geri döner. Eğer başarısızlık birinci parametreden kaynaklanıyorsa -1, ikinci parametreden kaynaklanıyorsa 
-    0 değerine geri dönmektedir. Bu durumda örneğin client programda inet_addr yerine inet_ptoa fonksiyonunu şöyle çağırabilirdik:
+    0 değerine geri dönmektedir. Bu durumda örneğin client programda inet_addr yerine inet_pton fonksiyonunu şöyle çağırabilirdik:
 
-    if (inet_pton(AF_INET, argv[1], &sin_server.sin_addr.s_addr) == 0) {
+    if (inet_pton(AF_INET, server_name, &sin_server.sin_addr.s_addr) == 0) {
         ...
     }
 
@@ -43851,9 +43923,650 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-
+											105. Ders 10/12/2023 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bu noktada dikkatimizi UDP protokolü üzerine yönelteceğiz. UDP protokolünü el aldıktan sonra yine TCP protokolü ile ilgili
+    bazı ayrıntılar üzerinde duracağız.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Giriş kısmında da belirttiğimiz gibi UDP (User Datagram Protocol) bağlantılı olmayan bir protokoldür. Dolayısıyla bir 
+    taraf bir tarafa hiç bağlanmadan onun IP adresini ve port numarasını bilerek UDP paketlerini gönderebilir. Gönderen taraf 
+    alan tarafın paketi alıp almadığını bilmez. Yani UDP protokolünde bir akış kontrolü yoktur. Dolayısıyla alan taraf bilgi 
+    kaçırabilir. Protokol kaçırılan bilgilerin telafisini kendisi yapmamaktadır. Halbuki TCP protokülünde bir bağlantı oluşturulduğu 
+    için bir akış kontrolü uygulanarak karşı tarafa ulaşmamış TCP paketlerinin yeniden gönderilmesi sağlanmaktadır.
+
+    UDP tabii ki TCP'ye göre daha hızlıdır. Zaten TCP bir bakıma UDP'nin organize edilmiş bağlantılı biçimidir. Pekiyi UDP protokolü 
+    ile ağ katmanı protokolü olan IP protokolü arasındaki fark nedir? Her iki protokolde aslında paketlerin iletimini yapmaktadır. 
+    Aslında UDP protokolünün gerçekten de IP protokolünden çok farkı yoktur. Ancak UDP bir aktarım (transport) katmanı protokolü olduğu 
+    için port numarası içermektedir. Halbuki IP protokolünde port numarası kavramı yoktur. Yani IP protokolünde biz bir host'a paket 
+    gönderebiliriz. Onun belli bir portuna paket gönderemeyiz. Bunun dışında UDP ile IP protokollerinin kullanımları konusunda yine 
+    bazı farklılıklar vardır. Aslında biz programcı olarak doğrudan IP paketleri de gönderebiliriz. Buna "raw socket" kullanımı 
+    denilmektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    TCP'de accept uygulayan tarafa "server" connect uygulayana tarafa "client" denilmektedir. Ancak UDP bağlantısız bir protokol
+    olduğu için "client" ve "server" kavramları bu protokolde tam oturmamaktadır. Ancak yine de genellikle hizmet alan tarafa
+    "client" hizmet veren tarafa "server" denilmektedir. UDP'de client daha çok gönderim yapan, server ise okuma yapan taraftırç
+
+    UDP özellikle periyodik kısa bilgilerin gönderildiği ve alındığı durumlarda hız nedeniyle tercih edilmektedir. UDP haberleşmesinde 
+    bilgiyi alan tarafın (server) bilgi kaçırabilmesi söz konusu olabileceğinden dolayı böyle kaçırmalarda sistemde önemli bir
+    aksamanın olmaması gerekir. Eğer bilgi kaçırma durumlarında sistemde önemli aksamalar oluşabiliyorsa UDP yerine TCP tercih 
+    edilmelidir. Örneğin bir televizyon yayınında görüntüye ilişkin bir frame karşı taraf tarafından alınmadığında önemli bir 
+    aksama söz konusu değildir. Belki görüntüde bir kasis olabilir ancak bu durum önemli kabul edilmemektedir. Örneğin birtakım 
+    makineler belli periyotlarda server'a "ben çalışıyorum" demek için periyodik UDP paketleri yollayabilir. Server da hangi 
+    makinenin çalışmakta olduğunu (bozulmamış olduğunu) bu sayede anlayabilir. Örneğin bir araba simülatörü arabanın durumunu 
+    UDP paketleriyle dış dünyaya verebilir. Bir UDP paketi 64K gibi bir sınıra sahiptir. 
+
+    TCP ve UDP protokollerinde bir uzunluk bilgisi yoktur. Uzunluk bilgisi IP protokolünde bulunmaktadır. IPV4 ve IPV6 
+    protokollerinde bir IP paketi en fazla 64K uzunlukta olabilmektedir. Tabii TCP stream tabanlı olduğu için bu 64K uzunluğun 
+    TCP için bir önemi yoktur. Ancak UDP paket tabanlı olduğu için bir UDP paketi IP paketinin uzunluğunu aşamaz. Dolayısıyla bir 
+    UDP paketi en fazla 64K uzunlukta olabilmektedir. Büyük paketlerin UDP ile gönderilmesi için programcının paketlere kendisinin 
+    manuel numaralar vermesi gerekebilir. Zaten TCP protokolü bu şekilde bir numaralandırmayı kendi içerisinde yapmaktadır. UDP 
+    haberleşmesinin önemli bir farkı da "broadcasting" işlemidir. Broadcasting yerel ağda belli bir host'un tüm host'lara UDP 
+    UDP paketleri gönderebilmesine denilmektedir. TCP'de böyle bir broadcasting mekanizması yoktur. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    UDP server programı tipik olarak şu adımlardan geçilerek oluşturulur:
+
+    1) Server SOCK_DGRAM parametresiyle bir socket yaratır.
+    2) Soketi bind fonksiyonuyla bağlar.
+    3) recvfrom fonksiyonuyla gelen paketleri alır ve sendto fonksiyonuyla UDP paketi gönderir.
+    4) Haberleşme bitince server soketi close fonksiyonuyla ile kapatır.
+
+    Haberleşme bittiğinde shutdown gibi bir işlemin gerekmediğine dikkat ediniz. shutdown işlemi TCP'de bağlantıyı koparmak için
+    kullanılmaktadır. Halbuki UDP protokolünde zaten bağlantı yoktur. Yukarıdaki adımları fonksiyon temelinde aşağıdaki gibi 
+    de özetleyebiliriz:
+
+    socket (SOCK_DGRAM) ---> bind ---> recfrom/sendto ---> close
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    UDP Client program da şu adımlardan geçilerek oluşturulur:
+
+    1) Client soketi SOCK_DGRAM parametresiyle yaratır.
+    2) Client isteğe bağlı olarak soketi bind fonksiyonuyla bağlayabilir.
+    3) Client server'ın host isminden hareketle server'ın IP adresini gethostbyname ya da getaddrinfo fonksiyonuyla elde edebilir.
+    4) Client sendto fonksiyonuyla UDP paketlerini gönderir ve recvfrom fonksiyonuyla UDP paketlerini alabilir.
+    5) Haberleşme bitince client close fonksiyonuyla soketi kapatır. 
+
+    Bu adımları fonksiyon isimleriyle şöyle özetleyebiliriz:
+
+    socket (SOCK_DGRAM) ---> bind (isteğe bağlı) ---> gethostbyname/getaddrinfo (isteğe bağlı) ---> sendto/recvfrom ---> close
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    UDP paketlerini okumak için kullanılan recvfrom prototipi şöyledir:
+
+    ssize_t recvfrom(int socket, void *buffer, size_t length, int flags, struct sockaddr *address, socklen_t *address_len);
+
+    Fonksiyonun birinci parametresi okuma işleminin yapılacağı soketi belirtir. ikinci parametre alınacak bilginin yerleştirileceği 
+    adresi belirtirtmektedir. Üçüncü parametre ikinci parametredeki alanın uzunluğunu belirtir. Eğer buradaki değer değer 
+    UDP paketindeki gönderilmiş olan byte sayısından daha az ise kırpılarak diziye yerleştirme yapılmaktadır. Fonksiyonun üçüncü
+    parametresi (flags) parametresi birkaç seçeneğe sahiptir. Bu parametre için 0 girilebilir. Fonksiyonun dördüncü parametresi 
+    UDP paketini gönderen tarafın IP adresinin ve port numarasının yerleştirileceği sockaddr_in yapısının adresini alır. Son parametre 
+    ise bu yapının uzunluğunu tutan int nesnenin adresini almaktadır. Fonksiyon başarı durumunda UDP paketinideki byte sayısına, 
+    başarıszlık durumunda -1 değerine geri dönmektedir. 
+
+    recvfrom fonksiyonun herhangi bir client'tan gelen paketi alabildiğine dikkat ediniz. Dolayısıyla her recvfrom ile alınan paket farklı 
+    bir client'a ilişkin olabilmektedir. 
+
+    recvfrom fonksiyonu eğer soket blokeli moddaysa (default durum) UDP paketi gelene kadar blokeye yol açar. Blokesiz modda fonksiyon
+    bekleme yapmaz, -1 değeriyle geri döner ve errno EAGAIN değeriyle set edilir. 
+
+    sendto fonksiyonunun prototipi de şöyledir:
+
+    ssize_t sendto(int socket, const void *message, size_t length, int flags, const struct sockaddr *dest_addr, socklen_t dest_len);
+
+    Fonksiyonun parametreleri recvfrom da olduğu gibidir. Yani birinci parametre gönderim yapılacak soketi belirtir. ikinci 
+    ve üçüncü parametreler gönderilecek bilgilerin bulunduğu tamponu ve onun uzunluğunu belirtmektedir. Yine bu fonksiyonda 
+    da bir flags parametresi vardır. Dördüncü parametre bilginin gönderileceği IP adresini ve port numarasını belirtir.Son 
+    parametre ise dördüncü parametredeki yapının (sockaddr_in ya da sockaddr_in6) uzunluğunu alır. 
+
+    Fonksiyon blokeli modda paket network tamponuna yazılana kadar blokeye yol açmaktadır. sendto fonksiyonu da başarı durumunda 
+    network tamponuna yazılan byte sayısına başarısızlık durumunda -1'e geri dönmektedir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Aşağıda tipik bir UDP client-server örneği verilmiştir. Bu örnekte client yine bir prompt'a düşerek kullanıcıdan bir 
+    yazı istemektedir. Bu yazıyı UDP paketi biçiminde server'a yollamaktadır. Server da bu yazıyı alıp görüntüledikten sonra 
+    yazıyı ters çevirip client'a geri yollamaktadır. Programların komut satırı argümanları diğer örneklerde olduğu gibidir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* server.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <getopt.h>
+
+#define DEF_SERVER_PORT		55555
+#define BUFFER_SIZE			4096
+
+char *revstr(char *str);
+void exit_sys(const char *msg);
+
+/* ./server [-p port] */
+
+int main(int argc, char *argv[])
+{
+	int server_sock;
+	struct sockaddr_in sin_server, sin_client;
+	socklen_t sin_len;
+	int server_port;
+	char buf[BUFFER_SIZE + 1];
+	char ntopbuf[INET_ADDRSTRLEN];
+	ssize_t result;
+	int option;
+	int p_flag, err_flag;
+
+	p_flag = err_flag = 0;
+
+	opterr = 0;
+	while ((option = getopt(argc, argv, "p:")) != -1) {
+		switch (option) {
+			case 'p':
+				p_flag = 1;
+				server_port = atoi(optarg);
+				break;
+			case '?':
+				if (optopt == 'p')
+					fprintf(stderr, "-%c option must have an argument!\n", optopt);
+				else
+					fprintf(stderr, "-%c invalid option!\n", optopt);
+				err_flag = 1;
+		}
+	}
+
+	if (err_flag)
+		exit(EXIT_FAILURE);
+
+	if (optind - argc != 0) {
+		fprintf(stderr, "too many arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if (!p_flag)
+		server_port = DEF_SERVER_PORT;
+
+	if ((server_sock = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
+		exit_sys("socket");
+
+	sin_server.sin_family = AF_INET;
+	sin_server.sin_port = htons(server_port);
+	sin_server.sin_addr.s_addr = htonl(INADDR_ANY);
+
+	if (bind(server_sock, (struct sockaddr *)&sin_server, sizeof(sin_server)) == -1)
+			exit_sys("bind");
+
+	printf("waiting UDP packet...\n");
+	for (;;) {
+		sin_len = sizeof(sin_client);
+		if ((result = recvfrom(server_sock, buf, BUFFER_SIZE, 0, (struct sockaddr *)&sin_client, &sin_len)) == -1)
+			exit_sys("recvfrom");
+		buf[result] = '\0';
+
+		inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN);
+		printf("%jd byte(s) received from %s : %u: \"%s\"\n", (intmax_t)result, ntopbuf, (unsigned)ntohs(sin_client.sin_port), buf);
+
+		revstr(buf);
+
+		if (sendto(server_sock, buf, result, 0, (struct sockaddr *)&sin_client, sizeof(sin_client)) == -1)
+			exit_sys("sendto");
+	}
+
+	close(server_sock);
+
+	return 0;
+}
+
+char *revstr(char *str)
+{
+	size_t i, k;
+	char temp;
+
+	for (i = 0; str[i] != '\0'; ++i)
+		;
+
+	for (--i, k = 0; k < i; ++k, --i) {
+		temp = str[k];
+		str[k] = str[i];
+		str[i] = temp;
+	}
+
+	return str;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/* client.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+
+#define DEF_SERVER_NAME		"localhost"
+#define DEF_SERVER_PORT		"55555"
+#define BUFFER_SIZE			4096
+
+void exit_sys(const char *msg);
+
+/* ./client [-s server] [-p port] */
+
+int main(int argc, char *argv[])
+{
+	int client_sock;
+	struct sockaddr_in sin_client, sin_server;
+	socklen_t sin_len;
+	struct addrinfo hints = {0, AF_INET, SOCK_STREAM};
+	struct addrinfo *res;
+	int gai_result;
+	int option;
+	int s_flag, p_flag, b_flag, err_flag;
+	const char *server_name;
+	int bind_port;
+	const char *server_port;
+	char buf[BUFFER_SIZE + 1];		/* BUFFER_SIZE is enough */
+	char ntopbuf[INET_ADDRSTRLEN];
+	ssize_t result;
+	char *str;
+
+	s_flag = p_flag = b_flag = err_flag = 0;
+
+	opterr = 0;
+	while ((option = getopt(argc, argv, "s:p:b:")) != -1) {
+		switch (option) {
+			case 's':
+				s_flag = 1;
+				server_name = optarg;
+				break;
+			case 'p':
+				p_flag = 1;
+				server_port = optarg;
+				break;
+			case 'b':
+				b_flag = 1;
+				bind_port = atoi(optarg);
+				break;
+			case '?':
+				if (optopt == 's' || optopt == 'p' || optopt == 'b')
+					fprintf(stderr, "-%c option must have an argument!\n", optopt);
+				else
+					fprintf(stderr, "-%c invalid option!\n", optopt);
+				err_flag = 1;
+		}
+	}
+
+	if (err_flag)
+		exit(EXIT_FAILURE);
+
+	if (optind - argc != 0) {
+		fprintf(stderr, "too many arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if (!s_flag)
+		server_name = DEF_SERVER_NAME;
+	if (!p_flag)
+		server_port = DEF_SERVER_PORT;
+
+	if ((client_sock = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
+		exit_sys("socket");
+
+	if (b_flag) {
+		sin_client.sin_family = AF_INET;
+		sin_client.sin_port = htons(bind_port);
+		sin_client.sin_addr.s_addr = htonl(INADDR_ANY);
+
+		if (bind(client_sock, (struct sockaddr *)&sin_client, sizeof(sin_client)) == -1)
+			exit_sys("bind");
+	}
+
+	if ((gai_result = getaddrinfo(server_name, server_port, &hints, &res)) != 0) {
+		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(gai_result));
+		exit(EXIT_FAILURE);
+	}
+
+	freeaddrinfo(res);
+
+	for (;;) {
+		printf("csd>");
+		fflush(stdout);
+
+		if (fgets(buf, BUFFER_SIZE, stdin) == NULL)
+			continue;
+		if ((str = strchr(buf, '\n')) != NULL)
+			*str = '\0';
+
+		if (!strcmp(buf, "quit"))
+			break;
+
+		if (sendto(client_sock, buf, strlen(buf), 0, res->ai_addr, sizeof(struct sockaddr_in)) == -1)
+			exit_sys("send");
+
+		sin_len = sizeof(sin_server);
+		if ((result = recvfrom(client_sock, buf, BUFFER_SIZE, 0, (struct sockaddr *)&sin_server, &sin_len)) == -1)
+			exit_sys("recvfrom");
+		buf[result] = '\0';
+
+		inet_ntop(AF_INET, &sin_server.sin_addr, ntopbuf, INET_ADDRSTRLEN);
+		printf("%jd byte(s) received from server %s : %u: \"%s\"\n", (intmax_t)result, ntopbuf, (unsigned)ntohs(sin_server.sin_port), buf);
+	}
+
+	close(client_sock);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+										106. Ders 16/12/2023 - Cumartesi
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    TCP/IP ya da UDP/IP server uygulamalarında server'ın bir client'tan gelen isteği yerine getirmesi bir zaman kaybı 
+    oluşturabilmektedir. Server bir client ile uğraşırken diğer client'ların istekleri mecburen bekletilir. İşte bu durumu 
+    en aza indirmek için select, poll (ve epoll) modellerinde server bir client'ın isteğini bir thread ile yerine getirebilir. 
+    Böylece server birden fazla client'a aynı anda hizmet verebilecektir. Örneğin select modelinde bu işlem şöyle yapılabilir:
+
+    for (;;) {
+        select(...);
+        if (<belli bir sokete bilgi geldi>) {
+            <thread oluştur ve işlemi thread'e devret>
+        }
+    }
+
+    Benzer biçimde UDP server uygulamasında da işlem şöyle yapılabilir:
+
+    for (;;) {
+        recvfrom(...)
+        <thread oluştur ve işlemi thread'e devret>
+    }
+
+    Tabii burada küçük bir işlem için yeni bir thread'in yaratılıp yok edilmesi etkin bir yöntem değildir. Çünkü bilindiği gibi
+    thread'lerin yaratılıp yok edilmeleri de dikkate değer bir zaman kaybı oluşturmaktadır. Thread'ler konusunda da belirttiğimiz 
+    gibi bu tür durumlarda "thread havuzları (thread pools)" kullanılabilir. Thread havuzlarında zaten belli bir miktar thread 
+    yaratılmış ve bekler durumda (suspend durumda) tutulmaktadır. Böylece client'tan gelen isteğin bu thread'lerden biri tarafından 
+    gerçekleştirilmesi sağlanır. POSIX sistemlerinde C'den kullanılabilecek standart bir thread havuzu mekanizmasının olmadığını
+    anımsayınız. Bu nedenle böyle bir thread havuzunu programcının kendisi yazabilir ya da C için yazılmış olan bir thread havuzu
+    kütüphanesini kullanabilir. Windows sistemlerinde işletim sistemi düzeyinde thread havuzlarına ilişkin standart API fonksiyonları 
+    bulunmaktadır. C++'ta pek çok framework içerisinde (MFC gibi, Qt gibi) zaten thread havuzları sınıfsal biçimde bulunmaktadır. 
+
+    Pekiyi yoğun bir server düşünelim. Makinemizde de bir tane işlemci bulunuyor olsun. Böyle bir thread havuzunun kullanılması
+    gerçek anlamda bir fayda sağlayabilir mi? Örneğin 5 tane client'ın isteğini thread yoluyla sağlamaya çalışalım. Her client'ın 
+    isteiği için 3 quanta süresi gerekiyor olsun. İşlemler seri yapıldığında toplam 15 quanta zamanında tüm client'ların mesajları 
+    işlenmiş olacaktır. Thread'ler kullanıldığında işlemcinin çalışma kuyruğunda (run queue) 5 thread bulunacak ve bunlar 
+    zaman paylaşımlı biçimde çalışacaktır. Dolayısıyla yine bu client'ların hepsinin işlerini bitirmesi için 15 quanta süresi 
+    gerekecektir. Tabii sistemde başka proseslerin thread'leri de varsa çok thread'li çalışma toplamda bu server'ın diğer 
+    proseslere göre daha fazla işlemci zamanı kullanmasına yol açacaktır. 
+
+    Ancak makinemizde birden fazla işlemci varsa bu durumda yukarıdaki thread sistemi belirgin bir avantaj sağlayacaktır. 
+    Bu tür durumlarda işlemci sayısı kadar thread'in aynı anda çalışması sağlanabilir. Bu thread'ler farklı işlemcilerde
+    eş zamanlı bir biçimde çalışabileceği için ciddi bir hızlanma sağlanacaktır. Tabii buradaki thread'lerin aynı anda 
+    farklı işlemciler tarafından çalıştırılması gerekir. İşletim sistemleri genellikle bu ayarlamayı kendi içlerinde yapabilmektedir. 
+    Örneğin Linux sistemlerinde kullanılan güncel çizelgeleme algoritmasında her işlemci için ayrı bir çalışma kuyruğu oluşturulmajta
+    ve thread'ler bunlara dinamik bir biçimde dağıtılmaktadır. Ancak yine de bazı durumlarda thread'lerin belli işlemcilere
+    programcı tarafından ataması (processor affinity) gerekebilmektedir. 
+
+    Örneğin makinemizde 8 işlemci ya da çekirdek olsun. Bu durumda biz 8 tane thread yaratıp bu 8 thread'in farklı işlemcilerde 
+    eş zamanlı olarak kendi içlerinde seri bir biçimdeçalışmasını sağlayabiliriz. Bunun sağlanması iki biçimde yapılabilir. 
+    Birincisi her thread için yularıdaki döngü yeniden oluşturulabilir. Örneğin:
+
+    /* 1'inci thread */
+
+   for (;;) {
+        recvfrom(...)
+        <mesajı işle>
+    }
+
+    /* 2'inci thread */
+
+   for (;;) {
+        recvfrom(...)
+        <mesajı işle>
+    }
+    ...
+
+    Soket soket fonksiyonları bu bağlamda thread güvenlidir. İkinci yöntemde server aldığı mesajları bir kuyruğa yazar. 
+    Thread'ler de aynı kuyruktan mesajları alarak işleme sokar. Örneğin:
+
+    for (;;) {
+        recvfrom(...)
+        <mesajı kuyruğa yerleştir>
+    }
+    ...
+
+    /* 1'inci thread */
+
+   for (;;) {
+        <kuyruktan mesajı al işle>
+    }
+
+    /* 2'inci thread */
+
+   for (;;) {
+        <kuyruktan mesajı al işle>
+    }
+    ...
+
+    Bu tür surumlarda işlemci ya da çekirdek sayısından daha fazla thread'in oluşturulması özel durumlar dışında önemli bir 
+    fayda sağlamamaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Pekiyi client istekleri için çok işlemcili ya da çok çekirdekli bir bilgisayar yetmiyorsa ne olacak? Bu tür durumlarda 
+    işleri birden fazla server makineye dağıtmak gerekir. Client'ın birden çok server olduğunu fark etmemesi dolayısıyla bu 
+    sürecin tamamen ser tarafta otomatik hale getirilmesi uygun olur. Aynı makinenin klonundan çıkartıp sisteme eklendiğinde
+    yükü paylaşabilmesi sağlanmalıdır. Böylece "ölçeklenebilir (scalable)" bir sistem söz konusu olacaktır. Pekiyi yük bu server
+    makinelere nasıl dağıtılabilir? İşte bunun için kullanılan mekanizmaya "load balancing", bu makanizmayı sağlayan birime de
+    "load balancer" denilmektedir. 
+
+    Server Makine			Server Makine		Server Makine	   	Server Makine	    ...
+
+								     Load Balancer
+
+    Bu tür dağıtık sistemlerde client aslında "load balancer" ile bağlantı sağlar. Load balancer client'ı en az neşgul olan 
+    server'a iletir. Bugün kullanılan cloud sistemler de kendi içlerinde load balancer benzeri mekanizmalar içermektedir. 
+    Load Balencer'lar tamamen donaımsal olarak ya da tamamen yazılımsal olarak gerçekleştirilebilmektedir. Yazılımsal gerçekleştirim
+    daha esnek olabilmektedir. Ancak donanımsal herçekleştirimler bazı durumlarda daha etkin olabilmektedir. 
+
+    Donanmsal load balancer'larda client server ile bağlantı kurmak istediğinde load balancer devreye girip sanki yalnızca 
+    en az meşgul olan server sistemde varmış gibi bağlantıyı onun kabul etmesini sağlamaktadır. Yazılımsal load balancer'larda
+    load balancer bir "proxy" gibi çalışmaktadır. Client load balancer ile bağlantı sağlar. Load balancer bunu en az meşgul server'a
+    yönlendirir. Bu kez client bu server ile bağlantı kurar. Buradaki load balancer görevini yapan "proxy" programınının server
+    yüklerini sürekli izlemesi gerekmektedir. Bunun için genellikle UDP protokolü kullanılmaktadır. Yani UDP ile serer makineler
+    sürekli bir içimde kendi durumlarını proxy'ye iletirler. Proxy'de bu bilgilerden hareketle en az meşgul server'ı tespit 
+    eder. Tabii server makineler eğer devre dışı kılırsa proxy'inin bunu fark etmesi ve artık ona yönlendirme yapmaması gerekir.
+    Benzer biçimde yeni bir server makinesi sisteme eklendiğinde proxy hemen onu da sisteme otomatik oalrak dahil etmelidir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Şimdi de TCP/IP ve UDP/IP ptorolerinin ve bunun için kullanılan soket fonksiyonlatının ayrıntıları üzerinde duracağız.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    TCP için kullandığımız recv ve send fonksiyonlarının read ve write fonksiyonlarından tek farkı flags parametresidir. 
+    Biz yukarıdaki örneklerde bu parametreyi 0 geçtik. Dolayısıyla yukarıdaki örneklerde kullandığımız recv ve send fonksiyonlarının 
+    read ve write fonksiyonlarından hiçbir farkı yoktur. Pekiyi bu flag değerleri neler olabilir? İşte POSIX standartlarında 
+    recv fonksiyonundaki flag değerleri şunlardan biri ya da birden fazlası olabilir:
+
+    MSG_PEEK: Bu bayrak gelen bilginin tampondan okunacağını ancak tampondan atılmayacağını belirtmektedir. Yani biz MSG_PEEK 
+    flag değeri ile okuma yaparsak hem bilgiyi elde ederiz hem de sanki hiç okuma yapmamışız gibi bilgi netwrok tamponunda kalır. 
+    Dolayısıyla bizim thread'imiz ya da başka bir thread recv yaparsa tampondakinş okuyacaktır. Pekiyi bu bayrak hani amaçla
+    kullanılmaktadır. Bazen (çok seyrek olarak) mesajın ne olduğuna MSG_PEEK ile bakıp duruma göre onu kuyruktan almak isteyebiliriz. 
+    Eğer mesaj bizim beğenmediğimiz bir mesajsa onu almak istemeyebiliriz. Onun başka bir thread tarafından işlenmesini sağlayabiliriz. 
+
+    MSG_OOB: Out-of-band data (urgent data) denilen okumalar için kullanılmaktadır. Out-of-band data konusu ayrı bir paragrafta 
+    açıklanacaktır.
+
+    MSG_WAITALL: Bu bayrak n byte okunmak istendiğinde bu n byt'ın hepsi okunana kadar bekleme sağlamaktadır. Fakat bu durumda bir 
+    sinyal geldiğinde yine recv -1 ile geri döner ve errno EINTR ile set edilir. Yine soket kapatıldığında ya da soket üzerinde 
+    bir hata oluştuğunda fonksiyon talep edilen kadar bilgiyi okuyamamış olabilir. Biz daha önce n byte okuma yapmak için aşağıdaki 
+    gibi bir fonksiyon önermiştik:
+
+    ssize_t read_socket(int sock, char *buf, size_t len)
+    {
+        size_t left, index;
+
+        left = len;
+        index = 0;
+
+        while (left > 0) {
+            if ((result = recv(sock, buf + index, left, 0)) == -1)
+                return -1;
+            if (result == 0)
+                break;
+            index += result;
+            left -= result;
+        }
+
+        return (ssize_t) index;
+    }
+
+    İşte aslında recv fonksiyonundaki MSG_WAITALL bayrağı adreta bunu sağlamaktadır. Ancak yine de bu bayrağın bazı sistemlerde bazı 
+    problemleri vardır. Örneğin Windows sistemlerinde ve Linux sistemlerinde bu bayrakla okunmak istenen miktar network alım tamponunun
+    büyüklüğünden fazlaysa istenen kadar miktarda byte okunamayabilmektedir. Ancak bu bayrak yüksek olmayan miktarlarda okumalar 
+    için yukarıdaki fonksiyonun yerine kullanılabilmektedir.
+
+    send fonksiyonundaki POSIX bayrakları da şunlardır:
+
+    MSG_EOR: Soket türü SOCK_SEQPACKET ise kaydı sonlandırmakta kullanılır.
+
+    MSG_OOB: Out-of-band data gönderimi için kullanılmaktadır. Bu konu ayrı bir paragrafta ele alınacaktır.
+
+    MSG_NOSIGNAL: Normal olarak send ya da write işlemi yapılırken karşı taraf soketi kapatmışsa bu fonksiyonların çağrıldığı 
+    tarafta SIGPIPE sinyali oluşmaktadır. Ancak bu bayrak kullanılırsa böylesi durumlarda SIGPIPE sinyali oluşmaz, send 
+    ya da write fonksiyonu -1 ile geri döner ve errno EPIPE değeri ile set edilir. 
+
+    Linux POSIX'in bayraklarından daha fazlasını bulundurmaktadır. Örneğin recv ve send işleminde MSG_DONTWAIT bir çağrımlık 
+    "nonblocking" etki yaratmaktadır. Yani recv sırasında network tamponunda hiç bilgi yoksa recv bloke olmaz, -1 ile geri 
+    döner errno EAGAIN değeri ile set edilir. send işlemi sırasında da network tamponu dolu ise send bloke olmaz -1 ile geri 
+    döner errno yine EAGAIN değeri ile set edilir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Normal olarak connect/accept işlemi TCP'de kullanılmaktadır. Ancak UDP soketlerde de seyrek biçimde connect/accept 
+    kullanılabilir. Eğer UDP bir soket connect ile UDP server'a bağlanırsa (server da bunu accept ile kabul etmelidir) bu durumda
+    artık iki taraf recvfrom ve sendto fonksiyonlarının yerine recv ve send fonksiyonlarını kullanabilir. Tabii burada yine 
+    datagram haberleşmesi yapılmaktadır. Yalnızca her defasında gönderme ve alma işlemlerinde karşı tarafın soketine ilişkin 
+    bilgilerin belirtilmesine gerek kalmamaktadır. Bu biçimdeki connect/accept bağlantısında yine bir akış kontrolü uygulanmamaktadır. 
+
+    Aslında recv fonksiyonu yerine recvfrom fonksiyonu da kullanılabilir. Yani recvfrom fonksiyonunun son iki parametresi NULL
+    geçilirse zaten bu işlem recv ile eşdeğer olmaktadır. Örneğin aşağıdaki iki çağrı eşdeğerdir:
+
+    result = recv(sock, buf, len, flags)
+    result = recvfrom(sock, buf, len, flags, NULL, NULL)
+
+    Benzer biçimde send yerine sendto fonksiyonu da kullanılabilir. Bu durumda sendto fonksiyonunun son iki parametresi 
+    ihmal edilir. Örneğin aşağıdaki iki çağrı eşdeğerdir:
+
+    result = send(sock, buf, len, flags)
+    result = sendto(sock, buf, len, flags, any_value, any_value);
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Biz şimdiye kadar client ile server programlar arasında ciddi bir mesaj alışverişi yapmadık. Verdiğimiz örneklerde client
+    program server programa bir yazı iletiyordu. Server program da client'a bu yazıyı ters çevirip gönderiyordu.Bu çok basit 
+    bir mesajlaşma işlemidir. Halbuki gerçek client-server uygulamalarında mesajlaşmalar çok daha çeşitli ve ayrıntılıdır. 
+    Gerçek uygulamalarda client program server programdan çok çeşitli seyleri yapmasını isteyebilir. Server'da client'ın isteğine
+    uygun bir biçimde yanıtları iletir. Örneğin dört işlem yapan bir server program olsun. Client iki operand'ı server'a gönderip 
+    ondan dört işlemden birini yapmasını istesin. Bu durumda client'ın server'a gönderdiği mesajlar fazlalaşmaktadır. Örneğin
+
+    ADD op1 op2
+    SUB op1 op2
+    MUL op1 op2
+    DIV op1 op2
+
+    Bir char programında client server'dan pek çok isteyebilir. Server da client'a çok çeşitli bilgiler iletebilir. Yani bu 
+    tür uygulamalarda mesajın bir içeriği ve parametreleri vardır. 
+
+    Pekiyi mesajlar karşı tarafa hangi formatta iletilecektir? İşte bunun için binaet ve text olmak üzere iki mesajlaşma 
+    tekniği kullanılmaktadır. 
+
+    Binary mesajlaşmadakabaca her iki taraf birbirlerine bir yapı nesnesinin içeriğini binay biçimde gönderir. Karşı taraf 
+    da bu yapı nesnesini alarak işlemini yapar. Ancak farklı mesajlarda farklı yapılar kullanılacağı için mesajın başında mesajın 
+    türünü ve uzunluğunu belirten ortak bir başlık kısmı bulundurulur. Bunun için tipik olarak şöyle bir yol izlenir: Mesajı 
+    gönderecek taraf önce mesajın uzunluğunu sonra da mesajın ne mesajı olduğunu belirten mesaj kodunu (numarasını) sonra da mesajın
+    içeriğini karşı ataarafa yollar. Bu işlemi "pseudo code" olarak aşağıdaki gibi ifade edebiliriz: 
+
+    typedef struct tagMSG_HEADER {
+        int len;
+        int type;
+    } MSG_HEADER;
+
+    typedef struct tagMSG_XXX {
+        /* message info */
+    } MSG_XXX;
+
+    typedef struct tagMSG_YYY {
+        /* message info */
+    } MSG_YYY;
+
+    Örneğin MSG_XXX mesajı karşı tarafa gönderilecek olsun:
+
+    MSG_HEADER header;
+    MSG_XXX msg_xxx;
+
+    header.len = sizeof(MSG_XXX);
+    header.type = MSG_TYPE_XXX;
+    send(sock, &header, sizeof(MSG_HEADER), 0);
+
+    <msg_xxx'in içi dolduruluyor>
+
+    send(sock, &msg_xxx, sizeof(MSG_XXX), 0);
+
+    Mesajı alan taraf da önce mesajın uzunluğunu ve kodunu elde eder, sonra da türünü elde eder ve soketten o uzunlukta okuma 
+    yapar. Örneğin:
+
+    MSG_HEADER header;
+    MSG_XXX msg_xxx;
+    ...
+
+    recv(sock, &header, sizeof(MSG_HEADER), MSG_WAITALL);
+
+    switch (header.type) {
+        case MSG_TYPE_XXX:
+            recv(sock, &msg_xxx, sizeof(header.len), MSG_WAITALL);
+            process_msg_xxx(&msg_xxx);
+            break;
+        ...
+    }
+
+    Burada aklınıza şöyle bir soru gelebilir: Okuyan taraf zaten mesajın kodunu (numarasını) elde edince o mesajın kaç byte 
+    uzunlukta olduğunu bilmeyecek mi? Bu durumda mesajın uzunluğunun karşı tarafa iletilmesine ne gerek var? İşte mesajlar 
+    sabit uzunlukta olmayabilir. Örneğin mesajın içerisinde bir metin bulunabilir. Bu durumda mesajın gerçek uzunluğu bu metnin
+    uzunluğuna bağlı olarak değişebilir. Genel bir çözüm için mesajın uzunluğunn da karşı tarafa iletilmesi gerekmektedir. 
+
+    Yukarıdaki gibi binary tabanlı mesajlaşma daha hızlı ve etkin olma eğiliminde ise de pratikte daha çok text tabalı mesajlaşmalar
+    kullanılmaktadır. Çünkü text tabalı mesajlaşmalar insanlar tarafından yazısal biçimde de oluşturulabilmektedir. IP protokol 
+    ailesinin uygulama katmanındaki PO3 gibi, TELNET gibi, FTP gibi protokolleri text tabanlı mesajlaşmayı kullanmaktadır. 
+
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
 
@@ -43863,6 +44576,9 @@ void exit_sys(const char *msg)
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
 
