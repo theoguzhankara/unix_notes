@@ -2820,7 +2820,7 @@ void exit_sys(const char *msg)
     #define st_ctime st_ctim.tv_sec
     };
 
-    Yapının st_dev elemanı dosyanın içinde bulunduğu aygıtın aygıt numarsını belirtir. Genellikle programcılar bu bilgiye gereksinim duymazlar. dev_t 
+    Yapının st_dev elemanı dosyanın içinde bulunduğu aygıtın aygıt numarasını belirtir. Genellikle programcılar bu bilgiye gereksinim duymazlar. dev_t 
     türü herhangi bir tamsayı türü biçiminde typedef edilebilecek bir tür ismidir. 
 
     stat fonksiyonları dosya bilgilerini aslında diskten elde etmektedir. UNIX/Linux sistemlerinde kullanılan dosya sistemlerinin disk organşizasyonunda 
@@ -42221,7 +42221,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     IPv6 ile birlikte yeni gelen diğer bir fonksiyon da getaddrinfo isimli fonksiyondur. Bu fonksiyon aslında inet_addr ve 
     gethosybyname fonksiyonlarının IPv6'yı da içerecek biçimde genişletilmiş bir biçimidir. Yani getaddrinfo hem noktalı 
-    desimal formatı nümerik adrese dönüşürür hem de eğer geçersiz bir noktalı desimal format söz konusuysa (bu durumda server 
+    desimal formatı nümerik adrese dönüştürür hem de eğer geçersiz bir noktalı desimal format söz konusuysa (bu durumda server 
     isimsel olarak girilmiş olabilir) DNS işlemi yaparak ilgili host'un IP adresini elde eder. Maalesef fonksiyon biraz karışık 
     tasarlanmıştır. Fonksiyonun prototipi şöyledir:
 
@@ -42234,10 +42234,10 @@ void exit_sys(const char *msg)
     girilmelidir. Fonksiyon bu port numarasını htons yaparak "big endian" formata dönüştürüp bize verecektir. Bu parametreye
     aynı zamanda IP ailesinin uygulama katmanına ilişkin spesifik bir protokolün ismi de girilebilmektedir (Örneğin "http" gibi, 
     "ftp" gibi). Bu durumda bu protokollerin port numaraları bilindiği için sanki o port numaraları girilmiş gibi işlem yapılır.
-    Eğer bu parametreye NULL girilirse bize port olarak 0 verilecektir. Port numarsını biz yerleştiriyorsak bu parametreye NULL 
+    Eğer bu parametreye NULL girilirse bize port olarak 0 verilecektir. Port numarasını biz yerleştiriyorsak bu parametreye NULL 
     girebiliriz. Fonksiyonun üçüncü parametresi nasıl bir adres istediğimizi anlatan filtreleme seçeneklerini belirtir. Bu parametre 
     addrinfo isimli bir yapı türündendir. Bu yapının yalnızca ilk dört elemanı programcı tarafından girilebilmektedir. Ancak POSIX 
-    standartları bu yapının elemanlarının sıfırlanmasını öngörmektedir (buradaki sıfırlanmak terimi normal türdeki elemanalr için 
+    standartları bu yapının elemanlarının sıfırlanmasını öngörmektedir (buradaki sıfırlanmak terimi normal türdeki elemanlar için 
     0 değerini, göstericiler için NULL adres değerini belirtmektedir). addrinfo yapısı şöyledir:
 
     struct addrinfo {
@@ -42257,12 +42257,12 @@ void exit_sys(const char *msg)
     Fonksiyonun ayrıntılı açıklaması için dokümanlara başvurunuz. Bu parametre NULL adres de girilebilir. Bu durumda ilgili host'a 
     ilişkin tüm adresler elde edilir. 
 
-    getaddrinfo fonksiyonun son parametresine bir bağlı listenin ilk elemanını gösteren adres yerleştirilmektedir. Buradaki 
-    bağlı listenin bağ elemanı sturct addrinfo yapısının ai_next elemanıdır. Bu bağlı listenin boşaltımı freeaddrinfo fonksiyonu
+    getaddrinfo fonksiyonunun son parametresine bir bağlı listenin ilk elemanını gösteren adres yerleştirilmektedir. Buradaki 
+    bağlı listenin bağ elemanı struct addrinfo yapısının ai_next elemanıdır. Bu bağlı listenin boşaltımı freeaddrinfo fonksiyonu
     tarafından yapılmaktadır. 
 
-    getaddrinfo fonksiyonu başarı durumunda 0 değerine başarısızlık durumunda error koduna geri döner. Bu error kodları klasik 
-    errno değerlerinden farklı olduğu için strerror fonksiyonuyla değil gai_strerror fonksiyonuyla yazıya dönüştürülmelidir. 
+    getaddrinfo fonksiyonu başarı durumunda 0 değerine, başarısızlık durumunda error koduna geri döner. Bu error kodları klasik 
+    errno değerlerinden farklı olduğu için strerror fonksiyonuyla değil, gai_strerror fonksiyonuyla yazıya dönüştürülmelidir. 
 
     Bağlı listenin düğümlerini free hale getirmek için freeaddrinfo fonksiyonu kullanılmaktadır. Fonksiyonun prototipi şöyledir:
 
@@ -42277,11 +42277,11 @@ void exit_sys(const char *msg)
 
     const char *gai_strerror(int ecode);
 
-    getaddrinfo fonksiyonunun client programda tipi kullanımı şöyledir:
+    getaddrinfo fonksiyonunun client programda tipik kullanımı aşağıda verilmiştir.
 
-    getaadrinfo fonksiyonu sayesinde client program için önceki örneklerde yaptığımız işlemleri oldukça baitleştirmiş olmaktayız. 
+    getaddrinfo fonksiyonu sayesinde client program için önceki örneklerde yaptığımız işlemleri oldukça basitleştirmiş olmaktayız. 
     Biz daha önce client programda önce inet_addr fonksiyonu ya da inet_pton fonksiyonu ile server adresinin noktalı formatta olup
-    olmadığını anlayıp duruma göre gethostbyname fonksiyonu ile DNS işlemi yapmıştık. Oysa getaadrinfo fonksiyonu bu iki işlemi 
+    olmadığını anlayıp duruma göre gethostbyname fonksiyonu ile DNS işlemi yapmıştık. Oysa getaddrinfo fonksiyonu bu iki işlemi 
     birlikte yapmaktadır. Bu fonksiyon bize connect için gereken sockaddr_in ya da sockadd_in6 yapı nesnelerini kendisi oluşturup
     sockaddr türünden bir adres gibi vermektedir. Client programın bu fonksiyonu kullanarak bağlantı sağlaması aşağıdaki gibi 
     bir kalıpla sağlanabilir:
@@ -42304,16 +42304,16 @@ void exit_sys(const char *msg)
     freeaddrinfo(res);
 
     Burada server_name noktalı desimal formattaki server IP numarasını ya da server ismini belirtmektedir. server_port ise yazısal
-    biçimde port numarısını belirtmektedir. sockaddr yapı nesnesinin oluşturulması için gereken bilgiler ise hints parametresinde 
-    girilmiştir. Fonksiyon DNS işlemi sonucunda elde edilen host bilgilerini bir bağlı liste biçimnde vermektedir. Bu örnek kodda
+    biçimde port numarasını belirtmektedir. sockaddr yapı nesnesinin oluşturulması için gereken bilgiler ise hints parametresinde 
+    girilmiştir. Fonksiyon DNS işlemi sonucunda elde edilen host bilgilerini bir bağlı liste biçiminde vermektedir. Bu örnek kodda
     bağlı listenin her elemanı connect fonksiyonuna sokulmuş ve bağlantı sağlanmaya çalışılmıştır. Örneğimizde biz hints parametresine
     AF_INET değerini girdik. Bu durumda DNS işlemi yapılırken fonksiyon yalnızca IPv4 adreslerini elde edecektir. IP bağlantısında 
-    bir taraf IPv4 diğer taraf IPv6 da olabilmektedir. hints parametresine eğer biz AF_UNSPEC geçseydik fonksiyon bize hem IPv4 
-    hem de IPv6 adreslerini verecektir. Örnek kodda elde edilen adreslerden hiçbiri ile bağlantı sağlanamamaışsa program 
+    bir taraf IPv4, diğer taraf IPv6 da olabilmektedir. hints parametresine eğer biz AF_UNSPEC geçseydik fonksiyon bize hem IPv4 
+    hem de IPv6 adreslerini verecektir. Örnek kodda elde edilen adreslerden hiçbiri ile bağlantı sağlanamamışsa program 
     sonlandırılmıştır. 
 
-    getaddrinfo fonksiyonun tersini yapan getnameinfo isminde bir fonksiyon da sonraları soket kütüphanesine eklenmiştir. 
-    getnameinfo aslında inet_ntop, getserverbyname (biz görmekdik) fonksiyonlarının bileşimi gibidir. Biz aşağıdaki
+    getaddrinfo fonksiyonunun tersini yapan getnameinfo isminde bir fonksiyon da sonraları soket kütüphanesine eklenmiştir. 
+    getnameinfo aslında inet_ntop, getserverbyname (biz görmedik) fonksiyonlarının birleşimi gibidir. Biz aşağıdaki
     örnekte bu fonksiyonu kullanmayacağız. 
 
     #include <netdb.h>
@@ -44562,9 +44562,9 @@ void exit_sys(const char *msg)
     sabit uzunlukta olmayabilir. Örneğin mesajın içerisinde bir metin bulunabilir. Bu durumda mesajın gerçek uzunluğu bu metnin
     uzunluğuna bağlı olarak değişebilir. Genel bir çözüm için mesajın uzunluğunn da karşı tarafa iletilmesi gerekmektedir. 
 
-    Yukarıdaki gibi binary tabanlı mesajlaşma daha hızlı ve etkin olma eğiliminde ise de pratikte daha çok text tabalı mesajlaşmalar
-    kullanılmaktadır. Çünkü text tabalı mesajlaşmalar insanlar tarafından yazısal biçimde de oluşturulabilmektedir. IP protokol 
-    ailesinin uygulama katmanındaki PO3 gibi, TELNET gibi, FTP gibi protokolleri text tabanlı mesajlaşmayı kullanmaktadır. 
+    Yukarıdaki gibi binary tabanlı mesajlaşma daha hızlı ve etkin olma eğiliminde ise de pratikte daha çok text tabanlı mesajlaşmalar
+    kullanılmaktadır. Çünkü text tabanlı mesajlaşmalar insanlar tarafından yazısal biçimde de oluşturulabilmektedir. IP protokol 
+    ailesinin uygulama katmanındaki PO3 gibi, Telnet gibi, FTP gibi protokolleri text tabanlı mesajlaşmayı kullanmaktadır. 
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
