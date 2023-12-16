@@ -10963,8 +10963,9 @@ void exit_sys(const char *msg)
     Pekiyi system fonksiyonunu nasıl yazabiliriz? Aşağıda buna bir örnek verilmiştir. Ancak aşağıdaki örnekte bazı noktalar 
     henüz kursumuzda o konu anlatılmadığı için ihmal edilmiştir. Bu noktalar şunlardır:
 
-    - waitpid fonksiyonu sinyalle kesilirse yeniden çalıştırılması gerekir
-    - Üst prosesin işlemler sırasında SIGCHLD sinyalini, SIGINT ve SIGQUIT sinyallerini bloke etmesi gerekmektedir. 
+    - waitpid fonksiyonu sinyalle kesilirse yeniden çalıştırılması gerekir.
+    - Üst prosesin işlemler sırasında SIGCHLD sinyalini, SIGINT ve SIGQUIT sinyallerini bloke etmesi gerekmektedir.
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -30313,6 +30314,7 @@ void thread_proc2()
     SIGXCPU
     SIGXFSZ
     SIGXRES
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -42325,7 +42327,7 @@ void exit_sys(const char *msg)
     adresi ve uzunluğu, port numarasına ilişkin yazının (servis ismi) yerleştirileceği dizinin adresi ve uzunluğudur. Son parametre 
     0 geçilebilir. Maksimum host ismi NI_MAXHOST ile maksimum servis ismi ise NI_MAXSERV ile belirtilmiştir. 
 
-    Yukarıda yazığımız server ve client programlarının yeni fonksiyonlarla modern yazım biçimini de aşağıda veriyoruz. Bu 
+    Yukarıda yazdığımız server ve client programlarının yeni fonksiyonlarla modern yazım biçimini de aşağıda veriyoruz. Bu 
     server ve client programları birer şablon olarak kullanabilirsiniz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -42583,9 +42585,9 @@ void exit_sys(const char *msg)
     Fonksiyonun birinci parametresi soket betimleyicisidir. İkinci parametre duruma göre karşı tarafın bilgilerinin yerleştirileceği 
     sockaddr_in ya da sockaddr_in6 yapı nesnesinin adresini alır. Son parametre ikinci parametredeki yapının uzunluğunu belirtmektedir. 
     Eğer buraya az bir uzunluk girilirse kırpma yapılır ve gerçek uzunluk verdiğimiz adresteki nesneye yerleştirilir. Fonksiyon başarı 
-    durumunda 0 değerine başarısızlık durumunda -1 değerine geri dönmektedir. 
+    durumunda 0 değerine, başarısızlık durumunda -1 değerine geri dönmektedir. 
 
-    getepername fonksiyonunun ters işlemini getsockname fonksiyonu yapmaktadır. Bu fonksiyon kendi bağlı soketimizin ip adresini ve 
+    getpeername fonksiyonunun ters işlemini getsockname fonksiyonu yapmaktadır. Bu fonksiyon kendi bağlı soketimizin ip adresini ve 
     port numarasını elde etmek için kullanılır. Genellikle bu fonksiyona gereksinim duyulmamaktadır. 
 
     #include <sys/socket.h>
@@ -42639,7 +42641,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Multi-client programlar için en basit ancak en verimsiz yöntemmodel "fork modeli"dir. Eğer az sayıda client söz konusu ise 
+    Multi-client programlar için en basit ancak en verimsiz yöntem/model "fork modeli"dir. Eğer az sayıda client söz konusu ise 
     bu model basitliğinden dolayı tercih edilebilir. Bu modelde her accept işleminde bir fork yapılır. Alt proses bağlanılan
     client ile konuşur. Ancak her client için yeni bir prosesin yaratılması aslında verimsiz bir yöntemdir. Tabii az client
     söz konusu ise basitliğinden dolayı bu yöntem yine de kullanılabilir. 
@@ -42810,6 +42812,8 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
+/* server.c */
+
 /* client.c */
 
 #include <stdio.h>
@@ -42827,7 +42831,7 @@ void exit_sys(const char *msg)
 
 void exit_sys(const char *msg);
 
-/* ./client [-s server] [-p port] */
+/* ./client [-s server] [-p server_port] [-b client_port] */
 
 int main(int argc, char *argv[])
 {
@@ -42947,6 +42951,8 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
+/* client.c */
+
 /*--------------------------------------------------------------------------------------------------------------------------
     Thread modeli fork modeline benzemektedir. Ancak thread yaratmak proses yaratmaktan daha kolay olduğu için proses modeline
     göre daha az maliyetlidir. Bu modelde her accept işleminde bir proses değil thread yaratılmaktadır. Tabii thread'ler aynı 
@@ -42954,7 +42960,7 @@ void exit_sys(const char *msg)
 
     Aşağıdaki örnekte fork işlemi ile proses yaratmak yerine pthread_create fonksiyonu ile thread yaratılmıştır. Yaratılan 
     thread'e client bilgileri CLIENT_INFO yapısı eşliğinde geçirilmiştir. CLIENT_INFO yapı nesnesi dinamik olarak tahsis edilmiş 
-    thread fonskiyonu içerisinde free işlemi uygulanmıştır. UNUIX/Linux sistemlerinde nasıl "zombie proses" oluyorsa "zombie
+    thread fonksiyonu içerisinde free işlemi uygulanmıştır. UNUIX/Linux sistemlerinde nasıl "zombie proses" oluyorsa "zombie
     thread" de oluşabilmektedir. Zombie thread oluşumunu engellemek için örneğimizde thread yaratılır yaratılmaz pthread_detach
     fonksiyonu ile thread detach moda sokulmuştur. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -43133,6 +43139,8 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
+/* server.c */
+
 /* client.c */
 
 #include <stdio.h>
@@ -43150,7 +43158,7 @@ void exit_sys(const char *msg)
 
 void exit_sys(const char *msg);
 
-/* ./client [-s server] [-p port] */
+/* ./client [-s server] [-p server_port] [-b client_port] */
 
 int main(int argc, char *argv[])
 {
@@ -43269,6 +43277,8 @@ void exit_sys(const char *msg)
 
 	exit(EXIT_FAILURE);
 }
+
+/* client.c */
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Multi-client server uygulamaları için diğer model de select modelidir. Biz daha önce bu modeli zaten görmüştük ve borular
@@ -43460,6 +43470,8 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
+/* server.c */
+
 /* client.c */
 
 #include <stdio.h>
@@ -43477,7 +43489,7 @@ void exit_sys(const char *msg)
 
 void exit_sys(const char *msg);
 
-/* ./client [-s server] [-p port] */
+/* ./client [-s server] [-p server_port] [-b client_port] */
 
 int main(int argc, char *argv[])
 {
@@ -43596,6 +43608,8 @@ void exit_sys(const char *msg)
 
 	exit(EXIT_FAILURE);
 }
+
+/* client.c */
 
 /*--------------------------------------------------------------------------------------------------------------------------
     poll modeli de select modeline benzer biçimde uygulanabilir. Bu modelde dikkat edilmesi gereken noktalar şunlardır:
@@ -43785,6 +43799,8 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
+/* server.c */
+
 /* client.c */
 
 #include <stdio.h>
@@ -43802,7 +43818,7 @@ void exit_sys(const char *msg)
 
 void exit_sys(const char *msg);
 
-/* ./client [-s server] [-p port] */
+/* ./client [-s server] [-p server_port] [-b client_port] */
 
 int main(int argc, char *argv[])
 {
@@ -43922,8 +43938,10 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
+/* client.c */
+
 /*--------------------------------------------------------------------------------------------------------------------------
-											105. Ders 10/12/2023 - Pazar
+												105. Ders 10/12/2023 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -43948,9 +43966,9 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    TCP'de accept uygulayan tarafa "server" connect uygulayana tarafa "client" denilmektedir. Ancak UDP bağlantısız bir protokol
+    TCP'de accept uygulayan tarafa "server", connect uygulayana tarafa "client" denilmektedir. Ancak UDP bağlantısız bir protokol
     olduğu için "client" ve "server" kavramları bu protokolde tam oturmamaktadır. Ancak yine de genellikle hizmet alan tarafa
-    "client" hizmet veren tarafa "server" denilmektedir. UDP'de client daha çok gönderim yapan, server ise okuma yapan taraftırç
+    "client", hizmet veren tarafa "server" denilmektedir. UDP'de client daha çok gönderim yapan, server ise okuma yapan taraftır.
 
     UDP özellikle periyodik kısa bilgilerin gönderildiği ve alındığı durumlarda hız nedeniyle tercih edilmektedir. UDP haberleşmesinde 
     bilgiyi alan tarafın (server) bilgi kaçırabilmesi söz konusu olabileceğinden dolayı böyle kaçırmalarda sistemde önemli bir
@@ -43983,6 +44001,7 @@ void exit_sys(const char *msg)
     de özetleyebiliriz:
 
     socket (SOCK_DGRAM) ---> bind ---> recfrom/sendto ---> close
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -43997,6 +44016,7 @@ void exit_sys(const char *msg)
     Bu adımları fonksiyon isimleriyle şöyle özetleyebiliriz:
 
     socket (SOCK_DGRAM) ---> bind (isteğe bağlı) ---> gethostbyname/getaddrinfo (isteğe bağlı) ---> sendto/recvfrom ---> close
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -44152,6 +44172,8 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
+/* server.c */
+
 /* client.c */
 
 #include <stdio.h>
@@ -44170,7 +44192,7 @@ void exit_sys(const char *msg)
 
 void exit_sys(const char *msg);
 
-/* ./client [-s server] [-p port] */
+/* ./client [-s server] [-p server_port] [-b client_port] */
 
 int main(int argc, char *argv[])
 {
@@ -44284,8 +44306,10 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
+/* client.c */
+
 /*--------------------------------------------------------------------------------------------------------------------------
-										106. Ders 16/12/2023 - Cumartesi
+												106. Ders 16/12/2023 - Cumartesi
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
