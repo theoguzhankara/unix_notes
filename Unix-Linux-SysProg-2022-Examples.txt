@@ -33117,7 +33117,8 @@ int main(void)
 	if (sigsetjmp(g_jbuf, 1) == 1) {
 		printf("SIGSEGV occures, but we continue...\n");		/* UNSAFE */
 		/* ... */
-	} else {
+	}
+	else {
 		*str = 'x';
 		/* ... */
 	}
@@ -42195,7 +42196,7 @@ void exit_sys(const char *msg)
 
     char ntopbuf[INET_ADDRSTRLEN];
     ...
-    printf("connected client ===> %s : %u\n", inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN), (unsigned)ntohs(sin_client.sin_port));
+    printf("connected client ===> %s:%u\n", inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN), (unsigned)ntohs(sin_client.sin_port));
 
     inet_ntoa işleminin tersinin inet_addr ile yapıldığını belirtmiştik. İşte inet_addr fonksiyonunun yerine hem IPv4 hem de IPv6 ile çalışan 
     inet_pton fonksiyonu kullanılabilmektedir:
@@ -42410,7 +42411,7 @@ int main(int argc, char *argv[])
 	if ((client_sock = accept(server_sock, (struct sockaddr *)&sin_client, &sin_len)) == -1)
 		exit_sys("accept");
 
-	printf("connected client ===> %s : %u\n", inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN), (unsigned)ntohs(sin_client.sin_port));
+	printf("connected client ===> %s:%u\n", inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN), (unsigned)ntohs(sin_client.sin_port));
 
 	for (;;) {
 		if ((result = recv(client_sock, buf, BUFFER_SIZE, 0)) == -1)
@@ -42628,7 +42629,7 @@ void exit_sys(const char *msg)
         if ((client_sock = accept(server_sock, (struct sockaddr *)&sin_client, &sin_len)) == -1)
             exit_sys("accept");
 
-        printf("connected client ===> %s : %u\n", inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN), 
+        printf("connected client ===> %s:%u\n", inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN), 
                 (unsigned)ntohs(sin_client.sin_port));
     }
 
@@ -42647,7 +42648,7 @@ void exit_sys(const char *msg)
     söz konusu ise basitliğinden dolayı bu yöntem yine de kullanılabilir. 
 
     Aşağıda fork modeliyle multi-client bir server örneği verilmiştir. Örnekte client programlar server ile bağlanıp ona yazı 
-    göndermekte server program da bu yazıyı ters çevirerek client programlara geri yollamaktadır. Örneği test etmek için 
+    göndermekte, server program da bu yazıyı ters çevirerek client programlara geri yollamaktadır. Örneği test etmek için 
     birden fazla terminal penceresi açmalısınız. Bu programda fork işlemi yapıldığında üst prosesin o andaki bellek alanının 
     alt prosese kopyalandığına dolayısıyla alt prosesin son accept yapılan client sokete sahip olduğuna dikkat ediniz. 
     Örneğimizde server program sonsuz döngüde çalışmaktadır. Server programı sonlandırmak için Ctrl+c tuşlarıyla ona SIGINT
@@ -42709,7 +42710,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -42742,7 +42743,7 @@ int main(int argc, char *argv[])
 		if ((client_sock = accept(server_sock, (struct sockaddr *)&sin_client, &sin_len)) == -1)
 			exit_sys("accept");
 
-		printf("connected client ===> %s : %u\n", inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN), (unsigned)ntohs(sin_client.sin_port));
+		printf("connected client ===> %s:%u\n", inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN), (unsigned)ntohs(sin_client.sin_port));
 
 		if ((pid = fork()) == -1)
 			exit_sys("fork");
@@ -42776,13 +42777,13 @@ void client_proc(int sock, struct sockaddr_in *sin)
 		buf[result] = '\0';
 		if (!strcmp(buf, "quit"))
 			break;
-		printf("%jd byte(s) received from %s : %u: \"%s\"\n", (intmax_t)result, ntopbuf, port, buf);
+		printf("%jd byte(s) received from %s:%u: \"%s\"\n", (intmax_t)result, ntopbuf, port, buf);
 		revstr(buf);
 		if (send(sock, buf, result, 0) == -1)
 			exit_sys("send");
 	}
 
-	printf("client disconnected %s : %u\n", ntopbuf, port);
+	printf("client disconnected %s:%u\n", ntopbuf, port);
 
 	shutdown(sock, SHUT_RDWR);
 	close(sock);
@@ -42879,7 +42880,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -42955,13 +42956,13 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Thread modeli fork modeline benzemektedir. Ancak thread yaratmak proses yaratmaktan daha kolay olduğu için proses modeline
-    göre daha az maliyetlidir. Bu modelde her accept işleminde bir proses değil thread yaratılmaktadır. Tabii thread'ler aynı 
+    göre daha az maliyetlidir. Bu modelde her accept işleminde bir proses değil, thread yaratılmaktadır. Tabii thread'ler aynı 
     adres alanını kullandığı için onlara gerekli parametreler uygun biçimde geçirilmelidir. 
 
     Aşağıdaki örnekte fork işlemi ile proses yaratmak yerine pthread_create fonksiyonu ile thread yaratılmıştır. Yaratılan 
     thread'e client bilgileri CLIENT_INFO yapısı eşliğinde geçirilmiştir. CLIENT_INFO yapı nesnesi dinamik olarak tahsis edilmiş 
-    thread fonksiyonu içerisinde free işlemi uygulanmıştır. UNUIX/Linux sistemlerinde nasıl "zombie proses" oluyorsa "zombie
-    thread" de oluşabilmektedir. Zombie thread oluşumunu engellemek için örneğimizde thread yaratılır yaratılmaz pthread_detach
+    ve thread fonksiyonu içerisinde free işlemi uygulanmıştır. UNIX/Linux sistemlerinde nasıl "zombie proses" oluyorsa "zombie
+    thread" de oluşabilmektedir. Örneğimizde zombie thread oluşumunu engellemek için thread yaratılır yaratılmaz pthread_detach
     fonksiyonu ile thread detach moda sokulmuştur. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -43026,7 +43027,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -43054,10 +43055,10 @@ int main(int argc, char *argv[])
 		if ((client_sock = accept(server_sock, (struct sockaddr *)&sin_client, &sin_len)) == -1)
 			exit_sys("accept");
 
-		printf("connected client ===> %s : %u\n", inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN), (unsigned)ntohs(sin_client.sin_port));
+		printf("connected client ===> %s:%u\n", inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN), (unsigned)ntohs(sin_client.sin_port));
 
 		if ((ci = (CLIENT_INFO *)malloc(sizeof(CLIENT_INFO))) == NULL) {
-			fprintf(stderr, "cannot allocate memory!..\n");
+			fprintf(stderr, "cannot allocate memory!...\n");
 			exit(EXIT_FAILURE);
 		}
 
@@ -43099,13 +43100,13 @@ void *client_thread_proc(void *param)
 		buf[result] = '\0';
 		if (!strcmp(buf, "quit"))
 			break;
-		printf("%jd byte(s) received from %s : %u: \"%s\"\n", (intmax_t)result, ntopbuf, port, buf);
+		printf("%jd byte(s) received from %s:%u: \"%s\"\n", (intmax_t)result, ntopbuf, port, buf);
 		revstr(buf);
 		if (send(ci->sock, buf, result, 0) == -1)
 			exit_sys("send");
 	}
 
-	printf("client disconnected %s : %u\n", ntopbuf, port);
+	printf("client disconnected %s:%u\n", ntopbuf, port);
 
 	shutdown(ci->sock, SHUT_RDWR);
 	close(ci->sock);
@@ -43206,7 +43207,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -43294,15 +43295,15 @@ void exit_sys(const char *msg)
     dahil etmemiz gerekir. 
 
     3) Karşı taraf soketi kapattığında bu durum recv fonksiyonunda anlaşılmaktadır. Dolayısıyla programcının soketi kapatıp ilgili 
-    betimleyiciyi select fonksiyhonunun okuma kümesinden çıkarması da gerekir. 
+    betimleyiciyi select fonksiyonunun okuma kümesinden çıkarması da gerekir. 
 
     Aşağıda select modeli ile bir TCP server örneği verilmiştir. Bu örnekte select fonksiyonunun blokesi çözüldüğünde
     önce betimleyicinin dinleme soketine ilişkin betimleyici olup olmadığına bakılmıştır. Eğer betimleyici dinleme soketine
-    ilişkince accept işlemi uygulanmıştır. Değilse recv işlemi uygulanmıştır. Karşı taraf soketi kapattığında recv fonksiyonu 
+    ilişkinse accept işlemi uygulanmıştır. Değilse recv işlemi uygulanmıştır. Karşı taraf soketi kapattığında recv fonksiyonu 
     0 ile geri dönecektir. Bu durumda ilgili soket okuma kümesinden çıkartılmıştır. Örneğimizdeki server kodunda iç içe 
     birkaç if deyimi kullanılmıştır. Kod aslında fonksiyonlar yoluyla daha anlaşılabilir biçimde de düzenlenebilirdi. 
 
-    Server program için diğer bir taarım şöyle de olabilirdi: Bağlanılan her client için yine bir CLIENT_INFO yapısı tahsis 
+    Server program için diğer bir tasarım şöyle de olabilirdi: Bağlanan her client için yine bir CLIENT_INFO yapısı tahsis 
     edilebilirdi. Client bilgileri bu yapının içinde saklanabilirdi. Sonra da dosya betimleyicisinden hareketle CLIENT_INFO 
     nesnesine hızlı bir biçimde erişmek için "hash tablosu" oluşturulabilirdi. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -43364,7 +43365,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -43412,7 +43413,7 @@ int main(int argc, char *argv[])
 				}
 				else {
 					sinaddr_len = sizeof(sin_client);
-					if (getpeername(fd, (struct sockaddr *)&sin_client,&sinaddr_len) == -1)
+					if (getpeername(fd, (struct sockaddr *)&sin_client, &sinaddr_len) == -1)
 						exit_sys("getpeername");
 					inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN);
 
@@ -43423,7 +43424,7 @@ int main(int argc, char *argv[])
 						if (!strcmp(buf, "quit"))
 							goto DISCONNECT;
 
-						printf("%jd byte(s) received from %s : %u: \"%s\"\n", (intmax_t)result, ntopbuf, (unsigned)ntohs(sin_client.sin_port), buf);
+						printf("%jd byte(s) received from %s:%u: \"%s\"\n", (intmax_t)result, ntopbuf, (unsigned)ntohs(sin_client.sin_port), buf);
 
 						revstr(buf);
 						if (send(fd, buf, result, 0) == -1)
@@ -43537,7 +43538,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -43614,17 +43615,21 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     poll modeli de select modeline benzer biçimde uygulanabilir. Bu modelde dikkat edilmesi gereken noktalar şunlardır:
 
-    1) İşin başında yine dinleme soketi (pasif soket) pollfd dizisi içerisine yerleştirilmiş olmalıdır. 
-    2) pollfd yapısının izlenecek olayı belirten events elemanı POLLIN olarak girilebilir. 
+    1) İşin başında yine dinleme soketi (pasif soket) pollfd dizisi içerisine yerleştirilmiş olmalıdır.
+
+    2) pollfd yapısının izlenecek olayı belirten events elemanı POLLIN olarak girilebilir.
+
     3) poll geri döndüğünde pollfd dizisinin revents elemanlarına bakılmalı ve bu elemanlar üzerinde POLLIN olayının 
-    gerçekleşip gerçekleşmediği kontrol edilmelidir. 
+    gerçekleşip gerçekleşmediği kontrol edilmelidir.
+
     4) Yeni bağlantı isteği geldiğinde dinleme soketi üzerinde POLLIN olayı oluşmaktadır. Bu durumda programcının accept işlemini
-    yapması gerekir. Yeni accept bağlantı kurulan client'ın pollfd bilfgileri yine diziye eklenmelidir. 
+    yapması gerekir. Yeni bağlantı kurulan client'ın pollfd bilgileri yine diziye eklenmelidir.
+
     5) Karşı taraf soketi kapattığında yine POLLIN olayı gerçekleşmektedir. Bu durumda recv fonksiyonu ile 0 byte okunursa 
-    soketin kapatıldığı anlaşılmaktadır. Tabii bu durumda programcının bu pollfd dizisinden bu elemanı çıkarması gerekir. 
+    soketin kapatıldığı anlaşılmaktadır. Tabii bu durumda programcının bu pollfd dizisinden bu elemanı çıkarması gerekir.
 
     Aşağıda multi-client server için poll modeline bir örnek verilmiştir. Burada pfds isimli bir pollfd dizisini oluşturulmuştur. 
-    Bu dizinin makismum uzunluğu MAX_CLIENT kadardır. Her bağlantı sağlandığında yeni client için bu pollfd dizisine bir eleman 
+    Bu dizinin maksimum uzunluğu MAX_CLIENT kadardır. Her bağlantı sağlandığında yeni client için bu pollfd dizisine bir eleman 
     eklenmiştir. Bir client disconnect olduğunda bu diziden ilgili eleman silinmiştir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -43686,7 +43691,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -43724,7 +43729,7 @@ int main(int argc, char *argv[])
 			if (pfds[i].revents & POLLIN) {
 				if (pfds[i].fd == server_sock) {
 					if (npfds >= MAX_CLIENT) {
-						fprintf(stderr, "number of clints exceeds %d limit!..\n", MAX_CLIENT);
+						fprintf(stderr, "number of clints exceeds %d limit!...\n", MAX_CLIENT);
 						continue;
 					}
 					sin_len = sizeof(sin_client);
@@ -43739,7 +43744,7 @@ int main(int argc, char *argv[])
 				}
 				else {
 					sinaddr_len = sizeof(sin_client);
-					if (getpeername(pfds[i].fd, (struct sockaddr *)&sin_client,&sinaddr_len) == -1)
+					if (getpeername(pfds[i].fd, (struct sockaddr *)&sin_client, &sinaddr_len) == -1)
 						exit_sys("getpeername");
 					inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN);
 
@@ -43750,7 +43755,7 @@ int main(int argc, char *argv[])
 						if (!strcmp(buf, "quit"))
 							goto DISCONNECT;
 
-						printf("%jd byte(s) received from %s : %u: \"%s\"\n", (intmax_t)result, ntopbuf, (unsigned)ntohs(sin_client.sin_port), buf);
+						printf("%jd byte(s) received from %s:%u: \"%s\"\n", (intmax_t)result, ntopbuf, (unsigned)ntohs(sin_client.sin_port), buf);
 
 						revstr(buf);
 						if (send(pfds[i].fd, buf, result, 0) == -1)
@@ -43866,7 +43871,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -44043,7 +44048,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -44105,7 +44110,7 @@ int main(int argc, char *argv[])
 						if (getpeername(ree[i].data.fd, (struct sockaddr *)&sin_client, &sinaddr_len) == -1)
 							exit_sys("getpeername");
 						inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN);
-						printf("%jd byte(s) received from %s : %u: \"%s\"\n", (intmax_t)result, ntopbuf, (unsigned)ntohs(sin_client.sin_port), buf);
+						printf("%jd byte(s) received from %s:%u: \"%s\"\n", (intmax_t)result, ntopbuf, (unsigned)ntohs(sin_client.sin_port), buf);
 						revstr(buf);
 						if (send(ree[i].data.fd, buf, result, 0) == -1)
 							exit_sys("send");
@@ -44217,7 +44222,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -44393,7 +44398,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -44462,7 +44467,7 @@ int main(int argc, char *argv[])
 							if (getpeername(ree[i].data.fd, (struct sockaddr *)&sin_client, &sinaddr_len) == -1)
 								exit_sys("getpeername");
 							inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN);
-							printf("%jd byte(s) received from %s : %u: \"%s\"\n", (intmax_t)result, ntopbuf, (unsigned)ntohs(sin_client.sin_port), buf);
+							printf("%jd byte(s) received from %s:%u: \"%s\"\n", (intmax_t)result, ntopbuf, (unsigned)ntohs(sin_client.sin_port), buf);
 							revstr(buf);
 							if (send(ree[i].data.fd, buf, result, 0) == -1)
 								exit_sys("send");
@@ -44576,7 +44581,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -44729,7 +44734,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -44759,7 +44764,7 @@ int main(int argc, char *argv[])
 			exit_sys("accept");
 
 		if ((ci = (CLIENT_INFO *)calloc(1, sizeof(CLIENT_INFO))) == NULL) {
-			fprintf(stderr, "cannot allocate memory!..\n");
+			fprintf(stderr, "cannot allocate memory!...\n");
 			exit(EXIT_FAILURE);
 		}
 
@@ -44798,7 +44803,7 @@ void io_proc(union sigval sval)
 	ci->buf[result] = '\0';
 
 	if (result > 0) {
-		printf("%jd byte(s) received from %s : %u: \"%s\"\n", (intmax_t)result, ci->ntopbuf, (ci->port), ci->buf);
+		printf("%jd byte(s) received from %s:%u: \"%s\"\n", (intmax_t)result, ci->ntopbuf, (ci->port), ci->buf);
 		revstr(ci->buf);
 		if (send(ci->cb.aio_fildes, ci->buf, result, 0) == -1)
 			exit_sys("send");
@@ -44810,7 +44815,7 @@ void io_proc(union sigval sval)
 		shutdown(ci->cb.aio_fildes, SHUT_RDWR);
 		close(ci->cb.aio_fildes);
 
-		printf("client disconnected ===> %s : %u\n", ci->ntopbuf, (ci->port));
+		printf("client disconnected ===> %s:%u\n", ci->ntopbuf, (ci->port));
 		free(ci);
 	}
 }
@@ -44906,7 +44911,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -45150,7 +45155,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -45175,7 +45180,7 @@ int main(int argc, char *argv[])
 		buf[result] = '\0';
 
 		inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN);
-		printf("%jd byte(s) received from %s : %u: \"%s\"\n", (intmax_t)result, ntopbuf, (unsigned)ntohs(sin_client.sin_port), buf);
+		printf("%jd byte(s) received from %s:%u: \"%s\"\n", (intmax_t)result, ntopbuf, (unsigned)ntohs(sin_client.sin_port), buf);
 
 		revstr(buf);
 
@@ -45282,7 +45287,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -45331,7 +45336,7 @@ int main(int argc, char *argv[])
 		buf[result] = '\0';
 
 		inet_ntop(AF_INET, &sin_server.sin_addr, ntopbuf, INET_ADDRSTRLEN);
-		printf("%jd byte(s) received from server %s : %u: \"%s\"\n", (intmax_t)result, ntopbuf, (unsigned)ntohs(sin_server.sin_port), buf);
+		printf("%jd byte(s) received from server %s:%u: \"%s\"\n", (intmax_t)result, ntopbuf, (unsigned)ntohs(sin_server.sin_port), buf);
 	}
 
 	close(client_sock);
@@ -45780,7 +45785,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -45807,7 +45812,7 @@ int main(int argc, char *argv[])
 	if ((client_sock = accept(server_sock, (struct sockaddr *)&sin_client, &sin_len)) == -1)
 		exit_sys("accept");
 
-	printf("connected client ===> %s : %u\n", inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN), (unsigned)ntohs(sin_client.sin_port));
+	printf("connected client ===> %s:%u\n", inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN), (unsigned)ntohs(sin_client.sin_port));
 
 	for (;;) {
 		if ((result = sock_readline(client_sock, buf, BUFFER_SIZE)) == -1)
@@ -45932,7 +45937,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -46126,7 +46131,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -46154,10 +46159,10 @@ int main(int argc, char *argv[])
 		if ((client_sock = accept(server_sock, (struct sockaddr *)&sin_client, &sin_len)) == -1)
 			exit_sys("accept");
 
-		printf("connected client ===> %s : %u\n", inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN), (unsigned)ntohs(sin_client.sin_port));
+		printf("connected client ===> %s:%u\n", inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN), (unsigned)ntohs(sin_client.sin_port));
 
 		if ((ci = (CLIENT_INFO *)malloc(sizeof(CLIENT_INFO))) == NULL) {
-			fprintf(stderr, "cannot allocate memory!..\n");
+			fprintf(stderr, "cannot allocate memory!...\n");
 			exit(EXIT_FAILURE);
 		}
 
@@ -46210,7 +46215,7 @@ void *client_thread_proc(void *param)
 			}
 	}
 
-	printf("client disconnected %s : %u\n", ntopbuf, port);
+	printf("client disconnected %s:%u\n", ntopbuf, port);
 
 	shutdown(ci->sock, SHUT_RDWR);
 	close(ci->sock);
@@ -46375,7 +46380,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!..\n");
+		fprintf(stderr, "too many arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
