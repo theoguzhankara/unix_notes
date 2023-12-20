@@ -34,231 +34,231 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	UNIX/Linux dünyasında komut satırı argümanlarının oluşturulması için geniş bir kesim tarafından kullanılan geleneksel bir biçim vardır. 
-	Bu biçime "GNU biçimi" de denilmektedir. Biz de kursumuzda UNIX/Linux dünyasında yazacağımız programlarda bu geleneği kullanacağız. 
-	GNU stilinde komut satırı argümanları üçe ayrılmaktadır:
+    UNIX/Linux dünyasında komut satırı argümanlarının oluşturulması için geniş bir kesim tarafından kullanılan geleneksel bir biçim vardır. 
+    Bu biçime "GNU biçimi" de denilmektedir. Biz de kursumuzda UNIX/Linux dünyasında yazacağımız programlarda bu geleneği kullanacağız. 
+    GNU stilinde komut satırı argümanları üçe ayrılmaktadır:
 
-	1) Argümansız seçenekler
-	2) Argümanlı seçenekler
-	3) Seçeneksiz argümanlar
+    1) Argümansız seçenekler
+    2) Argümanlı seçenekler
+    3) Seçeneksiz argümanlar
 
-	Argümansız seçenekler "-" karakterine yapışık tek bir harften oluşmaktadır. Harflerde büyük harf - küçük harf duyarlılığı (case sensitivity)
-	dikkate alınmaktadır. Örneğin:
+    Argümansız seçenekler "-" karakterine yapışık tek bir harften oluşmaktadır. Harflerde büyük harf - küçük harf duyarlılığı (case sensitivity)
+    dikkate alınmaktadır. Örneğin:
 
-	ls -l -i /usr/include
+    ls -l -i /usr/include
 
-	Burada -l ve -i argümansız seçeneklerdir. /usr/include argümanının bu seçeneklerle hiçbir ilgisi yoktur. Argümansız seçenekler tek bir 
-	karakterden oluşturulduğu için birleştirilebilmektedir. Örneğin:
+    Burada -l ve -i argümansız seçeneklerdir. /usr/include argümanının bu seçeneklerle hiçbir ilgisi yoktur. Argümansız seçenekler tek bir 
+    karakterden oluşturulduğu için birleştirilebilmektedir. Örneğin:
 
-	ls -li
+    ls -li
 
-	Buradaki -li aslında -l -i ile tamamen aynı anlamdadır. Genel olarak GNU stilinde seçenekler arasındaki sıranın bir önemi yoktur. 
-	Yani örneğin:
+    Buradaki -li aslında -l -i ile tamamen aynı anlamdadır. Genel olarak GNU stilinde seçenekler arasındaki sıranın bir önemi yoktur. 
+    Yani örneğin:
 
-	ls -l -i
+    ls -l -i
 
-	ile
+    ile
 
-	ls -i -l 
+    ls -i -l
 
-	arasında bir farklılık yoktur.
+    arasında bir farklılık yoktur.
 
-	Argümanlı seçeneklerde bir seçeneğin yanında o seçenekle ilişkili bir argüman da bulunur. Örneğin:
+    Argümanlı seçeneklerde bir seçeneğin yanında o seçenekle ilişkili bir argüman da bulunur. Örneğin:
 
-	gcc -o sample sample.c
+    gcc -o sample sample.c
 
-	Burada -o seçeneği seçeneği tek başına kullanılmaz. Hedef dosyanın ismi seçeneğin argümanını oluşturmaktadır. O halde buradaki 
-	-o seçeneği tipik olarak argümanlı seçeneğe bir örnektir. Argüman seçeneklerin birleştirilmesi tavsiye edilmez. Ancak birleştirme yapılabilmektedir. 
-	Örneğin:
+    Burada -o seçeneği seçeneği tek başına kullanılmaz. Hedef dosyanın ismi seçeneğin argümanını oluşturmaktadır. O halde buradaki 
+    -o seçeneği tipik olarak argümanlı seçeneğe bir örnektir. Argüman seçeneklerin birleştirilmesi tavsiye edilmez. Ancak birleştirme yapılabilmektedir. 
+    Örneğin:
 
-	gcc -co sample.o sample.c
+    gcc -co sample.o sample.c
 
-	Bu yazım biçimini pek çok program kabul etse de biz tavsiye etmiyoruz. Buradaki argümanların aşağıdaki gibi belirtilesi daha uygundur:
+    Bu yazım biçimini pek çok program kabul etse de biz tavsiye etmiyoruz. Buradaki argümanların aşağıdaki gibi belirtilesi daha uygundur:
 
-	gcc -c -o sample.o sample.c
+    gcc -c -o sample.o sample.c
 
-	Programlar, argümanlı seçeneklerde seçeneğin argümanı hiç boşluk karakterleriyle ayrılmasa bile bunu kabul edebilmektedir. Örneğin:
+    Programlar, argümanlı seçeneklerde seçeneğin argümanı hiç boşluk karakterleriyle ayrılmasa bile bunu kabul edebilmektedir. Örneğin:
 
-	gcc -osample sample.c
+    gcc -osample sample.c
 
-	Burada -o argümanlı seçenek olduğu için onu başka bir seçenek izleyemeyeceğinden dolayı "sample" -o seçeneğinin argümanı olarak 
-	ele alınmaktadır.
+    Burada -o argümanlı seçenek olduğu için onu başka bir seçenek izleyemeyeceğinden dolayı "sample" -o seçeneğinin argümanı olarak 
+    ele alınmaktadır.
 
-	Seçeneklerle ilgisi olmayan argümanlara "seçeneksiz argüman" denilmektedir. Örneğin:
+    Seçeneklerle ilgisi olmayan argümanlara "seçeneksiz argüman" denilmektedir. Örneğin:
 
-	gcc -o sample sample.c
+    gcc -o sample sample.c
 
-	Burada "sample.c" argümanı herhangi bir seçenekle ilgili değildir. Örneğin:
+    Burada "sample.c" argümanı herhangi bir seçenekle ilgili değildir. Örneğin:
 
-	cp x.txt y.txt
+    cp x.txt y.txt
 
-	Buradaki "x.txt" ve "y.txt" argümanları da seçeneklerle ilgili değildir. Seçeneksiz argümanların sonda bulunması gerekmez. Örneğin:
+    Buradaki "x.txt" ve "y.txt" argümanları da seçeneklerle ilgili değildir. Seçeneksiz argümanların sonda bulunması gerekmez. Örneğin:
 
-	gcc sample.c -o sample
+    gcc sample.c -o sample
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*---------------------------------------------------------------------------------------------------------------------------
-	Eskiden yalnızca tek karakterden oluşan kısa seçenekler kullanılıyordu. Ancak daha sonraları bu kısa seçeneklerin yetersiz kaldığı ve 
-	okunabilirliği bozduğu gerekçesiyle uzun seçenekler de kullanılmaya başlanmıştır. POSIX standartları uzun seçenekleri desteklememektedir. 
-	Ancak UNIX/Linux dünyasında yaygın biçimde kullanılmaktadır. Uzun seçenekler "--" öneki ile başlatılmaktadır. Örneğin:
+    Eskiden yalnızca tek karakterden oluşan kısa seçenekler kullanılıyordu. Ancak daha sonraları bu kısa seçeneklerin yetersiz kaldığı ve 
+    okunabilirliği bozduğu gerekçesiyle uzun seçenekler de kullanılmaya başlanmıştır. POSIX standartları uzun seçenekleri desteklememektedir. 
+    Ancak UNIX/Linux dünyasında yaygın biçimde kullanılmaktadır. Uzun seçenekler "--" öneki ile başlatılmaktadır. Örneğin:
 
-	prog --count -a -b --length 100
+    prog --count -a -b --length 100
 
-	Uzun seçenekler de argümanlı ve argümansız olabilmektedir. Yukarıdaki örnekte "--count" argümansız uzun seçenek, "-a" ve "-b" argümansız seçenekler 
-	ve "--length 100" ise argümanlı uzun seçenektir. 
+    Uzun seçenekler de argümanlı ve argümansız olabilmektedir. Yukarıdaki örnekte "--count" argümansız uzun seçenek, "-a" ve "-b" argümansız seçenekler 
+    ve "--length 100" ise argümanlı uzun seçenektir. 
 
-	Uzun seçeneklerde "isteğe bağlı argüman (optional argument)" denilen özel bir argüman da kullanılmaktadır. İsmi üzerinde "isteğe bağlı argüman" 
-	uzun seçeneklerin yanında verilip verilmemesi isteğe bağlı olan argümanlardır. Uzun seçeneklerin isteğe bağlı argümanları "=" sentaksı ile 
-	yapışık bir biçimde belirtilmektedir. Örneğin:
+    Uzun seçeneklerde "isteğe bağlı argüman (optional argument)" denilen özel bir argüman da kullanılmaktadır. İsmi üzerinde "isteğe bağlı argüman" 
+    uzun seçeneklerin yanında verilip verilmemesi isteğe bağlı olan argümanlardır. Uzun seçeneklerin isteğe bağlı argümanları "=" sentaksı ile 
+    yapışık bir biçimde belirtilmektedir. Örneğin:
 
-	prog --size=512
+    prog --size=512
 
-	Burada --size uzun seçeneğinin argümanı isteğe bağlıdır. Yani bu uzun seçenek argümansız da aşağıdaki gibi kullanılabilirdi:
+    Burada --size uzun seçeneğinin argümanı isteğe bağlıdır. Yani bu uzun seçenek argümansız da aşağıdaki gibi kullanılabilirdi:
 
-	prog --size
+    prog --size
 
-	Günümüzde genel olarak programlar kısa seçenekleri de uzun seçenekleri de bir arada kullanmaktadır. Programcılar bazı kısa seçeneklerin 
-	alternatif uzun seçeneklerini oluşturabilmektedir. Yukarıda da belirttiğimiz gibi POSIX standartları uzun seçenekleri desteklememektedir. 
+    Günümüzde genel olarak programlar kısa seçenekleri de uzun seçenekleri de bir arada kullanmaktadır. Programcılar bazı kısa seçeneklerin 
+    alternatif uzun seçeneklerini oluşturabilmektedir. Yukarıda da belirttiğimiz gibi POSIX standartları uzun seçenekleri desteklememektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	UNIX/Linux dünyasında kullanılan komut satırı argümanlarını parse etmek için getopt ve getopt_long isimli iki fonksiyon bulundurulmuştur. 
-	getopt fonksiyonu bir POSIX fonksiyonudur. Ancak bu fonksiyon uzun seçenekleri parse etmemektedir. getopt_long ise uzun seçenekleri de parse eden
-	getopt fonksiyonunun daha gelişmiş bir biçimidir. Ancak getopt_long bir POSIX fonksiyonu değildir. Ancak libc kütüphanesinde bulunmaktadır. 
-	Bu fonksiyonlar Windows sistemlerinde hazır bir biçimde herhangi bir kütüphanede bulunmamaktadır. Zaten yukarıda da belirttiğimiz gibi Windows
-	sistemlerindeki komut satırı argüman stili UNIX/Linux sistemlerindekinden farklıdır. 
+    UNIX/Linux dünyasında kullanılan komut satırı argümanlarını parse etmek için getopt ve getopt_long isimli iki fonksiyon bulundurulmuştur. 
+    getopt fonksiyonu bir POSIX fonksiyonudur. Ancak bu fonksiyon uzun seçenekleri parse etmemektedir. getopt_long ise uzun seçenekleri de parse eden
+    getopt fonksiyonunun daha gelişmiş bir biçimidir. Ancak getopt_long bir POSIX fonksiyonu değildir. Ancak libc kütüphanesinde bulunmaktadır. 
+    Bu fonksiyonlar Windows sistemlerinde hazır bir biçimde herhangi bir kütüphanede bulunmamaktadır. Zaten yukarıda da belirttiğimiz gibi Windows
+    sistemlerindeki komut satırı argüman stili UNIX/Linux sistemlerindekinden farklıdır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	getopt fonksiyonunun prototipi şöyledir:
+    getopt fonksiyonunun prototipi şöyledir:
 
-	#include <unistd.h>
+    #include <unistd.h>
 
-	int getopt(int argc, char * const argv[], const char *optstring);
+    int getopt(int argc, char * const argv[], const char *optstring);
 
-	getopt fonksiyonunun ilk iki parametresi main fonksiyonunun argc ve argv parametreleri gibidir. Yani programcı main fonksiyonunun bu parametrelerini 
-	getopt fonksiyonuna geçirir. Fonksiyonun üçüncü parametresinde kısa seçenekler belirtilmektedir. Bu parametre bir yazı biçiminde girilir. 
-	Bu yazıdaki her bir karakter bir kısa seçeneği belirtir. Bir karakterin yanında ':' karakteri varsa bu ':' karakterinin solundaki seçeneğin 
-	argümanlı bir seçenek olduğunu belirtmektedir. Örneğin "ab:c" burada -a, -b ve -c seçenekleri belirtilmiştir. Ancak -b seçeneğinin bir argümanı da
-	vardır. 
+    getopt fonksiyonunun ilk iki parametresi main fonksiyonunun argc ve argv parametreleri gibidir. Yani programcı main fonksiyonunun bu parametrelerini 
+    getopt fonksiyonuna geçirir. Fonksiyonun üçüncü parametresinde kısa seçenekler belirtilmektedir. Bu parametre bir yazı biçiminde girilir. 
+    Bu yazıdaki her bir karakter bir kısa seçeneği belirtir. Bir karakterin yanında ':' karakteri varsa bu ':' karakterinin solundaki seçeneğin 
+    argümanlı bir seçenek olduğunu belirtmektedir. Örneğin "ab:c" burada -a, -b ve -c seçenekleri belirtilmiştir. Ancak -b seçeneğinin bir argümanı da
+    vardır. 
 
-	getopt fonksiyonu bir kez çağrılmaz. Bir döngü içerisinde çağrılmalıdır. Çünkü fonksiyon her çağrıldığında bir kısa seçeneği bulmaktadır. 
-	Fonksiyon bütün kısa seçenekleri bulduktan sonra artık bulacak bir seçenek kalmadığında -1 değerine geri dönmektedir. O halde fonksiyonun 
-	çağrılma kalıbı şöyle olmalıdır:
+    getopt fonksiyonu bir kez çağrılmaz. Bir döngü içerisinde çağrılmalıdır. Çünkü fonksiyon her çağrıldığında bir kısa seçeneği bulmaktadır. 
+    Fonksiyon bütün kısa seçenekleri bulduktan sonra artık bulacak bir seçenek kalmadığında -1 değerine geri dönmektedir. O halde fonksiyonun 
+    çağrılma kalıbı şöyle olmalıdır:
 
-	int result;
-	...
+    int result;
+    ...
 
-	while ((result = getopt(argc, argv, "ab:c")) != -1) {
-		...
-	}
+    while ((result = getopt(argc, argv, "ab:c")) != -1) {
+        ...
+    }
 
-	getopt, her kısa seçeneği bulduğunda o kısa seçeneğe ilişkin karakterle (yani o karakterin sayısal karşılığı ile) geri dönmektedir. 
-	O halde bizim getopt fonksiyonunun geri dönüş değerini switch içerisinde ele almamız gerekir:
+    getopt, her kısa seçeneği bulduğunda o kısa seçeneğe ilişkin karakterle (yani o karakterin sayısal karşılığı ile) geri dönmektedir. 
+    O halde bizim getopt fonksiyonunun geri dönüş değerini switch içerisinde ele almamız gerekir:
 
-	while ((result = getopt(argc, argv, "ab:c")) != -1) {
-		switch (result) {
-			case 'a':
-				...
-				break;
-			case 'b':
-				...
-				break;
-			case 'c':
-				...
-				break;
-		}
-	}
+    while ((result = getopt(argc, argv, "ab:c")) != -1) {
+        switch (result) {
+            case 'a':
+                ...
+                break;
+            case 'b':
+                ...
+                break;
+            case 'c':
+                ...
+                break;
+        }
+    }
 
-	getopt fonksiyonu, olmayan (yani üçüncü parametresinde belirtilmeyen) bir kısa seçenekle karşılaştığında ya da argümanı olması gerektiği 
-	halde girilmemiş bir kısa seçenekle karşılaştığında '?' özel değerine geri dönmektedir. Programcının switch deyimine bu case bölümünü 
-	ekleyerek bu durumu da değerlendirmesi uygun olur. Örneğin:
+    getopt fonksiyonu, olmayan (yani üçüncü parametresinde belirtilmeyen) bir kısa seçenekle karşılaştığında ya da argümanı olması gerektiği 
+    halde girilmemiş bir kısa seçenekle karşılaştığında '?' özel değerine geri dönmektedir. Programcının switch deyimine bu case bölümünü 
+    ekleyerek bu durumu da değerlendirmesi uygun olur. Örneğin:
 
-	while ((result = getopt(argc, argv, "ab:c")) != -1) {
-		switch (result) {
-			case 'a':
-				...
-				break;
-			case 'b':
-				...
-				break;
-			case 'c':
-				...
-				break;
-			case '?':
-				...
-				break;
-		}
-	}
+    while ((result = getopt(argc, argv, "ab:c")) != -1) {
+        switch (result) {
+            case 'a':
+                ...
+                break;
+            case 'b':
+                ...
+                break;
+            case 'c':
+                ...
+                break;
+            case '?':
+                ...
+                break;
+        }
+    }
 
-	getopt fonksiyonunun kullandığı dört global değişken vardır. Bu global değişkenler kütüphanenin içerisinde tanımlanmıştır. Bunları biz
-	extern bildirimi ile kullanabiliriz. Ancak bunların extern bildirimleri zaten <unistd.h> dosyası içerisinde yapılmış durumdadır:
+    getopt fonksiyonunun kullandığı dört global değişken vardır. Bu global değişkenler kütüphanenin içerisinde tanımlanmıştır. Bunları biz
+    extern bildirimi ile kullanabiliriz. Ancak bunların extern bildirimleri zaten <unistd.h> dosyası içerisinde yapılmış durumdadır:
 
-	extern int opterr;
-	extern int optopt;
-	extern int optind;
-	extern char *optarg;
+    extern int opterr;
+    extern int optopt;
+    extern int optind;
+    extern char *optarg;
 
-	Default durumda, getopt fonksiyonu geçersiz bir seçenekle (yani üçüncü parametresinde belirtilmeyen bir seçenekle) karşılaştığında 
-	stderr dosyasına (ekranda çıkacaktır) kendisi hata mesajını yazdırmaktadır. Programcılar genellikle bunu istemezler. getopt fonksiyonunun 
-	geçersiz seçenekler için hata mesajını yazdırması opterr değişkenine 0 değeri atanarak sağlanabilir. Yani opterr değişkeni sıfır dışı 
-	bir değerdeyse (default durum) fonksiyon mesajı stderr dosyasına kendisi de yazar, sıfır değerindeyse fonksiyon hata mesajını stderr dosyasına 
-	yazmaz. 
+    Default durumda, getopt fonksiyonu geçersiz bir seçenekle (yani üçüncü parametresinde belirtilmeyen bir seçenekle) karşılaştığında 
+    stderr dosyasına (ekranda çıkacaktır) kendisi hata mesajını yazdırmaktadır. Programcılar genellikle bunu istemezler. getopt fonksiyonunun 
+    geçersiz seçenekler için hata mesajını yazdırması opterr değişkenine 0 değeri atanarak sağlanabilir. Yani opterr değişkeni sıfır dışı 
+    bir değerdeyse (default durum) fonksiyon mesajı stderr dosyasına kendisi de yazar, sıfır değerindeyse fonksiyon hata mesajını stderr dosyasına 
+    yazmaz. 
 
-	getopt fonksiyonu geçersiz bir seçenekle ya da argümanı girilmemiş argümanlı bir seçenekle karşılaştığında '?' geri dönmekle birlikte aynı zamanda
-	optopt global değişkenine geçersiz seçeneğin karakter karşılığını yerleştirmektedir. Böylece programcı daha yeterli bir mesaj verebilmektedir. 
-	Örneğin:
+    getopt fonksiyonu geçersiz bir seçenekle ya da argümanı girilmemiş argümanlı bir seçenekle karşılaştığında '?' geri dönmekle birlikte aynı zamanda
+    optopt global değişkenine geçersiz seçeneğin karakter karşılığını yerleştirmektedir. Böylece programcı daha yeterli bir mesaj verebilmektedir. 
+    Örneğin:
 
-	opterr = 0;
-	while ((result = getopt(argc, argv, "ab:c")) != -1) {
-		switch (result) {
-			case 'a':
-				printf("-a given...\n");
-				break;
-			case 'b':
-				printf("-b given...\n");
-				break;
-			case 'c':
-				printf("-c given...\n");
-				break;
-			case '?':
-			if (optopt == 'b')
-				fprintf(stderr, "-b option given without argument!...\n");
-			else
-				fprintf(stderr, "invalid option: -%c\n", optopt);
-			break;
-		}
-	}
+    opterr = 0;
+    while ((result = getopt(argc, argv, "ab:c")) != -1) {
+        switch (result) {
+            case 'a':
+                printf("-a given...\n");
+                break;
+            case 'b':
+                printf("-b given...\n");
+                break;
+            case 'c':
+                printf("-c given...\n");
+                break;
+            case '?':
+            if (optopt == 'b')
+                fprintf(stderr, "-b option given without argument!...\n");
+            else
+                fprintf(stderr, "invalid option: -%c\n", optopt);
+            break;
+        }
+    }
 
-	Argümanlı bir kısa seçenek bulunduğunda getopt fonksiyonu, optarg global değişkenini o kısa seçeneğin argümanını gösterecek biçimde 
-	set eder. Ancak optarg, yeni bir argümanlı kısa seçenek bulunduğunda bu kez onun argümanını gösterecek biçimde set edilmektedir. Yani 
-	programcı argümanlı kısa seçeneği bulduğu anda optarg değişkenine başvurmalı gerekirse onu başka bir göstericide saklamalıdır. 
+    Argümanlı bir kısa seçenek bulunduğunda getopt fonksiyonu, optarg global değişkenini o kısa seçeneğin argümanını gösterecek biçimde 
+    set eder. Ancak optarg, yeni bir argümanlı kısa seçenek bulunduğunda bu kez onun argümanını gösterecek biçimde set edilmektedir. Yani 
+    programcı argümanlı kısa seçeneği bulduğu anda optarg değişkenine başvurmalı gerekirse onu başka bir göstericide saklamalıdır. 
 
-	Pekiyi seçeneksiz argümanları nasıl edebiliriz? Seçeneksiz argümanlar argv dizisinin herhangi bir yerine bulunuyor olabilir. İşte getopt 
-	fonksiyonu her zaman seçeneksiz argümanları girildiği sırada argv dizisinin sonuna taşır ve onların başladığı indeksi de optind global 
-	değişkeninin göstermesini sağlar. O halde programcı getopt ile işini bitirdikten sonra (yani while döngüsünden çıktıktan sonra) optind
-	indeksinden argc indeksine kadar ilerleyerek tüm seçeneksiz argümanları elde edebilmektedir. Örneğin:
+    Pekiyi seçeneksiz argümanları nasıl edebiliriz? Seçeneksiz argümanlar argv dizisinin herhangi bir yerine bulunuyor olabilir. İşte getopt 
+    fonksiyonu her zaman seçeneksiz argümanları girildiği sırada argv dizisinin sonuna taşır ve onların başladığı indeksi de optind global 
+    değişkeninin göstermesini sağlar. O halde programcı getopt ile işini bitirdikten sonra (yani while döngüsünden çıktıktan sonra) optind
+    indeksinden argc indeksine kadar ilerleyerek tüm seçeneksiz argümanları elde edebilmektedir. Örneğin:
 
-	./sample -a ali -b veli selami -c
+    ./sample -a ali -b veli selami -c
 
-	Burada "ali" ve "selami" seçeneksiz argümanlardır. getopt bu argv dizisini şu halde getirmektedir:
+    Burada "ali" ve "selami" seçeneksiz argümanlardır. getopt bu argv dizisini şu halde getirmektedir:
 
-	./sample -a -b veli -c ali selami
+    ./sample -a -b veli -c ali selami
 
-	Şimdi burada optind indeksi artık "ali" argümanının başladığı indeksi belirtecektir. Onun ötesindeki tüm argümanlar seçeneksiz argümanlardır. 
-	Bu argümanları while döngüsünün dışında şöyle yazdırabiliriz:
+    Şimdi burada optind indeksi artık "ali" argümanının başladığı indeksi belirtecektir. Onun ötesindeki tüm argümanlar seçeneksiz argümanlardır. 
+    Bu argümanları while döngüsünün dışında şöyle yazdırabiliriz:
 
-	for (int i = optind; i < argc; ++i)
-		puts(argv[i]);
+    for (int i = optind; i < argc; ++i)
+        puts(argv[i]);
 
-	Programcının girilmiş olan seçenekleri saklayıp programın ilerleyen aşamalarında bunları kullanması gerekebilmektedir. Bunun için şöyle 
-	bir kalıp önerilebilir: 
+    Programcının girilmiş olan seçenekleri saklayıp programın ilerleyen aşamalarında bunları kullanması gerekebilmektedir. Bunun için şöyle 
+    bir kalıp önerilebilir: 
 
-	- Her seçenek için bir flag değişkeni tutulur. Bu flag değişkenlerine başlangıçta 0 atanır.
-	- Her argümanlı seçenek için bir gösterici tutulur. 
-	- Her seçenekle karşılaşıldığında flag değişkenine 1 atanarak o seçeneğin kullanıldığı kaydedilir. 
-	- Argümanlı seçeneklerle karşılaşıldığında onların argümanları göstericilerde saklanır. 
+    - Her seçenek için bir flag değişkeni tutulur. Bu flag değişkenlerine başlangıçta 0 atanır.
+    - Her argümanlı seçenek için bir gösterici tutulur. 
+    - Her seçenekle karşılaşıldığında flag değişkenine 1 atanarak o seçeneğin kullanıldığı kaydedilir. 
+    - Argümanlı seçeneklerle karşılaşıldığında onların argümanları göstericilerde saklanır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -266,7 +266,7 @@ int main(void)
     -c ve -e ise argümanlı seçeneklerdir. Bu kalıbı kendi programlarınızda da kullanabilirsiniz. Bu örnekte ayrıştırma işleminde 
     bir hata oluştuğunda programın devam etmemesini isteriz. Ancak tüm hataların rapor edilmesi de gerekmektedir. Bunun için bir 
     flag değişkeninden faydalanılabilir. O flag değişkeni hata durumunda set edilir. Çıkışta kontrol edilip duruma göre 
-	program sonlandırılır. 
+    program sonlandırılır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -608,99 +608,99 @@ int main(int argc, char *argv[])
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Daha önceden de belirttiğimiz gibi komut satırında uzun seçenek kullanımı POSIX standartlarında yoktur. Ancak Linux gibi pek çok 
-	sistemdeki çeşitli yardımcı programlar uzun seçenekleri desteklemektedir. Programlarda bazı kısa seçeneklerin eşdeğer uzun seçenekleri
-	bulunmaktadır. Bazı uzun seçeneklerin ise kısa seçenek eşdeğeri bulunmamaktadır. Bazı kısa seçeneklerin de uzun seçenek eşdeğerleri yoktur. 
+    Daha önceden de belirttiğimiz gibi komut satırında uzun seçenek kullanımı POSIX standartlarında yoktur. Ancak Linux gibi pek çok 
+    sistemdeki çeşitli yardımcı programlar uzun seçenekleri desteklemektedir. Programlarda bazı kısa seçeneklerin eşdeğer uzun seçenekleri
+    bulunmaktadır. Bazı uzun seçeneklerin ise kısa seçenek eşdeğeri bulunmamaktadır. Bazı kısa seçeneklerin de uzun seçenek eşdeğerleri yoktur. 
 
-	Uzun seçenekleri parse etmek için getopt_long isimli fonksiyon kullanılmaktadır. Uzun seçenekler POSIX standartlarında olmadığına göre 
-	getopt_long fonksiyonu da bir POSIX fonksiyonu değildir. Ancak GNU'nun glibc kütüphanesinde bir eklenti biçiminde bulunmaktadır. 
-	getopt_long fonksiyonu işlevsel olarak getopt fonksiyonunu kapsamaktadır. Ancak fonksiyonun kullanımı biraz daha zordur. Fonksiyonun 
-	prototipi şöyledir:
+    Uzun seçenekleri parse etmek için getopt_long isimli fonksiyon kullanılmaktadır. Uzun seçenekler POSIX standartlarında olmadığına göre 
+    getopt_long fonksiyonu da bir POSIX fonksiyonu değildir. Ancak GNU'nun glibc kütüphanesinde bir eklenti biçiminde bulunmaktadır. 
+    getopt_long fonksiyonu işlevsel olarak getopt fonksiyonunu kapsamaktadır. Ancak fonksiyonun kullanımı biraz daha zordur. Fonksiyonun 
+    prototipi şöyledir:
 
-	#include <getopt.h>
+    #include <getopt.h>
 
-	int getopt_long(int argc, char * const argv[], const char *optstring, const struct option *longopts, int *longindex);
+    int getopt_long(int argc, char * const argv[], const char *optstring, const struct option *longopts, int *longindex);
 
-	Fonksiyonun birinci ve ikinci parametrelerine, main fonksiyonundan alınan argc ve argv parametreleri geçirilir. Fonksiyonun üçüncü parametresi 
-	yine kısa seçeneklerin belirtildiği yazının adresini almaktadır. Yani fonksiyonun ilk üç parametresi tamamen getopt fonksiyonu ile aynıdır. 
-	Fonksiyonun dördüncü parametresi uzun seçeneklerin belirtildiği struct option türünden bir yapı dizisinin adresini almaktadır. Her uzun seçenek
-	struct option türünden bir nesneyle ifade edilmektedir. struct option yapısı şöyle bildirilmiştir:
+    Fonksiyonun birinci ve ikinci parametrelerine, main fonksiyonundan alınan argc ve argv parametreleri geçirilir. Fonksiyonun üçüncü parametresi 
+    yine kısa seçeneklerin belirtildiği yazının adresini almaktadır. Yani fonksiyonun ilk üç parametresi tamamen getopt fonksiyonu ile aynıdır. 
+    Fonksiyonun dördüncü parametresi uzun seçeneklerin belirtildiği struct option türünden bir yapı dizisinin adresini almaktadır. Her uzun seçenek
+    struct option türünden bir nesneyle ifade edilmektedir. struct option yapısı şöyle bildirilmiştir:
 
-	struct option {
-		const char *name;
-		int         has_arg;
-		int        *flag;
-		int         val;
-	};
+    struct option {
+        const char *name;
+        int         has_arg;
+        int        *flag;
+        int         val;
+    };
 
-	Fonksiyon bu yapı dizisinin bittiğini nasıl anlayacaktır? İşte yapı dizisinin son elemanına ilişkin yapı nesnesinin tüm elemanları 0'larla
-	doldurulmalıdır. (0 sabitinin göstericiler söz konusu olduğunda NULL adres anlamına geldiğini de anımsayınız.)
+    Fonksiyon bu yapı dizisinin bittiğini nasıl anlayacaktır? İşte yapı dizisinin son elemanına ilişkin yapı nesnesinin tüm elemanları 0'larla
+    doldurulmalıdır. (0 sabitinin göstericiler söz konusu olduğunda NULL adres anlamına geldiğini de anımsayınız.)
 
-	struct option yapısının name elemanı uzun seçeneğin ismini belirtmektedir. Yapının has_arg elemanı üç değerden birini alabilir:
+    struct option yapısının name elemanı uzun seçeneğin ismini belirtmektedir. Yapının has_arg elemanı üç değerden birini alabilir:
 
-	no_argument (0)
-	required_argument (1)
-	optional_argument (2)
+    no_argument (0)
+    required_argument (1)
+    optional_argument (2)
 
-	Bu eleman uzun seçeneğin argüman alıp almadığını belirtmektedir. Yapının flag ve val elemanları birbirleriyle ilişkilidir. Yapının val elemanı
-	uzun seçenek bulunduğunda bunun hangi sayısal değerle ifade edileceğini belirtir. İşte bu flag elemanına int bir nesnenin adresi geçilirse bu durumda 
-	uzun seçenek bulunduğunda bu val değeri bu int nesneye yerleştirilir. getopt_long ise bu durumda 0 değeri ile geri döner. Ancak bu flag 
-	göstericisine NULL adres de geçilebilir. Bu durumda getopt_long uzun seçenek bulunduğunda val elemanındaki değeri geri dönüş değeri olarak verir. 
-	Örneğin:
+    Bu eleman uzun seçeneğin argüman alıp almadığını belirtmektedir. Yapının flag ve val elemanları birbirleriyle ilişkilidir. Yapının val elemanı
+    uzun seçenek bulunduğunda bunun hangi sayısal değerle ifade edileceğini belirtir. İşte bu flag elemanına int bir nesnenin adresi geçilirse bu durumda 
+    uzun seçenek bulunduğunda bu val değeri bu int nesneye yerleştirilir. getopt_long ise bu durumda 0 değeri ile geri döner. Ancak bu flag 
+    göstericisine NULL adres de geçilebilir. Bu durumda getopt_long uzun seçenek bulunduğunda val elemanındaki değeri geri dönüş değeri olarak verir. 
+    Örneğin:
 
-	struct option options[] = {
-		{"count", required_argument, NULL, 'c'},
-		{0, 0, 0, 0}
-	};
+    struct option options[] = {
+        {"count", required_argument, NULL, 'c'},
+        {0, 0, 0, 0}
+    };
 
-	Burada uzun seçenek "--count" biçimindedir. Bir argümanla kullanılmak zorundadır. Bu uzun seçenek bulunduğunda flag parametresi NULL adres 
-	geçildiği için getopt_long fonksiyonu 'c' değeri ile geri dönecektir. Örneğin:
+    Burada uzun seçenek "--count" biçimindedir. Bir argümanla kullanılmak zorundadır. Bu uzun seçenek bulunduğunda flag parametresi NULL adres 
+    geçildiği için getopt_long fonksiyonu 'c' değeri ile geri dönecektir. Örneğin:
 
-	int count_flag;
-	...
+    int count_flag;
+    ...
 
-	struct option options[] = {
-		{"count", required_argument, &count_flag, 1},
-		{0, 0, 0, 0}
-	};
+    struct option options[] = {
+        {"count", required_argument, &count_flag, 1},
+        {0, 0, 0, 0}
+    };
 
-	Burada artık uzun seçenek bulunduğunda getopt_long fonksiyonu 0 ile geri dönecek ancak 1 değeri count_flag nesnesine yerleştirilecektir. 
+    Burada artık uzun seçenek bulunduğunda getopt_long fonksiyonu 0 ile geri dönecek ancak 1 değeri count_flag nesnesine yerleştirilecektir. 
 
-	getopt_long fonksiyonunun son parametresi uzun seçenek bulunduğunda o uzun seçeneğin option dizisindeki kaçıncı indeksli uzun seçenek olduğunu 
-	anlamak için kullanılmaktadır. Burada belirtilen adresteki nesneye uzun seçeneğin option dizisi içerisindeki indeks numarası yerleştirilmektedir. 
-	Ancak bu bilgiye genellikle gereksinim duyulmamaktadır. Bu parametre NULL geçilebilir. Bu durumda böyle bir yerleştirme yapılmaz. 
+    getopt_long fonksiyonunun son parametresi uzun seçenek bulunduğunda o uzun seçeneğin option dizisindeki kaçıncı indeksli uzun seçenek olduğunu 
+    anlamak için kullanılmaktadır. Burada belirtilen adresteki nesneye uzun seçeneğin option dizisi içerisindeki indeks numarası yerleştirilmektedir. 
+    Ancak bu bilgiye genellikle gereksinim duyulmamaktadır. Bu parametre NULL geçilebilir. Bu durumda böyle bir yerleştirme yapılmaz. 
 
-	Bu durumda getopt_long fonksiyonunun geri dönüş değeri beş biçimden biri olabilir:
+    Bu durumda getopt_long fonksiyonunun geri dönüş değeri beş biçimden biri olabilir:
 
-	1) Fonksiyon bir kısa seçenek bulmuştur. Kısa seçeneğin karakter koduyla geri döner. 
-	2) Fonksiyon bir uzun seçenek bulmuştur ve option yapısının flag elemanında NULL adres vardır. Bu durumda fonksiyon option yapısının 
-	val elemanındaki değerle geri döner. 
-	3) Fonksiyon bir uzun seçenek bulmuştur ve option yapısının flag elemanında NULL adres yoktur. Bu durumda fonksiyon val değerini bu adrese 
-	yerleştirir ve 0 değeri ile geri döner. 
-	4) Fonksiyon geçersiz (yani olmayan) bir kısa ya da uzun seçenekle karşılaşmıştır ya da argümanlı bir kısa seçenek ya da uzun seçeneğin 
-	argümanı girilmemiştir. Bu durumda fonksiyon '?' karakterinin değeriyle geri döner. 
-	5) Parse edecek argüman kalmamıştır fonksiyon -1 ile geri döner. 
+    1) Fonksiyon bir kısa seçenek bulmuştur. Kısa seçeneğin karakter koduyla geri döner. 
+    2) Fonksiyon bir uzun seçenek bulmuştur ve option yapısının flag elemanında NULL adres vardır. Bu durumda fonksiyon option yapısının 
+    val elemanındaki değerle geri döner. 
+    3) Fonksiyon bir uzun seçenek bulmuştur ve option yapısının flag elemanında NULL adres yoktur. Bu durumda fonksiyon val değerini bu adrese 
+    yerleştirir ve 0 değeri ile geri döner. 
+    4) Fonksiyon geçersiz (yani olmayan) bir kısa ya da uzun seçenekle karşılaşmıştır ya da argümanlı bir kısa seçenek ya da uzun seçeneğin 
+    argümanı girilmemiştir. Bu durumda fonksiyon '?' karakterinin değeriyle geri döner. 
+    5) Parse edecek argüman kalmamıştır fonksiyon -1 ile geri döner. 
 
-	getopt fonksiyonundaki yardımcı global değişkenlerin aynısı burada da kullanılmaktadır:
+    getopt fonksiyonundaki yardımcı global değişkenlerin aynısı burada da kullanılmaktadır:
 
-	opterr: Hata mesajının fonksiyon tarafından stderr dosyasına basılıp basılmayacağını belirtir. 
-	optarg: Argümanlı bir kısa ya da uzun seçenekte argümanı belirtmektedir. Eğer "isteğe bağlı argümanlı" bir uzun seçenek bulunmuşsa 
-	ve bu uzun seçenek için argüman girilmemişse optarg nesnesine NULL adres yerleştirilmektedir. 
-	optind: Bu değişken yine seçeneksiz argümanların başladığı indeksi belirtmektedir. 
-	optopt: Bu değişken geçersiz bir uzun ya da kısa seçenek girildiğinde hatanın nedenini belirtmektedir. 
+    opterr: Hata mesajının fonksiyon tarafından stderr dosyasına basılıp basılmayacağını belirtir. 
+    optarg: Argümanlı bir kısa ya da uzun seçenekte argümanı belirtmektedir. Eğer "isteğe bağlı argümanlı" bir uzun seçenek bulunmuşsa 
+    ve bu uzun seçenek için argüman girilmemişse optarg nesnesine NULL adres yerleştirilmektedir. 
+    optind: Bu değişken yine seçeneksiz argümanların başladığı indeksi belirtmektedir. 
+    optopt: Bu değişken geçersiz bir uzun ya da kısa seçenek girildiğinde hatanın nedenini belirtmektedir. 
 
-	getopt_long geçersiz bir seçenekle karşılaştığında '?' geri dönmekle birlikte optopt değişkenini şu biçimlerde set etmektedir:
+    getopt_long geçersiz bir seçenekle karşılaştığında '?' geri dönmekle birlikte optopt değişkenini şu biçimlerde set etmektedir:
 
-	1) Eğer fonksiyon argümanlı bir kısa seçenek bulduğu halde argüman girilmemişse o argümanlı kısa seçeneğin karakter karşılığını 
-	optopt değişkenine yerleştirir. 
-	2) Eğer fonksiyon argümanlı bir uzun seçenek bulduğu halde argüman girilmemişse o argümanlı uzun seçeneğin option yapısındaki val değerini 
-	optopt değişkenine yerleştirmektedir. 
-	3) Eğer fonksiyon geçersiz bir kısa seçenekle karşılaşmışsa bu durumda optopt geçersiz kısa seçeneğin karakter karşılığına geri döner.
-	4) Eğer fonksiyon geçersiz bir uzun seçenekle karşılaşmışsa bu durumda optopt değişkenine 0 değeri yerleştirilmektedir.
+    1) Eğer fonksiyon argümanlı bir kısa seçenek bulduğu halde argüman girilmemişse o argümanlı kısa seçeneğin karakter karşılığını 
+    optopt değişkenine yerleştirir. 
+    2) Eğer fonksiyon argümanlı bir uzun seçenek bulduğu halde argüman girilmemişse o argümanlı uzun seçeneğin option yapısındaki val değerini 
+    optopt değişkenine yerleştirmektedir. 
+    3) Eğer fonksiyon geçersiz bir kısa seçenekle karşılaşmışsa bu durumda optopt geçersiz kısa seçeneğin karakter karşılığına geri döner.
+    4) Eğer fonksiyon geçersiz bir uzun seçenekle karşılaşmışsa bu durumda optopt değişkenine 0 değeri yerleştirilmektedir.
 
-	Maalesef getopt_long olmayan bir uzun seçenek girildiğinde bunu bize vermemektedir. Ancak GNU'nun getopt_long gerçekleştirimine bakıldığında 
-	bu geçersiz uzun seçeneğin argv dizisinin "optind - 1" indeksinde olduğu görülmektedir. Yani bu geçersiz uzun seçeneğe argv[optind - 1] 
-	ifadesi ile erişilebilmektedir. Ancak bu durum glibc dokümanlarında belirtilmemiştir. Bu nedenle bu özelliğin kullanılması uygun değildir. 
+    Maalesef getopt_long olmayan bir uzun seçenek girildiğinde bunu bize vermemektedir. Ancak GNU'nun getopt_long gerçekleştirimine bakıldığında 
+    bu geçersiz uzun seçeneğin argv dizisinin "optind - 1" indeksinde olduğu görülmektedir. Yani bu geçersiz uzun seçeneğe argv[optind - 1] 
+    ifadesi ile erişilebilmektedir. Ancak bu durum glibc dokümanlarında belirtilmemiştir. Bu nedenle bu özelliğin kullanılması uygun değildir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -783,14 +783,14 @@ int main(int argc, char *argv[])
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	getopt_long fonksiyonun kullanımına diğer bir örnekte aşağıda verilmiştir. Aşağıda programın komut satırı argümanları şunlardır:
+    getopt_long fonksiyonun kullanımına diğer bir örnekte aşağıda verilmiştir. Aşağıda programın komut satırı argümanları şunlardır:
 
-	-a
-	-b <arg>
-	-c
-	-h ya da --help
-	--count <arg>
-	--line[=<arg>]
+    -a
+    -b <arg>
+    -c
+    -h ya da --help
+    --count <arg>
+    --line[=<arg>]
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -1835,19 +1835,19 @@ void exit_sys(const char *msg)
     değerlerini aşağıdaki gibi belirlemiştir:
 
     S_IRWXU             0700
-    S_IRUSR             0400 
-    S_IWUSR             0200 
-    S_IXUSR             0100 
-    S_IRWXG             070 
-    S_IRGRP             040 
-    S_IWGRP             020 
-    S_IXGRP             010 
-    S_IRWXO             07 
-    S_IROTH             04 
-    S_IWOTH             02 
-    S_IXOTH             01 
-    S_ISUID             04000 
-    S_ISGID             02000 
+    S_IRUSR             0400
+    S_IWUSR             0200
+    S_IXUSR             0100
+    S_IRWXG             070
+    S_IRGRP             040
+    S_IWGRP             020
+    S_IXGRP             010
+    S_IRWXO             07
+    S_IROTH             04
+    S_IWOTH             02
+    S_IXOTH             01
+    S_ISUID             04000
+    S_ISGID             02000
     S_ISVTX             01000
 
     Yani belli bir süreden sonra artık rwxrwxrwx biçiminde owner, group ve other bilgilerine ilişkin S_IXXX biçimindeki sembolik sabitler 
@@ -2780,14 +2780,14 @@ void exit_sys(const char *msg)
     int stat(const char *path, struct stat *buf);
     int fstat(int fd, struct stat *buf);
     int lstat(const char *path, struct stat *buf);
- 
+
     stat fonksiyonları bir dosyanın bilgilerini elde etmek amacıyla kullanılmaktadır. Örneğin dosyanın erişim hakları, kullanıcı ve grup id'leri,
     dosyanın uzunluğu, dosyanın tarih zaman bilgileri bu stat fonksiyonlarıyla elde edilmektedir. ls komutu -l seneği ile kullanıldığında
     aslında dosya bilgilerini bu stat fonksiyonuyla elde edip ekrana yazdırmaktadır.
 
     stat fonksiyonlarından en çok kullanılanı stat fonksiyonudur:
 
-    int stat(const char *path, struct stat *buf); 
+    int stat(const char *path, struct stat *buf);
 
     Fonksiyonun birinci parametresi bilgisi elde edilecek dosyanın yol ifadesini belirtmektedir. İkinci parametresi dosya 
     bilgilerinin yerleştirileceği struct stat isimli bir yapı nesnesinin adresini almaktadır. stat isimli yapı <sys/stat.h> 
@@ -3188,7 +3188,7 @@ char *get_ls(struct stat *finfo, const char *name)
     Bunlar gerçek anlamda birer dosya değildir. Adeta bir "pointer" dosyadır. İşletim sistemleri sembolik bağlantı dosyaları için diskte 
     yalnızca bir i-node elemanı tutmaktadır. Sembolik bağlantı dosyaları komut satırında ln -s komutuyla yaratılabilirler. Örneğin:
 
-    ln -s x.dat y.dat 
+    ln -s x.dat y.dat
 
     Burada "x.dat" dosyanının "y.dat" isimli bir sembolik bağlantı dosyası oluşturulmuştur. ls -l komutunda sembolik bağlantı dosyaları ok işaretiyle 
     gösterilmektedir. Örneğin:
@@ -5259,7 +5259,7 @@ void exit_sys(const char *msg)
     geri döner. Bu durumda walkdir fonksiyonun geri dönüş değeri üç biçimde olabilir:
 
     -1: POSIX fonksiyonlarından birinin hatayla geri dönmesi
-    > 0: Erken sonlanmayı belirtir. 
+    > 0: Erken sonlanmayı belirtir.
     0: Normal sonlanmayı belirtir.
 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -5685,7 +5685,7 @@ void exit_sys(const char *msg)
     bu sembolik bağlantının kendisinin mi yoksa onun hedefinin mi link'inin çıkartılacağı işletim sistemini yazanların isteğine bırakılmıştır. 
     Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri döner ve errno uygun biçimde değer alır.
 
-    Bir dizin'in hard link'inin çıkatılması özyinelemli fonksiyonları sonsuz döngüye sokabilmektedir. Bu nedenle dizinler üzerinde 
+    Bir dizin'in hard link'inin çıkartılması özyinelemeli fonksiyonları sonsuz döngüye sokabilmektedir. Bu nedenle dizinler üzerinde 
     hard link çıkartma şüpheli bir durumdur. POSIX standartları bir dizin'in hard link'ini çıkartılabilmesi için prosesin 
     bunu yapabilecek önceliğe sahip olması gerektiğini (yani etkin kullanıcı id'sinin 0 olması gerektiğini) ve işletim sisteminin de 
     dizinlerin hard link'lerinin çıkartılabilmesine izin vermesi gerektiğini belirtmektedir. Eskiden Linux sistemleri root prosesler için
@@ -5697,7 +5697,7 @@ void exit_sys(const char *msg)
 
     ln a b
 
-    Aşağıdaki örnekte komut satırından verilen bir dosyanın har link'i çıkartılmıştır. 
+    Aşağıdaki örnekte komut satırından verilen bir dosyanın hard link'i çıkartılmıştır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -5901,7 +5901,7 @@ void exit_sys(const char *msg)
 
     #include <unistd.h>
 
-    int access(const char *path, int amode) 
+    int access(const char *path, int amode)
 
     Fonksiyonun birinci parametresi erişim testinin yapılacağı dosyanın yol ifadesini belirtmektedir. İkinci parametresi test edilecek 
     erişimi belirtir. Bu parametre aşağıdaki sembolik sabitlerin bir düzeyinde OR'lanmasıyla oluşturulabilir:
@@ -6372,7 +6372,7 @@ void exit_sys(const char *msg)
     IO yönlendirmesinin yukarıdaki gibi yapılmasının iki önemli problemi vardır:
 
     1) Bu yönlendirme aynı biçimde yüksek numaralı betimleyiciler için yapılmak istenirse o betimleyicilerden önce boş boş 
-    betimleyicilerin bulunuyor olma olasılığı yükselir. Dolayısıyla open istediğimiz betimekyciyi değil başka bir betimleyiciyi 
+    betimleyicilerin bulunuyor olma olasılığı yükselir. Dolayısıyla open istediğimiz betimleyiciyi değil başka bir betimleyiciyi 
     tahsis edebilir. 
 
     2) Çok thread'li programlarda close işleminden sonra henüz open yapılmadan önce başka bir thread dosya açarsa bu betimleyiciyi 
@@ -6745,12 +6745,12 @@ int main(void)
 
     Biz bu programı çeşitli biçimlerde çalıştıralım:
 
-    parallels@ubuntu-linux-20-04-desktop:~/Study/Unix-Linux-SysProg$ ./sample
+    $ ./sample
     stderr
     stdout
-    parallels@ubuntu-linux-20-04-desktop:~/Study/Unix-Linux-SysProg$ ./sample > test.txt
+    $ ./sample > test.txt
     stderr
-    parallels@ubuntu-linux-20-04-desktop:~/Study/Unix-Linux-SysProg$ ./sample 2> test.txt
+    $ ./sample 2> test.txt
     stdout
 
     Görüldüğü gibi biz programın hata mesajları ile normal mesajları artık ayırabilmekteyiz. Eğer her mesayı printf ile stdout dosyasına 
@@ -6959,9 +6959,9 @@ int main(void)
     açabilmektedir. Bir programın bu makine komutlarını kullanmasının tüm sistemi çökertebileceği için önüne geçilmesi gerekir. 
     İşte işlemcilerin koruma mekanizması bu tür ihlallerin birinci elden işlemci tarafından tespit edilip engellenmesini sağlamaktadır.
 
-    İşlemcilerinm koruma mekanizmasının iki yönü vardır:
+    İşlemcilerin koruma mekanizmasının iki yönü vardır:
 
-    1) Bellek Koruması 
+    1) Bellek Koruması
     2) Komut Koruması
 
     Bellek koruması bir prosesin kendi bellek alanının dışına erişimlerinin tespit edilmesine yönelik mekanizmadır. Komut koruması 
@@ -7208,7 +7208,7 @@ int main(void)
     İkincisi bu FILE yapsı zaten işin başında static düzeyde tahsis edilmiş bir FILE dizisinin içerisinde alınabilir. Örneğin:
 
     static FILE g_files[FILE_MAX];
-    ... 
+    ...
 
     C standartlarında FILE yapısının içeriği hakkında bir bilgi verilmemiştir. Bu durumda bu FILE yapısının içeriği kütüphaneyi 
     yazanlar tarafından istenildiği gibi alınabilir. 
@@ -7506,7 +7506,7 @@ int main(void)
     C standartları herhangi bir dosyanın default tamponlaması hakkında bir şey söylememiş olsa da "stdin", "stdout" ve "stderr" 
     dosyalarının default tamponlaması hakkında şunları söylemiştir:
 
-    - stdin ve stdout dosyaları default durumda "eğer interaktif olmayan bir aygıta yönlendirilmişse işin başında tam tamponlamalı"  moddadırlar.
+    - stdin ve stdout dosyaları default durumda "eğer interaktif olmayan bir aygıta yönlendirilmişse işin başında tam tamponlamalı" moddadırlar.
     Ancak bu dosyalar "interaktif olan bir aygıta yönlendirilmişse işin başında tam tamponalamlı olamazlar, satır tamponlamalı ya da
     sıfır tamponlamalı" olabilirler. Klavye ve ekran yani terminal "interaktif aygıt" kabul edilmektedir. Ancak disk dosyaları interaktif aygıt
     kabul edilmemektedir. 
@@ -8871,7 +8871,7 @@ void exit_sys(const char *msg)
     yazı biçimindedir. Örneğin anahtar "ankara" yazısı olabilir, onun değeri de "06" yazısı olabilir. Anahtar "eskisehir" yazısı olabilir
     onun değeri de "26" yazısı olabilir. 
 
-    Çevre değişkenleri ve değerleri pek çok işletim sisteminde prosesin bellek alanı içerisinde tutulmaktadır. Örneğim Windows sistemleri, 
+    Çevre değişkenleri ve değerleri pek çok işletim sisteminde prosesin bellek alanı içerisinde tutulmaktadır. Örneğin Windows sistemleri, 
     UNIX/Linux sistemleri tipik olarak çevre değişkenlerini proses bellek alanı içerisinde özel bir alanda tutmaktadır. 
     Bu konu çerçevesinde programcının şu işlemleri yapabilmesi gerekmektedir:
 
@@ -9038,7 +9038,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	for (int i = 1; i < argc; ++i)	
+	for (int i = 1; i < argc; ++i)
 		if (putenv(argv[i]) == -1)
 			perror("putenv");
 
@@ -9113,7 +9113,7 @@ void exit_sys(const char *msg)
                     adres   ---> veli=200\0
                     adres   ---> selami=300\0
                     ...
-                    s dizisinin adresi  ----> ayse=500\0
+                    s dizisinin adresi   ----> ayse=500\0
                     NULL
 
     Maalesef bu environ global değişkeninin extern bildirimi herhangi bir başlık dosyasında bulundurulmamıştır. Prosesin çevre 
@@ -9275,7 +9275,7 @@ void exit_sys(const char *msg)
 
     ~/.bash_profile
     ~/.bash_login
-    ~/.profile 
+    ~/.profile
 
     Eğer bash "interactive non-login shell" olarak çalıştırılırsa (örenğin masaüstünden) bu durumda bash ~/.bashrc dosyasındaki 
     komutları çalıştırmaktadır. Bu durumda biz .bashrc dosyasına export ile çevre değişkeni eklersek masaüstünden terminali açtığımızda 
@@ -9486,7 +9486,7 @@ int main(int argc, char *argv[])
     if ((pid = fork()) == -1)
         exit_sys("fork");
 
-    if (pid == 0) 
+    if (pid == 0)
         if (exec(...) == -1)
             exit_sys("exec");
 
@@ -10443,7 +10443,7 @@ void exit_sys(const char *msg)
     Benzer biçimde bu bayrak şöyle de reset edilebilir:
 
     if (fcntl(fd, F_SETFD, fcntl(fd, F_GETFD) & ~FD_CLOEXEC)) == -1)
-        exit_sys("fcntl"); 
+        exit_sys("fcntl");
 
     Close on exec bayrağı dosya nesnesinin içerisinde tutulmamaktadır. Aynı dosya nesnesini gösteren farklı proseslerde farklı betimleyiciler
     olabilir. Bu betimleyicilerden birinin close on exec bayrağı set edilmişken diğerinin set edilmemiş olabilir. Yani close onexec bayrağı dosya
@@ -10571,7 +10571,7 @@ int main(int argc, char *argv[])
     olmaktadır. Pekiyi shebang'te belirtilen dosya çalıştırılırken ona komut satırı argümanları olarak ne geçirilecektir? 
     Shebang'te belirtilen programın çalıştırılması sırasında bu programa geçirilen komut satır argümanları şöyledir:
 
-    argv[0] ---> shebang'te belirtilen program dosyasına ilişkin yol ifadesi 
+    argv[0] ---> shebang'te belirtilen program dosyasına ilişkin yol ifadesi
     argv[1] ---> Eğer shebang'te çalıştırılabilen programın yanında isteğe bağlı argüman varsa o argüman 
     argv[2] ---> exec fonksiyonunda belirtilen çalıştırılabilir olmayan dosyanın (yani script dosyasının) yol ifadesi 
     argv[3] ve sonrası ---> exec fonksiyonunda belirtilen komut satırı argümanları ancak ilk argüman dahil değil
@@ -10579,7 +10579,7 @@ int main(int argc, char *argv[])
     Eğer shebang'in yanındaki programın yanında isteğe bağlı argüman verilmemişse bu durumda shebang'te belirtilen programın
     komut satırı argümanları şöyle olacaktır:
 
-    argv[0] ---> shebang'te belirtilen program dosyasına ilişkin yol ifadesi 
+    argv[0] ---> shebang'te belirtilen program dosyasına ilişkin yol ifadesi
     argv[1] ---> exec fonksiyonunda belirtilen çalıştırılabilir olmayan dosyanın (yani script dosyasının) yol ifadesi 
     argv[2] ve sonrası ---> exec fonksiyonunda belirtilen komut satırı argümanları ancak ilk argüman dahil değil
 
@@ -10687,7 +10687,7 @@ int main(int argc, char *argv[])
     Tabii biz bir script dosyasını doğrudan kabuk üzerinden de çalıştırabiliriz. Fark eden bir şey yoktur. Bu durumda zaten kabuk exec 
     işlemini uygulamaktadır. Örneğin "test.txt" dosyası şöyle olsun:
 
-    #!/home/kaan/Study/Unix-Linux-SysProg/mample ankara 
+    #! /home/kaan/Study/Unix-Linux-SysProg/mample ankara
 
     Şimdi bunu kabuk üzerinden çalıştıralım:
 
@@ -10759,7 +10759,7 @@ int main(int argc, char *argv[])
 
 /* test.txt */
 
-#!/home/kaan/Study/Unix-Linux-SysProg/mample ankara
+#! /home/kaan/Study/Unix-Linux-SysProg/mample ankara
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi bütün bunların anlamı nedir? Yani shebang ile bir script dosyasının aslında başka bir programı çalıştırmasının ne faydası olabilir?
@@ -10793,7 +10793,7 @@ int main(int argc, char *argv[])
     Aynı durum python, perl, sed, awk gibi dillerde de böyledir. Şimdi bir Python programını shebang ile çalıştıralım. Programın ismi
     "sample.py" olsun:
 
-    #!/usr/bin/python3 
+    #!/usr/bin/python3
 
     for i in range(10):
         print(i)
@@ -10809,7 +10809,7 @@ int main(int argc, char *argv[])
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-#!/usr/bin/python3 
+#!/usr/bin/python3
 
 for i in range(10):
 	print(i)
@@ -10897,7 +10897,7 @@ for i in range(10):
     Pek çok sistemde kabuk programları "interaktif olmayan (noninteractive)" bir modda çalıştırılabilmektedir. Örneğin UNIX/Linux 
     kabuk programları "-c" seçeneği ile çalıştırılırsa yalnızca bir komutu çalıştırıp sonlanmaktadır. Örneğin:
 
-    bash -c "ls -l; cat sample.c" 
+    bash -c "ls -l; cat sample.c"
 
     Benzer biçimde Windows sistemlerinde de "cmd.exe" kabuk programı /C seçeneği ile benzer biçimde çalıştırılabilmektedir. 
 
@@ -11687,7 +11687,7 @@ void exit_sys(const char *msg)
     Burada prosesin kullanıcı id'si ile etkin kullanıcı id'si yer değiştirilmiştir. Örneğin prosesin çağrı öncesindeki kullanıcı id'leri 
     şöyle olsun:
 
-    Gerçek kullanıcı id'si: kaan 
+    Gerçek kullanıcı id'si: kaan
     Etkin kullanıcı id'si: root
     Saklı kullanıcı id'si: root
 
@@ -11697,7 +11697,7 @@ void exit_sys(const char *msg)
 
     Şimdi id'ler şöyle olacaktır:
 
-    Gerçek kullanıcı id'si: root 
+    Gerçek kullanıcı id'si: root
     Etkin kullanıcı id'si: kaan
     Saklı kullanıcı id'si: root
 
@@ -11705,7 +11705,7 @@ void exit_sys(const char *msg)
 
     setreuid(geteuid(), getuid());
 
-    Gerçek kullanıcı id'si: kaan 
+    Gerçek kullanıcı id'si: kaan
     Etkin kullanıcı id'si: root
     Saklı kullanıcı id'si: root
 
@@ -11965,7 +11965,7 @@ void exit_sys(const char *msg)
 
     Aşağıdaki program set-user-id bayrağı set edilmiş sahibi root olan bir program dosyasına dönüştürülmüştür. Program aşağıdaki gibi derlenmiştir:
 
-    gcc -o sample sample.c 
+    gcc -o sample sample.c
 
     Sonra program dosyasının sahibi root olarak değiştirilmiştir. Ondan sonra da program dosyasının set-user-id bayrağı set edilmiştir:
 
@@ -12269,7 +12269,7 @@ int main(void)
     kaçıncı sanal sayfaya karşılık geldiğini hesaplar. Bu hesap işlemci tarafından oldukça kolay bir biçimde yapılır. Sayı 12 kere sağa ötelenirse
     başka bir deyişle sayının sağındaki 3 hex digit kaldırılırsa bu sanal adresin kaçıncı sanal sayfaya karşılık geldiği bulunabilir:
 
-    05C34782 >> 12 = 05C34 (sanal sayfa no, decimal 23604) 
+    05C34782 >> 12 = 05C34 (sanal sayfa no, decimal 23604)
 
     Artık işlemci sayfa tablosunda 0x5C34 yani desimal 23604 numaralı girişe bakar. Sayfa tablosunun ilgili kısmı şöyle olsun:
 
@@ -12497,10 +12497,10 @@ int main(void)
 
     Sanal Sayfa No  (decimal/hex)   Fiziksel Sayfa No (desimal/hex)
     ...                         ...
-    23603                       84523 
+    23603                       84523
     23604                       -
-    23605                       42398 
-    23606                       - 
+    23605                       42398
+    23606                       -
     23607                       73245
     ...                         ...
 
@@ -12624,6 +12624,8 @@ int main(void)
 	printf("ok\n");
 
 	getchar();
+
+	free(pc);
 
 	return 0;
 }
@@ -13796,9 +13798,9 @@ void exit_sys(const char *msg)
 
     - Client'ın bağlantıyı sonlandırması şöyle bir el sıkışmayla sağlanmıştır:
 
-    1) Önce client server'a DISCONNECT_REQUESTED mesajını gönderir. 
-    2) Sonra server bu mesajı alınca eğer disconnect'i kabul ederse DISCONNECT_ACCEPTED mesajını gönderir
-    3) Client son olarak server'a DISCONNECT mesajını göndererek el sıkışmayı sonlandırır. 
+    1) Önce client server'a DISCONNECT_REQUESTED mesajını gönderir.
+    2) Sonra server bu mesajı alınca eğer disconnect'i kabul ederse DISCONNECT_ACCEPTED mesajını gönderir.
+    3) Client son olarak server'a DISCONNECT mesajını göndererek el sıkışmayı sonlandırır.
 
     - Client program bir komut satırı oluşturup komutların kullanıcı tarafından uygulanmasını sağlamaktadır. Ancak bağlantının sonlandırılması
     bir dizi el sıkışma gerektirdiği için "quit" komutu sırasında yaptırılmıştır.
@@ -14429,7 +14431,7 @@ void exit_sys(const char *msg)
     Anımsanacağı gibi dup fonksiyonu bize ilk boş betimleyiciyi, dup2 fonksiyonu ise ikinci parametresiyle belirttiğimiz betimleyiciyi 
     vermektedir. Oysa fcntl fonksiyonu F_DUPFD komut koduyla bize belli bir değerden büyük en düşük betimleyici verir. Örneğin:
 
-    if ((fd2 = fcntl(fd, F_DUPFD, 50)) == -1) 
+    if ((fd2 = fcntl(fd, F_DUPFD, 50)) == -1)
         exit_sys("fcntl");
 
     Burada fd'nin çiftlenmiş betimleyicisi 50 ya da ilk büyük betimleyicidir. O halde fcntl ile dup fonksiyonun eşdeğeri şöyledir:
@@ -14444,10 +14446,10 @@ void exit_sys(const char *msg)
     if ((fd2 = fcntl(fd, F_DUPFD_CLOEXEC, 0)) == -1)
         exit_sys("fcntl");
 
-    fd2 betimleyicisinin aynı zamanda close on exec bayrağı set edilmiştir. 
+    fd2 betimleyicisinin aynı zamanda close on exec bayrağı set edilmiştir.
 
     fcntl fonksiyonunun diğer komut kodları dosya kilitleme gibi özel bazı konulara ilişkindir. Bu bayraklar o konuların anlatıldığı bölümde 
-    ele alınmaktadır. 
+    ele alınmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -14552,7 +14554,7 @@ int main(int argc, char *argv[])
 					usleep(500);
 					continue;
 				}
-				else 
+				else
 					exit_sys("write");
 			++i;
 		}
@@ -16743,13 +16745,20 @@ void exit_sys(const char *msg)
     Klasik Sistem 5 mesaj kuyrukları ile POSIX mesaj kuyruklarını avantaj/dezavantaj bakımından şöyle karşılaştırabiliriz:
 
     - POSIX mesaj kuyrukları isimlendirme bakımından daha güzel bir arayüz sunmaktadır.
-    - Klasik Sistem 5 mesaj kuyrukları daha taşınabilirdir. Ancak POSIX mesaj kuyrukları da artık taşınabilir hale gelmiştir. 
-    - POSIX mesaj kuyrukları dosyalar gibi kullanılmaktadır. Dolayısıyla "her şeyin dosya olduğu" tasarımı ile daha uyumludur. 
-    - Klasik Sistem 5 mesaj kuyruklarında belli bir önceliğe ilişkin mesajlar alınabilmektedir. POSIX mesaj kuyruklarında bu yapılamamaktadır. 
+
+    - Klasik Sistem 5 mesaj kuyrukları daha taşınabilirdir. Ancak POSIX mesaj kuyrukları da artık taşınabilir hale gelmiştir.
+
+    - POSIX mesaj kuyrukları dosyalar gibi kullanılmaktadır. Dolayısıyla "her şeyin dosya olduğu" tasarımı ile daha uyumludur.
+
+    - Klasik Sistem 5 mesaj kuyruklarında belli bir önceliğe ilişkin mesajlar alınabilmektedir. POSIX mesaj kuyruklarında bu yapılamamaktadır.
+
     - POSIX mesaj kuyrukları silindiğinde onu kullanan prosesler kullanmaya devam ederler. Ancak klasik Sistem 5 mesaj kuyruklarında
-    mesaj kuyruğu silindiğinde onu kullanan prosesler artık mesaj kuyruğunu kullanamaz hale gelirler. 
-    - POSIX mesaj kuyrukları dosya sistemi gibi mount edilebilmektedir. Dolayısıyla silme işlemi dosya siler gibi yapılabilmektedir. 
-    - Her iki mesaj kuyruğu da silinene kadar ya da sistem reboot edilene kadar yaşamaktadır. 
+    mesaj kuyruğu silindiğinde onu kullanan prosesler artık mesaj kuyruğunu kullanamaz hale gelirler.
+
+    - POSIX mesaj kuyrukları dosya sistemi gibi mount edilebilmektedir. Dolayısıyla silme işlemi dosya siler gibi yapılabilmektedir.
+
+    - Her iki mesaj kuyruğu da silinene kadar ya da sistem reboot edilene kadar yaşamaktadır.
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -16758,11 +16767,11 @@ void exit_sys(const char *msg)
     yönlendirir. Böylece iki proses, farklı sanal adreslerle aynı fiziksel sayfaya erişirler. Proseslerden biri oraya bir şey yazdığında 
     diğeri onu hemen görür. Dolayısıyla yöntem çok hızlıdır. Ancak bu yöntem kendi içerisinde bir senkronizasyon içermemektedir. 
     Dolayısıyla senkronizasyonun sağlanması için semaphore gibi bir senkronizasyon nesnesine de gereksinim duyulur. Zaten bu nedenle
-    IPC nesnelerine semaphore'lar eklenmiştir. 
+    IPC nesnelerine semaphore'lar eklenmiştir.
 
     Paylaşılan bellek alanları da UNIX/Linux dünyasında tıpkı mesaj kuyruklarında olduğu gibi iki arayüzle kullanılabilmektedir:
     Klasik Sistem 5 paylaşılan bellek alanları ve POSIX paylaşılan bellek alanları. Biz de burada önce klasik Sistem 5 paylaşılan bellek 
-    alanlarını sonra da POSIX paylaşılan bellek alanlarını göreceğiz. 
+    alanlarını sonra da POSIX paylaşılan bellek alanlarını göreceğiz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -17124,7 +17133,7 @@ void exit_sys(const char *msg)
 
     #include <sys/mman.h>
 
-    int shm_open(const char *name, int oflag, mode_t mode); 
+    int shm_open(const char *name, int oflag, mode_t mode);
 
     Fonksiyonun birinci parametresi paylaşılan bellek alanı nesnesinin ismini belirtmektedir. Tıpkı POSIX mesaj kuyruklarında 
     olduğu gibi bu ismin kök dizinde bir dosya ismi gibi verilmesi gerekmektedir. (Bazı sistemlerin, buradaki dosya isminin 
@@ -17268,7 +17277,7 @@ void exit_sys(const char *msg)
     Kontrol şöyle yapılabilir:
 
     shmaddr = mmap(NULL, SHM_SIZE, PROT_WRITE, MAP_SHARED, fdshm, 0);
-	if (shmaddr == MAP_FAILED) 
+	if (shmaddr == MAP_FAILED)
 		exit_sys("mmap");
 
     Paylaşılan bellek alanı betimleyicisi mapping işleminden sonra close fonksiyonuyla kapatılabilir. Bu durum mapping'i etkilememektedir. 
@@ -17575,7 +17584,7 @@ void exit_sys(const char *msg)
     if (fstat(fd, &finfo) == -1)
         exit_sys("fstat");
 
-    if ((maddr = (char *)mmap(NULL, finfo.st_size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0)) == MAP_FAILED) 
+    if ((maddr = (char *)mmap(NULL, finfo.st_size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0)) == MAP_FAILED)
         exit_sys("mmap");
 
     Burada biz önce dosyanın uzunluğunu fstat fonksiyonu ile elde ettik sonra da mmap fonksiyonu ile dosyanın hepsini 
@@ -17631,7 +17640,7 @@ int main(int argc, char *argv[])
 	if (fstat(fd, &finfo) == -1)
 		exit_sys("fstat");
 
-	if ((maddr = (char *)mmap(NULL, finfo.st_size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0)) == MAP_FAILED) 
+	if ((maddr = (char *)mmap(NULL, finfo.st_size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0)) == MAP_FAILED)
 		exit_sys("mmap");
 
 	for (off_t i = 0; i < finfo.st_size; ++i)
@@ -17775,7 +17784,7 @@ int main(int argc, char *argv[])
 	if (fstat(fd, &finfo) == -1)
 		exit_sys("fstat");
 
-	if ((maddr = (char *)mmap(NULL, finfo.st_size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0)) == MAP_FAILED) 
+	if ((maddr = (char *)mmap(NULL, finfo.st_size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0)) == MAP_FAILED)
 		exit_sys("mmap");
 
 	printf("Press ENTER to continue...\n");
@@ -17882,7 +17891,7 @@ void exit_sys(const char *msg)
     Bu durumda biz POSIX standartlarına uygunluk bakımından örneğin bir bellek tabanlı dosyanın bellek alanına bir şeyler yazdığımızda
     o alanın flush edilmesi için MS_SYNC ya da MS_ASYNC bayraklarıyla msync çağrısını yapmamız gerekir:
 
-    if ((maddr = (char *)mmap(NULL, finfo.st_size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0)) == MAP_FAILED) 
+    if ((maddr = (char *)mmap(NULL, finfo.st_size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0)) == MAP_FAILED)
         exit_sys("mmap");
 
     memcpy(maddr, "ankara", 6);
@@ -18148,8 +18157,8 @@ void exit_sys(const char *msg)
 
     Buradaki flags parametresi aşağıdaki sembolik sabitlerin bit OR işlemine sokulmasıyla oluşturulur:
 
-    MCL_CURRENT: Şu anda RAM'de olan tüm sayfaların kilitleneceği anlamına gelir. 
-    MCL_FUTURE: Bundan sonra RAM'e alınacak tüm sayfaların kilitleneceği anlamına gelir. 
+    MCL_CURRENT: Şu anda RAM'de olan tüm sayfaların kilitleneceği anlamına gelir.
+    MCL_FUTURE: Bundan sonra RAM'e alınacak tüm sayfaların kilitleneceği anlamına gelir.
 
     munlockall fonksiyonu ise ters işlemi yapmaktadır:
 
@@ -18271,37 +18280,37 @@ void exit_sys(const char *msg)
     toplam CPU zamanının artırılmasını sağlayabilmektedir. (Örneğin tek bir işlemci bulunuyor olsun. Bizim dışımızda sistemde 10 thread 
     çalışıyor olsun. Biz prosesimizde tek thread oluşturursak (default durum) 1 / 11 CPU zamanı elde ederiz. İki thread oluştursak 
     2 / 12 CPU zamanı elde ederiz. Üç thread oluştursak 3 / 13 CPU zamanı elde ederiz. Bir kesrin pay ve paydasına aynı sayı eklendiğinde 
-    kesrin büyüdüğüne dikkat ediniz.) 
+    kesrin büyüdüğüne dikkat ediniz.)
 
     3) Bir programın çeşitli parçalarının çok işlemcili ya da çok çekirdekli makinelerde eş zamanlı biçimde çalıştırılmasına
     "paralel programlama" denilmektedir. Paralel programlama yapabilmek için programcının thread'leri kullanması ve thread'leri farklı 
-    işlemcilere ya da çekirdeklere ataması gerekmektedir. 
+    işlemcilere ya da çekirdeklere ataması gerekmektedir.
 
     4) Thread'ler bazı durumlarda mutlak zorunlu olmasa da tasarımı kolaylaştırmak için ve sistemi ölçeklenebilir (scalable) 
     hale getirmek için kullanılabilmektedir.
 
     5) Thread'ler bazı durumlarda zorunlu olarak da kullanılabilmektedir. Örneğin GUI programlama modelinde bir mesajın işlenmesi 
-    uzun süre aldığında bu durumda mecburen thread'ler kullanılmaktadır. 
+    uzun süre aldığında bu durumda mecburen thread'ler kullanılmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Programın akışına ilişkin birkaç terim bazen birbirleriyle karıştırılmaktadır. (Yine de bilgisayar bilimlerindeki terimlerin çoğu 
     farklı konularda farklı anlamlarda kullanılabilmektedir.)
 
-    Concurrent Computing: Bu terim genel bir şemsiye terimdir. Birden fazla akışın söz konusu olabildiği tüm durumlar için kullanılabilmektedir. 
+    Concurrent Computing: Bu terim genel bir şemsiye terimdir. Birden fazla akışın söz konusu olabildiği tüm durumlar için kullanılabilmektedir.
 
     Multithreading (ya da Multithreaded) Programming: Bir işin birden fazla thread ile gerçekleştirilmesine yönelik uygulamalar için 
-    bu terim kullanılmaktadır. 
+    bu terim kullanılmaktadır.
 
     Reentrancy: Bu terim de genellikle fonksiyon akışının içi içe geçebilmesini belirtmektedir. Örneğin bir fonksiyonun "reenterant"
     olması demek fonksiyon çalışırken yeniden aynı fonksiyonun çalıştırılması demektir. Reentrancy "özyineleme (recursion)" demek değildir. 
     Özyinelemede tek bir akış vardır. Fakat örneğin iki thread'in aynı fonksiyona girmesi durumunda bir "reentrancy" durumu oluşur. 
     Ya da örneğin bir mikro denetleyici sistemde akış bir fonksiyon üzerinde ilerlerken bir kesme oluştuğunda kesme kodu 
     yeniden aynı fonksiyonu çağırırsa burada da bir "reentrancy" durumu söz konusu olur. UNIX/Linux sistemlerinde de hiç thread 
-    kullanmamış olsak da "sinyal (signal)" mekanizması bir "reentrancy" durumu oluşturabilmektedir. 
+    kullanmamış olsak da "sinyal (signal)" mekanizması bir "reentrancy" durumu oluşturabilmektedir.
 
     Parallel Programming: Aynı makinede bir prosesin çeşitli thread'lerinin farklı CPU ya da çekirdeklerde eşzamanlı çalıştırılma gayretine
-    paralel programlama denilmektedir. 
+    paralel programlama denilmektedir.
 
     Distributed Computing: Bir işin farklı bilgisayarlarda eş zamanlı bir biçimde ele alınmasına ilişkin bir terimdir. Paralel 
     programlamaya benzemektedir. Ancak paralel programlama "aynı makinede" yürütülen bir faaliyetken "distributed computing" 
@@ -18497,7 +18506,7 @@ void exit_sys(const char *msg)
 
     int result;
     ...
-    if ((result = pthread_xxx(...)) != 0) 
+    if ((result = pthread_xxx(...)) != 0)
         exit_sys_errno("pthread_xxx", result);
 
     errno ismi bazı sistemlerde bir değişken değil makro olduğu için errno isminde bir değişken tanımlamayınız. 
@@ -21300,7 +21309,7 @@ namespace CSD
 
     #include <pthread.h>
 
-    int pthread_mutexattr_setpshared(pthread_mutexattr_t *attr, int pshared); 
+    int pthread_mutexattr_setpshared(pthread_mutexattr_t *attr, int pshared);
 
     Fonksiyonun birinci parametresi mutex özellik nesnesinin adresini almaktadır. İkinci parametresi ise nesnenin proseslerarası paylaşımını 
     belirtmektedir. Bu parametre PTHREAD_PROCESS_SHARED geçilirse nesne proseslerarasında paylaşılmakta, PTHREAD_PROCESS_PRIVATE geçilirse
@@ -21487,7 +21496,7 @@ int main(void)
 		exit_sys("shm_open");
 
 	shminfo = (SHARED_INFO *)mmap(NULL, sizeof(SHARED_INFO), PROT_WRITE, MAP_SHARED, fdshm, 0);
-	if (shminfo == MAP_FAILED) 
+	if (shminfo == MAP_FAILED)
 		exit_sys("mmap");
 
 	for (int i = 0; i < 1000000000; ++i) {
@@ -21993,7 +22002,7 @@ void exit_sys_errno(const char *msg, int eno)
 
     0 1 1 3 3 5 7 9 11 13 14 14 16 18 20 20 22 22 23 24 27 28 29 31 32 33 34 34 36 37 37 38 38 39 41 43 43 43 44 45 45 48 
     49 49 51 51 51 52 54 54 54 55 57 60 60 60 61 61 61 61 62 62 64 66 66 68 69 70 72 73 75 76 76 79 81 81 81 82 83 84 85 
-    85 87 87 90 92 93 94 95 98 98 98 99 
+    85 87 87 90 92 93 94 95 98 98 98 99
 
     Görüldüğü gibi tüketici thread bazı değerleri kaçırmış bazı değerleri de birden fazla kez almıştır.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -22486,7 +22495,7 @@ void exit_sys_errno(const char *msg, int eno)
 
     #include <pthread.h>
 
-    int pthread_condattr_setpshared(pthread_condattr_t *attr, int pshared); 
+    int pthread_condattr_setpshared(pthread_condattr_t *attr, int pshared);
     int pthread_condattr_getpshared(const pthread_condattr_t *attr, int * pshared);
 
     Buradaki pshared parametresi PTHREAD_PROCESS_SHARED ya da PTHREAD_PROCESS_PRIVATE değerinde olabilir. pthread_condattr_getpshared 
@@ -24973,7 +24982,7 @@ void exit_sys(const char *msg)
 
     Tabii bu kontrol aşağıdaki gibi de yapılabilir:
 
-    if ((result = pthread_barrier_wait(&g_barrier)) != 0) 
+    if ((result = pthread_barrier_wait(&g_barrier)) != 0)
         if (result == PTHREAD_BARRIER_SERIAL_THREAD) {
             /* birleştirme işlemi */
         }
@@ -25968,10 +25977,10 @@ void *thread_proc4(void *param)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bugün çok işlemcili ve çok çekirdekli sistemlerde işlemci-bellek bağlantısında iki mimari kullanılmaktadır: 
+    Bugün çok işlemcili ve çok çekirdekli sistemlerde işlemci-bellek bağlantısında iki mimari kullanılmaktadır:
 
     - SMP (Symmetric Multiprocessor) Mimarisi
-    - NUMA (Non Unified Memory Access) Mimarisi 
+    - NUMA (Non Unified Memory Access) Mimarisi
 
     SMP mimarisi pek çok işlemci tarafından default olarak kullanılan mimaridir. Bu mimaride işlemciler ya da çekirdekler 
     aynı RAM'e erişmektedir. Dolayısıyla "bus" çakışmasını ortadan kaldırmak için bir işlemci ya da çekirdek RAM'e erişirken 
@@ -29700,7 +29709,7 @@ void exit_sys_errno(const char *msg, int eno)
 
     #include <string.h>
 
-    char *strerror(int errnum); 
+    char *strerror(int errnum);
 
     Görüldüğü gibi fonksiyon statik alanın adresiyle geri dönmektedir. O halde bu fonksiyonun aynı anda farklı thread'lerden 
     çağrılması uygun değldir. Çünkü bu fonksiyon thread güvenli değildir. O halde aslında strerror yerine bizim strerror_t
@@ -31206,7 +31215,7 @@ void exit_sys(const char *msg)
 
     #include <signal.h>
 
-    int sigprocmask(int how, const sigset_t *set, sigset_t *oset); 
+    int sigprocmask(int how, const sigset_t *set, sigset_t *oset);
 
     Fonksiyonun birinci parametresi "signal mask kümesi" üzerinde hangi işlemin yapılacağını belirtmektedir. Bu parametre şunlardan 
     biri olabilir:
@@ -32643,7 +32652,7 @@ void exit_sys(const char *msg)
     int si_signo:	Oluşan sinyalin numarası.
     int si_errno:	O andaki errno değeri (saklayıp geri yüklemek için gerekebilmektedir).
     pid_t si_pid:	Sinyali gönderen prosesin proses id'sini belirtmektedir.
-    uid_t si_uid:	Sinyali gönderen prosesin gerçek kullanıcı id'sini belirtir. 
+    uid_t si_uid:	Sinyali gönderen prosesin gerçek kullanıcı id'sini belirtir.
     int si_int:		sigqueue fonksiyonundaki sinyale iliştirilen int değer.
     void *si_ptr:	sigqueue fonksiyonundaki sinyale iliştirilen adres bilgisi.
 
@@ -32720,7 +32729,7 @@ void exit_sys(const char *msg)
     gerçek zamanlı sinyaller için hepsinin teslim edildiğini göreceksiniz. Örneğin 10 numaralı sinyal ile (SIGUSR1) şöyle bir 
     durum oluşmuştur:
 
-    Birinci terminal 
+    Birinci terminal
 
     $ ./sample 10
     Process id: 46480
@@ -33648,7 +33657,7 @@ void exit_sys(const char *msg)
     Fonksiyon şunları yapar:
 
     - Yeni bir oturum (session) oluşturur.
-    - Bu oturum içerisinde yeni bir proses grubu oluşturur. 
+    - Bu oturum içerisinde yeni bir proses grubu oluşturur.
     - Oluşturulan oturumun ve proses grubunun lideri fonksiyonu çağıran prosestir.
 
     Görüldüğü gibi bir proses setsid fonksiyonunu çağırdığında bir oturumla birlikte yeni bir proses grubu da oluşturulmaktadır. 
@@ -33856,7 +33865,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Oturumun arka plan bir prosesi, prosesin ilişkin olduğu terminalden (controlling terminal) okuma yapmak isterse terminal 
     sürücüsü o arka plan prosesin içinde bulunduğu proses grubuna SIGTTIN sinyalini göndermektedir. Bu sinyalin default eylemi 
-    (default action)  prosesin durdurulmasıdır. Bu biçimde durdurulmuş olan prosesler SIGCONT sinyali ile yeniden çalıştırılmak 
+    (default action) prosesin durdurulmasıdır. Bu biçimde durdurulmuş olan prosesler SIGCONT sinyali ile yeniden çalıştırılmak 
     istenebilir. Ancak yeniden okuma yapılırsa yine proses durdurulacaktır. Bu tür prosesler kabuk üzerinden fg %n komutuyla ön plana 
     çekilebilir. Bu durumda kabuk önce prosesin proses grubunu ön plan proses grubu yapar sonra da onu SIGCONT sinyali ile yeniden 
     proses grubunu çalışır duruma getirir.
@@ -34912,7 +34921,7 @@ void exit_sys(const char *msg)
     Periyodik timer oluşturabilmek için kullanılan setitime fonksiyonunun bazı yetersizlikleri şunlardır:
 
     - Haberdar etme mekanizması yalnızca sinyalle yapılmaktadır.
-    - Kullanılan sinyal gerçek zamanlı olmayan sinyallerdir. Bunların da biriktirilmesi söz konusu değildir. 
+    - Kullanılan sinyal gerçek zamanlı olmayan sinyallerdir. Bunların da biriktirilmesi söz konusu değildir.
     - Sinyal oluştuğunda sinyal gerçek zamanlı olmadığı için sinyale iliştirilecek bir bilgi de yoktur.
     - Thread yoluyla haberdar edilme mekanizması yoktur.
     - Zaman duyarlılığı mikrosaniye mertebesindedir.
@@ -35812,7 +35821,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Şimdi de bazı proses limitlerinden bahsedelim. Bunlar hakkında daha ayrıntılı bilgileri ilgili dokümanlardan edinebilirsiniz.
 
-    - RLIMIT_AS: Prosesin maksimum kullanabileceği sanal bellek miktarını belirtir. Bu limitin Linux'taki default hard ve soft default  
+    - RLIMIT_AS: Prosesin maksimum kullanabileceği sanal bellek miktarını belirtir. Bu limitin Linux'taki default hard ve soft default 
     RLIM_INFINITY biçimindedir. 
 
     - RLIMIT_CORE: Bu limit üzerinde daha önce de "core dosyalarının oluşturulması" konusunda bazı şeyler söylemiştik. Bu limit
@@ -37409,7 +37418,7 @@ void exit_sys(const char *msg)
 
     POLLRDHUP: Soketlerde karşı taraf soketi kapattığında ya da shutdown fonksiyonu SHUT_WR argümanıyla çağrıldığında oluşur. 
 
-    POLLNVAL: Bu bayrak yapının events elemanında set edilmez. Fonksiyon tarafından eğer izlenen bir betimelyici kapalıysa 
+    POLLNVAL: Bu bayrak yapının events elemanında set edilmez. Fonksiyon tarafından eğer izlenen bir betimleyici kapalıysa 
     yapının revents elemanında fonksiyon tarafından set edilmektedir. 
 
     Bu bayraklar bit OR işlemine sokulabilmektedir. Örneğin hem okuma hem de yazma izlemesi için POLLIN|POLLOUT kullanılabilir.
@@ -37418,11 +37427,11 @@ void exit_sys(const char *msg)
 
     Boruda bilgi yok ve yazan tarafın betimleyicisi kapalı ===> Okuyan tarafta POLLHUP
     Boruda bilgi var ve yazan tarafın betimleyicisi kapalı ===> Okuyan tarafta POLLIN|POLLHUP
-    Boruda bilgi var ve yazan tarafın betimleyicisi açık ===> Okuyan tarafta POLLIN 
+    Boruda bilgi var ve yazan tarafın betimleyicisi açık ===> Okuyan tarafta POLLIN
 
     Boruda yazma için yer yok ve okuyan tarafın betimleyicisi kapalı ===> Yazan tarafta POLLERR
-    Boruda yazma için yer var ve okuyan tarafın betimleyicisi kapalı ===> Yazan tarafta POLLOUT|POLLERRR
-    Boruda yazma için yer var ve okuyan tarafın betimleyicisi açık ===> Yazan tarafta POLLOUT 
+    Boruda yazma için yer var ve okuyan tarafın betimleyicisi kapalı ===> Yazan tarafta POLLOUT|POLLERR
+    Boruda yazma için yer var ve okuyan tarafın betimleyicisi açık ===> Yazan tarafta POLLOUT
 
     Sokette bilgi var ===> Okuyan tarafta POLLIN
     Network tamponunda yazacak yer var ===> Yazan tarafta POLLOUT
@@ -37787,7 +37796,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    select ve poll fonksiyonlarının en önemli sorunu betimeleyici sayısı arttığında performansın ciddi biçimde düşmesidir. Yani
+    select ve poll fonksiyonlarının en önemli sorunu betimleyici sayısı arttığında performansın ciddi biçimde düşmesidir. Yani
     bu fonksiyonlar iyi bir ölçeklenebilirliğe (scalability) sahip değildir. İşte bu nedenden dolayı multiplexed IO işlemleri için 
     Linux sistemlerinde bu sistemlere özgü epoll fonksiyonları da bulundurulmuştur. epoll fonksiyonları, select ve poll fonksiyonlarına 
     göre özellikle betimleyici sayısı arttığında çok daha iyi performans göstermektedir. Bu nedenle Linux sistemlerinde ölçeklenebilir 
@@ -37867,16 +37876,16 @@ void exit_sys(const char *msg)
 
     Boruda bilgi yok ve yazan tarafın betimleyicisi kapalı ===> Okuyan tarafta EPOLLHUP
     Boruda bilgi var ve yazan tarafın betimleyicisi kapalı ===> Okuyan tarafta EPOLLIN|EPOLLHUP
-    Boruda bilgi var ve yazan tarafın betimleyicisi açık ===> Okuyan tarafta EPOLLIN 
+    Boruda bilgi var ve yazan tarafın betimleyicisi açık ===> Okuyan tarafta EPOLLIN
 
     Boruda yazma için yer yok ve okuyan tarafın betimleyicisi kapalı ===> Yazan tarafta EPOLLERR
     Boruda yazma için yer var ve okuyan tarafın betimleyicisi kapalı ===> Yazan tarafta EPOLLOUT|EPOLLERR
-    Boruda yazma için yer var ve okuyan tarafın betimleyicisi açık ===> Yazan tarafta EPOLLOUT 
+    Boruda yazma için yer var ve okuyan tarafın betimleyicisi açık ===> Yazan tarafta EPOLLOUT
 
     Sokette bilgi var ===> Okuyan tarafta EPOLLIN
     Network tamponunda yazacak yer var ===> Yazan tarafta EPOLLOUT
-    accept yapan tarafta bağlantı isteği oluştuğunda ===> accept yapan tarafta POLLIN
-    Karşı taraf soketi kapattığında ===> karşı tarafta E |EPOLLOUT|EPOLLRDHUP
+    accept yapan tarafta bağlantı isteği oluştuğunda ===> accept yapan tarafta EPOLLIN
+    Karşı taraf soketi kapattığında ===> karşı tarafta EPOLLIN|EPOLLOUT|EPOLLRDHUP
 
     epoll_event yapısının data elemanı aslında çekirdek tarafından saklanıp epoll_wait fonksiyonu yoluyla bize geri verilmektedir.
     Bu eleman bir birlik biçiminde bildirilmiştir (yani programcı tarafından bu birliğin yalnızca tek elemanı set edilmelidir):
@@ -37906,7 +37915,7 @@ void exit_sys(const char *msg)
     betimleyici için "kenar tetiklemeli (edge triggered)" mod kullanılır.
 
     Yukarıda da belirtildiği gibi düzey tetiklemeli mod demek (select, poll'daki durum ve epoll'daki default durum) bir okuma 
-    ya da yazma olayı açılıp bloke çözüldüğünde programcı eğer okuma ya da yazma yapmayıp yeniden bu fonksiyonları çağrırsa 
+    ya da yazma olayı açılıp bloke çözüldüğünde programcı eğer okuma ya da yazma yapmayıp yeniden bu fonksiyonları çağırırsa 
     bekleme yapılmayacak demektir. Yani örneğin biz select ya poll ile stdin dosyasını izliyorsak ve klavyeden bir giriş yapıldıysa 
     bu fonksiyonlar blokeyi çözer. Fakat biz read ile okuma yapmazsak ve yeniden select ve poll fonksiyonlarını çağırırsak artık bloke 
     oluşmaz. Halbuki kenar tetiklemeli modda biz okuma yapmasak bile yeni okuma eylemi oluşana kadar yine blokede kalırız. Biz buradaki 
@@ -38680,11 +38689,11 @@ void exit_sys(const char *msg)
     IO işlemi gerçekleştiğinde, biz yeniden IO işlemi için bu fonksiyonların çağrılmasını sağlamalıyız.
 
     Aşağıda asenkron IO modelinin uygulanmasına ilişkin bir örnek verilmiştir. Örnekte stdin dosyasından sürekli okuma yapılmak 
-    istenmiştir. Burada bildirim SIGEV_THREAD ile kernel tarafından yaratılan bir thread yoluyla yapılmaktadır. Okuma olayı bittiğinde 
-    kernel tarafından yaratılmış olan thread bizim belirlediğimiz fonksiyonu çağırmaktadır. Ancak bu işlemlerin kaç thread'in yaratılacağı 
-    gibi özellikler sistemden sisteme değişebilmektedir. Örneğin Linux genellikle tek bir thread yaratıp tüm olayları bu thread'e 
-    yaptırmaktadır. Biz de bu fonksiyon içerisinde aio_return fonksiyonu ile kaç byte okunduğunu belirleyip işlemin devam etmesi 
-    için aio_read fonksiyonunu yeniden çağırmaktayız. Burada thread fonksiyonuna  bizim aiocb yapısını nasıl geçirdiğimize 
+    istenmiştir. Burada bildirim SIGEV_THREAD ile kernel tarafından yaratılan thread yoluyla yapılmaktadır. Okuma olayı bittiğinde 
+    kernel tarafından yaratılmış olan thread, bizim belirlediğimiz fonksiyonu çağırmaktadır. Ancak bu işlemler için kaç thread'in 
+    yaratılacağı gibi özellikler sistemden sisteme değişebilmektedir. Örneğin Linux genellikle tek bir thread yaratıp tüm olayları 
+    bu thread'e yaptırmaktadır. Biz de bu fonksiyon içerisinde aio_return fonksiyonu ile kaç byte okunduğunu belirleyip işlemin devam 
+    etmesi için aio_read fonksiyonunu yeniden çağırmaktayız. Burada thread fonksiyonuna bizim aiocb yapısını nasıl geçirdiğimize 
     dikkat ediniz:
 
     cb.aio_sigevent.sigev_value.sival_ptr = &cb;
@@ -38842,6 +38851,8 @@ int main(int argc, char *argv[])
 
 	pause();
 
+	free(cb->aio_buf);
+
 	free(cb);
 
 	return 0;
@@ -38966,6 +38977,8 @@ int main(int argc, char *argv[])
 	printf("waiting at pause, press Ctrl+C to exit...\n");
 
 	pause();
+
+	free(ioinfo);
 
 	return 0;
 }
@@ -43951,39 +43964,39 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Daha önceden de belirttiğimiz gibi Linux sistemlerinde en etkin asenkron IO yöntemi epoll isimli yöntemdir. epoll yönteminin
-    yalnızca Linux sistemlerine özgü olduğunu anımsayınız. Yine anımsayacağınız gibi bu yöntemde önce epoll_cretae ya da 
+    yalnızca Linux sistemlerine özgü olduğunu anımsayınız. Yine anımsayacağınız gibi bu yöntemde önce epoll_create ya da 
     epoll_create1 fonksiyonlarıyla bir epoll betimleyicisinin yaratılması gerekiyordu. Daha sonra izlenecek betimleyiciler 
-    epoll_ctl fonksiyonu ile izleme dahil ediliyordu. Ancak olay beklemesi epoll_wait fonksiyonu ile yapılıyordu. 
+    epoll_ctl fonksiyonu ile izlemeye dahil ediliyordu. Ancak olay beklemesi epoll_wait fonksiyonu ile yapılıyordu.
 
     Biz daha önce borularla epoll örneği yapmıştık. Soketlerle de işlemler benzer biçimde yürütülmektedir. epoll server 
     modelinin anahtar noktalarını şöyle açıklayabiliriz:
 
-    - Önce dinleme soketini epoll ile izlemeye alınmalıdır. Soketten okuma işlemleri için yine EPOLLIN olayı oluşmaktadır. 
+    - Önce dinleme soketi epoll ile izlemeye alınmalıdır. Soketten okuma işlemleri için yine EPOLLIN olayı oluşmaktadır.
 
-    - EPOLLIN olayı oluştuğunda olaya konu olan soket betimleyicisinin dinleme soketi olup olmadığına bakılmalı eğer olaya
+    - EPOLLIN olayı oluştuğunda olaya konu olan soket betimleyicisinin dinleme soketi olup olmadığına bakılmalıdır. Eğer olaya
     konu olan betimleyici dinleme soketiyse accept işlemi uygulanıp elde edilen betimleyicinin de izlenmesi sağlanmalıdır.
 
     - Karşı taraf soketi kapattığında hem EPOLLIN hem de EPOLLERR olayları oluşmaktadır. EPOLLIN olayı oluştuğunda recv 
-    uygulanıp 0 byte okunduğunda karşı atarfın soketi kapatmış olacağı düşünülmeli ve client soket kapatılmalıdır.
+    uygulanıp 0 byte okunduğunda karşı tarafın soketi kapatmış olacağı düşünülmeli ve client soket kapatılmalıdır.
 
-    - Client soketin kapatılması ile otomatik olarak izleme sona erdirilmektedir. Bunun için ayrıca epollctl kullanılmasına
-    gerek yoktur. 
+    - Client soketin kapatılması ile otomatik olarak izleme sona erdirilmektedir. Bunun için ayrıca epoll_ctl kullanılmasına
+    gerek yoktur.
 
     - epoll modelinde karşı tarafın soketi kapatmasından dolayı oluşan EPOLLIN ve EPOLLERR olaylarında getpeername fonksiyonu
     kullanılmamalıdır. (Halbuki select ve poll fonksiyonlarında bu durumda getpeername fonksiyonu kullanılabilmektedir.)
 
-    Anımsanacağı gibi epoll modelinde default izleme biçimi "deüzey tetiklemeli (level triggered)" biçimdedir. Düzey tetiklemeli
-    izlemede bir olay olştuğunda o olayda olayın gereği yapılmadıktan sonra o olay yeniden oluşuyor gibi izleme yapılmaktadır. 
-    Örneğin düzey tetiklemeli izlemede sokete bilgi gelmiş olsun. Bu durumda eoll_wait yapıldığında EPOLLIN olayı gerçekleşecektir. 
-    Ancak eğer biz sokette gelen tüm bilgileri okumazsak yeniden epoll_wait fonksiyonunu bir daha çağırdığımızda yine EPOLLIN olayı 
+    Anımsanacağı gibi epoll modelinde default izleme biçimi "düzey tetiklemeli (level triggered)" biçimdedir. Düzey tetiklemeli
+    izlemede bir olay oluştuğunda o olayda olayın gereği yapılmadıktan sonra o olay yeniden oluşuyor gibi izleme yapılmaktadır. 
+    Örneğin düzey tetiklemeli izlemede sokete bilgi gelmiş olsun. Bu durumda epoll_wait yapıldığında EPOLLIN olayı gerçekleşecektir. 
+    Ancak eğer biz sokete gelen tüm bilgileri okumazsak epoll_wait fonksiyonunu bir daha çağırdığımızda yine EPOLLIN olayı 
     gerçekleşecektir. Çünkü düzey tetiklemede sokette okunacak bilgi olduğu sürece epoll_wait hep bu olayı oluşturacaktır. Ancak 
     kenar tetiklemede durum böyle değildir. Kenar tetiklemeli modda sokete bilgi gelmiş olsun. Bu durumda epoll_wait yapıldığında
     EPOLLIN olayı gerçekleşecektir. Biz bu olayda soketteki tüm bilgileri okumazsak bile artık epoll_wait fonksiyonunu çağırdığımızda
-    EPOLLIN olayı oluşmayacaktır. EPOLLIN olayı bu modda yalnızca sokete yeni bir bilgi geldiğinde oluşmaktadır. 
+    EPOLLIN olayı oluşmayacaktır. EPOLLIN olayı bu modda yalnızca sokete yeni bir bilgi geldiğinde oluşmaktadır.
 
     Aşağıda daha önce yaptığımız client/server örneğinin epoll modeli ile düzey tetiklemeli gerçekleştirimi verilmiştir. 
     Örneğimizde disconnect olan client'ın bilgilerini o sırada getpeername uygulayamadığımızdan dolayı yazdırmadık. (Tabii 
-    aslında bu tür uygulamalarda sürekli getpeername uygulamak iyi bir teknik değildir. Bağlanılan vlient'ın bilgilerini
+    aslında bu tür uygulamalarda sürekli getpeername uygulamak iyi bir teknik değildir. Bağlanılan client'ın bilgilerini
     bir kere saklayıp oradan elde etmek daha iyi bir yöntemdir. Ancak biz buradaki uygulamalarda kodu karmaşık göstermemek 
     için her defasında getpeername fonksiyonunu kullandık.)
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -44301,15 +44314,15 @@ void exit_sys(const char *msg)
     daha iyi bir performans sağladığı belirtilmektedir. Kenar tetiklemeli modu kullanırken göz önüne alınması gereken önemli
     anahtar noktalar şunlardır:
 
-    - Kenar tetiklemeli modda sokete bildi geldiğinde gelen bilgilerin hepsinin okunmasına gayret edilmelidir. Çünkü eğer biz
+    - Kenar tetiklemeli modda sokete bilgi geldiğinde gelen bilgilerin hepsinin okunmasına gayret edilmelidir. Çünkü eğer biz
     sokete bilgi geldiğinde onların hepsini okumazsak bir daha EPOLLIN olayı ancak yeni bir bilgi geldiğinde oluşacağından 
     gelmiş olan bilgilerin işleme sokulması gecikebilecektir. (Halbuki düzey tetiklemeli modda gelen bilgilerin hepsi okunmasa 
     bile bir sonraki epoll_wait çağrımında yine EPOLLIN olayı gerçekleşeceği için böyle bir durum söz konusu olmayacaktır.)
 
-    - Betimleyiciyi kenar tetiklemeli modda izlemek için epoll_event yapısının events elemanına EPOLLET yayağının eklenmesi 
+    - Betimleyiciyi kenar tetiklemeli modda izlemek için epoll_event yapısının events elemanına EPOLLET bayrağının eklenmesi 
     gerekmektedir. 
 
-    - Kenar tetiklemeli modda sokete gelen tüm bilgilerin okunması için betimelycinin blokesiz modda olması gerekir. Aksi takdirde
+    - Kenar tetiklemeli modda sokete gelen tüm bilgilerin okunması için betimleyicinin blokesiz modda olması gerekir. Aksi takdirde
     recv ya da read yaparken sokette bilgi kalmamışsa bloke oluşacaktır. Soket default olarak blokeli moddadır. Soketi daha 
     önce görmüş olduğumuz fcntl fonksiyonu ile aşağıdaki gibi blokesiz moda sokabiliriz:
 
@@ -44324,15 +44337,15 @@ void exit_sys(const char *msg)
                 break;
             exit_sys("recv");
         }
-        /* ... */
+        // ...
     }
 
-    - Aslında epoll modelinde bazı soket betimelyicileri düzey tetiklemeli bazıları kenar tetiklemeli modda olabilir. Örneğin
-    pasif soketi düzey tetiklemeli modda tutup diğerlerini kenar tetiklemeli modda tutabilrisiniz. 
+    - Aslında epoll modelinde bazı soket betimleyicileri düzey tetiklemeli bazıları kenar tetiklemeli modda olabilir. Örneğin
+    pasif soketi düzey tetiklemeli modda tutup diğerlerini kenar tetiklemeli modda tutabilirsiniz. 
 
     Aşağıda daha önce yazmış olduğumuz client/server programın epoll modeli ile kenar tetiklemeli biçimi verilmiştir. Bu örnekte
     dinleme soketi düzey tetiklemeli modda bırakılmış ancak client soketler kenar tetiklemeli moda sokulmuştur. Soket üzerinde
-    EPOLLIN olayı gerçekleştiğinde bir döngü içerisinde recv EAGAIN nedeniyle başarısız olana kadar okuma yapılmıştır. 
+    EPOLLIN olayı gerçekleştiğinde bir döngü içerisinde recv fonksiyonu EAGAIN nedeniyle başarısız olana kadar okuma yapılmıştır. 
     Tabii bu örnek aslında kenar tetiklemeli modele iyi bir örnek oluşturmamaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -44657,17 +44670,17 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Anımsanacağı gibi asenkron IO için başı aio_ ile başlayan bir grup asenkron IO fonksiyonları da bulunuyordu. Bu fonksiyonlarla
-    okuma yazma yapılırken işlemler başlatılıyor ancak akış bloke olmadan ancak arka planda devam ettiriliyordu. Olayın bittiği de 
-    bize bir sinyal ya da bir callback fonksiyon yoluyla bildiriliyordu. Biz bu yöntemi daha önce incelemiş ve bununla ilgili bazı 
-    örnekler yapmıştık.Şimdi de bu yöntemi soketlerde kullanacağız. 
+    okuma yazma yapılırken işlemler başlatılıyor ancak akış bloke olmadan arka planda devam ettiriliyordu. Olayın bittiği de bize 
+    bir sinyal ya da bir callback fonksiyonu yoluyla bildiriliyordu. Biz bu yöntemi daha önce incelemiş ve bununla ilgili bazı 
+    örnekler yapmıştık. Şimdi de bu yöntemi soketlerde kullanacağız. 
 
     Asenkron IO modelinin soketlerde kullanılmasına ilişkin anahtar noktalar şunlardır:
 
     - accept işleminin bu mekanizmaya dahil edilmesi gerekmemektedir. Yani akış accept işleminde bloke olabilir. Tabii istenirse 
-    accept işlemi de bu mekanizmaya dahil edilebilir.Çünkü accept işlemi de bir okuma durumu oluşturmaktadır.
+    accept işlemi de bu mekanizmaya dahil edilebilir. Çünkü accept işlemi de bir okuma durumu oluşturmaktadır.
 
     - Bir okuma (ya da yazma) olayından sonra yeniden aynı mekanizmanın aio_read fonksiyonu çağrılarak kurulması gerekmektedir. 
-    Yani aio_read bir kez değil her defasında yeniden çağrılmalıdır. 
+    Yani aio_read bir kez değil, her defasında yeniden çağrılmalıdır. 
 
     Aşağıda daha önce yapmış olduğumuz server programını bu kez asenkron IO fonksiyonlarıyla gerçekleştiriyoruz.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -44990,7 +45003,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bu noktada dikkatimizi UDP protokolü üzerine yönelteceğiz. UDP protokolünü el aldıktan sonra yine TCP protokolü ile ilgili
+    Bu noktada dikkatimizi UDP protokolü üzerine yönelteceğiz. UDP protokolünü ele aldıktan sonra yine TCP protokolü ile ilgili
     bazı ayrıntılar üzerinde duracağız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
