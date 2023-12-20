@@ -37852,10 +37852,10 @@ void exit_sys(const char *msg)
 
     EPOLLIN: Okuma amaçlı izlemeyi belirtir. Boruda ya da sokette okunacak bilgi oluştuğunda epoll_wait tarafından bu bayrak set 
     edilir. Soketlerde accept yapan tarafta bir bağlantı istedği oluştuğunda da EPOLLIN bayrağı epoll_wait tarafından set 
-    edilmektedir. EPOLLIN bayrağı aynı zamanda karşı taraf soketi kapattığnda da oluşmaktadır. 
+    edilmektedir. EPOLLIN bayrağı aynı zamanda karşı taraf soketi kapattığında da oluşmaktadır. 
 
     EPOLLOUT: Yazma amaçlı izlemeyi belirtir. Boruya ya da sokete yazma durumu oluştuğunda (yani boruda ya da network tamponunda yazma 
-    için yer açıldığında) fonksiyon tarafından bu bayrak set edilmektedir. EPOLLOUT bayrağı aynı zamanda karşı taraf soketi kapattığnda 
+    için yer açıldığında) fonksiyon tarafından bu bayrak set edilmektedir. EPOLLOUT bayrağı aynı zamanda karşı taraf soketi kapattığında 
     da oluşmaktadır. 
 
     EPOLLERR: Hata amaçlı izlemeyi belirtir. Bu bayrak epoll_ctl fonksiyonunda set edilmez, epoll_wait fonksiyonu tarafından set 
@@ -40520,7 +40520,7 @@ void exit_daemon(const char *msg)
     Bu teknikte bilgiler bir paket adı altında bir araya getirilir sonra ilgili fiziksel katmanla seri bir biçimde gönderilir. 
 
     - Ağ Katmanı (network layer) artık "internetworking" yapmak için gerekli kuralları tanımlamaktadır. "Internetworking" terimi 
-    "network'lerden oluşan network'ler" anlamına gelir. Aynı fiziksel ortamda bulunan ağlara "Yerel Ağlar (Local Area Netwroks)"
+    "network'lerden oluşan network'ler" anlamına gelir. Aynı fiziksel ortamda bulunan ağlara "Yerel Ağlar (Local Area Networks)"
     denilmektedir. Bu yerel ağlar "router" denilen aygıtlarla birbirlerine bağlanmaktadır. Böylece "internetworking" ortamı 
     oluşturulmaktadır. Tabii böyle bir ortamda artık ağa birimler için fiziksel adresler kullanılamaz. Bu ortamlarda ağa birimlere 
     mantıksal bir adres ataması yapılmalıdır. İşte "network katmanı" internetworking ortamı içerisinde bir birimden diğerine bir paket 
@@ -41878,7 +41878,7 @@ void ExitSys(LPCSTR lpszMsg, DWORD dwLastError)
     Client ve server programları yazarken onların ilgili olduğu server ve port numaralarını komut satırı argümanlarıyla 
     almak iyi bir tekniktir. Örneğin biz client programı şöyle çalıştırabilmeliyiz:
 
-    ./client -s <server_ismi> -p <server_port> -b <kaynak_port>
+    ./client -s <server_ismi> -p <server_port> -b <client_port>
 
     Tabii buradaki -s ve -p seçeneklerinin default değerleri de söz konusu olacaktır. 
 
@@ -45035,23 +45035,41 @@ void exit_sys(const char *msg)
     aksama söz konusu değildir. Belki görüntüde bir kasis olabilir ancak bu durum önemli kabul edilmemektedir. Örneğin birtakım 
     makineler belli periyotlarda server'a "ben çalışıyorum" demek için periyodik UDP paketleri yollayabilir. Server da hangi 
     makinenin çalışmakta olduğunu (bozulmamış olduğunu) bu sayede anlayabilir. Örneğin bir araba simülatörü arabanın durumunu 
-    UDP paketleriyle dış dünyaya verebilir. Bir UDP paketi 64K gibi bir sınıra sahiptir. 
+    UDP paketleriyle dış dünyaya verebilir. Bir UDP paketi 64K gibi bir sınıra sahiptir.
 
-    TCP ve UDP protokollerinde bir uzunluk bilgisi yoktur. Uzunluk bilgisi IP protokolünde bulunmaktadır. IPV4 ve IPV6 
+    TCP ve UDP protokollerinde bir uzunluk bilgisi yoktur. Uzunluk bilgisi IP protokolünde bulunmaktadır. IPv4 ve IPv6 
     protokollerinde bir IP paketi en fazla 64K uzunlukta olabilmektedir. Tabii TCP stream tabanlı olduğu için bu 64K uzunluğun 
     TCP için bir önemi yoktur. Ancak UDP paket tabanlı olduğu için bir UDP paketi IP paketinin uzunluğunu aşamaz. Dolayısıyla bir 
     UDP paketi en fazla 64K uzunlukta olabilmektedir. Büyük paketlerin UDP ile gönderilmesi için programcının paketlere kendisinin 
     manuel numaralar vermesi gerekebilir. Zaten TCP protokolü bu şekilde bir numaralandırmayı kendi içerisinde yapmaktadır. UDP 
-    haberleşmesinin önemli bir farkı da "broadcasting" işlemidir. Broadcasting yerel ağda belli bir host'un tüm host'lara UDP 
-    UDP paketleri gönderebilmesine denilmektedir. TCP'de böyle bir broadcasting mekanizması yoktur. 
+    haberleşmesinin önemli bir farkı da "broadcasting" işlemidir. Broadcasting, yerel ağda belli bir host'un tüm host'lara UDP 
+    paketleri gönderebilmesine denilmektedir. TCP'de böyle bir broadcasting mekanizması yoktur.
+
+    UDP header'ı 8 byte'tan oluşmaktadır ve yapısı aşağıdaki gibidir.
+
+    <------- Byte 1 -------><------- Byte 2 -------><------- Byte 3 -------><------- Byte 4 ------->
+    +----------------------------------------------+-----------------------------------------------+				^
+    |                  Source Port                 |                Destination Port               |	(4 bytes)	|
+    |                   (16 bits)                  |                   (16 bits)                   |				|
+    +----------------------------------------------+-----------------------------------------------+				|	8 bytes
+    |                 Header Length                |                   Checksum                    |	(4 bytes)	|
+    |                   (16 bits)                  |                   (16 bits)                   |				|
+    +----------------------------------------------+-----------------------------------------------+				v
+    |                                    Application Layer Data                                    |
+    |                                         (Size Varies)                                        |
+    +----------------------------------------------------------------------------------------------+
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     UDP server programı tipik olarak şu adımlardan geçilerek oluşturulur:
 
     1) Server SOCK_DGRAM parametresiyle bir socket yaratır.
+
     2) Soketi bind fonksiyonuyla bağlar.
+
     3) recvfrom fonksiyonuyla gelen paketleri alır ve sendto fonksiyonuyla UDP paketi gönderir.
+
     4) Haberleşme bitince server soketi close fonksiyonuyla ile kapatır.
 
     Haberleşme bittiğinde shutdown gibi bir işlemin gerekmediğine dikkat ediniz. shutdown işlemi TCP'de bağlantıyı koparmak için
@@ -45063,12 +45081,16 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    UDP Client program da şu adımlardan geçilerek oluşturulur:
+    UDP client program da şu adımlardan geçilerek oluşturulur:
 
     1) Client soketi SOCK_DGRAM parametresiyle yaratır.
+
     2) Client isteğe bağlı olarak soketi bind fonksiyonuyla bağlayabilir.
-    3) Client server'ın host isminden hareketle server'ın IP adresini gethostbyname ya da getaddrinfo fonksiyonuyla elde edebilir.
+
+    3) Client, server'ın host isminden hareketle server'ın IP adresini gethostbyname ya da getaddrinfo fonksiyonuyla elde edebilir.
+
     4) Client sendto fonksiyonuyla UDP paketlerini gönderir ve recvfrom fonksiyonuyla UDP paketlerini alabilir.
+
     5) Haberleşme bitince client close fonksiyonuyla soketi kapatır.
 
     Bu adımları fonksiyon isimleriyle şöyle özetleyebiliriz:
@@ -45080,39 +45102,43 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     UDP paketlerini okumak için kullanılan recvfrom prototipi şöyledir:
 
+    #include <sys/socket.h>
+
     ssize_t recvfrom(int socket, void *buffer, size_t length, int flags, struct sockaddr *address, socklen_t *address_len);
 
-    Fonksiyonun birinci parametresi okuma işleminin yapılacağı soketi belirtir. ikinci parametre alınacak bilginin yerleştirileceği 
-    adresi belirtirtmektedir. Üçüncü parametre ikinci parametredeki alanın uzunluğunu belirtir. Eğer buradaki değer değer 
-    UDP paketindeki gönderilmiş olan byte sayısından daha az ise kırpılarak diziye yerleştirme yapılmaktadır. Fonksiyonun üçüncü
-    parametresi (flags) parametresi birkaç seçeneğe sahiptir. Bu parametre için 0 girilebilir. Fonksiyonun dördüncü parametresi 
-    UDP paketini gönderen tarafın IP adresinin ve port numarasının yerleştirileceği sockaddr_in yapısının adresini alır. Son parametre 
-    ise bu yapının uzunluğunu tutan int nesnenin adresini almaktadır. Fonksiyon başarı durumunda UDP paketinideki byte sayısına, 
-    başarıszlık durumunda -1 değerine geri dönmektedir. 
+    Fonksiyonun birinci parametresi okuma işleminin yapılacağı soketi belirtir. İkinci parametre alınacak bilginin yerleştirileceği 
+    adresi belirtmektedir. Üçüncü parametre ikinci parametredeki alanın uzunluğunu belirtir. Eğer buradaki değer UDP paketindeki 
+    gönderilmiş olan byte sayısından daha az ise kırpılarak diziye yerleştirme yapılmaktadır. Fonksiyonun üçüncü parametresi (flags) 
+    birkaç seçeneğe sahiptir. Bu parametre için 0 girilebilir. Fonksiyonun dördüncü parametresi UDP paketini gönderen tarafın IP 
+    adresinin ve port numarasının yerleştirileceği sockaddr_in yapısının adresini alır. Son parametre ise bu yapının uzunluğunu tutan 
+    int nesnenin adresini almaktadır. Fonksiyon başarı durumunda UDP paketindeki byte sayısına, başarısızlık durumunda -1 değerine 
+    geri dönmektedir.
 
-    recvfrom fonksiyonun herhangi bir client'tan gelen paketi alabildiğine dikkat ediniz. Dolayısıyla her recvfrom ile alınan paket farklı 
-    bir client'a ilişkin olabilmektedir. 
+    recvfrom fonksiyonunun herhangi bir client'tan gelen paketi alabildiğine dikkat ediniz. Dolayısıyla her recvfrom ile alınan paket 
+    farklı bir client'a ilişkin olabilmektedir.
 
-    recvfrom fonksiyonu eğer soket blokeli moddaysa (default durum) UDP paketi gelene kadar blokeye yol açar. Blokesiz modda fonksiyon
-    bekleme yapmaz, -1 değeriyle geri döner ve errno EAGAIN değeriyle set edilir. 
+    recvfrom fonksiyonu, eğer soket blokeli moddaysa (default durum) UDP paketi gelene kadar blokeye yol açar. Blokesiz modda fonksiyon
+    bekleme yapmaz, -1 değeriyle geri döner ve errno EAGAIN değeriyle set edilir.
 
     sendto fonksiyonunun prototipi de şöyledir:
 
+    #include <sys/socket.h>
+
     ssize_t sendto(int socket, const void *message, size_t length, int flags, const struct sockaddr *dest_addr, socklen_t dest_len);
 
-    Fonksiyonun parametreleri recvfrom da olduğu gibidir. Yani birinci parametre gönderim yapılacak soketi belirtir. ikinci 
+    Fonksiyonun parametreleri recvfrom da olduğu gibidir. Yani birinci parametre gönderim yapılacak soketi belirtir. İkinci 
     ve üçüncü parametreler gönderilecek bilgilerin bulunduğu tamponu ve onun uzunluğunu belirtmektedir. Yine bu fonksiyonda 
-    da bir flags parametresi vardır. Dördüncü parametre bilginin gönderileceği IP adresini ve port numarasını belirtir.Son 
-    parametre ise dördüncü parametredeki yapının (sockaddr_in ya da sockaddr_in6) uzunluğunu alır. 
+    da bir flags parametresi vardır. Dördüncü parametre bilginin gönderileceği IP adresini ve port numarasını belirtir. Son 
+    parametre ise dördüncü parametredeki yapının (sockaddr_in ya da sockaddr_in6) uzunluğunu alır.
 
     Fonksiyon blokeli modda paket network tamponuna yazılana kadar blokeye yol açmaktadır. sendto fonksiyonu da başarı durumunda 
-    network tamponuna yazılan byte sayısına başarısızlık durumunda -1'e geri dönmektedir. 
+    network tamponuna yazılan byte sayısına, başarısızlık durumunda -1'e geri dönmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Aşağıda tipik bir UDP client-server örneği verilmiştir. Bu örnekte client yine bir prompt'a düşerek kullanıcıdan bir 
     yazı istemektedir. Bu yazıyı UDP paketi biçiminde server'a yollamaktadır. Server da bu yazıyı alıp görüntüledikten sonra 
-    yazıyı ters çevirip client'a geri yollamaktadır. Programların komut satırı argümanları diğer örneklerde olduğu gibidir. 
+    yazıyı ters çevirip client'a geri yollamaktadır. Programların komut satırı argümanları diğer örneklerde olduğu gibidir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* server.c */
@@ -45394,39 +45420,39 @@ void exit_sys(const char *msg)
     thread'lerin yaratılıp yok edilmeleri de dikkate değer bir zaman kaybı oluşturmaktadır. Thread'ler konusunda da belirttiğimiz 
     gibi bu tür durumlarda "thread havuzları (thread pools)" kullanılabilir. Thread havuzlarında zaten belli bir miktar thread 
     yaratılmış ve bekler durumda (suspend durumda) tutulmaktadır. Böylece client'tan gelen isteğin bu thread'lerden biri tarafından 
-    gerçekleştirilmesi sağlanır. POSIX sistemlerinde C'den kullanılabilecek standart bir thread havuzu mekanizmasının olmadığını
+    gerçekleştirilmesi sağlanır. POSIX sistemlerinde C'de kullanılabilecek standart bir thread havuzu mekanizmasının olmadığını
     anımsayınız. Bu nedenle böyle bir thread havuzunu programcının kendisi yazabilir ya da C için yazılmış olan bir thread havuzu
     kütüphanesini kullanabilir. Windows sistemlerinde işletim sistemi düzeyinde thread havuzlarına ilişkin standart API fonksiyonları 
-    bulunmaktadır. C++'ta pek çok framework içerisinde (MFC gibi, Qt gibi) zaten thread havuzları sınıfsal biçimde bulunmaktadır. 
+    bulunmaktadır. C++'ta pek çok framework içerisinde (MFC gibi, Qt gibi) zaten thread havuzları sınıfsal biçimde bulunmaktadır.
 
     Pekiyi yoğun bir server düşünelim. Makinemizde de bir tane işlemci bulunuyor olsun. Böyle bir thread havuzunun kullanılması
     gerçek anlamda bir fayda sağlayabilir mi? Örneğin 5 tane client'ın isteğini thread yoluyla sağlamaya çalışalım. Her client'ın 
-    isteiği için 3 quanta süresi gerekiyor olsun. İşlemler seri yapıldığında toplam 15 quanta zamanında tüm client'ların mesajları 
+    isteği için 3 quanta süresi gerekiyor olsun. İşlemler seri yapıldığında toplam 15 quanta zamanında tüm client'ların mesajları 
     işlenmiş olacaktır. Thread'ler kullanıldığında işlemcinin çalışma kuyruğunda (run queue) 5 thread bulunacak ve bunlar 
     zaman paylaşımlı biçimde çalışacaktır. Dolayısıyla yine bu client'ların hepsinin işlerini bitirmesi için 15 quanta süresi 
     gerekecektir. Tabii sistemde başka proseslerin thread'leri de varsa çok thread'li çalışma toplamda bu server'ın diğer 
-    proseslere göre daha fazla işlemci zamanı kullanmasına yol açacaktır. 
+    proseslere göre daha fazla işlemci zamanı kullanmasına yol açacaktır.
 
     Ancak makinemizde birden fazla işlemci varsa bu durumda yukarıdaki thread sistemi belirgin bir avantaj sağlayacaktır. 
     Bu tür durumlarda işlemci sayısı kadar thread'in aynı anda çalışması sağlanabilir. Bu thread'ler farklı işlemcilerde
     eş zamanlı bir biçimde çalışabileceği için ciddi bir hızlanma sağlanacaktır. Tabii buradaki thread'lerin aynı anda 
     farklı işlemciler tarafından çalıştırılması gerekir. İşletim sistemleri genellikle bu ayarlamayı kendi içlerinde yapabilmektedir. 
-    Örneğin Linux sistemlerinde kullanılan güncel çizelgeleme algoritmasında her işlemci için ayrı bir çalışma kuyruğu oluşturulmajta
+    Örneğin Linux sistemlerinde kullanılan güncel çizelgeleme algoritmasında her işlemci için ayrı bir çalışma kuyruğu oluşturulmakta
     ve thread'ler bunlara dinamik bir biçimde dağıtılmaktadır. Ancak yine de bazı durumlarda thread'lerin belli işlemcilere
-    programcı tarafından ataması (processor affinity) gerekebilmektedir. 
+    programcı tarafından ataması (processor affinity) gerekebilmektedir.
 
     Örneğin makinemizde 8 işlemci ya da çekirdek olsun. Bu durumda biz 8 tane thread yaratıp bu 8 thread'in farklı işlemcilerde 
-    eş zamanlı olarak kendi içlerinde seri bir biçimdeçalışmasını sağlayabiliriz. Bunun sağlanması iki biçimde yapılabilir. 
-    Birincisi her thread için yularıdaki döngü yeniden oluşturulabilir. Örneğin:
+    eş zamanlı olarak kendi içlerinde seri bir biçimde çalışmasını sağlayabiliriz. Bunun sağlanması iki biçimde yapılabilir. 
+    Birincisi her thread için yukarıdaki döngü yeniden oluşturulabilir. Örneğin:
 
-    /* 1'inci thread */
+    // 1'inci thread
 
    for (;;) {
         recvfrom(...)
         <mesajı işle>
     }
 
-    /* 2'inci thread */
+    // 2'inci thread
 
    for (;;) {
         recvfrom(...)
@@ -45434,8 +45460,8 @@ void exit_sys(const char *msg)
     }
     ...
 
-    Soket soket fonksiyonları bu bağlamda thread güvenlidir. İkinci yöntemde server aldığı mesajları bir kuyruğa yazar. 
-    Thread'ler de aynı kuyruktan mesajları alarak işleme sokar. Örneğin:
+    Soket fonksiyonları bu bağlamda thread güvenlidir. İkinci yöntemde server aldığı mesajları bir kuyruğa yazar. Thread'ler de 
+    aynı kuyruktan mesajları alarak işleme sokar. Örneğin:
 
     for (;;) {
         recvfrom(...)
@@ -45443,56 +45469,56 @@ void exit_sys(const char *msg)
     }
     ...
 
-    /* 1'inci thread */
+    // 1'inci thread
 
    for (;;) {
         <kuyruktan mesajı al işle>
     }
 
-    /* 2'inci thread */
+    // 2'inci thread
 
    for (;;) {
         <kuyruktan mesajı al işle>
     }
     ...
 
-    Bu tür surumlarda işlemci ya da çekirdek sayısından daha fazla thread'in oluşturulması özel durumlar dışında önemli bir 
+    Bu tür durumlarda işlemci ya da çekirdek sayısından daha fazla thread'in oluşturulması özel durumlar dışında önemli bir 
     fayda sağlamamaktadır.
 
     Linux'un epoll modelinde thread'li kullanımda Linux genel olarak her işlemci ya da çekirdek için gerektiğinde kendisi 
     thread oluşturmaktadır. Dolayısıyla epoll modeli yukarıdaki gibi bir organizasyon yapılmasa da daha iyi bir performans 
-    göstermektedir. 
+    göstermektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi client istekleri için çok işlemcili ya da çok çekirdekli bir bilgisayar yetmiyorsa ne olacak? Bu tür durumlarda 
     işleri birden fazla server makineye dağıtmak gerekir. Client'ın birden çok server olduğunu fark etmemesi dolayısıyla bu 
-    sürecin tamamen ser tarafta otomatik hale getirilmesi uygun olur. Aynı makinenin klonundan çıkartıp sisteme eklendiğinde
+    sürecin tamamen server tarafta otomatik hale getirilmesi uygun olur. Aynı makinenin klonundan çıkartıp sisteme eklendiğinde
     yükü paylaşabilmesi sağlanmalıdır. Böylece "ölçeklenebilir (scalable)" bir sistem söz konusu olacaktır. Pekiyi yük bu server
-    makinelere nasıl dağıtılabilir? İşte bunun için kullanılan mekanizmaya "load balancing", bu makanizmayı sağlayan birime de
-    "load balancer" denilmektedir. 
+    makinelere nasıl dağıtılabilir? İşte bunun için kullanılan mekanizmaya "load balancing", bu mekanizmayı sağlayan birime de
+    "load balancer" denilmektedir.
 
-    Server Makine			Server Makine		Server Makine	   	Server Makine	    ...
+    Server Makine		Server Makine		Server Makine		Server Makine		...
 
-								     Load Balancer
+								Load Balancer
 
-    Bu tür dağıtık sistemlerde client aslında "load balancer" ile bağlantı sağlar. Load balancer client'ı en az neşgul olan 
+    Bu tür dağıtık sistemlerde client aslında "load balancer" ile bağlantı sağlar. Load balancer client'ı en az meşgul olan 
     server'a iletir. Bugün kullanılan cloud sistemler de kendi içlerinde load balancer benzeri mekanizmalar içermektedir. 
-    Load Balencer'lar tamamen donaımsal olarak ya da tamamen yazılımsal olarak gerçekleştirilebilmektedir. Yazılımsal gerçekleştirim
-    daha esnek olabilmektedir. Ancak donanımsal herçekleştirimler bazı durumlarda daha etkin olabilmektedir. 
+    Load Balencer'lar tamamen donanımsal olarak ya da tamamen yazılımsal olarak gerçekleştirilebilmektedir. Yazılımsal gerçekleştirim
+    daha esnek olabilmektedir. Ancak donanımsal gerçekleştirimler bazı durumlarda daha etkin olabilmektedir.
 
-    Donanmsal load balancer'larda client server ile bağlantı kurmak istediğinde load balancer devreye girip sanki yalnızca 
+    Donanmsal load balancer'larda client, server ile bağlantı kurmak istediğinde load balancer devreye girip sanki yalnızca 
     en az meşgul olan server sistemde varmış gibi bağlantıyı onun kabul etmesini sağlamaktadır. Yazılımsal load balancer'larda
     load balancer bir "proxy" gibi çalışmaktadır. Client load balancer ile bağlantı sağlar. Load balancer bunu en az meşgul server'a
     yönlendirir. Bu kez client bu server ile bağlantı kurar. Buradaki load balancer görevini yapan "proxy" programınının server
-    yüklerini sürekli izlemesi gerekmektedir. Bunun için genellikle UDP protokolü kullanılmaktadır. Yani UDP ile serer makineler
-    sürekli bir içimde kendi durumlarını proxy'ye iletirler. Proxy'de bu bilgilerden hareketle en az meşgul server'ı tespit 
-    eder. Tabii server makineler eğer devre dışı kılırsa proxy'inin bunu fark etmesi ve artık ona yönlendirme yapmaması gerekir.
-    Benzer biçimde yeni bir server makinesi sisteme eklendiğinde proxy hemen onu da sisteme otomatik oalrak dahil etmelidir. 
+    yüklerini sürekli izlemesi gerekmektedir. Bunun için genellikle UDP protokolü kullanılmaktadır. Yani UDP ile server makineler
+    sürekli bir biçimde kendi durumlarını proxy'ye iletirler. Proxy'de bu bilgilerden hareketle en az meşgul server'ı tespit 
+    eder. Tabii server makineler eğer devre dışı kalırsa proxy'inin bunu fark etmesi ve artık ona yönlendirme yapmaması gerekir.
+    Benzer biçimde yeni bir server makinesi sisteme eklendiğinde proxy hemen onu da sisteme otomatik olarak dahil etmelidir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Şimdi de TCP/IP ve UDP/IP ptorolerinin ve bunun için kullanılan soket fonksiyonlatının ayrıntıları üzerinde duracağız.
+    Şimdi de TCP/IP ve UDP/IP protokollerinin ve bunun için kullanılan soket fonksiyonlarının ayrıntıları üzerinde duracağız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -45502,15 +45528,15 @@ void exit_sys(const char *msg)
     recv fonksiyonundaki flag değerleri şunlardan biri ya da birden fazlası olabilir:
 
     MSG_PEEK: Bu bayrak gelen bilginin tampondan okunacağını ancak tampondan atılmayacağını belirtmektedir. Yani biz MSG_PEEK 
-    flag değeri ile okuma yaparsak hem bilgiyi elde ederiz hem de sanki hiç okuma yapmamışız gibi bilgi netwrok tamponunda kalır. 
-    Dolayısıyla bizim thread'imiz ya da başka bir thread recv yaparsa tampondakinş okuyacaktır. Pekiyi bu bayrak hani amaçla
+    flag değeri ile okuma yaparsak hem bilgiyi elde ederiz hem de sanki hiç okuma yapmamışız gibi bilgi network tamponunda kalır. 
+    Dolayısıyla bizim thread'imiz ya da başka bir thread recv yaparsa tampondakini okuyacaktır. Pekiyi bu bayrak hangi amaçla
     kullanılmaktadır. Bazen (çok seyrek olarak) mesajın ne olduğuna MSG_PEEK ile bakıp duruma göre onu kuyruktan almak isteyebiliriz. 
-    Eğer mesaj bizim beğenmediğimiz bir mesajsa onu almak istemeyebiliriz. Onun başka bir thread tarafından işlenmesini sağlayabiliriz. 
+    Eğer mesaj bizim beğenmediğimiz bir mesajsa onu almak istemeyebiliriz. Onun başka bir thread tarafından işlenmesini sağlayabiliriz.
 
     MSG_OOB: Out-of-band data (urgent data) denilen okumalar için kullanılmaktadır. Out-of-band data konusu ayrı bir paragrafta 
     açıklanacaktır.
 
-    MSG_WAITALL: Bu bayrak n byte okunmak istendiğinde bu n byt'ın hepsi okunana kadar bekleme sağlamaktadır. Fakat bu durumda bir 
+    MSG_WAITALL: Bu bayrak n byte okunmak istendiğinde bu n byte'ın hepsi okunana kadar bekleme sağlamaktadır. Fakat bu durumda bir 
     sinyal geldiğinde yine recv -1 ile geri döner ve errno EINTR ile set edilir. Yine soket kapatıldığında ya da soket üzerinde 
     bir hata oluştuğunda fonksiyon talep edilen kadar bilgiyi okuyamamış olabilir. Biz daha önce n byte okuma yapmak için aşağıdaki 
     gibi bir fonksiyon önermiştik:
@@ -45534,7 +45560,7 @@ void exit_sys(const char *msg)
         return (ssize_t) index;
     }
 
-    İşte aslında recv fonksiyonundaki MSG_WAITALL bayrağı adreta bunu sağlamaktadır. Ancak yine de bu bayrağın bazı sistemlerde bazı 
+    İşte aslında recv fonksiyonundaki MSG_WAITALL bayrağı adeta bunu sağlamaktadır. Ancak yine de bu bayrağın bazı sistemlerde bazı 
     problemleri vardır. Örneğin Windows sistemlerinde ve Linux sistemlerinde bu bayrakla okunmak istenen miktar network alım tamponunun
     büyüklüğünden fazlaysa istenen kadar miktarda byte okunamayabilmektedir. Ancak bu bayrak yüksek olmayan miktarlarda okumalar 
     için yukarıdaki fonksiyonun yerine kullanılabilmektedir.
@@ -45547,12 +45573,12 @@ void exit_sys(const char *msg)
 
     MSG_NOSIGNAL: Normal olarak send ya da write işlemi yapılırken karşı taraf soketi kapatmışsa bu fonksiyonların çağrıldığı 
     tarafta SIGPIPE sinyali oluşmaktadır. Ancak bu bayrak kullanılırsa böylesi durumlarda SIGPIPE sinyali oluşmaz, send 
-    ya da write fonksiyonu -1 ile geri döner ve errno EPIPE değeri ile set edilir. 
+    ya da write fonksiyonu -1 ile geri döner ve errno EPIPE değeri ile set edilir.
 
-    Linux POSIX'in bayraklarından daha fazlasını bulundurmaktadır. Örneğin recv ve send işleminde MSG_DONTWAIT bir çağrımlık 
-    "nonblocking" etki yaratmaktadır. Yani recv sırasında network tamponunda hiç bilgi yoksa recv bloke olmaz, -1 ile geri 
-    döner errno EAGAIN değeri ile set edilir. send işlemi sırasında da network tamponu dolu ise send bloke olmaz -1 ile geri 
-    döner errno yine EAGAIN değeri ile set edilir. 
+    Linux, POSIX'in bayraklarından daha fazlasını bulundurmaktadır. Örneğin recv ve send işleminde MSG_DONTWAIT bir çağrımlık 
+    "non-blocking" etki yaratmaktadır. Yani recv sırasında network tamponunda hiç bilgi yoksa recv bloke olmaz, -1 ile geri 
+    döner ve errno EAGAIN değeri ile set edilir. send işlemi sırasında da network tamponu dolu ise send bloke olmaz -1 ile geri 
+    döner ve errno yine EAGAIN değeri ile set edilir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -45560,45 +45586,46 @@ void exit_sys(const char *msg)
     kullanılabilir. Eğer UDP bir soket connect ile UDP server'a bağlanırsa (server da bunu accept ile kabul etmelidir) bu durumda
     artık iki taraf recvfrom ve sendto fonksiyonlarının yerine recv ve send fonksiyonlarını kullanabilir. Tabii burada yine 
     datagram haberleşmesi yapılmaktadır. Yalnızca her defasında gönderme ve alma işlemlerinde karşı tarafın soketine ilişkin 
-    bilgilerin belirtilmesine gerek kalmamaktadır. Bu biçimdeki connect/accept bağlantısında yine bir akış kontrolü uygulanmamaktadır. 
+    bilgilerin belirtilmesine gerek kalmamaktadır. Bu biçimdeki connect/accept bağlantısında yine bir akış kontrolü uygulanmamaktadır.
 
     Aslında recv fonksiyonu yerine recvfrom fonksiyonu da kullanılabilir. Yani recvfrom fonksiyonunun son iki parametresi NULL
     geçilirse zaten bu işlem recv ile eşdeğer olmaktadır. Örneğin aşağıdaki iki çağrı eşdeğerdir:
 
-    result = recv(sock, buf, len, flags)
-    result = recvfrom(sock, buf, len, flags, NULL, NULL)
+    result = recv(sock, buf, len, flags);
+    result = recvfrom(sock, buf, len, flags, NULL, NULL);
 
     Benzer biçimde send yerine sendto fonksiyonu da kullanılabilir. Bu durumda sendto fonksiyonunun son iki parametresi 
     ihmal edilir. Örneğin aşağıdaki iki çağrı eşdeğerdir:
 
-    result = send(sock, buf, len, flags)
+    result = send(sock, buf, len, flags);
     result = sendto(sock, buf, len, flags, any_value, any_value);
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Biz şimdiye kadar client ile server programlar arasında ciddi bir mesaj alışverişi yapmadık. Verdiğimiz örneklerde client
-    program server programa bir yazı iletiyordu. Server program da client'a bu yazıyı ters çevirip gönderiyordu.Bu çok basit 
+    program, server programa bir yazı iletiyordu. Server program da client'a bu yazıyı ters çevirip gönderiyordu. Bu çok basit 
     bir mesajlaşma işlemidir. Halbuki gerçek client-server uygulamalarında mesajlaşmalar çok daha çeşitli ve ayrıntılıdır. 
-    Gerçek uygulamalarda client program server programdan çok çeşitli seyleri yapmasını isteyebilir. Server'da client'ın isteğine
+    Gerçek uygulamalarda client program, server programdan çok çeşitli şeyleri yapmasını isteyebilir. Server'da client'ın isteğine
     uygun bir biçimde yanıtları iletir. Örneğin dört işlem yapan bir server program olsun. Client iki operand'ı server'a gönderip 
-    ondan dört işlemden birini yapmasını istesin. Bu durumda client'ın server'a gönderdiği mesajlar fazlalaşmaktadır. Örneğin
+    ondan dört işlemden birini yapmasını istesin. Bu durumda client'ın server'a gönderdiği mesajlar fazlalaşmaktadır. Örneğin:
 
     ADD op1 op2
     SUB op1 op2
     MUL op1 op2
     DIV op1 op2
 
-    Bir char programında client server'dan pek çok isteyebilir. Server da client'a çok çeşitli bilgiler iletebilir. Yani bu 
-    tür uygulamalarda mesajın bir içeriği ve parametreleri vardır. 
+    Bir char programında client server'dan pek çok şey isteyebilir. Server da client'a çok çeşitli bilgiler iletebilir. Yani bu 
+    tür uygulamalarda mesajın bir içeriği ve parametreleri vardır.
 
-    Pekiyi mesajlar karşı tarafa hangi formatta iletilecektir? İşte bunun için binaet ve text olmak üzere iki mesajlaşma 
-    tekniği kullanılmaktadır. 
+    Pekiyi mesajlar karşı tarafa hangi formatta iletilecektir? İşte bunun için binary ve text olmak üzere iki mesajlaşma 
+    tekniği kullanılmaktadır.
 
-    Binary mesajlaşmadakabaca her iki taraf birbirlerine bir yapı nesnesinin içeriğini binay biçimde gönderir. Karşı taraf 
+    Binary mesajlaşmada kabaca her iki taraf birbirlerine bir yapı nesnesinin içeriğini binary biçimde gönderir. Karşı taraf 
     da bu yapı nesnesini alarak işlemini yapar. Ancak farklı mesajlarda farklı yapılar kullanılacağı için mesajın başında mesajın 
     türünü ve uzunluğunu belirten ortak bir başlık kısmı bulundurulur. Bunun için tipik olarak şöyle bir yol izlenir: Mesajı 
     gönderecek taraf önce mesajın uzunluğunu sonra da mesajın ne mesajı olduğunu belirten mesaj kodunu (numarasını) sonra da mesajın
-    içeriğini karşı ataarafa yollar. Bu işlemi "pseudo code" olarak aşağıdaki gibi ifade edebiliriz:
+    içeriğini karşı tarafa yollar. Bu işlemi "pseudo code" olarak aşağıdaki gibi ifade edebiliriz:
 
     typedef struct tagMSG_HEADER {
         int len;
@@ -45606,11 +45633,11 @@ void exit_sys(const char *msg)
     } MSG_HEADER;
 
     typedef struct tagMSG_XXX {
-        /* message info */
+        // message info
     } MSG_XXX;
 
     typedef struct tagMSG_YYY {
-        /* message info */
+        // message info
     } MSG_YYY;
 
     Örneğin MSG_XXX mesajı karşı tarafa gönderilecek olsun:
@@ -45646,7 +45673,7 @@ void exit_sys(const char *msg)
     Burada aklınıza şöyle bir soru gelebilir: Okuyan taraf zaten mesajın kodunu (numarasını) elde edince o mesajın kaç byte 
     uzunlukta olduğunu bilmeyecek mi? Bu durumda mesajın uzunluğunun karşı tarafa iletilmesine ne gerek var? İşte mesajlar 
     sabit uzunlukta olmayabilir. Örneğin mesajın içerisinde bir metin bulunabilir. Bu durumda mesajın gerçek uzunluğu bu metnin
-    uzunluğuna bağlı olarak değişebilir. Genel bir çözüm için mesajın uzunluğunn da karşı tarafa iletilmesi gerekmektedir. 
+    uzunluğuna bağlı olarak değişebilir. Genel bir çözüm için mesajın uzunluğunun da karşı tarafa iletilmesi gerekmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -45654,15 +45681,15 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Yukarıdaki gibi binary tabanlı mesajlaşma daha hızlı ve etkin olma eğiliminde ise de pratikte daha çok text tabalı mesajlaşmalar
-    kullanılmaktadır. Çünkü text tabalı mesajlaşmalar insanlar tarafından yazısal biçimde de oluşturulabilmektedir. IP protokol 
-    ailesinin uygulama katmanındaki PO3 gibi, TELNET gibi, FTP gibi protokolleri text tabanlı mesajlaşmayı kullanmaktadır.
+    Yukarıdaki gibi binary tabanlı mesajlaşma daha hızlı ve etkin olma eğiliminde ise de pratikte daha çok text tabanlı mesajlaşmalar
+    kullanılmaktadır. Çünkü text tabanlı mesajlaşmalar insanlar tarafından yazısal biçimde de oluşturulabilmektedir. IP protokol 
+    ailesinin uygulama katmanındaki POP3, Telnet, FTP gibi protokolleri text tabanlı mesajlaşmayı kullanmaktadır.
 
-    Text tabanlı mesajlaşmada client'tan server'a ve server'dan client'a gönderilen mesajla bir yazı olarak gönderilir. 
+    Text tabanlı mesajlaşmada client'tan server'a ve server'dan client'a gönderilen mesajlar bir yazı olarak gönderilir. 
     Karşı taraf bu yazıyı alır, parse eder ve gereğini yapar. Programlama dillerinde yazılarla işlem yapabilen pek çok 
-    standart araç bulunduğu için bu biçimde mesajların işlenmesi genel olarak daha kolaydır. Ancak mesaj tabanlı gaberleşme 
-    genel olarak daha yavaştır. Çünkü birtakım bilgilerin yazısal olarak ifade edilmesi bibary ifade edilmesinden genel 
-    olarak daha fazla yer kaplama eğilimindedir. 
+    standart araç bulunduğu için bu biçimde mesajların işlenmesi genel olarak daha kolaydır. Ancak mesaj tabanlı haberleşme 
+    genel olarak daha yavaştır. Çünkü birtakım bilgilerin yazısal olarak ifade edilmesi binary ifade edilmesinden genel 
+    olarak daha fazla yer kaplama eğilimindedir.
 
     Text tabanlı mesajlaşmada önemli bir sorun mesajın nerede bittiğinin tespit edilmesidir. Bunun için mesajın sonu özel 
     bir karakterle sonlandırılabilir. Örneğin IP protokol ailesinin uygulama katmanındaki protokoller genel olarak mesajları 
@@ -45676,20 +45703,20 @@ void exit_sys(const char *msg)
     Tabii bu biçimdeki mesajlaşmalarda soketten CR/LF çifti görülene kadar okuma yapılması gerekir. Bu işlem soketten byte 
     byte okuma ile yapılmamalıdır. Çünkü her byte okuması için prosesin kernel moda geçmesi zaman kaybı oluşturmaktadır. 
     Belli bir karakter ya da karakter kümesi görülene kadar soketten okuma işleminin nasıl yapılması gerektiği izleyen 
-    paragraflarda açıklanacaktır. 
+    paragraflarda açıklanacaktır.
 
     Yazının sonunun tespit edilmesi için kullanılabilecek diğer bir yöntem de baştan yazının uzunluğunun iletilmesi olabilir. 
     Örneğin:
 
     "ADD op1 op2"
 
-    Mesajı için önce bu yazının uzunluğu karşı tarafa iletilebilir. Sonra yazı gönderilir. Okuyan taraf da yazının hepsini
-    belirtilen uzunlukta okuma yaparak elde edebilir. 
+    Yukarıdaki mesaj için önce bu yazının uzunluğu karşı tarafa iletilebilir. Sonra yazı gönderilir. Okuyan taraf da yazının 
+    hepsini belirtilen uzunlukta okuma yaparak elde edebilir.
 
     Yazının sonuna belli bir karakter yerleştirerek o kadar görene kadar etkin okuma yapmak için şöyle bir teknik kullanılmaktadır:
     Karakterler soketten tek tek okunmaz. Blok blok okunurak bir tampona yerleştirilir. Sonra bu tampondan karakterler elde edilir. 
     Tabii blok okuması yapıldığında birden fazla satır tamponda bulunabilecektir. Bu durumda okuma sırasında tamponda nerede 
-    kalındığının da tutulması gerekir. Bu işlemi yapan klasik bir algoritma "Effective TCI/IP Programming" kitabında verilmiştir. 
+    kalındığının da tutulması gerekir. Bu işlemi yapan klasik bir algoritma "Effective TCP/IP Programming" kitabında verilmiştir. 
     Aşağıda bu biçimde CR/LF çifti görülene kadar soketten etkin bir biçimde yukarıda belirttiğimiz gibi okuma yapan bir fonksiyon 
     örneği veriyoruz:
 
@@ -45724,23 +45751,23 @@ void exit_sys(const char *msg)
         return (ssize_t) (str - bstr);
     }
 
-    Fonksiyonun birinci parametresi okuma yapılacak soketi ikinci ve üçüncü parametreleri okunacak satırım yerleştirileceği 
+    Fonksiyonun birinci parametresi okuma yapılacak soketi, ikinci ve üçüncü parametreleri okunacak satırın yerleştirileceği 
     dizinin adresini ve uzunluğunu almaktadır. Buradaki dizinin sonunda her zaman CR/LF ve null karakter bulunacaktır. Fonksiyon 
-    başarı durumunda dizie yerleştirilen karakter sayısı ile (CR/LF dahil) geri dönmektedir. Karşı taraf soketi kapatmışsa 
+    başarı durumunda diziye yerleştirilen karakter sayısı ile (CR/LF dahil) geri dönmektedir. Karşı taraf soketi kapatmışsa 
     ve hiçbir okuma yapılamamışsa bu durumda fonksiyon 0 ile geri dönmektedir. Bu durumda programcının verdiği dizinin içeriği 
     kullanılmamalıdır. Mesajın sonunda CR/LF çifti olmadıktan sonra fonksiyon başarılı okuma yapmamaktadır. Fonksiyon başarısızlık 
     durumunda -1 değerine geri döner ve errno uygun biçimde set edilir. Burada yazmış olduğumuz sock_readline fonksiyonu bir 
-    satır okunan kadar blokeye yol açmaktadır. Dolayısıyla çok client'lı server uygulamalarında select, poll ve epoll gibi modellerde
+    satır okunana kadar blokeye yol açmaktadır. Dolayısıyla çok client'lı server uygulamalarında select, poll ve epoll gibi modellerde
     bu fonksiyon bu haliyle kullanılamaz. Örneğin biz select fonksiyonunda bir grup soketi bekliyor olalım. Bir sokete bir satırın 
-    yarısı gelmiş olabilir. Bu durumda biz read_line fonksiyonu çağırırsak bloke oluşacaktır. Tabii gerçi satırın geri kalan kısmı 
+    yarısı gelmiş olabilir. Bu durumda biz read_line fonksiyonunu çağırırsak bloke oluşacaktır. Tabii gerçi satırın geri kalan kısmı 
     zaten kısa bir süre sonra gelecek olsa da bu durum yine bir kusur oluşturacaktır.
 
     UNIX/Linux, macOS ve Windows sistemlerinde yalnızca CR ('\r) karakteri imleci bulunulan satırın başına geçirmektedir. Dolayısıyla 
     bir yazının sonunda CR/LF çifti varsa yazının ekrana bastırılmasında bir sorun oluşmayacaktır. Çünki önce CR karakteri 
-    imleci bulunulan satırın abşına geçirecek sonra LF karakteri aşağı satırın başına geçirecektir. Böylece yazının sonunda LF
-    karakterinin bulunmasıyla CR/LF karakterlerinin bulunması arasında bir fark oluşmayacaktır. 
+    imleci bulunulan satırın başına geçirecek sonra LF karakteri aşağı satırın başına geçirecektir. Böylece yazının sonunda LF
+    karakterinin bulunmasıyla CR/LF karakterlerinin bulunması arasında bir fark oluşmayacaktır.
 
-    Aşağıdaki örnekte client program server programa CR/LF ile sonlandırılmış bir yazı göndermektedir. Server program da bu yazıyı 
+    Aşağıdaki örnekte client program, server programa CR/LF ile sonlandırılmış bir yazı göndermektedir. Server program da bu yazıyı 
     yukarıdaki sock_readline fonksiyonunu kullanarak okuyup ekrana (stdout dosyasına) yazdırmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -46021,13 +46048,13 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi dört işlem yapan bir client/server uygulama yazmak isteyelim. Bu multi-client bir uygulama olsun. Bunun için 
-    thread modelini kullanalım. (Çünkü bu tür uygulamalarda diğer modeller kullanılırken dikkat açıklamamız gereken başka 
-    noktalar vardır. Diğer modellerde soketten okunan bilgilerin biriktirilmesi gerekmektedir. Bu biriktirmenin nasıl yapılabileceğni
+    thread modelini kullanalım. (Çünkü bu tür uygulamalarda diğer modeller kullanılırken dikkat etmemiz gereken başka 
+    noktalar vardır. Diğer modellerde soketten okunan bilgilerin biriktirilmesi gerekmektedir. Bu biriktirmenin nasıl yapılabileceğini
     izleyen paragraflarda açıklayacağız.)
 
-    Uygulama katmanı protokellerinde genel olarak client'ın server'a her gönderdiği mesaj için server client'a bir yanıt verir. 
+    Uygulama katmanı protokollerinde genel olarak client'ın server'a her gönderdiği mesaj için server client'a bir yanıt verir. 
     Bu yanıt olumlu ise istenen işlemin yanıtıdır. Olumsuz ise bir hata yanıtıdır. Bu tür protokollerde protokolü tasarlayan baştan 
-    client'ın server'a server'ın da client'a göndereceği mesajları belirlemelidir. 
+    client'ın server'a, server'ın da client'a göndereceği mesajları belirlemelidir.
 
     Dört işlem client/server programımızda client'ın server'a göndereceği mesajlar şunlar olabilir:
 
@@ -46038,7 +46065,7 @@ void exit_sys(const char *msg)
     "DIV op1 op2CR/LF"
     "LOGOUTCR/LF"
 
-    Server'ın client'a gnderdiği mesajlar da şunlar olabilir:
+    Server'ın client'a gönderdiği mesajlar da şunlar olabilir:
 
     "LOGIN_ACCEPTEDCR/LF"
     "RESULT resultCR/LF"
