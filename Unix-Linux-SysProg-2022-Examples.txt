@@ -45439,7 +45439,7 @@ void exit_sys(const char *msg)
     farklı işlemciler tarafından çalıştırılması gerekir. İşletim sistemleri genellikle bu ayarlamayı kendi içlerinde yapabilmektedir. 
     Örneğin Linux sistemlerinde kullanılan güncel çizelgeleme algoritmasında her işlemci için ayrı bir çalışma kuyruğu oluşturulmakta
     ve thread'ler bunlara dinamik bir biçimde dağıtılmaktadır. Ancak yine de bazı durumlarda thread'lerin belli işlemcilere
-    programcı tarafından ataması (processor affinity) gerekebilmektedir.
+    programcı tarafından atanması (processor affinity) gerekebilmektedir.
 
     Örneğin makinemizde 8 işlemci ya da çekirdek olsun. Bu durumda biz 8 tane thread yaratıp bu 8 thread'in farklı işlemcilerde 
     eş zamanlı olarak kendi içlerinde seri bir biçimde çalışmasını sağlayabiliriz. Bunun sağlanması iki biçimde yapılabilir. 
@@ -45447,14 +45447,14 @@ void exit_sys(const char *msg)
 
     // 1'inci thread
 
-   for (;;) {
+    for (;;) {
         recvfrom(...)
         <mesajı işle>
     }
 
     // 2'inci thread
 
-   for (;;) {
+    for (;;) {
         recvfrom(...)
         <mesajı işle>
     }
@@ -45471,13 +45471,13 @@ void exit_sys(const char *msg)
 
     // 1'inci thread
 
-   for (;;) {
+    for (;;) {
         <kuyruktan mesajı al işle>
     }
 
     // 2'inci thread
 
-   for (;;) {
+    for (;;) {
         <kuyruktan mesajı al işle>
     }
     ...
@@ -45493,7 +45493,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi client istekleri için çok işlemcili ya da çok çekirdekli bir bilgisayar yetmiyorsa ne olacak? Bu tür durumlarda 
     işleri birden fazla server makineye dağıtmak gerekir. Client'ın birden çok server olduğunu fark etmemesi dolayısıyla bu 
-    sürecin tamamen server tarafta otomatik hale getirilmesi uygun olur. Aynı makinenin klonundan çıkartıp sisteme eklendiğinde
+    sürecin tamamen server tarafta otomatik hale getirilmesi uygun olur. Aynı makinenin klonundan çıkartılıp sisteme eklendiğinde
     yükü paylaşabilmesi sağlanmalıdır. Böylece "ölçeklenebilir (scalable)" bir sistem söz konusu olacaktır. Pekiyi yük bu server
     makinelere nasıl dağıtılabilir? İşte bunun için kullanılan mekanizmaya "load balancing", bu mekanizmayı sağlayan birime de
     "load balancer" denilmektedir.
@@ -45502,7 +45502,7 @@ void exit_sys(const char *msg)
 
 								Load Balancer
 
-    Bu tür dağıtık sistemlerde client aslında "load balancer" ile bağlantı sağlar. Load balancer client'ı en az meşgul olan 
+    Bu tür dağıtık sistemlerde client aslında "load balancer" ile bağlantı sağlar. Load balancer, client'ı en az meşgul olan 
     server'a iletir. Bugün kullanılan cloud sistemler de kendi içlerinde load balancer benzeri mekanizmalar içermektedir. 
     Load Balencer'lar tamamen donanımsal olarak ya da tamamen yazılımsal olarak gerçekleştirilebilmektedir. Yazılımsal gerçekleştirim
     daha esnek olabilmektedir. Ancak donanımsal gerçekleştirimler bazı durumlarda daha etkin olabilmektedir.
@@ -45522,8 +45522,8 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    TCP için kullandığımız recv ve send fonksiyonlarının read ve write fonksiyonlarından tek farkı flags parametresidir. 
-    Biz yukarıdaki örneklerde bu parametreyi 0 geçtik. Dolayısıyla yukarıdaki örneklerde kullandığımız recv ve send fonksiyonlarının 
+    TCP için kullandığımız recv ve send fonksiyonlarının, read ve write fonksiyonlarından tek farkı flags parametresidir. 
+    Biz yukarıdaki örneklerde bu parametreyi 0 geçtik. Dolayısıyla yukarıdaki örneklerde kullandığımız recv ve send fonksiyonlarının, 
     read ve write fonksiyonlarından hiçbir farkı yoktur. Pekiyi bu flag değerleri neler olabilir? İşte POSIX standartlarında 
     recv fonksiyonundaki flag değerleri şunlardan biri ya da birden fazlası olabilir:
 
@@ -45560,9 +45560,9 @@ void exit_sys(const char *msg)
         return (ssize_t) index;
     }
 
-    İşte aslında recv fonksiyonundaki MSG_WAITALL bayrağı adeta bunu sağlamaktadır. Ancak yine de bu bayrağın bazı sistemlerde bazı 
-    problemleri vardır. Örneğin Windows sistemlerinde ve Linux sistemlerinde bu bayrakla okunmak istenen miktar network alım tamponunun
-    büyüklüğünden fazlaysa istenen kadar miktarda byte okunamayabilmektedir. Ancak bu bayrak yüksek olmayan miktarlarda okumalar 
+    İşte aslında recv fonksiyonundaki MSG_WAITALL bayrağı adeta bunu sağlamaktadır. Ancak yine de bu bayrağın bazı sistemlerde 
+    bazı problemleri vardır. Örneğin Windows sistemlerinde ve Linux sistemlerinde bu bayrakla okunmak istenen miktar network alım 
+    tamponunun büyüklüğünden fazlaysa istenen miktarda byte okunamayabilmektedir. Ancak bu bayrak yüksek olmayan miktarlarda okumalar 
     için yukarıdaki fonksiyonun yerine kullanılabilmektedir.
 
     send fonksiyonundaki POSIX bayrakları da şunlardır:
@@ -45615,7 +45615,7 @@ void exit_sys(const char *msg)
     MUL op1 op2
     DIV op1 op2
 
-    Bir char programında client server'dan pek çok şey isteyebilir. Server da client'a çok çeşitli bilgiler iletebilir. Yani bu 
+    Bir chat programında client server'dan pek çok şey isteyebilir. Server da client'a çok çeşitli bilgiler iletebilir. Yani bu 
     tür uygulamalarda mesajın bir içeriği ve parametreleri vardır.
 
     Pekiyi mesajlar karşı tarafa hangi formatta iletilecektir? İşte bunun için binary ve text olmak üzere iki mesajlaşma 
