@@ -45713,7 +45713,7 @@ void exit_sys(const char *msg)
     Yukarıdaki mesaj için önce bu yazının uzunluğu karşı tarafa iletilebilir. Sonra yazı gönderilir. Okuyan taraf da yazının 
     hepsini belirtilen uzunlukta okuma yaparak elde edebilir.
 
-    Yazının sonuna belli bir karakter yerleştirerek o kadar görene kadar etkin okuma yapmak için şöyle bir teknik kullanılmaktadır:
+    Yazının sonuna belli bir karakter yerleştirerek o karakteri görene kadar etkin okuma yapmak için şöyle bir teknik kullanılmaktadır:
     Karakterler soketten tek tek okunmaz. Blok blok okunurak bir tampona yerleştirilir. Sonra bu tampondan karakterler elde edilir. 
     Tabii blok okuması yapıldığında birden fazla satır tamponda bulunabilecektir. Bu durumda okuma sırasında tamponda nerede 
     kalındığının da tutulması gerekir. Bu işlemi yapan klasik bir algoritma "Effective TCP/IP Programming" kitabında verilmiştir. 
@@ -45763,7 +45763,7 @@ void exit_sys(const char *msg)
     zaten kısa bir süre sonra gelecek olsa da bu durum yine bir kusur oluşturacaktır.
 
     UNIX/Linux, macOS ve Windows sistemlerinde yalnızca CR ('\r) karakteri imleci bulunulan satırın başına geçirmektedir. Dolayısıyla 
-    bir yazının sonunda CR/LF çifti varsa yazının ekrana bastırılmasında bir sorun oluşmayacaktır. Çünki önce CR karakteri 
+    bir yazının sonunda CR/LF çifti varsa yazının ekrana bastırılmasında bir sorun oluşmayacaktır. Çünkü önce CR karakteri 
     imleci bulunulan satırın başına geçirecek sonra LF karakteri aşağı satırın başına geçirecektir. Böylece yazının sonunda LF
     karakterinin bulunmasıyla CR/LF karakterlerinin bulunması arasında bir fark oluşmayacaktır.
 
@@ -46058,7 +46058,7 @@ void exit_sys(const char *msg)
 
     Dört işlem client/server programımızda client'ın server'a göndereceği mesajlar şunlar olabilir:
 
-    "LOGIN <user_name> <password>CT/LF"
+    "LOGIN <user_name> <password>CR/LF"
     "ADD op1 op2CR/LF"
     "SUB op1 op2CR/LF"
     "MUL op1 op2CR/LF"
@@ -46074,8 +46074,8 @@ void exit_sys(const char *msg)
     Bu tür uygulama katmanı protokollerinde fiziksel bağlantı ile mantıksal bağlantının karıştırılmaması gerekir. Bir client'ın
     server'a connect fonksiyonuyla bağlanması onun hizmet alacağı anlamına gelmemektedir. Onun hizmet alabilmesi için mantıksal 
     bir bağlantının da sağlanması gerekir. Bizim protokolümüzde bu mantıksal bağlantı "LOGIN" ve "LOGIN_ACCEPTED" mesajlarıyla
-    yapılmaktadır. Client TCP'den bağlandıktan sonra server'a kullanıcı adını ve parolayı yollar. Server doğrulamayı yaparsa 
-    client'a "LOGIN ACCEPTEDCR/LF" mesajını iletir. Eğer server doğrulamayı yapamazsa bu durumda örneğin "ERROR LOGIN_FAILEDCR/LF"
+    yapılmaktadır. Client, TCP'den bağlandıktan sonra server'a kullanıcı adını ve parolayı yollar. Server doğrulamayı yaparsa 
+    client'a "LOGIN_ACCEPTEDCR/LF" mesajını iletir. Eğer server doğrulamayı yapamazsa bu durumda örneğin "ERROR LOGIN_FAILEDCR/LF"
     gibi bir hata mesajıyla geri dönüp soketi kapatacaktır.
 
     <BURADA KALDIK>
