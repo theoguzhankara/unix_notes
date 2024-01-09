@@ -17151,11 +17151,13 @@ void exit_sys(const char *msg)
 
     Fonksiyonun üçüncü parametresi paylaşılan bellek alanının erişim haklarını belirtmektedir. Tabii ancak ikinci parametrede O_CREAT
     bayrağı kullanılmışsa bu parametreye gereksinim duyulmaktadır. İkinci parametrede O_CREAT bayrağı kullanılmamışsa üçüncü parametre
-    hiç kullanılmamaktadır.
+    hiç kullanılmamaktadır. Ancak shm_open fonksiyonunun bu üçüncü parametresi kullanılmayacak olsa bile girilmek 
+    zorundadır. Örneğin bu tür durumlarda bu parametre için 0 değerini girebilirsiniz. (open fonksiyonunun üçüncü parametresinin 
+    eğer gerek yoksa girilmeyebileceğini anımsayınız.)
 
-    shm_open bize tıpkı bir disk dosyasında olduğu gibi bir dosya betimleyicisi vermektedir. (Halbuki mq_open fonksiyonunda POSIX
-    standartlarında bunun zorunlu olmadığını anımsayınız.) Fonksiyon başarısız olursa yine -1 değerine geri döner ve errno değişkeni 
-    uygun biçimde set edilir. 
+    shm_open bize tıpkı bir disk dosyasında olduğu gibi bir dosya betimleyicisi vermektedir. (Halbuki mq_open fonksiyonunun bir 
+    dosya betimleyicisi vermesinin zorunlu olmadığını anımsayınız.) Fonksiyon başarısız olursa yine -1 değerine geri döner ve errno 
+    değişkeni uygun biçimde set edilir. 
 
     Örneğin:
 
@@ -17164,20 +17166,21 @@ void exit_sys(const char *msg)
 	if ((fdshm = shm_open(SHM_NAME, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)) == -1)
 		exit_sys("shm_open");
 
-    2) Paylaşılan bellek alanı yaratıldıktan sonra ftruncate fonksiyonu ile ona bir büyüklük vermek gerekir. Örneğin:
+    2) Paylaşılan bellek alanı yaratıldığında 0 uzunluktadır. Ona ftruncate fonksiyonu ile ona bir büyüklük vermek gerekir. truncate
+    ve ftruncate fonksiyonlarının bir dosyayı büyütmek ya da küçültmek amacıyla kullanıldığını anımsayınız. Örneğin:
 
     if (ftruncate(fdshm, SHM_SIZE) == -1)
 		exit_sys("ftruncate");
 
-    Tabii paylaşılan bellek alanı zaten yaratılmışsa ve biz onu açıyorsak ftruncate fonksiyonunu aynı uzunlukta çağırdığımızda aslında fonksiyon
-    herhangi bir şey yapmayacaktır. Yani aslında ftruncate fonksiyonu paylaşılan bellek alanı ilk kez yaratılırken bir kez yapılır.
-    Ancak yukarıda da belirttiğimiz gibi aynı uzunlukta ftruncate işleminin bir etkisi yoktur. 
+    Tabii paylaşılan bellek alanı zaten yaratılmışsa ve biz onu açıyorsak ftruncate fonksiyonunu aynı uzunlukta çağırdığımızda 
+    aslında fonksiyon herhangi bir şey yapmayacaktır. Yani aslında ftruncate fonksiyonu paylaşılan bellek alanı ilk kez yaratılırken 
+    bir kez çağrılır. Ancak yukarıda da belirttiğimiz gibi aynı uzunlukta ftruncate işleminin bir etkisi yoktur. 
 
-    POSIX paylaşılan bellek alanı nesneleri Linux'ta dosya sisteminde /dev/shm dizini içerisinde görüntülenmektedir. Yani programcı isterse
-    bu dizin içerisindeki nesneleri komut satırında rm komutuyla silebilir. 
+    POSIX paylaşılan bellek alanı nesneleri Linux'ta dosya sisteminde /dev/shm dizini içerisinde görüntülenmektedir. Yani programcı 
+    isterse bu dizin içerisindeki nesneleri komut satırında rm komutuyla silebilir. 
 
     3) Artık paylaşılan bellek alanı nesnesinin belleğe "map" edilmesi gerekmektedir. (Klasik Sistem 5 paylaşılan bellek alanlarında 
-    "map etmek" yerine "attach etmek" terimi kullanılmaktaydı. Bu arayüzde "attach" yerine "mapping" sözcüğü tercih edilmiştir.)
+    "map etmek" yerine "attach etmek" terimi kullanılmaktaydı. Bu arayüzde ise "attach" yerine "mapping" sözcüğü tercih edilmiştir.)
     Bunun için mmap isimli bir POSIX fonksiyonu kullanılmaktadır. mmap fonksiyonu pek çok UNIX türevi sistemde bir sistem fonksiyonu 
     olarak gerçekleştirilmiştir. mmap, paylaşılan bellek alanlarının dışında başka amaçlarla da kullanılabilen ayrıntılı bir sistem 
     fonksiyonudur. Bu nedenle, biz burada önce fonksiyonun paylaşılan bellek alanlarında kullanımına kısaca değineceğiz. Sonra bu 
@@ -17188,19 +17191,21 @@ void exit_sys(const char *msg)
     void *mmap(void *addr, size_t len, int prot, int flags, int fd, off_t off);
 
     Fonksiyonun birinci parametresi, "mapping için" önerilen sanal adresi belirtmektedir. Programcı, belli bir sanal adresin 
-    mapping için kullanılmasını isteyebilir. Ancak fonksiyon, flags parametresinde MAP_FIXED geçilmemişse bu adresi tam (exact) olarak 
-    yani verildiği gibi kullanmayabilir. Fonksiyon bu önerilen adresin yakınındaki bir sayfayı tahsis edebilir. Bu tahsisatın burada belirtilen 
-    adresin neresinde yapılacağı garanti edilmemiştir. Yani buradaki adres eğer fonksiyonun flags parametresinde MAP_FIXED kullanılmamışsa bir öneri 
-    niteliğindedir. Eğer bu adres NULL olarak geçilirse bu durumda mapping işlemi işletim sisteminin kendi belirlediği bir adresten 
-    itibaren yapılır. Tabii en normal durum bu parametrenin NULL adres olarak geçilmesidir. 
+    mapping için kullanılmasını isteyebilir. Ancak fonksiyon, flags parametresinde MAP_FIXED geçilmemişse bu adresi tam (exact) 
+    olarak yani verildiği gibi kullanmayabilir. Fonksiyon bu önerilen adresin yakınındaki bir sayfayı tahsis edebilir. Bu tahsisatın 
+    burada belirtilen adresin neresinde yapılacağı garanti edilmemiştir. Yani buradaki adres eğer fonksiyonun flags parametresinde 
+    MAP_FIXED kullanılmamışsa bir öneri niteliğindedir. Eğer bu adres NULL olarak geçilirse bu durumda mapping işlemi işletim 
+    sisteminin kendi belirlediği bir adresten itibaren yapılır. Tabii en normal durum bu parametrenin NULL adres olarak geçilmesidir. 
 
     Fonksiyonun ikinci parametresi, paylaşılan bellek alanının ne kadarının map edileceğini belirtir. Örneğin paylaşılan bellek alanı 
-    nesnesi 1 MB olabilir. Ancak biz onun 100K'lık bir kısmını map etmek isteyebiliriz. Ya da tüm paylaşılan bellek alanını da map etmek isteyebiliriz. 
-    Bu uzunluk sayfa katlarında olmak zorunda değildir. Ancak pek çok sistem, bu uzunluğu sayfa katlarına doğru yukarı yuvarlamaktadır. 
-    Yani biz uzunluğu örneğin 100 byte verebiliriz. Ancak sistem 100 byte yerine sayfa uzunluğu olan 4096 byte'ı map edecektir. 
+    nesnesi 1 MB olabilir. Ancak biz onun 100K'lık bir kısmını map etmek isteyebiliriz. Ya da tüm paylaşılan bellek alanını da map 
+    etmek isteyebiliriz. Bu uzunluk sayfa katlarında olmak zorunda değildir. Ancak pek çok sistem, bu uzunluğu sayfa katlarına doğru 
+    yukarı yuvarlamaktadır. Yani biz uzunluğu örneğin 100 byte verebiliriz. Ancak sistem 100 byte yerine sayfa uzunluğu olan 4096 
+    byte'ı map edecektir. 
 
-    Fonksiyonun üçüncü parametresi, mapping işleminin koruma özelliklerini belirtmektedir. Başka bir deyişle bu parametre 
-    paylaşılan bellek alanı için ayrılacak fiziksel sayfaların işlemci düzeyinde koruma özelliklerini belirtir. Bu özellikler şunlardan oluşturulabilir:
+    Fonksiyonun üçüncü parametresi, mapping işleminin koruma özelliklerini belirtmektedir. Başka bir deyişle bu parametre paylaşılan 
+    bellek alanı için ayrılacak fiziksel sayfaların işlemci düzeyinde koruma özelliklerini belirtir. Bu özellikler şu sembolik 
+    sabitlerden oluşturulabilir:
 
     PROT_READ
     PROT_WRITE
@@ -17213,9 +17218,10 @@ void exit_sys(const char *msg)
     çalıştırılabilirliği üzerinde etkili olmaktadır. Örneğin Intel ve ARM işlemcilerinde, fiziksel sayfa PROT_EXEC ile özelliklendirilmemişse 
     o sayfadaki bir kod çalıştırılamamaktadır. PROT_NONE o sayfaya herhangi bir erişimin mümkün olamayacağını belirtmektedir. Yani 
     PROT_NONE olan bir sayfa ne okunabilir ne de yazılabilir. Bu tür sayfa özellikleri "guard page" oluşturmak için kullanılabilmektedir. 
-    Tabii bir sayfanın koruma özelliği daha sonra da değiştirilebilir. Aslında bütün işlemciler buradaki koruma özelliklerinin hepsini desteklemeyebilirler. 
-    Örneğin Intel işlemcilerinde PROT_WRITE zaten okuma özelliğini de kapsamaktadır. Bazı işlemciler sayfalarda PROT_EXEC özelliğini 
-    hiç bulundurmamaktadır. Ancak ne olursa olsun programcı sanki bu özelliklerin hepsi varmış gibi bu parametreyi oluşturmalıdır. 
+    Tabii bir sayfanın koruma özelliği daha sonra da değiştirilebilir. Aslında bütün işlemciler buradaki koruma özelliklerinin hepsini 
+    desteklemeyebilirler. Örneğin Intel işlemcilerinde PROT_WRITE zaten okuma özelliğini de kapsamaktadır. Bazı işlemciler sayfalarda
+    PROT_EXEC özelliğini hiç bulundurmamaktadır. Ancak ne olursa olsun programcı sanki bu özelliklerin hepsi çalıştıkları işlemcide 
+    varmış gibi bu parametreyi oluşturmalıdır. Böylece kodun başka bir işlemcinin bulunduğu sistemde de düzgün çalışması sağlanacaktır.
 
     Fonksiyonun dördüncü parametresi olan flags aşağıdaki değerlerden yalnızca birini alabilir:
 
@@ -17226,61 +17232,65 @@ void exit_sys(const char *msg)
     MAP_PRIVATE "copy on write" denilen semantik için kullanılmaktadır. "Copy on write" işlemi "yazma yapılana kadar sanal sayfaların
     aynı fiziksel sayfalara yönlendirilmesi ancak yazmayla birlikte o sayfaların bir kopyalarının çıkartılıp yazmanın o prosese 
     özel olarak yapılması ve yapılan yazmaların paylaşılan bellek alanına yansıtılmaması" anlamına gelmektedir. Başka bir deyişle
-    MAP_PRIVATE şunlara yol açmaktadır:
+    MAP_PRIVATE bayrağı şunlara yol açmaktadır:
 
     - Okuma yapılınca paylaşılan bellek alanından okuma yapılmış olur. 
-    - Ancak yazma yapıldığında bu yazma paylaşılan bellek alanına yansıtılmaz. O anda yazılan sayfanın bir kopyası çıkartılarak
-    yazma o kopya üzerine yapılır. Dolayısıyla başka bir proses bu yazma işlemini göremez. 
+    - Yazma yapıldığında bu yazma paylaşılan bellek alanına yansıtılmaz. O anda yazılan sayfanın bir kopyası çıkartılarak yazma o 
+    kopya üzerine yapılır. Dolayısıyla başka bir proses bu yazma işlemini göremez. 
 
-    Bir proses ilgili paylaşılan bellek alanı nesnesini MAP_PRIVATE ile map ettiğinde diğer proses o alana yazma yaptığında onun yazdığını MAP_PRIVATE
-    yapan prosesin görüp görmeyeceği POSIX standartlarında belirsiz (unspecified) bırakılmıştır. Linux sistemlerinin man sayfasında da 
-    aynı "unspecified" durum belirtilmiş olsa da mevcut Linux çekirdeklerinde başka bir proses private mapping yapılmış yere yazma yaptığında
-    bu yazma private mapping'in yapıldığı proseste görülmektedir. Ancak sayfaya yazma yapıldığında artık o sayfanın kopyasından 
-    çıkartılacağı için bu yazma işleminden sonraki diğer prosesin yaptığı yazma işlemleri görülmemektedir.
+    Bir proses ilgili paylaşılan bellek alanı nesnesini MAP_PRIVATE ile map ettiğinde ve diğer proses o alana yazma yaptığında onun 
+    yazdığını MAP_PRIVATE yapan prosesin görüp görmeyeceği POSIX standartlarında belirsiz (unspecified) bırakılmıştır. Linux 
+    sistemlerinin man sayfasında da bu durum "unspecified" olarak belirtilmiş olsa da mevcut Linux çekirdeklerinde başka bir proses 
+    private mapping yapılmış yere yazma yaptığında bu yazma private mapping'in yapıldığı proseste görülmektedir. Ancak private mapping 
+    yapan proses sayfaya yazma yaptığında artık o sayfanın kopyasından çıkartılacağı için bu yazma işleminden sonraki diğer prosesin 
+    yaptığı yazma işlemleri görülmemektedir.
 
     MAP_SHARED ise yazma işleminin paylaşılan bellek alanına yapılacağını yani "copy on write" yapılmayacağını belirtmektedir. 
     Dolayısıyla MAP_SHARED bir mapping'te paylaşılan alana yazılanlar diğer prosesler tarafından görülür. Normal olarak programcılar
-    amaç doğrultusunda shared mapping kullanırlar. Private mapping (yani "copy on write") bazı özel durumlarda tercih edilmektedir. 
-    Örneğin işletim sistemi (exec fonksiyonları) çalıştırılabilir dosyanın ".data" bölümünü private mapping yaparak belleğe mmap 
-    ile yüklemektedirler.
+    proseslerarası haberleşme için shared mapping kullanırlar. Private mapping (yani "copy on write") bazı özel durumlarda tercih 
+    edilmektedir. Örneğin işletim sistemi (exec fonksiyonları) çalıştırılabilir dosyanın ".data" bölümünü private mapping yaparak
+    belleğe mmap ile yüklemektedirler.
 
-    Fonksiyonun flags parametresinde MAP_PRIVATE ve MAP_SHARED değerlerinin yalnızca biri kullanılabilir. Ancak bu değerlerden biri ile 
-    MAP_FIXED değeri bit düzeyinde OR işlemine sokulabilmektedir. MAP_FIXED bayrağı, fonksiyonun birinci parametresindeki adres NULL geçilmemişse
-    bu adresin kendisinin aynen (hiç değiştirilmeden) kullanılacağını belirtmektedir. Yani bu adresin yakınındaki herhangi bir sayfa değil kendisi tahsis edilecek 
-    ve fonksiyon bu adresin aynısıyla geri dönecektir. Eğer MAP_FIXED bayrağı belirtilmişse Linux sistemlerinde birinci parametredeki 
-    adresin sayfa katlarında olma zorunlululuğu vardır. Ancak POSIX standartlarının son versiyonları "may require" ifadesiyle bunun zorunlu olmayabileceğini 
-    belirtmektedir. 
+    Fonksiyonun flags parametresinde MAP_PRIVATE ve MAP_SHARED değerlerinin yalnızca biri kullanılabilir. Ancak bu değerlerden
+    biri ile MAP_FIXED değeri bit düzeyinde OR işlemine sokulabilmektedir. MAP_FIXED bayrağı fonksiyonun birinci parametresindeki
+    adres NULL geçilmemişse bu adresin kendisinin aynen (hiç değiştirilmeden) kullanılacağını belirtmektedir. Yani bu adresin 
+    yakınındaki herhangi bir sayfa değil tam olarak bu adresten itibaren tahsisat yapılacak ve fonksiyon bu adresin aynısıyla 
+    geri dönecektir. (Tabii bu durumda programcının verdiği adres uygun olmayabilir. Bu durumda fonksiyon da başarısız olur.)
+    Eğer MAP_FIXED bayrağı belirtilmişse Linux sistemlerinde birinci parametredeki adresin sayfa katlarında olma zorunlululuğu vardır. 
+    Ancak POSIX standartlarının son versiyonları "may require" ifadesiyle bunun zorunlu olmayabileceğini belirtmektedir. 
 
-    Fonksiyonun son iki parametresi dosya betimleyicisi ve bir de offset içermektedir. Paylaşılan bellek alanının belli bir offset'ten 
-    sonraki kısmı map edilebilmektedir. Örneğin paylaşılan bellek alanı nesnemiz 4 MB olsun. Biz bu nesnenin 1 MB'sinden itibaren 64K'lık 
-    kısmını map edebiliriz. O halde mmap fonksiyonunu örneğin şöyle çağırabiliriz:
+    Fonksiyonun son iki parametresi dosya betimleyicisi ve bir de offset içermektedir. Paylaşılan bellek alanının belli bir 
+    offset'ten sonraki kısmı map edilebilmektedir. Örneğin paylaşılan bellek alanı nesnemiz 4 MB olsun. Biz bu nesnenin 1 MB'sinden 
+    itibaren 64K'lık kısmını map edebiliriz. Örneğin mmap fonksiyonunu şöyle çağırabiliriz:
 
-    shmaddr = mmap(NULL, SHM_SIZE, PROT_WRITE, MAP_SHARED, fdshm, 0);
+    shmaddr = mmap(NULL, SHM_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fdshm, 0);
 
-    Burada paylaşılan bellek alanı nesnesinin SHM_SIZE kadar alanı map edilmek istenmiştir. İlgili sayfalar 
-    PROT_WRITE özelliğine sahip olacaktır. Yani bu sayfalara yazma yapılabilecektir. Bu sayfalara yazma 
-    yapıldığında paylaşılan bellek alanı nesnesi bundan etkilenecek yani aynı nesneyi kullanan diğer proseslerde de 
-    eğer shared mapping yapılmışsa bu durum gözükecektir. Burada paylaşılan bellek alanı nesnesinin 0'ıncı offset'inden 
-    itibaren SHM_SIZE kadar alanın map edildiğine dikkat ediniz. 
+    Burada paylaşılan bellek alanı nesnesinin SHM_SIZE kadar alanı map edilmek istenmiştir. İlgili sayfalar PROT_READ|PROT_WRITE
+    özelliğine sahip olacaktır. Yani bu sayfalara yazma yapılabilecektir. Bu sayfalara yazma yapıldığında paylaşılan bellek alanı 
+    nesnesi bundan etkilenecek, yani aynı nesneyi kullanan diğer proseslerde de eğer shared mapping yapılmışsa bu değişiklikler 
+    gözükecektir. Burada paylaşılan bellek alanı nesnesinin 0'ıncı offset'inden itibaren SHM_SIZE kadar alanın map edildiğine 
+    dikkat ediniz. 
 
-    mmap fonksiyonun son parametresindeki offset değeri MAP_FIXED belirtilmişse, birinci parametre ile son parametrenin sayfa katlarına bölümünden elde edilen 
-    kalan aynı olmak zorundadır. (Yani örneğin POSIX standartlarında işletim sistemi eğer 5000 adresini kabul ediyorsa 5000 % 4096 = 4'tür. Bu durumda 
-    son parametrenin de 4096'ya bölümünden elde edilen kalan 4 olmalıdır.) Ancak MAP_FIXED belirtilmemişse POSIX standartları bu offset değerinin 
-    sayfa katlarında olup olmayacağını işletim sistemini yazanların isteğine bırakmıştır. Linux çekirdeklerinde, MAP_FIXED belirtilsin ya da belirtilmesin 
-    bu offset değeri her zaman sayfa katlarında olmak zorundadır. 
+    mmap fonksiyonun son parametresindeki offset değeri flags parametresinde MAP_FIXED belirtilmişse, birinci parametre ile son 
+    parametrenin sayfa katlarına bölümünden elde edilen kalan aynı olmak zorundadır. (Yani örneğin POSIX standartlarında işletim 
+    sistemi eğer 5000 adresini kabul ediyorsa 5000 % 4096 = 4'tür. Bu durumda son parametrenin de 4096'ya bölümünden elde edilen
+    kalanın da 4 olması gerekir.) Ancak flags parametresinde MAP_FIXED belirtilmemişse POSIX standartları bu offset değerinin 
+    sayfa katlarında olup olmayacağını işletim sistemini yazanların isteğine bırakmıştır. Linux çekirdeklerinde MAP_FIXED belirtilsin 
+    ya da belirtilmesin bu offset değeri her zaman sayfa katlarında olmak zorundadır. 
 
     mmap fonksiyonu başarı durumunda mapping yapılan sanal bellek adresine geri dönmektedir. Fonksiyon başarısızlık durumunda 
     MAP_FAILED özel değerine geri döner. Pek çok sistemde MAP_FAILED bellekteki son adres olarak aşağıdaki biçimde define edilmiştir:
 
     #define MAP_FAILED ((void *) -1)
 
-    Kontrol şöyle yapılabilir:
+    mmap fonksiyonunun başarı kontrolü şöyle yapılabilir:
 
     shmaddr = mmap(NULL, SHM_SIZE, PROT_WRITE, MAP_SHARED, fdshm, 0);
 	if (shmaddr == MAP_FAILED)
 		exit_sys("mmap");
 
-    Paylaşılan bellek alanı betimleyicisi mapping işleminden sonra close fonksiyonuyla kapatılabilir. Bu durum mapping'i etkilememektedir. 
+    Paylaşılan bellek alanı betimleyicisi mapping işleminden sonra close fonksiyonuyla kapatılabilir. Bu durum mapping'i 
+    etkilememektedir. 
 
     4) Programcı paylaşılan bellek alanı ile işini bitirdikten sonra artık map ettiği alanı boşaltabilir. Bu işlem munmap POSIX 
     fonksiyonu ile yapılmaktadır. (mmap fonksiyonunu malloc gibi düşünürsek munmap fonksiyonunu da free gibi düşünebiliriz.)
@@ -17290,16 +17300,18 @@ void exit_sys(const char *msg)
 
     int munmap(void *addr, size_t len);
 
-    Fonksiyonun birinci parametresi, daha önce map edilen alanın başlangıç adresini belirtir. İkinci parametre unmap edilecek alanın uzunluğunu 
-    belirtmektedir. Fonksiyon birinci parametresinde belirtilen adresten itibaren ikinci parametresinde belirtilen miktardaki 
-    byte'ı kapsayan sayfaları unmap etmektedir. (Örneğin buradaki adres bir sayfanın ortalarında ise ve uzunluk da başka bir sayfanın ortalarına kadar 
-    geliyorsa bu iki sayfa da tümden unmap edilmektedir.) POSIX standartları işletim sistemlerinin birinci parametrede belirtilen 
-    adresin sayfa katlarında olmasını zorlayabileceğini (may require) belirtmektedir. Linux'ta birinci parametrede belirtilen adres sayfa katlarında olmak zorundadır. 
-    Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri döner ve errno değişkeni uygun biçimde set edilir. 
-    munmap ile zaten map edilmemiş bir alan unmap edilmeye çalışılırsa fonksiyon bir şey yapmaz. Bu durumda fonksiyon başarısızlıkla geri dönmemektedir. 
+    Fonksiyonun birinci parametresi, daha önce map edilen alanın başlangıç adresini, ikinci parametresi ise unmap edilecek alanın 
+    uzunluğunu belirtmektedir. Fonksiyon birinci parametresinde belirtilen adresten itibaren ikinci parametresinde belirtilen miktardaki 
+    byte'ı içeren sayfaları unmap etmektedir. (Örneğin buradaki adres bir sayfanın ortalarında ise ve uzunluk da başka bir sayfanın
+    ortalarına kadar geliyorsa bu iki sayfa da tümden unmap edilmektedir.) POSIX standartları işletim sistemlerinin birinci parametrede 
+    belirtilen adresin sayfa katlarında olmasını zorlayabileceğini (may require) belirtmektedir. Linux'ta birinci parametrede belirtilen 
+    adres sayfa katlarında olmak zorundadır. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri döner ve 
+    errno değişkeni uygun biçimde set edilir. munmap ile zaten map edilmemiş bir alan unmap edilmeye çalışılırsa fonksiyon bir şey yapmaz.
+    Bu durumda fonksiyon başarısızlıkla geri dönmemektedir. 
 
-    Paylaşılan bellek alanına ilişkin dosya betimleyicisi close fonksiyonu ile kapatılabilir. Paylaşılan bellek alanı betimleyicisi close ile kapatıldığında 
-    munmap işlemi yapılmamaktadır. Zaten paylaşılan bellek alanı nesnesi map edildikten sonra hemen close ile kapatılabilir. Bunun mapping işlemine bir etkisi olmaz. 
+    Paylaşılan bellek alanına ilişkin dosya betimleyicisi close fonksiyonu ile kapatılabilir. Paylaşılan bellek alanı betimleyicisi 
+    close ile kapatıldığında munmap işlemi yapılmamaktadır. Zaten paylaşılan bellek alanı nesnesi map edildikten sonra hemen close 
+    ile kapatılabilir. Bunun mapping işlemine bir etkisi olmaz. Ancak proses sonlandığında tabii unmap işlemi otomatik olarak yapılmaktadır.
 
     Unmap işlemi mevcut mapping'in bir kısmına yapılabilmektedir. Bu durumda işletim sistemi mapping işlemini ardışıl olmayan 
     parçalara kendisi ayırmaktadır. Örneğin:
@@ -17317,24 +17329,27 @@ void exit_sys(const char *msg)
     5) Paylaşılan bellek alanı nesnesine ilişkin betimleyici close fonksiyonu ile sanki bir dosyaymış gibi kapatılır. Yukarıda da 
     belirttiğimiz gibi bu kapatma işlemi aslında mapping işleminden hemen sonra da yapılabilir. 
 
-    6) Artık paylaşılan bellek alanı nesnesi shm_unlink fonksiyonu ile silinebilir. Anımsanacağı gibi bu silme yapılmazsa 
-    sistem reboot edilene kadar nesne hayatta kalmaya devam edecektir (kernel persistant). Fonksiyonun prototipi şöyledir:
+    6) Artık paylaşılan bellek alanı nesnesi shm_unlink fonksiyonu ile silinebilir. Anımsanacağı gibi bu silme yapılmazsa sistem 
+    reboot edilene kadar nesne hayatta kalmaya devam edecektir (kernel persistant). shm_unlink fonksiyonunun prototipi şöyledir:
 
     #include <sys/mman.h>
 
     int shm_unlink(const char *name);
 
-    Fonksiyon paylaşılan bellek alanı nesnesinin ismini alır onu yok eder. Başarı durumunda 0 değerine, başarısızlık durumunda -1 
-    değerine geri dönmektedir. Örneğin:
+    Fonksiyon paylaşılan bellek alanı nesnesinin ismini alarak onu yok eder. Başarı durumunda 0 değerine, başarısızlık 
+    durumunda -1 değerine geri dönmektedir. Örneğin:
 
-    Tıpkı POSIX mesaj kuyruklarında olduğu gibi bir proses paylaşılan bellek alanını shm_unlink fonksiyonu ile silse bile paylaşılan bellek 
-    alanını kullanan diğer prosesler unmap işlemi yapana kadar nesne gerçek anlamda silinmemektedir. 
+    if (shm_unlink(SHM_NAME) == -1)
+        exit_sys("shm_unlink");
 
-    Aşağıdaki örnekte prog1 programı paylaşılan bellek alanına bir yazı yazmakta prog2 programı da bu yazıyı alarak stdout dosyasına 
-    yazdırmaktadır. Tabii prog1 programı sürekli paylaşılan bellek alanının başına eskisini ezecek biçimde yazıları yazar. 
-    Programı test ederken prog1'de paylaşılan bellek alanına bir şeyler yazdıktan sonra prog2'de ENTER tuşuna basarak o yazılanların 
-    alınmasını sağlamalısınız. Paylaşılan bellek alanları kendi içerisinde bir senkronizasyon içermemektedir. Örneğimizde prog1 en sonunda
-    paylaşılan bellek alanına "quit" yazdığında her iki program da sonlanmaktadır. 
+    Tıpkı POSIX mesaj kuyruklarında olduğu gibi bir proses paylaşılan bellek alanını shm_unlink fonksiyonu ile silse bile paylaşılan 
+    bellek alanını kullanan diğer prosesler unmap işlemi yapana kadar nesne gerçek anlamda silinmemektedir. 
+
+    Aşağıdaki örnekte "prog1" programı paylaşılan bellek alanına bir yazı yazmakta "prog2" programı da bu yazıyı alarak 
+    stdout dosyasına yazdırmaktadır. Tabii "prog1" programı sürekli paylaşılan bellek alanının başına eskisini ezecek biçimde yazıları 
+    yazar. Programı test ederken "prog1"de paylaşılan bellek alanına bir şeyler yazdıktan sonra "prog2"de ENTER tuşuna basarak o 
+    yazılanların alınmasını sağlamalısınız. Paylaşılan bellek alanları kendi içerisinde bir senkronizasyon içermemektedir. 
+    Örneğimizde "prog1" en sonunda paylaşılan bellek alanına "quit" yazdığında her iki program da sonlanmaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* prog1.c */
@@ -17456,14 +17471,15 @@ void exit_sys(const char *msg)
 
     SORU: POSIX paylaşılan bellek alanı nesnesi demekle ne kastedilmektedir? 
 
-    YANIT: shm_open fonksiyonu sanki bir dosya yaratıyor gibi paylaşılan bellek alanı nesnesini yaratmaktadır. Aslında ortada bir dosya 
-    yoktur. Ancak gerçek dosyalar da map edilebildiğinden (ileride ele alınacak) tasarım sanki "paylaşılan bellek alanı nesnesi 
-    bir dosyaymış, o nesneye bir şeyler yazdığımızda o dosyaya bir şeyler yazıyormuşuz" gibi yapılmıştır. 
+    YANIT: shm_open fonksiyonu sanki bir dosya yaratıyor gibi paylaşılan bellek alanı nesnesini yaratmaktadır. Aslında ortada 
+    bir dosya yoktur. Ancak gerçek dosyalar da map edilebildiğinden (ileride ele alınacak) tasarım sanki "paylaşılan bellek 
+    alanı nesnesi bir dosyaymış, o nesneye bir şeyler yazdığımızda o dosyaya bir şeyler yazıyormuşuz" gibi yapılmıştır. Tabii 
+    shm_open sırasında işletim sistemi sanal bellek alanı için swap dosyalarında yer de ayırabilmektedir. 
 
     SORU: POSIX paylaşılan bellek alanı shm_open fonksiyonu ile yaratıldığında gerçekte diskte bir dosya yaratılmakta mıdır?
 
-    YANIT: Hayır yapılmamaktadır. Yalnızca bize sanki paylaşılan bellek alanı nesneleri bir dosya gibi gösterilmektedir. İşletim sistemi
-    arka planda paylaşılan bellek alanı nesneleri için swap dosyalarında yer ayırabilmektedir.
+    YANIT: Hayır yapılmamaktadır. Yalnızca bize sanki paylaşılan bellek alanı nesneleri bir dosya gibi gösterilmektedir. İşletim 
+    sistemi arka planda paylaşılan bellek alanı nesneleri için swap dosyalarında yer ayırabilmektedir.
 
     SORU: POSIX paylaşılan bellek alanları arka planda nasıl işlem görmektedir?
 
@@ -17473,18 +17489,18 @@ void exit_sys(const char *msg)
     SORU: ftruncate fonksiyonuna neden gereksinim duyulmaktadır? 
 
     YANIT: Paylaşılan bellek alanı shm_open ile ilk kez yaratıldığında henüz alanın içi boştur. Ona bir uzunluk vermek gerekmektedir. 
-    ftruncate ona bir uzunluk vermek için kullanılmaktadır. Tabii ftruncate fonksiyonu nesne yaratıldığı zaman bir kez çağrılır. Ancak 
-    aynı uzunlukla ftruncate işleminde nesne üzerinde bir değişiklik olmayacaktır. 
+    ftruncate fonksiyonu ona bir uzunluk vermek için kullanılmaktadır. Tabii ftruncate fonksiyonu nesne yaratıldığı zaman bir kez 
+    çağrılmalıdır. Ancak aynı uzunlukla ftruncate işleminde nesne üzerinde bir değişiklik olmayacaktır. 
 
-    SORU: Private mapping yapılmasının ne anlamı olabilir? Çünkü private mapping'te nesneye yapılan yazma işlemleri 
-    nesneye yansıtılmamaktadır. 
+    SORU: Private mapping yapılmasının ne anlamı olabilir? Çünkü private mapping'te nesneye yapılan yazma işlemleri nesneye 
+    yansıtılmamaktadır. 
 
-    YANIT: Private mapping'te nesneye yazma yapıldığında "copy on write" mekanizması devreye girer ve yazma yapılan sayfa
-    paylaştırılan sayfadan ayrıştırılır. Copy on write mekanizması işletim sisteminin pek çok yerinde kullanılmaktadır. 
-    Yani private mapping programcılardan ziyade çekirdek tarafından kullanılır. 
+    YANIT: Private mapping'te nesneye yazma yapıldığında "copy on write" mekanizması devreye girer ve yazma yapılan sayfa paylaştırılan 
+    sayfadan ayrıştırılır. Copy on write mekanizması işletim sisteminin pek çok yerinde kullanılmaktadır. Yani private mapping 
+    programcılardan ziyade çekirdek tarafından kullanılmaktadır. 
 
-    SORU: Private mapping yapıldığında başka bir proses paylaşılan bellek alanına yazma yaptığında (tabii o proses de 
-    paylaşılan bellek alanını shared mapping ile açmış olsun) bu yazma işlemini private mapping yapan taraf görür mü? 
+    SORU: Private mapping yapıldığında başka bir proses paylaşılan bellek alanına yazma yaptığında (tabii o proses de paylaşılan 
+    bellek alanını shared mapping ile açmış olsun) bu yazma işlemini private mapping yapan taraf görür mü? 
 
     YANIT: Bu durum POSIX standartlarında "unspecified" bırakılmıştır. Linux çekirdeğinde bu yazma "private mapping yapan tarafta 
     eğer sayfada "copy on write" yapılmadıysa" görülmektedir. 
@@ -17493,23 +17509,24 @@ void exit_sys(const char *msg)
 
     YANIT: Eğer fonksiyonun flags parametresinde MAP_FIXED belirtilmemişse birinci parametre sayfa katlarında olmak zorunda değildir. 
     Ancak MAP_FIXED belirtilmişse POSIX'in eski versiyonu sayfa katlarını zorunlu tutmaktaydı. Ancak güncel versiyonda bu zorunluluk 
-    gevşetilmiştir ve işletim sisteminin isteğine bağlı hale getirilmiştir. Linux çekirdeği MAP_FIXED durumunda birinci parametredeki adresin
-    sayfa katlarında olmasını zorunlu tutmaktadır. Fonksiyonun son parametresindeki offset değeri eğer MAP_FIXED belirtilmişse 
-    POSIX standartlarına göre birinci parametrede belirtilen adresin sayfa katlarına bölümüne elde edilen kalanla aynı kalanı vermek zorundadır. 
-    Ancak POSIX standartları MAP_FIXED belirtilsin ya da belirtilmesin offset değerinin işletim sistemi tarafından sayfa katlarında olmasının 
-    zorunlu tutulabileceğini (may require) de belirtmiştir. Linux sistemlerinde MAP_FIXED belirtilse de belirtilmese de offset değeri sayfa katlarında 
-    olmak zorundadır. 
+    gevşetilmiştir ve işletim sisteminin isteğine bağlı hale getirilmiştir. Linux çekirdeği MAP_FIXED durumunda birinci parametredeki
+    adresin sayfa katlarında olmasını zorunlu tutmaktadır. Fonksiyonun son parametresindeki offset değeri eğer MAP_FIXED belirtilmişse 
+    POSIX standartlarına göre birinci parametrede belirtilen adresin sayfa katlarına bölümüne elde edilen kalanla aynı kalanı 
+    vermek zorundadır. Ancak POSIX standartları MAP_FIXED belirtilsin ya da belirtilmesin offset değerinin işletim sistemi tarafından 
+    sayfa katlarında olmasının zorunlu tutulabileceğini (may require) de belirtmiştir. Linux sistemlerinde MAP_FIXED belirtilse de 
+    belirtilmese de offset değeri sayfa katlarında olmak zorundadır. 
 
     SORU: Paylaşılan bellek alanları shmget ya da shm_open fonksiyonuyla oluşturulduktan sonra neden onların attach edilmesi ya da 
     map edilmesi gerekmektedir?
 
-    YANIT: Klasik Sistem 5'teki shmget ve POSIX'teki shm_open fonksiyonları nesnenin kendisini oluşturur. Bu nesnenin proseste kullanılabilmesi 
-    için prosesin adres alanı içerisine attach ya da map edilmesi gerekmektedir. Yani nesnenin var olması ayrı bir durumdur
-    onun proses tarafından kullanılır duruma getirilmesi ayrı bir durumdur. Kaldı ki aynı nesne aynı prosesin adres alanı içerisinde birden 
-    fazla kez de attach ya da map edilebilir. Örneğin tipik olarak işletim sistemi shm_open fonksiyonu ile bir paylaşılan bellek alanı 
-    oluşturulduğunda o alanı bir swap dosyası içerisinde diskte oluşturmaktadır. Sonra bu paylaşılan bellek alanı, prosesin sanal 
-    bellek alanına map edildiğinde işletim sistemi prosesin sayfa tablosunda ilgili girişleri ayırır ve paylaşılan bellek alanı kullanılmaya başlandığında 
-    onu RAM'e çeker. Başka bir proses de onu kullanmak isterse o prosesin sayfa tablosunda o girişleri aynı fiziksel sayfaya yönlendirir. 
+    YANIT: Klasik Sistem 5'teki shmget ve POSIX'teki shm_open fonksiyonları nesnenin kendisini oluşturur. Bu nesnenin proseste 
+    kullanılabilmesi için prosesin adres alanı içerisine attach ya da map edilmesi gerekmektedir. Yani nesnenin var olması ayrı 
+    bir durumdur onun proses tarafından kullanılır duruma getirilmesi ayrı bir durumdur. Kaldı ki aynı nesne aynı prosesin adres 
+    alanı içerisinde birden fazla kez de attach ya da map edilebilir. Örneğin tipik olarak işletim sistemi shm_open fonksiyonu ile 
+    bir paylaşılan bellek alanı oluşturulduğunda o alanı bir swap dosyası içerisinde diskte oluşturmaktadır. Sonra bu paylaşılan 
+    bellek alanı, prosesin sanal bellek alanına map edildiğinde işletim sistemi prosesin sayfa tablosunda ilgili girişleri ayırır 
+    ve paylaşılan bellek alanı kullanılmaya başlandığında onu RAM'e çeker. Başka bir proses de onu kullanmak isterse o prosesin 
+    sayfa tablosunda o girişleri aynı fiziksel sayfaya yönlendirir. 
 
     SORU: Paylaşılan bellek alanı shm_open ile açıldıktan sonra bu betimleyiciyi ne zaman kapatmalıyız? 
 
@@ -17523,10 +17540,10 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bellek tabanlı dosyalar (memory mapped files) 90'lı yıllarla birlikte işletim sistemlerine sokulmuştur. Microsoft ilk kez 
-    32 bit Windows sistemlerinde (Windows NT ve sonra da Windows 95) bellek tabanlı dosyaları işletim sisteminin çekirdeğine dahil etmiştir. 
-    90'ların ortalarında bellek tabanlı dosyalar, POSIX IPC nesneleriyle birlikte UNIX türevi sistemlere de resmi olarak sokulmuştur. 
-    macOS sistemleri de bellek tabanlı dosyaları (memory mapped files) desteklemektedir. 
+    Bellek tabanlı dosyalar (memory mapped files) 90'lı yıllarla birlikte işletim sistemlerine sokulmuştur. 90'ların ortalarında 
+    bellek tabanlı dosyalar POSIX IPC nesneleriyle birlikte UNIX türevi sistemlere de resmi olarak sokulmuştur. macOS sistemleri 
+    de bellek tabanlı dosyaları desteklemektedir. Microsoft ise ilk kez 32 bit Windows sistemlerinde (Windows NT (1993) ve sonra da 
+    Windows 95 (1995)) bellek tabanlı dosyaları işletim sisteminin çekirdeğine dahil etmiştir. 
 
     Bellek tabanlı dosyalar (memory mapped files) adeta diskte bulunan bir dosyanın prosesin sanal bellek alanına çekilmesi 
     anlamına gelmektedir. Biz bir disk dosyasını bellek tabanlı biçimde açıp kullandığımızda dosya sanki bellekteymiş gibi bir 
@@ -17534,25 +17551,26 @@ void exit_sys(const char *msg)
     bu değişiklikler dosyaya yansıtılmaktadır. Böylece dosya üzerinde işlemler yapılırken read ve write sistem fonksiyonları yerine
     doğrudan göstericilerle bellek üzerinde işlem yapılmış olur. 
 
-    read fonksiyonu ile dosyanın bir kısmını okumak isteyelim:
+    Örneğin read fonksiyonu ile dosyanın bir kısmını okumak isteyelim:
 
     result = read(fd, buf, size);
 
     Burada genellikle işletim sistemlerinde arka planda iki işlem yapılmaktadır: Önce dosyanın ilgili bölümü işletim sisteminin
-    çekirdeği içerisindeki bir alana (bu alana buffer cache ya da page cache denilmektedir) çekilir. Sonra bu alandan bizim belirttiğimiz 
-    alana aktarım yapılır. Halbuki bellek tabanlı dosyalarda genel olarak bu iki aktarım yerine dosya doğrudan prosesin bellek 
-    alanına map edilmektedir. Yani bu anlamda bellek tabanlı dosyalar hız ve bellek kazancı sağlamaktadır. Ayrıca her read ve write 
-    işleminin kontrol edilme zorunluluğu da bellek tabanlı dosyalarda ortadan kalkmaktadır. Bir dosya üzerinde dosyanın farklı yerlerinden 
-    okuma ve yazma işlemlerinin sürekli yapıldığı durumlarda bellek tabanlı dosyalar klasik read/write sistemine göre oldukça avantaj sağlamaktadır. 
+    çekirdeği içerisindeki bir alana (bu alana buffer cache ya da page cache denilmektedir) çekilir. Sonra bu alandan bizim 
+    belirttiğimiz alana aktarım yapılır. Halbuki bellek tabanlı dosyalarda genel olarak bu iki aktarım yerine dosya doğrudan prosesin 
+    bellek alanına map edilmektedir. Yani bu anlamda bellek tabanlı dosyalar hız ve bellek kazancı sağlamaktadır. Ayrıca her 
+    read ve write işleminin kontrol edilme zorunluluğu da bellek tabanlı dosyalarda ortadan kalkmaktadır. Bir dosya üzerinde 
+    dosyanın farklı yerlerinden okuma ve yazma işlemlerinin sürekli yapıldığı durumlarda bellek tabanlı dosyalar klasik read/write 
+    sistemine göre oldukça avantaj sağlamaktadır. 
 
     Bu noktada kişilerin akıllarına şu soru gelmektedir? Biz bir dosyayı open ile açsak dosyanın tamamını read ile belleğe okusak 
-    sonra işlemleri bellek üzerinde yapsak sonra da write fonksiyonu ile tek hamlede yine onları diske yazsak bu yöntemin 
+    sonra işlemleri bellek üzerinde yapsak, sonra da write fonksiyonu ile tek hamlede yine onları diske yazsak bu yöntemin 
     bellek tabanlı dosyalardan bir farkı kalır mı? Bu soruda önerilen yöntem bellek tabanlı dosya çalışmasına benzemekle birlikte 
-    bellek tabanlı dosyalar bu sorudaki çalışma biçiminden farklıdır. Birincisi, dosyanın tamamının belleğe okunması yine iki tamponun 
-    devreye girmesine yol açmaktadır. İkincisi, bellek tabanlı dosyaların bir mapping oluşturması ve dolayısıyla prosesler arasında 
-    etkin bir kullanıma yol açmasıdır. Yani örneğin iki proses aynı dosyayı bellek tabanlı olarak açtığında işletim sistemi her proses için 
-    ayrı bir alan oluşturmamakta dosyanın parçalarını fiziksel bellekte bir yere yerleştirip o proseslerin aynı yerden çalışmasını 
-    sağlamaktadır. 
+    bellek tabanlı dosyalar bu sorudaki çalışma biçiminden oldukça farklıdır. Birincisi, dosyanın tamamının belleğe okunması yine 
+    iki tamponun devreye girmesine yol açmaktadır. İkincisi ise bellek tabanlı dosyaların bir mapping oluşturması ve dolayısıyla 
+    prosesler arasında etkin bir kullanıma yol açmasıdır. Yani örneğin iki proses aynı dosyayı bellek tabanlı olarak açtığında 
+    işletim sistemi her proses için ayrı bir alan oluşturmamakta dosyanın parçalarını fiziksel bellekte bir yere yerleştirip o 
+    proseslerin aynı yerden çalışmasını sağlamaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -17566,16 +17584,18 @@ void exit_sys(const char *msg)
     if ((fd = open("test.txt", O_RDWR)) == -1)
         exit_sys("open");
 
-    İleride de belirtileceği gibi dosyalar bellek tabanlı olarak yaratılamamakta ve dosyalara bellek tabanlı biçimde eklemeler yapılamamaktadır.
-    Yani zaten var olan dosyalar bellek tabanlı biçimde kullanılabilirler.
+    İleride de belirtileceği gibi dosyalar bellek tabanlı olarak yaratılamamakta ve dosyalara bellek tabanlı biçimde eklemeler 
+    yapılamamaktadır. Yani zaten var olan dosyalar bellek tabanlı biçimde kullanılabilirler.
 
     2) Açılmış olan dosya mmap fonksiyonu ile prosesin sanal bellek alanına map edilir. Yani işlemler adeta önceki konuda gördüğümüz
     POSIX paylaşılan bellek alanlarına benzer bir biçimde yürütülmektedir. (Burada shm_open yerine open fonksiyonunun kullanıldığını 
     varsayabilirsiniz.) Mapping işleminde genellikle shared mapping (MAP_SHARED) tercih edilir. Eğer private mapping (MAP_PRIVATE)
-    yapılırsa mapping yapılan alana yazma yapıldığında bu dosyaya yansıtılmaz, "copy on write" mekanizması devreye girer. mmap fonksiyonun son 
-    iki parametresi dosya betimleyicisi ve dosyada bir offset belirtmektedir. İşte dosya betimleyicisi olarak açmış olduğumuz dosyanın 
-    betimleyicisini verebiliriz. Offset olarak da dosyanın neresini map edeceksek oranın başlangıç offsetini verebiliriz. Mapping sırasında 
-    dosya göstericisinin konumunun bir önemi yoktur. Örneğin:
+    yapılırsa mapping yapılan alana yazma yapıldığında yazma bu dosyaya yansıtılmaz, "copy on write" mekanizması devreye girer.
+    mmap fonksiyonun son iki parametresi dosya betimleyicisi ve dosyada bir offset belirtmektedir. İşte dosya betimleyicisi olarak 
+    açmış olduğumuz dosyanın betimleyicisini verebiliriz. Offset olarak da dosyanın neresini map edeceksek oranın başlangıç offsetini 
+    verebiliriz. Mapping sırasında dosya göstericisinin konumunun bir önemi yoktur. Örneğin:
+
+	<BURADA KALDIK>
 
     char *maddr;
     struct stat finfo;
@@ -46047,7 +46067,7 @@ void exit_sys(const char *msg)
 /* client.c */
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Pekiyi dört işlem yapan bir client/server uygulama yazmak isteyelim. Bu multi-client bir uygulama olsun. Bunun için 
+    Pekiyi matematiksel işlemler yapan bir client/server uygulama yazmak isteyelim. Bu multi-client bir uygulama olsun. Bunun için 
     thread modelini kullanalım. (Çünkü bu tür uygulamalarda diğer modeller kullanılırken dikkat etmemiz gereken başka 
     noktalar vardır. Diğer modellerde soketten okunan bilgilerin biriktirilmesi gerekmektedir. Bu biriktirmenin nasıl yapılabileceğini
     izleyen paragraflarda açıklayacağız.)
@@ -46056,26 +46076,29 @@ void exit_sys(const char *msg)
     Bu yanıt olumlu ise istenen işlemin yanıtıdır. Olumsuz ise bir hata yanıtıdır. Bu tür protokollerde protokolü tasarlayan baştan 
     client'ın server'a, server'ın da client'a göndereceği mesajları belirlemelidir.
 
-    Dört işlem client/server programımızda client'ın server'a göndereceği mesajlar şunlar olabilir:
+    Matematiksel işlemler yapan client/server programımızda client'ın server'a göndereceği mesajlar şunlar olabilir:
 
-    "LOGIN <user_name> <password>CR/LF"
-    "ADD op1 op2CR/LF"
-    "SUB op1 op2CR/LF"
-    "MUL op1 op2CR/LF"
-    "DIV op1 op2CR/LF"
-    "LOGOUTCR/LF"
+    "LOGIN <user_name> <password>\r\n"
+    "ADD op1 op2\r\n"
+    "SUB op1 op2\r\n"
+    "MUL op1 op2\r\n"
+    "DIV op1 op2\r\n"
+    "SQRT op1 op2\r\n"
+    "POW op1 op2\r\n"
+    "LOGOUT\r\n"
 
     Server'ın client'a gönderdiği mesajlar da şunlar olabilir:
 
-    "LOGIN_ACCEPTEDCR/LF"
-    "RESULT resultCR/LF"
-    "ERROR messageCR/LF"
+    "LOGIN_ACCEPTED\r\n"
+    "LOGOUT_ACCEPTED\r\n"
+    "RESULT result\r\n"
+    "ERROR message\r\n"
 
     Bu tür uygulama katmanı protokollerinde fiziksel bağlantı ile mantıksal bağlantının karıştırılmaması gerekir. Bir client'ın
     server'a connect fonksiyonuyla bağlanması onun hizmet alacağı anlamına gelmemektedir. Onun hizmet alabilmesi için mantıksal 
     bir bağlantının da sağlanması gerekir. Bizim protokolümüzde bu mantıksal bağlantı "LOGIN" ve "LOGIN_ACCEPTED" mesajlarıyla
     yapılmaktadır. Client, TCP'den bağlandıktan sonra server'a kullanıcı adını ve parolayı yollar. Server doğrulamayı yaparsa 
-    client'a "LOGIN_ACCEPTEDCR/LF" mesajını iletir. Eğer server doğrulamayı yapamazsa bu durumda örneğin "ERROR LOGIN_FAILEDCR/LF"
+    client'a "LOGIN_ACCEPTED\r\n" mesajını iletir. Eğer server doğrulamayı yapamazsa bu durumda örneğin "ERROR LOGIN_FAILED\r\n"
     gibi bir hata mesajıyla geri dönüp soketi kapatacaktır.
 
     <BURADA KALDIK>
@@ -46084,12 +46107,15 @@ void exit_sys(const char *msg)
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-/* server.c */
+/* calc-server.c */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+#include <math.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include <errno.h>
 #include <unistd.h>
 #include <pthread.h>
@@ -46097,42 +46123,70 @@ void exit_sys(const char *msg)
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+#define CREDENTIALS_PATH	"credentials.csv"
+
 #define DEF_SERVER_PORT		55555
-#define BUFFER_SIZE			4096
+#define MAX_MSG_SIZE		4096
 #define MAX_MSG_PARAMS		32
+
+#define MAX_USER_NAME		64
+#define MAX_PASSWORD		64
+#define MAX_CREDENTIALS		1024
+
+typedef struct tagCREDENTIAL {
+	char user_name[MAX_USER_NAME];
+	char password[MAX_PASSWORD];
+} CREDENTIAL;
 
 typedef struct tagCLIENT_INFO {
 	int sock;
 	struct sockaddr_in sin;
+	char buf[MAX_MSG_SIZE + 1];				// MAX_MSG_SIZE is enough
+	CREDENTIAL credential;
 } CLIENT_INFO;
 
-typedef struct MSG {
+typedef struct tagMSG {
 	char *params[MAX_MSG_PARAMS];
 	int count;
 } MSG;
 
 typedef struct tagCLIENT_MSG_PROC {
 	char *msg;
-	void (*proc)(void);
+	bool (*proc)(CLIENT_INFO *, const MSG *);
 } CLIENT_MSG_PROC;
 
+int read_credentials(void);
 void *client_thread_proc(void *param);
 ssize_t sock_readline(int sock, char *str, size_t size);
+void receive_msg(CLIENT_INFO *ci);
+void send_msg(CLIENT_INFO *ci, const char *msg);
+int is_empty_line(const char *line);
+void exit_client_thread(CLIENT_INFO *ci);
 void parse_msg(char *msg, MSG *msgs);
-void login_proc(void);
-void sub_proc(void);
-void mul_proc(void);
-void logout_proc(void);
+
+bool login_proc(CLIENT_INFO *ci);
+bool add_proc(CLIENT_INFO *ci, const MSG *msg);
+bool sub_proc(CLIENT_INFO *ci, const MSG *msg);
+bool mul_proc(CLIENT_INFO *ci, const MSG *msg);
+bool div_proc(CLIENT_INFO *ci, const MSG *msg);
+bool sqrt_proc(CLIENT_INFO *ci, const MSG *msg);
+bool pow_proc(CLIENT_INFO *ci, const MSG *msg);
+bool logout_proc(CLIENT_INFO *ci, const MSG *msg);
 
 char *revstr(char *str);
 void exit_sys(const char *msg);
 
 CLIENT_MSG_PROC g_client_msgs[] = {
-    {"LOGIN", login_proc},
-    {"SUB", sub_proc},
-    {"MUL", mul_proc},
-    {"LOGOUT", logout_proc},{NULL, NULL}
+	{"ADD", add_proc},
+	{"SUB", sub_proc},
+	{"MUL", mul_proc},
+	{"DIV", div_proc},
+	{"SQRT", sqrt_proc},
+	{"POW", pow_proc},
+	{"LOGOUT", logout_proc},{NULL, NULL}
 };
+CREDENTIAL g_credentials[MAX_CREDENTIALS];
+int g_ncredentials;
 
 /* ./server [-p port] */
 
@@ -46175,6 +46229,11 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
+	if (read_credentials() == -1) {
+		fprintf(stderr, "cannot read credentials...\n");
+		exit(EXIT_FAILURE);
+	}
+
 	if (!p_flag)
 		server_port = DEF_SERVER_PORT;
 
@@ -46199,7 +46258,7 @@ int main(int argc, char *argv[])
 		if ((client_sock = accept(server_sock, (struct sockaddr *)&sin_client, &sin_len)) == -1)
 			exit_sys("accept");
 
-		printf("connected client ===> %s:%u\n", inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN), (unsigned)ntohs(sin_client.sin_port));
+		// printf("connected client ===> %s : %u\n", inet_ntop(AF_INET, &sin_client.sin_addr, ntopbuf, INET_ADDRSTRLEN), (unsigned)ntohs(sin_client.sin_port));
 
 		if ((ci = (CLIENT_INFO *)malloc(sizeof(CLIENT_INFO))) == NULL) {
 			fprintf(stderr, "cannot allocate memory!...\n");
@@ -46225,12 +46284,52 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
+int read_credentials(void)
+{
+	char buf[MAX_USER_NAME + MAX_PASSWORD + 32];
+	FILE *f;
+	char *str;
+
+	if ((f = fopen(CREDENTIALS_PATH, "r")) == NULL)
+		return -1;
+
+	g_ncredentials = 0;
+	while (fgets(buf, MAX_USER_NAME + MAX_PASSWORD + 32, f) != NULL) {
+		if (is_empty_line(buf) == 0)
+			continue;
+		if ((str = strtok(buf, ",")) == NULL)
+			return -1;
+		strcpy(g_credentials[g_ncredentials].user_name, str);
+		if ((str = strtok(NULL, "\n")) == NULL)
+			return -1;
+		strcpy(g_credentials[g_ncredentials].password, str);
+
+		if ((str = strtok(NULL, "\n")) != NULL)
+			return -1;
+
+		++g_ncredentials;
+	}
+
+	fclose(f);
+
+	return 0;
+}
+
+int is_empty_line(const char *line)
+{
+	while (*line != '\0') {
+		if (!isspace(*line))
+			return -1;
+		++line;
+	}
+
+	return 0;
+}
+
 void *client_thread_proc(void *param)
 {
-	char buf[BUFFER_SIZE + 1];		// BUFFER_SIZE is enough
 	char ntopbuf[INET_ADDRSTRLEN];
 	unsigned port;
-	ssize_t result;
 	CLIENT_INFO *ci = (CLIENT_INFO *)param;
 	MSG msg;
 	int i;
@@ -46238,42 +46337,41 @@ void *client_thread_proc(void *param)
 	inet_ntop(AF_INET, &ci->sin.sin_addr, ntopbuf, INET_ADDRSTRLEN);
 	port = (unsigned)ntohs(ci->sin.sin_port);
 
-	for (;;) {
-		if ((result = sock_readline(ci->sock, buf, BUFFER_SIZE)) == -1)
-			exit_sys("sock_readline");
-		if (result == 0) {
-			fprintf(stderr, "client unexpectedly down...\n");
-			exit(EXIT_FAILURE);
-		}
+	if (!login_proc(ci)) {
+		send_msg(ci, "ERROR incorrect user name or password\r\n");
+		exit_client_thread(ci);
+	}
 
-		parse_msg(buf, &msg);
+	send_msg(ci, "LOGIN_ACCEPTED\r\n");
+	printf("client connected with user name \"%s\"\n", ci->credential.user_name);
+
+	for (;;) {
+		receive_msg(ci);
+		*strchr(ci->buf, '\r') = '\0';
+		printf("Message from \"%s\": \"%s\"\n", ci->credential.user_name, ci->buf);
+		parse_msg(ci->buf, &msg);
 
 		for (i = 0; g_client_msgs[i].msg != NULL; ++i)
 			if (!strcmp(g_client_msgs[i].msg, msg.params[0])) {
-				g_client_msgs[i].proc();
+				if (!g_client_msgs[i].proc(ci, &msg))
+					goto EXIT;
 				break;
 			}
+		if (g_client_msgs[i].msg == NULL) {
+			send_msg(ci, "ERROR invalid command\r\n");
+		}
+
 	}
 
-	printf("client disconnected %s:%u\n", ntopbuf, port);
+	printf("client disconnected %s : %u\n", ntopbuf, port);
 
+EXIT:
 	shutdown(ci->sock, SHUT_RDWR);
 	close(ci->sock);
 
 	free(ci);
 
 	return NULL;
-}
-
-void parse_msg(char *buf, MSG *msg)
-{
-	char *str;
-
-	msg->count = 0;
-	for (str = strtok(buf, " \r\n\t"); str != NULL; str = strtok(NULL, " \r\n\t"))
-		msg->params[msg->count++] = str;
-
-	msg->params[msg->count] = NULL;
 }
 
 ssize_t sock_readline(int sock, char *str, size_t size)
@@ -46307,24 +46405,195 @@ ssize_t sock_readline(int sock, char *str, size_t size)
 	return (ssize_t) (str - bstr);
 }
 
-void login_proc(void)
+void receive_msg(CLIENT_INFO *ci)
 {
-	printf("LOGIN...\n");
+	ssize_t result;
+
+	if ((result = sock_readline(ci->sock, ci->buf, MAX_MSG_SIZE)) == -1) {
+		fprintf(stderr, "sock_readline: %s\n", strerror(errno));
+		exit_client_thread(ci);
+	}
+
+	if (result == 0) {
+		fprintf(stderr, "sock_readline: client unexpectedly down...\n");
+		exit_client_thread(ci);
+	}
 }
 
-void sub_proc(void)
+void send_msg(CLIENT_INFO *ci, const char *msg)
 {
-	printf("SUB...\n");
+	if (send(ci->sock, msg, strlen(msg), 0) == -1)
+		exit_client_thread(ci);
 }
 
-void mul_proc(void)
+void exit_client_thread(CLIENT_INFO *ci)
 {
-	printf("MUL...\n");
+	shutdown(ci->sock, SHUT_RDWR);
+	close(ci->sock);
+	free(ci);
+	pthread_exit(NULL);
 }
 
-void logout_proc(void)
+void parse_msg(char *buf, MSG *msg)
+{
+	char *str;
+
+	msg->count = 0;
+	for (str = strtok(buf, " \r\n\t"); str != NULL; str = strtok(NULL, " \r\n\t"))
+		msg->params[msg->count++] = str;
+
+	msg->params[msg->count] = NULL;
+}
+
+bool login_proc(CLIENT_INFO *ci)
+{
+	MSG msg;
+	char *user_name, *password;
+
+	receive_msg(ci);
+	parse_msg(ci->buf, &msg);
+
+	user_name = msg.params[1];
+	password = msg.params[2];
+
+	if (msg.count != 3)
+		return false;
+
+	if (strcmp(msg.params[0], "LOGIN") != 0)
+		return false;
+
+	for (int i = 0; i < g_ncredentials; ++i)
+		if (strcmp(user_name, g_credentials[i].user_name) == 0 && strcmp(password, g_credentials[i].password) == 0) {
+			ci->credential = g_credentials[i];
+			return true;
+		}
+
+	return false;
+}
+
+bool add_proc(CLIENT_INFO *ci, const MSG *msg)
+{
+	double op1, op2, result;
+	char buf[MAX_MSG_SIZE];
+
+	if (msg->count != 3) {
+		send_msg(ci, "ERROR invalid operand in command\r\n");
+		return true;
+	}
+	op1 = atof(msg->params[1]);
+	op2 = atof(msg->params[2]);
+
+	result = op1 + op2;
+
+	sprintf(buf, "RESULT %f\r\n", result);
+	send_msg(ci, buf);
+
+	return true;
+}
+
+bool sub_proc(CLIENT_INFO *ci, const MSG *msg)
+{
+	double op1, op2, result;
+	char buf[MAX_MSG_SIZE];
+
+	if (msg->count != 3) {
+		send_msg(ci, "ERROR invalid operand in command\r\n");
+		return true;
+	}
+	op1 = atof(msg->params[1]);
+	op2 = atof(msg->params[2]);
+
+	result = op1 - op2;
+
+	sprintf(buf, "RESULT %f\r\n", result);
+	send_msg(ci, buf);
+
+	return true;
+}
+
+bool mul_proc(CLIENT_INFO *ci, const MSG *msg)
+{
+	double op1, op2, result;
+	char buf[MAX_MSG_SIZE];
+
+	if (msg->count != 3) {
+		send_msg(ci, "ERROR invalid operand in command\r\n");
+		return true;
+	}
+	op1 = atof(msg->params[1]);
+	op2 = atof(msg->params[2]);
+
+	result = op1 * op2;
+
+	sprintf(buf, "RESULT %f\r\n", result);
+	send_msg(ci, buf);
+
+	return true;
+}
+
+bool div_proc(CLIENT_INFO *ci, const MSG *msg)
+{
+	double op1, op2, result;
+	char buf[MAX_MSG_SIZE];
+
+	if (msg->count != 3) {
+		send_msg(ci, "ERROR invalid operand in command\r\n");
+		return true;
+	}
+	op1 = atof(msg->params[1]);
+	op2 = atof(msg->params[2]);
+
+	result = op1 / op2;
+
+	sprintf(buf, "RESULT %f\r\n", result);
+	send_msg(ci, buf);
+
+	return true;
+}
+
+bool sqrt_proc(CLIENT_INFO *ci, const MSG *msg)
+{
+	double op, result;
+	char buf[MAX_MSG_SIZE];
+
+	if (msg->count != 2) {
+		send_msg(ci, "ERROR invalid operand in command\r\n");
+		return true;
+	}
+	op = atof(msg->params[1]);
+	result = sqrt(op);
+
+	sprintf(buf, "RESULT %f\r\n", result);
+	send_msg(ci, buf);
+
+	return true;
+}
+
+bool pow_proc(CLIENT_INFO *ci, const MSG *msg)
+{
+	double op1, op2, result;
+	char buf[MAX_MSG_SIZE];
+
+	if (msg->count != 3) {
+		send_msg(ci, "ERROR invalid operand in command\r\n");
+		return true;
+	}
+	op1 = atof(msg->params[1]);
+	op2 = atof(msg->params[2]);
+
+	result = pow(op1, op2);
+
+	sprintf(buf, "RESULT %f\r\n", result);
+	send_msg(ci, buf);
+
+	return true;
+}
+
+bool logout_proc(CLIENT_INFO *ci, const MSG *msg)
 {
 	printf("LOGOUT...\n");
+
+	return true;
 }
 
 char *revstr(char *str)
@@ -46351,13 +46620,14 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
-/* server.c */
+/* calc-server.c */
 
-/* client.c */
+/* calc-client.c */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <errno.h>
 #include <unistd.h>
 #include <sys/socket.h>
@@ -46367,12 +46637,38 @@ void exit_sys(const char *msg)
 
 #define DEF_SERVER_NAME		"127.0.0.1"
 #define DEF_SERVER_PORT		"55555"
-#define BUFFER_SIZE			4096
+#define MAX_MSG_SIZE		4096
+#define MAX_MSG_PARAMS		32
+
+
+typedef struct tagMSG {
+	char *params[MAX_MSG_PARAMS];
+	int count;
+} MSG;
+
+typedef struct tagSERVER_MSG_PROC {
+	char *msg;
+	void (*proc)(const MSG *);
+} SERVER_MSG_PROC;
+
+
+ssize_t sock_readline(int sock, char *str, size_t size);
+void receive_msg(int sock, char *str);
+void send_msg(int sock, const char *msg);
+void parse_msg(char *buf, MSG *msg);
+int parse_error(char *buf, MSG *msg);
+int login_attempt(int sock, const char *user_name, const char *password);
+
+void result_proc(const MSG *msg);
+void error_proc(const MSG *msg);
 
 void exit_sys(const char *msg);
-ssize_t sock_readline(int sock, char *str, size_t size);
 
-/* ./client [-s server] [-p server_port] [-b client_port] */
+SERVER_MSG_PROC g_server_msgs[] = {
+	{"ERROR", error_proc},
+	{"RESULT", result_proc},
+	{NULL, NULL}
+};
 
 int main(int argc, char *argv[])
 {
@@ -46381,14 +46677,16 @@ int main(int argc, char *argv[])
 	struct addrinfo hints = {0, AF_INET, SOCK_STREAM};
 	struct addrinfo *res, *ri;
 	int gai_result;
-	char buf[BUFFER_SIZE];
+	char buf[MAX_MSG_SIZE];
 	char *str;
 	int option;
 	int s_flag, p_flag, b_flag, err_flag;
 	const char *server_name;
 	int bind_port;
 	const char *server_port;
-	ssize_t result;
+	const char *user_name, *password;
+	MSG msg;
+	int i;
 
 	s_flag = p_flag = b_flag = err_flag = 0;
 
@@ -46419,10 +46717,13 @@ int main(int argc, char *argv[])
 	if (err_flag)
 		exit(EXIT_FAILURE);
 
-	if (optind - argc != 0) {
-		fprintf(stderr, "too many arguments!...\n");
+	if (argc - optind != 2) {
+		fprintf(stderr, "wrong number of arguments!..\n");
 		exit(EXIT_FAILURE);
 	}
+
+	user_name = argv[optind + 0];
+	password = argv[optind + 1];
 
 	if (!s_flag)
 		server_name = DEF_SERVER_NAME;
@@ -46455,42 +46756,37 @@ int main(int argc, char *argv[])
 
 	freeaddrinfo(res);
 
-	printf("connected server...\n");
+	if (login_attempt(client_sock, user_name, password) == -1)
+		goto EXIT;
+
+	printf("connection successful...\n");
 
 	for (;;) {
 		printf("csd>");
 		fflush(stdout);
 
-		if (fgets(buf, BUFFER_SIZE, stdin) == NULL)
+		if (fgets(buf, MAX_MSG_SIZE, stdin) == NULL)
 			continue;
 		if ((str = strchr(buf, '\n')) != NULL)
 			*str = '\0';
-
 		strcat(str, "\r\n");
 
-		if (send(client_sock, buf, strlen(buf), 0) == -1)
-			exit_sys("send");
+		send_msg(client_sock, buf);
+		receive_msg(client_sock, buf);
 
-		if ((result = sock_readline(client_sock, buf, BUFFER_SIZE)) == -1)
-			exit_sys("sock_readline");
-		if (result == 0) {
-			fprintf(stderr, "server unexpectedly down...\n");
-			exit(EXIT_FAILURE);
-		}
-		printf("%s", buf);
+		parse_msg(buf, &msg);
+
+		for (i = 0; g_server_msgs[i].msg != NULL; ++i)
+			if (!strcmp(g_server_msgs[i].msg, msg.params[0])) {
+				g_server_msgs[i].proc(&msg);
+				break;
+			}
 	}
-
+EXIT:
 	shutdown(client_sock, SHUT_RDWR);
 	close(client_sock);
 
 	return 0;
-}
-
-void exit_sys(const char *msg)
-{
-	perror(msg);
-
-	exit(EXIT_FAILURE);
 }
 
 ssize_t sock_readline(int sock, char *str, size_t size)
@@ -46524,7 +46820,95 @@ ssize_t sock_readline(int sock, char *str, size_t size)
 	return (ssize_t) (str - bstr);
 }
 
-/* client.c */
+void receive_msg(int sock, char *str)
+{
+	ssize_t result;
+
+	if ((result = sock_readline(sock, str, MAX_MSG_SIZE)) == -1)
+		exit_sys("receive_msg");
+	if (result == 0) {
+		fprintf(stderr, "receive_msg: unexpectedly down...\n");
+		exit(EXIT_FAILURE);
+	}
+}
+
+void send_msg(int sock, const char *msg)
+{
+	if (send(sock, msg, strlen(msg), 0) == -1)
+		exit_sys("send_msg");
+}
+
+void parse_msg(char *buf, MSG *msg)
+{
+	char *str;
+
+	if (parse_error(buf, msg) == 0)
+		return;
+
+	msg->count = 0;
+	for (str = strtok(buf, " \r\n\t"); str != NULL; str = strtok(NULL, " \r\n\t"))
+		msg->params[msg->count++] = str;
+
+	msg->params[msg->count] = NULL;
+}
+
+int parse_error(char *buf, MSG *msg)
+{
+	while (isspace(*buf))
+		++buf;
+	if (!strncmp(buf, "ERROR", 5)) {
+		buf += 5;
+		while (isspace(*buf))
+			++buf;
+		*strchr(buf, '\r') = '\0';
+		msg->count = 2;
+		msg->params[0] = "ERROR";
+		msg->params[1] = buf;
+
+		return 0;
+	}
+	return -1;
+}
+
+int login_attempt(int sock, const char *user_name, const char *password)
+{
+	char buf[MAX_MSG_SIZE];
+	MSG msg;
+
+	sprintf(buf, "LOGIN %s %s\r\n", user_name, password);
+	send_msg(sock, buf);
+	receive_msg(sock, buf);
+	parse_msg(buf, &msg);
+	if (!strcmp(msg.params[0], "ERROR")) {
+		fprintf(stderr, "login error: %s\n", msg.params[1]);
+		return -1;
+	}
+
+	if (strcmp(msg.params[0], "LOGIN_ACCEPTED") != 0) {
+		fprintf(stderr, "unexpected server message!..\n");
+		return -1;
+	}
+	return 0;
+}
+
+void result_proc(const MSG *msg)
+{
+	printf("%s\n", msg->params[1]);
+}
+
+void error_proc(const MSG *msg)
+{
+	printf("Error: %s\n", msg->params[1]);
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/* calc-client.c */
 
 /*--------------------------------------------------------------------------------------------------------------------------
 
