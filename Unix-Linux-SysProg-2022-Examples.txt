@@ -46640,7 +46640,6 @@ void exit_sys(const char *msg)
 #define MAX_MSG_SIZE		4096
 #define MAX_MSG_PARAMS		32
 
-
 typedef struct tagMSG {
 	char *params[MAX_MSG_PARAMS];
 	int count;
@@ -46650,7 +46649,6 @@ typedef struct tagSERVER_MSG_PROC {
 	char *msg;
 	void (*proc)(const MSG *);
 } SERVER_MSG_PROC;
-
 
 ssize_t sock_readline(int sock, char *str, size_t size);
 void receive_msg(int sock, char *str);
@@ -46669,6 +46667,8 @@ SERVER_MSG_PROC g_server_msgs[] = {
 	{"RESULT", result_proc},
 	{NULL, NULL}
 };
+
+/* ./calc-client <username> <password> [-s server] [-p server_port] [-b client_port] */
 
 int main(int argc, char *argv[])
 {
