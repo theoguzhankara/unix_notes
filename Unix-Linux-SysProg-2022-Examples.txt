@@ -14837,12 +14837,12 @@ void exit_sys(const char *msg)
     Dolayısıyla erişim hakları için yine <sys/stat.h> içerisindeki S_IXXX sembolik sabitleri ya da bunların sayısal değerleri kullanılır. 
     Bu erişim haklarının IPC_CREAT ve IPC_EXCL ile bitsel OR işlemine sokulması gerekmektedir. Örneğin:
 
-		msgid = msgget(0x12345, IPC_CREAT|S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+	msgid = msgget(0x12345, IPC_CREAT|S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
 
     Anımsanacağı gibi POSIX 2008 standardı ile bu S_IXXX sembolik sabitlerine sayısal değerler de karşılık getirilmişti. O halde POSIX 2008 
     ve sonrasında bu işlemi şöyle de yapabiliriz:
 
-		msgid = msgget(0x12345, IPC_CREAT|0644);
+	msgid = msgget(0x12345, IPC_CREAT|0644);
 
     Tabii anahtara ilişkin mesaj kuyruğu zaten varsa buradaki erişim haklarının ve O_CREAT bayrağının hiçbir etkisi yoktur. Erişim hakları, 
     nesne gerçekten yaratılacaksa kullanılmaktadır.
@@ -14851,7 +14851,7 @@ void exit_sys(const char *msg)
     bu durumda kullanılmayan bir anahtar oluşturulup mesaj kuyruğu yaratılır. msgget fonksiyonu da bu mesaj kuyruğunun id değerine
     geri döner. Örneğin:
 
-		msgid = msgget(IPC_PRIVATE, IPC_CREAT|S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+	msgid = msgget(IPC_PRIVATE, IPC_CREAT|S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
 
     Burada olmayan bir anahtardan hareketle mesaj kuyruğu yaratıldığı için bir çakışma söz konusu olmayacaktır. Tabii bu durumda 
     bu id değerinin (anahtarı bilmiyoruz) diğer prosese aktarılması gerekmektedir. Bu aktarım da olsa olsa komut satırı argümanıyla 
@@ -16162,7 +16162,7 @@ void exit_sys(const char *msg)
 
     Fonksiyon ya iki argümanla ya da dört argümanla çağrılmaktadır. Eğer mesaj kuyruğu zaten varsa fonksiyon iki argümanla çağrılır. 
     Ancak mesaj kuyruğunun yaratılması gibi bir durum söz konusu ise fonksiyon dört argümanla çağrılır. Eğer mesaj kuyruğunun yaratılması 
-    söz konusu ise son iki parametre sırasıyla IPC nesnesinin erişim hakları ve "özellikleri (attribute)" girilmelidir. Yani mesaj kuyruğu
+    söz konusu ise son iki parametreye sırasıyla IPC nesnesinin erişim hakları ve "özellikleri (attribute)" girilmelidir. Yani mesaj kuyruğu
     yaratılacaksa adeta fonksiyonun parametrik yapısının aşağıdaki gibi olduğu varsayılmalıdır:
 
     mqd_t mq_open(const char *name, int oflag, mode_t mode, const struct mq_attr *attr);
@@ -16252,7 +16252,7 @@ void exit_sys(const char *msg)
 
     Mesaj kuyruklarının kendi içerisinde bir senkronizasyon da içerdiğine dikkat ediniz. Kuyruğa yazan taraf kuyruk dolarsa 
     (Linux'taki default değerin 10 olduğunu anımsayınız) blokede beklemektedir. Ta ki diğer taraf kuyruktan mesajı alıp kuyrukta 
-    açana kadar.
+    yer açana kadar.
 
     3) POSIX mesaj kuyruklarından mesaj almak için mq_receive fonksiyonu kullanılmaktadır. Fonksiyonun prototipi şöyledir:
 
@@ -16288,7 +16288,7 @@ void exit_sys(const char *msg)
     büyük bir değer olarak uydurduk. Aslında yukarıda da belirttiğimiz gibi mq_receive uyguladığımız noktada bizim tampon uzunluğunu 
     biliyor durumda olmamız gerekir. 
 
-    4) Pekiyi POSIX mesaj kuyruklarında mesaj haberleşmesi nasıl sonlandırılacaktır. Burada da karşı taraf betimleyiciyi kapattığında diğer taraf bunu 
+    4) Pekiyi POSIX mesaj kuyruklarında mesaj haberleşmesi nasıl sonlandırılacaktır? Burada da karşı taraf betimleyiciyi kapattığında diğer taraf bunu 
     anlayamamaktadır. O halde heberleşmenin sonlanması için gönderen tarafın özel bir mesajı göndermesi ya da 0 uzunlukta bir mesajı
     göndermesi gerekir. Eğer 0 uzunluklu mesaj gönderilirse alan tarafta mq_receive fonksiyonu 0 ile geri dönecek ve alan taraf haberleşmenin 
     bittiğini anlayabilecektir.
@@ -46064,7 +46064,13 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
-/* client.c */
+/*--------------------------------------------------------------------------------------------------------------------------
+												108. Ders 05/01/2024 - Cuma
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												109. Ders 07/01/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi matematiksel işlemler yapan bir client/server uygulama yazmak isteyelim. Bu multi-client bir uygulama olsun. Bunun için 
@@ -46101,10 +46107,22 @@ void exit_sys(const char *msg)
     client'a "LOGIN_ACCEPTED\r\n" mesajını iletir. Eğer server doğrulamayı yapamazsa bu durumda örneğin "ERROR LOGIN_FAILED\r\n"
     gibi bir hata mesajıyla geri dönüp soketi kapatacaktır.
 
-    <BURADA KALDIK>
+    Aşağıda çok client'lı matematiksel işlem yapan bir client-server uygulama kodu verilmiştir. Bu uygulamada "calc-server" 
+    programı her client bağlantısında bir thread açıp o thread yoluyla ilgili client ile konuşmaktadır. Yani buradaki server
+    IO modeli olarak thread modelini kullanmaktadır. Bir client, server'a "kullanıcı adı" ve "parola" ile bağlanmaktadır. Server
+    program bir CSV dosyasına bakarak kullanıcı adı ve parola bilgisini doğrulamaktadır. Bir client bağlandığında server program 
+    CLIENT_INFO isimli bir yapı türünden bir nesne yaratıp client'ın bilgilerini orada saklamaktadır. Aslında bu tür programlarda 
+    tüm client'ların bilgileri bir dizi ya da bağlı liste içerisinde tutulmalıdır. Çünkü server tüm client'lara belli bir mesajı 
+    göndermek isteyebilir. Server programı aşağıdaki gibi derleyebilirsiniz:
 
-    Aşağıdaki program tam değil
+    gcc -Wall -o calc-server calc-server.c -lm
 
+    Prototipleri <math.h> içerisinde olan standart C fonksiyonları libc kütüphanesinde değildir. libm isimli ayrı bir 
+    kütüphanededir. Maalesef gcc otomatik olarak bu kütüphaneyi link aşamasına dahil etmemektedir. Bu nedenle matematiksel 
+    fonksiyonları kullanırken linker için -lm seçeneğinin bulundurulması gerekmektedir.
+
+    Client program (calc-client.c) server'a fiziksel olarak TCP'den bağlandıktan sonra ona kullanıcı adı ve parolayı mesaj 
+    olarak gönderir. Sonra bir komut satırına düşer. Komutlar komut satırından verilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* calc-server.c */
@@ -46183,7 +46201,8 @@ CLIENT_MSG_PROC g_client_msgs[] = {
 	{"DIV", div_proc},
 	{"SQRT", sqrt_proc},
 	{"POW", pow_proc},
-	{"LOGOUT", logout_proc},{NULL, NULL}
+	{"LOGOUT", logout_proc},
+	{NULL, NULL}
 };
 CREDENTIAL g_credentials[MAX_CREDENTIALS];
 int g_ncredentials;
@@ -46195,7 +46214,6 @@ int main(int argc, char *argv[])
 	int server_sock, client_sock;
 	struct sockaddr_in sin_server, sin_client;
 	socklen_t sin_len;
-	char ntopbuf[INET_ADDRSTRLEN];
 	int option;
 	int server_port;
 	int p_flag, err_flag;
@@ -46253,7 +46271,6 @@ int main(int argc, char *argv[])
 	printf("listening port %d\n", server_port);
 
 	for (;;) {
-		printf("waiting for connection...\n");
 		sin_len = sizeof(sin_client);
 		if ((client_sock = accept(server_sock, (struct sockaddr *)&sin_client, &sin_len)) == -1)
 			exit_sys("accept");
@@ -46350,6 +46367,11 @@ void *client_thread_proc(void *param)
 		*strchr(ci->buf, '\r') = '\0';
 		printf("Message from \"%s\": \"%s\"\n", ci->credential.user_name, ci->buf);
 		parse_msg(ci->buf, &msg);
+
+		if (msg.count == 0) {
+			send_msg(ci, "ERROR empty command\r\n");
+			continue;
+		}
 
 		for (i = 0; g_client_msgs[i].msg != NULL; ++i)
 			if (!strcmp(g_client_msgs[i].msg, msg.params[0])) {
@@ -46591,9 +46613,11 @@ bool pow_proc(CLIENT_INFO *ci, const MSG *msg)
 
 bool logout_proc(CLIENT_INFO *ci, const MSG *msg)
 {
-	printf("LOGOUT...\n");
+	send_msg(ci, "LOGOUT_ACCEPTED\r\n");
 
-	return true;
+	printf("%s logging out...\n", ci->credential.user_name);
+
+	return false;
 }
 
 char *revstr(char *str)
@@ -46628,6 +46652,7 @@ void exit_sys(const char *msg)
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdbool.h>
 #include <errno.h>
 #include <unistd.h>
 #include <sys/socket.h>
@@ -46647,7 +46672,7 @@ typedef struct tagMSG {
 
 typedef struct tagSERVER_MSG_PROC {
 	char *msg;
-	void (*proc)(const MSG *);
+	bool (*proc)(const MSG *);
 } SERVER_MSG_PROC;
 
 ssize_t sock_readline(int sock, char *str, size_t size);
@@ -46657,14 +46682,16 @@ void parse_msg(char *buf, MSG *msg);
 int parse_error(char *buf, MSG *msg);
 int login_attempt(int sock, const char *user_name, const char *password);
 
-void result_proc(const MSG *msg);
-void error_proc(const MSG *msg);
+bool result_proc(const MSG *msg);
+bool error_proc(const MSG *msg);
+bool logout_accepted_proc(const MSG *msg);
 
 void exit_sys(const char *msg);
 
 SERVER_MSG_PROC g_server_msgs[] = {
 	{"ERROR", error_proc},
 	{"RESULT", result_proc},
+	{"LOGOUT_ACCEPTED", logout_accepted_proc},
 	{NULL, NULL}
 };
 
@@ -46769,6 +46796,8 @@ int main(int argc, char *argv[])
 			continue;
 		if ((str = strchr(buf, '\n')) != NULL)
 			*str = '\0';
+		if (buf[strspn(buf, " \t")] == '\0')		/* check if buf contains white spaces */
+			continue;
 		strcat(str, "\r\n");
 
 		send_msg(client_sock, buf);
@@ -46778,7 +46807,8 @@ int main(int argc, char *argv[])
 
 		for (i = 0; g_server_msgs[i].msg != NULL; ++i)
 			if (!strcmp(g_server_msgs[i].msg, msg.params[0])) {
-				g_server_msgs[i].proc(&msg);
+				if (!g_server_msgs[i].proc(&msg))
+					goto EXIT;
 				break;
 			}
 	}
@@ -46891,14 +46921,23 @@ int login_attempt(int sock, const char *user_name, const char *password)
 	return 0;
 }
 
-void result_proc(const MSG *msg)
+bool result_proc(const MSG *msg)
 {
 	printf("%s\n", msg->params[1]);
+
+	return true;
 }
 
-void error_proc(const MSG *msg)
+bool error_proc(const MSG *msg)
 {
 	printf("Error: %s\n", msg->params[1]);
+
+	return true;
+}
+
+bool logout_accepted_proc(const MSG *msg)
+{
+	return false;
 }
 
 void exit_sys(const char *msg)
@@ -46911,6 +46950,201 @@ void exit_sys(const char *msg)
 /* calc-client.c */
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												110. Ders 12/01/2024 - Cuma
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Şimdi de IRC stili bir chat programı yazacağımızı düşünelim. Programlardaki IO modeli üzerinde durmayacağız. Yalnızca 
+    mesajlaşmalar üzerinde duracağız.
+
+    Bu tür chat programlarında server kendisine bağlanan tüm client'ların bilgilerini tutmaktadır. Bir client bir yazıyı 
+    tüm diğer client'ların görmesi için server'a iletir. Server'da bunu client'lara iletir. Böyle basit bir chat uygulamasında 
+    client'tan server'a gönderilecek mesajlar şunlar olabilir:
+
+    "LOGIN <kullanıcı_adı> <parola>\r\n"
+    "SEND_MESSAGE <mesaj metni>\r\n
+    "LOGOUT\r\n"
+
+    Server'dan client'a gönderilecek mesajlar şunlar olabilir:
+
+    "LOGIN_ACCEPTED\r\n"
+    "ACTIVE_USERS\r\n"
+    "NEW_USER_LOGGEDIN <kullanıcı adı>\r\n"
+    "USER_LOGGEDOUT <kullanıcı_adı>\r\n"
+    "LOGOUT_ACCEPTED\r\n"
+    "DISTRIBUTE_MESSAGE <mesaj metni>\r\n"
+    "LOGOUT_ACCEPTED\r\n"
+    "ERROR <hata_mesajı>"
+
+    Çalışma akışı şöyle olabilir:
+
+    - Client önce LOGIN mesajı ile server'a mantıksal bakımdan bağlanır. Server da bağlantıyı kabul ederse client'a 
+    LOGIN_ACCEPTED mesajını gönderir. Tabii oturuma yeni kullanıcı katıldığı için aynı zamanda server diğer tüm client'lara
+    NEW_USER_LOGGEDIN yollar. Bağlanan client'a ise oturumdakilerin hepsinin listesini ACTIVE_USERS mesajı ile iletmektedir. 
+
+    - Client bir mesajın oturumdaki herkes tarafından görülmesini sağlamak amacıyla server'a SEND_MESSAGE mesajını gönderir. 
+    Server da bu mesajı oturumdaki tüm client'lara DISTRIBUTE_MESSAGE mesajıyla iletir.
+
+    - Bir kullanıcı logout olmak istediğinde server'a LOGOUT mesajını gönderir. Server'da bunu kabul ederse client'a 
+    LOGOUT_ACCEPTED mesajını gönderir. Ancak client'ın logout olduğu bilgisinin oturumdaki diğer client'lara da iletilmesi 
+    gerekmektedir. Bunun için server tüm client'lara USER_LOGGED mesajını göndermelidir.
+
+    - Yine bir hata durumunda server client'lara ERROR mesajı gönderebilir.
+
+    Aslında chat programları için IP protocol ailesinde IRC (Internet Relay Chat) protokolü bulunmaktadır. IRC server ve client 
+    programlar Linux sistemlerinde zaten bulunmaktadır. Siz de bu protokolün dokümanlarını inceleyerek bu protokol için 
+    client ve/veya server programları yazabilirsiniz. IRC protokolü "RFC 1459" olarak dokümante edilmiştir. Başka kurumların da
+    chat protokollerinin bazıları artık dokümante edilmiştir. Microsoft'un MSN Chat protokülünün dokümanlarına aşağıdaki 
+    adresten erişebilirsiniz:
+
+    http://www.hypothetic.org/docs/msn/
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Komut satırı tabanlı bir telnet, ssh benzeri client-server bir program yazmak isteyelim. Amacımız bir client'ın
+    server makinede komut satırından işlem yapmasını sağlamak olsun. Yani client server'a bağlanacak ona shell komutları 
+    yollayacak, komutların çıktısını da görecek. Böyle bir programın server tarafının çatısı şöyle oluşturulabilir:
+
+    - Client program bağlandığında server iki boru yaratır ve fork işlemi yapar.
+
+    - fork işleminden sonra henüz exec işlemi yapmadan alt prosesin stdin betimleyicisini borunun birine, stdout betimleyicisini 
+    de diğerine yönlendirir. Böylece üst proses boruya yazma yaptığında aslında alt proses bunu stdin betimleyicisinden okuyacaktır.
+    Benzer biçimde alt proses diğer boruya yazma yaptığında üst proses de bunu diğer borudan okuyabilecektir.
+
+    - Bu yönlendirmelerden sonra server exec yaparak shell programını çalıştırır.
+
+    - Client, server'a shell komutunu gönderdiğinde server komutu shell programına işletir, çıktısını elde eder ve client'a 
+    yollar.
+
+    Aslında bu işlemi yapan iki standart protokol vardır: telnet ve ssh protokolleri. telnet protokolü güvenlik bakımından 
+    zayıf olduğu için günümüzde daha çok ssh kullanılmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												111. Ders 14/01/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Telnet ya da ssh benzeri programı yazarken üst prosesin /bin/bash programını çalıştırıp ona komutlar yollaması ve ondan 
+    komutlar alması gerekmektedir. İşin bu kısmını yapan örnek bir program aşağıda verilmiştir. Aşağıdaki programda üst proses
+    iki boru yaratmıştır. Sonra alt prosesi yaratarak exec uygulamıştır. Ancak üst proses henüz exec yapmadan alt prosesin 
+    stdin betimleyicisini ve stdout betimleyicisini boruya yönlendirmiştir. Böylece şöyle bir mekanizma oluşturulmuştur: Üst 
+    proses borulardan birine yazdığında sanki alt prosesin stdin dosyasına yazmış gibi olmaktadır. Üst proses diğer borudan 
+    okuma yaptığında alt prosesin stdout dosyasına yazılanları okumuş gibi olmaktadır. 
+
+    Aşağıdaki programda bazı kusurlar vardır. Örneğin:
+
+    - Üst proses kabuğa komutu ilettikten sonra onun stdout ya da stdin dosyasına yazdıklarını okumaya çalışmaktadır. Ancak
+    ne kadar bilginin okunacağı belli değildir.
+
+    - Üst proses alt prosesin yazdıklarını okuyabilmek için biraz gecikme uygulamıştır. Ancak alt proses bu gecikmeden uzun süre 
+    çalışıyorsa program hatalı çalışır.
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+#define BUFFER_SIZE		65536
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	pid_t pid;
+	int fdsout[2];
+	int fdsin[2];
+	char buf[BUFFER_SIZE + 1];
+	ssize_t result;
+	int status;
+
+	if (pipe(fdsin) == -1)
+		exit_sys("pipe");
+
+	if (pipe(fdsout) == -1)
+		exit_sys("pipe");
+
+	if ((pid = fork()) == -1)
+		exit_sys("fork");
+
+	if (pid == 0) { /* child */
+		close(fdsin[0]);
+		close(fdsout[1]);
+
+		if (dup2(fdsin[1], 1) == -1)
+			_exit(EXIT_FAILURE);
+		if (dup2(fdsin[1], 2) == -1)
+			_exit(EXIT_FAILURE);
+		if (dup2(fdsout[0], 0) == -1)
+			_exit(EXIT_FAILURE);
+
+		close(fdsin[1]);
+		close(fdsout[0]);
+
+		if (execl("/bin/bash", "/bin/bash", (char *)NULL) == -1)
+			_exit(EXIT_FAILURE);
+
+		/* unreachable code */
+	}
+
+	/* parent process */
+
+	close(fdsin[1]);
+	close(fdsout[0]);
+
+	/* parent writes fdsout[1] and read fdsin[0] */
+
+	if (fcntl(fdsin[0], F_SETFL, fcntl(fdsin[0], F_GETFL)|O_NONBLOCK) == -1)
+		exit_sys("fcntl");
+
+	for (;;) {
+		printf("Command: ");
+		fflush(stdout);
+		if (fgets(buf, BUFFER_SIZE, stdin) == NULL)
+			continue;
+		if (write(fdsout[1], buf, strlen(buf)) == -1)
+			exit_sys("write");
+		if (!strcmp(buf, "exit\n"))
+			break;
+		usleep(300000);
+		if ((result = read(fdsin[0], buf, BUFFER_SIZE)) == -1) {
+			if (errno == EAGAIN)
+				continue;
+			exit_sys("read");
+		}
+
+		buf[result] = '\0';
+		printf("%s", buf);
+	}
+
+	if (wait(&status) == -1)
+		exit_sys("wait");
+
+	if (WIFEXITED(status))
+		printf("Shell exits normally with exit code: %d\n", WEXITSTATUS(status));
+	else
+		printf("shell exits abnormally!..\n");
+
+	close(fdsin[0]);
+	close(fdsout[1]);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -46918,4 +47152,15 @@ void exit_sys(const char *msg)
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
 
