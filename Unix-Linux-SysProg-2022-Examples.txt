@@ -49211,6 +49211,743 @@ void exit_sys(const char *msg)
 												116. Ders 02/02/2024 - Cuma
 ---------------------------------------------------------------------------------------------------------------------------*/
 
+    UNIX domain soketler "isimsiz boru haberleşmesine" benzer biçimde de kullanılabilmektedir. Anımsanacağı gibi isimsiz borularla
+    yalnızca üst ve alt proseslerer arasında haberleşme yapılabiliyordu. Yine anımsayacağınız gibi pipe fonksiyonu bize iki 
+    betimleyici veriyordu. Biz de fork işlemi ile bu betimleyicileri alt prosese geçiriyorduk. İşte isimsiz borularla yapılan 
+    şeylerin benzeri soketlerle de yapılabilimektedir. İsimsiz soketlere İngilizce "unbound sockets" de denilmektedir.
+    İsimsiz (unbound) soket yaratımı socketpair isimli fonksiyonuyla yapılmaktadır. Fonksiyonun prototipi şöyledir:
+
+    #include <sys/socket.h>
+    
+    int socketpair(int domain, int type, int protocol, int sv[2]);
+
+    Fonksiyonun birinci parametresi protokol ailesinin ismini alır. Her ne kadar fonksiyon genel olsa da pek çok işletim sistemi 
+    bu fonksiyonu yalnızca UNIX domain soketler için gerçekleştirmektedir. (Gerçekten de üst ve alt prosesler arasında UNIX domain 
+    soketler varken örneğin TCP/IP soketleriyle haberleşmenin zarardan başka bir faydası olmayacaktır.) Linux sistemleri isimsiz 
+    soket olarak yalnızca UNIX doimain soketlerini desteklemektedir. Dolayısıyla bu birinci parametre Linux sistemlerinde AF_UNIX 
+    biçiminde geçilmelidir. Fonksiyonun ikinci parametresi kullanılacak soketin türünü belirtir. Bu parametre yine SOCK_STREAM 
+    ya da SOCK_DGRAM biiminde girilmelidir. Üçüncü parametre kullahılacak transport katmanını belirtmektedir. Bu parametre 0 olarak 
+    geçilebilir. Son parametre bir çift soket betimleyicisinin yerleştirileceği iki elemanlı int türden dizinin başlangıç adresini 
+    almaktadır. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri dönmektedir. Örneğin:
+
+    int socks[2];
+
+    if (socketpair(AF_UNIX, SOCK_STREAM, 0, socks) == -1)
+        exit_sys("socketpair");
+
+    socketpair fonksiyonu SOCK_STREAM soketler için zaten bağlantı sağlanmış iki soketi bize vermektedir. Yani bu fonksiyon 
+    çağrıldıktan sonra listen, accept, connect gibi fonksiyonların çağrılması gereksizdir. Dolayısıyla tipik haberleşme şöyle 
+    gerçekleştirilmektedir:
+
+    1) socketpair fonksiyonu ile soket çifti yaratılır.
+    
+    2) Soket çifçi yataıldıktan sonra fork ile alt proses yaratılır. 
+
+    3) İki taraf da kullanmayacakları soketleri kapatırlar. Hangi prosesin socketpair fonksiyonun son parametresine yerleştirilen
+    hangi soket betimleycisini kullanacağınızn bir önemi yoktur.
+
+    4) Haberleşme soket fonksiyonlarıyla gerçekleştirilir. 
+
+    Pekiyi isimsiz borularla socketpair fonksiyonuyla oluşturulan isimsiz UNIX domain soketler arasında ne fark vardır?
+    Aslında bu iki kullanım benzer etkilere sahiptir. Ancak en önemli farklılık UNIX domain soketlerin çift yönlü (full duplex)
+    bir haberleşme sağlamasıdır. Ayrıca isimsiz mesaj kuyrukları olmadığına dikkat ediniz. Halbuki isimsiz UNIX domain soketler 
+    sanki isimsiz mesaj kuyrukları gibi de kullanılabilmektedir. 
+
+    Aşağıdaki programda tıpkı isimsiz boru haberleşmesinde olduğu gibi üst ve alt prosesler birbirileri arasında isimsiz UNIX 
+    domain soketler yoluyla haberleşmektedir. Buradaki soketlerin çift yönlü haberleşmeye olanak verdiğini anımsayınız. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* uds-socketpair.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <sys/socket.h>
+
+#define BUFFER_SIZE     1024
+
+char *revstr(char *str);
+void exit_sys(const char *msg);
+
+int main(void)
+{
+    int socks[2];
+    char buf[BUFFER_SIZE + 1];
+    char *str;
+    ssize_t result;
+    pid_t pid;
+
+    if (socketpair(AF_UNIX, SOCK_STREAM, 0, socks) == -1)
+        exit_sys("socketpair");
+
+    if ((pid = fork()) == -1)
+        exit_sys("fork");
+
+    if (pid != 0) {     /* parent */
+        close(socks[1]);
+
+        for (;;) {
+            if ((result = recv(socks[0], buf, BUFFER_SIZE, 0)) == -1)
+                exit_sys("recv");
+            if (result == 0)
+                break;
+            buf[result] = '\0';
+            if (!strcmp(buf, "quit"))
+                break;
+            revstr(buf);
+            if (send(socks[0], buf, strlen(buf), 0) == -1)
+                exit_sys("send");
+        }
+
+        if (waitpid(pid, NULL, 0) == -1)
+            exit_sys("waitpid");
+
+        close(socks[0]);
+
+        exit(EXIT_SUCCESS);
+    }
+    else {              /* child */
+        close(socks[0]);
+
+        for (;;) {
+            printf("Yazı giriniz:");
+            if (fgets(buf, BUFFER_SIZE, stdin) == NULL)
+                continue;
+            if ((str = strchr(buf, '\n')) != NULL)
+                *str = '\0';
+            if ((send(socks[1], buf, strlen(buf), 0)) == -1)
+                exit_sys("send");
+            if (!strcmp(buf, "quit"))
+                break;
+            if ((result = recv(socks[1], buf, BUFFER_SIZE, 0)) == -1)
+                exit_sys("recv");
+            if (result == 0)
+                break;
+            buf[result] = '\0';
+            
+            printf("%ld bytes received: %s\n", (long)result, buf);
+        }
+
+        close(socks[1]);
+        exit(EXIT_SUCCESS);
+    }
+  
+    return 0;
+}
+
+char *revstr(char *str)
+{
+    size_t i, k;
+    char temp;
+
+    for (i = 0; str[i] != '\0'; ++i)
+        ;
+    
+    for (--i, k = 0;  k < i; ++k, --i) {
+        temp = str[k];
+        str[k] = str[i];
+        str[i] = temp;
+    }
+
+    return str;
+}
+
+void exit_sys(const char *msg)
+{
+    perror(msg);
+
+    exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bu bölümde TCP ve UDP protokollerinin aşağı seviyeli çalışma mekanizması üzerinde durulacaktır. Ancak bu protokollerin aşağı
+    seviyeli çalışma biçimleri biraz karmaşıktır. Biz burada çok derine inmeden bu çalışma biçimini açıklayacağız. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    TCP protokolü 1981 yılında RFC 793 dokğmanı ile tanımlanmıştır (https://tools.ietf.org/html/rfc793). Sonradan protokole 
+    bazı revizyonlar ve eklemeler de yapılmıştır. Protokolün son güncel versiyonu 2022'de RFC 9293 dokümanında tanımlanmıştır.
+
+    Paket tabanlı protokollerin hepsinde gönderilip alınan veriler paket biçimindedir (yani bir grup byte biçimindedir). Bu paketlerin
+    "başlık (header) ve veri (data)" kısımları vardır. Örneğin "Ethernet paketinin başlık ve veri kısmı", "IP paketinin başlık ve 
+    veri kısmı", "TCP paketinin başlık ve veri kısmı" bulunmaktadır. Öte yandan TCP protokolü aslında IP protokolünün üzerine 
+    oturtulmuştur. Yani aslında TCP paketleri IP paketleri gibi gönderilip alınmaktadır. Nihayet aslında bu paketler bilgisayarımıza 
+    Ethernet ya da Wireless paketi olarak gelmektedir. Paketlerin başlık kısımlarında önemli "meta data" bilgileri bulunmaktadır. 
+    O halde örneğin aslında bizim network kartımıza bilgiler Ethernet paketi gibi gelmektedir. Aslında IP paketi Ethernet paketinin 
+    veri kısmında, TCP paketi de aslında IP paketinin veri kısmında konuşlandırılmaktadır. Yani aslında bize gelen Ethernet paketinin 
+    veri kısmında IP paketi, IP paketinin veri kısmında da TCP paketi bulunmaktadır. TCP'de gönderdiğimiz veriler aslında IP paketinin 
+    veri kısmını oluşturmaktadır. 
+
+    Örneğin bir host'tan diğerine bir TCP paketnin gönderildiğini düşünelim. TCP paketi "TCP Header" ve "TCP Data" kısmından oluşmaktadır:
+
+    TCP Header
+    TCP Data
+
+    Ancak TCP paketi aslında IP paketi gibi gönderilmektedir. IP paketi de "IP Header" ve "IP Data" kısımlarından oluşmaktadır. 
+    İşte aslında TCP kapeti IP paketinin Data kısmında bulundurulur. Yani yolculuk eden TCP paketinin görünümü şöyledir:
+
+    IP Header
+    IP Data (TCP Header + TCP Data)
+
+    TCP Paketi de bilgisarımızın Ethernet kartına sanki Ethernat paketi gibi gelmektedir. Ethernet Paketi de "Ethernet Header" ve 
+    "Ethernet Data" kısımların oluşmaktadır. İşte bütün TCP paketi aslında IP paketi gibii IP paketi de Ethernet paketi gibi gönderilip 
+    alınmaktadır:
+
+    Ethernet Header
+    Ethernet Data (IP Header + IP Data (TCP Header + TCP Data)
+
+    Bu durumu aşağıdaki gibi de gösterebiliriz:
+
+    Ethernet Header 
+        IP Header
+            TCP BHeader
+                TCP Data
+    
+    Ethernet protokolu (IEEE 802.3) OSI katmanına göre fiziksel ve veri bağlantı katmanının işlevlerini yerine getirmektedir. 
+    Wireless haberleşme için kullanılan Wi-Fi Protokolü (IEEE 802.11) Ethernet protokolünün telsiz (wireless) biçimi gibi düşünülebilir. 
+    
+    Örneğin biz TCP'de send fonksiyonuyla "ankara" yazısını gönderiyor olalım. Bu "ankara" yazısını oluşturan byte'lar aslında 
+    TCP paketinin veri kısmındadır. 
+
+    Ethernet Header
+        IP Header
+            TCP Header
+                "Ankara"
+
+    Tabii IP paketleri aslında yalnızca bilgisayarımıza gelirken Ethernet paketi ya da Wi-Fi paketi olarak gelir. Dışarıda rotalanırken 
+    Ethernet paketi söz konusu değildir. 
+
+    IP protokolünün IPV4 ve IPV6 biçiminde iki versiyonunun olduğunu anımsayınız. Ancak TCP ve UDP protokollerinin böyle bir 
+    versiyon numarası yoktur. TCP paketi IPV4 paketinin veri kısmında da IPV6 paketinin veri kısmında da konuşlandırılmış olabilir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Yerel ağımızda aslında router tarafından gönderilip alınan paketlerin hepsi yerel ağdaki tüm bilgisayarlara ulaşmaktadır. 
+    Ethernet ve Wireless kartları yalnızca kendilerini ilgilendiren paketleri alıp işletim sistemini haberda redebilmektedir. 
+    Ancak bu kartlar için yazılmış özel programlar sayesinde bilgisayarımıza ulaşan tüm paketler incelenebilmektedir. Bu tür
+    yardımcı programlara "network sniffer" da denilmektedir. 
+
+    En yaygın kullanılan "network sniffer" program "wireshark" isimli open source programdır. Bu programın eskiden ismi 
+    "Ethereal" biçimindeydi. Aslında wireshark programı "libpcap" isimli open source kütüphane kullanılarak yazılmıştır. Yani
+    asıl işlevsellik bu kütüphanededir. Wireshark adeta libpcap kütüphanesinin bir önyüzü (frontend) gibidir. Bu kütüphanenin 
+    Windows versiyonuna "npcap" denilmektedir. Linux Debian türevi sistemlerde kütüphane aşağıdaki gibi indirilebilir:
+
+    sudo apt-get install libpcap-dev
+
+    Benzer biçimde Linux'!ta wireshark programını da GUI arayüzü yazılım yöneticisinden yüklenebileceği gibi komut satırından 
+    Debian türevi sistemlerde aşağıdaki gibi yüklenebilir:
+
+    sudo apt-get install wireshark
+
+    Wireshark programının kullanımına ilşkin pek çok "tutorial" bulunmaktadır. Kursumuzun EBooks klasöründe de birkaç kitap
+    bulunmaktadır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    IPV4 protokolünün başlık (header) kısmı şöyledir (her satırda 4 byte bulunmaktadır):
+
+    Version (4 bit) | Header Length (4 bit) | TOS (8 bit) | Total Length (16 bit)
+    Identifications (16 bit) | Flags (3 bit) | Fragmented Offset (13 bit)
+    Time To Live (8 bit) | Protocol (8 bit) | Header Checksum (16 bits)
+    Source IP Adress (32 bit)
+    Destinatiın IP Address
+    Options (32 bite kadar değişebilir uzunlukta)
+
+    Buradan da gördüğünüz gibi IP başlığında kaynak ve hedef IP adresleri ve IP paketinin toplam uzunluğu bulunmaktadır. Port
+    kavramının IP protokolünde olmadığını anımsayınız. IPV6 header formatını da ilgili kaynaklardan elde edebilirsiniz. 
+
+    TCP paketi yukarıda da belirttiğimiz gibi IP paketinin veri (data) kısmındadır. TCP paketi de "TCP Header" ve "TCP Data" 
+    kısımlarından oluşmaktadır. TCP başlığının formatı şöyledir (her satırda 4 byte bulunmaktadır):
+
+    Source Port (16 bit) | Destination Port (16 bit)
+    Sequence Number (32 bit)
+    Acknowledge Number (32 bit)
+    Header Length (4 bit) | Reserved (6 bit) | Flags (6 bit) | Window Size (16 bit)
+    Checksum (16 bit) | Urgent Pointer (16 bit)
+    Options (Optional)
+
+    Burada her satır 32 bit yani 4 byte yer kaplamaktadır. TCP başlığı 20 byte'tan 60 byte'a kadar değişen uzunlukta olabilir. 
+    Başlıktaki Header Length TCP data'sının hangi offsetten başladığını dolayısıyla TCP başlığının DWORD (4 byte olarak) uzunuğunu 
+    belirtir. Yani başlığın byte uzunluğu için buradaki değer 4 ile çarpılmalıdır. Böylece Header Length kısmında en az 5 
+    (toplam 20 byte) en fazla 15 (toplam 60 byte) değeri bulunabilir. Bu başlıkta kaynak ve hedef IP adreslerinin ve TCP data 
+    kısmının uzunluğunun bulunmadığına dikkat ediniz. Çünkü bu bilgiler zaten IP başlığında doğrudan ya da dolaylı biçimde 
+    bulunmaktadır. TCP paketi her zaman IP paketinin data kısmında konuşlandırılmaktadır. 
+
+    Başlıktaki Flags alanı 6 bitten oluşmaktadır. Her bit bir özelliği temsil eder. Buradaki belli bitler set edildiğinde 
+    başlıktaki belli alanlar da anlamlı hale gelebilmektedir. Buradaki bitler yani flag'ler şunlardır: URG, ACK, PSH, RST, 
+    SYN, FIN. Flags alanındaki birden fazla bit 1 olabilir. Yani bireden fazla flag set edilmiş olabilir. Bir TCP paketi 
+    (TCP segment) yalnızca başlık içerebilir. Yani hiç data içermeyebilir. Başka bir deyişle TCP paketinin data kısmı 0 byte 
+    uzunluğunda olabilir. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    TCP protokolünde o anda iki tarafın da bulunduğu bir "durum (state)" vardır. Taraflar belli eylemler sonucunda durumdan
+    duruma geçiş yaparlar. Bu nedenle TCP'nin çalışması bir "sonlu durum makinesi (finite state mschine)" biçiminde ele alınıp 
+    açıklanabilir. Henüz bağlantı yoksa iki taraf da CLOSED denilen durumdadır. TCP'de tarafların hangi olaylar sonucunda
+    hangi durumda olduklarına ilişkin diyagrama "durum diyagramı (state diagrm)" denilmektedir. (TCP durum diyagramı için 
+    Google'da "TCP state diagram" araması ile görsellerden çizilmiş diyagramları görebilirsiniz.)
+
+    TCP bağlantısının kurulması için client ile server data kısmı boş olan (yani yalnızca başlık kısmı bulunan) paketleri gönderip 
+    almaktadır. Buna el sıkışma (hand shaking) denilmektedir. TCP'de bağlantı kurulması için yapılan el sıkışma 4'lü (four way) 
+    ya da 3'lü (three way) olabilir. Burada 3'lü demekle bağlantı için toplam 3 paketin yolculuk etmesi 4'lü demekle toplam 4 
+    paketin yolculuk etmesi kastedilmektedir. Uygulamada daha çok 3'lü el sıkışma kullanılmaktadır. 
+    
+    TCP'de bağlantının kurulabilmesi için "iki tarafın da birbirlerine SYN biti set edilmiş data kısmı olmayan TCP paketi 
+    (20 byte) gönderip karşı taraftan ACK biti set edilmiş data'sı olmayan TCP paketi alması" gerekir. Yukarıda da belirttiğimiz
+    gibi bunun iki yolu olabilir:
+
+    Client              Server 
+
+    CLOSED              LISTEN
+    ------- SYN -----> 
+    SYN-SENT            
+    <------ ACK ------
+    <------ SYN ------
+    ESTABLISHED         SYN-RECEIVED
+    ------- ACK ----->
+                        ESTABLISHED
+
+    Burada 4 paket kullanıldığı için buna 4'lü el sıkışma denilmektedir. Yukarıdaki bağlantı kurulurken iki tarafın TCP 
+    durumunu (state) da belirttik. Server bağlantı sırasında ACK ile SYN bitini tek bir paket olarak da gönderilebilir. 
+    (Yani paketin Flags kısmında hem SYN hem de ACK biti set edilmiş olabilir.) Buna 3'lü el sıkışma denilmektedir:
+
+    Client              Server 
+
+    CLOSED              LISTEN
+    ------- SYN -----> 
+    SYN-SENT            
+    <-- SYN + ACK ----
+                        SYN-RECEIVED
+    ------- ACK ----->
+     ESTABLISHED         ESTABLISHED
+
+/*--------------------------------------------------------------------------------------------------------------------------    
+                                            117. Ders 04/02/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bağlantının kopartılması için iki tarafın da birbirilerine FIN biti set edilmiş paketler gönderip ACK biti set edilmiş 
+    paketleri alması gerekir. Bağlantının kopartılması da tipik olarak 3'lü ya da 4'lü el sıkışma yoluyla yapılmaktadır. 
+    FIN ve ACK paketleri ayrı ayrı gönderilirse 4'lü el sıkışma tek bir paket olarak gönderilirse 3'lü el sıkışma gerçekleşir. 
+    Bağlantının kopartılması talebini herhangi bir taraf başlatabilir.  4'lü el sıkışma ile bağlantının kopartılması şöyle
+    yapılmaktadır:
+
+    Peer-1              Peer-2
+
+    ESTABLISHED         ESTABLISHED
+    ------- FIN -----> 
+    FIN-WAIT-1          CLOSE_WAIT      
+    <------ ACK ------
+    FIN-WAIT-2          
+    <------ FIN -----
+                        LAST-ACK
+    ------- ACK ----->
+    TIME-WAIT           CLOSED
+    CLOSED
+
+    Burada iki taraf da birbirlerine FIN biti set edilmiş data kısmı olmayan TCP paketleri gönderip ACK biti set edilmiş data 
+    kısmı olmayan TCP paketleri almıştır. 3'lü el sıkışma ile bağlantının kopartılmasında bir taraf tek bir pakette hem FIN biti 
+    set edilmiş hem de ACK biti set edilmiş paket göndermektedir:
+
+    Peer-1              Peer-2
+
+    ESTABLISHED         ESTABLISHED
+    ------- FIN -----> 
+    FIN-WAIT-1          CLOSE_WAIT
+    <-- FIN + ACK ----
+    FIN-WAIT-2          LAST-ACK
+    ------- ACK ----->
+    TIME-WAIT           CLOSED
+    CLOSED
+
+    Burada özetle bir taraf önce karşı tarafa FIN paketi yollamıştır. Karşı taraf buna ACK+FIN ile karşılık vermiştir. Diğer taraf 
+    da son olarak karşı tarafa ACK yollamıştır. Ancak bağlantıyı kopartmak isteyen taraf bu ACK yollama işinden sonra MSL (Maximum Segment Life) 
+    denilen bir zaman aralığının iki katı kadar beklemektedir (Tipik olarak 2 dakika). MSL bir paketin kaybolduğuna karar verilmesi 
+    için gereken gereken zamanı belirtmektedir. (Eğer bu taraf beklemeden hemen CLOSED duruma geçseydi bu durumda bu taraf yeniden 
+    bağlantı kurduğunda henüz karşı taraf paketi almamışsa sabki eski bağlantı devam ettiriliyormuş gibi bir durum oluabilirdi.)
+
+    Soket programlamada bağlantı shutdown ile SHUT_RD kullanılarak kopartıldığında yukarıdaki 3'lü el sıkışma gerçekleşmektedir. 
+
+    Bağlantının koparılması "yarım biçimde de (half close") yapılabilir. Bu durumda bir taraf diğer tarafa FIN paketi gönderir. 
+    Karşı taraf da buna ACK paketi ile karşılık verir. Bundan sonra artık FIN gönderen taraf veri gönderemez ama alabilir, 
+    ACK gönderen taraf ise veri alamaz ama gönderebilir:
+
+    Peer-1              Peer-2
+
+    ESTABLISHED         ESTABLISHED
+    ------- FIN -----> 
+    FIN-WAIT-1          CLOSE-WAIT
+    <-- ACK -------
+                        CLOSING
+                        TIME_WAIT
+
+    Bunun tersi de şöyle söz konusu olabilir:
+
+   Peer-1              Peer-2
+
+    <-- FIN ------      
+    CLOSE_WAIT          FIN-WAIT-1 
+    ---- ACK ---->               
+    CLOSING
+    TIME_WAIT
+
+    Burada da artık Peer-2 veri gönderemez ama alabilir, Peer-1 ise veri veri alamaz fakat gönderebilir. 
+
+/*--------------------------------------------------------------------------------------------------------------------------    
+                                            118. Ders 09/02/2024 - Cuma
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------    
+    Pekiyi shutdown fonksiyonunun "half close" işlemindeki etkisi nasıldır? Aslında shutdown fonksiyonunun ikinci parametresinde
+    belirtilen SHUT_WR, SHUT_RD ve SHUT_RDWR değerlerinin protoldeki bağlantının kopartılması süreciyle bir ilgisi yoktur. 
+    shutdown fonksiyonu her durumda "half close" uygulamaktadır. Yani shutdown fonksiyonun ikinci parametresi ne olursa olsun
+    bu fonksiyonu çağıran taraf karşı tarafa FIN paketi yollar, akrşı atarf da bu tarafa ACK paketi yollar. Zaten protokolün 
+    kendisinde "half close" işlemi SHUT_WR, SHUT_RD ya da SHUT_RDWR biçiminde bir bilgi taşımamaktadır. TCP protokolü tasarlandığında 
+    "half close" işleminin "bir tarafı göndermeye kapatıp diğer tarafı almaya kapatmak" gibi bir işlev göreceği düşünülmüştür.
+    Ancak bu "half close" işleminin işletim sistemleri tarafından tam olarak nasıl ele alınacağı TCP/IP sıket gerçekleştirimini 
+    yapanlar tarafından belirlenmektedir. 
+
+    Şimdi Linux sistemlerinde shutdown fonksiyonunun muhtemel gerçekleştirimi ve arka planda gerçekleşen muhtemel işlemler konusunda 
+    bilgi verelim. Örneğin bir taraf shutdown fonksiyonunu SHUT_WR parametresiyle aşağıdaki gibi çağırmış olsun. Ancak karşı taraf 
+    shutdown fonksiyonunu çağırmamış olsun:
+        
+    shutdown(sock, SHUT_WR);
+
+    Burada SHUT_WR uygulayan taraf diğer tarafa FIN paketi gönderir, diğer taraf da buna ACK ile yanıt verir ve "half close" işlemi 
+    gerçekleşir. Artık SHUT_WR uygulayan taraf bundan sonra diğer tarafa veri göndermemeli diğer taraf da karşı taraftan veri almamlıdır. 
+    Bir taraf SHUT_WR ile "half close" uyguladığında karşı taraf recv işlemi yaparsa sanki soket kapatılmış gibi recv fonksiyonu 
+    0 ile geri dönecektir. SHUT_WR yapan taraf send fonksiyonunu kullandığında ise SIGPIPE sinyali oluşacaktır.
+    
+    Şimdi de bir taraf shutdown fonksiyonunu SHUT_RD ile çağırmış olsun.
+
+    shutdown(sock, SHUT_RD);
+
+    Bu durumda yine SHUT_RD uygulayan taraf karşı tarafa FIN paketi gönderir ve karşı taraftan ACK paketi alır. Böylece "half close" 
+    işlemi gerçekleşir. Artık SHUT_RD uygulayan taraf veri almayacak fakat veri gönderebilecektir. Karşı taraf ise veri alabilecek 
+    ancak veri gönderemeyecektir. Tabii aslında karşı taraf shutdown fonksiyonun aslında hangi parametreyle çağprıldığını bilmemektedir. 
+    Dolayısıyla aslında soket fonksiyonlarıyla veri göndermeye devam edebilecektir. Karşı taraf eğer send işlemi yaparsa 
+    burada işletim sistemi değişik davranışlar gösterebilmektedir. Karşı tarafın gönderdiği paketler karşı tarafa ulaştığında SHUT_RD 
+    yapan taraftaki işletim sistemi bu paketleri hiç dikkate almayabilir. Böylece SHUT_RD yapan taraf recv fonksiyonunu çağırsa 
+    bile recv 0 ile geri döner. Ya da işletim sistemi böylesi bir durumda karşı taraf veri gönderdiğinde ona RST bayrağı set edilmiş 
+    paket gönderip (buna connection reset denilmektedir) karşı tarafın artık send işlemlerinde SIGPIPE sinyali üretmesini sağlayabilir. 
+
+    Şimdi de shutwown fonksiyonunun SHUT_RDWR parametresi ile çağrıldığını düşünelim. Bu en çok kullanılan parametredir. Bu durumda yine 
+    fonksiyonu çağıran taraf karşı tarafa FIN paketi gönderir, karşı taraftan ACK paketi alır. Yine "half close" işlemi gerçekleşir. 
+    Ancak artık SHUT_RDWR uygulayan taraf recv ve send işlemlerini yapamayacaktır. SHUT_RDWR uygulayan taraf recv fonksiyonunu çağırırsa 
+    fonksiyon 0 ile geri dönecek, send fonksiyonunu çağırırsa doğrudan SIGPIPE sinyali oluşacaktır. Bu durumda SHUT_RDWR uygulayan 
+    tarafın karşı tarafı, artık send işlemi yaparsa yine davranış yukarıda SHUT_RD fonksiyonunda belirtildiği gibi gerçekleşecektir. 
+
+    Tabii normal olarak iki tarafın da aslında ayrı ayrı shutdown fonksiyonunu çağırması gerekir. Bu durumda 4'lü el sıkışma
+    gerçekleşecektir. TCP/IP soket programlamada önce bir taraf shutdown uygulayıp "half close" oluşturabilir. Diğer taraf da bunu
+    anlayıp o da shutdown uygulayarak 4'lü el sıkışma oluşturabilir.   
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------    
+    TCP'de akış kontrolü için "acknowledgement" yani "alındı" bildirimi kullanılmaktadır. Bir taraf bir tarafa bir paket veri 
+    gönderirken verinin yanı sıra aynı zamanda paketin Flags kısmındaki PSH bitini 1 yapar. Karşı taraf da paketi aldığını diğer 
+    tarafa haber vermek için diğer tarafa ACK biti set edilmiş bir paket gönderir. TCP'de her gönderilen paket için bir "alındı" 
+    bilgisinin alınması gerekir. Eğer paketi gönderen taraf bu paketi içeren bir ACK paketi alamazsa bu durumda "paketin karşı 
+    tarafa ulaşmadığından" şüphelenemktedir. Bu durumda paketi gönderen taraf belli bir algoritma ile zaman aralıklarıyla aynı paketi yeniden 
+    göndermektedir. Böylesi bir durumda paketi alan taraf aynı paketi birden fazla kez de alabilir. Bunun yalnızca tek bir kopyasını 
+    işleme sokmak alan tarafın sorumluluğundadır. Tabii gönderen tarafın paketi yolda kaybolabileceği gibi alan tarafın ACK paketi de
+    yolda kaybolabilir. Bu durumda yine gönderen taraf ACK alamadığına göre göndermeye devam edecektir. Bu durumda alıcı taraf bunun 
+    için yine ACK gönderecektir. 
+    
+    Yukarıda da belirttiğimiz gibi paketin "data" kısmı dolu olmak zorunda değildir. Bağlantı sağlanırken ve sonlandırıırken gönderilen 
+    SYN ve FIN paketleri "data" içermemektedir. ACK paketi ayrı bir paket olarak gönderilmek zorunda değildir. Bilgiyi alan 
+    taraf hem bilgi gönderirken hem de ACK işlemi yapabilir. Örneğin:
+
+    PSH -- data ----->   
+    <------data------- PSH + ACK
+    ACK --------------->
+
+    Aslında izleyen paragraflarda da ele alınacağı gibi ACK biti yalnızca "alındığını bildirme için değil" pencere genişliklerinin 
+    ayarlanması için de kullanılmaktadır. Yani bir taraf karşı taraftan bilgi almadığı halde yine ACK gönderebilir. 
+
+    TCP'de kümülatif bir "acknowledgement" sistemi kullanılmaktadır. Yani paketi gönderen taraf bu paket için ACK almadan başka paketleri 
+    gönderebilir. Paketleri alan taraf birden fazla paket için tek bir ACK yollayabilir. Kümülatif ACK işlemi için "sıra numarası 
+    (sequence number)" denilen bir değerden faydalanılmaktadır. Sırası numarası (sequence number) gönderilen paketin bütün içerisindeki 
+    kaçıncı byte'tan başladığını olduğunu belirten bir değerdir. Bunu dosyalardaki dosya göstericisine benzetebiliriz. Sıra numarası TCP 
+    başlığında 32 bitlik bir alanda tutulmaktadır. Sıra numarası 32 bitlik değerin sonuna geldiğinde yeniden başa dönmektedir (wrapping).
+    Sıra numarası bağlantı kurulduğunda sıfırdan başlatılmaz, rastgele bir değerden başlatılmaktadır. Örneğin belli bir anda bir tarafın 
+    sura numarası 1552 olsun. Şimdi bu taraf karşı tarafa 300 byte göndersin. Artık bu gönderimden sonra sıra numarası 1852 olacaktır. 
+    Yani bir sonraki gönderimde bu taraf sırası numarası olarak 1852'yi kullanacaktır. Sıra numarası her bilgi gönderiminde bulundurulmak 
+    zorundadır. Bilgiyi alan taraf ACK paketini gönderirken paketteki sıra numarasını "talep ettiği sonraki sıra numarası" olarak paketin 
+    sıra numarasını belirten kısmına yerleştirir.  Örneğin:
+
+    Peer-1                                          Peer-2
+    
+    300 byte (sequnce Number: 3560) ----->
+    100 byte (sequnce Number: 3860) ----->
+                                                  <---- ACK (Acknowledgement Number: 3960)
+    50 byte  (sequnce Number: 3960) ------>
+                                                  <---- ACK (Acknowledgement Number: 4010)    
+    10 byte  (sequnce Number: 4010) ------>
+
+    Buradaki örnek gönderimde gönderen taraf önce 300 byte'lık bir paketi sonra 100 byte'lık bir paketi karşı tarafa göndermiştir. Karşı yataf 
+    ise bu iki paket için tek bir ACK göndermiştir. Karşı tarafın gönderdiği ACK aslında diğer taraftan yeni talep edeceği sıra numarasındaki 
+    bilgiyi belirtmektedir. İki paketi gönderen taraf karşı taraftan gelen ACK içerisindeki bu sıra numarasına baktığında bu iki paketinde 
+    alındığını anlamaktadır. Görüldüğü gibi her paket için ayrı bir ACK yollanmak zorunda değildir. Buna "kümülatif alındı (cummulative 
+    acknowledgment)" bildirimi denilmektedir. Örneğin bir tarafın karşı tarafa peş peşe 5 paket gönderdiğini düşünelim. Karşı taraftan 
+    bir ACK gelmiş olsun. Gönderen taraf bu ACK paketine bakarak gönderdiği bilginin ne kadarının karşı taraf tarafından alındığını 
+    anlayabilmektedir. 
+
+    Pekiyi bir TCP paketi (TCP segment) gönderici (sender) tarafından gönderildikten sonra alıcı (receiver) bunu alamamışsa ne olacaktır? 
+    Çünkü TCP'nin güvenli bir protokol olması demek bir biçimde böyle bir durumda bir telafinin yapılması demektir. İşte yukarıda da 
+    belirtitğimiz gibi TCP protokolü şöyle yöntem izlemektedir: Gönderen taraf her gönderdiği paket (TCP segment) için bir zamanlayıcı 
+    kurar. Bu zamanlayıcıya "retransmission timer" denilmektedir. Eğer belli süre içerisinde gönderilen TCP paketini kapsayan bir
+    ACK gelmediyse gönderici taraf aynı paketi yeniden göndermektedir. Böylece aslında gönderilen paket henüz onun için ACK gelmedikçe 
+    gönderme tamponundan atılmaz. Retrsansmission timer bazı değerlere göre dinamik bir biçimde oluşturulmaktadır. Bunun detayları için 
+    önerilen kaynaklara bakılabilir. Tabii böyle bir sistemde alıcı taraf aynı paketi birden fazla kez alabilmektedir. Yukarıda da belirttiğimiz 
+    gibi bu durumda bu paketlerin yalnızca tek bir kopyasını alıp diğerlerini atmak alıcı tarafın sorumluluğundadır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------   
+                                        119. Ders 11/02/2024 - Pazar                                                
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------   
+    TCP protokolünün bir "akış kontrolü (flow control)" oluşturduğunu belirtmiştik. Akış kontrolünün amacı tampon taşmasının 
+    engellenmesidir. Bağlantı sağldandıktan sonra bir tarafın diğer tarafa sürekli bilgi gönderdiğini düşünelim. Bu bilgileri 
+    işletimsistemi alacak ve bekletecektir. Pekiyi ya ilgili proses soketten okuma yapmazsa? Bu durumda hala karşı taraf bilgi 
+    gönderirse işletim sismeinin ayırdığı tampon taşabilir. 
+
+    Tpik olarka işletim sistemleri bağlantı yapılmış her soket için iki tamon bulundurmaktadır: Gönderme taponu (send buffer) ve
+    alma tamponu (receive buffer). Biz send fonksiyonunu kullandığımızda göndermek istediğimiz bilgiler gönderme tamponuna 
+    yazılır ve hemen send fonksiyonu geri döner. Gönderme tamponundaki bilgilerin paketlenerek gönderilmesi belli bir zaman sonra
+    işletim sistemi tarafından yapılmaktadır. Eğer send işlemi sırasında zaten gönderme tamponu doluysa send fonksiyonu gönderilecek 
+    olanları tamamen tampona yazana kadar blokede beklemektedir. Alma tamponu (receive buffer) karşı tarafın gönderdiği bilgilerin 
+    alınması için kullanılan tampondur. Karşı tarafın gönderdiği bilgiler alındığında işletim sistemi bu bilgileri alma tamponuna 
+    yerleştirir. Aslında recv fonksiyonu bu tampondan bilgileri almaktadır. 
+
+    send ---> [gönderme tamponu] ---> işletim sistemi gönderiyor ---> ||||| <--- işletim sistemi alıyor ---> [alma tamponu] <---- recv
+
+    Akış kontrolünün en önemli unsurlarından biri alma tamponunun taşmasını engellemektir. Örneğin gönderici taraf sürekli bilgi gönderirse 
+    fakat alıcı taraftaki proses recv işlemiyle hiç okuma yapmazsa alıcı taraftaki işletim sisteminin alıcı tamponu dolabilir ve 
+    sistem çökebilir. İşte akış kontrolü sayesinde alıcı taraf gönderici tarafa "artık gönderme, benim tamponum doldu" diyebilmektedir. 
+    Şimdi bir taraftaki prosesin diğer tarafa bir döngü içerisinde send fonksiyonuyla bilgi gönderdiğini ancak diğer taraftaki prosesin
+    bu bilgiyi almadığını varayalım. Akış kontrolünün uygulandığı durumda ne olacaktır? İşte önce send ile gönderilenler karşı tarafa 
+    iletilecektir. Karşı tamponu dolduğunda karşı taraf gönderen tarafa "artık gönderme" diyecektir. Bu durumda göndermeyi 
+    kesen taraftaki proses hala send işlemi yapacağına göre o tarafın gönderme tamponu dolacak ve send fonksiyonu blokeye 
+    yol açacaktır. Linux sistemlerinde tek bir send ile gönderme tamponundan daha büyük bir bilgiyi göndermek istediğimizde 
+    tüm bilgi yine tampona yerleştirilene kadar bloke oluşmaktadır. 
+
+    Aşağıdaki örnekte client program bağlantı kurduktan sonra bir döngü içerisinde server programa send fonksiyonu ile bilgi
+    göndermektedir. Ancak server program bu bilgiyi recv ile okumamaktadır. Yukarıda da belirttiğimiz gibi bu durumda server 
+    programın tamponu dolacak ve server program karşı tarafa "artık gönderme" diyecek. Bu kezde karşı tarafın gönderme tamponu 
+    dolacak dolayısıyla send fonksiyonu da bir süre sonra blokede bekleyecektir. Bu programları farklı terminallerden aşağıdaki 
+    gibi çalıştırabilirsiniz:
+
+    ./server 55555
+    ./client localhost 55555
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* server.c */
+
+/* oobserver.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+#define BUFFER_SIZE     1024
+
+void exit_sys(const char *msg);
+
+int main(int argc, char *argv[])
+{
+    int sock_server, sock_client;
+    struct sockaddr_in sinaddr, sinaddr_client;
+    socklen_t sinaddr_len;
+    char ntopbuf[INET_ADDRSTRLEN];
+    in_port_t port;
+
+    if (argc != 2) {
+        fprintf(stderr, "wrong number of arguments!..\n");
+        exit(EXIT_FAILURE);
+    }   
+
+    port = (in_port_t)strtoul(argv[1], NULL, 10);
+
+    if ((sock_server = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+        exit_sys("socket");
+
+    sinaddr.sin_family = AF_INET;
+    sinaddr.sin_port = htons(port);
+    sinaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+
+    if (bind(sock_server, (struct sockaddr *)&sinaddr, sizeof(sinaddr)) == -1)
+        exit_sys("bind");
+
+    if (listen(sock_server, 8) == -1)
+        exit_sys("listen");
+
+    printf("Waiting for connection...\n");
+    
+    sinaddr_len = sizeof(sinaddr_client);
+    if ((sock_client = accept(sock_server, (struct sockaddr *)&sinaddr_client, &sinaddr_len)) == -1)
+        exit_sys("accept");
+
+    printf("Connected: %s : %u\n", inet_ntop(AF_INET, &sinaddr_client, ntopbuf, INET_ADDRSTRLEN), (unsigned)ntohs(sinaddr_client.sin_port));    
+  
+    printf("Press any key to EXIT...\n");
+    getchar();
+
+    shutdown(sock_client, SHUT_WR);
+    close(sock_client);
+    close(sock_server);
+    
+    return 0;
+}
+
+void exit_sys(const char *msg)
+{
+    perror(msg);
+
+    exit(EXIT_FAILURE);
+}
+
+/* client.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+
+#define BUFFER_SIZE        1024
+
+void exit_sys(const char *msg);
+
+int main(int argc, char *argv[])
+{
+    int sock;
+    struct addrinfo *ai, *ri;
+    struct addrinfo hints = {0};
+    char buf[BUFFER_SIZE] = {0};
+    int result;
+    ssize_t sresult;
+    ssize_t stotal;
+    
+    if (argc != 3) {
+        fprintf(stderr, "wrong number of arguments!..\n");
+        exit(EXIT_FAILURE);
+    }
+    
+    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+        exit_sys("socket");
+
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+
+    if ((result = getaddrinfo(argv[1], argv[2], &hints, &ai)) != 0) {
+        fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(result));
+        exit(EXIT_FAILURE);
+    }
+
+    for (ri = ai; ri != NULL; ri = ri->ai_next) 
+        if (connect(sock, ri->ai_addr, ri->ai_addrlen) != -1) 
+            break;
+    
+    if (ri == NULL)
+        exit_sys("connect");
+
+    freeaddrinfo(ai);
+
+    printf("Connected...\n");
+
+    stotal = 0;
+    for (;;) {
+        printf("send calls...\n");
+        if ((sresult = send(sock, buf, BUFFER_SIZE, 0)) == -1)
+            exit_sys("send");
+        stotal += sresult;
+        printf("bytes sent: %jd, total bytes sent: %jd\n", sresult, stotal);
+    }
+
+    close(sock);
+    
+    return 0;
+}
+
+void exit_sys(const char *msg)
+{
+    perror(msg);
+
+    exit(EXIT_FAILURE);
+}
+
+<BURADA KALDIK>
+/*--------------------------------------------------------------------------------------------------------------------------   
+    Yukarıda basit olarak açıkladığımız akış kontrolünün TCP'de bazı detayları vardır. 
+    
+    TCP'de bunun için "pencere (window)" kavramı kullanılmaktadır. Pencerenin bir büyüklüğü (window size) vardır. Pencere büyüklüğü
+    TCP başlığında velirtilmektedir. Pencere büyüklüğü demek "hiç ACK gelmediği durumda göndericinin en fazla gönderebileceği 
+    byte sayısı" demektir. Örneğin pencere genişliğinin 8K olması demek "alıcı ACK göndermedikten sonra göndericinin en fazla 
+    8K gönderebilmesi" demektir. Pencere genişliği alıcı taraf tarafından gönderici tarafa bildirilir. Örneğin pencere genişliği
+    alıcı taraf için 8K olsun. Bu durumda gönderici taraf sırasıyla 1K + 1K + 1K + 1K + 1K uzunluğunda toplam 5K'lık bilgiyi 
+    karşı tarafa göndermiş olsun. Eğer henüz ACK gelmemişse gönderici taraf en fazla 3K kadar daha bilgi gönderebilir. 
+    
+    TCP'de her ACK sırasında yeni pencere genişliği de karşı tarafa gönderilmek zorundadır. Yani ACK paketi gönderilirken  aynı 
+    zamanda yeni pencere genişliği de gönderilmektedir. ACK paketi yalnızca alındı bilgisinigöndermek için değil pencere genişliğini
+    ayarlamak için de gönderilebilmektedir. Başka bir deyişle bir taraf "yalnızca bilgi aldığı için" ACK göndermek zorunda değildir. 
+    Hiç bilgi almadığı halde yeni pencere genişliğini karşı tarafa bildirmek için de ACK gönderebilir. Pencere genişliği en fazla 
+    64K olabilir. Çünkü bunun için TCP başlığında 16 bit yer ayrılmıştır. 
+
+    Şimdi bir tarafın diğer tarafa send fonksiyonu ile sürekli bilgi gönderdiğini ancak diğer tarafın bilgiyi recv ile okumadığını 
+    düşünelim. İşletim sisteminin alıcı taraf için oluşturduğu alma tamponunun 1MB olduğunu düşünelim. Alıcı taraf muhtemelen bilgi
+    geldikçe ACK yaparken 64K'lık pencere genişliğini karşı tarafa bildirecektir. Ancak zamanla alma tamponu dolduğu için bu pencere 
+    genişliğini düşürecek en sonunda ACK ile pencere genişliğini 0 yapacak ve karşı atarafa "artık gönderme" deiyecektir. Pencere 
+    genişliği ile alma tamponunun genişliği birbirine karıştırılmamalıdır. Alma tamponu gelen bilgilerin yerleştirildiği tampondur. 
+    Pencere genişliği karşı tarafın ACK almadıktan sonra gönderebileceği makismum byte sayısıdır. 
+
+    Pekiyi pencere genişlikleri ve sıra numaraları bağlantı sırasında nasıl karşı tarafa bildirilmektedir? İşte bağlantı kurulurken 
+    client taraf SYN paketi içerisinde kendi başlangıç sıra numarasını karşı tarafa iletmektedir. Server da bağlantıyı kabul ederken 
+    yine SYN (ya da SYN + ACK) paketinde kendi sıra numarasını karşı tarafa bildirmektedir. Pencere genişliği de aslında ilk kez 
+    bağlantı yapılarken ACK paketlerinde belirtilmektedir. 
+
+    TCP/IP stack gerçekleştirimleri ACK stratejisi için bazı yöntemler uygulamaktadır. Örneğin eğer gönderilecek paket varsa 
+    bununla birlikte ACK paketinin gönderilmesi, ACK'ların iki paket biriktirildikten sonra gönderilmesi gibi. Benzer biçimde 
+    pencere genişliklerinin ayarlanması için de bazı stratejiler izlenebilmektedir.  Bunun için "Tcp IP Protocol Suite" kitabının 
+    466'ıncı sayfasına başvurabilirsiniz.
+
+    <BURADA KALDIK>
+
+    TCP paketindeki önemli Flag'lerden birisi de "RST" bitidir. Buna "reset isteği" denilmektedir. Bir taraf RST bayrağı set edilmiş paket alırsa artık karşı tarafın
+    "abnormal" bir biçimde bağlantıyı kopartıp yeniden bağlanma talep ettiği anlaşılır. Normal sonlanma el sıkışarak başarılı bir biçimde yapılırken RST işlemi anormal
+    sonlanmaları temsil eder. Örneğin soket kütüphanelerinde hiç shutdown yapmadan soket close edilirse close eden taraf karşı tarafa RST paketi göndermektedir. 
+    Halbuki önce shutdown yapılırsa el sıkışmalı sonlanma gerçekleştirilir. O halde her zaman aktif soketler shutdown yapıldıktan sonra close edilmelidir.   
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    UDP protokolü aslında saf IP protokolüne çok benzerdir. UDP'yi IP'den ayıran iki önemli farklılık şudur:
+
+    1) UDP'nin port numarası kavramına sahip olması 
+    2) UDP'nin hata için bir checksum kontrolü uygulayabilmesidir. 
+
+    Bir UDP paketi yine aslında IP paketinin data kısmında bulunmaktadır. IPV4 Formatı şöyledir:
+
+    Source Port   | Destination Port
+    Total Length  | Checksum
+    Data
+
+    Burada UDP paketinin toplam uzunluğunun bulunması aslında gereksizdir. Çünkü uzunluk TCP'de olduğu gibi aslında IP paketinin başlığına bakılarak
+    tespit edilebilmektedir. Ancak hesaplama kolaylı oluşturmak için bu uzunluk UDP başlığında ayrıca bulundurulmuştur. Aslında checksum UDP paketlerinde
+    bulunmak zorunda değildir.  Eğer gönderici checksum kontrolü istemiyorsa burayı 0 bitleriyle doldurur. (Eğer zaten checksum 0 ise burayı 1 bitleriyle 
+    doldurmaktadır.) Alan taraf checksum hatasıyla karşılaşırsa TCP'de olduğu gibi paketi yeniden talep etmez. Yalnızca onu atar. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
 /*--------------------------------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------------------------------*/
