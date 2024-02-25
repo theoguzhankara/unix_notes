@@ -50091,19 +50091,24 @@ void exit_sys(const char *msg)
     pencere genişliklerinin ayarlanması için de bazı stratejiler izlenebilmektedir. Bunun için "TCP/IP Protocol Suite" kitabının 
     466'ıncı sayfasına başvurabilirsiniz.
 
-    <BURADA KALDIK>
+    TCP paketindeki önemli Flag'lerden birisi de "RST" bitidir. Buna "reset isteği" denilmektedir. Bir taraf RST bayrağı set 
+    edilmiş paket alırsa artık karşı tarafın "abnormal" bir biçimde bağlantıyı kopartıp yeniden bağlanma talep ettiği anlaşılır. 
+    Normal sonlanma el sıkışarak başarılı bir biçimde yapılırken RST işlemi anormal sonlanmaları temsil eder. Örneğin soket 
+    kütüphanelerinde hiç shutdown yapmadan soket close edilirse close eden taraf karşı tarafa RST paketi göndermektedir. 
+    Halbuki önce shutdown yapılırsa el sıkışmalı sonlanma gerçekleştirilir. O halde her zaman aktif soketler shutdown yapıldıktan 
+    sonra close edilmelidir.
+---------------------------------------------------------------------------------------------------------------------------*/
 
-    TCP paketindeki önemli Flag'lerden birisi de "RST" bitidir. Buna "reset isteği" denilmektedir. Bir taraf RST bayrağı set edilmiş paket alırsa artık karşı tarafın
-    "abnormal" bir biçimde bağlantıyı kopartıp yeniden bağlanma talep ettiği anlaşılır. Normal sonlanma el sıkışarak başarılı bir biçimde yapılırken RST işlemi anormal
-    sonlanmaları temsil eder. Örneğin soket kütüphanelerinde hiç shutdown yapmadan soket close edilirse close eden taraf karşı tarafa RST paketi göndermektedir. 
-    Halbuki önce shutdown yapılırsa el sıkışmalı sonlanma gerçekleştirilir. O halde her zaman aktif soketler shutdown yapıldıktan sonra close edilmelidir.
+/*--------------------------------------------------------------------------------------------------------------------------
+												120. Ders 16/02/2024 - Cuma
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     UDP protokolü aslında saf IP protokolüne çok benzerdir. UDP'yi IP'den ayıran iki önemli farklılık şudur:
 
-    1) UDP'nin port numarası kavramına sahip olması
-    2) UDP'nin hata için bir checksum kontrolü uygulayabilmesidir.
+    1) UDP port numarası kavramına sahiptir.
+    2) UDP'nin hata için bir checksum mekanizması vardır. Yani bir taraf diğer tarafa UDP paketi gönderirken gönderdiği veri için
+    checksum bilgisini de UDP başlık kısmına iliştirmektedir.
 
     Bir UDP paketi yine aslında IP paketinin data kısmında bulunmaktadır. UDP header'ı 8 byte'tan oluşmaktadır ve yapısı aşağıdaki gibidir.
 
@@ -50112,22 +50117,787 @@ void exit_sys(const char *msg)
     |                  Source Port                 |                Destination Port               |  (4 bytes)  |
     |                   (16 bits)                  |                   (16 bits)                   |             |
     +----------------------------------------------+-----------------------------------------------+             |  8 bytes
-    |                 Header Length                |                   Checksum                    |  (4 bytes)  |
+    |                    Length                    |                   Checksum                    |  (4 bytes)  |
     |                   (16 bits)                  |                   (16 bits)                   |             |
     +----------------------------------------------+-----------------------------------------------+             v
     |                                    Application Layer Data                                    |
     |                                         (Size Varies)                                        |
     +----------------------------------------------------------------------------------------------+
 
-    Burada UDP paketinin toplam uzunluğunun bulunması aslında gereksizdir. Çünkü uzunluk TCP'de olduğu gibi aslında IP paketinin başlığına bakılarak
-    tespit edilebilmektedir. Ancak hesaplama kolaylı oluşturmak için bu uzunluk UDP başlığında ayrıca bulundurulmuştur. Aslında checksum UDP paketlerinde
-    bulunmak zorunda değildir. Eğer gönderici checksum kontrolü istemiyorsa burayı 0 bitleriyle doldurur. (Eğer zaten checksum 0 ise burayı 1 bitleriyle 
-    doldurmaktadır.) Alan taraf checksum hatasıyla karşılaşırsa TCP'de olduğu gibi paketi yeniden talep etmez. Yalnızca onu atar.
+    Burada UDP paketinin toplam uzunluğunun bulunması aslında gereksizdir. Çünkü uzunluk TCP'de olduğu gibi aslında IP paketinin 
+    başlığına bakılarak tespit edilebilmektedir. Ancak hesaplama kolaylığı oluşturmak için bu uzunluk UDP başlığında ayrıca 
+    bulundurulmuştur. Ayrıca checksum UDP paketlerinde bulunmak zorunda değildir. Eğer gönderici checksum kontrolü istemiyorsa 
+    burayı 0 bitleriyle doldurur. (Eğer zaten checksum 0 ise burayı 1 bitleriyle doldurmaktadır.) Alan taraf checksum hatasıyla 
+    karşılaşırsa TCP'de olduğu gibi paketi yeniden talep etmez. Yalnızca onu atar.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    Bazen TCP ve UDP yerine doğrudan IP protokolünü kullanmak isteyebiliriz. Buna soket programlamada "raw socket" denilmektedir. 
+    Diğer protokol ailelerinde de "raw socket" ağ katmanı protokolünü belirtmektedir. Biz kursumuzda "raw socket" işlemleri üzerinde
+    durmayacağız. Ancak daha aşağı seviyeli çalışmalar için ya da örneğin aktarım katmanını gerçekleştirmek (implemente etmek)
+    için "raw socket" kullanımını bilmek gerekir.
+
+    Genel bir "raw soket" oluşturmak için soket nesnesi yaratılırken protokol ailesi için AF_PACKET girilir. Soket türü için de 
+    SOCK_RAW girilmelidir. IP protokolü için protokol ailesi yine AF_INET ya da AF_INET6 girilip soket türü SOCK_RAW olarak 
+    girilebilir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bu bölümde UNIX/Linux sistemlerinde kullanılan kütüphane dosyaları ve onların ayrıntıları üzerinde duracağız.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Kütüphane "hazır kodların bulunduğu topluluklar" için kullanılan bir terimdir. Ancak aşağı seviyeli dünyada kütüphane 
+    kavramı daha farklı bir biçimde kullanılmaktadır. Aşağı seviyeli dünyada "içerisinde derlenmiş bir biçimde fonksiyonların 
+    bulunduğu dosyalara kütüphane (library)" denilmektedir. Aslında kütüphaneler yalnızca fonksiyon değil, global nesneler 
+    de içerebilmektedir.
+
+    Kütüphaneler "statik" ve "dinamik" olmak üzere ikiye ayrılmaktadır. Statik kütüphane dosyalarının uzantıları UNIX/Linux 
+    sistemlerinde ".a (archive)" biçiminde, Windows sistemlerinde ".lib (library)" biçimindedir. Dinamik kütüphane dosyalarının 
+    uzantıları ise UNIX/Linux sistemlerinde ".so (shared object), Windows sistemlerinde ".dll (dynamic link library)" biçimindedir. 
+    UNIX/Linux dünyasında kütüphane dosyaları geleneksel olarak başında "lib" öneki olacak biçimde isimlendirilmektedir. (Örneğin "x"
+    isimli bir statik kütüphane dosyası UNIX/Linux sistemlerinde genellikle "libx.a" biçiminde, "x" isimli bir dinamik kütüphane 
+    dosyası ise UNIX/Linux sistemlerinde genellikle "libx.so" biçiminde isimlendirilmektedir.)
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Statik kütüphaneler aslında "object modülleri (yani .o dosyalarını)" tutan birer kap gibidir. Yani statik kütüphaneler object
+    modüllerden oluşmaktadır. Statik kütüphanelere link aşamasında linker tarafından bakılır. Bir program statik kütüphane dosyasından 
+    bir çağırma yaptıysa (ya da o kütüphaneden bir global değişkeni kullandıysa) linker o statik kütüphane içerisinde ilgili fonksiyonun 
+    bulunduğu object modülü link aşamasında statik kütüphane dosyasından çekerek çalıştırılabilir dosyaya yazar. (Yani statik kütüphaneden 
+    bir tek fonksiyon çağırsak bile aslında o fonksiyonun bulunduğu object modülün tamamı çalıştırılabilen dosyaya yazılmaktadır.) 
+    Statik kütüphaneleri kullanan programlar artık o statik kütüphaneler olmadan çalıştırılabilirler.
+
+    Statik kütüphane kullanımının şu dezavantajları vardır:
+
+    1) Kütüphaneyi kullanan farklı programlar aynı fonksiyonun (onun bulunduğu object modülün) bir kopyasını çalıştırılabilir dosya 
+    içerisinde bulundururlar. Yani örneğin printf fonksiyonu statik kütüphanede ise her printf kullanan C programı aslında printf 
+    fonksiyonunun bir kopyasını da barındırıyor durumda olur. Bu da programların fazla yer kaplamasına yol açacaktır.
+
+    2) Aynı statik kütüphaneyi kullanan programlar belleğe yüklenirken işletim sistemi aynı kütüphane kodlarınını yeniden fiziksel 
+    belleğe yükleyecektir. İşletim sistemi bu kodların ortak olarak kullanıldığını anlayamamaktadır.
+
+    3) Statik kütüphanede bir değişiklik yapıldığında onu kullanan programların yeniden link edilmesi gerekir.
+
+    Statik kütüphane kullanımının şu avantajları vardır:
+
+    1) Kolay konuşlandırılabilirler. Statik kütüphane kullanan bir programın yüklenmesi için başka dosyalara gereksinim 
+    duyulmamaktadır.
+
+    2) Statik kütüphanelerin kullanımları kolaydır, statik kütüphane kullanan programlar için daha kolay build ya da make işlemi 
+    yapılabilmektedir.
+
+    3) Statik kütüphane kullanan programların yüklenmesi dinamik kütüphane kullanan programların yüklenmesinden çoğu kez daha hızlı
+    yapılmaktadır. Ancak bu durum çeşitli koşullara göre tam ters bir hale de gelebilmektedir.
 
 ---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    UNIX/Linux sistemlerinde statik kütüphane dosyaları üzerinde işlemler "ar" isimli utility program yoluyla yapılmaktadır. 
+    ar programına önce bir seçenek, sonra statik kütüphane dosyasının ismi, sonra da bir ya da birden fazla object modül ismi komut
+    satırı argümanı olarak verilir. Örneğin:
+
+    ar r libmyutil.a x.o y.o
+
+    Burada r seçeneği belirtmektedir. ar eski bir komut olduğu için burada seçenekler '-' ile başlatılarak verilmemektedir. Komuttaki
+    "libmyutil.a" işlemden etkilenecek statik kütüphane dosyasını "x.o" ve "y.o" argümanları ise object modülleri belirtmektedir. 
+    Tipik ar seçenekleri ve yaptıkları işler şunlardır:
+
+    r (replace) seçeneği (yanında "-" olmadığına dikkat ediniz) ilgili object modüllerin kütüphaneye yerleştirilmesini sağlar. 
+    Eğer kütüphane dosyası yoksa komut aynı zamanda onu yaratmaktadır. Örneğin:
+
+    ar r libmyutil.a x.o y.o
+
+    Burada "libmuutil.a" statik kütüphane dosyasına "x.o" ve "y.o" object modülleri yerleştirilmiştir. Eğer "libmyutil.a" dosyası
+    yoksa aynı zamanda bu dosya yaratılacaktır.
+
+    t seçeneği kütüphane içerisindeki object modüllerin listesini almakta kullanılır. Örneğin:
+
+    ar t libsample.a
+
+    d (delete) seçeneği kütüphaneden bir object modülü silmekte kullanılır. Örneğin:
+
+    ar d libmyutil.a x.o
+
+    x (extract) seçeneği kütüphane içerisindeki object modülü bir dosya biçiminde diske save etmekte kullanılır. Ancak bu object 
+    modül kütüphane dosyasından silinmeyecektir. Örneğin:
+
+    ar x libmyutil.a x.o
+
+    m (modify) seçeneği de bir object modülün yeni versiyonunu eski versiyonla değiştirmekte kullanılır.
+
+    O halde "x.c" ve "y.c" dosyalarının içerisindeki fonksiyonları statik kütüphane dosyasına eklemek için sırasıyla şunlar
+    yapılmalıdır:
+
+    gcc -c x.c
+    gcc -c y.c
+    ar r libmyutil.a x.o y.o
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Statik kütüphane kullanan programları derlerken statik kütüphane dosyaları komut satırında belirtilebilir. Bu durumda gcc 
+    ve clang derleyicileri o dosyayı link işleminde kullanmaktadır. Örneğin:
+
+    gcc -o app app.c libmyutil.a
+
+    Burada "libmyutil.a" dosyasına C derleyicisi bakmamaktadır. gcc aslında bu dosyayı linker'a iletmektedir. Biz bu işlemi 
+    iki adımda da yapabilirdik:
+
+    gcc -c app.c
+    gcc -o app app.o libmyutil.a
+
+    Her ne kadar GNU'nun linker programı aslında "ld" isimli programsa da genellikle programcılar bu ld linker'ını doğrudan 
+    değil yukarıdaki gibi "gcc" yoluyla kullanırlar. Çünklü ld linker'ı kullanılırken "libc" kütüphanesi gibi start-up object
+    modüller gibi modüllerin de programcı tarafından ld linker'ına verilmesi gerekmektedir. Bu da oldukça sıkıcı bir işlemdir. 
+    Halbuki biz ld linker'ını gcc yoluyla çalıştırdığımızda ld linker'ına bu dosyalar zaten default kütüphaneler ve object modüller
+    gcc tarafından verilmektedir.
+
+    Komut satırında kütüphane dosyalarının komut satırı argümanlarının sonunda belirtilmesi uygundur. Çünkü gcc programı kütüphane 
+    dosyalarının solundaki dosyalar link edilirken ilgili kütüphane dosyasını bu işleme dahil ederler. Örneğin:
+
+    gcc -o app app1.o libmyutil.a app2.o
+
+    Böylesi bir kullanımda "libmyutil.a" komut satırı argümanının solunda yalnızca "app1.o" dosyası vardır. Dolayısıyla yalnızca 
+    bu modül için bu kütüphaneye bakılacaktır, "app2.o" bu kütüphaneye bakılmayacaktır.
+
+    Şüphesiz statik kütüphane kullanmak yerine aslında object modülleri de doğrudan link işlemine sokabiliriz. Örneğin:
+
+    gcc -o sample sample.c x.o y.o
+
+    Ancak çok sayıda object modül söz konusu olduğunda bu işlemin zorlaşacağına dikkat ediniz. Yani "object modüller dosyalara 
+    benzetilirse statik kütüphane dosyaları dizinler gibi" düşünülebilir.
+
+    Derleme işlemi sırasında kütüphane dosyası -l<isim> biçiminde de belirtilebilir. Bu durumda arama sırasında "lib" öneki 
+    ve ".a" uzantısı aramaya dahil edilmektedir. Yani örneğin:
+
+    gcc -o sample sample.c -lmyutil
+
+    İşleminde aslında libmyutil.a (ya da libmyutil.so) dosyaları aranmaktadır. Arama işlemi sırasıyla bazı dizinlerde yapılmaktadır. 
+    Örneğin /lib dizini, /usr/lib dizini, /usr/local/lib dizini gibi dizinlere bakılmaktadır. Ancak "bulunulan dizine" bakılmamaktadır. 
+    -l seçeneği ile "belli bir dizine de bakılması isteniyorsa" -L seçeneği ile ilgili dizin belirtilebilir. Örneğin:
+
+    gcc -o sample sample.c -lmyutil -L.
+
+    Buradaki '.' çalışma dizinini temsil etmektedir. Artık "libmyutil.a" kütüphanesi için bulunulan dizine de (current working 
+    directory) bakılacaktır. Birden fazla dizin için -L seçeneğinin yinelenmesi gerekmektedir. Örneğin:
+
+    gcc -o sample sample.c -lmyutil -L. -L/home/csd
+
+    Geleneksel olarak -l ve -L seçeneklerinden sonra boşluk bırakılmamaktadır. Ancak boşluk bırakılmasında bir sakınca yoktur.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir statik kütüphane başka bir statik kütüphaneye bağımlı olabilir. Örneğin biz "liby.a" kütüphanesindeki kodda "libx.a" 
+    kütüphanesindeki fonksiyonları kullanmış olabiliriz. Bu durumda "liby.a" kütüphanesini kullanan program "libx.a" kütüphanesini
+    de komut satırında belirtmek zorundadır. Örneğin:
+
+    gcc -o sample sample.c libx.a liby.a
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												121.Ders 18/02/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Dinamik kütüphane dosyalarının UNIX/Linux sistemlerinde uzantıları ".so" (shared object'ten kısaltma), Windows sistemlerinde 
+    ise .dll (Dynamic Link Library) biçimindedir.
+
+    Bir dinamik kütüphaneden bir fonksiyon çağrıldığında linker statik kütüphanede olduğu gibi gidip fonksiyonun kodunu 
+    (fonksiyonun bulunduğu object modülü) çalıştırılabilen dosyaya yazmaz. Bunun yerine çalıştırılabilen dosyaya çağrılan fonksiyonun 
+    hangi dinamik kütüphanede olduğu bilgisini yazar. Çalıştırılabilen dosyayı yükleyen işletim sistemi o dosyanın çalışması için 
+    gerekli olan dinamik kütüphaneleri çalıştırılabilen dosyayla birlikte bütünsel olarak sanal bellek alanına yüklemektedir. Böylece 
+    birtakım ayarlamalar yapıldıktan sonra artık çağrılan fonksiyon için gerçekten o anda sanal belleğe yüklü olan dinamik kütüphane 
+    kodlarına gidilmektedir. Örneğin biz app programımızda "libmyutil.so" dinamik kütüphanesinden foo isimli fonksiyonu çağırmış olalım. 
+    Bu foo fonksiyonunun kodları dinamik kütüphaneden alınıp app dosyasına yazılmayacaktır. Bu app dosyası çalıştırıldığında 
+    işletim sistemi bu app dosyası ile birlikte libmyutil.so dosyasını da sanal belleğe yükleyecektir. Programın akışı foo çağrısına
+    geldiğinde akış libmyutil.so dosyası içerisindeki foo fonksiyonunun kodlarına aktarılacaktır. Dinamik kütüphane dosyalarının 
+    bir kısmının değil, hepsinin prosesin adres alanına yüklendiğine dikkat ediniz. Tabii işletim sisteminin sanal bellek mekanizması
+    aslında yalnızca bazı sayfaları fiziksel belleğe yükleyebilecektir.
+
+    Dinamik kütüphane kullanımının avantajları şunlardır:
+
+    1) Çalıştırılabilen dosyalar fonksiyon kodlarını içermezler. Dolayısıyla önemli bir disk hacmi kazanılmış olur. Oysa statik 
+    kütüphanelerde statik kütüphanelerden çağrılan fonksiyonlar çalıştırılabilen dosyalara yazılmaktadır.
+
+    2) Dinamik kütüphaneler birden fazla program proses tarafından fiziksel belleğe tekrar tekrar yüklenmeden kullanılabilmektedir.
+    Yani işletim sistemi arka planda aslında aynı dinamik kütüphaneyi kullanan programlarda bu kütüphaneyi tekrar tekrar fiziksel 
+    belleğe yüklememektedir. Bu da statik kütüphanelere göre önemli bir bellek kullanım avantaj oluşturmaktadır. Bu durumda eğer 
+    dinamik kütüphanenin ilgili kısmı daha önce fiziksel yüklenmişse bu durum dinamik kütüphane kullanan programın daha hızlı 
+    yüklemesine de yol açabilmektedir. Process1 ve Process2 biçiminde iki programın çalıştığını düşünelim. Bunlar aynı dinamik 
+    kütüphaneyi kullanıyor olsun. İşletim sistemi bu dinamik kütüphaneyi bu proseslerin sanal bellek alanlarının farklı yerlerine 
+    yükleyebilir. Ancak aslında işletim sistemi sayfa tablolarını kullanarak mümkün olduğunca aslında bu iki dinamik kütüphaneyi 
+    aynı fiziksel sayfaya eşlemeye çalışacaktır. Tabii bu durumda proseslerden biri dinamik kütüphane içerisindeki bir statik nesneyi 
+    değiştirdiğinde artık "copy on write" mekanizması devreye girecek ve dinamik kütüphanenin o sayfasının yeni bir kopyası oluşturulacaktır. 
+    Aslında bu durum fork fonksiyonu ile yeni bir prosesin yaratılması durumuna çok benzemektedir.
+
+    3) Dinamik kütüphaneleri kullanan programlar bu dinamik kütüphanelerdeki değişikliklerden etkilenmezler. Yani biz dinamik 
+    kütüphanenin yeni bir versiyonunu oluşturduğumuzda bunu kullanan programları derlemek ya da link etmek zorunda kalmayız. 
+    Örneğin bir dinamik kütüphaneden foo fonksiyonunu çağırmış olalım. Bu foo fonksiyonunun kodları bizim çalıştırılabilir dosyamızın
+    içerisinde değil de dinamik kütüphanede olduğuna göre dinamik kütüphanedeki foo fonksiyonu değiştirildiğinde bizim programımız artık 
+    değişmiş olan foo fonksiyonunu çağıracaktır.
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Dinamik kütüphanelerin gerçekleştiriminde ve kullanımında önemli bir sorun vardır. Dinamik kütüphanelerin tam olarak sanal 
+    belleğin neresine yükleneceği baştan belli değildir. Halbuki çalıştırılabilen dosyanın sanal belleğin neresine yükleneceği 
+    baştan bilinebilmektedir. Yani çalıştırılabilen dosyanın tüm kodları aslında derleyici ve bağlayıcı tarafından zaten "onun 
+    sanal bellekte yükleneceği yere göre" oluşturulmaktadır. Fakat dinamik kütüphanelerin birden fazlası prosesin sanal adres 
+    alanına yüklenebildiğinden bunlar için yükleme adresinin önceden tespit edilmesi mümkün değildir. İşte bu sorunu giderebilmek 
+    için işletim sistemlerinde değişik teknikler kullanılmaktadır. Windows sistemlerinde "import-export tablosu ve relocation 
+    tablosu" denilen yöntem tercih edilmiştir. Bu sistemlerde dinamik kütüphane belli bir adrese yüklendiğinde işletim sistemi 
+    o dinamik kütüphanenin "relocation" tablosuna bakarak gerekli makine komutlarını düzeltmektedir. Dinamik kütüphane fonksiyonlarının
+    çağrımı için de import tablosu ve export tablosu denilen tablolar kullanılmaktadır. UNIX/Linux dünyasında dinamik kütüphanelerin 
+    herhangi bir yere yüklenebilmesi için ise "Konumdan Bağımsız Kod (Position Independent Code)" denilen teknik kullanılmaktadır. 
+    Konumdan bağımsız kod "nereye yüklenirse yüklenilsin çalışabilen kod" anlamına gelmektedir. Konumdan bağımsız kod oluşturabilmek
+    derleyicinin yapabileceği bir işlemdir. Konumdan bağımsız kod oluşturabilmek için gcc ve clang derleyicilerinde derleme 
+    sırasında -fPIC seçeneğinin bulundurulması gerekmektedir. Biz kursumuzda konumdan bağımsız kodun nasıl oluşturulabildiği 
+    üzerinde durmayacağız. Bu konuyu anlayabilmek için sembolik makine dilleri ve ELF formatı hakkında bilgi sahibi olmak gerekir.
+
+    Pekiyi Windows sistemlerinin kullandığı "relocation" tekniği ile UNIX/Linux sistemlerinde kullanılan "konumdan bağımsız
+    kod tekniği" arasında performans bakımından ne farklılıklar vardır? İşte bu tekniklerin kendi aralarında bazı avantaj 
+    ve dezavantajları bulunmaktadır. Windows'taki teknikte "relocation" işlemi bir zaman kaybı oluşturabilmektedir. Ancak 
+    bir "relocation" işlemi yapıldığında kodlar daha hızlı çalışma eğilimindedir. Konumdan bağımsız kod tekniğinde ise
+    "relocation" işlemine gerek kalmaz. Ancak dinamik kütüphanelerdeki fonksiyonlar çağrılırken göreli biçimde daha fazla
+    zaman kaybedilmektedir. Aynı zamanda bu teknikte kodlar biraz daha fazla yer kaplamaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Linux sistemlerinde aslında dinamik kütüphaneler ismine "dinamik linker (dynamic linker)" denilen bir dinamik kütüphane 
+    tarafından yüklenmektedir. Bu dinamik kütüphane "ld.so" ya da "ld-linux.so" ismiyle bulunmaktadır. Programın yüklenmesinin
+    execve sistem fonksiyonu tarafından yapıldığını anımsayınız. Bu sistem fonksiyonu ayrıntılı birtakım işlemler yaparak 
+    tüm yüklemeyi gerçekleştirmektedir. Bu sürecin ayrıntıları olmakla birlikte kabaca execve süreci bu bağlamda şöyle 
+    yürütülmektedir: execve fonksiyonu önce işletim sistemi için gereken çeşitli veri yapılarını oluşturur sonra çalıştırılabilen 
+    dosyayı belleğe yükler. Sonra da dinamik linker kütüphanesini belleğe yükler. Bundan sonra akış dinamik linker'daki koda
+    aktarılır. Dinamik linker da çalıştırılabilir dosyada belirtilen dinamik kütüphaneleri yükler. Sonra da akışı çalıştırılabilen
+    dosyada belirtilen gerçek başlangıç adresine (entry point) aktarır. Dinamik linker kodları aslında user modda mmap sistem 
+    sistem fonksiyonunu kullanarak diğer dinamik kütüphaneleri yüklemektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    UNIX/Linux sistemlerinde bir dinamik kütüphane oluşturma işlemi şöyle yapılır:
+
+    1) Önce dinamik kütüphaneye yerleştirilecek object modüllerin -fPIC seçeneği ile "Konumdan Bağımsız Kod (Position Independent Code)" 
+    tekniği kullanılarak derlenmesi gerekir. (-fPIC seçeneğinde -f'ten sonra boşluk bırakılmamalıdır.)
+
+    2) Link işleminde "çalıştırılabilir (executable)" değil de "dinamik kütüphane" dosyasının oluşturulması için -shared seçeneğinin 
+    kullanılması gerekir. "-shared" seçeneği kullanılmazsa linker dinamik kütüphane değil, normal çalıştırılabilir dosya oluşturmaya
+    çalışmaktadır. Zaten bu durumda main fonksiyonu olmadığı için linker error mesajı verecektir.
+
+    gcc -fPIC a.c b.c c.c
+    gcc -o libmyutil.so -shared a.o b.o c.o
+
+    Dinamik kütüphanelere daha sonra dosya eklenip çıkartılamaz. Onların her defasında yeniden bütünsel biçimde oluşturulmaları 
+    gerekmektedir. Yukarıdaki işlem aslında tek hamlede de aşağıdaki gibi yapılabilmektedir:
+
+    gcc -o libmyutil.so -shared -fPIC a.c b.c c.c
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Biz yukarıda dinamik kütüphanelerin nasıl oluşturulduğunu gördük. Pekiyi dinamik kütüphaneler nasıl kullanılmaktadır?
+
+    Dinamik kütüphane kullanan bir program link edilirken kullanılan dinamik kütüphanenin komut satırında belirtilmesi gerekir. 
+    Örneğin:
+
+    gcc -o app app.c libmyutil.so
+
+    Tabii bu işlem yine -l seçeneği ile de yapılabilirdi:
+
+    gcc -o sample sample.c -lsample -L.
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+<BURADA KALDIK>
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Default durumda gcc (ve tabii clang) derleyicileri standart C fonksiyonlarının ve POSIX fonksiyonlarını (glibc kütüphanesi)
+    dinamik kütüphaneden alarak kullanır. Ancak programcı isterse -static seçeneği ile statik link işlemi de yapabilir. Bu durumda
+    bu fonksiyonlar statik kütüphanelerden alınarak çalıştırılabilen dosyalara yazılacaktır. Örneğin:
+
+    gcc -o sample -static sample.c
+
+    Tabii bu biçimde statik link işlemi yapıldığında çalıştırılabilen dosyanın boyutu çok büyüyecektir.
+
+    Bir programın kullandığı dinamik kütüphaneler ldd isimli uitility program ile basit bir biçimde görüntülenebilir.
+    Örneğin:
+
+    $ ldd sample
+	linux-vdso.so.1 (0x00007fff38162000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f7ec0b5c000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007f7ec114f000
+
+    ldd programı dinamik kütüphaneelerin kullandığı dinamik kütüphaneleri de görüntülemektedir. Programın doğrudan kullandığı dinamik
+    kütüphanelerin listesi readlef komutuyla aşağıdaki gibi de elde edilebilir:
+
+    $ readelf -d sample | grep "NEEDED"
+    0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Pekiyi bizim programımız örneğin "libsample.so" isimli bir dinamik kütüphaneden çağrı yapıyor olsun. Bu "libsample.so" 
+    dosyasının program çalıştırılırken nerede bulundurulması gerekir? İşte program çalıştırılırken ilgili dinamik kütüphane 
+    dosyasının özel bazı dizinlerde bulunuyor olması gerekmektedir. Yükleme sırasında hangi dizinlere bakıldığı "man ld.so" 
+    sayfasından elde edilebilir. Bu dokümanda dinamik kütüphanenin bulunabilmesi için sırasıyla tek tek hangi dizinlere bakıldığı 
+    belirtilmiştir.
+
+    Ayrıntılar bir yana bırakılırsa kabaca LD_LIBRARY_PATH isimli çevre değişkeninde belirtilen dizinlere (bu çevre değişkeni 
+    de PATH çevre değişkeni gibi ':'ler ile ayrılmış dizinler oluşmaktadır. '.' dizini yine "o anki çalışma dizini" anlamına gelmektedir) 
+    ve /lib, /usr/lib dizinlerine bakılmaktadır. O halde basit bir seçenek bizim dinamik kütüphanemizi /lib ya da /usr/lib
+    dizinlerinin birinin içine çekmek ya da LD_LIBRARY_PATH çevre değişkenine dinamik kütüphanemizin bulunduğu dizini eklemktedir. 
+    /lib dizini işletim sisteminin boot edilebilmesi için gereken birtakım araçların da kullandığı daha temel bir kütüphane dizinidir. 
+    Uygulama programcılarının kütüphanelerini buraya değil /usr/lib içerisine yerleştirmesi daha uygun olur.
+
+    Dinamik kütüphanelerin aranacağı yer aslında doğrudan çalıştırılabilen dosyanın içerisine (.dynamic isimli bölüme (section)) de yazılabilir. Bunun için
+    "-rpath <yol ifadesi>" linker seçeneği kullanılmalıdır. Buradaki yol ifadesinin mutlak olması gerekir. Ancak eskiden bunun için DT_RPATH isimli tag kullanılırken
+    daha sonra bu tag "deprecated" yapılmış DT_RUNPATH tag'ı kullanılmaya başlanmıştır. Bu seçeneği linker'a geçirebilmek için gcc'de -Wl seçeneğini kullanmak 
+    gerekir. -Wl seçeneği bitişik yazılan virgüllü alanlardan oluşmaktadır. gcc bunu ld linler'ına virgüller yerine boşluklar koyarak geçirmektedir. Örneğin:
+
+    gcc -o sample ample.c -Wl,-rpath,/home/csd/Study/Unix-Linux-SysProg libsample.so
+
+    Burada ELF formatının DT_RUNPATH tag'ına yerleştirme yapımaktadır. Çalıştırılabilir dosyaya iliştirilen rpath bilgisi reaelf 
+    programı ile aşağıdaki gibi görümtülenebilir:
+
+    $ readelf -d sample | grep "RUNPATH"
+    0x000000000000001d (RUNPATH)            Library runpath: [/home/csd/Study/Unix-Linux-SysPro
+
+    Eğer DT_RPATH tag'ına yerleştirme yapılmak isteniyorsa linker seçeneklerine ayrıca --disable-new-dtags seçeneğinin de girilmesi gerekmektedir. 
+    Örneğin:
+
+    gcc -o sample ample.c -Wl,-rpath,/home/csd/Study/Unix-Linux-SysProg,--disable-new-dtags libsample.so
+
+    Görüntüleme de şöyle yapılabilir:
+
+    $ readelf -d sample | grep "RPATH"
+    0x000000000000000f (RPATH)              Library rpath: [/home/csd/Study/Unix-Linux-SysProg]
+
+    Çalıştırılabilir dosyaya DT_RUNPATH tag'ının mutlak yol ifadesi biçiminde girilemsi kullanım sorunlarına yol açabilmektedir. 
+    Çünkü bu durumda kurulum sırasında dinamik kütüphane ya başka dizine yerleştirilirse ne olacaktır? İşte -rpath seçeneğinde '$ORIGIN' program 
+    dosyasının bulunduğu dizin anlamına gelir. Örneğin:
+
+    gcc -o sample -Wl,-rpath,'$ORIGIN'/. sample.c libsample.so
+
+    Burada artık neresi olursa olsun dinamik kütüphane çalıştırılan programla aynı dizinde bulunursa sorun oluşmayacaktır. Pekiyi DT_RPATH tag'ı neden deprecated yapılıp
+    DT_RUNPATH tag'ı eklenmiştir? İşte aslında arama sırası bakımından DT_RPATH tag'ının en yukarıda olması (daha soğrusu LD_LIBRARY_PATH'in yukarısında olması) 
+    yanlış bir tasarımdır. Geriye doğru uyumu koruyarak bu yanlış tasarım telafi edilmiştir. 
+
+    Dinamik kütüphanenin aranması sırasında /lib ve /usr/lib dizilerine bakılmadan önce özel bir dosyaya da bakılmaktadır. Bu dosya /etc/ld.so.cache isimli dosyadır. 
+    /etc/ld.so.cache dosyası aslında binary bir dosyadır. Bu dosya hızlı aramanın yapılabilmesi için "sözlük (dictionary)" tarzı bir içeriğe sahiptir. Bu dosya
+    ilgili dinamik kütüphane dosyalarının hangi dizinler içerisinde olduğunu gösteren bir yapıdadır. (Yani bu dosya .so dosyalarının hangi dizinlerde olduğunu 
+    belirten binary bir dosyadır.) Pekiyi bu dosyanın içerisinde hangi so dosyaları vardır? Aslında bu dosyanın içerisinde /lib ve /usr/lib dizinindeki so 
+    dosyalarının hepsi vardır. Ama programcı isterse kendi dosyalarını da bu cache dosyasının içerisine yerleştirebilir. Pekiyi neden böyle bir cache 
+    dosyasına gereksinim duyulmuştur? Dinamik kütüphaneler yüklenirken /lib ve /usr/lib dizinlerinin taranması göreli olarak uzun zaman almaktadır. 
+    Bu da programın yüklenme süresini uzatabilmektedir. Halbuki bu dizinlere bakılmadan önce bu cache dosyasına bakılırsa ilgili dosyanın olup olmadığı varsa
+    nerede olduğu çok daha hızlı bir biçimde elde edilebilmektedir. Burada dikkat edilmesi gereken nokta bu cache dosyasına /lib ve /usr/lib dizinlerinden 
+    daha önce bakıldığı ve bu dizinlerin içeriğinin de zaten bu cache dosyasının içerisinde olduğudur. O halde aslında /lib ve /usr/lib dizinlerinde arama 
+    çok nadir olarak yapılır. 
+
+    Pekiyi /etc/ld.so.cache dosyasına biz nasıl bir dosya ekleriz? Aslında programcı bunu dolaylı olarak yapar. Şöyle ki: /sbin/ldconfig isimli bir program vardır.
+    Bu program /etc/ld.so.conf isimli bir text dosyaya bakar. Bu dosya dizinlerden oluşmaktadır. Bu dizinlerin içindeki so dosyalarını /etc/ld.so.cache dosyasına
+    ekler. Şimdiler de /etc/ld.so.conf dosyasının içeriği şöyledir:
+
+    include /etc/ld.so.conf.d/*.conf
+
+    Bu ifade /etc/ld.so.conf.d dizinindeki tüm .conf uzantılı dosyaların bu işleme dahil edileceğini belirtir. 
+
+    Biz ldconfig programını çalıştırdığımızda bu program /lib, /usr/lib ve /etc/ld.so.conf (dolayısıyla /etc/ld.so.conf.d dizinindeki .conf dosyaları)na bakarak
+    /etc/ld.so.cache dosyasını yeniden oluşturmaktadır. O halde bizim bu cache'e ekleme yapmak için tek yapacağımız şey /etc/ld.so.conf.d dizinindeki bir .conf
+    dosyasına yeni bir satır olarak bir dizinin yol ifadesini girmektir. (.conf dosyaları her satırda bir dizinin yol ifadesinden oluşmaktadır) Tabii programcı 
+    isterse bu dizine yeni bir .conf dosyası da ekleyebilir. İşte programcı bu işlemi yaptıktan sonra /sbin/ldconfig programını çalıştırınca artık onun eklediği
+    dizinin içerisindeki so dosyaları da /etc/ld.so.cache dosyasının içerisine eklenmiş olacaktır. Daha açık bir anlatımla programcı bu cache dosyasına ekleme işini 
+    adım adım şöyle yapar:
+
+    1) Önce so dosyasını bir dizine yerleştirir. 
+    2) Bu dizinin ismini /etc/ld.so.conf.d dizinindeki bir dosyanın sonuna ekler.
+    3) /sbin/ldconfig programını çalıştırır.
+
+    Programcı /etc/ld.so.conf.d dizinindeki herhangi bir dosyaya değil de -f seçeneği ile kendi belirlediği bir dosyaya da ilgili dizini yazabilmektedir. ldconfig 
+    her çalıştırıldığında sıfırdan yeniden cache dosyasını oluşturmaktadır. 
+
+    Programcı /lib ya da /usr/lib dizinine bir so dosyası eklediğinde ldconfig programını çalıştırması zorunlu olmasa da iyi bir tekniktir. Çünkü o dosya da cache
+    dosyasına yazılacak ve daha hızlı bulunacaktır.
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    UNIX/Linux sistemlerinde dinamik kütüphane dosyalarına isteğe bağlı olarak birer versiyon numarası verilmektedir. Bu versiyon numarası dosya 
+    isminin bir parçası durumundadır. Linux sistemlerinde izlenen tipik numaralandırma (convention) şöyledir:
+
+    <dosya ismi>.so.<majör numara>.<minör yüksek numara>.<minör alçak numara>
+
+    Örneğin:
+
+    libsample.so.2.4.6
+
+    Majör numara büyük değişiklikleri, minör numaralar ise küçük değişiklikleri anlatmaktadır. Majör numara değişirse yeni dinamik kütüphane
+    eskisiyle uyumlu olmaz. Burada "uyumlu değildir" lafı eski dinamik kütüphaneyi kullanan programların yenisini kullanamayacağı anlamına gelmektedir. 
+    Çünkü muhtemelen bu yeni versiyonda fonksiyonların isimlerinde, parametrik yapılarında değişiklikler söz konusu olmuş olabilir. Bazı fonksiyonlar silinmiş olabilir. 
+    Fakat majör numarası aynı ancak minör numaraları farklı olan kütüphaneler birbirleriyle uyumludur. Yani alçak minör numarayı kullanan program yüksek minör
+    numarayı kullanırsa sorun olmayacaktır. Bu durumda yüksek minör numaralı kütüphanede hiçbir fonksiyonun ismi, parametrik yapısı değişmemiştir ve hiçbir fonksiyon
+    silinmemiştir. Örneğin fonksiyonlarda daha hızlı çalışacak biçimde optimizasyonlar yapılmış olabilir. Ya da örneğin yeni birtakım fonksiyonlar da eklenmiş 
+    olabilir. 
+
+    Linux sistemlerinde bir konvansiyon olarak bir kütüphanenin üç ismi bulunmaktadır: Gerçek ismi (real name), so ismi (so name) ve linker ismi (linker name).
+    Kütüphanenin majör ve çift minör versiyonlu ismine gerçek ismi denilmektedir. Örneğin:
+
+    libsample.so.2.4.6
+
+    so ismi ise yalnızca majör numara içeren ismidir. Örneğin yukarıdaki gerçek ismin so ismi şöyledir:
+
+    libsample.so.2
+
+    Linker ismi ismi ise hiç versiyon numarası içermeyen ismidir. Örneğin yukarıdaki kütüphanelerin linker ismi ise şöyledir:
+
+    libsample.so
+
+    İşte so ismi gerçek isme sembolik link, linker ismi de so ismine sembolik link yapılır. 
+
+    linker ismi ---> so ismi ---> gerçek ismi
+
+    Örneğin:
+
+    gcc -o libsample.so.1.0.0 -shared -fPIC a.c b.c c.c     (gerçek isimli kütüphane dosyası oluşturuldu)
+    ln -s libsample.so.1.0.0 libsample.so.1                 (so ismi oluşturuldu)
+    ln -s libsample.so.1 libsample.so                       (linker ismi oluşturuldu)
+
+    lrwxrwxrwx 1 csd study   14 Nov 26 22:32 libsample.so -> libsample.so.1
+    lrwxrwxrwx 1 csd study   18 Nov 26 22:31 libsample.so.1 -> libsample.so.1.0.0
+    -rwxr-xr-x 1 csd study 7552 Nov 26 22:30 libsample.so.1.0.
+
+    Dinamik kütüphanelerin linker isimleri link aşamasında (link ederken) kullanılan isimlerdir. Bu sayede link işlemini yapan programcıların daha az tuşa basarak 
+    genel bir isim kullanması sağlanmıştır. Bu durumda örneğin biz libsample isimli kütüphane kullanan programı link etmek istersek şöyle yapabiliriz:
+
+    gcc -o sample sample.c libsample.so
+
+    Ya da şöyle yapabiliriz:
+
+    gcc -o sample sample.c -lsample -L.
+
+    Dinamik kütüphanelerin so isimleri aslında kütüphanenin tüm uyumlu (compatible) versiyonlarının ortak ismi gibi düşünülebilir. Kütüphanelerin so isimleri 
+    aslında aynı zamanda kütüphanelerin gerçek isimlerine ilişkin kütüphane dosyalarının içerisinde SONAME tag'ıyla yazılmaktadır. Yani dinamik kütüphane 
+    dosyalarının içerisinde SONAME isimli bir alan vardır. Bu SONAME alanı link işlemi sırasında -sonmame seneği ile doldurulur. Dİnamik kütüphaneyi 
+    oluşturan programcı genel olarak bu SONAME alanına kütüphanenin soname'ini yazmalıdır. Örneğin:
+
+    gcc -o libsample.so.1.0.0 -Wl,-soname,libsample.so.1 -shared a.o b.o c.o 
+
+    Tabii programcı kütüphane dosyasında bu SONAME alanına hiç bir şey yazmayabilir. Örneğin:
+
+    gcc -o libsample.so.1.0.0 -shared a.o b.o c.o 
+
+    Bir kütüphane dosyasının SONAME alanı readelf -d seçeneği ile görüntülenebilir. (-d seçeneği ".dynamic" isimli bölünmü görüntülemektedir. SONAME alanı bu bölüm (section)
+    içerisindedir.) Örneğin:
+
+    readelf -d libsample.so.1.0.0 | grep SONAME
+
+    Aynı işlemi objdum utility'si ile de şöyle yapabiliriz:
+
+    objdump -x libsample.so.1.0.0 | grep SONAME
+
+    Dinamik kütüphanelerin so isimleri yükleme sırasında gerçek yüklenecek dosyayı belirtmektedir. Yani örneğin libsample.so.1.0.0 dinamik kütüphane 
+    dosyasının SONAME alanında libsample.so.1 ismi yazıyorsa aslında bu kütüphane yerine yükleyici libsample.so.1 isimli kütüphaneyi yükleyecektir. Tabii mademki
+    libsample.so.1 dosyası libsample.so.1.0.0 dosyasına sembolik link yapılmıştır. Bu durumda yükleyici yine libsample.so.1.0.0 dosyasını yükler. Şimdi bu işlemleri
+    yeniden sırasıyla en baştan yapalım:
+
+    gcc -c -fPIC a.c b.c c.c
+    gcc -o libsample.so.1.0.0 -shared -Wl,-soname,libsample.so.1 a.o b.o c.o
+    ln -s libsample.so.1.0.0 libsample.so.1
+    in -s libsample.so.1 libsample.so
+
+    Şimdi de kütüphaneyi kullanan sample isimli programı derleyip link edelim:
+
+    gcc -o sample sample.c libsample.so
+
+    Şimdi ldd utility'si ile sample programının kullandığı dinamik kütüphanelere bakalım:
+
+	linux-vdso.so.1 (0x00007ffd809b6000)
+	libsample.so.1 => ./libsample.so.1 (0x00007ff0f491d000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007ff0f452c000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007ff0f4d21000)
+
+    Görüldüğü gibi aslında sample programı libsample.so sembolik linkinin izlediği libsample.so.1.0.0 dosyasını değil bu dosyanın SONAME alanında yazılı olan 
+    libsample.so.1 dosyasını yüklemek istemektedir. Tabii neticede kütüphanelerin so isimleri gerçek isimlerine sembolik link yapıldığına göre aslında yine yükleyici
+    libsample.so.1.0.0 dinamik kütüphanesini yğkleyecektir. 
+
+    Pekiyi çalıştırılabilen bir dosyanın hangi dinamik kütüphaneleri kullandığı nerede yazmaktadır? İşte aslında bu bilgi çalıştırılabilen dosyanın içersinde
+    .dynamic isimli bölümde DT_NEEDED taglarıyla belirtilir. ldd programı da aslında bu tag'lara bakmaktadır. Biz bu tagı yine istersek readelf -d ile görüntüleyebiliriz. 
+    Örneğin:
+
+    readelf -d sample | grep NEEDED
+    0x0000000000000001 (NEEDED)             Shared library: [libsample.so.1]
+    0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+
+    İşte aslında dinamik kütüphane kullanan program link edilirken linker kütüphane dosyasının SONAME tag alanına bakıp orada yazan dosyayı çalıştırılabilen dosyanın 
+    NEEDED alanına yazmaktadır. Yükleyici aslında her zaman bu NEEDED alanındaki dinamik kütüphaneleri yüklemeye çalışmaktadır. 
+
+    Pekiyi kütüphanenin SONAME alanına bir şey yazılmazsa ne olur? İşte bu durumda linker link işlemi sırasında belirtilen dinamik kütüphane dosyasını çalıştırılabilen dosyanın
+    NEEDED alanına yerleştirir. Örneğin:
+
+    gcc -c -fPIC a.c b.c c.c
+    gcc -o libsample.so.1.0.0 a.o b.o c.o
+    ln -s libsample.so.1.0.0 libsample.so.1
+    in -s libsample.so.1 libsample.so
+
+    gcc -o sample sample.c libsample.so
+
+    Burada sample programının NEEDED tag'ı şöyle oluşturulacaktır:
+
+    readelf -d sample | grep NEEDED
+    x0000000000000001 (NEEDED)             Shared library: [libsample.so]
+    0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+
+    Tabii sonuç olarak oluşturulan semblik linlerden dolayı yine yükleyici libsample.so.1.0.0 dosyasını yükleyecektir. 
+
+    Peki bu durumda so isminin anlamı nedir? İşte eğer biz asıl isme ilişkin dosyanın so ismine yerleştirme yaparsak çalıştırılabi,len dosya o isimdeki dosyası yüklemek
+    isteyecektir. Biz de sembolik linkleri değiştirerek onun başka bir minör versyonu yüklemesini sağlayabiliriz. Yani örneğin yukarıdaki uygulamada sample programı aslında
+    sample.so.1 dosyasını yüklemek istemektedir. Normalde de bu dosya sample.so.1.0.0 dosyasını göstermektedir. Şimdi biz bu dosyanın ileride örneğin sample.so.1.0.1
+    dosyasını göstermesini sağlayabiliriz. Artık sample programı çalıştırıldığında bu yeni versiyonu yüklemeye çalışacaktır. 
+
+    so ismine ilişkin sembolik link çıkartma ve /etc/ld.so.cache dosyasının güncellenmesi işlemi ldconfig tarafından otomatik yapılmaktadır. Yani aslında biz kütüphanenin gerçek isimli dosyasını
+    /lib ya da /usr/lib içerisinde yerleştirip ldconfig programını çalıştırdığımızda bu program zaten so ismine ilişkin sembolik linki de oluşturmaktadır.
+
+    Özetle Dinamik kütüphane kullanırken şu konvansiyona uymak iyi bir tekniktir:
+
+    - Kütüphane ismini lib ile başlatarak vermek
+    - Kütüphane ismine mjör ve minör numara vermek
+    - Gerçek isimli kütüphane dosyasını oluştururken so ismi olarak -Wl,-soname seçeneği ile kütüphanein so ismini yazmak
+    - Kütüphane için linker ismi ve so ismini sembolik link biçiminde oluşturmak
+    - Kütüphane paylaşılacaksa onu /usr/lib dizinine yerleştirmek ve ldconfig programı çalıştırarak /etc/ld.so.cache dosyasının güncellenmesini sağlamak. Bu işlem eğer
+    kütüphaneyi /usr/lib içersine yerleştirmiyorsak yapılmayabilir.
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Dinamik kütüphane dosyaları program çalıştırıldıktan sonra çalılşma zamanı sırasında belli bir noktada da yüklenebilir. Bu işlemin bazı avantajları
+    şunlar olabilmektedir:
+
+    - Program daha hızlı yüklenebilir.
+    - Programın sanal bellek alanı gereksiz bir biçimde doldurulmayabilir. (Örneğin nadiren çalışacak bir fonksiyon dinamik kürüphanede olabilir. 
+    Bu durumda o dinamik kütüphanenin işin başında yüklenmesi gereksiz bir yükleme zamanı ve bellek israfına yol açabilir.)
+
+    Dinamik kütüphanelerin dinamik yüklenmesi dlopen, dlsym, dlerror ve dlclose fonksiyonlarıyla yapılmaktadır. Bu fonksiyonlarda libdl kütüphanesi 
+    içerisindedir. Dolaısıyla link işlemi için -ldl seçeneğinin bulundurulması gerekir. dlopen fonksiyonun prototipi şöyledir:
+
+    #include <dlfcn.h>
+
+    void *dlopen(const char *filename, int flag);
+
+    Fonksiyonun birinci parametresi yüklenecek dinamik kütüphanenin yol ifadesini, ikinci parametresi seçenek belirten bayrakları almaktadır. Fonksiyon başarı durumunda
+    kütüphaneyi temsil eden bir handle değerine başarısızlık durumunda NULL adrese geri dönmektedir. Başarıszlık durumunda fonksiyon errno değişkenini set etmez. 
+    Başarısızlığa ilikin yazı doğrudan dlerror fonksiyonuyla elde edilmektedir:
+
+    char *dlerror(void);
+
+    dlopen fonksiyonun birinci parametresindeki dinamik kütüphane isminde eğer hiç / karakteri yoksa bu durumda kütüphanenin aranması daha önce ele aldığımız
+    prosedüre göre yapılmaktadır. Eğer dosya isminde en az bir / karakteri varsa dosya yalnızca bu mutlak ya da göreli yol ifadesinde aranmaktadır. 
+
+    Dinamik yükleme sırasında yüklenecek kütüphanenin SONAME alanında yazılan isme hiç bakılmamaktadır. (Bu SONAME alanındaki isim yalnızca link aşamasında kullanılır)
+
+    Kütüphanenin adres alanından boşaltılması ise dlclose fonksiyonuyla yapılmaktadır:
+
+    int dlclose(void *handle);
+
+    Fonksiyon başarı durumda 0, başarıszlık durumunda 0 dışı bir değere geri dönmektedir. Aynı kütüphane ikinci kez yüklenebilir. Bu durumda gerçek bir yükleme yapılmaz.
+    Ancak yüklenen sayıda close işleminin yapılması gerekmektedir. 
+
+    Kütüphanein içerisindeki fonksiyonlar ya da global nesneler adresleri elde eidlerek kullanılırlar. Bunların adreslerini elde edebilmek için dlsym isimli 
+    fonksiyon kullanılmaktadır:
+
+    void *dlsym(void *handle, const char *symbol);
+
+    Fonksiyon başarı durumunda ilgili sembolün adresine başarısızlık durumunda NULL adrese geri döner. 
+
+    Sembol isimleri konusunda dikkat etmek gerekir. Çünkü bazı derleyiciler bazı koşullar altında isimleri dekore edip object dosyaya
+    yazabilmektedir. Örneğin C++ derleyicicileri fonksiyon isimlerini parametrik yapıyla kombine ederek başka bir isimle object dosyaya 
+    yazar. Halbuki dlsym fonksiyonunda sembolün dinamik kütüphanedeki dekaore edilmiş isminin kullanılması gerekmektedir. Sembollerin dekore
+    edilmiş isimlerini elde edebilmek için "nm" utility'sini kullanabilirisniz.
+
+    Aşağıda bir dinamik kütüphane dinamik olarak yüklenmiş ve oradan bir fonksiyon ve data adresi alınarak kullanılmıştır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <dlfcn.h>
+
+int main(void)
+{
+	void *dl;
+	int (*padd)(int ,int);
+	int result;
+	int *pi;
+
+	if ((dl = dlopen("libsample.so", RTLD_NOW)) == NULL) {
+		fprintf(stderr, "dlopen: %s\n", dlerror());
+		exit(EXIT_FAILURE);
+	}
+
+	if ((*(void **)&padd = dlsym(dl, "add")) == NULL) {
+		fprintf(stderr, "dlsym: %s\n", dlerror());
+		exit(EXIT_FAILURE);
+	}
+
+	result = padd(10, 20);
+	printf("%d\n", result);
+
+	if ((pi = (int *)dlsym(dl, "x")) == NULL) {
+		fprintf(stderr, "dlsym: %s\n", dlerror());
+		exit(EXIT_FAILURE);
+	}
+	printf("%d\n", *pi);
+
+	dlclose(dl);
+
+	return 0;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Dinamik kütüphane dlopen fonksiyonuyla yüklenirken global değişkenlerin ve fonksiyonların nihai yükleme adresleri bu dlopen işlemi sırasında
+    hesaplanabilir ya da onlar kullanıldıklarında hesaplanabilir. İkisi arasında kullanıcı açısından bir fark olmamakla birlikte tüm sembollerin
+    adreslerinin yükleme sırasında hesaplanması bazen yükleme işlemini (eğer çok sembol varsa) uzatabilmektedir. Bu durumu ayarlamak için dlopen fonksiyonun flags 
+    parametresi kullanılır. Bu parametre RTLD_NOW olarak girilirse tüm sembollerin adresleri dlopen sırasında, RTLD_LAZY girilirse kullanıldıkları noktada 
+    hesaplanmaktadır. İki biçim arasında çoğu kez programcı için bir farklılık oluşmamaktadır. Ancak aşağıdaki örnekte bu iki biçimin ne anlama geldiği 
+    gösterilmektdir. 
+
+    Aşağıdaki örnekte libmample.so kütüphanesindeki foo fonksiyonu gerçekte olmayan bir bar fonksiyonunu çağırmıştır. Bu fonksiyonun gerçekte olmadığı
+    foo fonksiyonun sembol çözümlemesi yapıldığında anlaşılacaktır. İşte eğer bu kütüphaney,i kullanan sample.c programı kütüphaneyi RTLD_NOW ile yüklerse 
+    tüm semboller o anda çözlümeye çalışılacağından dolayı bar'ın bulunmuyor olması hatası da dlopen sırasında oluşacaktır. Eğer kütüphane RTLD_LAZY ile
+    yüklenirse bu durumda sembol çözümlemesi foo2nun kullanıldığı noktada (yani dlsym fonksiyonunda) gerçekleşecektir. Dolayısıyla hata da o o noktada oluşacaktır. 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* mample.c */
+
+#include <stdio.h>
+
+void bar(void);
+
+void foo(void)
+{
+	bar();
+}
+
+/* sample.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <dlfcn.h>
+
+int main(void)
+{
+	void *dl;
+	void (*pf)(void);
+
+	if ((dl = dlopen("libmample.so", RTLD_LAZY)) == NULL) {		/* RTLD_NOW ile de deneyiniz */
+		fprintf(stderr, "dlopen: %s\n", dlerror());
+		exit(EXIT_FAILURE);
+	}
+
+	printf("Ok\n");
+
+	if ((*(void **)&pf = dlsym(dl, "foo")) == NULL) {
+		fprintf(stderr, "dlsym: %s\n", dlerror());
+		exit(EXIT_FAILURE);
+	}
+
+	pf();
+
+	dlclose(dl);
+
+	return 0;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bazen bir dinamik kütüphane içerisindeki sembollerin o dinamik kütüphaneyi kullanan kodlar tarafından kullanılması istenmeyebilir. 
+    Örneğin dinamik kütüphanede bar isimli bir fonksiyon vardır. Bu fonksiyon bu dinamik kütüphanenin kendi içerisinden başka fonksiyonlar tarafından
+    kullanılıyor olabilir. Ancak bu fonksiyonun dinamik kütüphanenin dışından kullanılması istenmeyebilir. (Bunun çeşitli nedenleri olabilir. Örneğin
+    kapsülleme sağlamak için, dışarıdaki sembol çakışmalarını ortadan kaldırmak için vs.) İşte bunu sağlamak amacıyla gcc'ye özgü __attribute__((...))
+    eklentisindan faydalanılmaktadır. __attribute__((...)) eklentisi pek çok seçeneğe sahip platform spesifik bazı işlemlere yol açmaktadır. Bu eklentinin
+    seçeneklerini gcc dokümanlarından elde edbilirsiniz. Bizim bu amaçla kullanacağımız __attribute__((...)) seçeneği "visibility" isimli seçenektir. 
+
+    Aşağıdaki örnekte bar fonksiyonu foo fonksiyonu tarafından kullanılmaktadır. Ancak kütüphanin dışından bu fonksiyonun kullanılması istenmemiştir. 
+
+    Burada fonksiyon özelliğinin (yani __attribute__ sentaksının) fonksiyon isminin hemen sola getirildiğine ve çift parantez kullanıldığına dikkat ediniz.
+    Bıurada kullanılan özellik "visibility" isimli özelliktir ve değeri "hidden" biçimde verilmiştir. 
+
+    Default durumda dinamik kütüphanedeki bütün global semboller dışarıdan kullanılabilmektedir. Buradaki __attribute__((visibility("hidden"))) özelliğinin
+    fonksiyonu static yapmakla aynı şey olmadığına dikkat ediniz. Fonksiyon static yapılırsa o dinamik dinamik kütüphanedeki diğer modüller tarafından da kullanılamamaktadır.
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* mample.c */
+
+#include <stdio.h>
+
+void bar(void);
+
+void foo(void)
+{
+	printf("foo\n");
+	bar();
+}
+
+void __attribute__((visibility("hidden"))) bar(void)
+{
+	printf("bar\n");
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir dinamik kütüphane normal olarak ya da dinamik olarak yüklendiğinde birtakım ilk işlerin yapılması gerekebilir. (Örneğin
+    kütüphane thread güvenli olma iddiasındadır ve birtakım senkronizasyon nesnelerinin ve thread'e özgü alanların yaratılması gerekebilir.)
+    Bunun için __attribute__((constructor)) fonksiyon özelliği kullanılmaktadır. Benzer biçimde dinamik kütüphane programın adres alanından
+    boşaltılırken de birtakım son işlemler için __attribute__((destructor)) ile belirtilen fonksiyon çağrılmaktadır. (Aslında bu constructor ve destructor 
+    fonksiyonları normal programlarda da kullanılabilir. Bu durumda ilgili fonksiyonlar main fonksiyonundan önce ve main fonksiyonundan sonra çağrılmaktadır.)
+
+    Dinamik kütüphane birden fazla kez yüklendiğinde yalnızca ilk yüklemede toplamda bir kez constructor fonksiyonu çağrılmaktadır. Benzer biçimde
+    destructor fonksiyonu da yalnızca bir kez çağrılır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* mample.c */
+
+#include <stdio.h>
+
+void __attribute__((constructor)) dynamic_init()
+{
+	printf("dinamik kütüphane kullanılıyor..\n");
+}
+
+void __attribute__((destructor)) dynamic_exit()
+{
+	printf("dinamik kütüphane boşaltılıyor...\n");
+}
+
+void foo(void)
+{
+	printf("foo\n");
+}
+
+/* sample.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <dlfcn.h>
+
+int main(void)
+{
+	void *dl;
+
+	if ((dl = dlopen("libmample.so", RTLD_NOW)) == NULL) {
+		fprintf(stderr, "dlopen: %s\n", dlerror());
+		exit(EXIT_FAILURE);
+	}
+
+	printf("ok\n");
+
+	if ((dl = dlopen("libmample.so", RTLD_NOW)) == NULL) {
+		fprintf(stderr, "dlopen: %s\n", dlerror());
+		exit(EXIT_FAILURE);
+	}
+
+	dlclose(dl);
+
+	return 0;
+}
 
 /*--------------------------------------------------------------------------------------------------------------------------
 
