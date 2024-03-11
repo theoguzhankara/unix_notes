@@ -4265,8 +4265,8 @@ char *get_ls(struct stat *finfo, const char *name)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Anımsanacağı gibi dizinler (directories) de aslında tamamen dosyalar gibi organize ediliyordu. Dizinlerin içerisinde aşağıdaki gibi 
-    dizin girişleri bulunyordu:
+    Anımsanacağı gibi dizinler (directories) de aslında tamamen dosyalar gibi organize ediliyordu. Dizinlerin içerisinde aşağıdaki 
+    gibi dizin girişleri bulunyordu:
 
     isim    i-node_no
     isim    i-node_no
@@ -4276,19 +4276,22 @@ char *get_ls(struct stat *finfo, const char *name)
     Dizin dosyalarının gerçek formatları biraz daha detay içerebilmektedir. Kursumuzun sonlarında doğru Ext-2 dosya sisteminin disk organizasyonu
     üzerinde duracağız. 
 
-    Bir dizini erişim hakları yeterliyse open fonlsiyonuyla açabiliriz. Ancak POSIX standartlarında dizin dosyalarından okuma, yazma ve konumlandırma işlemlerinin 
-    yapılıp yapılamayacağı işletim sistemini yazanların isteğine bırakılmıştır. Linux, BSD, macOS gibi sistemler dizin dosyalarından read ve write fonksiyonları ile 
-    okuma ve yazma yapmaya izin vermemektedir. Ancak bu sistemler lseek fonksiyonuyla dizin dosyalarının dosya göstericilerinin konumlandırılmasına izin vermektedir. 
-    Pekiyi mademki işletim sistemleri dizin dosyalarından okuma yazma yapmaya izin vermeyebiliyorlar, bu durumda open fonksiyonuyla dizin dosyalarını hangi modda 
-    açabiliriz? İşte bunun POSIX standartlarında O_SEARCH isimli bir mod bulunmaktadır. Bu mod aslında ileride ele alacağımız at'li POSIX 
-    fonksiyonları için düşünülmüştür. Eğer O_SEARCH modunda bir dizin açılırsa bu dizinden okuma yazma yapılamaz ancak bu at'li fonksiyonlar kullanılabilir. 
-    Ancak O_SEARCH modu Linux tarafıdan desteklenmemektedir. Bu durumda mecburen Linux'ta bir dizini açacaksak işletim sistemi read fonksiyonu ile okuma yapılmasına 
-    izin vermiyor olsa da biz açış modu olarak O_RDONLY kullanırız. 
+    Bir dizini erişim hakları yeterliyse open fonlsiyonuyla açabiliriz. Ancak POSIX standartlarında dizin dosyalarından okuma, 
+    yazma ve konumlandırma işlemlerinin yapılıp yapılamayacağı işletim sistemini yazanların isteğine bırakılmıştır. Linux, BSD, 
+    macOS gibi sistemler dizin dosyalarından read ve write fonksiyonları ile okuma ve yazma yapmaya izin vermemektedir. Ancak bu 
+    sistemler lseek fonksiyonuyla dizin dosyalarının dosya göstericilerinin konumlandırılmasına izin vermektedir. Pekiyi mademki 
+    işletim sistemleri dizin dosyalarından okuma yazma yapmaya izin vermeyebiliyorlar, bu durumda open fonksiyonuyla dizin dosyalarını 
+    hangi modda açabiliriz? İşte bunun POSIX standartlarında O_SEARCH isimli bir mod bulunmaktadır. Bu mod aslında ileride ele 
+    alacağımız at'li POSIX fonksiyonları için düşünülmüştür. Eğer O_SEARCH modunda bir dizin açılırsa bu dizinden okuma yazma 
+    yapılamaz ancak bu at'li fonksiyonlar kullanılabilir. Ancak O_SEARCH modu Linux tarafıdan desteklenmemektedir. Bu durumda 
+    mecburen Linux'ta bir dizini açacaksak işletim sistemi read fonksiyonu ile okuma yapılmasına izin vermiyor olsa da biz açış 
+    modu olarak O_RDONLY kullanırız. 
 
-    Pekiyi bir dizini O_SEARCH modunda açmak ile O_RDONLY modunda açmak arasında ne fark vardır? O_SEARCH modu POSIX standartlarına bir dizin üzerinde "read", "write"
-    yapmamak ancak başka işlemlerde kullanılmak amacıyla kullanılmak için eklenmiştir. Dolayısıyla bir işletim sistemi örneğin dizin dosyalarından read fonksiyonu ile
-    okuma yapmaya izin veriyorsa bu durumda biz o dizini O_SEARCH modunda açarsak okuma yapamayız. Ancak O_RDONLY modunda açarsak okuma yapabiliriz. 
-    Linux ve macOS O_SEARCH modunu desteklememektedir. Ancak BSD türevi sistemler bu modu desteklemektedir. 
+    Pekiyi bir dizini O_SEARCH modunda açmak ile O_RDONLY modunda açmak arasında ne fark vardır? O_SEARCH modu POSIX standartlarına 
+    bir dizin üzerinde "read", "write" yapmamak ancak başka işlemlerde kullanılmak amacıyla kullanılmak için eklenmiştir. Dolayısıyla 
+    bir işletim sistemi örneğin dizin dosyalarından read fonksiyonu ile okuma yapmaya izin veriyorsa bu durumda biz o dizini O_SEARCH 
+    modunda açarsak okuma yapamayız. Ancak O_RDONLY modunda açarsak okuma yapabiliriz. Linux ve macOS O_SEARCH modunu desteklememektedir. 
+    Ancak BSD türevi sistemler bu modu desteklemektedir. 
 
     Aşağıdaki Linux sistemlerinde bir dizin'inin open fonksiyonuyla açılmasına örnek verdik. Linux açış modu olarak O_SREACH modunu 
     desteklemediği için O_RDONLY modunu kullandık. İşletim sistemleri genel olarak dizinlerin write modda açılmasına izin vermemektedir. 
@@ -4323,14 +4326,15 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Pekiyi mademki işletim sistemlerinin çoğu bir dizin üzerinde read ve write fonksiyonları ile işlem yapmaya izin vermiyorsa bu durumda 
-    bir dizini open fonksiyonu ile açmanın ne anlamı vardır? İşte anımsanacağı gibi yol ifadesi alan POSIX dosya fonksiyonlarının başı f ile başlayan 
-    dosya betimleyicisi alan biçimleri de vardı. Örneğin stat ve lstat fonksiyonları yol ifadesi alırken fstat fonksiyonu dosya betimleyicisi 
-    alıyordu. Benzer biçimde chmod için fchmod, chown fchown fonksiyonları bulunmaktaydı. İşte bu f'li fonksiyonların bir de at'li versiyonları vardır. 
-    Örneğin fstatat, fchmodat, fchownat gibi. Ayrıca başı f ile başlamayan çeşitli dosya fonksiyonlarının da at'li versiyonarı bulunmaktadır. 
-    Örneğin open fonksiyonun da bir at'li versiyonu vardır. Aslında at'li versiyonlar seyrek kullanılan fonksiyonlardır. Ancak biz kursumuzda bunlar 
-    hakkında açıklama yapmayı da uygun görüyoruz. Pekiyi bu at'li fonksiyonlar ne yapmaktadır. Aşağıda openat fonksiyonunun prototipini 
-    görüyorsunuz:
+    Pekiyi mademki işletim sistemlerinin çoğu bir dizin üzerinde read ve write fonksiyonları ile işlem yapmaya izin vermiyorsa 
+    bu durumda bir dizini open fonksiyonu ile açmanın ne anlamı vardır? İşte anımsanacağı gibi yol ifadesi alan POSIX dosya 
+    fonksiyonlarının başı f ile başlayan dosya betimleyicisi alan biçimleri de vardı. Örneğin stat ve lstat fonksiyonları yol 
+    ifadesi alırken fstat fonksiyonu dosya betimleyicisi alıyordu. Benzer biçimde chmod için fchmod, chown fchown fonksiyonları 
+    bulunmaktaydı. İşte bu f'li fonksiyonların bir de at'li versiyonları vardır. Örneğin fstatat, fchmodat, fchownat gibi. 
+    Ayrıca başı f ile başlamayan çeşitli dosya fonksiyonlarının da at'li versiyonarı bulunmaktadır. Örneğin open fonksiyonun 
+    da bir at'li versiyonu vardır. Aslında at'li versiyonlar seyrek kullanılan fonksiyonlardır. Ancak biz kursumuzda bunlar 
+    hakkında açıklama yapmayı da uygun görüyoruz. Pekiyi bu at'li fonksiyonlar ne yapmaktadır. Aşağıda openat fonksiyonunun 
+    prototipini görüyorsunuz:
 
     #include <fcntl.h>
 
@@ -4340,25 +4344,28 @@ void exit_sys(const char *msg)
 
     int open(const char *path, int oflag, ...);
 
-    Fonksiyonların at'li vesiyonları genel olarak bir dosya betimleyicisi de almaktadır. Bu dosya betimleyicisinin bir dizin'e ilişikin olması
-    gerekir. Eğer bu dosya betimleyicisi bir dizin'e ilişkin değilse fonksiyon başarısız olur. at'li versiyonlara bir dizine ilişkin dosya betimleyicisi
-    verdikten sonra ayrıca bu fonksiyonlar bir de yol ifadesi de alırlar. Buradaki yol ifadesi eğer mutlak (absolute) ise bu at'li versiyonların at'siz
-    versiyonlardan (flag parametreleri dışında) hiçbir farkı kalmaz. Dolayısıyla bu durumda geçerli olsa da at'li versiyonları kullanmanın anlamı kalmamaktadır. 
-    (Bazı at'li versiyonlar flag parametresine de sahiptir. Bu parametrenin işlevinden faydalanmak için de at'li fonksiyonlar kullanılabilmektedir.)
-    Yani fonksiyon bu dizin betimleyicisinden faydalanmamaktadır. Ancak yol ifadesi göreli (relative) ise bu durumda dosya prosesin çalışma dizininden itibaren değil
-    dizin betimleyicisinin belirttiği dizinden itibaren orijin belirtmektedir. Yani biz at'li versiyonlarla göreli yol ifadelerinin orijinlerini prosesin 
-    çalışma dizinin dışında başka bir dizine kaydırabilmekteyiz. Tabii fonksiyonların at'li versiyonları kullanılacaksa bu durumda dizin dosyalarının 
-    O_SEARCH modunda açılması daha uygundur. Çünkü bu at'li versiyonlar için dizin dosyalarının okuma modunda açılması gerekmemektedir. Zaten POSIX'te
-    O_SEARCH modu bu at'li fonksiyonlar için bulundurulmuştur. Linux ve macOS sistemleri O_SEARCH modunu desteklemediğine göre bu sistemlerde 
-    at'li fonksiyonları kullanırken dizin'leri O_RDONLY modda açmamız gerekir. POSIX standartlarına göre at'li fonksiyonlarda eğer dizin O_SEARCH modunda 
-    açılmışsa belirtilen dizinin "x" hakkına sahilik kontrolü yapılmaz. Eğer dizin O_SERACH yerine diğer modlarla (örneğin O_RDONLY) açılmışsa
-    bu durumda belirtilen dizinde "x" hakkı kontrolü yapılmaktadır. Ayrıca fonksiyonların at'li versiyonlarında dizine ilişkin dosya betimleyicisine özel olarak 
-    AT_FDCWD değeri geçirilirse bu durumda sanki prosesin çalışma dizinine ilişkin dizin betimleyicisi geçirilmiş gibi bir etki oluşmaktadır. 
-    Tabii bu durumda fonksiyonun at'li versiyonu ile at'siz versyonu arasında bir fark kalmaz. Ancak fonksiyonarın at'li versiyonlarının ekstra parametreleri de 
-    olabilmektedir (genellikle bu ekstra parametre flag parametresi biçimindedir). İşte programcı bu ekstra parametrelerden faydalanabilmek için dosya 
-    betimleyici parametresini AT_FDCWD biçiminde geçebilmektedir. Ayrıca fonksiyonların at'li versiyonlarında biz yol ifadesi olarak mutlak ifadesi geçtiğimizde 
-    fonksiyonun dizin betimleyici parametresi zaten hiç kontrol edilmemektedir (yani bu parametre geçersiz bir betimleyici belirtse bile eğer yol ifadesi mutlak ise 
-    fonksiyon için bir sorun oluşturmamaktadır.)
+    Fonksiyonların at'li vesiyonları genel olarak bir dosya betimleyicisi de almaktadır. Bu dosya betimleyicisinin bir dizin'e 
+    ilişkin olması gerekir. Eğer bu dosya betimleyicisi bir dizin'e ilişkin değilse fonksiyon başarısız olur. at'li versiyonlara 
+    bir dizine ilişkin dosya betimleyicisi verdikten sonra ayrıca bu fonksiyonlar bir de yol ifadesi de alırlar. Buradaki yol 
+    ifadesi eğer mutlak (absolute) ise bu at'li versiyonların at'siz versiyonlardan (flag parametreleri dışında) hiçbir farkı 
+    kalmaz. Dolayısıyla bu durumda geçerli olsa da at'li versiyonları kullanmanın anlamı kalmamaktadır. (Bazı at'li versiyonlar 
+    flag parametresine de sahiptir. Bu parametrenin işlevinden faydalanmak için de at'li fonksiyonlar kullanılabilmektedir.)
+    Yani fonksiyon bu dizin betimleyicisinden faydalanmamaktadır. Ancak yol ifadesi göreli (relative) ise bu durumda dosya 
+    prosesin çalışma dizininden itibaren değil dizin betimleyicisinin belirttiği dizinden itibaren orijin belirtmektedir. Yani 
+    biz at'li versiyonlarla göreli yol ifadelerinin orijinlerini prosesin çalışma dizinin dışında başka bir dizine kaydırabilmekteyiz. 
+    Tabii fonksiyonların at'li versiyonları kullanılacaksa bu durumda dizin dosyalarının O_SEARCH modunda açılması daha uygundur. 
+    Çünkü bu at'li versiyonlar için dizin dosyalarının okuma modunda açılması gerekmemektedir. Zaten POSIX'te O_SEARCH modu bu at'li 
+    fonksiyonlar için bulundurulmuştur. Linux ve macOS sistemleri O_SEARCH modunu desteklemediğine göre bu sistemlerde at'li fonksiyonları 
+    kullanırken dizin'leri O_RDONLY modda açmamız gerekir. POSIX standartlarına göre at'li fonksiyonlarda eğer dizin O_SEARCH modunda 
+    açılmışsa belirtilen dizinin "x" hakkına sahilik kontrolü yapılmaz. Eğer dizin O_SERACH yerine diğer modlarla (örneğin O_RDONLY) 
+    açılmışsa bu durumda belirtilen dizinde "x" hakkı kontrolü yapılmaktadır. Ayrıca fonksiyonların at'li versiyonlarında dizine 
+    ilişkin dosya betimleyicisine özel olarak AT_FDCWD değeri geçirilirse bu durumda sanki prosesin çalışma dizinine ilişkin dizin 
+    betimleyicisi geçirilmiş gibi bir etki oluşmaktadır. Tabii bu durumda fonksiyonun at'li versiyonu ile at'siz versyonu arasında bir 
+    fark kalmaz. Ancak fonksiyonarın at'li versiyonlarının ekstra parametreleri de olabilmektedir (genellikle bu ekstra parametre 
+    flag parametresi biçimindedir). İşte programcı bu ekstra parametrelerden faydalanabilmek için dosya betimleyici parametresini 
+    AT_FDCWD biçiminde geçebilmektedir. Ayrıca fonksiyonların at'li versiyonlarında biz yol ifadesi olarak mutlak ifadesi geçtiğimizde 
+    fonksiyonun dizin betimleyici parametresi zaten hiç kontrol edilmemektedir (yani bu parametre geçersiz bir betimleyici belirtse 
+    bile eğer yol ifadesi mutlak ise fonksiyon için bir sorun oluşturmamaktadır.)
 
     Diğer at'li bazı fonksiyonların da prototipleri şöyledir:
 
@@ -4366,8 +4373,8 @@ void exit_sys(const char *msg)
     int fchownat(int fd, const char *path, uid_t owner, gid_t group, int flag);
     int fstatat(int fd, const char *restrict path, struct stat *restrict buf, int flag);
 
-    Aşağıda openat fonksiyonunun kullanımına bir örnek verilmiştir. Burada çalışma dizininde "test.txt" dosyası bulunduğu halde fonksiyon 
-    başarısız olacaktır.
+    Aşağıda openat fonksiyonunun kullanımına bir örnek verilmiştir. Burada çalışma dizininde "test.txt" dosyası bulunduğu 
+    halde fonksiyon başarısız olacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -4404,12 +4411,12 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Bir dizin dosyası içerisindeki "dizin girişlerini (directory entry)" elde etmek için bir grup POSIX fonksiyonu bulundurulmuştur. 
-    (Dizin dosyalarının open ya da openat ile fonksiyonu ile açılabildiğine ancak pek çok sistemde read fonksiyonu ile okunamadığına dikkat ediniz. 
-    Ayrıca dizin dosyalarının iç formatı dosya sisteminden dosya sistemine değişebilmektedir. Bu nedenle POSIX standartlarında bu işi yapan ayrı 
-    fonksiyonlar bulundurulmuştur.)
+    (Dizin dosyalarının open ya da openat ile fonksiyonu ile açılabildiğine ancak pek çok sistemde read fonksiyonu ile okunamadığına 
+    dikkat ediniz. Ayrıca dizin dosyalarının iç formatı dosya sisteminden dosya sistemine değişebilmektedir. Bu nedenle POSIX 
+    standartlarında bu işi yapan ayrı fonksiyonlar bulundurulmuştur.)
 
-    Linux sistemlerinde dizin girişlerinin okunması için getdents isimli bir sistem fonksiyonu bulundurulmuştur. Dolayısıyla aşağıda açıklayacağımız
-    POSIX fonksiyonları arka planda Linuz sistemlerinde getdents sistem fonksiyonunu çağırmaktadır. 
+    Linux sistemlerinde dizin girişlerinin okunması için getdents isimli bir sistem fonksiyonu bulundurulmuştur. Dolayısıyla 
+    aşağıda açıklayacağımız  POSIX fonksiyonları arka planda Linux sistemlerinde getdents sistem fonksiyonunu çağırmaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -6057,6 +6064,7 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
+<BURADA KALDIK>
 /*--------------------------------------------------------------------------------------------------------------------------
     Anımsanacağı gibi "dosya betimleyici tablosu (file descriptor table)" proses kontrol blok yoluyla erişilebilen dosy anesnelerinin 
     adreslerinin tutulduğu bir gösterici dizisi biçimindeydi. İşletim sisteminin çekirdeği ne zaman bir dosya açılsa o dosya için
@@ -28764,7 +28772,7 @@ int main(void)
 #include <stdio.h>
 #include <sched.h>
 
-int main(void){
+int main(void) {
 	printf("CPU: %d\n",sched_getcpu());
 	return 0;
 }
@@ -50321,7 +50329,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-												121.Ders 18/02/2024 - Pazar
+												121. Ders 18/02/2024 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -50887,7 +50895,7 @@ void exit_sys(const char *msg)
     baştan "dinamik linker" tarafından değil de programın çalışma zamanı sırasında yüklenmesinin bazı avantajları şunlar 
     olabilmektedir:
 
-    1) Dİnamik kütühaneler baştan yüklenmediği için program başlangıçta daha hızlı yüklenebilir.
+    1) Dinamik kütühaneler baştan yüklenmediği için program başlangıçta daha hızlı yüklenebilir.
 
     2) Programın sanal bellek alanı gereksiz bir biçimde doldurulmayabilir. Örneğin nadiren çalışacak bir fonksiyon dinamik 
     kütüphanede olabilir. Bu durumda o dinamik kütüphanenin işin başında yüklenmesi gereksiz bir yükleme zamanı ve bellek 
@@ -50898,7 +50906,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Dinamik kütüphanelerin dinamik yüklenmesi dlopen, dlsym, dlerror ve dlclose fonksiyonlarıyla yapılmaktadır. Bu fonksiyonlar 
     "libdl" kütüphanesi içerisindedir. Dolayısıyla link işlemi için -ldl seçeneğinin bulundurulması gerekir. Dinamik kütüphanelerin
-    dinamik yüklenmesi için önce "dlopen" fonksiyonu ile dinamik kütüpahenin yüklenmesinin sağlanması gerekir. dlopen fonksiyonun 
+    dinamik yüklenmesi için önce "dlopen" fonksiyonu ile dinamik kütüpahenin yüklenmesinin sağlanması gerekir. dlopen fonksiyonunun 
     prototipi şöyledir:
 
     #include <dlfcn.h>
@@ -51494,6 +51502,197 @@ int main()
     aracının "nmake" ismiyle başka versiyonunu geliştirmiştir. Ancak Microsoft uzun bir süredir "msbuild" denilen başka bir
     build sistemini kulanmaktadır. Örneğin Microsoft'un Visual Studio IDE'si arka planda bu "msbuild" aracını kullanmaktadır. 
     Qt Framework'ünde "qmake" isimli üst düzey make aracı kullanılmaktadır. Bazı IDE'ler "cmake" kullanmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												126. Ders 10/03/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    En fazla kullanılan build otomasyon aracı "make" isimli araçtır. make aracını kullanmak için ismine "make dosyası" denilen
+    bir dosya oluşturulur. Sonra bu dosya "make" isimli program ile işletilir. Dolayısıyla make aracının kullanılması için make 
+    dosyalarının nasıl oluşturulduğunun bilinmesi gerekir. Make dosyaları aslında kendine özgü bir dil ile oluşturulmaktadır. 
+    Bu make dilinin kendi sentaksı ve semantiği vardır. make aracı için çeşitli kitaplar ve öğretici dokümanlar (tutorials)
+    oluşturulmuştur. Orijinal dokümanlarına aşağıdaki bağlantıdan erişilebilir:
+
+    https://www.gnu.org/software/make/manual/
+
+    Yukarıda da belirttiğimiz gibi "make" aracı değişik sistemlerde birbirine benzer biçimde bulunmaktadır. Microsoft'un make
+    aracına "nmake" denilmektedir. GNU Projesi kapsamında bu make aracı yeniden yazılmıştır. Bugün ağırlıklı olarak GNU projesindeki
+    make aracı kullanılmaktadır. Bu araca "GNU Make" de denilmektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir make dosyası "kurallardan (rules)" oluşmaktadır. Bir kuralın (rule) geneil biçimi şöyledir:
+
+    hedef (target) : ön_koşullar (prerequisites)
+        işlemler (recipes)
+
+    Örneğin:
+
+    app: a.o b.o c.o
+        gcc -o app a.o b.o c.o
+
+    Burada "app" hedefi, "a.o b.o c.o" ön koşulları ve "gcc -o app a.o b.o c.o" satırı da "işlemleri (recipes)" belirtmektedir. 
+    Hedef genellik bir tane olur. Ancak ön koşullar birden fazla olabilir. İşlemler tek bir satırdan oluşmak zorunda değildir. 
+    Eğer birden fazla satırdan oluşacaksa satırlar alt alta yazılır. İşlemler belirtilirken yukarıdaki satırdan bir TAB içeriye
+    girinti verilmek zorundadır. Örneğin:
+
+    app: a.o b.o c.o
+    <TAB>gcc -o app a.o b.o c.o
+
+    Kuraldaki hedef ve ön koşullar tipik olarak birer dosyadır. Kuralın anlamı şöyledir: Ön koşulalrda belirtilen dosyaların 
+    herhangi birinin tarih ve zamanı hedefte belirtilen dosyanın tarih ve zamanından ileri ise (yani bunlar güncellenmişse)
+    bu durumda belirtilen işlemler yapılır. Yukarıdkai kuralı yeniden inceleyiniz:
+
+    app: a.o b.o c.o
+        gcc -o app a.o b.o c.o
+
+    Burada eğer "a.o" ya da "b.o" ya da "c.o" dosyalarının tarih ve zamanı "app" dosyasının tarih ve zamanından ilerideyse
+    aşağıdaki kabuk komutu çalıştırılacaktır:
+
+    gcc -o app a.o b.o c.o
+
+    Bu link işlemi anlamına gelir. Link işlemindne sonra artık "app" dısyasının tarih ve zamanı ön koşul dosyalarından daha
+    ileride olacağı için kural "güncel (up to date)" hale gelir. Artık bu kural işletildiğinde bu link işlemi yapılmayacaktır. 
+    Bu link işleminin yeniden yapılabilmesi için "a.o" ya da "b.o" ya da "c.o" dosyalarında güncelleme yapılmış olması gerekir. 
+    Bu dosyalar derleme işlem sonucunda oluşacağına göre bu dosyaların güncellenmesi aslında bunlara ilişkin ".c" dosyalarının 
+    derlenmesiyle olabilir. Şimdi aşağıdaki kuralları yazalım:
+
+    a.o: a.c
+        gcc -c a.c
+
+    b.o: b.c
+        gcc -c b.c
+
+    c.o: c.c
+        gcc -c c.c
+
+    Bu kurallar "ilgili .c dosyalarında bir değişiklik olduğunda onları yeniden derle" anlamına gelmektedir. Şimdi önceki kuralla
+    bu kuralları bir araya getirelim:
+
+    app: a.o b.o c.o
+        gcc -o app a.o b.o c.o
+    a.o: a.c
+        gcc -c a.c
+    b.o: b.c
+        gcc -c b.c
+    c.o: c.c
+        gcc -c c.c
+
+    make programı çalıştırıldığında önce program make dosyasından hareketle bir "bağımlılık grafı (dependency graph)" 
+    oluşturmaktadır. Bağımlılık grafı "hangi dosya hangi dosyanın durumuna bağlı" biçimin de oluşturulan bir graftır. 
+    Yukarıdaki örnekte "a.o", "b.o" ve "c.o" dosyaları aşağıdaki kurallara bağımlıdır. Daha sonra make programı sırasıyla 
+    bu grafa uygun olarak aşağıdan yukarıya kuralları işletmektedir. Yukarıdkai örnekte birinci kural ikinci, üçüncü
+    ve dördüncü kurallara bağımlıdır. Dolayısıyla önce bu kurallar işletilip daha sonra birinci kural işletilir. Böylece bu
+    make dosyasından şöyle sonuç çıkmaktadır: "Herhangi bir .c dosya değiştirildiğinde onu dele ve hep birlikte link işlemi 
+    yap".
+
+    Kuralın hedefindeki dosya yoksa koşulun sağlandığı kabul edilmektedir. Yani bu durumda ilgili işlemler yapılacaktır. 
+    Yukarıdaki örnekte "object dosyalarını silersek" bu duurmda derleme işlemlerinin hepsi yapılacaktır. Normal olarak her 
+    ön koşul dosyasının bir bir hedefle ilişkili oılması beklenir. Yani ön koşulda belirtilen dosyaların var olması gerekmektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    make dosyası hazırlandıktan sonra make programı ile dosya işletilir. make programı işletilecek dosyayaı -f ya da --file 
+    seçeneği ile komut satırı argümanından almaktadır. Örneğin:
+
+    $ make -f project.mak
+
+    Ancak -f seçeneği kullanılmazsa make programı sırasıyla "GNUmakefile", "makefile" ve "Makefile" dosyalarını aramaktadır. 
+    GNU dünyasındaki genel eğilim projenin make dosyasının "Makefile" biçiminde isimlendirilmesidir. Açık kaynak kodlu bir 
+    yazılımda projenin make dosyasının da verilmiş olması beklenir. Böylece kaynak kodları elde eden kişiler yeniden derlemeyi
+    komut satırında "make" yazarak yapabilirler.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Aslında make programı çalıştırılırken program belli bir hedefi gerçekleştirmek için işlem yapar. Gerçekleştirilecek 
+    hedef make programında komut satırı argümanı olarak verilmektedir. Eğer hedef belirtilmezse ilk hedef gerçekleştirilmeye 
+    çalıştırılır. Örneğin:
+
+    # Makefile
+
+    app: a.o b.o c.o
+        gcc -o app a.o b.o c.o
+    a.o: a.c
+        gcc -c a.c
+    b.o: b.c
+        gcc -c b.c
+    c.o: c.c
+        gcc -c c.c
+
+    project: project.c
+        gcc -o project project.c
+
+    Burada birbirinden bağımsız iki hedef vardır: app ve project. Biz make programını hedef belirtmeden çalıştırırsak ilk 
+    hedef gerçekleştirilmeye çalışılır. Ancak belli bir hedefin de gerçekleştirilmesini sağlayabiliriz. Örneğin:
+
+    $ make project
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir kuralda ön koşul yoksa kuralın sağlandığı varsayılmaktadır. Yani bu durumda doğrudan belirtilen işlemler (recipes) 
+    yapılır. Örneğin:
+
+    clean:
+        rm -f *.o
+
+    Burada make programını aşağıdaki çalıştırmış olalım:
+
+    $ make clean
+
+    Bu durumda tüm ".o" dosyaları silinecektir. Örneğin:
+
+    # Makefile
+
+    app: a.o b.o c.o
+        gcc -o app a.o b.o c.o
+    a.o: a.c
+        gcc -c a.c
+    b.o: b.c
+        gcc -c b.c
+    c.o: c.c
+        gcc -c c.c
+
+    clean:
+        rm -f *.o
+
+    install:
+        sudo cp app /usr/local/bin
+
+    Burada "clean" hedefi rebuild işlemi için object dosyaları silmektedir. install hedefi ise elde edilen programı belli 
+    bir yere kopyalamaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir kaynak dosya bir başlık dosyasını kullanıyorsa bağımlılıkta bu başlık dosyasının da belirtilmesi uygun olur. Çünkü
+    bu başlık dosyasında bir güncelleme yapıldığında bu kaynak dosyanın da yeniden derlenmesi beklenir. Örneğin:
+
+    a.o: a.c app.h
+        gcc -c app.c
+
+    Burada artık app.h dosyası üzerinde bir değişiklik yapıldığında derleme işlemi yeniden yapılacaktır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    <BURADA KALDIK>
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
