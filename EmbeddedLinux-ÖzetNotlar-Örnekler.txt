@@ -307,7 +307,21 @@
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+    ARM bir tasarım firmasıdır. Yani fabrikalara sahip değildir. ARM yaptığı tasarımları lisanslandırarak üretici firmalara 
+    satmaktadır. ARM'ın uyguladığı dört tür lisans vardır:
 
+    Entegre Devre (IC) Lisansı (Full Custom License): Bu lisans müşterinin mikrodenetleyici tasarımını kendi özel ihtiyaçlarına 
+    göre özelleştirmesine ve optimize etmesine olanak tanır. Yani bu lisansa sahip olan Apple gibi, Qualcomm gibi, Samsung gibi 
+    firmalar bu lisansa sahiptir.
+
+    Mimari Lisans (Architecture License): Bu lisans ARM'nin genel mikroişlemci mimarisine erişim sağlayan bu lisanstır. Ancak, 
+    bu lisans müşterinin mikrodenetleyiciyi özelleştirmesine izin vermez. Yani bu lisansa sahip olanlar işlemci tasarımını
+    kullanarak üretim yapabilirler ancak onu özelleştiremezler.
+
+    Çekirdek Lisansı (Processor IP License): Bu lisans ile ancak müşteri belli bir ARM işlemcisini üretebilmektedir.
+
+    Geliştirici Lisansı (Development License): Bu lisans ARM'nin tasarım araçlarına erişim sağlayan bir lisanstır. Müşteri 
+    bu araçları kullanarak kendi işlemcilerini tasarlayabilir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -315,15 +329,26 @@
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+    Popüler ürünlerde kullanılan ARM işlemcileri (core'ları) şunlardır:
 
+    iPhone 14: A15 isimli SOC'u kullanmaktadır. Apple'ın ARMv8.6‑A versiyonunu kullanan Avalanche Cortex'i vardır.
+    iPhone 15: A16 isimli SOC'u kullanmaktadır. Apple'ın ARMv8.6‑A versiyonunu kullanan Evereset Cortex'i vardır.
+    M1 SOC: Apple'ın ARMv8.4‑A versiyonunu kullanan FireStorm isimli Cortex'i vardır.
+    M2 SOC: Apple'ın ARMv8.6‑A versiyonunu kullanan Avalanche ve Blizzard isimli Cortex'leri vardır.
+    M3 SOC: Apple'ın ARMv8.6‑A versiyonunu Avalanche ve Blizzard kullanan isimli Cortex'i vardır.
+    Samsung Galaxy S24: Qualcomm firmasının Snapdragon 8 SOC'unu kullnamaktadır. Bu SOC içerisinde ARMv9-A versiyonunu kullanan 
+    Cortex A715 bulunmaktadır.
+    Redmi Note 11: Xiaomi firmasınn ürünüdür. Qualcomm Snapdragon 685 SOC'unu kullanmaktadır. Bu SOC'un içerisinde ARMV8.2-A 
+    versiyonuna ilişkin Cortex A78 bulunmaktadır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+    Raspberry Pi 3: BCM2837 SOC kullanlmıştır. Bu SOC'un içerisinde ARMV8-A versiyonuna ilişkin Cortex-A53 bulunmaktadır. 
+    Raspberry Pi 4: BCM2711 SOC kullanlmıştır. Bu SOC'un içerisinde ARMV8-A versiyonuna ilişkin Cortex-A72 bulunmaktadır. 
+    Raspberry Pi 5: BCM2712 Bu SOC'un içerisinde ARMV8.2-A versiyonuna ilişkin Cortex-A76 bulunmaktadır.
 
------------------------------------------------------------------------------------------------------------------------------*/
-
-/*-----------------------------------------------------------------------------------------------------------------------------
-
+    BlackBone Black 4G ve BeagleBone Black Wireless: Texas Instruments'ın Sitera Sitara-AM3358 SOC'unu kullanmaktadır. Bu SOC'un 
+    içerisinde Cortex-A8 kullanılmıştır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
