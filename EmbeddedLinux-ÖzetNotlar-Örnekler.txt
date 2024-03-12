@@ -289,13 +289,21 @@
     gerektiğinde bozulmamasına yol açmaktadır.
 
     RISC ve CISC mimarilerini bir spektrum olarak düşünmek gerekir. Örneğin MIPS işlemcileri ARM işlemcilerine göre bu spektrumun 
-    daha fazla RISC tarafındadır. Intel'in x86 işlemcilerini kategori olarak CISC grubu işlemci olarak ele alsak da 
-
-
+    daha fazla RISC tarafındadır. Intel'in x86 işlemcilerini kategori olarak CISC grubu işlemci olarak ele alsak da Pentium 
+    işlemcileri ile birlikte bu işlemcilerde de RISC prensipleri gittikçe daha fazla kullanılır hale gelmiştir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-
+    ARM işlemcilerinin tarihi “Acorn Computer” isimli İngiliz firmasına dayanmaktadır. Bu firma 80’li yılların başlarında 
+    “BBC Micro” isimli 64K’lık ev bilgisayarlarını yapmıştı. Bu bilgisayarlarda Rockwell’in 8 bitlik 6502 işlemcileri kullanılıyordu. 
+    Firma daha sonra “Bekeley RISC” projesinden etkilenerek kendi RISC işlemcilerini yapmaya odaklandı. Böylece ilk ARM modelleri 
+    tasarlanmış oldu. Şirket 1990’da “Apple” ve “VLSI Technology” şirketleriyle ortaklıklar da kurarak ARM ismini aldı. (Eskiden 
+    ARM “Acorn RISC Machine” isminden kısaltlıyordu. Fakat daha sonra bu firma kurulunca bu kısaltma “Advanced RISC Machine” haline 
+    getirildi.) Apple firması bu yeni firmaya maddi destek sağlamıştır. “VLSI Technology” firması ise ekipman tedarik etmiştir.
+    Acorn ise az sayıda tasarım mühendisini bu yeni firmaya aktarmıştır. 2016 yılında SoftBank Group ARM hisselerinin önemli bir 
+    bölümünü aldı. 2018'de ARM'ın Çin şubesinin yarısından fazlasını Chine Investment Şirketine sattı.2018'de 2020'de NVidia 
+    ARM'ı softBank Group'tan satın almak istediyse de satış gerçekleşmedi. Bugün SoftBank Group ARM'ın %90 civarındaki hisselereine 
+    sahiptir. Geri kalan hisseleri kurucu ortaklarda ve halka arzdadır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
