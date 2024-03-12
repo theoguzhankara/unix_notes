@@ -28,27 +28,27 @@
 
     - Raspberry Pi 5 alınacaksa soğutucu ya da soğutuculu kılıf da alınmalı. Raspberry Pi 3 ve 4 için soğutucu alınmayabilir.
 
-    - Raspberry Pi İçin Micso SD Kart: 64GB Yüksek Hızlı (SanDisk Extreme serisi olabilir). Micro SD kart 32 GB de olabilir.
+    - Raspberry Pi için Micso SD Kart: 64GB Yüksek Hızlı (SanDisk Extreme serisi olabilir). Micro SD kart 32 GB de olabilir.
     Ancak 32GB'den düşüğü tavsiye etmiyoruz.
 
-    - Raspberry Pi 4 ve Raspberry Pi 5 için "Mikro HDMI -> HDMI kablosu", Raspberry Pi 3 için "HDM -> HDM" Kablosu.
+    - Raspberry Pi 4 ve Raspberry Pi 5 için "Mikro HDMI -> HDMI kablosu", Raspberry Pi 3 için "HDMI -> HDMI" Kablosu.
 
     - USB Kombo Klavye + Mouse
 
     - Raspberry Pi için GPIO Breadboard Aktarma Kablosu
 
-    - Raspberry Pi İçin Güç Kaynağı Adaptörü: Raspberry Pi 3 ve 4 için 5V/3A, Raspberry Pi 5 için 5V/5A (27W). Raspberry Pi 4 
+    - Raspberry Pi için Güç Kaynağı Adaptörü: Raspberry Pi 3 ve 4 için 5V/3A, Raspberry Pi 5 için 5V/5A (27W). Raspberry Pi 4 
     ve 5 USB Type C kullanıyor. Raspberry Pi 3 Micro USB kablosu kullanıyor.
 
-    - Beaglebone Black SBC (Single Board Computer): Beaglebone Black 4G ya da BeagleBone Black Industrial ya da Beaglebone 
-    Black Wireless yeni satın alacak olanlar "Beaglebone Black 4G" ya da Beaglebonde Black Wireless" alabilirler. Stokları 
+    - BeagleBone Black SBC (Single Board Computer): BeagleBone Black 4G ya da BeagleBone Black Industrial ya da BeagleBone 
+    Black Wireless yeni satın alacak olanlar "BeagleBone Black 4G" ya da BeagleBone Black Wireless" alabilirler. Stokları 
     kontrol etmek gerekiyor.
 
-    - Beaglebone Black İçin Güç Kaynağı: Mini USB ile 5V/500mA güç adaptörü ya da yuvarlak girişli (DC Jack) 5V/1A güç adaptörü.
+    - BeagleBone Black için Güç Kaynağı: Mini USB ile 5V/500mA güç adaptörü ya da yuvarlak girişli (DC Jack) 5V/1A güç adaptörü.
 
     - BeagleBone Black için Micro SD Kart (16GB olabilir).
 
-    - Beaglebone Black İçin "Micro HDM -> HDMI" Dönüştürücü.
+    - BeagleBone Black için "Micro HDMI -> HDMI" Dönüştürücü.
 
     - Standart Boy Breadboard ve İsteğe Bağlı Küçük Boy Breadboard'lar da olabilir.
 
@@ -116,7 +116,7 @@
 
     - Gömülü sistemler çeşitli kaynaklarda çeşitli ölçütlere göre de sınıflandırılabilmektedir.
 
-    1) İşlevsel Gereksinime Göre sınıflandırma
+    1) İşlevsel Gereksinime Göre Sınıflandırma:
 
         a) Gerçek zamanlı Olan ya da Gerçek Zamanlı Olmayan Gömülü Sistemler: Bunlar "hard" ya da "soft" real-time olabilmektedir.
         b) Bağımsız (Stand-Alone) olan Bağımısz Olmayan Sistemler: Bunlar belli bir amaca yönelik hazırlanmış gömülü sistemlerdir.
@@ -219,18 +219,18 @@
     CISC mimarisinden toplamda daha iyi bir tasarım olduğu kabul görmüştür. Bu nedenle son dönem mikroişlemci tasarımlarında hep 
     RISC mimarisi kullanılmıştır.
 
-    CISC ve RISC mimarisi arasındaki temel farklılklar şunlardır:
+    CISC ve RISC mimarisi arasındaki temel farklılıklar şunlardır:
 
     1) CISC işlemcilerinde fazla sayıda makine komutu bulunmaktadır. Bu işlemcilerde bazı komutlar temel işlemleri yaparken 
     bazıları karmaşık işlemler yapmaktadır. Halbuki RISC işlemcilerinde az sayıda temel nmakine komutları bulunmaktadır. Bu 
-    makine komutları da daha fazla transistör kullanılarak daha hızlı çalışacak biçime getirilmiştir. Dolayısla CISC işlemcilerindeki 
+    makine komutları da daha fazla transistör kullanılarak daha hızlı çalışacak biçime getirilmiştir. Dolayısıyla CISC işlemcilerindeki 
     bazı komutlar RISC işlemcilerinde birkaç komutla karşılanabilmektedir. Ancak bu durum sanıldığının tersine daha hızlı bir 
     çalışma sağlama potansiyelindedir.
 
     2) CISC işlemcilerinde az sayıda yazmaç (register), RISC işlemcilerinde fazla sayıda yazmaç bulunma eğilimindedir. Yazmaç 
     sayıları az olunca yazmaçların tekrar tekrar aynı değerlerle yüklenmesi gerekebilmektedir. Bu da derleyicinin nesneleri 
     daha kısa sürede yazmaçlarda tutmasına yol açmaktadır. Yine CISC işlemcilerindeki bazı komutlar ancak bazı özel bazı yazmaçlarla 
-    kullanılmaktadır. (Örneğin Intel X86 şlemcilerinde MUL ve DIV gibi komutların bir operandı EAX ya da RAX yazmacında bulunmak 
+    kullanılmaktadır. (Örneğin Intel X86 işlemcilerinde MUL ve DIV gibi komutların bir operandı EAX ya da RAX yazmacında bulunmak 
     zorundadır.) Oysa RISC işlemcilerinde her işlem her yazmaçla yapılabilmektedir.
 
     3) CISC işlemcilerinde komutlar farklı uzunluklarda olabilmektedir. Örneğin Intel'in x86 ailesinde 1 byte olan makine komutları 
@@ -240,11 +240,11 @@
     n sonraki ya da önceki makine komutlarının yerini belirleyebilmektedir.
 
     4) RISC işlemcilerinde pipeline mekanizması CISC işlemcilerine göre daha iyi gerçekleştirilmektedir. Pipeline işlemcinin
-    bir makine komutunu çalıştırırken sonraki komutlar üzerinde hazırlık işlemlerini yapması anlamına gelmektedir. RICS tasarımı
-    olarak pipleline mekanizmasının daha iyi yürütülmesine katkı sağlamaktadır.
+    bir makine komutunu çalıştırırken sonraki komutlar üzerinde hazırlık işlemlerini yapması anlamına gelmektedir. RISC tasarımı
+    olarak pipeline mekanizmasının daha iyi yürütülmesine katkı sağlamaktadır.
 
     5) RISC İşlemcileri Load/Store tarzı makine komutları kullanmaktadır. Bu işlemcilerde belleğe erişim yapan makine komutlarıyla
-    artimetik, mantıksal ve bitel işlem yapan makine komutları birbirinden ayrılmıştır. Örneğin RISC işlemcilerinde ADD, SUB gibi
+    aritmetik, mantıksal ve bitsel işlem yapan makine komutları birbirinden ayrılmıştır. Örneğin RISC işlemcilerinde ADD, SUB gibi
     makine komutlarının her iki operandı da yazmaç olmak zorundadır. Halbuki CISC işlemcilerinde bu tür makine komutlarının bir 
     operandı yazmaç bir operandı bellek olabilmektedir. Örneğin:
 
@@ -254,7 +254,7 @@
 
     - b'yi yazmaca çeken makine komutu
     - Yazmaçtaki b ile bellekteki c'yi toplayan makine komutu
-    - Yamzmaçtaki toplamı a'ya yerleştiren makine komutu
+    - Yazmaçtaki toplamı a'ya yerleştiren makine komutu
 
     Oysa aynı işlem RISC işlemcilerinde şöyle gerçekleştirilmektedir:
 
