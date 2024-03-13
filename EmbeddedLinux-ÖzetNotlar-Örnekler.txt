@@ -174,8 +174,8 @@
     avantajlarındandır. Gömülü uygulamalarda kullanılan pek çok mikrodenetleyici ailesi vardır. Örneğin:
 
     - Microchip PIC Mikrodenetleyici Ailesi (Microchip)
-    - Renesans Mikrodenetleyici Ailesi (Renesans)
-    - ARM Mikrodenetleyici Ailesi (Tasarımcısı ARM Holding, ancak çok şeşitli firmalar tarafından üretiliyor)
+    - Renesas Mikrodenetleyici Ailesi (Renesas)
+    - ARM Mikrodenetleyici Ailesi (Tasarımcısı ARM Holding, ancak çok çeşitli firmalar tarafından üretiliyor)
     - AVR Mikrodenetleyici Ailesi (Atmel, ancak Atmel firması 2016'da Microchip tarafından satın alındı)
     - MSP Mikrodenetleyici Ailesi (Texas Instruments)
 
@@ -202,10 +202,14 @@
 
 /*-----------------------------------------------------------------------------------------------
     Küçük bir kit (baskılı devre) üzerine monte edilmiş bilgisayarlara SBC (Single Board Computer) denilmektedir. Genellikle 
-    bu kitlerde SoC'lar, RAM'ler ve başka çevre birimleri ve IO işlemleri için soketler bulunmaktadır. Örneğin Raspberry Pi, 
+    bu kitlerde SoC'lar, RAM'ler, başka çevre birimleri ve IO işlemleri için soketler bulunmaktadır. Örneğin Raspberry Pi, 
     Beagleboard SBC'lere örnek verilebilir. SBC'ler klavye, fare ve monitör takılarak bir masaüstü bilgisayar gibi kullanılabilmektedir.
     SBC'ler masaüstü bilgisayarlar gibi de kullanılabildiğinden bunlara Linux başta olmak üzere, Android ve Windows gibi işletim 
     sistemleri yüklenebilmektedir.
+------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------
+												3. Ders 12/03/2024 - Salı
 ------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------
