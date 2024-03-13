@@ -74,7 +74,7 @@
     Asıl amacı bilgisayar olmayan fakat bilgisayar sistemi içeren sistemlere genel olarak gömülü sistemler (embedded systems) 
     denilmektedir. Yani gömülü sistemler başka amaçları gerçekleştirmek için tasarlanmış olan aygıtların içerisindeki bilgisayar
     sistemleridir. Örneğin elektronik tartılar, biyomedikal aygıtlar, GPS cihazları, turnike geçiş sistemleri (validatörler), 
-    müzik kutuları, kapı güvenlik aygıtları, otomobiller içerisindeki kontrol panelleri, birer gömülü sistemdir. Gömülü 
+    müzik kutuları, kapı güvenlik aygıtları, otomobiller içerisindeki kontrol panelleri birer gömülü sistemdir. Gömülü 
     sistemlerde en çok kullanılan programlama dili C'dir. Ancak genel amaçlı işletim sistemlerinin yüklenebildiği SBC'lerde 
     (Single Board Computer) diğer programlama dilleri de kullanılabilmektedir.
 
@@ -85,25 +85,25 @@
 
     Gömülü sistemlerin tipik özellikleri şunlardır:
 
-    - Gömülü sistemler "genel değil belirli (specific) amaca yönelik" işlemleri gerçekleştirmektedir. Yani genel amaçlı değil 
-    özel amaçlı donanım ve yazılım hizmeti sunmaktadır. Bu sistemlerdeki yazılımlar da genel amaçlı değil belli bir amacı 
+    - Gömülü sistemler "genel değil belirli (specific) amaca yönelik" işlemleri gerçekleştirmektedir. Yani genel amaçlı değil, 
+    özel amaçlı donanım ve yazılım hizmeti sunmaktadır. Bu sistemlerdeki yazılımlar da genel amaçlı değil, belli bir amacı 
     gerçekleştirmeyi hedeflemektedir.
 
-    - Gömülü sistemler genellikle daha düşük bir bilgiişlem kapasaitesine sahip bilgisayar devreleridir. Örneğin bu sistemlerde 
+    - Gömülü sistemler genellikle daha düşük bir bilgi işlem kapasitesine sahip bilgisayar devreleridir. Örneğin bu sistemlerde 
     kullanılan işlemciler genel amaçlı masaüstü işlemcilerden genellikle daha yavaş olma eğilimindedir. Bu sistemlerdeki bellek
-    miktarları (birincil ve ikinci bellekler) genel amaçlı bilgiayar sistemlerine göre daha düşük olma eğilimindedir. Dolayısıyla 
+    miktarları (birincil ve ikinci bellekler) genel amaçlı bilgisayar sistemlerine göre daha düşük olma eğilimindedir. Dolayısıyla 
     gömülü sistemlerin maliyetleri de genel amaçlı bilgisayar sistemlerine göre çok düşüktür.
 
     - Gömülü sistemler genellikle (fakat her zaman değil) daha düşük güç harcamaktadır. Bu durum onların bataryalarla beslenebilmesini 
     dolayısıyla fiziksel taşınabilirliğini de artırmaktadır. Tabii genel olarak gömülü sistemler düşük güç harcama eğiliminde olan 
     sistemler olsalar da bu durum her zaman böyle olmak zorunda değildir. Bazı gömülü sistemlerin gömüldüğü sistemlerde bir güç kullanma
     sorunu yoktur. (Örneğin araba kantarı zaten bu işlevi gerçekleştirmek için önemli bir güç harcamaktadır. Dolayısıyla bu sistemdeki
-    gömülü sisteminharcadığı gücün önemi olmayabilir.)
+    gömülü sistemin harcadığı gücün önemi olmayabilir.)
 
     - Gömülü sistemlerin önemli bir bölümü "gerçek zamanlı (real time)" olaylarla ilişkilidir. Bu sistemlerin belli bir bölümü 
     dış dünyadaki değişimlere karşı bir yanıt oluşturmaya çalışmaktadır. Örneğin bir gömülü sistem otamdaki ısı belli bir kritik 
-    düzeye geldiğinde bir işlemi başlatabilir. Ya da bir gömülü sistem kalp ritmi bozulduğunda kalbe uyarılar göndererek ritm bozukluğunu
-    düzeltmeye çalışabilir. Hava araçlarındak gömülü sistemler o anki hava şartlarına göre bir otomatik kumanda sistemi işlevini 
+    düzeye geldiğinde bir işlemi başlatabilir. Ya da bir gömülü sistem kalp ritmi bozulduğunda kalbe uyarılar göndererek ritim bozukluğunu
+    düzeltmeye çalışabilir. Hava araçlarındaki gömülü sistemler o anki hava şartlarına göre bir otomatik kumanda sistemi işlevini 
     görüyor olabilir. Tabii gömülü istemlerin bu gerçek zamanlı işlem doğası bazı uygulamalarda "çok katı (hard realtime)" olurken bazı 
     uygulamalarda "daha gevşek (soft realtime)" olabilmektedir.
 
@@ -118,24 +118,24 @@
 
     1) İşlevsel Gereksinime Göre Sınıflandırma:
 
-        a) Gerçek zamanlı Olan ya da Gerçek Zamanlı Olmayan Gömülü Sistemler: Bunlar "hard" ya da "soft" real-time olabilmektedir.
-        b) Bağımsız (Stand-Alone) olan Bağımısz Olmayan Sistemler: Bunlar belli bir amaca yönelik hazırlanmış gömülü sistemlerdir.
+        a) Gerçek Zamanlı Olan ya da Gerçek Zamanlı Olmayan Gömülü Sistemler: Bunlar "hard" ya da "soft" real-time olabilmektedir.
+        b) Bağımsız (Stand-Alone) Olan ya da Bağımsız Olmayan Sistemler: Bunlar belli bir amaca yönelik hazırlanmış gömülü sistemlerdir.
         Örneğin hesap makineleri, kapı güvenlik sistemleri, MP3 çalarlar gibi.
-        c) Ağ (Network) Üzerinde İşlem Yapan Gömülü Sistemler: Bunlar ağ işlemleri yapmak için oluşturulmuş gömülü sisteemlerdir.
+        c) Ağ (Network) Üzerinde İşlem Yapan Gömülü Sistemler: Bunlar ağ işlemleri yapmak için oluşturulmuş gömülü sistemlerdir.
         ATM makineleri, ADSL Rouer cihazları gibi cihazları bunlara örnek verebiliriz.
-        d) Mobil Aygıtlarda Kullanılan Gömülü Sistemler: Bunlar küçük, taşınabilir aygıtlarda kullanılan gönmülü sistemlerdir.
-        Telefonlari GPS cihazları, dijital kameralar bunlara örnek verilebilir.
+        d) Mobil Aygıtlarda Kullanılan Gömülü Sistemler: Bunlar küçük, taşınabilir aygıtlarda kullanılan gömülü sistemlerdir.
+        Telefonlar, GPS cihazları, dijital kameralar bunlara örnek verilebilir.
 
     2) Performans Gereksinimine Göre Sınıflandırma:
 
         a) Küçük Ölçekli (Small Scale) Gömülü Sistemler
-        b) Orta Ölçekli (Medium Scale) Gömülü sisteemlerde
+        b) Orta Ölçekli (Medium Scale) Gömülü Sistemler
         c) Büyük Ölçekli (Large Scale) Gömülü Sistemler
 
     Biz burada "https://www.ultralibrarian.com/2022/06/28/types-of-embedded-systems-characteristics-classifications-ulc"
     bağlantısındaki sınıflandırmayı kullandık. Ancak başka kaynaklarda başka türlü sınıflandırmalar da yapılabilmektedir.
 
-    Gömülü sistemlerde bilgisayar birimi olarak genellikle miktodenetleyiciler (microcontrollers) kullanılmaktadır. Ancak entegre
+    Gömülü sistemlerde bilgisayar birimi olarak genellikle mikrodenetleyiciler (microcontrollers) kullanılmaktadır. Ancak entegre
     devre teknolojisinin gelişmesiyle artık içlerine standart işletim sistemi yüklenebilen çok daha gelişmiş donanımlar da 
     gömülü sistemlerde kullanılabilmektedir.
 
@@ -153,7 +153,7 @@
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Bir bilgisayar sisteminde aritmetik, mantıksal, bitsel işlemler ve karşılaştırma gibi bilgiişlem faaliyetleri işlemleri 
+    Bir bilgisayar sisteminde aritmetik, mantıksal, bitsel işlemler ve karşılaştırma gibi bilgi işlem faaliyetleri işlemleri 
     "mikroişlemci (microprocessor)" denilen birim tarafından yapılmaktadır. Mikroişlemciler entegre devre biçiminde üretilmişlerdir. 
     Mikroişlemcilere kavramsal olarak CPU (Centeral Processing Unit) de denilmektedir. Yani CPU mikroişlemcilerin kavramsal ismidir. 
     Aslında genel amaçlı bir bilgisayar sisteminde komut çalıştıran pek çok işlemci bulunabilmektedir. CPU bu işlemcileri de 
@@ -165,11 +165,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------
     Mikrodenetleyiciler tek bir chip içerisine yerleştirilmiş bir bilgisayar sistemi gibi düşünülebilirler. Tipik olarak bir 
     mikrodenetleyicide bir "işlemci (processor)", kendi içerisinde "RAM ve Flash EPROM", dış dünya ile haberleşmek için kullanılan 
-    "IO birimi" ve bazı "çevre birimleri (peripherals)" bulunmaktadır. Mikrodenetleycilere İngilizce "microcontroller" ya da 
-    "microcontroller Unit (MCU)" da denilmektedir.
+    "IO birimi" ve bazı "çevre birimleri (peripherals)" bulunmaktadır. Mikrodenetleyicilere İngilizce "Microcontroller" ya da 
+    "Microcontroller Unit (MCU)" da denilmektedir.
 
     Mikrodenetleyicilerin işlem kapasiteleri ve içerdikleri bellek miktarları düşük olma eğilimindedir. Ancak bunlar çok kolay 
-    programlanıp uygulamaya sokulabilmektedir. Mikro denetleyicilere "tek çiplik bilgisayar (single chip computer)" da denilmektedir. 
+    programlanıp uygulamaya sokulabilmektedir. Mikrodenetleyicilere "tek çiplik bilgisayar (single chip computer)" da denilmektedir. 
     Mikrodenetleyiciler özellikle gömülü sistemlerde tercih edilmektedir. Bunların düşük güç harcaması ve ucuz olmaları en büyük 
     avantajlarındandır. Gömülü uygulamalarda kullanılan pek çok mikrodenetleyici ailesi vardır. Örneğin:
 
@@ -186,23 +186,23 @@
     entegre devrenin içerisine sıkıştırmaktadır. Bunlara genel olarak "SoC (System on Chip)" denilmektedir. SoC mikrodenetleyicilere 
     benzese de aslında onlardan farklıdır. SoC’lar içerisindeki işlemcilerin ve belleklerin kapasiteleri yüksektir. Bunlar özel 
     amaçlı üretilirler ve bunların devrelerde kullanılmaları mikrodenetleyiciler kadar kolay değildir. Bunların en önemli avantajları 
-    "az yer kaplamasıdır". Örneğin Raspberry Pi kitlerinde Broadcom isimli firmanın 2835, 2836, 2837, 2711, 2712 numaralı SOC 
+    "az yer kaplamasıdır". Örneğin Raspberry Pi kitlerinde Broadcom isimli firmanın 2835, 2836, 2837, 2711, 2712 numaralı SoC 
     çipleri kullanılmıştır. SoC'ların RAM ve ROM bellek içermesi zorunlu değildir. Bazı SoC'lar RAM içerirken bazıları içermeyebilmektedir. 
-    Örneğin Raspberry Pi 1, 2, 3 modellerinde kullanılan SoC'lar RAM içerirken Raspberry Pi 4 ve 5 modellerinde kullanılan SOC'lar 
+    Örneğin Raspberry Pi 1, 2, 3 modellerinde kullanılan SoC'lar RAM içerirken Raspberry Pi 4 ve 5 modellerinde kullanılan SoC'lar 
     RAM içermemektedir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    SoC kavramına benzer diğer bir kavram da "SoM Ssystem on Module)" kavramıdır. SoM bir işlemci ve onunla ilişkili bazı birimlerin
+    SoC kavramına benzer diğer bir kavram da "SoM (System on Module)" kavramıdır. SoM bir işlemci ve onunla ilişkili bazı birimlerin
     monte edildiği kartları belirtmek için kullanılmaktadır. SoM'lar SoC'ları içerebilir. Ancak başka birimleri de içerebilir. 
-    Örneğin bir SoM bir işlemci, buna ilişkin RAM, IO denetleyicisi (IO controllers içeren bir kart olabilir. Örneğin "Raspberry Pi
-    Pico" ve "Raspberry Pi Compute Module" birer SBC'den ziyade birer SoM olarak ele alınabilir. SoM kavramını zihninizde SoM ile 
+    Örneğin bir SoM bir işlemci, buna ilişkin RAM, IO denetleyicisi (IO controllers) içeren bir kart olabilir. Örneğin "Raspberry Pi
+    Pico" ve "Raspberry Pi Compute Module" birer SBC'den ziyade birer SoM olarak ele alınabilir. SoM kavramını zihninizde SoC ile 
     SBC arasında bir yerde konumlandırabilirsiniz.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Küçük bir kit (baskılı devre) üzerine monte edilmiş bilgisayarlara SBC (Single Board Computer) denilmektedir. Genellikle 
-    bu kitlerde SOC'lar, RAM'ler ve başka çevre birimleri ve IO işlemleri için soketler bulunmaktadır. Örneğin Raspberry Pi, 
+    bu kitlerde SoC'lar, RAM'ler ve başka çevre birimleri ve IO işlemleri için soketler bulunmaktadır. Örneğin Raspberry Pi, 
     Beagleboard SBC'lere örnek verilebilir. SBC'ler klavye, fare ve monitör takılarak bir masaüstü bilgisayar gibi kullanılabilmektedir.
     SBC'ler masaüstü bilgisayarlar gibi de kullanılabildiğinden bunlara Linux başta olmak üzere, Android ve Windows gibi işletim 
     sistemleri yüklenebilmektedir.
@@ -227,9 +227,9 @@
     bazı komutlar RISC işlemcilerinde birkaç komutla karşılanabilmektedir. Ancak bu durum sanıldığının tersine daha hızlı bir 
     çalışma sağlama potansiyelindedir.
 
-    2) CISC işlemcilerinde az sayıda yazmaç (register), RISC işlemcilerinde fazla sayıda yazmaç bulunma eğilimindedir. Yazmaç 
+    2) CISC işlemcilerinde az sayıda yazmaç (register), RISC işlemcilerinde ise fazla sayıda yazmaç bulunma eğilimindedir. Yazmaç 
     sayıları az olunca yazmaçların tekrar tekrar aynı değerlerle yüklenmesi gerekebilmektedir. Bu da derleyicinin nesneleri 
-    daha kısa sürede yazmaçlarda tutmasına yol açmaktadır. Yine CISC işlemcilerindeki bazı komutlar ancak bazı özel bazı yazmaçlarla 
+    daha kısa sürede yazmaçlarda tutmasına yol açmaktadır. Yine CISC işlemcilerindeki bazı komutlar ancak bazı özel yazmaçlarla 
     kullanılmaktadır. (Örneğin Intel X86 işlemcilerinde MUL ve DIV gibi komutların bir operandı EAX ya da RAX yazmacında bulunmak 
     zorundadır.) Oysa RISC işlemcilerinde her işlem her yazmaçla yapılabilmektedir.
 
@@ -241,7 +241,7 @@
 
     4) RISC işlemcilerinde pipeline mekanizması CISC işlemcilerine göre daha iyi gerçekleştirilmektedir. Pipeline işlemcinin
     bir makine komutunu çalıştırırken sonraki komutlar üzerinde hazırlık işlemlerini yapması anlamına gelmektedir. RISC tasarımı
-    olarak pipeline mekanizmasının daha iyi yürütülmesine katkı sağlamaktadır.
+    olarak pipeline mekanizmasının daha iyi yürütülmesine olanak sağlamaktadır.
 
     5) RISC İşlemcileri Load/Store tarzı makine komutları kullanmaktadır. Bu işlemcilerde belleğe erişim yapan makine komutlarıyla
     aritmetik, mantıksal ve bitsel işlem yapan makine komutları birbirinden ayrılmıştır. Örneğin RISC işlemcilerinde ADD, SUB gibi
@@ -250,7 +250,7 @@
 
     a = b + c;
 
-    gibi bir işlem CISC kullanılarak şu makine komutlarıyla yapılabilmektedir:
+    gibi bir işlem CISC işlemcisi ile şu makine komutlarıyla yapılabilmektedir:
 
     - b'yi yazmaca çeken makine komutu
     - Yazmaçtaki b ile bellekteki c'yi toplayan makine komutu
@@ -294,15 +294,15 @@
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    ARM işlemcilerinin tarihi “Acorn Computer” isimli İngiliz firmasına dayanmaktadır. Bu firma 80’li yılların başlarında 
-    “BBC Micro” isimli 64K’lık ev bilgisayarlarını yapmıştı. Bu bilgisayarlarda Rockwell’in 8 bitlik 6502 işlemcileri kullanılıyordu. 
-    Firma daha sonra “Bekeley RISC” projesinden etkilenerek kendi RISC işlemcilerini yapmaya odaklandı. Böylece ilk ARM modelleri 
-    tasarlanmış oldu. Şirket 1990’da “Apple” ve “VLSI Technology” şirketleriyle ortaklıklar da kurarak ARM ismini aldı. (Eskiden 
-    ARM “Acorn RISC Machine” isminden kısaltlıyordu. Fakat daha sonra bu firma kurulunca bu kısaltma “Advanced RISC Machine” haline 
-    getirildi.) Apple firması bu yeni firmaya maddi destek sağlamıştır. “VLSI Technology” firması ise ekipman tedarik etmiştir.
-    Acorn ise az sayıda tasarım mühendisini bu yeni firmaya aktarmıştır. 2016 yılında SoftBank Group ARM hisselerinin önemli bir 
-    bölümünü aldı. 2018'de ARM'ın Çin şubesinin yarısından fazlasını Chine Investment Şirketine sattı.2018'de 2020'de NVidia 
-    ARM'ı softBank Group'tan satın almak istediyse de satış gerçekleşmedi. Bugün SoftBank Group ARM'ın %90 civarındaki hisselereine 
+    ARM işlemcilerinin tarihi "Acorn Computer" isimli İngiliz firmasına dayanmaktadır. Bu firma 80’li yılların başlarında 
+    "BBC Micro" isimli 64K’lık ev bilgisayarlarını yapmıştı. Bu bilgisayarlarda Rockwell’in 8 bitlik 6502 işlemcileri kullanılıyordu. 
+    Firma daha sonra "Berkeley RISC" projesinden etkilenerek kendi RISC işlemcilerini yapmaya odaklandı. Böylece ilk ARM modelleri 
+    tasarlanmış oldu. Şirket 1990’da "Apple" ve "VLSI Technology" şirketleriyle ortaklıklar da kurarak ARM ismini aldı. (Eskiden 
+    ARM "Acorn RISC Machine" isminden kısaltlıyordu. Fakat daha sonra bu firma kurulunca bu kısaltma "Advanced RISC Machine" haline 
+    getirildi.) Apple firması bu yeni firmaya maddi destek sağlamıştır. "VLSI Technology" firması ise ekipman tedarik etmiştir.
+    Acorn ise az sayıda tasarım mühendisini bu yeni firmaya aktarmıştır. 2016 yılında "SoftBank Group" ARM hisselerinin önemli bir 
+    bölümünü aldı. 2018'de ARM'ın Çin şubesinin yarısından fazlasını "Chine Investment" şirketine sattı. 2020'de "NVidia" ARM'ı 
+    SoftBank Group'tan satın almak istediyse de satış gerçekleşmedi. Bugün "SoftBank Group" ARM'ın %90 civarındaki hisselerine 
     sahiptir. Geri kalan hisseleri kurucu ortaklarda ve halka arzdadır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -310,45 +310,136 @@
     ARM bir tasarım firmasıdır. Yani fabrikalara sahip değildir. ARM yaptığı tasarımları lisanslandırarak üretici firmalara 
     satmaktadır. ARM'ın uyguladığı dört tür lisans vardır:
 
-    Entegre Devre (IC) Lisansı (Full Custom License): Bu lisans müşterinin mikrodenetleyici tasarımını kendi özel ihtiyaçlarına 
-    göre özelleştirmesine ve optimize etmesine olanak tanır. Yani bu lisansa sahip olan Apple gibi, Qualcomm gibi, Samsung gibi 
-    firmalar bu lisansa sahiptir.
+    Entegre Devre Lisansı (Full Custom License): Bu lisans müşterinin mikrodenetleyici tasarımını kendi özel ihtiyaçlarına 
+    göre özelleştirmesine ve optimize etmesine olanak tanır. Örneğin Apple gibi, Qualcomm gibi, Samsung gibi firmalar bu 
+    lisansa sahiptir.
 
     Mimari Lisans (Architecture License): Bu lisans ARM'nin genel mikroişlemci mimarisine erişim sağlayan bu lisanstır. Ancak, 
     bu lisans müşterinin mikrodenetleyiciyi özelleştirmesine izin vermez. Yani bu lisansa sahip olanlar işlemci tasarımını
     kullanarak üretim yapabilirler ancak onu özelleştiremezler.
 
-    Çekirdek Lisansı (Processor IP License): Bu lisans ile ancak müşteri belli bir ARM işlemcisini üretebilmektedir.
+    Çekirdek Lisansı (Processor IP License): Bu lisans ile ancak müşteri belli bir ARM işlemcisini (core) üretebilmektedir.
 
     Geliştirici Lisansı (Development License): Bu lisans ARM'nin tasarım araçlarına erişim sağlayan bir lisanstır. Müşteri 
     bu araçları kullanarak kendi işlemcilerini tasarlayabilir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+    ARM dünyasında çalışmak için bazı terimler hakkında bilgi sahibi olmak gerekir. ARM firması kendine özgü terimler uydurmuştur.
+    Bu dünyada en çok karşılaşılan terimler "core", "cortex" ve "version" terimleridir.
 
+    ARM dünyasında "core" terimi belli bir mikroişlemci tasarımını belirtmektedir. Bu tasarım üretici firmalar tarafından 
+    fiziksel hale getirilmektedir. Bir grup "core" bir araya getirildiğinde ve işlemciyle ilişkili birtakım birimler de bunlara 
+    eklendiğinde "Cortex'ler" oluşmaktadır. ARM firması ARM'ın klasik versiyonlarında "cortex" terimini kullanmamıştır. Cortex
+    terimi ARM11'den sonra kullanılmaya başlanmıştır. Bir cortex belli sayıda "core" içerebilir. Bu "core"lar noktalı sayılara
+    (floating point) ilişkin işlem yapan birimlere sahip olabilirler. Cortex içerisindeki core'ların belli hızları vardır. Core 
+    ve cortex terimleri daha çok çip düzeyindeki mimariyi belirtmektedir. Ancak cortex'lerde kullanılan işlemcilerin (core'ların) 
+    sistem programcısını ilgilendiren "komut kümeleri (instruction sets)" de vardır. Böylece bir grup grup cortex belli bir komut
+    kümesi ile kullanılabilecek biçimde tasarlanmıştır. Komut kümesi mimarisine "ARM Versiyonları" ya da İngilizcesiyle "ARM ISA
+    (Instruction Set Architecture) Mimarisi" denilmektedir. Biz sistem programcısı olarak elimizdeki cortex'in hangi komut kümesini 
+    kullanan ARM versiyonuna ilişkin olduğunu bilmek durumundayız. Burada dikkat edilmesi gereken nokta "Cortex teriminin donanımsal 
+    mimariyi, versiyonun ise yazılımsal mimariyi belirtiyor" olmasıdır. O halde gömülü sistem geliştiricisi olarak bizim ilgilendiğimiz 
+    ARM içeren kart ile ilgili şu iki özelliği biliyor olamamız gerekir:
+
+    1) Kartımızda ARM'ın hangi cortex'i kullanılmıştır?
+    2) Bu cortex'in ilişkin olduğu versiyon numarası nedir?
+
+    Yukarıda da belirtitğimiz gibi farklı cortex'ler aynı version numarasını kullanabilmektedir.
+
+    ARM dünyasında üç mimari profili (profile) bulunmaktadır:
+
+    1) A Profili (Apllication)
+    2) R Profili (Realtime)
+    3) M Profili (Microcontroller)
+
+    Bu profiller ilgili cortex'lerin hangi tür uygulamalarda ideal olarak kullanılabileceğini belirtmektedir. Profil isimleri 
+    cortex'lerde ve versiyon numaralarında '-' karakterinden sonra belirtilmektedir. Örneğin "Cortex-A8" ve "ARMV7-A" gibi.
+    A profilleri masasüstü işletim sistemlerinin çalıştırılabileceği, tamamen kişilsel bilgisayar olarak kullanılabilecek 
+    cortex'leri belirtmektedir. Biz kursumuzda "gömülü Linux programcısı" olarak bu "A" profilleriyle çalışacağız. R profilleri
+    "gerçek zamanlı (realtime)" uygulamalar için daha uygun olabilecek cortex'leri belirtmektedir. R profilleri A profilleri 
+    birbirlerine benzemektedir. R profilleri A profillerine göre çok daha seyrek kullanılmaktadır. M profilleri ARM'nin mikrodenetleyici
+    olarak kullanılan cortex'lerini belirtmektedir. Bu cortex'ler genel olarak Linux işletim sisteminin yüklenmesine izin vermemktedir. 
+    Bu cortex'ler genellikle "bare-metal" programlarla kullanılmaktadır. Ya da gerçek zamanlı işletim sistemleriyle de M profilleri
+    kullanılabilmektedir.
+
+    ARM'ın iki önemli versiyonu ARMV7-A ve ARMV8'A dır. ARMV7 32 bitlik bir arayüz sunmaktadır. Dolayısıyla bu komut mimarisini 
+    kullanan cortex'ler 32 bitlik core'ları içermektedir. ARMV8-A versiyonları 64 bitlik arayüz sunmaktadır. Dolayısıyla bu 
+    versiyonları kullanan core'lar 64 bitlik işlemcilerdir. Ancak ARM cortex'lerinin bir grubu hem 32 bit hem de 64 bit olarak 
+    kullanılabilmektedir. Bu core'larda işletim sistemleri 32 bitlik ve 64 bitlik programları zaman paylaşımlı olarak bir arada 
+    çalıştırabilmektedir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Mikroişlemciler ilk çıktığında 8 bit işlemleri yapabiliyordu (örneğin 8080, 6800 gibi işlemciler). Bunlara 8 bitlik mikroişlemci 
+    deniyordu. Sonra 16 bitlik mikroişlemciler çıktı (örneğin Intel'in 8086 işlemcisi). Bunu 32 bit işlemciler izledi. Günümüzde 
+    artık ağırlıklı olarak 64 bit işlemciler kullanılmaktadır. Pekiyi bir işlemcinin N bitlik olmasının anlamı nedir?
+
+    - N bitlik bir işlemcide tek hamlede (yani tek bir makine komutuyla) N bit üzerind işlem yapılabilmektedir. Örneğin 32 bitlik 
+    bir mikroişlemcide tek bir makine komutu ile 32 bitlik iki sayısıyı toplayıp çarpabiliriz.
+
+    - N bitlik bir mikroişlemci genellikle (ama her zaman değil) 2^N uzunlukta bir fiziksel RAM'i adresleyebilmektedir. Örneğin
+    32 bitlik bir mikroişlemciye biz tipik olarak 2^32 = 4GB'lik bir RAM bağlaybiliriz. Elimizdeki RAM 64GB olsa bile 32 bit
+    bir mikroişlemci bu RAM'in ancak ilk 4GB'sini kullanabilmektedir. Tabii bu durum her zmana böyle değildir. Örneğin 8086 
+    işlemcisi 16 bit olduğu halde 2^16 değil 2^20 uzunlupunda (1MB) fiziksel belleği adresleyebiliyordu. Benzer biçimde bugünkü
+    64 bitlik Intel ve AMD işlemcileri gereksiz olduğu gerekçesiyle 2^64 değil 2^48 uzuluğundaki RAM'leri adresleyebilmektedir.
+
+    - N bitlik bir mikroişlemcide genellikle işlemci ile RAM aarasında transfer N bit olarak yapılmaktadır. Örneğin 32 bitlik
+    bir mikroişlemcide tek bir makine komutuyla RAM'den CPU 32 bitlik bir veri alabilir.
+
+    8 bitten 16 bite geçişte ve 16 bitten 32 bite geçişte çok farkedilir bir hızlanma yaşanmıştır. Ancak 32 bitten 64 bite geçişte 
+    hızlanma öncekiler kadar olmamıştır. Bunun nedeni 64 bitlik işlemlerin aslında yoğun olarak yapılmadığındandır. Ancak 32 bitten
+    64 bite geçişin en önemli etkisi işlemciye bağlanabilecek RAM miktarı üzerinde olmuştur. Örneğin elimizde 8 GB RAM'li 
+    Raspberry Pi 5 olsun. Buradaki ARM cortex'i hem 32 bit hem de 64 bit işlemci gibi çalışabilmektedir. Dolayısıyla biz bu Kartımızda
+    32 bitlik de 64 bitlik de Linux yükleyebilriz. Ancak 32 bitlik Linux işletim sistemi işlemciyi 32 bit modda çalıştıracağı için 
+    biz 8GB RAM'in ancak 4GB'sini kullanabiliriz. Bu 8GB RAM'in tamamından istifade edebilmemiz için işlemcinin 64 bit modunda 
+    çalıştırılması dolayısıyla da işletim sisteminin 64 bit olması gerekir.
+
+    Pekiyi 128 bitlik bir işlemci daha iyi bir çalışam sunmaz mı? Neden 128 bitlik işlemciler yok? İşte 128 bitlik tamsayı işlemlerine
+    çok nadir gereksinim duyulmaktadır. 2^128 uzunlupunda RAM zaten şu an için erişilmesi imkansız bir RAM miktarıdır. O halde 
+    işlemcilerin 64 bitten 128 bite çıkartılmasının şu an için önemli bir faydası olmayacaktır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Popüler ürünlerde kullanılan ARM işlemcileri (core'ları) şunlardır:
 
-    iPhone 14: A15 isimli SOC'u kullanmaktadır. Apple'ın ARMv8.6‑A versiyonunu kullanan Avalanche Cortex'i vardır.
-    iPhone 15: A16 isimli SOC'u kullanmaktadır. Apple'ın ARMv8.6‑A versiyonunu kullanan Evereset Cortex'i vardır.
-    M1 SOC: Apple'ın ARMv8.4‑A versiyonunu kullanan FireStorm isimli Cortex'i vardır.
-    M2 SOC: Apple'ın ARMv8.6‑A versiyonunu kullanan Avalanche ve Blizzard isimli Cortex'leri vardır.
-    M3 SOC: Apple'ın ARMv8.6‑A versiyonunu Avalanche ve Blizzard kullanan isimli Cortex'i vardır.
-    Samsung Galaxy S24: Qualcomm firmasının Snapdragon 8 SOC'unu kullnamaktadır. Bu SOC içerisinde ARMv9-A versiyonunu kullanan 
+    iPhone 14: A15 isimli SoC'u kullanmaktadır. Apple'ın ARMv8.6‑A versiyonunu kullanan Avalanche Cortex'i vardır. Buradaki Core'lar
+    yalnızca 64 biti desteklemektedir.
+
+    iPhone 15: A16 isimli SoC'u kullanmaktadır. Apple'ın ARMv8.6‑A versiyonunu kullanan Evereset Cortex'i vardır. Buradaki Core'lar
+    yalnızca 64 biti desteklemektedir.
+
+    M1 SoC: Apple'ın ARMv8.4‑A versiyonunu kullanan FireStorm isimli Cortex'i vardır. Buradaki Core'lar
+    yalnızca 64 biti desteklemektedir.
+
+    M2 SoC: Apple'ın ARMv8.6‑A versiyonunu kullanan Avalanche ve Blizzard isimli Cortex'leri vardır. Buradaki Core'lar
+    yalnızca 64 biti desteklemektedir.
+
+    M3 SoC: Apple'ın ARMv8.6‑A versiyonunu Avalanche ve Blizzard kullanan isimli Cortex'i vardır. Buradaki Core'lar
+    yalnızca 64 biti desteklemektedir.
+
+    Samsung Galaxy S24: Qualcomm firmasının Snapdragon-8 SoC'unu kullnamaktadır. Bu SoC içerisinde ARMv9-A versiyonunu kullanan 
     Cortex A715 bulunmaktadır.
-    Redmi Note 11: Xiaomi firmasınn ürünüdür. Qualcomm Snapdragon 685 SOC'unu kullanmaktadır. Bu SOC'un içerisinde ARMV8.2-A 
+
+    Redmi Note 11: Xiaomi firmasınn ürünüdür. Qualcomm Snapdragon-685 SoC'unu kullanmaktadır. Bu SoC'un içerisinde ARMV8.2-A 
     versiyonuna ilişkin Cortex A78 bulunmaktadır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Raspberry Pi 3: BCM2837 SOC kullanlmıştır. Bu SOC'un içerisinde ARMV8-A versiyonuna ilişkin Cortex-A53 bulunmaktadır. 
-    Raspberry Pi 4: BCM2711 SOC kullanlmıştır. Bu SOC'un içerisinde ARMV8-A versiyonuna ilişkin Cortex-A72 bulunmaktadır. 
-    Raspberry Pi 5: BCM2712 Bu SOC'un içerisinde ARMV8.2-A versiyonuna ilişkin Cortex-A76 bulunmaktadır.
+    Bu kursta kullanacağımız SBC'lerin üzerinde bulunan ARM cortex'leri ve bunların versiyon numaraları da şöyledir:
 
-    BlackBone Black 4G ve BeagleBone Black Wireless: Texas Instruments'ın Sitera Sitara-AM3358 SOC'unu kullanmaktadır. Bu SOC'un 
-    içerisinde Cortex-A8 kullanılmıştır.
+    Raspberry Pi 3: BCM2837 SoC kullanlmıştır. Bu SoC'un içerisinde ARMV8-A versiyonuna ilişkin Cortex-A53 bulunmaktadır. Bu 
+    cortex'teki core'lar hem 32 bit hem de 64 bit modda çalışabilmektedir.
+
+    Raspberry Pi 4: BCM2711 SoC kullanlmıştır. Bu SoC'un içerisinde ARMV8-A versiyonuna ilişkin Cortex-A72 bulunmaktadır. Bu 
+    cortex'teki core'lar hem 32 bit hem de 64 bit modda çalışabilmektedir.
+
+    Raspberry Pi 5: BCM2712 Bu SoC'un içerisinde ARMV8.2-A versiyonuna ilişkin Cortex-A76 bulunmaktadır. Bu cortex'teki 
+    core'lar hem 32 bit hem de 64 bit modda çalışabilmektedir.
+
+    BlackBone Black 4G ve BeagleBone Black Wireless: Texas Instruments'ın Sitara-AM3358 SoC'unu kullanmaktadır. Bu SoC'un 
+    içerisinde Cortex-A8 kullanılmıştır. Bu cortex 32 bit core'lardan oluşmaktadır. Bunların kullandığı komut mimarisi de 
+    ARMV7-A'dır. (Yani BeagleBona Black'ler 32 bit ARM işlemcilerini kullanmaktadır. Dolayısıyla bunlara 32 bit Linux sistemleri
+    yüklenebilmektedir.)
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
