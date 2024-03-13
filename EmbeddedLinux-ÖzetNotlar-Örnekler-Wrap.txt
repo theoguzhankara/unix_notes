@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------
 
                                         C ve Sistem Programcıları Derneği
 
@@ -14,13 +14,13 @@
 
                                                 Son Güncelleme: 12/03/2024
 
------------------------------------------------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------
 												1. Ders 05/03/2024 - Salı
------------------------------------------------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------
     Kurs için gerekli olabilecek malzemeler şunlardır:
 
     - Raspberry Pi SBC (Single Board Computer): Version 3, 4 ya da 5 olabilir. Yeni satın alacakların Raspberry Pi 5 almalarını tavsiye ediyoruz.
@@ -55,17 +55,17 @@
 
     - Ethernet RJ45 Kablosu: Eğer SBC'nin wireless özelliği varsa buna gerek duymayabilirsiniz.
 
------------------------------------------------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------
 												2. Ders 07/03/2024 - Perşembe
------------------------------------------------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------
     Kursumuzun giriş bölümünde çeşitli kavramları ve terimleri açıklayacağız.
------------------------------------------------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------
     Asıl amacı bilgisayar olmayan fakat bilgisayar sistemi içeren sistemlere genel olarak gömülü sistemler (embedded systems) denilmektedir. Yani gömülü sistemler başka amaçları gerçekleştirmek için tasarlanmış olan aygıtların içerisindeki bilgisayar sistemleridir. Örneğin elektronik tartılar, biyomedikal aygıtlar, GPS cihazları, turnike geçiş sistemleri (validatörler), müzik kutuları, kapı güvenlik aygıtları, otomobiller içerisindeki kontrol panelleri birer gömülü sistemdir. Gömülü sistemlerde en çok kullanılan programlama dili C'dir. Ancak genel amaçlı işletim sistemlerinin yüklenebildiği SBC'lerde (Single Board Computer) diğer programlama dilleri de kullanılabilmektedir.
 
     Gömülü sistemler gömüldüğü aygıtta belli işlevleri sağlamak için kullanılmaktadır. Örneğin buzdolaplarının, çamaşır makinelerinin içerisine yerleştirilen bilgisayar devreleri ve yazılımlar onların önemli etkinlerini yönetmekte, kullanıcı ile arayüz oluşturabilmektedir. Günümüzde bilgisayar sistemi içeren aygıtlar artık her yeri sarmıştır. Bu nedenle üzerinde geliştirme faaliyetleri de önemli bir iş alanı haline gelmiştir.
@@ -111,13 +111,13 @@
     2) Mikroişlemcileri
     3) DSP'ler
 
------------------------------------------------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------
     Bir bilgisayar sisteminde aritmetik, mantıksal, bitsel işlemler ve karşılaştırma gibi bilgi işlem faaliyetleri işlemleri "mikroişlemci (microprocessor)" denilen birim tarafından yapılmaktadır. Mikroişlemciler entegre devre biçiminde üretilmişlerdir. Mikroişlemcilere kavramsal olarak CPU (Centeral Processing Unit) de denilmektedir. Yani CPU mikroişlemcilerin kavramsal ismidir. Aslında genel amaçlı bir bilgisayar sisteminde komut çalıştıran pek çok işlemci bulunabilmektedir. CPU bu işlemcileri de programlayan "merkezi (central)" işlemcidir. Bilgisayar sisteminde yerel bazı işlemlerden sorumlu yardımcı işlemciler de vardır. Örneğin "kesme denetleyicisi (interrupt controller)", "disk denetleyicisi (disk controller)", "DMA denetleyicisi (DMA controller)" gibi.
------------------------------------------------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------
     Mikrodenetleyiciler tek bir chip içerisine yerleştirilmiş bir bilgisayar sistemi gibi düşünülebilirler. Tipik olarak bir mikrodenetleyicide bir "işlemci (processor)", kendi içerisinde "RAM ve Flash EPROM", dış dünya ile haberleşmek için kullanılan "IO birimi" ve bazı "çevre birimleri (peripherals)" bulunmaktadır. Mikrodenetleyicilere İngilizce "Microcontroller" ya da "Microcontroller Unit (MCU)" da denilmektedir.
 
     Mikrodenetleyicilerin işlem kapasiteleri ve içerdikleri bellek miktarları düşük olma eğilimindedir. Ancak bunlar çok kolay programlanıp uygulamaya sokulabilmektedir. Mikrodenetleyicilere "tek çiplik bilgisayar (single chip computer)" da denilmektedir. Mikrodenetleyiciler özellikle gömülü sistemlerde tercih edilmektedir. Bunların düşük güç harcaması ve ucuz olmaları en büyük avantajlarındandır. Gömülü uygulamalarda kullanılan pek çok mikrodenetleyici ailesi vardır. Örneğin:
@@ -128,21 +128,21 @@
     - AVR Mikrodenetleyici Ailesi (Atmel, ancak Atmel firması 2016'da Microchip tarafından satın alındı)
     - MSP Mikrodenetleyici Ailesi (Texas Instruments)
 
------------------------------------------------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------
     Bazı firmalar ayrı birimler olarak tasarlanmış mikroişlemcileri, RAM'leri, ROM’ları ve diğer bazı çevre birimlerini tek bir entegre devrenin içerisine sıkıştırmaktadır. Bunlara genel olarak "SoC (System on Chip)" denilmektedir. SoC mikrodenetleyicilere benzese de aslında onlardan farklıdır. SoC’lar içerisindeki işlemcilerin ve belleklerin kapasiteleri yüksektir. Bunlar özel amaçlı üretilirler ve bunların devrelerde kullanılmaları mikrodenetleyiciler kadar kolay değildir. Bunların en önemli avantajları "az yer kaplamasıdır". Örneğin Raspberry Pi kitlerinde Broadcom isimli firmanın 2835, 2836, 2837, 2711, 2712 numaralı SoC çipleri kullanılmıştır. SoC'ların RAM ve ROM bellek içermesi zorunlu değildir. Bazı SoC'lar RAM içerirken bazıları içermeyebilmektedir. Örneğin Raspberry Pi 1, 2, 3 modellerinde kullanılan SoC'lar RAM içerirken Raspberry Pi 4 ve 5 modellerinde kullanılan SoC'lar RAM içermemektedir.
------------------------------------------------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------
     SoC kavramına benzer diğer bir kavram da "SoM (System on Module)" kavramıdır. SoM bir işlemci ve onunla ilişkili bazı birimlerin monte edildiği kartları belirtmek için kullanılmaktadır. SoM'lar SoC'ları içerebilir. Ancak başka birimleri de içerebilir. Örneğin bir SoM bir işlemci, buna ilişkin RAM, IO denetleyicisi (IO controllers) içeren bir kart olabilir. Örneğin "Raspberry Pi Pico" ve "Raspberry Pi Compute Module" birer SBC'den ziyade birer SoM olarak ele alınabilir. SoM kavramını zihninizde SoC ile SBC arasında bir yerde konumlandırabilirsiniz.
------------------------------------------------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------
     Küçük bir kit (baskılı devre) üzerine monte edilmiş bilgisayarlara SBC (Single Board Computer) denilmektedir. Genellikle bu kitlerde SoC'lar, RAM'ler ve başka çevre birimleri ve IO işlemleri için soketler bulunmaktadır. Örneğin Raspberry Pi, Beagleboard SBC'lere örnek verilebilir. SBC'ler klavye, fare ve monitör takılarak bir masaüstü bilgisayar gibi kullanılabilmektedir. SBC'ler masaüstü bilgisayarlar gibi de kullanılabildiğinden bunlara Linux başta olmak üzere, Android ve Windows gibi işletim sistemleri yüklenebilmektedir.
------------------------------------------------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------
     Mikroişlemcileri tasarım mimarilerine göre iki CISC (Complex Instruction Set Computers) ve RISC (Reduced Instruction Set Computers) olmak üzere iki kısma ayırabiliriz. CISC ailesi işlemcilere Intel firmasının x86 ailesi işlemcilerini örnek verebiliriz. ARM, MIPS, PowerPC, Itanium gibi işlemciler ise tipik RISC işlemcileridir. Her ne kadar CISC ve RISC isimleri komut kümesi ile ilgili biçimde uydurulmuşsa da CISC ve RISC tasarımları başka bakımlardan da farklılık göstermektedir.
 
     İşlemciler (makro ve mikro) ortaya çıktığında çok fazla makine komutunun bulunmasının bir avantaj olduğu düşünülüyordu. Ancak daha sonraları bunun avantajdan ziyade dezavantaj oluşturduğu görüldü. Belli bir süreden sonra artık RISC mimarisinin CISC mimarisinden toplamda daha iyi bir tasarım olduğu kabul görmüştür. Bu nedenle son dönem mikroişlemci tasarımlarında hep RISC mimarisi kullanılmıştır.
@@ -192,13 +192,13 @@
     Görüldüğü gibi ARM işlemcilerinde Load/Store komutları dışındaki komutlar üç operand'lıdır. Bu da yazmaçlardaki değerlerin gerektiğinde bozulmamasına yol açmaktadır.
 
     RISC ve CISC mimarilerini bir spektrum olarak düşünmek gerekir. Örneğin MIPS işlemcileri ARM işlemcilerine göre bu spektrumun daha fazla RISC tarafındadır. Intel'in x86 işlemcilerini kategori olarak CISC grubu işlemci olarak ele alsak da Pentium işlemcileri ile birlikte bu işlemcilerde de RISC prensipleri gittikçe daha fazla kullanılır hale gelmiştir.
------------------------------------------------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------
     ARM işlemcilerinin tarihi "Acorn Computer" isimli İngiliz firmasına dayanmaktadır. Bu firma 80’li yılların başlarında "BBC Micro" isimli 64K’lık ev bilgisayarlarını yapmıştı. Bu bilgisayarlarda Rockwell’in 8 bitlik 6502 işlemcileri kullanılıyordu. Firma daha sonra "Berkeley RISC" projesinden etkilenerek kendi RISC işlemcilerini yapmaya odaklandı. Böylece ilk ARM modelleri tasarlanmış oldu. Şirket 1990’da "Apple" ve "VLSI Technology" şirketleriyle ortaklıklar da kurarak ARM ismini aldı. (Eskiden ARM "Acorn RISC Machine" isminden kısaltlıyordu. Fakat daha sonra bu firma kurulunca bu kısaltma "Advanced RISC Machine" haline getirildi.) Apple firması bu yeni firmaya maddi destek sağlamıştır. "VLSI Technology" firması ise ekipman tedarik etmiştir. Acorn ise az sayıda tasarım mühendisini bu yeni firmaya aktarmıştır. 2016 yılında "SoftBank Group" ARM hisselerinin önemli bir bölümünü aldı. 2018'de ARM'ın Çin şubesinin yarısından fazlasını "Chine Investment" şirketine sattı. 2020'de "NVidia" ARM'ı SoftBank Group'tan satın almak istediyse de satış gerçekleşmedi. Bugün "SoftBank Group" ARM'ın %90 civarındaki hisselerine sahiptir. Geri kalan hisseleri kurucu ortaklarda ve halka arzdadır.
------------------------------------------------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------
     ARM bir tasarım firmasıdır. Yani fabrikalara sahip değildir. ARM yaptığı tasarımları lisanslandırarak üretici firmalara satmaktadır. ARM'ın uyguladığı dört tür lisans vardır:
 
     Entegre Devre Lisansı (Full Custom License): Bu lisans müşterinin mikrodenetleyici tasarımını kendi özel ihtiyaçlarına göre özelleştirmesine ve optimize etmesine olanak tanır. Örneğin Apple gibi, Qualcomm gibi, Samsung gibi firmalar bu lisansa sahiptir.
@@ -208,9 +208,9 @@
     Çekirdek Lisansı (Processor IP License): Bu lisans ile ancak müşteri belli bir ARM işlemcisini (core) üretebilmektedir.
 
     Geliştirici Lisansı (Development License): Bu lisans ARM'nin tasarım araçlarına erişim sağlayan bir lisanstır. Müşteri bu araçları kullanarak kendi işlemcilerini tasarlayabilir.
------------------------------------------------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------
     ARM dünyasında çalışmak için bazı terimler hakkında bilgi sahibi olmak gerekir. ARM firması kendine özgü terimler uydurmuştur. Bu dünyada en çok karşılaşılan terimler "core", "cortex" ve "version" terimleridir.
 
     ARM dünyasında "core" terimi belli bir mikroişlemci tasarımını belirtmektedir. Bu tasarım üretici firmalar tarafından fiziksel hale getirilmektedir. Bir grup "core" bir araya getirildiğinde ve işlemciyle ilişkili birtakım birimler de bunlara eklendiğinde "Cortex'ler" oluşmaktadır. ARM firması ARM'ın klasik versiyonlarında "cortex" terimini kullanmamıştır. Cortex terimi ARM11'den sonra kullanılmaya başlanmıştır. Bir cortex belli sayıda "core" içerebilir. Bu "core"lar noktalı sayılara (floating point) ilişkin işlem yapan birimlere sahip olabilirler. Cortex içerisindeki core'ların belli hızları vardır. Core ve cortex terimleri daha çok çip düzeyindeki mimariyi belirtmektedir. Ancak cortex'lerde kullanılan işlemcilerin (core'ların) sistem programcısını ilgilendiren "komut kümeleri (instruction sets)" de vardır. Böylece bir grup grup cortex belli bir komut kümesi ile kullanılabilecek biçimde tasarlanmıştır. Komut kümesi mimarisine "ARM Versiyonları" ya da İngilizcesiyle "ARM ISA (Instruction Set Architecture) Mimarisi" denilmektedir. Biz sistem programcısı olarak elimizdeki cortex'in hangi komut kümesini kullanan ARM versiyonuna ilişkin olduğunu bilmek durumundayız. Burada dikkat edilmesi gereken nokta "Cortex teriminin donanımsal mimariyi, versiyonun ise yazılımsal mimariyi belirtiyor" olmasıdır. O halde gömülü sistem geliştiricisi olarak bizim ilgilendiğimiz ARM içeren kart ile ilgili şu iki özelliği biliyor olamamız gerekir:
@@ -229,9 +229,9 @@
     Bu profiller ilgili cortex'lerin hangi tür uygulamalarda ideal olarak kullanılabileceğini belirtmektedir. Profil isimleri cortex'lerde ve versiyon numaralarında '-' karakterinden sonra belirtilmektedir. Örneğin "Cortex-A8" ve "ARMV7-A" gibi. A profilleri masasüstü işletim sistemlerinin çalıştırılabileceği, tamamen kişilsel bilgisayar olarak kullanılabilecek cortex'leri belirtmektedir. Biz kursumuzda "gömülü Linux programcısı" olarak bu "A" profilleriyle çalışacağız. R profilleri "gerçek zamanlı (realtime)" uygulamalar için daha uygun olabilecek cortex'leri belirtmektedir. R profilleri A profilleri birbirlerine benzemektedir. R profilleri A profillerine göre çok daha seyrek kullanılmaktadır. M profilleri ARM'nin mikrodenetleyici olarak kullanılan cortex'lerini belirtmektedir. Bu cortex'ler genel olarak Linux işletim sisteminin yüklenmesine izin vermemktedir. Bu cortex'ler genellikle "bare-metal" programlarla kullanılmaktadır. Ya da gerçek zamanlı işletim sistemleriyle de M profilleri kullanılabilmektedir.
 
     ARM'ın iki önemli versiyonu ARMV7-A ve ARMV8'A dır. ARMV7 32 bitlik bir arayüz sunmaktadır. Dolayısıyla bu komut mimarisini kullanan cortex'ler 32 bitlik core'ları içermektedir. ARMV8-A versiyonları 64 bitlik arayüz sunmaktadır. Dolayısıyla bu versiyonları kullanan core'lar 64 bitlik işlemcilerdir. Ancak ARM cortex'lerinin bir grubu hem 32 bit hem de 64 bit olarak kullanılabilmektedir. Bu core'larda işletim sistemleri 32 bitlik ve 64 bitlik programları zaman paylaşımlı olarak bir arada çalıştırabilmektedir.
------------------------------------------------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------
     Mikroişlemciler ilk çıktığında 8 bit işlemleri yapabiliyordu (örneğin 8080, 6800 gibi işlemciler). Bunlara 8 bitlik mikroişlemci deniyordu. Sonra 16 bitlik mikroişlemciler çıktı (örneğin Intel'in 8086 işlemcisi). Bunu 32 bit işlemciler izledi. Günümüzde artık ağırlıklı olarak 64 bit işlemciler kullanılmaktadır. Pekiyi bir işlemcinin N bitlik olmasının anlamı nedir?
 
     - N bitlik bir işlemcide tek hamlede (yani tek bir makine komutuyla) N bit üzerind işlem yapılabilmektedir. Örneğin 32 bitlik bir mikroişlemcide tek bir makine komutu ile 32 bitlik iki sayısıyı toplayıp çarpabiliriz.
@@ -243,9 +243,9 @@
     8 bitten 16 bite geçişte ve 16 bitten 32 bite geçişte çok farkedilir bir hızlanma yaşanmıştır. Ancak 32 bitten 64 bite geçişte hızlanma öncekiler kadar olmamıştır. Bunun nedeni 64 bitlik işlemlerin aslında yoğun olarak yapılmadığındandır. Ancak 32 bitten 64 bite geçişin en önemli etkisi işlemciye bağlanabilecek RAM miktarı üzerinde olmuştur. Örneğin elimizde 8 GB RAM'li Raspberry Pi 5 olsun. Buradaki ARM cortex'i hem 32 bit hem de 64 bit işlemci gibi çalışabilmektedir. Dolayısıyla biz bu Kartımızda 32 bitlik de 64 bitlik de Linux yükleyebilriz. Ancak 32 bitlik Linux işletim sistemi işlemciyi 32 bit modda çalıştıracağı için biz 8GB RAM'in ancak 4GB'sini kullanabiliriz. Bu 8GB RAM'in tamamından istifade edebilmemiz için işlemcinin 64 bit modunda çalıştırılması dolayısıyla da işletim sisteminin 64 bit olması gerekir.
 
     Pekiyi 128 bitlik bir işlemci daha iyi bir çalışam sunmaz mı? Neden 128 bitlik işlemciler yok? İşte 128 bitlik tamsayı işlemlerine çok nadir gereksinim duyulmaktadır. 2^128 uzunlupunda RAM zaten şu an için erişilmesi imkansız bir RAM miktarıdır. O halde işlemcilerin 64 bitten 128 bite çıkartılmasının şu an için önemli bir faydası olmayacaktır.
------------------------------------------------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------
     Popüler ürünlerde kullanılan ARM işlemcileri (core'ları) şunlardır:
 
     iPhone 14: A15 isimli SoC'u kullanmaktadır. Apple'ın ARMv8.6‑A versiyonunu kullanan Avalanche Cortex'i vardır. Buradaki Core'lar yalnızca 64 biti desteklemektedir.
@@ -261,9 +261,9 @@
     Samsung Galaxy S24: Qualcomm firmasının Snapdragon-8 SoC'unu kullnamaktadır. Bu SoC içerisinde ARMv9-A versiyonunu kullanan Cortex A715 bulunmaktadır.
 
     Redmi Note 11: Xiaomi firmasınn ürünüdür. Qualcomm Snapdragon-685 SoC'unu kullanmaktadır. Bu SoC'un içerisinde ARMV8.2-A versiyonuna ilişkin Cortex A78 bulunmaktadır.
------------------------------------------------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------
     Bu kursta kullanacağımız SBC'lerin üzerinde bulunan ARM cortex'leri ve bunların versiyon numaraları da şöyledir:
 
     Raspberry Pi 3: BCM2837 SoC kullanlmıştır. Bu SoC'un içerisinde ARMV8-A versiyonuna ilişkin Cortex-A53 bulunmaktadır. Bu cortex'teki core'lar hem 32 bit hem de 64 bit modda çalışabilmektedir.
@@ -274,17 +274,17 @@
 
     BlackBone Black 4G ve BeagleBone Black Wireless: Texas Instruments'ın Sitara-AM3358 SoC'unu kullanmaktadır. Bu SoC'un içerisinde Cortex-A8 kullanılmıştır. Bu cortex 32 bit core'lardan oluşmaktadır. Bunların kullandığı komut mimarisi de ARMV7-A'dır. (Yani BeagleBona Black'ler 32 bit ARM işlemcilerini kullanmaktadır. Dolayısıyla bunlara 32 bit Linux sistemleri
     yüklenebilmektedir.)
------------------------------------------------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------------------------*/
 
