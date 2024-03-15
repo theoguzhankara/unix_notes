@@ -50268,7 +50268,7 @@ void exit_sys(const char *msg)
 
     ar r libmyutil.a x.o y.o
 
-    Burada "libmuutil.a" statik kütüphane dosyasına "x.o" ve "y.o" object modülleri yerleştirilmiştir. Eğer "libmyutil.a" dosyası
+    Burada "libmyutil.a" statik kütüphane dosyasına "x.o" ve "y.o" object modülleri yerleştirilmiştir. Eğer "libmyutil.a" dosyası
     yoksa aynı zamanda bu dosya yaratılacaktır.
 
     t seçeneği kütüphane içerisindeki object modüllerin listesini almakta kullanılır. Örneğin:
@@ -51169,16 +51169,16 @@ int main(void)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Bazen bir dinamik kütüphane içerisindeki sembollerin o dinamik kütüphaneyi kullanan kodlar tarafından kullanılması istenmeyebilir. 
-    Örneğin dinamik kütüphanede "bar"" isimli bir fonksiyon vardır. Bu fonksiyon bu dinamik kütüphanenin kendi içerisinden başka 
+    Örneğin dinamik kütüphanede "bar" isimli bir fonksiyon vardır. Bu fonksiyon bu dinamik kütüphanenin kendi içerisinden başka 
     fonksiyonlar tarafından kullanılıyor olabilir. Ancak bu fonksiyonun dinamik kütüphanenin dışından kullanılması istenmeyebilir.
     (Bunun çeşitli nedenleri olabilir. Örneğin kapsülleme sağlamak için, dışarıdaki sembol çakışmalarını ortadan kaldırmak için vs.) 
-    İşte bunu sağlamak amacıyla gcc ve clang derleyicilerine özgü __attribute__((...)) eklentisindan faydalanılmaktadır. __attribute__((...)) 
+    İşte bunu sağlamak amacıyla gcc ve clang derleyicilerine özgü "__attribute__((...))" eklentisindan faydalanılmaktadır. "__attribute__((...))" 
     eklentisi pek çok seçeneğe sahip platform spesifik bazı işlemlere yol açmaktadır. Bu eklentinin seçeneklerini gcc dokümanlarından 
-    elde edbilirsiniz. Bizim bu amaçla kullanacağımız __attribute__((...)) seçeneği "visibility" isimli seçenektir. 
+    elde edebilirsiniz. Bizim bu amaçla kullanacağımız "__attribute__((...))" seçeneği "visibility" isimli seçenektir.
 
-    Aşağıdaki örnekte bar fonksiyonu foo fonksiyonu tarafından kullanılmaktadır. Ancak kütüphanin dışından bu fonksiyonun kullanılması istenmemiştir. 
-    Eğer fonksiyon isminin soluna __attribute__((visibility("hidden"))) yazlırsa bu durumda bu fonksiyon dinamik kütüphanein dışından 
-    herhangi bir biçimde kullanılamaz. Örneğin:
+    Aşağıdaki örnekte bar fonksiyonu foo fonksiyonu tarafından kullanılmaktadır. Ancak kütüphanenin dışından bu fonksiyonun kullanılması 
+    istenmemiştir. Eğer fonksiyon isminin soluna "__attribute__((visibility("hidden")))" yazılırsa bu durumda bu fonksiyon dinamik kütüphanenin 
+    dışından herhangi bir biçimde kullanılamaz. Örneğin:
 
     void __attribute__((visibility("hidden"))) bar(void)
     {
@@ -51193,8 +51193,8 @@ int main(void)
     dışarıdan çağrılamayacaktır. Tabii kütüphane içerisindeki foo fonksiyonu bar fonksiyonunu çağırabilmektedir. Dosyaları
     aşağıdaki gibi derleyebilirsiniz:
 
-    gcc -shared -fPIC -Wl,-soname,libmyutil.so.1 -o libmyutil.so.1.0.0 libmyutil.
-    gcc -o app app.c libmyutil.so.1.0.0 -
+    gcc -shared -fPIC -Wl,-soname,libmyutil.so.1 -o libmyutil.so.1.0.0 libmyutil.c
+    gcc -o app app.c libmyutil.so.1.0.0 -ldl
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -51250,7 +51250,7 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Pekiyi dinamik kütüphaneyi dinamik yüklemeyip normal yöntemle kullansaydık ne olacaktı? İşte bu durumda hata programı link
+    Pekiyi dinamik kütüphaneyi dinamik yüklemeyip normal yöntemle kullansaydık ne olacaktı? İşte bu durumda hata, programı link
     ederken oluşmaktadır. Örneğin:
 
     $ gcc -shared -fPIC -Wl,-soname,libmyutil.so.1 -o libmyutil.so.1.0.0 libmyutil.c
@@ -51296,6 +51296,7 @@ int main(void)
     main ends...
     destructor bar begins...
     destructor bar ends...
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -51326,7 +51327,7 @@ int main(void)
     kullanımına bir örnek verilmiştir. Derlemeyi aşağıdaki gibi yapabilirsiniz:
 
     $ gcc -shared -fPIC -Wl,-soname,libmyutil.so.1 -o libmyutil.so.1.0.0 libmyutil.c
-    $ gcc -o app app.c libmyutil.so.1.0.0 -l
+    $ gcc -o app app.c libmyutil.so.1.0.0 -ldl
 
     Kütüphaneye "so ismi" verdiğimiz için sembolik link oluşturmayı unutmayınız:
 
@@ -51334,7 +51335,7 @@ int main(void)
 
     Programı çalıştırmadan önce LD_LIBRARY_PATH çevre değişkenini de ayarlayınız:
 
-    export LD_LIBRARY_PATH=.
+    $ export LD_LIBRARY_PATH=.
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -51431,8 +51432,8 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    C++'ta yazılmış kodların da kütüphane biçimine getirilmesinde farklı bir durum yoktur. SInıfların bildirimleri başlık 
-    dosyalarında bulundurulur. Bunlar yine C++ derleyicisi ile (g++ ya da clang++) derlenir. Aynı biçimde kullanılır. 
+    C++'ta yazılmış kodların da kütüphane biçimine getirilmesinde farklı bir durum yoktur. Sınıfların bildirimleri başlık 
+    dosyalarında bulundurulur. Bunlar yine C++ derleyicisi ile (g++ ya da clang++) derlenir. Aynı biçimde kullanılır.
 
     Aşağıda C++'ta yazılmış olan bir sınıfın dinamik kütüphaneye yerleştirilmesi ve oradan kullanılmasına bir örnek verilmiştir. 
     Derleme işlemlerini şöyle yapabilirsiniz:
@@ -51523,10 +51524,10 @@ int main()
     $ gcc -c app3.c
     $ gcc -o app app1.o app2.o app3.o ... app10.o
 
-    İşte bu sıkıcı işlemi oratadan kaldırmak ve build işlemini otomatize etmek için "build otomasyon araçları (build automation 
+    İşte bu sıkıcı işlemi ortadan kaldırmak ve build işlemini otomatize etmek için "build otomasyon araçları (build automation 
     tools)" denilen araçlar geliştirilmiştir. Bunların en eskisi ve yaygın olanı "make" isimli araçtır. make arasının yanı sıra 
     "cmake" gibi "qmake" gibi daha yüksek seviyeli build araçları da zamanla geliştirilmiştir. make aracı pek çok sistemde 
-    benzer biçimde bulunmaktadır. Bugün UNIX/Linux sistemlerinde "GNU make" aracı kullaılmaktadır. Microsoft klasik make
+    benzer biçimde bulunmaktadır. Bugün UNIX/Linux sistemlerinde "GNU make" aracı kullanılmaktadır. Microsoft klasik make
     aracının "nmake" ismiyle başka versiyonunu geliştirmiştir. Ancak Microsoft uzun bir süredir "msbuild" denilen başka bir
     build sistemini kulanmaktadır. Örneğin Microsoft'un Visual Studio IDE'si arka planda bu "msbuild" aracını kullanmaktadır. 
     Qt Framework'ünde "qmake" isimli üst düzey make aracı kullanılmaktadır. Bazı IDE'ler "cmake" kullanmaktadır.
@@ -51551,7 +51552,7 @@ int main()
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir make dosyası "kurallardan (rules)" oluşmaktadır. Bir kuralın (rule) geneil biçimi şöyledir:
+    Bir make dosyası "kurallardan (rules)" oluşmaktadır. Bir kuralın (rule) genel biçimi şöyledir:
 
     hedef (target) : ön_koşullar (prerequisites)
         işlemler (recipes)
@@ -51569,9 +51570,9 @@ int main()
     app: a.o b.o c.o
     <TAB>gcc -o app a.o b.o c.o
 
-    Kuraldaki hedef ve ön koşullar tipik olarak birer dosyadır. Kuralın anlamı şöyledir: Ön koşulalrda belirtilen dosyaların 
+    Kuraldaki hedef ve ön koşullar tipik olarak birer dosyadır. Kuralın anlamı şöyledir: Ön koşullarda belirtilen dosyaların 
     herhangi birinin tarih ve zamanı hedefte belirtilen dosyanın tarih ve zamanından ileri ise (yani bunlar güncellenmişse)
-    bu durumda belirtilen işlemler yapılır. Yukarıdkai kuralı yeniden inceleyiniz:
+    bu durumda belirtilen işlemler yapılır. Yukarıdaki kuralı yeniden inceleyiniz:
 
     app: a.o b.o c.o
         gcc -o app a.o b.o c.o
@@ -51581,7 +51582,7 @@ int main()
 
     gcc -o app a.o b.o c.o
 
-    Bu link işlemi anlamına gelir. Link işlemindne sonra artık "app" dısyasının tarih ve zamanı ön koşul dosyalarından daha
+    Bu link işlemi anlamına gelir. Link işleminden sonra artık "app" dısyasının tarih ve zamanı ön koşul dosyalarından daha
     ileride olacağı için kural "güncel (up to date)" hale gelir. Artık bu kural işletildiğinde bu link işlemi yapılmayacaktır. 
     Bu link işleminin yeniden yapılabilmesi için "a.o" ya da "b.o" ya da "c.o" dosyalarında güncelleme yapılmış olması gerekir. 
     Bu dosyalar derleme işlem sonucunda oluşacağına göre bu dosyaların güncellenmesi aslında bunlara ilişkin ".c" dosyalarının 
@@ -51611,18 +51612,18 @@ int main()
     make programı çalıştırıldığında önce program make dosyasından hareketle bir "bağımlılık grafı (dependency graph)" 
     oluşturmaktadır. Bağımlılık grafı "hangi dosya hangi dosyanın durumuna bağlı" biçimin de oluşturulan bir graftır. 
     Yukarıdaki örnekte "a.o", "b.o" ve "c.o" dosyaları aşağıdaki kurallara bağımlıdır. Daha sonra make programı sırasıyla 
-    bu grafa uygun olarak aşağıdan yukarıya kuralları işletmektedir. Yukarıdkai örnekte birinci kural ikinci, üçüncü
+    bu grafa uygun olarak aşağıdan yukarıya kuralları işletmektedir. Yukarıdaki örnekte birinci kural ikinci, üçüncü
     ve dördüncü kurallara bağımlıdır. Dolayısıyla önce bu kurallar işletilip daha sonra birinci kural işletilir. Böylece bu
-    make dosyasından şöyle sonuç çıkmaktadır: "Herhangi bir .c dosya değiştirildiğinde onu dele ve hep birlikte link işlemi 
+    make dosyasından şöyle sonuç çıkmaktadır: "Herhangi bir .c dosya değiştirildiğinde onu derle ve hep birlikte link işlemi 
     yap".
 
     Kuralın hedefindeki dosya yoksa koşulun sağlandığı kabul edilmektedir. Yani bu durumda ilgili işlemler yapılacaktır. 
-    Yukarıdaki örnekte "object dosyalarını silersek" bu duurmda derleme işlemlerinin hepsi yapılacaktır. Normal olarak her 
-    ön koşul dosyasının bir bir hedefle ilişkili oılması beklenir. Yani ön koşulda belirtilen dosyaların var olması gerekmektedir.
+    Yukarıdaki örnekte "object dosyalarını silersek" bu durumda derleme işlemlerinin hepsi yapılacaktır. Normal olarak her 
+    ön koşul dosyasının bir bir hedefle ilişkili olması beklenir. Yani ön koşulda belirtilen dosyaların var olması gerekmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    make dosyası hazırlandıktan sonra make programı ile dosya işletilir. make programı işletilecek dosyayaı -f ya da --file 
+    make dosyası hazırlandıktan sonra make programı ile dosya işletilir. make programı işletilecek dosyayı -f ya da --file 
     seçeneği ile komut satırı argümanından almaktadır. Örneğin:
 
     $ make -f project.mak
@@ -51758,7 +51759,7 @@ int main()
     üzere tasarlanmış ayrı bir grup fonksiyondur. Oysa kernek tarafından export edilmiş fonksiyonlar user moddan çağrılamazlar. Yalnızca kernel modğllerinden
     çağrılabilirler. Buradan çıkan sonuç şudur: Bir kernel modül yazılırken ancak kernel'ın export ettiği fonksiyon ve datalar kullanılabilmektedir. Kernel kaynak kodları
     çok büyüktür buradaki kısıtlı sayıda fonksiyon export edilmiştir. Benzer biçimde programcının oluşturduğu bir kernel modül içerisindeki belli fonksiyonları da
-    programcı export edebilir. Bu duurmda bu fonksiyonlar da başka kernel modüllerinden kullanılabilirler. 
+    programcı export edebilir. Bu durumda bu fonksiyonlar da başka kernel modüllerinden kullanılabilirler.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -52742,7 +52743,7 @@ void exit_sys(const char *msg)
     Fonskiyonların birinci parametreleri kopyalamanın yapılacağı hedef adreslerdir. Yani copy_to_user için birinci parametre user alanındaki adres, 
     copy_from_user için birinci parametre kernel alanındaki adrestir. İkinci parametre kaynak adresi belirtmektedir. Bu kaynak adres copy_to_user için kernel
     alanındaki adres, copy_from_user için user alanındakş adrestir. Son parametre transfer edilecek byte sayısını belirtmektedir. Fonksiyonlar başarı durumunda 0
-    değerine, başarısızlık durumunda transfer edilemeyen byte sayısına geri dönerler. Kernel mod programcılaının bu fonksiyonlar başarısızken bunu çağıran foksiyonlarını
+    değerine, başarısızlık durumunda transfer edilemeyen byte sayısına geri dönerler. Kernel mod programcılarının bu fonksiyonlar başarısızken bunu çağıran foksiyonlarını
     -EFAULT (Bad address) ile geri döndürmesi uygun olur.
 
     Bazen user alanındaki adresin zaten geçerliliği sınanmıştır. Bu durumda yeniden geçerlilik sınaması yapmadan yukarıdaki işlemleri yapan
@@ -56508,7 +56509,7 @@ chmod $mode $module
         chmod $mode ${module}$i
     done
 
-    Aşağıdaki örnekte boru aygıt sürücüsü MAX_DEVICE kadar minör numaraı (yani farklı boruları) destekleyecek duruma getirilmiştir.
+    Aşağıdaki örnekte boru aygıt sürücüsü MAX_DEVICE kadar minör numarayı (yani farklı boruları) destekleyecek duruma getirilmiştir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <linux/module.h>
@@ -60395,7 +60396,7 @@ void exit_sys(const char *msg)
     içerisindeki kuyruk elemanları request isimli yapı nesnelerinden oluşmaktadır. (Yani request_queue aslında request yapılarının oluşturduğu bir kuyruk sistenidir.) 
 
     Her request nesnesi kendi içerisinde bio isimli yapı nesnelerinden oluşmaktadır. request nesnesinin içerisindeki bio nesnleri bir bağlı liste biçiminde tutulmaktadır. Her bio yapısının
-    sonunda ise değişken sayıda (yani n tane) bio_vec yapıları bulunmaktadır. İşte transfer işini yapacak fonksiyon transfere ilişkin bilgileri bu bio_vec yapısındna elde etmektedir. 
+    sonunda ise değişken sayıda (yani n tane) bio_vec yapıları bulunmaktadır. İşte transfer işini yapacak fonksiyon transfere ilişkin bilgileri bu bio_vec yapısından elde etmektedir. 
 
     request_queue: request ---> request ---> request ---> request ...
     request: bio ---> bio ---> bio ---> bio ---> bio ---> ...
@@ -60934,7 +60935,7 @@ chmod $mode $module
 
     GRUB boot-loader konfigürasyon dosyası normal olarak /boot/grub dizini içerisindedir. Yani boot-loader buradaki grub.cfg dosyası 
     temel alınarak ayarlanır. Ama bu dosyanın güncellenmesi zordur. Bunun için daha basit yöntem /etc/default/grub dosyası 
-    üzerinde basit değişiklikler yapmak ama bunu yaptıktan sonra aşağıdkai komutu uygulamaktır:
+    üzerinde basit değişiklikler yapmak ama bunu yaptıktan sonra aşağıdaki komutu uygulamaktır:
 
     sudo update-grub
 
