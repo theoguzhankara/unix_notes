@@ -10,6 +10,8 @@
 
                             (Notları okurken editörünüzün "Line Wrapping" özelliğini pasif hale getiriniz.)
 
+                                                    Son Güncelleme: 15/03/2024
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -3876,7 +3878,7 @@ void exit_sys(const char *msg)
     (Yani aslında bir POSIX sisteminde /etc/passwd ve /etc/group dosyaları bu isimlerde ve Linux'tak içerikte bulunmak zorunda değildir. 
     Ancak bu bilgileri alan aşağıda açıklayacağımız POSIX fonksiyonları bulunmak zorundadır.)
 ---------------------------------------------------------------------------------------------------------------------------*/
-<BURADA KALDIK>
+
 /*--------------------------------------------------------------------------------------------------------------------------
     /etc/passwd dosyası üzerinde parse işlemi yapan fonksiyonların prototipleri <pwd.h> dosyası içerisinde bulundurulmuştur. 
     getpwnam POSIX fonksiyonu bir kullanıcının ismini alarak o kullanıcı hakkında /etc/passwd dosyasında belirtilen bilgileri 
@@ -4360,7 +4362,7 @@ void exit_sys(const char *msg)
     açılmışsa belirtilen dizinin "x" hakkına sahilik kontrolü yapılmaz. Eğer dizin O_SERACH yerine diğer modlarla (örneğin O_RDONLY) 
     açılmışsa bu durumda belirtilen dizinde "x" hakkı kontrolü yapılmaktadır. Ayrıca fonksiyonların at'li versiyonlarında dizine 
     ilişkin dosya betimleyicisine özel olarak AT_FDCWD değeri geçirilirse bu durumda sanki prosesin çalışma dizinine ilişkin dizin 
-    betimleyicisi geçirilmiş gibi bir etki oluşmaktadır. Tabii bu durumda fonksiyonun at'li versiyonu ile at'siz versyonu arasında bir 
+    betimleyicisi geçirilmiş gibi bir etki oluşmaktadır. Tabii bu durumda fonksiyonun at'li versiyonu ile at'siz versiyonu arasında bir 
     fark kalmaz. Ancak fonksiyonarın at'li versiyonlarının ekstra parametreleri de olabilmektedir (genellikle bu ekstra parametre 
     flag parametresi biçimindedir). İşte programcı bu ekstra parametrelerden faydalanabilmek için dosya betimleyici parametresini 
     AT_FDCWD biçiminde geçebilmektedir. Ayrıca fonksiyonların at'li versiyonlarında biz yol ifadesi olarak mutlak ifadesi geçtiğimizde 
@@ -6004,7 +6006,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    access fonksiyonunun faccassat isminde "at"li bir versiyonu da vardır. Bu versyonda aynı zamanda istenirse gerçek kullanıcı ve 
+    access fonksiyonunun faccassat isminde "at"li bir versiyonu da vardır. Bu versiyonda aynı zamanda istenirse gerçek kullanıcı ve 
     grup id'leri yerine etkin kullanıcı ve grup id'leri de işleme sokulabilmektedir. Fonksiyonun parametrik yapısı şöyledir:
 
     #include <fcntl.h>
@@ -6064,14 +6066,13 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
-<BURADA KALDIK>
 /*--------------------------------------------------------------------------------------------------------------------------
-    Anımsanacağı gibi "dosya betimleyici tablosu (file descriptor table)" proses kontrol blok yoluyla erişilebilen dosy anesnelerinin 
+    Anımsanacağı gibi "dosya betimleyici tablosu (file descriptor table)" proses kontrol blok yoluyla erişilebilen dosya nesnelerinin 
     adreslerinin tutulduğu bir gösterici dizisi biçimindeydi. İşletim sisteminin çekirdeği ne zaman bir dosya açılsa o dosya için
     bir dosya nesnesi (Linux'ta "file" yapısı) yaratıp dosya betimleyici tablosunda bir slotun o nesneyi göstermesini sağlıyordu. 
     Zaten "dosya betimleyicisi (file descriptor)" de dosya betimleyici tablosunda bir indeks belirtiyordu. Linux çekirdeklerinde 
-    buradak veri yapıları zamanla biraz değiştirilmiştir. Güncel çekirdekte proses kontrol bloktan dosya nesnesine erişim birkaç yapıdan geçilerek 
-    yapılmaktadır:
+    buradaki veri yapıları zamanla biraz değiştirilmiştir. Güncel çekirdekte proses kontrol bloktan dosya nesnesine erişim birkaç 
+    yapıdan geçilerek yapılmaktadır:
 
     task_struct (files) ---> files_struct (fdt) ---> fdtable (fd) ---> file * türünden bir dizi ---> file
 
@@ -6082,22 +6083,24 @@ void exit_sys(const char *msg)
     #define STDOUT_FILENO       1
     #define STDERR_FILENO       2
 
-    Aygıt "sürücüler (device drivers)" dosya gibi açılarak kullanılmaktadır. (Yani bir aygıt sürücü de kullanılmadan önce "open" fonksiyonuyla açılır, 
-    sonra "read" fonksiyonuyla ondan okuma yapılıp "write" fonksiyonu ile ona yazma yapabilir.) Dolayısıyla bir dosya nesnesi bir disk dosyasına ilişkin olabileceği gibi 
-    bir aygıt sürücüs dosyasına da ilişkin olabilir. Örneğin biz bir betimleyiciden read fonksiyonu ile okuma yapmak istediğimizde 
-    sistem eğer bu betimleyicinin gösterdiği dosya nesnesi bir disk dosyasına ilişkinse bizim dosyadan okuma yapmamızı sağlar. Ancak bir 
-    aygıt sürücüye ilişkinse bu durumda sistem o aygıt sürücünün "read" fonksiyonunu çağırır. Yani aygıt sürücülerin içerisinde 
-    "read" yapıldığında "write" yapıldığında çağrılacak fonksiyonlar vardır. İşte örneğin biz 0 numaralı betimleyiciden okuma yapmak istediğimizde aslında 
-    "terminal aygıt sürücüsünün" "read" fonksiyonu çağrılmaktadır. 0 numaralı betimleyici O_RDONLY modunda açılmıştır. Terminal aygıt sürücüsünün
-    "read" fonksiyonu da bize klavyeden okunanları verir. Program çalışmaya başladığında 1 ve 2 numaralı betimleyicilerin her ikisi de aynı dosya nesnesini göstermektedir. 
-    Bu dosya da O_WRONLY modunda açılmıştır. Bu dosya nesneleri de yine "terminal aygıt sürücüsüne" ilişkindir. Dolayısıyla biz write işlemi yaptığımızda
-    aslında terminal aygıt sürücüsünün "write" fonksiyonunu çağırmış oluruz. O da bilgileri imlecin bulunduğu noktadan itibaren ekrana yazar. 
-    Burada stdout ve stderr betimleyicilerinin aynı dosya nesnesini gösterdiğine dikkat ediniz. Dolayısıyla bu betimleyiciler kullanıldığında yazdırılmak istenen 
-    şeyler ekrana çıkacaktır. (O halde stdout ile stderr arasında ne farklılık vardır? İzleyen bölümlerde bu durum açıklanacaktır)
+    Aygıt "sürücüler (device drivers)" dosya gibi açılarak kullanılmaktadır. (Yani bir aygıt sürücü de kullanılmadan önce "open" 
+    fonksiyonuyla açılır, sonra "read" fonksiyonuyla ondan okuma yapılıp "write" fonksiyonu ile ona yazma yapabilir.) Dolayısıyla 
+    bir dosya nesnesi bir disk dosyasına ilişkin olabileceği gibi bir aygıt sürücüs dosyasına da ilişkin olabilir. Örneğin biz 
+    bir betimleyiciden read fonksiyonu ile okuma yapmak istediğimizde sistem eğer bu betimleyicinin gösterdiği dosya nesnesi bir 
+    disk dosyasına ilişkinse bizim dosyadan okuma yapmamızı sağlar. Ancak bir aygıt sürücüye ilişkinse bu durumda sistem o aygıt 
+    sürücünün "read" fonksiyonunu çağırır. Yani aygıt sürücülerin içerisinde "read" yapıldığında "write" yapıldığında çağrılacak 
+    fonksiyonlar vardır. İşte örneğin biz 0 numaralı betimleyiciden okuma yapmak istediğimizde aslında "terminal aygıt sürücüsünün" 
+    "read" fonksiyonu çağrılmaktadır. 0 numaralı betimleyici O_RDONLY modunda açılmıştır. Terminal aygıt sürücüsünün "read" fonksiyonu 
+    da bize klavyeden okunanları verir. Program çalışmaya başladığında 1 ve 2 numaralı betimleyicilerin her ikisi de aynı dosya 
+    nesnesini göstermektedir. Bu dosya da O_WRONLY modunda açılmıştır. Bu dosya nesneleri de yine "terminal aygıt sürücüsüne" 
+    ilişkindir. Dolayısıyla biz write işlemi yaptığımızda aslında terminal aygıt sürücüsünün "write" fonksiyonunu çağırmış oluruz. 
+    O da bilgileri imlecin bulunduğu noktadan itibaren ekrana yazar. Burada stdout ve stderr betimleyicilerinin aynı dosya nesnesini 
+    gösterdiğine dikkat ediniz. Dolayısıyla bu betimleyiciler kullanıldığında yazdırılmak istenen şeyler ekrana çıkacaktır. 
+    (O halde stdout ile stderr arasında ne farklılık vardır? İzleyen bölümlerde bu durum açıklanacaktır)
 
-    open fonksiyonunun ilk boş betimleyici veridiği garanti edilmiştir. Yani örneğin programımız başladığında 0, 1 ve 2 numaralı betimleyiciler dolu olduğuna
-    göre open fonksiyonu bize 3 numaralı betimleyiciyi vercektir. Tabii dosyaları kapattığımızda o betimleyicilere ilişkin slot'lar serbest bırakılır. 
-    Bu durumda open ilk boş betimleyiciyi bize verir. 
+    open fonksiyonunun ilk boş betimleyici veridiği garanti edilmiştir. Yani örneğin programımız başladığında 0, 1 ve 2 numaralı 
+    betimleyiciler dolu olduğuna göre open fonksiyonu bize 3 numaralı betimleyiciyi vercektir. Tabii dosyaları kapattığımızda 
+    o betimleyicilere ilişkin slot'lar serbest bırakılır. Bu durumda open ilk boş betimleyiciyi bize verir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -6105,8 +6108,8 @@ void exit_sys(const char *msg)
     çiftlenmiş (duplicate) olması" denilmektedir. Bu durumda bizim bu betimleyicilerden hangisini kullandığımız bir önemi kalmamaktadır. 
     Pekiyi böyle bir durumda bir betimleyiciyi close fonksiyonuyla kapattığımızda ne olacaktır? İşte dosya nesnelerinin içerisinde 
     bir sayaç bulunmaktadır. close fonksiyonu bu sayacın değerini bir eksiltir. Dosya nesnesinin silinmesi sayaç 0'a düştüğünde
-    yapılmaktadır. O halde close her durumda betimleyici slotunu boşaltır. Ancak dosya nesnesinin referans sayıcını bir eksilttikten sonra
-    eğer referans sayacı 0'a düşmüşse dosya nesnesini siler. Aşağıda Linux'un güncel çekirdeğindeki dosya nesnesi verilmiştir. 
+    yapılmaktadır. O halde close her durumda betimleyici slotunu boşaltır. Ancak dosya nesnesinin referans sayıcını bir eksilttikten 
+    sonra eğer referans sayacı 0'a düşmüşse dosya nesnesini siler. Aşağıda Linux'un güncel çekirdeğindeki dosya nesnesi verilmiştir. 
     Buradaki f_count elemanı bu sayacı belirtmektedir:
 
     struct file {
@@ -6159,9 +6162,9 @@ void exit_sys(const char *msg)
 
     int dup(int fildes);
 
-    Fonksiyon parametre olarak açık bir dosyanın betimleyicisini alır, o betimleyicinin gösterdiği dosya nesnesini gösteren yeni bir betimleyici 
-    oluşturup o betimleyiciye geri döner. Fonksiyon başarısızlık durumunda -1'e geri dönmektedir. dup fonksiyonunun en düşük boş betimleyici
-    slotunu tahsis etmesi garanti edilmiştir. 
+    Fonksiyon parametre olarak açık bir dosyanın betimleyicisini alır, o betimleyicinin gösterdiği dosya nesnesini gösteren 
+    yeni bir betimleyici oluşturup o betimleyiciye geri döner. Fonksiyon başarısızlık durumunda -1'e geri dönmektedir. dup 
+    fonksiyonunun en düşük boş betimleyici slotunu tahsis etmesi garanti edilmiştir. 
 
     Açık dosyanın tüm bilgileri dosya nesnesinin içerisinde olduğuna göre iki betimleyici aynı dosya nesnesini gösteriyorsa 
     örneğin aynı dosya göstericisine sahip gibi davranırlar. Aşağıdaki programda dup fonksiyonuna bir örnek verilmiştir. 
@@ -6215,12 +6218,12 @@ int main(void)
     Bu fonksiyon yine birinci parametresiyle belirtilen betimleyici çiftlemek için kullanılmaktadır. Ancak bu fonksiyon
     ilk boş betimleyici ile değil ikinci parametresiyle belirtilen betimleyici ile geri dönmek ister. Yani biz istersek 
     bu fonksiyon sayesinde istediğimiz bir betimleyicinin birinci parametresiyle belirtilen betimleyici ile aynı dosya nesnesini 
-    göstermesini sağlayabiliriz. Eğer ikinci parametresiyle belirtilen betimleyici zaten açık bir dosyaya ilişkinse bu durumda dosya 
-    önce kapatılır, sonra o betimleyicinin birinci parametresiyle belirtilen betimleyicinin gösterdiği dosya nesnesini göstermesi 
-    sağlanır. Fonksiyon başarı durumunda ikinci parametresiyle belirtilen betimleyicinin aynısına, başarısızlık durumunda -1 değerine
-    geri dönmektedir. Tabii fonksiyon birinci ve ikinci parametresinin aynı betimleyiciye ilişkin olduğunu da kontrol etmektedir. 
-    Bu durumda bir şey yapmadan başarılı olur. Fonksiyonun iki argümanı aynı betimleyiciyi belirtiyorsa dup2 hiçbir şey yapmaz, argümanlarla
-    belirtilen betimleyiciye geri döner.
+    göstermesini sağlayabiliriz. Eğer ikinci parametresiyle belirtilen betimleyici zaten açık bir dosyaya ilişkinse bu durumda 
+    dosya önce kapatılır, sonra o betimleyicinin birinci parametresiyle belirtilen betimleyicinin gösterdiği dosya nesnesini 
+    göstermesi sağlanır. Fonksiyon başarı durumunda ikinci parametresiyle belirtilen betimleyicinin aynısına, başarısızlık durumunda 
+    -1 değerine geri dönmektedir. Tabii fonksiyon birinci ve ikinci parametresinin aynı betimleyiciye ilişkin olduğunu da kontrol 
+    etmektedir. Bu durumda bir şey yapmadan başarılı olur. Fonksiyonun iki argümanı aynı betimleyiciyi belirtiyorsa dup2 hiçbir 
+    şey yapmaz, argümanlarla belirtilen betimleyiciye geri döner.
 
     Aşağıda dup2 fonksiyonunun kullanımına bir örnek verilmiştir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -6277,10 +6280,10 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Dosyalar konusundaki önemli bir alt konu da "IO Yönlendirmesi (IO Redirection)" denilen konudur. IO yönlendirmesi teknik olarak
-    bir dosya betimleyicisinin gösterdiği dosya nesnesinin değiştirilmesi işlemidir. Bu sayede bir kişi belli bir dosya üzerinde 
-    işlem yaptığını sanırken aslında başka bir dosya üzerinde işlem yapar hale gelmektedir. IO yönlendirmesi en çok "stdin", "stdout" ve
-    "stderr", dosyaları üzerinde uygulanmaktadır. 
+    Dosyalar konusundaki önemli bir alt konu da "IO Yönlendirmesi (IO Redirection)" denilen konudur. IO yönlendirmesi teknik 
+    olarak bir dosya betimleyicisinin gösterdiği dosya nesnesinin değiştirilmesi işlemidir. Bu sayede bir kişi belli bir dosya 
+    üzerinde işlem yaptığını sanırken aslında başka bir dosya üzerinde işlem yapar hale gelmektedir. IO yönlendirmesi en çok 
+    "stdin", "stdout" ve "stderr", dosyaları üzerinde uygulanmaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -6291,22 +6294,22 @@ void exit_sys(const char *msg)
     Gerçekten de 0, 1 ve 2 numaralı betimnleyicilerin gösterdiği dosya nesneleri "terminal aygıt sürücüsüne" ilişkindir. 
 
     Bir aygıt sürücü kernel modda çalışan bir kod topluluğudur. Bir dosya betimleyicisi bir aygıt sürücüne ilişkinse bu betimleyici 
-    ile read fonksiyonu çağrıldığında aygıt sürücüsünü yazanların "read" olarak tanımladıkları fonksiyon çağrılmaktadır. Benzer biçimde
-    bir aygıt sürücüne ilişkinse bu betimleyici ile write fonksiyonu çağrıldığında aygıt sürücüsünü yazanların "write" diye tanımladıkları
-    fonksiyon çağrılmaktadır. 
+    ile read fonksiyonu çağrıldığında aygıt sürücüsünü yazanların "read" olarak tanımladıkları fonksiyon çağrılmaktadır. Benzer 
+    biçimde bir aygıt sürücüne ilişkinse bu betimleyici ile write fonksiyonu çağrıldığında aygıt sürücüsünü yazanların "write" 
+    diye tanımladıkları fonksiyon çağrılmaktadır. 
 
-    0 numaralı stdin betimleyicisi "read-only" modda açılmış durumdadır. Benzer biçimde 1 ve 2 numaralı betimleyiciler de "write-only"
-    modda açılmış durumdadır. 0 numaralı betimleyiciden okuma yapılmak istendiğinde aygıt sürücüsünün okuma fonksiyonu çalıştırılır ve
-    bu fonksiyon da aslında klavyeden okunanları bize verir. 1 ve 2 numaralı betimleyiciler dup yapılmış durumdadır. Yani bu betimleyiciler 
-    aynı dosya nesnesini göstermektedir. Bu betimleyicilerle yazma işlemi yapılırsa aygıt sürücülerin yazma fonksiyonları devreye girer
-    ve bu fonksiyonlar da yazdırılacak şeyleri ekrana çıkartırlar. 
+    0 numaralı stdin betimleyicisi "read-only" modda açılmış durumdadır. Benzer biçimde 1 ve 2 numaralı betimleyiciler de 
+    "write-only" modda açılmış durumdadır. 0 numaralı betimleyiciden okuma yapılmak istendiğinde aygıt sürücüsünün okuma fonksiyonu 
+    çalıştırılır ve bu fonksiyon da aslında klavyeden okunanları bize verir. 1 ve 2 numaralı betimleyiciler dup yapılmış durumdadır. 
+    Yani bu betimleyiciler aynı dosya nesnesini göstermektedir. Bu betimleyicilerle yazma işlemi yapılırsa aygıt sürücülerin yazma 
+    fonksiyonları devreye girer ve bu fonksiyonlar da yazdırılacak şeyleri ekrana çıkartırlar. 
 
-    Görüldüğü gibi aygıt sürücüler sanki bir dosyaymış gibi ele alınmaktadır. Bunun önemli faydaları vardır. Yani programcı bu sayede
-    "sanki klavye ve ekran birer dosyaymış gibi" dosya fonksiyonlarını kullanarak onlarla işlem yapabilmektedir.
+    Görüldüğü gibi aygıt sürücüler sanki bir dosyaymış gibi ele alınmaktadır. Bunun önemli faydaları vardır. Yani programcı bu 
+    sayede "sanki klavye ve ekran birer dosyaymış gibi" dosya fonksiyonlarını kullanarak onlarla işlem yapabilmektedir.
 
     Aşağıdaki örnekte 0 numaralı stdin betimleyicisinden read fonksiyonuyla okuma yapılmış ve okunanlar 1 numaralı stdout 
-    betimleyicisine yazılmıştır. Biz read fonksiyonuyla stdin dosyasından okuma yapmak istediğimizde read fonksiyonu ENTER tuşuna basılına
-    kadarki klavyeden girilenleri bize vermektedir.
+    betimleyicisine yazılmıştır. Biz read fonksiyonuyla stdin dosyasından okuma yapmak istediğimizde read fonksiyonu ENTER tuşuna 
+    basılına kadarki klavyeden girilenleri bize vermektedir.
 
     <unistd.h> dosyasında okunabilirliği artırmak için şu sembolik sabitler bildirilmiştir:
 
@@ -6314,8 +6317,8 @@ void exit_sys(const char *msg)
     #define STDOUT_FILENO       1
     #define STDERR_FILENO       2
 
-    Bir program çalışmaya başladığında 0, 1 ve 2 numaralı betimleyiciler zaten hazır durumdadır. Bu betimleyicileri programcı oluşturmamıştır.
-    O halde bu betişmleyicilerin kapatılmasını da programcı yapmamalıdır. Buradaki mekanizma ileride ele alınacaktır.
+    Bir program çalışmaya başladığında 0, 1 ve 2 numaralı betimleyiciler zaten hazır durumdadır. Bu betimleyicileri programcı 
+    oluşturmamıştır. O halde bu betişmleyicilerin kapatılmasını da programcı yapmamalıdır. Buradaki mekanizma ileride ele alınacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -6349,8 +6352,8 @@ void exit_sys(const char *msg)
     C'nin <stdio.h> dosyası içerisinde prototipleri bulunan stdin ve stdout dosyaları üzerinde işlem yapan "scanf", "puts", 
     "printf" gibi fonksiyonları eninde sonunda read ve write fonksiyonlarını 0 ve 1 numaralı betimleyicilerle çağırarak işlemlerini 
     yapmaktadır. Zaten bu sistemlerde ekrana bir şey yazdırmak için klavyeden bir şey okumak için başka bir yol yoktur. Örneğin 
-    biz printf fonksiyonu ile ekrana bir şeyler yazdırmak istediğimiz zaman aslında printf önce yazdırılacak yazıyı bir dizide oluşturur
-    sonra write fonksiyonunu 1 numaralı betimleyici ile çağırır. 
+    biz printf fonksiyonu ile ekrana bir şeyler yazdırmak istediğimiz zaman aslında printf önce yazdırılacak yazıyı bir dizide 
+    oluşturur sonra write fonksiyonunu 1 numaralı betimleyici ile çağırır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -6403,9 +6406,10 @@ void exit_sys(const char *msg)
     o thread kapabilir. Çünkü close ile open işlemleri atomik değildir. 
 
     IO yönlendirmesi daha sağlıklı bir biçimde dup2 fonksiyonuyla yapılabilir. Anımsanacağı gibi dup2(fd1, fd2) işleminde 
-    fd2 betimleyicisi fd1 betimleyicisi ile aynı dosya nesnesini gösterir hale getirilmektedir. fd2 zaten açık bir dosyaya ilişkinse
-    önce o betimleyici üzerinde atomik bir biçimde close işlemi uygulanmaktadır. dup2 fonksiyonun en düşük betimleyiciyi değil ikinci parametresiyle
-    blirtilen betimleyiciyi yönlendirdiğine dikkat ediniz. O halde örneğin 1 numaralı betimleyici şöyle yönlendirilebilir:
+    fd2 betimleyicisi fd1 betimleyicisi ile aynı dosya nesnesini gösterir hale getirilmektedir. fd2 zaten açık bir dosyaya 
+    ilişkinse önce o betimleyici üzerinde atomik bir biçimde close işlemi uygulanmaktadır. dup2 fonksiyonun en düşük betimleyiciyi 
+    değil ikinci parametresiyle blirtilen betimleyiciyi yönlendirdiğine dikkat ediniz. O halde örneğin 1 numaralı betimleyici 
+    şöyle yönlendirilebilir:
 
     int fd;
     ...
@@ -6418,14 +6422,16 @@ void exit_sys(const char *msg)
 
     close(fd);
 
-    Burada dup2 ile birlikte hem 1 numaralı betimleyicinin hem de fd numaralı betimleyicinin yeni açılan dosyaya ilişkin dosya nesnesini gösteridiğine
-    dikkat ediniz. fd betimleyicisini kapatmak doğru tekniktir. 1 numaralı betimleyici zaten ileride de ele alınacağı gibi proses bittiğinde kapatılmaktadır.
+    Burada dup2 ile birlikte hem 1 numaralı betimleyicinin hem de fd numaralı betimleyicinin yeni açılan dosyaya ilişkin dosya 
+    nesnesini gösteridiğine dikkat ediniz. fd betimleyicisini kapatmak doğru tekniktir. 1 numaralı betimleyici zaten ileride de 
+    ele alınacağı gibi proses bittiğinde kapatılmaktadır.
 
     Burada gerçekleşmesi beklenmeyen bir küçük nokta üzerinde de durmak istiyoruz. Bizim open fonksiyonuyla yönlendirilecek dosyayı
-    açtığımız durumda ya stdout dosyası zaten kapatılmışsa ne olacaktır? İşte bu durumda close işlemi bizim için sorun oluşturur. Şöyle ki 
-    Bu durumda open fonksiyonu en düşük betimleyici olan 1 numaralı betimleyiciyi tahsis edecektir. dup2(fd, 1) çağrısında her iki betimleyici de
-    aynı olduğu için dup2 bir şey yapmayacaktır. Ancak bundan sonda fd betimleyicisinin kapatılması aslında 1 numaralı betimleyicinin 
-    kapatılması anlamına gelecektir. Yani sakıncalı bir durum oluşaçaktır. Bu sakıncalı durum aşağıdaki gibi bir kontrolle elimine edilebilir:
+    açtığımız durumda ya stdout dosyası zaten kapatılmışsa ne olacaktır? İşte bu durumda close işlemi bizim için sorun oluşturur. 
+    Şöyle ki bu durumda open fonksiyonu en düşük betimleyici olan 1 numaralı betimleyiciyi tahsis edecektir. dup2(fd, 1) çağrısında 
+    her iki betimleyici de aynı olduğu için dup2 bir şey yapmayacaktır. Ancak bundan sonda fd betimleyicisinin kapatılması aslında 
+    1 numaralı betimleyicinin kapatılması anlamına gelecektir. Yani sakıncalı bir durum oluşaçaktır. Bu sakıncalı durum aşağıdaki 
+    gibi bir kontrolle elimine edilebilir:
 
     int fd;
     ...
@@ -6479,9 +6485,9 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Yukarıdaki örnekte biz 1 numaralı betimleyicinin bizim dosyamıza ilişkin dosya nesnesini göstermesini sağladık. Pekiyi 
-    bundan geri dönebilir miyiz? Yani 1 numaralı betimleyicinin yeniden terminale ilişkin aygıt sürücüsünü göstermesini sağlayabilir miyiz?
-    Anımsanacağı gibi 1 ve 2 numaralı betimleyicilerin her ikisi de terminal aygıt sürücüsüne ilişkin dosya nesnesini belirtiyordu.
-    İşte biz bu sayede geri dönüşü aşağıdaki gibi yapabiliriz:
+    bundan geri dönebilir miyiz? Yani 1 numaralı betimleyicinin yeniden terminale ilişkin aygıt sürücüsünü göstermesini sağlayabilir 
+    miyiz? Anımsanacağı gibi 1 ve 2 numaralı betimleyicilerin her ikisi de terminal aygıt sürücüsüne ilişkin dosya nesnesini 
+    belirtiyordu. İşte biz bu sayede geri dönüşü aşağıdaki gibi yapabiliriz:
 
     int fd;
 
@@ -6544,9 +6550,9 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Pekiyi yukarıdaki örnekte 2 numaralı betimleyici bir biçimde yönlendirilmişse ya da close edilmişse geri dönüş nasıl sağlanabilir?
-    Burada artık işleme başlamadan önce dup işlemi ile 1 numaralı betimleyicinin gösterdiği dosya nesnesini gösteren başka bir 
-    yedek betimleyicinin oluşturulması gerekir. Aşağıda bu duruma örnek verilmiştir.
+    Pekiyi yukarıdaki örnekte 2 numaralı betimleyici bir biçimde yönlendirilmişse ya da close edilmişse geri dönüş nasıl 
+    sağlanabilir? Burada artık işleme başlamadan önce dup işlemi ile 1 numaralı betimleyicinin gösterdiği dosya nesnesini 
+    gösteren başka bir yedek betimleyicinin oluşturulması gerekir. Aşağıda bu duruma örnek verilmiştir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -6597,8 +6603,9 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Şimdi de 0 numaralı betimleyiciyi yönlendirelim. Eğer biz 0 numaralı betimleyiciyi bir dosyaya yönlendirirsek bu durumda 
-    klavyeden (stdin dosyasından) okuma yaptığını sanan standart C fonksiyonları aslında bu dosyadan okuma yapacaktır. Yani adeta 
-    sanki bu dosyanın içindekiler klavyeden girilmiş gibi bit etki oluşturacaktır. Aşağıdaki örnekte "test.txt" dosyasının içeriği şöyledir:
+    klavyeden (stdin dosyasından) okuma yaptığını sanan standart C fonksiyonları aslında bu dosyadan okuma yapacaktır. Yani 
+    adeta sanki bu dosyanın içindekiler klavyeden girilmiş gibi bit etki oluşturacaktır. Aşağıdaki örnekte "test.txt" dosyasının 
+    içeriği şöyledir:
 
     10 20
     30 40
@@ -6644,13 +6651,14 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    IO yönlendirmesi kabuk üzerinden de yapılabilmektedir. Kabukta ">" sembolü 1 numaralı betimleyicinin yönlendirileceği anlamına gelmektedir. Örneğin:
+    IO yönlendirmesi kabuk üzerinden de yapılabilmektedir. Kabukta ">" sembolü 1 numaralı betimleyicinin yönlendirileceği 
+    anlamına gelmektedir. Örneğin:
 
     ./sample > test.txt
 
-    Bu durumda kabuk önce ">" sembolünün sağındaki dosyayı O_WRONLY|O_TRUNC modunda açar. Sonra ./sample programını çalıştırarak bu 
-    prosesin 1 numaralı betimleyicisini dup2 fonksiyonu ile bu dosyaya yönlendirir. Böylece ./sample, sample programının ekrana yazdığını
-    zannettiği şeyler bu dosyaya yazılmış olacaktır. 
+    Bu durumda kabuk önce ">" sembolünün sağındaki dosyayı O_WRONLY|O_TRUNC modunda açar. Sonra ./sample programını çalıştırarak 
+    bu prosesin 1 numaralı betimleyicisini dup2 fonksiyonu ile bu dosyaya yönlendirir. Böylece ./sample, sample programının 
+    ekrana yazdığını zannettiği şeyler bu dosyaya yazılmış olacaktır. 
 
     ls gibi, cat gibi kabuk komutlarının da aslında birer program olduğuna bunların da 1 numaralı betimleyiciyi kullanarak yazdırma 
     yaptığına dikkat ediniz. Örneğimn biz kabuk üzerinde şu komutu uygulayabiliriz:
@@ -6670,8 +6678,8 @@ void exit_sys(const char *msg)
     ./sample < test.txt
 
     Burada kabuk "test.txt" dosyasını O_RDONLY modda açar. Sonra ./sample programını çalıştırır. Prosesin 0 numaralı betimleyicisini
-    "test.txt" dosyasına dup2 fonksiyonuyla yönlendirir. Böylece program sanki klavyeden okuduğunu sanırken aslında dosyadan okuma
-    yapacaktır. Aşağıdaki örnekte programın "sample.c" olduğunu kabul edelim. "test.txt" dosyasının içeriği de şöyle olsun:
+    "test.txt" dosyasına dup2 fonksiyonuyla yönlendirir. Böylece program sanki klavyeden okuduğunu sanırken aslında dosyadan
+    okuma yapacaktır. Aşağıdaki örnekte programın "sample.c" olduğunu kabul edelim. "test.txt" dosyasının içeriği de şöyle olsun:
 
     10 20
     30 40
@@ -6706,8 +6714,8 @@ int main(void)
     Burada "test.txt" dosyası açılıp ./sample programının "stderr" olarak isimlendirilen 2 numaralı betimleyicisi bu dosyaya 
     yönlendirilecektir. 
 
-    Kabuk programları ">", "<", "n>" "n<" gibi yönlendirmeleri nasıl yapmaktadır? Bu konu ileride ele alınacaktır. Kabuk önce bir kez
-    fork işlemi yapar. Sonra yönlendirme işlemini gerçekleştirir. Sonra da exec işlemi yapmaktadır.
+    Kabuk programları ">", "<", "n>" "n<" gibi yönlendirmeleri nasıl yapmaktadır? Bu konu ileride ele alınacaktır. Kabuk önce 
+    bir kez fork işlemi yapar. Sonra yönlendirme işlemini gerçekleştirir. Sonra da exec işlemi yapmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -6724,16 +6732,16 @@ int main(void)
 
     fd = open("/dev/null", O_WRONLY);
 
-    Ancak bu dizin girişi gerçek bir dosya değildir. Bu giriş için yalnızca bir i-node elemanı bulundurulmaktadır. İşletim sistemi 
-    böyle bir dosya açılmaya çalışıldığında aslında "bir aygıt sürücü ile işlem yapılmak istendiğini" anlamaktadır. Yani aygıt sürücü
-    bir dosya gibi açılıyor olsa da aslında onun bir dosyayla ilgisi yoktur. Aygıt dosyaları (örneğimizdeki "dev/null" dosyası) 
-    dummy bir dosyadır. Aslında kernel içerisindeki aygıt sürücüyü temsil etmektedir. 
+    Ancak bu dizin girişi gerçek bir dosya değildir. Bu giriş için yalnızca bir i-node elemanı bulundurulmaktadır. İşletim 
+    sistemi böyle bir dosya açılmaya çalışıldığında aslında "bir aygıt sürücü ile işlem yapılmak istendiğini" anlamaktadır. 
+    Yani aygıt sürücü bir dosya gibi açılıyor olsa da aslında onun bir dosyayla ilgisi yoktur. Aygıt dosyaları (örneğimizdeki 
+    "dev/null" dosyası) dummy bir dosyadır. Aslında kernel içerisindeki aygıt sürücüyü temsil etmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Pekiyi stderr dosyası ne anlama gelmektedir? Anımsanacağı gibi stderr 2 numaralı betimleyici ile temsil edilmektedir. 1 ve 2
-    numaralı betimleyiciler dup yapılmış durumdadır. Yani her iki betimleyici ile de write yapıldığında yazılanlar ekrana çıkacaktır. 
-    O halde stderr dosyasının ne anlamı vardır? 
+    Pekiyi stderr dosyası ne anlama gelmektedir? Anımsanacağı gibi stderr 2 numaralı betimleyici ile temsil edilmektedir. 1 
+    ve 2 numaralı betimleyiciler dup yapılmış durumdadır. Yani her iki betimleyici ile de write yapıldığında yazılanlar ekrana 
+    çıkacaktır. O halde stderr dosyasının ne anlamı vardır? 
 
     C'de stdin, stdout ve stderr isimli değişkenler betimleyici belirtmezler. Bu değişkenler FILE * türündendir. Tabii stdin 
     UNIX/Linuz sistemlerinde 0 numaralı betimleyici ile stdout 1 numaralı betimleyici ile stderr de 2 numaralı betimleyici ile 
@@ -6741,9 +6749,9 @@ int main(void)
 
     fprintf(stderr, "stderr\n");
 
-    Tabii aslında bilindiği gibi printf ile fprintf arasında, scanf ile fscanf arasındaki tek farklılık printf ve scanf fonksiyonlarının
-    default olarak stdout ve stdin dosya bilgi göstericilerini kullanmasıdır. Yani örneğin printf(...) çağrısı tamamen fprintf(stdout, ...)
-    çağrısı eşdeğerdir. Benzer biçimde scanf(...) çağrısı ile de fscanf(stdin, ...) eşdeğerdir.
+    Tabii aslında bilindiği gibi printf ile fprintf arasında, scanf ile fscanf arasındaki tek farklılık printf ve scanf 
+    fonksiyonlarının default olarak stdout ve stdin dosya bilgi göstericilerini kullanmasıdır. Yani örneğin printf(...) çağrısı 
+    tamamen fprintf(stdout, ...) çağrısı eşdeğerdir. Benzer biçimde scanf(...) çağrısı ile de fscanf(stdin, ...) eşdeğerdir.
 
     Programcı hata mesajlarını her zaman "stderr" dosyasına yazdırmalıdır. Bu iyi bir tekniktir. Örneğin:
 
@@ -6752,8 +6760,9 @@ int main(void)
         exit(EXIT_FAILURE);
     }
 
-    Böylece ileride gerekirse programın normal çıktılarıyla hata mesajları IO yönlendirmesiyle birbirinden ayrılabilir. Tabii biz 
-    IO yönlendirmesi yapmadıktan sonra programın normal mesajlarıyla hata mesajlarının her ikisi de ekrana çıkacaktır. Aşağıdaki gibi bir program olsun:
+    Böylece ileride gerekirse programın normal çıktılarıyla hata mesajları IO yönlendirmesiyle birbirinden ayrılabilir. 
+    Tabii biz IO yönlendirmesi yapmadıktan sonra programın normal mesajlarıyla hata mesajlarının her ikisi de ekrana çıkacaktır. 
+    Aşağıdaki gibi bir program olsun:
 
     /* sample.c */
 
@@ -6777,8 +6786,8 @@ int main(void)
     $ ./sample 2> test.txt
     stdout
 
-    Görüldüğü gibi biz programın hata mesajları ile normal mesajları artık ayırabilmekteyiz. Eğer her mesayı printf ile stdout dosyasına 
-    yazdırsaydık bunun imkanı olmayacaktı.
+    Görüldüğü gibi biz programın hata mesajları ile normal mesajları artık ayırabilmekteyiz. Eğer her mesayı printf ile stdout
+    dosyasına yazdırsaydık bunun imkanı olmayacaktı.
 
     Örneğin biz find programı ile "sample.c" dosyasını dizin ağacında aramak isteyelim:
 
@@ -6790,12 +6799,13 @@ int main(void)
     find / -name "sample.c" 2> test.txt
 
     Artık hata mnesajları ekranda görünmeyecektir. Bu tür durumlar için /dev/null isimli bir aygıt sürücü bulundurulmuştur. Bu 
-    aygıt sürücü açılırsa ve ona yazma yapılırsa yazılanlar atılmaktadır. O halde programın yazdığı hata mesajları gereksiz yer kaplamasın diye
-    biz yönlendirmeyi /dev/null aygıt sürücüsüne yapabiliriz. Örneğin:
+    aygıt sürücü açılırsa ve ona yazma yapılırsa yazılanlar atılmaktadır. O halde programın yazdığı hata mesajları gereksiz yer 
+    kaplamasın diye biz yönlendirmeyi /dev/null aygıt sürücüsüne yapabiliriz. Örneğin:
 
     find / -name "sample.c" 2> /dev/null
 
-    /dev/null aygıt sürücüsünden okuma yapılmaya çalışılırsa sanki dosya sonuna gelinmiş (yani EOF durumuna gelinmiş) gibi bir durum oluşur.
+    /dev/null aygıt sürücüsünden okuma yapılmaya çalışılırsa sanki dosya sonuna gelinmiş (yani EOF durumuna gelinmiş) gibi bir 
+    durum oluşur.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -6837,11 +6847,11 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    "/dev/random" ve "/dev/urandom" aygıt sürücüleri her okunduğunda rastgele byte'lar elde edilmektedir. Bu iki aygıt sürücü arasında
-    bazı küçük farklılıklar vardır. Ancak burada onun üzerinde durmayacağız. Ayrıca bu aygıt sürücülerden okumayı pratik hale getirmek 
-    için Linux'a 3.17 çekirdeği ile birlikte "sys_getrandom" isimli bir sistem fonksiyonu da eklenmiştir. Aşağıdaki örnekte bu aygıt sürücüden 
-    rastgele byte'lar okunup hex sistemde ekrana yazdırılmıştır. Program beklemelere yol açarsa şaşırmayınız. Çünkü konunun bazı 
-    ayrıntıları vardır. 
+    "/dev/random" ve "/dev/urandom" aygıt sürücüleri her okunduğunda rastgele byte'lar elde edilmektedir. Bu iki aygıt sürücü 
+    arasında bazı küçük farklılıklar vardır. Ancak burada onun üzerinde durmayacağız. Ayrıca bu aygıt sürücülerden okumayı 
+    pratik hale getirmek için Linux'a 3.17 çekirdeği ile birlikte "sys_getrandom" isimli bir sistem fonksiyonu da eklenmiştir. 
+    Aşağıdaki örnekte bu aygıt sürücüden rastgele byte'lar okunup hex sistemde ekrana yazdırılmıştır. Program beklemelere yol 
+    açarsa şaşırmayınız. Çünkü konunun bazı ayrıntıları vardır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -6938,9 +6948,9 @@ int main(void)
 
     ps -e | wc
 
-    Burada "ps -e" komutu satır satır sistemdeki prosesleri "stdout" dosyasına yazmaktadır. "wc" komutuna argüman verilmediğinde göre
-    bu komut "stdin" dosyasından okuma yapacaktır. O halde bu durumda aslında "ps -e" komutunun ekrana yazdıklarını "wc" komutu 
-    işleme sokacaktır.
+    Burada "ps -e" komutu satır satır sistemdeki prosesleri "stdout" dosyasına yazmaktadır. "wc" komutuna argüman verilmediğinde 
+    göre bu komut "stdin" dosyasından okuma yapacaktır. O halde bu durumda aslında "ps -e" komutunun ekrana yazdıklarını "wc" 
+    komutu işleme sokacaktır.
 
     Örneğin bir çıktıyı sayfa sayfa görüntülemek için "more" isimli bir komut bulunmaktadır. "more" programı normalde bir dosyayı 
     argüman olarak alır. Ancak eğer dosya verilmezse bu durumda "more" stdin dosyasından okunanları sayfa sayfa görüntüler. 
@@ -6961,8 +6971,8 @@ int main(void)
 
     a | b | c
 
-    Burada "a" programının stdout dosyasına yazdıklarını "b" programı stdin dosyasından okuyacaktır. "b" programının da stdout dosyasına 
-    yazdıklarını "c" programı stdin dosyasından okuyacaktır.
+    Burada "a" programının stdout dosyasına yazdıklarını "b" programı stdin dosyasından okuyacaktır. "b" programının da stdout 
+    dosyasına yazdıklarını "c" programı stdin dosyasından okuyacaktır.
 
     Eğer boru mekanizması olmasaydı yukarıdaki işlemler yine yapılabilirdi. Ancak bu durumda geçici dosyaların oluşturulması gerekirdi. 
     Örneğin:
@@ -6974,14 +6984,15 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Çok prosesli (multiprocessing) işletim sistemlerinin çalıştığı donanımlarda kullanılan mikroişlemcilerin "koruma mekanizması (protection mechanism)"
-    denilen bir özelliği vardır. Çok prosesleri sistemlerde bütün programlar o anda RAM'de bir biçimde bulunmaktadır. Tabii işletim sisteminin
-    kendisi de RAM'de bulunur. Bir programın göstericiler yoluyla kendi bellek alanının dışına çıkarak başka bir prosesin bellek alanına
-    erişmesi mutlaka engellenmesi gereken bir durumdur. Çünkü eğer bu durum engellenmezse bir program başka bir programın bellek
-    alanını bozabilir. Bu bozulma da o programın hatalı çalışmasına ya da çökmesine yol açabilir. Program başka bir programın bellek alanını
-    bozmasa bile oradaki programlar üzerinde casuslak faaliyeliteleri yürütebilir. Buna ek olarak bazı makine komutları tamamen sistemin çökmesine yol 
-    açabilmektedir. Bir programın bu makine komutlarını kullanmasının tüm sistemi çökertebileceği için önüne geçilmesi gerekir. 
-    İşte işlemcilerin koruma mekanizması bu tür ihlallerin birinci elden işlemci tarafından tespit edilip engellenmesini sağlamaktadır.
+    Çok prosesli (multiprocessing) işletim sistemlerinin çalıştığı donanımlarda kullanılan mikroişlemcilerin "koruma mekanizması 
+    (protection mechanism)" denilen bir özelliği vardır. Çok prosesleri sistemlerde bütün programlar o anda RAM'de bir biçimde 
+    bulunmaktadır. Tabii işletim sisteminin kendisi de RAM'de bulunur. Bir programın göstericiler yoluyla kendi bellek alanının 
+    dışına çıkarak başka bir prosesin bellek alanına erişmesi mutlaka engellenmesi gereken bir durumdur. Çünkü eğer bu durum 
+    engellenmezse bir program başka bir programın bellek alanını bozabilir. Bu bozulma da o programın hatalı çalışmasına ya da 
+    çökmesine yol açabilir. Program başka bir programın bellek alanını bozmasa bile oradaki programlar üzerinde casuslak faaliyeliteleri 
+    yürütebilir. Buna ek olarak bazı makine komutları tamamen sistemin çökmesine yol açabilmektedir. Bir programın bu makine 
+    komutlarını kullanmasının tüm sistemi çökertebileceği için önüne geçilmesi gerekir. İşte işlemcilerin koruma mekanizması bu 
+    tür ihlallerin birinci elden işlemci tarafından tespit edilip engellenmesini sağlamaktadır.
 
     İşlemcilerin koruma mekanizmasının iki yönü vardır:
 
@@ -6994,8 +7005,8 @@ int main(void)
     Tabii her türlü mikroişlemci böyle bir mekanizmaya sahip değildir. Ancak güçlü işlemcilerde bu mekanizma bulunmaktadır. 
     Örneğin Intel'in 80386 ve sonrası işlemcileri ARM'nin Cortex A serisi işlemcileri, Alpha işlemcileri, PowerPC işlemcileri, 
     Itanium işlemcileri bu mekanizmalarsa sahiptir. Mikrodenetleyiciler genel olarak küçük işlemciler oldukları için bu mekanizmaya 
-    sahip değillerdir. Windows gibi Linux gibi macOS gibi işletim sistemleri bu mekanizmaya sahip olmayan işlemcilerin bulundurğu sistemlerde 
-    kullanılamazlar.
+    sahip değillerdir. Windows gibi Linux gibi macOS gibi işletim sistemleri bu mekanizmaya sahip olmayan işlemcilerin bulundurğu 
+    sistemlerde kullanılamazlar.
 
     Bir prosesin bellek korumasını ve komut korumasını ihlal etmesi birinci elde mikroişlemci tarafından tespit edilmektedir. 
     Mikroişlemci ihlali tespit eder ve işletim sistemine bildirir. İşletim sistemi de hemen her zaman programı sonlandırır. 
@@ -7012,8 +7023,8 @@ int main(void)
     user modda çalışmaktadır. Ancak kernel kodları ve aygıt sürücüler (kernel modülleri) kernel modda çalışırlar. 
 
     Bir programın "sudo" ile çalıştırılmasının (yani programın proses id'sinin 0 olmasının) bu konuyla hiçbir ilgisi yoktur. 
-    Proses id'nin 0 olması yalnızca dosya erişimleri için avantaj sağlayabilmektedir. Yoksa biz bir programı "sudo" ile çalıştırsak bile 
-    o program yine "user modda" çalıştırılmaktadır.
+    Proses id'nin 0 olması yalnızca dosya erişimleri için avantaj sağlayabilmektedir. Yoksa biz bir programı "sudo" ile çalıştırsak 
+    bile o program yine "user modda" çalıştırılmaktadır.
 
     Pekiyi biz kendi programımızı kernel modda çalıştıramaz mıyız? Bu sorunun yanıtı genel olarak "hayır" biçimindedir. Bunun tek 
     yolu "aygıt sürücü" ya da "kernel modül" denilen biçimde kod yazmaktır. Zaten aygıt sürücülerin en önemli özelliği onların 
@@ -7035,9 +7046,9 @@ int main(void)
     read(fd, (char *)0x123456, 10)
 
     Linux'ta read POSIX fonksiyonu doğrudan sys_read sistem fonksiyonunu çağıracaktır. Eğer bu sistem fonksiyonu ikinci parametreyle
-    verilen adresi hiç kontrol etmezse koruma mekanizmasından da muaf olduğu için tuzağa düşecektir. İşte bu tür sistem fonksiyonları kesinlikle
-    adreslerin o prosesin alanı içerisinde olup olmadığını test ederler. Bunun gibi pek çok yapılması egreken irili ufaklı kontroller 
-    vardır. 
+    verilen adresi hiç kontrol etmezse koruma mekanizmasından da muaf olduğu için tuzağa düşecektir. İşte bu tür sistem fonksiyonları 
+    kesinlikle adreslerin o prosesin alanı içerisinde olup olmadığını test ederler. Bunun gibi pek çok yapılması egreken irili ufaklı 
+    kontroller vardır. 
 
     O halde aslında bir proses yaşamının önemli bir kısmını user modda geçrirken bir kısmını da kernel modda geçirebilmektedir. 
     Örneğin "time" isimli kabuk komutuyla biz prosesin ne kadar zamanı kernel modda ne kadar zamanı user modda geçirdiğini görebiliriz:
@@ -7052,10 +7063,10 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    C'nin prototipleri <stdio.h> içerisinde olan ve başı "f" ile başlayan dosya fonksiyonları aslında birer "sarma fonksiyon (wapper function)"
-    gibidir. Biz bu fonksiyonları kullandığımızda arka planda bu fonksiyonlar UNIX/Linux ve macOS sistemlerinde POSIX fonksiyonlarını, 
-    Windows sistemlerinde ise Windows API fonksiyonlarını kullanmaktadır. Tabi bu fonksiyonlar da ilgili sistemdeki sistem fonksiyonlarını
-    çağırmaktadır. Örneğin biz Linux sistemlerinde fopen fonksiyonunu kullanmış olalım:
+    C'nin prototipleri <stdio.h> içerisinde olan ve başı "f" ile başlayan dosya fonksiyonları aslında birer "sarma fonksiyon 
+    (wapper function)" gibidir. Biz bu fonksiyonları kullandığımızda arka planda bu fonksiyonlar UNIX/Linux ve macOS sistemlerinde 
+    POSIX fonksiyonlarını, Windows sistemlerinde ise Windows API fonksiyonlarını kullanmaktadır. Tabi bu fonksiyonlar da ilgili 
+    sistemdeki sistem fonksiyonlarınıçağırmaktadır. Örneğin biz Linux sistemlerinde fopen fonksiyonunu kullanmış olalım:
 
     fopen (user mode) ---> open (user mode) ---> sys_open (kernel mode)
 
@@ -7076,15 +7087,16 @@ int main(void)
         ...
     } FILE;
 
-    Standart dosya fonksiyonlarının en önemli özellikleri bir "cache sistemi" oluşturmalarıdır. Burada "cache" terimi daha uygun olmasına karşın 
-    daha çok "tampon (buffer)" terimi kullanılmaktadır. Bu nedenle C'nin dosya fonksiyonlarına "tamponlu (buffered) IO fonksiyonları" denilmektedir.
+    Standart dosya fonksiyonlarının en önemli özellikleri bir "cache sistemi" oluşturmalarıdır. Burada "cache" terimi daha 
+    uygun olmasına karşın daha çok "tampon (buffer)" terimi kullanılmaktadır. Bu nedenle C'nin dosya fonksiyonlarına 
+    "tamponlu (buffered) IO fonksiyonları" denilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Aşağıda iki program verilmiştir. Bu iki program da bir dosyanın bütün karakterlerini ekrana yazdırmaktadır. "a.c" programı
     bu işlemi her defasında read fonksiyonu çağırarak yaparken "b.c" programı bir defasında 512 byte okuma yaparak okunanları 
-    bir tampona yerleştirip oradan alıp yazdırmaktadır. Dolayısıyla "b.c" programının daha hızlı çalışması beklenir. Çünkü bu program 
-    sistem fonksiyonlarını daha az çağırmaktadır. 
+    bir tampona yerleştirip oradan alıp yazdırmaktadır. Dolayısıyla "b.c" programının daha hızlı çalışması beklenir. Çünkü bu 
+    program sistem fonksiyonlarını daha az çağırmaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* a.c */
@@ -7180,16 +7192,17 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     İşte standart C fonksiyonları da yukarıdaki örnekte olduğu gibi sistem fonksiyonlarını daha az çağırmak için bir tampon
     kullanmaktadır. Biz örneğin fgetc fonksiyonu ile bir byte bile okumak istesek fgetc bir tamponluk bilgiyi okur ve bize 
-    onun içerisinde bir byte'ı verir. Biz daha sonra yeniden fgetc fonksiyonunu çağırdığımızda fgetc zaten tamponda daha önce okunmuş olan 
-    bilgi yığını olduğu için read fonksiyonu ile okuma yapmaz bize doğrudan tampondan verir. Tabii tampondaki her byte okunduktan sonra 
-    (yani tamponun sonuna gelindiğinde) fgetc yeniden read fonksiyonunu çağıracak ve tamponu yeniden dolduracaktır. 
+    onun içerisinde bir byte'ı verir. Biz daha sonra yeniden fgetc fonksiyonunu çağırdığımızda fgetc zaten tamponda daha önce 
+    okunmuş olan bilgi yığını olduğu için read fonksiyonu ile okuma yapmaz bize doğrudan tampondan verir. Tabii tampondaki 
+    her byte okunduktan sonra (yani tamponun sonuna gelindiğinde) fgetc yeniden read fonksiyonunu çağıracak ve tamponu yeniden 
+    dolduracaktır. 
 
     fopen fonksiyonun geri döndürdüğü FILE türünden yapının içerisinde aslında bu tamponu yönetmek için gerekli olan bilgiler de 
     bulunmaktadır. 
 
-    Standart C fonksiyonlarının kullandıkları default tampon büyüklüğü <stdio.h> içerisinde BUFSIZ sembolik sabitiyle ifade edilmiştir. 
-    (Tabii bu BUFSIZ değerini değiştirmenin bir anlamı yoktur. Kod çoktan derlenmiştir. Bu sembolik sabit sadece dış dünyaya default durum 
-    hakkında bilgi vermek için bulundurulmuştur.)
+    Standart C fonksiyonlarının kullandıkları default tampon büyüklüğü <stdio.h> içerisinde BUFSIZ sembolik sabitiyle ifade 
+    edilmiştir. (Tabii bu BUFSIZ değerini değiştirmenin bir anlamı yoktur. Kod çoktan derlenmiştir. Bu sembolik sabit sadece 
+    dış dünyaya default durum hakkında bilgi vermek için bulundurulmuştur.)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -7202,13 +7215,13 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Standart C fonksiyonlarının oluşturdukları bu tampon read/write bir tampondur. Yani yalnızca okuma sırsında da değil yazma sırasında
-    da kullanılmaktadır. Örneğin biz fputc fonksiyonu le bir byte'ı dosyaya yazamak istesek bu bir byte aslında bu tampona yazılır. 
-    Bu tampon dolduğunda (bu konusunun ayrıntısı ele alınacaktır) ya da fflush fonksiyonu çağrıldığında ya da en kötü olasılıkla
-    fclose işlemi sırasında write fonksiyonu çağrılarak diske yazdırılır. Biz tampondaki bilginin aktarılmasını garanti etmek için
-    fflush fonksiyonu kullanabiliriz. Tampondaki bilginin write gibi bir fonksiyonla diske yazılması işlemine dosya terminolojisinde
-    "flush işlemi" denilmektedir. fflush fonksiyonunun kullanılabilmes için dosyanın "yazma modunda açılmış olması (yani "w", "r+" gibi modlarda)"
-    gerekmektedir. 
+    Standart C fonksiyonlarının oluşturdukları bu tampon read/write bir tampondur. Yani yalnızca okuma sırsında da değil yazma 
+    sırasında da kullanılmaktadır. Örneğin biz fputc fonksiyonu le bir byte'ı dosyaya yazamak istesek bu bir byte aslında bu 
+    tampona yazılır. Bu tampon dolduğunda (bu konusunun ayrıntısı ele alınacaktır) ya da fflush fonksiyonu çağrıldığında ya da 
+    en kötü olasılıkla fclose işlemi sırasında write fonksiyonu çağrılarak diske yazdırılır. Biz tampondaki bilginin aktarılmasını 
+    garanti etmek için fflush fonksiyonu kullanabiliriz. Tampondaki bilginin write gibi bir fonksiyonla diske yazılması işlemine 
+    dosya terminolojisinde "flush işlemi" denilmektedir. fflush fonksiyonunun kullanılabilmes için dosyanın "yazma modunda açılmış 
+    olması (yani "w", "r+" gibi modlarda)" gerekmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -7218,8 +7231,8 @@ int main(void)
 /*--------------------------------------------------------------------------------------------------------------------------
     Anımsanacağı gibi C'nin dosya açmakta kullanılan fopen fonksiyonu bize FILE türünden bir yapı nesnesinin adresini vermektedir. 
     Bu FILE nesnesine "stream" de denilmektedir. Biz Derneğimizde buna genel olarak "dosya bilgi göstericisi" diyoruz. 
-    İşte bu FILE yapısının içerisinde söz konusu bu tamponu yönetmek için de bilgiler bulunmaktadır. Örneğin FILE yapısının içerisinde 
-    tipik olarak şu bilgiler bulunur:
+    İşte bu FILE yapısının içerisinde söz konusu bu tamponu yönetmek için de bilgiler bulunmaktadır. Örneğin FILE yapısının 
+    içerisinde tipik olarak şu bilgiler bulunur:
 
     - İşletim sistemi düzeyinde okuma/yazma işlemleri için gereken dosya betimleyicisi
     - Tamponun başlangıç adresini tutan bir gösterici
@@ -7227,9 +7240,10 @@ int main(void)
     - Tamponun uzunluğunu tutan bir eleman ya da tamponun sonunu tutan bir gösterici
     - Diğer bilgiler
 
-    Pekiyi fopen tarafından bu FILE yapısı nasıl tahsis edilmektedir? Standart C kütüphanelerini yazanlar birkaç teknik kullanabilmektedir. 
-    Birincisi doğrudan tahsisatın malloc fonksiyonu ile yapılmasıdır. Tabii bu durumda free işlemi fclose fonksiyonu tarafından yapılacaktır. 
-    İkincisi bu FILE yapsı zaten işin başında static düzeyde tahsis edilmiş bir FILE dizisinin içerisinde alınabilir. Örneğin:
+    Pekiyi fopen tarafından bu FILE yapısı nasıl tahsis edilmektedir? Standart C kütüphanelerini yazanlar birkaç teknik 
+    kullanabilmektedir. Birincisi doğrudan tahsisatın malloc fonksiyonu ile yapılmasıdır. Tabii bu durumda free işlemi fclose 
+    fonksiyonu tarafından yapılacaktır. İkincisi bu FILE yapsı zaten işin başında static düzeyde tahsis edilmiş bir FILE 
+    dizisinin içerisinde alınabilir. Örneğin:
 
     static FILE g_files[FILE_MAX];
     ...
@@ -7246,17 +7260,17 @@ int main(void)
 
     int fileno(FILE *stream);
 
-    Fonksiyonun geri dönüş değeri dosya betimleyicisidir. Pekiyi bu fonksiyon başarısız olabilir mi ya da başarısızlığı tespit edebilir mi?
-    POSIX standartlarına göre fonksiyon başarısız olabilir. Bu durumda -1 değerine geri döner. Ancak fonksiyonun başarısızlığı tespit etmesi 
-    yeterli bir biçimde yapılamayabilir. Fonksiyon FILE yapısının içerisindeki elemana başlangıçta geçersiz bir değer atayıp bu değere
-    bakmaktadır. 
+    Fonksiyonun geri dönüş değeri dosya betimleyicisidir. Pekiyi bu fonksiyon başarısız olabilir mi ya da başarısızlığı tespit 
+    edebilir mi? POSIX standartlarına göre fonksiyon başarısız olabilir. Bu durumda -1 değerine geri döner. Ancak fonksiyonun 
+    başarısızlığı tespit etmesi yeterli bir biçimde yapılamayabilir. Fonksiyon FILE yapısının içerisindeki elemana başlangıçta 
+    geçersiz bir değer atayıp bu değere bakmaktadır. 
 
-    Tabii fileno fonksiyonuyla FILE yapısı içerisindeki dosya betimleyicisini alıp onunla işlem yapınca onun gösterdiği dosya göstericisi 
-    değiştirilmiş olur. Pek çok gerçekleştirim bu durumda soruna yol açmamaktadır. Ancak bu konuda dikkat etmek gerekir. fileno fonksiyonu
-    kısıtlı biçimde bazı zorunlu durumlarda kullanılmalıdır. 
+    Tabii fileno fonksiyonuyla FILE yapısı içerisindeki dosya betimleyicisini alıp onunla işlem yapınca onun gösterdiği dosya 
+    göstericisi değiştirilmiş olur. Pek çok gerçekleştirim bu durumda soruna yol açmamaktadır. Ancak bu konuda dikkat etmek 
+    gerekir. fileno fonksiyonu kısıtlı biçimde bazı zorunlu durumlarda kullanılmalıdır. 
 
-    Aşağıdaki örnekte dosya önce fopen fonksiyonuyla açılıp fileno fonksiyonuyla dosya betimleyicisi elde edilmiş ve sonra o betimleyici ile
-    okuma yapılmıştır. 
+    Aşağıdaki örnekte dosya önce fopen fonksiyonuyla açılıp fileno fonksiyonuyla dosya betimleyicisi elde edilmiş ve sonra 
+    o betimleyici ile okuma yapılmıştır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -7308,13 +7322,14 @@ void exit_sys(const char *msg)
 
     FILE *fdopen(int fd, const char *mode);
 
-    Fonksiyonun birinci parametresi open fonksiyonu ile elde edilen dosya betimleyicidir. İkinci parametre dosyanın fopen fonksiyonundaki açış modudur. 
-    Tabii buradaki açış modunun open fonksiyonuyla dosya açılırkenki mod ile uyuşması gerekir. Fonksiyon başarı durumunda dosya bilgi 
-    göstericisine, başarısızlık durumunda NULL adrese geri döner. errno değeri uygun biçimde set edilir. 
+    Fonksiyonun birinci parametresi open fonksiyonu ile elde edilen dosya betimleyicidir. İkinci parametre dosyanın fopen 
+    fonksiyonundaki açış modudur. Tabii buradaki açış modunun open fonksiyonuyla dosya açılırkenki mod ile uyuşması gerekir. Fonksiyon 
+    başarı durumunda dosya bilgi göstericisine, başarısızlık durumunda NULL adrese geri döner. errno değeri uygun biçimde set 
+    edilir. 
 
     Aşağıdaki örnekte önce open POSIX fonksiyonu ile dosya açılmış sonra dosya betimleyicisi kullanılarak fdopen fonksiyonu ile 
-    dosya bilgi göstericisi elde edilmiştir. İşlemlere standart C fonksiyonlarıyla devam edilmiştir. fclose işlemi zaten bu betimleyiciyi 
-    kapacağı için ayrıca close fonksiyonu çağrılmamıştır. 
+    dosya bilgi göstericisi elde edilmiştir. İşlemlere standart C fonksiyonlarıyla devam edilmiştir. fclose işlemi zaten bu 
+    betimleyiciyi kapacağı için ayrıca close fonksiyonu çağrılmamıştır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -7363,22 +7378,22 @@ void exit_sys(const char *msg)
     yeniden doldurulur. Yazma sırasında da tampona yazılır. Tamponun sonuna gelindiğinde tampona yazılmış olanlar flush edilir. 
     (Tabii her zaman fflush ve fclose zaten flush işlemini yapmaktadır.)
 
-    Satır Tamponlamalı Mod (Line Buffering): Bu modda tampon tamamen doldurulmaz. Yalnızca tek satırlık bilgi ('\n' karakterş dahil olmak üzere)
-    tampona çekilmektedir. Okuma sırasında bu tampondan byte'lar verilir. Yazma sırasına yine tampona yazılır. flush işlemi '\n' 
-    karakteri tampona yazılınca (ya da fflush ve fclose fonksiyonları çağrılınca) yapılmaktadır. Satır tamponlamalı mod tipik olarak
-    text dosyalar için kullanılmaktadır. Binary dosyalar için bu mod kullanılabilse de anlamsızdır. 
+    Satır Tamponlamalı Mod (Line Buffering): Bu modda tampon tamamen doldurulmaz. Yalnızca tek satırlık bilgi ('\n' karakterş 
+    dahil olmak üzere) tampona çekilmektedir. Okuma sırasında bu tampondan byte'lar verilir. Yazma sırasına yine tampona yazılır. 
+    flush işlemi '\n' karakteri tampona yazılınca (ya da fflush ve fclose fonksiyonları çağrılınca) yapılmaktadır. Satır tamponlamalı 
+    mod tipik olarak text dosyalar için kullanılmaktadır. Binary dosyalar için bu mod kullanılabilse de anlamsızdır. 
 
-    Sıfır Tamponlamalı Mod (No Buffering): Burada tampon hiç kullanılmaz. Doğrudan ilgili aşağı seviyeli fonksiyonlarla (yani read ve write POSIX 
-    fonksiyonlarıyla) aktarım yapılır.
+    Sıfır Tamponlamalı Mod (No Buffering): Burada tampon hiç kullanılmaz. Doğrudan ilgili aşağı seviyeli fonksiyonlarla (yani read 
+    ve write POSIX fonksiyonlarıyla) aktarım yapılır.
 
-    Satır tamponlaması kişilere biraz tuhaf gelebilmektedir. Çünkü satır tamponlaması yapabilmek için standart C kütüphanesinin okuma sırasında
-    '\n' karakterini görmesi gerekir ki bazı durumlarda bunun etkin bir biçimde yapılabilme olanağı yoktur. Ancak bazı durumlarda zaten 
-    aygıt sürücüler bize satırsal bilgi vermektedir. Standart kütüphaneleri disk dosyaları için satır tamponlaması yaparken aslında
-    çoğu kez '\n' karakterine kadar değil tüm tampon kadar okuma yapmaktadır. Ancak '\n' karakteri tampona yazıldığında flush işlemi 
-    yapmaktadırlar. C standartları bu üç tamponlama biçimini belirtmiş olsa da detaylar konusunda bir açıklama yapmamıştır. 
-    Dolayısıyla kütüphaneyi gerçekleştirenler satır tamponlaması ile okuma yapılırken '\n' karakterine kadar değil tüm tamponu da
-    doldurabilmektedir. C standartlarında tamponlama stratejisi için "niyet" belirtilmiştir. Ancak yukarıda da belirttiğimiz gibi 
-    detay belirtilmemiştir. 
+    Satır tamponlaması kişilere biraz tuhaf gelebilmektedir. Çünkü satır tamponlaması yapabilmek için standart C kütüphanesinin 
+    okuma sırasında '\n' karakterini görmesi gerekir ki bazı durumlarda bunun etkin bir biçimde yapılabilme olanağı yoktur. Ancak 
+    bazı durumlarda zaten aygıt sürücüler bize satırsal bilgi vermektedir. Standart kütüphaneleri disk dosyaları için satır 
+    tamponlaması yaparken aslında çoğu kez '\n' karakterine kadar değil tüm tampon kadar okuma yapmaktadır. Ancak '\n' karakteri 
+    tampona yazıldığında flush işlemi yapmaktadırlar. C standartları bu üç tamponlama biçimini belirtmiş olsa da detaylar konusunda 
+    bir açıklama yapmamıştır. Dolayısıyla kütüphaneyi gerçekleştirenler satır tamponlaması ile okuma yapılırken '\n' karakterine 
+    kadar değil tüm tamponu da doldurabilmektedir. C standartlarında tamponlama stratejisi için "niyet" belirtilmiştir. Ancak yukarıda 
+    da belirttiğimiz gibi detay belirtilmemiştir. 
 
     Tamponlama modu ile ilgili iki önemli soru gündeme gelmektedir?
 
@@ -7390,8 +7405,8 @@ void exit_sys(const char *msg)
     default durumda "tam tamponlamalı (full buffered)" modu esas almaktadır. Ancak standartlarda "stdin", "stdout" ve "strderr" 
     dosyaları için bazı şeyler söylenmiştir. Bir dosyanın tamponlama modu dosya fopen fonksiyonuyla açıldıktan sonra ancak henüz 
     hiçbir işlem yapmadan "setbuf" ve "setvbuf" standart C fonksiyonlarıyla değiştirilebilmektedir. Dosya üzerinde herhangi bir 
-    işlem yaptıktan sonra bu fonksiyonların çağrılması "tanımsız davranışa (undefined behavior)" yol açmaktadır. "setvbuf" fonksiyonu işlevsel olarak 
-    "setbuf" fonksiyonunu zaten kapsamaktadır. 
+    işlem yaptıktan sonra bu fonksiyonların çağrılması "tanımsız davranışa (undefined behavior)" yol açmaktadır. "setvbuf" 
+    fonksiyonu işlevsel olarak "setbuf" fonksiyonunu zaten kapsamaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -7402,8 +7417,8 @@ void exit_sys(const char *msg)
 
     void setbuf(FILE *stream, char *buf);
 
-    Fonksiyonun birinci parametresi dosya bilgi göstericisini, ikinci parametresi yeni tamponun yerini belirtmektedir. Bu tamponun BUFSIZ 
-    uzunluğunda olması gerekir. Eğer ikinci parametre NULL adres olarak girilirse bu durumda dosya "sıfır tamponlamalı moda" 
+    Fonksiyonun birinci parametresi dosya bilgi göstericisini, ikinci parametresi yeni tamponun yerini belirtmektedir. Bu tamponun 
+    BUFSIZ uzunluğunda olması gerekir. Eğer ikinci parametre NULL adres olarak girilirse bu durumda dosya "sıfır tamponlamalı moda" 
     sokulmaktadır. Fonksiyon başarıyı kontrol edememektedir. 
 
     Aşağıdaki örnekte setbuf fonksiyonu ile dosya için kullanılacak tamponun yeri değiştirilmiştir. fgetc işlemi sonrasında bu 
@@ -7500,8 +7515,8 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Çeşitli standart C kütüphanelerinin özellikle stdio fonksiyonlarının gerçekleştirimini üşenmeden inceleyebilirsiniz. Alternatifler 
-    şunlar olabilir:
+    Çeşitli standart C kütüphanelerinin özellikle stdio fonksiyonlarının gerçekleştirimini üşenmeden inceleyebilirsiniz. 
+    Alternatifler şunlar olabilir:
 
     - uclibc (Mikro C kütüphanesi): https://elixir.bootlin.com/uclibc-ng/latest/source
     - musl libc kütüphanesi: http://www.musl-libc.org/
@@ -7510,9 +7525,9 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    C'nin <stdio.h> dosyası içerisinde FILE * türünden yani "stream" belirten üç değişken ismi bulnmaktadır: stdin, stdout ve stderr.
-    Bu değişkenler fopen fonksiyonun geri döndürdüğü FILE nesnesi türünden adres belirtmektedir. Dolayısıyla C'nin standart dosya fonksiyonlarında 
-    bunları kullanabiliriz. Örneğin aslında:
+    C'nin <stdio.h> dosyası içerisinde FILE * türünden yani "stream" belirten üç değişken ismi bulnmaktadır: stdin, stdout 
+    ve stderr. Bu değişkenler fopen fonksiyonun geri döndürdüğü FILE nesnesi türünden adres belirtmektedir. Dolayısıyla C'nin 
+    standart dosya fonksiyonlarında bunları kullanabiliriz. Örneğin aslında:
 
     printf(...);
 
@@ -7520,23 +7535,23 @@ int main(void)
 
     fprintf(stdout, ...);
 
-    stdin, stdout ve stderr dosya bilgi göstericileri (streams) programcı tarafından açılmamıştır ve programcı tarafından kapatılmamalıdır.
-    Programcı bunları doğrudan kullanabilir. Şüphesiz UNIX/Linux sistemlerinde stdin dosya bilgi göstericisinin gösterdiği FILE nesnesinin 
-    içerisinde 0 numaları betimleyici, stdout FILE nesnesinin içerisinde 1 numaralı betimleyici ve stderr FILE nesnesinin içerisinde 2 numaralı betimleyici 
-    vardır. 
+    stdin, stdout ve stderr dosya bilgi göstericileri (streams) programcı tarafından açılmamıştır ve programcı tarafından 
+    kapatılmamalıdır. Programcı bunları doğrudan kullanabilir. Şüphesiz UNIX/Linux sistemlerinde stdin dosya bilgi göstericisinin 
+    gösterdiği FILE nesnesinin içerisinde 0 numaları betimleyici, stdout FILE nesnesinin içerisinde 1 numaralı betimleyici ve 
+    stderr FILE nesnesinin içerisinde 2 numaralı betimleyici vardır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     C standartları herhangi bir dosyanın default tamponlaması hakkında bir şey söylememiş olsa da "stdin", "stdout" ve "stderr" 
     dosyalarının default tamponlaması hakkında şunları söylemiştir:
 
-    - stdin ve stdout dosyaları default durumda "eğer interaktif olmayan bir aygıta yönlendirilmişse işin başında tam tamponlamalı" moddadırlar.
-    Ancak bu dosyalar "interaktif olan bir aygıta yönlendirilmişse işin başında tam tamponalamlı olamazlar, satır tamponlamalı ya da
-    sıfır tamponlamalı" olabilirler. Klavye ve ekran yani terminal "interaktif aygıt" kabul edilmektedir. Ancak disk dosyaları interaktif aygıt
-    kabul edilmemektedir. 
+    - stdin ve stdout dosyaları default durumda "eğer interaktif olmayan bir aygıta yönlendirilmişse işin başında tam tamponlamalı" 
+    moddadırlar. Ancak bu dosyalar "interaktif olan bir aygıta yönlendirilmişse işin başında tam tamponalamlı olamazlar, satır 
+    tamponlamalı ya da sıfır tamponlamalı" olabilirler. Klavye ve ekran yani terminal "interaktif aygıt" kabul edilmektedir. 
+    Ancak disk dosyaları interaktif aygıt kabul edilmemektedir. 
 
-    - stderr dosyası ister interaktif olamayan aygıta yönlendirilmiş olsun isterse interaktif aygıta yönlendirilmiş olsun işin başında
-    tam tamponlamalı olamaz. Ancak satır tamponlamalı ya da sıfır tamponlamalı olabilir. 
+    - stderr dosyası ister interaktif olamayan aygıta yönlendirilmiş olsun isterse interaktif aygıta yönlendirilmiş olsun 
+    işin başında tam tamponlamalı olamaz. Ancak satır tamponlamalı ya da sıfır tamponlamalı olabilir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -7545,7 +7560,8 @@ int main(void)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Örneğin Windows sistemlerindeki C derleyicilerinde default durumda dosyay yönlendirme yapılmamışsa stdout sıfır tamponlamalı 
-    stdin satır tamponlamalıdır. Ancak UNIX/Linux sistemlerinde stdout ve stdin dosyaları satır tamponlamalıdır. Aşağıdaki örnekte bu durum anlaşılabilir.
+    stdin satır tamponlamalıdır. Ancak UNIX/Linux sistemlerinde stdout ve stdin dosyaları satır tamponlamalıdır. Aşağıdaki örnekte 
+    bu durum anlaşılabilir.
 
     #include <stdio.h>
 
@@ -7571,9 +7587,9 @@ int main(void)
         return 0;
     }
 
-    stdout dosyası default terminale yönlendirilmişken satır tamponlamalı ya da sıfır tamponlamalı modda olabiliyorsa bir yazının ekrana 
-    çıkmasını nasıl garanti edebiliriz? Mademki stdout terminale yönlendirildiğinde en kötü olasılıkla satır tamponlamalı olabilir 
-    o zaman yazının sonuna '\n' karakteri koyarız. Örneğin:
+    stdout dosyası default terminale yönlendirilmişken satır tamponlamalı ya da sıfır tamponlamalı modda olabiliyorsa bir yazının 
+    ekrana çıkmasını nasıl garanti edebiliriz? Mademki stdout terminale yönlendirildiğinde en kötü olasılıkla satır tamponlamalı 
+    olabilir. O zaman yazının sonuna '\n' karakteri koyarız. Örneğin:
 
     #include <stdio.h>
 
@@ -7637,21 +7653,22 @@ int main(void)
 /*--------------------------------------------------------------------------------------------------------------------------
     stdin dosyası hem Windows hem de UNIX/Linux sistemlerinde dosyaya yönlendirilmemişse satır amponlamalı moddadır. Dolayısıyla 
     biz klavyeden bir karakter bile okumak istesek UNIX/Linux sistemlerinde read fonksiyonu 0 numaralı betimleyici ile çağrılarak 
-    bir satırlık bilgi okunup tampona yerleştirilmektedir. Artık tamponda bilgi olduğu sürece okuma fonksiyonları tampondakileri okuyacaktır. 
-    Örneğin üst üste ik getchar çağrısı ile iki karakteri stdin dosyasından okumak isteyelim:
+    bir satırlık bilgi okunup tampona yerleştirilmektedir. Artık tamponda bilgi olduğu sürece okuma fonksiyonları tampondakileri 
+    okuyacaktır. Örneğin üst üste ik getchar çağrısı ile iki karakteri stdin dosyasından okumak isteyelim:
 
     ch1 = getchar();
     ch2 = getchar();
 
-    Birinci getchar fonksiyonu bizden bir satır alarak onu stdin dosyasının tampona yerleştirir. Tabii tamponun sonunda '\n' karakteri de
-    bulunacaktır. İkinci getchar tampon boş olmadığı sürece artık klavyeden giriş istemeyip tampondan girişi karşılayacaktır. 
-    Yukarıdaki örnekte biz ilk getchar fonksiyonunda klavyeden "a" karakterine basıp ENTER tuşuna basalım. Bu durumda tamponda şu karakter olacaktır:
+    Birinci getchar fonksiyonu bizden bir satır alarak onu stdin dosyasının tampona yerleştirir. Tabii tamponun sonunda '\n' 
+    karakteri de bulunacaktır. İkinci getchar tampon boş olmadığı sürece artık klavyeden giriş istemeyip tampondan girişi 
+    karşılayacaktır. Yukarıdaki örnekte biz ilk getchar fonksiyonunda klavyeden "a" karakterine basıp ENTER tuşuna basalım. 
+    Bu durumda tamponda şu karakter olacaktır:
 
     a\n
 
     İlk getchar bu 'a' karakterini ikinci getchar ise '\n' karakterini alacaktır. Biz getchar fonksiyonunu üçüncü kez çağırdığımızda 
-    artık yeni bir satır istenecektir. Yani stdin dosyasından okuma yapan fonksiyonlar tampon boşsa read fonksiyonunu çağırarak bizden 
-    bir satırlık bilgi istemektedir. Aşağıdaki programla test işlemini yapabilirsiniz:
+    artık yeni bir satır istenecektir. Yani stdin dosyasından okuma yapan fonksiyonlar tampon boşsa read fonksiyonunu çağırarak 
+    bizden bir satırlık bilgi istemektedir. Aşağıdaki programla test işlemini yapabilirsiniz:
 
     #include <stdio.h>
 
@@ -7671,16 +7688,16 @@ int main(void)
     Tabii scanf, getchar, gets gibi fonksiyonların hepsi ortak tampondan çalışmaktadır. Yani bu fonksiyonların hepsi stdin dosyasından 
     okuma yapar. stdin dosyasının da bir tane tamponu vardır. 
 
-    Pekiyi biz gerçekten ikinci getchar fonksiyonu ile yeni bir klavye girişi yapmak istiyorsak bunu nasıl sağlayabiliriz? stdin dosyasının 
-    flush edilmesi geçersiz bir işlemdir. Zira C'de "read-only" dosyalar flush edilemezler. Bunun için özel bir fonksiyon da bulundurulmamıştır. 
-    O zaman tek yapılacak şey '\n' karakterini görene kadar stdin dosyasından karakter karakter okuma yapmaktır. Bu işlem şöyle bir döngü 
-    ile yapılabilir:
+    Pekiyi biz gerçekten ikinci getchar fonksiyonu ile yeni bir klavye girişi yapmak istiyorsak bunu nasıl sağlayabiliriz? stdin 
+    dosyasının flush edilmesi geçersiz bir işlemdir. Zira C'de "read-only" dosyalar flush edilemezler. Bunun için özel bir fonksiyon 
+    da bulundurulmamıştır. O zaman tek yapılacak şey '\n' karakterini görene kadar stdin dosyasından karakter karakter okuma yapmaktır. 
+    Bu işlem şöyle bir döngü ile yapılabilir:
 
 	while(getchar() != '\n')
 		;
 
-    Tabii sonraki anlatımlarda görüleceği üzere EOF durumunun da kontrol edilmesi daha uygun olur. Bu nedenle aşağıdaki gibi bir fonksiyon
-    bu iş için kullanılabilir:
+    Tabii sonraki anlatımlarda görüleceği üzere EOF durumunun da kontrol edilmesi daha uygun olur. Bu nedenle aşağıdaki gibi bir 
+    fonksiyon bu iş için kullanılabilir:
 
     void clear_stdin(void)
     {
@@ -7722,16 +7739,16 @@ int main(void)
 /*--------------------------------------------------------------------------------------------------------------------------
     stdin dosyası default durumda pek çok sistemde terminal aygıt sürücüsüne (yani klavyeye) yönlendirilmiş durumdadır. 
     Biz stdin dosyasında okuma yaptığımızda EOF ile karşılaşabiliriz. Çünkü stdin bir dosyaya yönlendirdildiğinde dosyanın sonuna
-    gelinmiş de olabilir. Pekiyi stdin defaut durumda klavyeden okuma yaparken dosya sonu kavramı ne olacaktır? İşte terminal aygıt sürücüsü 
-    bazı özel tuş kombinasyonlarında yalancı bir EOF etkisi oluşturmaktadır. Windows sistemlerinde Ctrl+z tuşu UNIX/Linux sistemlerinde 
-    Ctrl+d tuşu bu amaçla kullanılmaktadır. Örneğin:
+    gelinmiş de olabilir. Pekiyi stdin defaut durumda klavyeden okuma yaparken dosya sonu kavramı ne olacaktır? İşte terminal 
+    aygıt sürücüsü bazı özel tuş kombinasyonlarında yalancı bir EOF etkisi oluşturmaktadır. Windows sistemlerinde Ctrl+z tuşu 
+    UNIX/Linux sistemlerinde Ctrl+d tuşu bu amaçla kullanılmaktadır. Örneğin:
 
     ch = getchar();
 
-    Burada Windows sistemlerinde Ctrl+z tuşuna UNIX/Linux sistemlerinde Ctrl+d tuşuna basıldığında "dosya sonuna gelme etkisi" yaratılacak ve 
-    getchar fonksiyonu EOF değerine (-1) geri dönecektir. Tabii bu tuş kombinasyonlarına basıldığında gerçekte dosya sonuna gelme gibi bir durum 
-    oluşmamaktadır. Bu yalancı bir etkidir. Yani daha sonra stdin dosyasından yine okuma yapılabilir. Bu nedenle stdin tamponunu boşaltırken 
-    kullanıcının EOF etkisi yaratmak isteyebileceğine de dikkat edilmelidir:
+    Burada Windows sistemlerinde Ctrl+z tuşuna UNIX/Linux sistemlerinde Ctrl+d tuşuna basıldığında "dosya sonuna gelme etkisi" 
+    yaratılacak ve getchar fonksiyonu EOF değerine (-1) geri dönecektir. Tabii bu tuş kombinasyonlarına basıldığında gerçekte 
+    dosya sonuna gelme gibi bir durum oluşmamaktadır. Bu yalancı bir etkidir. Yani daha sonra stdin dosyasından yine okuma 
+    yapılabilir. Bu nedenle stdin tamponunu boşaltırken kullanıcının EOF etkisi yaratmak isteyebileceğine de dikkat edilmelidir:
 
     void clear_stdin(void)
     {
@@ -7758,8 +7775,8 @@ int main(void)
     getchar fonksiyonu stdin dosyasından bir karakter okur. Tabii önce tampona bakar. Tamponda en az bir karakter varsa onu verir. 
     Tampon tamamen boşsa klavyeden bir satır okuyarak tamponu doldurur. Ondan sonra karakteri verir. Aslında gets ve scanf gibi 
     fonksiyonların hepsi getchar kullanılarak yazılmıştır. Yani temel fonksiyon getchar fonksiyonlarıdır. 
-    getchar fonksiyonu dosya sonuna gelindiğinde ya da IO hatası olduğunda EOF (-1) değerine geri dönmektedir. getchar fonksiyonunun prototipi 
-    şöyledir:
+    getchar fonksiyonu dosya sonuna gelindiğinde ya da IO hatası olduğunda EOF (-1) değerine geri dönmektedir. getchar fonksiyonunun 
+    prototipi şöyledir:
 
     #include <stdio.h>
 
@@ -7770,10 +7787,10 @@ int main(void)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     gets fonksiyonu C99'da "derecated" yapılmış ve C11'de C'den kaldırılmıştır. Ancak hala derleyiciler bunu muhafaza etmektedir. 
-    gets fonksiyonu stdin dosyasından karakter karakter okuma yapar ve okuduğu karakterleri verilen bir diziyeyerleştirir. gets fonksiyonu
-    '\n' karakterini de okur ancak onun yerine diziye '\0' karakterini yerleştirir. Yani gets fonksiyonu aslında stdin tamponunu da tamamen
-    boşaltmaktadır. Tabii gets fonksiyonu çağrıldığında stdin tamponunda zaten karakterler varsa gets klavyeden bir giriş beklemeden onları okuyup 
-    geri dönecektir. 
+    gets fonksiyonu stdin dosyasından karakter karakter okuma yapar ve okuduğu karakterleri verilen bir diziyeyerleştirir. gets 
+    fonksiyonu '\n' karakterini de okur ancak onun yerine diziye '\0' karakterini yerleştirir. Yani gets fonksiyonu aslında stdin 
+    tamponunu da tamamen boşaltmaktadır. Tabii gets fonksiyonu çağrıldığında stdin tamponunda zaten karakterler varsa gets 
+    klavyeden bir giriş beklemeden onları okuyup geri dönecektir. 
 
     gets fonksiyonunun prototipi şöyledir:
 
@@ -7815,14 +7832,14 @@ int main(void)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    gets fonksiyonun problemi parametre olarak verdiğimiz dizinin her zaman taşırılabilme olasılığıdır. Fonksiyonun dizi unuzunluğunu da
-    parametre olarak alması gerekirdi. İşte C11 ile birlikte isteğe bağlı biçimde standartlara eklenmiş olan gets_s bununu yapmaktadır.
-    gets_s fonksiyonunun prototipi şöyledir:
+    gets fonksiyonun problemi parametre olarak verdiğimiz dizinin her zaman taşırılabilme olasılığıdır. Fonksiyonun dizi uzunluğunu 
+    da parametre olarak alması gerekirdi. İşte C11 ile birlikte isteğe bağlı biçimde standartlara eklenmiş olan gets_s bununu 
+    yapmaktadır. gets_s fonksiyonunun prototipi şöyledir:
 
     char *gets_s(char *s, rsize_t n);
 
-    Buradaki rsize_t türü de yine "isteğe bağlı typedef edilmesi gereken" bir türdür. Aşağıdak gets_s fonksiyonun muhtemel bir gerçekleştirimi
-    verilmiştir. 
+    Buradaki rsize_t türü de yine "isteğe bağlı typedef edilmesi gereken" bir türdür. Aşağıdak gets_s fonksiyonun muhtemel bir 
+    gerçekleştirimi verilmiştir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -7946,8 +7963,8 @@ EXIT:
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir dosyadan okunan karakter beğenilmezse sanki hiç okunmamış gibi bir etki oluşturmak için (yani o karakteri tampona geri bırakmak için)
-    ungetc isimli bir standart C fonksiyonu bulundurulmuştur:
+    Bir dosyadan okunan karakter beğenilmezse sanki hiç okunmamış gibi bir etki oluşturmak için (yani o karakteri tampona geri 
+    bırakmak için) ungetc isimli bir standart C fonksiyonu bulundurulmuştur:
 
     #include <stdio.h>
 
@@ -7957,10 +7974,11 @@ EXIT:
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir dosyayı byte byte okurken fgetc fonksiyonundan faydalanırız. Standart C fonksiyonları tamponlu çalıştığına göre 
-    gereksiz bir biçimde sistem fonksiyonları tekrar tekrar çağrılmayacaktır. Ancak öte yandan fonksiyon çağırmanın da bir maliyeti 
-    vardır. İşte C standartlarında fgetc yerine getc isimli alternatif bir fonksiyon da bulundurulmuştur. getc fonksiyonu makro olarak 
-    yazılabilmektedir. Yani iki fonksiyon arasındaki tek fark getc fonksiyonunun bir makro biçiminde yazılabilmesidir. getc fonksiyonunun prototipi de şöyledir:
+    Bir dosyayı byte byte okurken fgetc fonksiyonundan faydalanırız. Standart C fonksiyonları tamponlu çalıştığına göre gereksiz 
+    bir biçimde sistem fonksiyonları tekrar tekrar çağrılmayacaktır. Ancak öte yandan fonksiyon çağırmanın da bir maliyeti vardır. 
+    İşte C standartlarında fgetc yerine getc isimli alternatif bir fonksiyon da bulundurulmuştur. getc fonksiyonu makro olarak 
+    yazılabilmektedir. Yani iki fonksiyon arasındaki tek fark getc fonksiyonunun bir makro biçiminde yazılabilmesidir. getc 
+    fonksiyonunun prototipi de şöyledir:
 
     #include <stdio.h>
 
@@ -7977,9 +7995,10 @@ EXIT:
     Proseslerin id değerleri pid_t türüyle temsil edilmiştir. pid_t türü işaretli bir tamsayı türü olmak koşuluyla <sys/types.h> ve
     <unistd.h> dosyalarında typedef edilmiş durumdadır. 
 
-    Sistem boot edildiğinde boot kodu 0 numaralı id'ye sahip proses biçimine dönüştürülmektedir. (Buna "swapper" ya da "pager" da denilebilmektedir.)
-    Daha sonra da bu 0 numaralı id bir daha sistemde kullanılmamaktadır. Sistemde ikinci yaratılan proses 1 numaralı id'ye sahip olan "init" isimli prosestir. 
-    0 numaralı pros yok edildiği için sistemdeki bütün proseslerin atası bu "init" posesidir. 
+    Sistem boot edildiğinde boot kodu 0 numaralı id'ye sahip proses biçimine dönüştürülmektedir. (Buna "swapper" ya da "pager" 
+    da denilebilmektedir.) Daha sonra da bu 0 numaralı id bir daha sistemde kullanılmamaktadır. Sistemde ikinci yaratılan proses 
+    1 numaralı id'ye sahip olan "init" isimli prosestir. 0 numaralı pros yok edildiği için sistemdeki bütün proseslerin atası 
+    bu "init" posesidir. 
 
     İşletim sisteminin çekirdeği tipik olarak yeni yaratılan bir proses için proses id değerini bir sayaç ile vermektedir. Her proses yaratıldığında
     bu sayaç değeri bir artırılır. Sayaç sona geldiğinde yeniden başa geçilir ve bitmiş proseslerin id'leri kullanılır.
@@ -7996,6 +8015,7 @@ EXIT:
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
+#include <stdint.h>
 #include <unistd.h>
 
 int main(void)
@@ -8004,7 +8024,7 @@ int main(void)
 
 	pid = getpid();
 
-	printf("%lld\n", (long long)pid);		/* printf("%jd\n", (intmax_t)pid) */
+    printf("%jd\n", (intmax_t)pid);     /* printf("%lld\n", (long long)pid); */
 
 	return 0;
 }
@@ -8026,6 +8046,7 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
+#include <stdint.h>
 #include <unistd.h>
 
 int main(void)
@@ -8033,10 +8054,10 @@ int main(void)
     pid_t pid, ppid;
 
     pid = getpid();
-    printf("pid = %lld\n", (long long)pid);
+    printf("pid = %jd\n", (intmax_t)pid);
 
     ppid = getppid();
-    printf("ppid = %lld\n", (long long)ppid);
+    printf("ppid = %jd\n", (intmax_t)ppid);
 
     return 0;
 }
@@ -8062,10 +8083,11 @@ int main(void)
     parallels@ubuntu-linux-20-04-desktop:~$ ulimit -u
     7535
 
-    Bu değerler aslında o anda ya da kalıcı olarak değiştirilebilmektedir. Bu değerlerin boot edilene kadar değiştirilmesi bu dosyalara 
-    yeni değerlerin yazılmasıyla yapılabilir. Ya da sysctl kabuk komutu ile yapılabilir. Kalıcı değişiklik için sistem boot edilirken 
-    başvurulan bazı konfigürasyon dosyalarından faydalanılmaktadır. Örneğin /etc/sysctl.conf dosyasına yeni limitler girilirse
-    sistem her açıldığında bu limitlerle açılacaktır. Aslında bu limitler "kernel parametreleri" yoluyla da değiştirilebilmektedir. 
+    Bu değerler aslında o anda ya da kalıcı olarak değiştirilebilmektedir. Bu değerlerin boot edilene kadar değiştirilmesi bu 
+    dosyalara yeni değerlerin yazılmasıyla yapılabilir. Ya da sysctl kabuk komutu ile yapılabilir. Kalıcı değişiklik için sistem 
+    boot edilirken başvurulan bazı konfigürasyon dosyalarından faydalanılmaktadır. Örneğin /etc/sysctl.conf dosyasına yeni 
+    limitler girilirse sistem her açıldığında bu limitlerle açılacaktır. Aslında bu limitler "kernel parametreleri" yoluyla 
+    da değiştirilebilmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -8081,8 +8103,8 @@ int main(void)
     tamamen özdeş bir kopyasını oluşturur. (Bunu klonlama makinesine giren orada klonu çıkartılan bir insan olarak düşünebilirsiniz.)
     Yani fork fonksiyonu şunları yapmaktadır:
 
-    1) Yeni bir proses kontrol blok yaratır. fork işlemini yapan prosesin proses kontrol bloğunun içeriğini, yeni yaratılan prosesin 
-    kontrol bloğuna kopyalar. Böylece üst proses ile yeni yaratılan alt proses tamamen aynı özelliklere sahip olmaktadır.
+    1) Yeni bir proses kontrol blok yaratır. fork işlemini yapan prosesin proses kontrol bloğunun içeriğini, yeni yaratılan 
+    prosesin kontrol bloğuna kopyalar. Böylece üst proses ile yeni yaratılan alt proses tamamen aynı özelliklere sahip olmaktadır.
 
     2) fork, bu fonksiyonu çağıran prosesin bellek alanının da kopyasını yeni yaratılan proses için oluşturmaktadır. Böylece 
     her iki proses de aynı koda ve data ve heap alanlarına sahip olacaktır. Ancak bunlar birbirlerinden ayrıdır. 
@@ -8092,8 +8114,8 @@ int main(void)
     görmeyecektir. fork fonksiyonu, bir klonlama yapmaktadır. Yeni bir prosesi, kendi prosesiyle aynı özelliklere ve aynı bellek alanı 
     ile yaratmaktadır. fork sırasında prosesin kontrol bloğu yeni yaratılan prosese kopyalandığı için üst proses ile alt proses 
     aynı kullanıcı ve grup id'sine sahip olur. (Bir kişi klonlama makinesine girip klonu çıkartıldığında makineden iki kişi çıkacaktır. 
-    Bu iki kişinin de anıları aynı olacaktır. Ancak artık bunların yaşamları farklıdır. Birisinin başına gelen şeyler makineden çıktıktan sonra
-    ona özgü olacaktır.)
+    Bu iki kişinin de anıları aynı olacaktır. Ancak artık bunların yaşamları farklıdır. Birisinin başına gelen şeyler makineden
+    çıktıktan sonra ona özgü olacaktır.)
 
     fork işlemini yapan proses üst proses (parent process) durumundadır. Yeni yaratılan proses ise alt proses (child process) durumundadır. 
     Tabii alt proses yeni bir proses id'ye sahip olacaktır. Alt prosesin üst prosesi, fork fonksiyonu uygulayan proses olacaktır. 
@@ -8121,8 +8143,8 @@ int main(void)
     }
 
     Aşağıdaki örnekte fork fonksiyonu ile bir proses yaratılmış ve çeşitli proses id'ler üst ve alt proseslerde yazdırılmıştır. 
-    Bu örnekte üst proseste fork fonksiyonunun alt prosesin proses id değeri ile geri döndüğüne dikkat ediniz. 
-    Denemenin yapıldığı makinede şöyle bir sonuç elde edilmiştir:
+    Bu örnekte üst proseste fork fonksiyonunun alt prosesin proses id değeri ile geri döndüğüne dikkat ediniz. Denemenin yapıldığı 
+    makinede şöyle bir sonuç elde edilmiştir:
 
     Parent pid: 549376
     Parent's parent pid: 536568
@@ -8175,9 +8197,9 @@ void exit_sys(const char *msg)
     fork işleminde en fazla kafa karıştıran noktalardan biri fork fonksiyonundan iki akışın çıkması durumudur. Burada genellikle 
     yeni öğrenenlerin gözden kaçırdığı birkaç nokta vardır:
 
-    1) fork sırasında fork işlemini yapan prosesin (yani üst prosesin) tüm bellek alanının yani onun kod, data, stack ve heap alanlarının 
-    özdeş bir kopyası oluşturulmaktadır. Yani fork işlemini yapan prosesin kod, data stack ve heap alanlarının hepsi alt proseste de 
-    bulunmaktadır. Örneğin:
+    1) fork sırasında fork işlemini yapan prosesin (yani üst prosesin) tüm bellek alanının yani onun kod, data, stack ve heap 
+    alanlarının özdeş bir kopyası oluşturulmaktadır. Yani fork işlemini yapan prosesin kod, data stack ve heap alanlarının hepsi 
+    alt proseste de bulunmaktadır. Örneğin:
 
     if ((pid = fork()) == -1)
         exit_sys("fork");
@@ -8189,21 +8211,22 @@ void exit_sys(const char *msg)
         ...
     }
 
-    Bu kod, bu haliyle hem üst proseste hem de alt proseste bulunacaktır. Yani fork işleminden sonra bu kodlardan aslında iki tane vardır. Bizim buradaki 
-    temel amacımız fork çıkışında kodu aynı olan iki farklı prosese farklı şeyleri yaptırmaktır. İşte bunu sağlamanın yolu fork 
-    fonksiyonunun geri dönüş değerinden faydalanmaktır. 
+    Bu kod, bu haliyle hem üst proseste hem de alt proseste bulunacaktır. Yani fork işleminden sonra bu kodlardan aslında iki 
+    tane vardır. Bizim buradaki temel amacımız fork çıkışında kodu aynı olan iki farklı prosese farklı şeyleri yaptırmaktır. İşte 
+    bunu sağlamanın yolu fork fonksiyonunun geri dönüş değerinden faydalanmaktır. 
 
     2) Yeni öğrenen kişilere iki prosesin de fork fonksiyonundan çıkması tuhaf gelebilmektedir. Aslında burada bir tuhaflık yoktur. 
-    Şöyle ki: Prosesin yaratılması ve bellek alanlarının kopyalanması zaten fork içerisinde yapılmaktadır. fork fonksiyonunu çağıran proses 
-    (üst proses) fork'tan çıkacaktır. Kopyası çıkartılan alt proses de çalışmaya fork içerisinden başlamaktadır. Bu durumda alt proses de fork fonksiyonundan 
-    çıkacaktır. 
+    Şöyle ki: Prosesin yaratılması ve bellek alanlarının kopyalanması zaten fork içerisinde yapılmaktadır. fork fonksiyonunu 
+    çağıran proses (üst proses) fork'tan çıkacaktır. Kopyası çıkartılan alt proses de çalışmaya fork içerisinden başlamaktadır. 
+    Bu durumda alt proses de fork fonksiyonundan çıkacaktır. 
 
     Tabii fork fonksiyonundan çıkınca artık üst proses ile alt prosesin yaşamları farklı olabilmektedir. Örneğin üst proses 
-    bir global değişkenin değerini değiştirse alt proses bunu değişmiş olarak görmez. Çünkü o global değişkenin üst proseste ve alt 
-    proseste farklı kopyaları vardır. Üst proses kendi global değişkenini değiştirmektedir. Yani fork işleminden çıkıldığında üst ve alt prosesin
-    her şeyi aynı olsa da artık bunlar kendi yollarına gideceklerdir. (Bu durumu klon makinesinden çıkan iki kişinin durumuna benzetebiliriz. 
-    Klon makinesinden çıkar çıkmaz bu iki kişinin her şeyi aynıdır. Ancak bundan sonra bu kişiler bağımsız kişiler oldukları için başlarına 
-    farklı olaylar gelecektir. Birisinin maruz kaldığı bir duruma diğeri maruz kalmayacaktır.)
+    bir global değişkenin değerini değiştirse alt proses bunu değişmiş olarak görmez. Çünkü o global değişkenin üst proseste 
+    ve alt proseste farklı kopyaları vardır. Üst proses kendi global değişkenini değiştirmektedir. Yani fork işleminden çıkıldığında 
+    üst ve alt prosesin her şeyi aynı olsa da artık bunlar kendi yollarına gideceklerdir. (Bu durumu klon makinesinden çıkan 
+    iki kişinin durumuna benzetebiliriz. Klon makinesinden çıkar çıkmaz bu iki kişinin her şeyi aynıdır. Ancak bundan sonra bu 
+    kişiler bağımsız kişiler oldukları için başlarına farklı olaylar gelecektir. Birisinin maruz kaldığı bir duruma diğeri 
+    maruz kalmayacaktır.)
 
     Aşağıdaki örnekte fork işlemi sonrasında üst proses g_x global değişkenine yeni bir değer atamıştır. Sonra alt proseste bu 
     global değişkenin değeri yazdırılmıştır. Tabii alt proses üst prosesin yaptığı bu değişikliği görmeyecektir. Çünkü aslında 
@@ -8254,8 +8277,9 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Aşağıdaki örnekte "Common Code" yazısı 8 defa ekranda görünecektir. Çünkü ilk fork işleminden sonra ikinci fork işlemini 
-    iki proses yapacaktır. Böylece ikinci fork işleminden sonra aynı koda sahip 4 proses oluşacaktır. Sonra bu 4 proses de üçüncü 
-    fork işlemini yapacaktır. O halde üçüncü fork işleminden toplam 8 proses çıkacaktır. Buradaki sleep fonksiyonuna takılmayınız.
+    iki proses yapacaktır. Böylece ikinci fork işleminden sonra aynı koda sahip 4 proses oluşacaktır. Sonra bu 4 proses de 
+    üçüncü fork işlemini yapacaktır. O halde üçüncü fork işleminden toplam 8 proses çıkacaktır. Buradaki sleep fonksiyonuna 
+    takılmayınız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -8299,22 +8323,23 @@ int main(void)
 /*--------------------------------------------------------------------------------------------------------------------------
     fork işlemi sırasında üst prosesin (fork işlemini yapan prosesin) proses kontrol bloğunun yeni yaratılan alt prosesin 
     proses kontrol bloğuna kopyalandığını belirttik. Bu nedenle alt prosesin "kullanıcı id'si, grup id'si, çalışma dizini" ve 
-    daha pek çok özellikleri üst prosesle aynıdır. Pekiyi dosya betimleyici tablosunun durumu ne olacaktır? Örneğin biz 
-    bir dosya açmış olsak sonra fork yapmış olsak alt proseste bu dosyanın durumu ne olacaktır?
+    daha pek çok özellikleri üst prosesle aynı olacaktır. Pekiyi alt proseste dosya betimleyici tablosunun durumu ne olacaktır? 
+    Örneğin biz bir dosya açmış olsak sonra fork yapmış olsak alt proseste bu dosyanın durumu ne olacaktır?
 
     fork işlemi sırasında işletim sistemi üst prosesin dosya betimleyici tablosu içerisindeki dosya nesnelerinin adreslerini de 
     alt prosesin dosya betimleyici tablosuna kopyalamaktadır. Ancak dosya nesnelerinin kopyalarını çıkartmamaktadır. Böylece fork 
-    işleminin sonunda üst prosesin dosya betimleyici tablosunun slotları ile alt prosesin dosya betimleyici tablosunun slotları yani 
-    dosya betimleyicileri aynı dosya nesnesini gösteriyor durumda olur. Bu tür kopyalamalara "sığ kopyalama (shallow copy)" de 
-    denilmektedir. Mademki açık dosyaya ilişkin tüm bilgiler dosya nesnesinde tutulmaktadır o halde fork işleminden sonra proseslerden 
-    biri bir dosyanın dosya göstericisini değiştirirse diğer proses bunu değişmiş olarak görecektir. Tabii fork işlemi sırasında
-    dosya nesnelerinin referans sayaçları da bir artırılmaktadır. Benzer biçimde aslında işin başında açık olan 0, 1 ve numaralı betimleyiciler 
-    login işlemi öncesinde yaratılmış durumdadır. Her fork işleminde bu betimleyicilere ilişkin dosya nesnelerinin kopyaları çıkartılmamaktadır. 
-    Prosesler aslında genellikle aynı 0, 1 ve 2 numaralı dosya nesnelerini göstermektedir.
+    işleminin sonunda üst prosesin dosya betimleyici tablosunun slotları ile alt prosesin dosya betimleyici tablosunun slotları 
+    (yani dosya betimleyicileri) aynı dosya nesnesini gösteriyor durumda olur. Bu tür kopyalamalara "sığ kopyalama (shallow copy)" 
+    da denilmektedir. Mademki açık dosyaya ilişkin tüm bilgiler dosya nesnesinde tutulmaktadır, o halde fork işleminden sonra 
+    proseslerden  biri bir dosyanın dosya göstericisini değiştirirse diğer proses bunu değişmiş olarak görecektir. Tabii fork 
+    işlemi sırasında dosya nesnelerinin referans sayaçları da bir artırılmaktadır. Benzer biçimde aslında işin başında açık olan 
+    0, 1 ve numaralı betimleyiciler login işlemi öncesinde yaratılmış durumdadır. Her fork işleminde bu betimleyicilere ilişkin 
+    dosya nesnelerinin kopyaları çıkartılmamaktadır. Prosesler aslında genellikle aynı 0, 1 ve 2 numaralı dosya nesnelerini 
+    göstermektedir.
 
-    Aşağıdaki örnekte önce bir dosya açılmış sonra üst proses dosya göstericisini 50'inci offset'e konumlandırmıştır. Üst prosesle alt proses 
-    aynı dosya nesnelerini gördüğü için bu durumdan alt proses etkilenecektir. Alt proseste yapılan okuma 50'inci offset'ten itibaren 
-    yapılacaktır.
+    Aşağıdaki örnekte önce bir dosya açılmış sonra üst proses dosya göstericisini 50'inci offset'e konumlandırmıştır. Üst prosesle 
+    alt proses aynı dosya nesnelerini gördüğü için bu durumdan alt proses etkilenecektir. Alt proseste yapılan okuma 50'inci 
+    offset'ten itibaren yapılacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -8363,13 +8388,14 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    C'nin standart dosya fonksiyonlarının bir tamponlama mekanizmasıyla çalıştığını görmüştük. Bu durumda fopen fonksiyonu ile açtığımız bir dosyaya 
-    bir şeyler yazıp henüz tampon flush edilmeden fork yaparsak tüm bellek alanının kopyası çıkartılacağı için bu tamponun da flush edilmemiş bir kopyası 
-    oluşacaktır. Bu durum tasarımda sorunlara yol açabilir. Programcının bu durumu dikkate alıp fork işleminden önce fflush yapması gerekebilir. 
+    C'nin standart dosya fonksiyonlarının bir tamponlama mekanizmasıyla çalıştığını görmüştük. Bu durumda fopen fonksiyonu ile 
+    açtığımız bir dosyaya bir şeyler yazıp henüz tampon flush edilmeden fork yaparsak tüm bellek alanının kopyası çıkartılacağı 
+    için bu tamponun da flush edilmemiş bir kopyası oluşacaktır. Bu durum tasarımda sorunlara yol açabilir. Programcının bu 
+    durumu dikkate alıp fork işleminden önce fflush yapması gerekebilir. 
 
-    Aşağıdaki örnekte printf fonksiyonu Linux sistemlerinde default durumda "satır tamponlamalı" olan stdout dosyasının tamponuna bilgileri yazmıştır.
-    Ancak "\n" karakteri tampona yazılmadığı için flush işlemi de yapılmamıştır. fork işlemi ile birlikte bu tamponun da kopyası çıkarılacağından 
-    dolayı ekranda iki tane "Ok" yazısı görünecektir. 
+    Aşağıdaki örnekte printf fonksiyonu Linux sistemlerinde default durumda "satır tamponlamalı" olan stdout dosyasının tamponuna 
+    bilgileri yazmıştır. Ancak "\n" karakteri tampona yazılmadığı için flush işlemi de yapılmamıştır. fork işlemi ile birlikte 
+    bu tamponun da kopyası çıkarılacağından dolayı ekranda iki tane "Ok" yazısı görünecektir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -8470,6 +8496,8 @@ int main(void)
 	return 0;
 }
 
+<BURADA KALDIK>
+
 /*--------------------------------------------------------------------------------------------------------------------------
     _exit fonksiyonunun parametresi olan exit kodunun hangi değerde olduğu işletim sistemini ilgilendirmemektedir. Yani işletim 
     sistemi bu değeri aslında kullanmamaktadır. İşletim sistemi exit kodunu alır ve saklar. Bunu prosesi yaratan üst proses isterse
@@ -8480,8 +8508,8 @@ int main(void)
 /*--------------------------------------------------------------------------------------------------------------------------
     Üst proses fork fonksiyonu ile alt prosesi yarattıktan sonra onun sonlanmasını bekleyebilir ve alt proses sonlandığında 
     onun exit kodunu alabilir. Bunun için wait ve waitpid isimli POSIX fonksiyonları kullanılmaktadır. waitpid fonksiyonu wait 
-    fonksiyonunu işlevsel olarak kapsamaktadır. (Zaten önce wait fonksiyonu vardı, onun yetersizlikleri görülünce waitpid fonksiyonu
-    tasarlandı).
+    fonksiyonunu işlevsel olarak kapsamaktadır. (Zaten önce wait fonksiyonu vardı, onun yetersizlikleri görülünce waitpid 
+    fonksiyonu tasarlandı).
 
     wait fonksiyonunun prototipi şöyledir:
 
@@ -9276,12 +9304,12 @@ void exit_sys(const char *msg)
 
     export CITY=Eskisehir
 
-    Aslında pek çok kabuk programında hiç kabuk programının çevre değişkenlerini set etmeden doğrudan çalıştırılacak program için
+    Aslında pek çok kabuk programında hiç kabuk programının çevre değişkenlerini set etmeden, doğrudan çalıştırılacak program için
     çevre değişkenleri belirlenebilmektedir. Bunun için önce "değişken=değer" yazılarak program dosyası belirtilir. Örneğin:
 
     $ XX=10 YY=20 ./sample
 
-    Burada XX ve YY kabuğun çevre değişken listesine eklenmemektedir. Doğrudan ./sample prosesin çevre değişkeni yapılmaktadır. 
+    Burada XX ve YY kabuğun çevre değişken listesine eklenmemektedir. Doğrudan ./sample prosesinin çevre değişkeni yapılmaktadır. 
     Kabuk bu durumda fork işleminden sonra alt proseste bu çevre değişkenlerini ekleyip exec yapmaktadır.
 
     Bu durumda hem kabuk değişkeni yaratılmış olur hem de bu değişken prosesin çevre değişkeni yapılır. 
@@ -9292,7 +9320,7 @@ void exit_sys(const char *msg)
     startup dosyaları kabuğun nasıl çalıştırıldığına bağlı olarak değişmektedir. Kabuk programları üç biçimde çalıştırılabilmektedir:
 
     1) Interactive login shell
-    2) Interatictine Non-login shell
+    2) Interactive Non-login shell
     3) Non-interactive shell
 
     "Interactive shell" demek "komut satırına düşen kullanıcının komut verip çalıştırdığı shell" demektir. "login shell" demek bize "user name" ve
@@ -9784,7 +9812,7 @@ void exit_sys(const char *msg)
     execlp("./mample", ...);    /* PATH çevre değişkenine başvurulmaz */
     execlp("a/mample", ...);    /* PATH eçvre değişkenine başvurulmaz */
 
-    exec fonksiyonlarının p'li versyonları eğer dosya isminde hiç "/" karakteri yoksa ve PATH dizinlerinde dosyayı bulamazsa prosesin 
+    exec fonksiyonlarının p'li versiyonları eğer dosya isminde hiç "/" karakteri yoksa ve PATH dizinlerinde dosyayı bulamazsa prosesin 
     çalışma dizinine bakmamaktadır. Yani bu durumda yalnızca PATH eçvre değişkenindeki dizinlere bakmaktadır. Tabii PATH eçvre değişkeninde
     o andaki prosesin çalışma dizini "." ile de belirtilebilir. Örneğin:
 
@@ -9807,7 +9835,7 @@ void exit_sys(const char *msg)
     dizinde bulduğunda ve onu sistem fonksiyonuyla (execve) çalıştırmaya çalıştığında EINVAL ve ENOEXEC errno değerini alırsa dosyanın bir 
     kabuk dosyası (shell script) olduğundan çalıştırılamadığı sonucunu çıkartmaktadır ve bu durumda dosyayı /bin/sh (default shell) programı ile çalıştırmaktadır.
     Ancak exec fonksiyonlarının diğer versiyonları EINVAL ve ENOEXEC hatalarında bunu yapmamaktadır. Bunu yalnızca exec fonksiyonlarının p'li 
-    versiyonları yapmaktadır. Exec fonksiyonlarının p'li versyonları PATH dizinlerinin birinde dosyayı sistem fonksiyonuyla (execve) çalıştırmaya 
+    versiyonları yapmaktadır. Exec fonksiyonlarının p'li versiyonları PATH dizinlerinin birinde dosyayı sistem fonksiyonuyla (execve) çalıştırmaya 
     çalıştığında EACCESS errno değeri ile başarısız olurlarsa dosyayı sonraki PATH dizinlerinde aramaya devam ederler. Ancak bu arama sırasında 
     bu fonksiyonlar artık dosyayı diğer PATH dizinlerinde bulamazlarsa EACCESS errno değeri ile başarısız olurlar. 
 
@@ -10045,7 +10073,7 @@ void exit_sys(const char *msg)
     Ancak bu fonksiyonlar dosyayı bir dizinde bulduğunda ve onu sistem fonksiyonuyla (execve) çalıştırmaya çalıştığında EINVAL ve ENOEXEC errno 
     değerini alırsa dosyanın bir kabuk dosyası olduğundan çalıştırılamadığı sonucunu çıkartmaktadır ve bu durumda dosyayı 
     /bin/sh (default shell) programı ile çalıştırmaktadır. Ancak exec fonksiyonlarının diğer versiyonları EINVAL ve ENOEXEC hatalarında bunu 
-    yapmamaktadır. Bunu yalnızca exec fonksiyonlarının p'li versiyonları yapmaktadır. Exec fonksiyonlarının p'li versyonları PATh dizinlerinin 
+    yapmamaktadır. Bunu yalnızca exec fonksiyonlarının p'li versiyonları yapmaktadır. Exec fonksiyonlarının p'li versiyonları PATH dizinlerinin 
     birinde dosyayı sistem fonksiyonuyla (execve) çalıştırmaya çalıştığında EACCESS errno değeri ile başarısız olurlarsa dosyayı sonraki 
     PATH dizinlerinde aramaya devam ederler. Ancak bu arama sırasında bu fonksiyonlar artık dosyayı diğer PATH dizinlerinde bulamazlarsa 
     EACCESS errn değeri ile başarısız olurlar. 
@@ -36749,7 +36777,7 @@ void exit_sys(const char *msg)
     lockf fonksiyonu ile konulduğunu belirtir. flock fonksiyonu Linux'a özgü olduğu için burada LINUX belirteci ile görüntülenecektir. 
     İkinci sütun kilidin isteğe bağlı mı zorunlu mu olduğunu belirtmektedir. Üçüncü sütun ise kilidin türünü belirtmektedir. 
     Dördüncü sütun kilidi koyan prosesin proses id'sini belirtmektedir. Sonraki sütun ':' karakterleriyle ayrılmış üç alandan 
-    oluşmaktadır. İlk iki alan dosyanın içinde bulunduğu aygıtın majör ve minör numaralarını belirtmektdir. Üçüncü alanda 
+    oluşmaktadır. İlk iki alan dosyanın içinde bulunduğu aygıtın majör ve minör numaralarını belirtmektedir. Üçüncü alanda 
     kilit uygulanan dosyanın i-node numarası belirtilmektedir. Sonraki iki sütunda da kilidin başlangıç offset'i ve uzunluğu
     belirtilmektedir. 
 
@@ -50793,7 +50821,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Yukarıda anlattıklarımızı özetlersek geldiğimiz noktayı daha iyi kavrayabiliriz:
 
-    1) Bir dinamik kütüpahen oluştururken ona bir versiyon numarası da atanabilmektedir. Örneğin biz oluşturduğumuz "myutil" 
+    1) Bir dinamik kütüphane oluştururken ona bir versiyon numarası da atanabilmektedir. Örneğin biz oluşturduğumuz "myutil" 
     dinamik kütüphanesine "1.0.0" versiyon numarası atamış olalım. Bu durumda kütüphanemizin gerçek ismi "libmyutil.so.1.0.0" 
     olacaktır. Kütüphanemizi aşağıdaki gibi derlemiş olalım:
 
@@ -50801,23 +50829,23 @@ void exit_sys(const char *msg)
 
     2) Dinamik kütüphanelerin "so ismi" kütüphanelerin içerisine yazılan ismidir. Yukarıdaki gibi bir derlemede biz "libmyutil.so.1.0.0"
     kütüphanesinin içerisine "so ismi" olarak "libmyutil.so" ismini yerleştirdik. "so isimleri" genel olarak yalnızca majör 
-    numara içeren isimlerdir. Bizim bu aşamda tipik olarak bir sembolik link oluşturarak "so ismine ilişkin dosyanın gerçek 
+    numara içeren isimlerdir. Bizim bu aşamada tipik olarak bir sembolik link oluşturarak "so" ismine ilişkin dosyanın gerçek 
     kütüphane dosyasını göstermesini sağlamamız gerekir. Bunu şöyle yapabiliriz:
 
     $ ln -s libmyutil.so.1.0.0 libmyutil.so.1
 
-    Şimdi her iki dosyaysı da görüntüleyelim:
+    Şimdi her iki dosyayı da görüntüleyelim:
 
     lrwxrwxrwx 1 kaan study    18 Mar  1 20:02 libmyutil.so.1 -> libmyutil.so.1.0.0
     -rwxr-xr-x 1 kaan study 15736 Mar  1 19:57 libmyutil.so.1.0.0
 
-    3) Dinamik kütüphanenin link aşamasında kullanılmasını kolaylaştırmak için sonunda versiyon uzunatısı olmayan bir "linker ismi"
+    3) Dinamik kütüphanenin link aşamasında kullanılmasını kolaylaştırmak için sonunda versiyon uzuntısı olmayan bir "linker ismi"
     oluşturabiliriz. Tabii bu linker ismi aslında gerçek kütüphaneye referans edecektir. Ancak bu referansın doğrudan değil de "so ismi"
     üzerinden yapılması daha esnek bir kullanıma yol açacaktır. Örneğin:
 
-    ln -s libmyutil.so.1 libmyutil.so
+    $ ln -s libmyutil.so.1 libmyutil.so
 
-    Artık kütüphanenin "linker ismi" "so ismine"i "so ismi" de gerçek ismine sembolik link yapılmış durumdadır. Bu üç dayası 
+    Artık kütüphanenin "linker ismi" "so ismine", "so ismi" de gerçek ismine sembolik link yapılmış durumdadır. Bu üç dosyayı 
     aşağıda yeniden görüntüleyelim:
 
     lrwxrwxrwx 1 kaan study    14 Mar  1 20:07 libmyutil.so -> libmyutil.so.1
@@ -50830,7 +50858,7 @@ void exit_sys(const char *msg)
 
     4) Şimdi kütüphaneyi kullanan bir "app" programını derleyip link edelim:
 
-    gcc -o app app.c libmyutil.so
+    $ gcc -o app app.c libmyutil.so
 
     Şimdi LD_LIBRARY_PATH çevre değişkenini belirleyip programı çalıştıralım:
 
@@ -50840,21 +50868,21 @@ void exit_sys(const char *msg)
     200.000000
     0.500000
 
-    Burada biz app programının kullandığı kütüphane ismi app dosyasının içerisinde kütüphanenin "so ismi" olarak set edielcektir. 
+    Burada app programının kullandığı kütüphane ismi app dosyasının içerisinde kütüphanenin "so ismi" olarak set edilecektir. 
     Yani burada "app" dosyası sanki "libmyutil.so.1" dosyasını kullanıyor gibi olacaktır. Örneğin:
 
     $ readelf -d app | grep "NEEDED"
     0x0000000000000001 (NEEDED)             Paylaşımlı kitaplık: [libmyutil.so.1]
     0x0000000000000001 (NEEDED)             Paylaşımlı kitaplık: [libc.so.6]
 
-    İşte "app" programını yükleyecek olan dinamik linker aslında "libmyutil.so.1" doyasını yüklemeye çalışacaktır. Bu dosyann 
+    İşte "app" programını yükleyecek olan dinamik linker aslında "libmyutil.so.1" dosyasını yüklemeye çalışacaktır. Bu dosyann 
     kütüphanenin gerçek ismine sembolik link yapıldığını anımsayınız. Bu durumda gerçekte yüklenecek olan dosya "libmyutil.so.1" 
-    dosyası değil "libmyutil.so.1.0.0" dosyası olacaktır. Yani çalışmada bir sorun ortaya çıkmayacaktır. Pekiyi tüm bunların 
+    dosyası değil, "libmyutil.so.1.0.0" dosyası olacaktır. Yani çalışmada bir sorun ortaya çıkmayacaktır. Pekiyi tüm bunların 
     amacı nedir? Bunu şöyle açıklayabiliriz:
 
-    1) Örneğin kütüphanemizin libmyutil.so.1.1.0 biçiminde majör numarası aynı minör numarası farklı öncekiyle uyumlu yeni bir 
-    versioyunun daha oluşturulduğunu düşünelim. Şimdi biz uygulamamızı çektiğimiz dizin içerisindeki "libmyutil.so" doaysını 
-    bu yeni versyionu referans edecek biçimde değiştirebiliriz. Bu durumda dinamik linker "app" programını yüklemeye çalışırken 
+    1) Örneğin kütüphanemizin libmyutil.so.1.1.0 biçiminde majör numarası aynı, minör numarası farklı öncekiyle uyumlu yeni bir 
+    versiyonunun daha oluşturulduğunu düşünelim. Şimdi biz uygulamamızı çektiğimiz dizin içerisindeki "libmyutil.so" dosyasını 
+    bu yeni versiyonu referans edecek biçimde değiştirebiliriz. Bu durumda dinamik linker "app" programını yüklemeye çalışırken 
     aslında artık "libmyutil.so.1.1.0" kütüphanesini yükleyecektir. Burada biz hiç "app" dosyasının içini değiştirmeden artık "app"
     dosyasının kütüphanenin yeni minör versiyonunu kullamasını sağlamış olduk.
 
@@ -50870,7 +50898,7 @@ void exit_sys(const char *msg)
     çalıştırdığımızda bu program zaten "so ismine" ilişkin sembolik linki de oluşturmaktadır. Örneğin biz "libmyutil.so.1.0.0" dosyasını
     "/usr/lib" dizinine kopyalayalım ve "ldconfig" programını çalıştıralım. "ldconfig" programı "libmyutil.so.1" sembolik link dosyasını 
     oluşturup bu sembolik link dosyasının "libmyutil.so.1.0.0" dosyasına referans etmesini sağlayacaktır. Tabii cache'e de "libmyutil.so.1" 
-    dosyasını yerleştrecektir. Örneğin:
+    dosyasını yerleştirecektir. Örneğin:
 
     $ ldconfig -p | grep "libmyutil"
     libmyutil.so.1 (libc6,x86-64) => /lib/libmyutil.so.1
@@ -50895,7 +50923,7 @@ void exit_sys(const char *msg)
     baştan "dinamik linker" tarafından değil de programın çalışma zamanı sırasında yüklenmesinin bazı avantajları şunlar 
     olabilmektedir:
 
-    1) Dinamik kütühaneler baştan yüklenmediği için program başlangıçta daha hızlı yüklenebilir.
+    1) Dinamik kütüphaneler baştan yüklenmediği için program başlangıçta daha hızlı yüklenebilir.
 
     2) Programın sanal bellek alanı gereksiz bir biçimde doldurulmayabilir. Örneğin nadiren çalışacak bir fonksiyon dinamik 
     kütüphanede olabilir. Bu durumda o dinamik kütüphanenin işin başında yüklenmesi gereksiz bir yükleme zamanı ve bellek 
@@ -50906,7 +50934,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Dinamik kütüphanelerin dinamik yüklenmesi dlopen, dlsym, dlerror ve dlclose fonksiyonlarıyla yapılmaktadır. Bu fonksiyonlar 
     "libdl" kütüphanesi içerisindedir. Dolayısıyla link işlemi için -ldl seçeneğinin bulundurulması gerekir. Dinamik kütüphanelerin
-    dinamik yüklenmesi için önce "dlopen" fonksiyonu ile dinamik kütüpahenin yüklenmesinin sağlanması gerekir. dlopen fonksiyonunun 
+    dinamik yüklenmesi için önce "dlopen" fonksiyonu ile dinamik kütüphanenin yüklenmesinin sağlanması gerekir. dlopen fonksiyonunun 
     prototipi şöyledir:
 
     #include <dlfcn.h>
@@ -50914,12 +50942,12 @@ void exit_sys(const char *msg)
     void *dlopen(const char *filename, int flag);
 
     Fonksiyonun birinci parametresi yüklenecek dinamik kütüphanenin yol ifadesini, ikinci parametresi seçenek belirten bayrakları almaktadır. 
-    Fonksiyon başarı durumunda kütüphaneyi temsil eden bir handle değerine başarısızlık durumunda NULL adrese geri dönmektedir. Başarıszlık 
-    durumunda fonksiyon errno değişkenini set etmez. Başarısızlığa ilikin yazı doğrudan dlerror fonksiyonuyla elde edilmektedir:
+    Fonksiyon başarı durumunda kütüphaneyi temsil eden bir handle değerine, başarısızlık durumunda NULL adrese geri dönmektedir. Başarısızlık 
+    durumunda fonksiyon errno değişkenini set etmez. Başarısızlığa ilişkin yazı doğrudan dlerror fonksiyonuyla elde edilmektedir:
 
     char *dlerror(void);
 
-    dlopen fonksiyonun birinci parametresindeki dinamik kütüphane isminde eğer hiç / karakteri yoksa bu durumda kütüphanenin aranması 
+    dlopen fonksiyonunun birinci parametresindeki dinamik kütüphane isminde eğer hiç / karakteri yoksa bu durumda kütüphanenin aranması 
     daha önce ele aldığımız prosedüre göre yapılmaktadır. Eğer dosya isminde en az bir / karakteri varsa dosya yalnızca bu mutlak ya da 
     göreli yol ifadesinde aranmaktadır. Dinamik yükleme sırasında yüklenecek kütüphanenin SONAME alanında yazılan isme hiç bakılmamaktadır. 
     (Bu SONAME alanındaki isim yalnızca link aşamasında linker tarafından kullanılmaktadır.)
@@ -50952,7 +50980,7 @@ void exit_sys(const char *msg)
 
     void *dlsym(void *handle, const char *symbol);
 
-    Fonksiyon başarı durumunda ilgili sembolün adresine başarısızlık durumunda NULL adrese geri döner. Örneğin:
+    Fonksiyon başarı durumunda ilgili sembolün adresine, başarısızlık durumunda NULL adrese geri döner. Örneğin:
 
     double (*padd)(double, double);
     ...
@@ -50965,12 +50993,12 @@ void exit_sys(const char *msg)
     printf("%f\n", result);
 
     Ancak burada C standartları bağlamında bir pürüz vardır. C'de (ve tabii C++'ta) fonksiyon adresleri ile data adresleri tür
-    dönüştürme operatörü ile bile dönüştürülememektedir. Yani yukarıdaki dönüştürmesi ile atama geçersizdir. Ayrıca void * türü
-    datya adresi için anlamlıdır. Yani biz C'de de C+'ta da void bir adresi fonksiyon göstericisine, fonksiyo adresini de 
-    void bir göstericiye atayamayız. Ancak pek çok derleyici default durumda bu biçimdek, dönüştürmeleri kabul etmektedir. Yani 
+    dönüştürme operatörü ile bile dönüştürülememektedir. Yani yukarıdaki tür dönüştürmesi ile atama geçersizdir. Ayrıca void * türü
+    data adresi için anlamlıdır. Yani biz C'de de C++'ta da void bir adresi fonksiyon göstericisine, fonksiyon adresini de 
+    void bir göstericiye atayamayız. Ancak pek çok derleyici default durumda bu biçimdeki dönüştürmeleri kabul etmektedir. Yani 
     yukarıdaki kod aslında C'de geçersiz olmasına karşın gcc ve clang derleyicilerinde sorunsuz derlenecektir. (Derleme sırasında 
     -pedantic-errors seçeneği kullanılırsa derleyiciler standartlara uyumu daha katı bir biçimde ele almaktadır. Dolayısıyla yukarıdaki
-    kod bu seçenek kullanarak derlerseniz error oluşacaktır.) Pekiyi bu durumda ne yapabiliriz? İşte bunun için bir hile vardır. 
+    kod bu seçenek kullanılarak derlenirse error oluşacaktır.) Pekiyi bu durumda ne yapabiliriz? İşte bunun için bir hile vardır. 
     Fonksiyon göstericisinin adresini alırsak artık o bir data göstericisi haline gelir. Bir daha * kullanırsak data göstericisi gibi 
     aslında fonksiyon göstericisinin içerisine değer atayabiliriz. Örneğin:
 
@@ -50980,9 +51008,9 @@ void exit_sys(const char *msg)
     }
 
     Sembol isimleri konusunda dikkat etmek gerekir. Çünkü bazı derleyiciler bazı koşullar altında isimleri farklı isim gibi object
-    dosyaya yazabilmektedir. Buna "name decoration" ya da "name mangling" denilmektedir. Örneğin C++ derleyicicileri fonksiyon isimlerini 
+    dosyaya yazabilmektedir. Buna "name decoration" ya da "name mangling" denilmektedir. Örneğin C++ derleyicileri fonksiyon isimlerini 
     parametrik yapıyla kombine ederek başka bir isimle object dosyaya yazar. Halbuki dlsym fonksiyonunda sembolün dinamik kütüphanedeki 
-    dekare edilmiş isminin kullanılması gerekmektedir. Sembollerin dekore edilmiş isimlerini elde edebilmek için "nm" utility'sini 
+    dekore edilmiş isminin kullanılması gerekmektedir. Sembollerin dekore edilmiş isimlerini elde edebilmek için "nm" utility'sini 
     kullanabilirsiniz. Örneğin:
 
     nm libmyutil.so.1.0.0
@@ -51081,17 +51109,17 @@ int main(void)
     Dinamik kütüphane dlopen fonksiyonuyla yüklenirken global değişkenlerin ve fonksiyonların nihai yükleme adresleri bu dlopen 
     işlemi sırasında hesaplanabilir ya da onlar kullanıldıklarında hesaplanabilir. İkisi arasında kullanıcı açısından bir fark 
     olmamakla birlikte tüm sembollerin adreslerinin yükleme sırasında hesaplanması bazen yükleme işlemini (eğer çok sembol varsa) 
-    uzatabilmektedir. Bu durumu ayarlamak için dlopen fonksiyonun ikinci parametresi olan flags parametresi kullanılır. Bu flags 
+    uzatabilmektedir. Bu durumu ayarlamak için dlopen fonksiyonunun ikinci parametresi olan flags parametresi kullanılır. Bu flags 
     parametresi RTLD_NOW olarak girilirse (yukarıdaki örnekte böyle yaptık) tüm sembollerin adresleri dlopen sırasında, RTLD_LAZY 
     girilirse kullanıldıkları noktada hesaplanmaktadır. İki biçim arasında çoğu kez programcı için bir farklılık oluşmamaktadır. 
-    Ancak aşağıdaki örnekte bu iki biçimin ne anlama geldiği gösterilmektdir. 
+    Ancak aşağıdaki örnekte bu iki biçimin ne anlama geldiği gösterilmektedir. 
 
-    Aşağıdaki örnekte libmyutil.so.1.0.0 kütüphanesindeki foo fonksiyonu gerçekte olmayan bir bar fonksiyonunu çağırmıştır. Bu 
-    fonksiyonun gerçekte olmadığı foo fonksiyonun sembol çözümlemesi yapıldığında anlaşılacaktır. İşte eğer bu kütüphaneyi 
+    Aşağıdaki örnekte "libmyutil.so.1.0.0" kütüphanesindeki foo fonksiyonu gerçekte olmayan bir bar fonksiyonunu çağırmıştır. Bu 
+    fonksiyonun gerçekte olmadığı foo fonksiyonunun sembol çözümlemesi yapıldığında anlaşılacaktır. İşte eğer bu kütüphaneyi 
     kullanan "app.c" programı kütüphaneyi RTLD_NOW ile yüklerse tüm semboller o anda çözülmeye çalışılacağından dolayı bar 
     fonksiyonunun bulunmuyor olması hatası da dlopen sırasında oluşacaktır. Eğer kütüphane RTLD_LAZY ile yüklenirse bu durumda 
-    sembol çözümlemesi foo'nun' kullanıldığı noktada (yani dlsym fonksiyonunda) gerçekleşecektir. Dolayısıyla hata da o o 
-    noktada oluşacaktır. Bu programı RTLD_NOW ve RTLD_LAZY bayraklarıyla ayrı ayrı derleyip çalıştırınız.
+    sembol çözümlemesi foo'nun kullanıldığı noktada (yani dlsym fonksiyonunda) gerçekleşecektir. Dolayısıyla hata da o noktada 
+    oluşacaktır. Bu programı RTLD_NOW ve RTLD_LAZY bayraklarıyla ayrı ayrı derleyip çalıştırınız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* libmyutil.c */
@@ -51673,6 +51701,10 @@ int main()
         gcc -c app.c
 
     Burada artık app.h dosyası üzerinde bir değişiklik yapıldığında derleme işlemi yeniden yapılacaktır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												127. Ders 15/03/2024 - Cuma
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -52299,7 +52331,7 @@ clean:
     MKDEV makrosuyla oluşturulmaktadır. İkinci parametre ilk parametrede belirtilen minör numaradan itibaren kaç minör numaranın kaydettirileceğini
     belirtmektedir. Örneğin biz majör= 20, minör=0'dan itibaren 5 minör numarayı kaydettirebiliriz. Fonksiyonun son parametresi proc ve sys dosyas 
     sistemlerindeki aygıt sürücünün ismini belirtir. Kernel modüllerin isimleri kernel modül dosyasından gelmektedir. Ancak karakter aygıt sürücülerinin
-    isimlerini biz istediğimiz gibi veririz. Her aygıt sürücü bir kernel modül biçiminde yazılmak zorundadır. Fonksiyon başarı durumunda 0 değerine
+    isimlerini biz istediğimiz gibi veririz. Her aygıt sürücü bir kernel modül biçiminde yazılmak zorundadır. Fonksiyon başarı durumunda 0 değerine,
     başarısızlık durumunda negatif errno değerine geri döner.
 
     register_chrdev_region fonksiyonu modülün init fonksiyonunda register ettirilen majör ve minör numaralar unregister_chrdev_region
@@ -56017,7 +56049,7 @@ yukarısındaki fiziksel RAM'dir. 64 bit Intel işlemcilerinde ZONE_NORMAL tüm 
     void kfree (const void *objp);
 
     kmalloc fonksiyonunun birinci parametresi tahsis edilecek byte sayısını belirtir. İkincisi parametresi tahsis edilecek alan ve biçim hakkında 
-    bayrakları içermektedir. Bu ikinci parametre çeşitli sembolik sabitlerden oluştrulmaktadır. Burada önemli birkaç byrak şunlardır:
+    bayrakları içermektedir. Bu ikinci parametre çeşitli sembolik sabitlerden oluşturulmaktadır. Burada önemli birkaç byrak şunlardır:
 
     GFP_KERNEL: Kernel alanı içerisinde normal tahsisat. En sık bu bayrak kullanılmaktadır. Burada RAM doluysa swap işlemi yapılabilir. Bu işlem sırasında
     akış kernel modda wait kuruklarında bekletilebilir. Tahsisat ZONE_NORMAL alanından yapılmaktadır.
@@ -57230,7 +57262,7 @@ done
     ioctl iki argümanla çağrılır. Ancak bir veri transferi söz konusu ise ioctl üç argümanla çağrılmalıdır. Bu durumda üçüncü argüman transfer adres olmalıdır. 
     Tabii aslında bu üçüncü parametrenin veri transferi ile ilgili olması dlayısıyla bir adres belirtmesi zorunlu değildir.
 
-    Fonksiyon başarı durumunda 0 değerine, başarıszlık durumunda -1 değerine geri döner. errno uygun biçimde set edilmektedir.
+    Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri döner. errno uygun biçimde set edilmektedir.
 
     User moddan bir program aygıt sürücü için ioctl fonksiyonunu çağırdığında proses use r moddan kernel moda geçer ve aygıt sürücüdeki 
     file_operations yapısının unlocked_ioctl elemanında belirtilen fonksiyon çağrılır. Bu fonksiyonun parametrik yapısı şöyle olmalıdır:
@@ -57627,7 +57659,7 @@ done
 /*--------------------------------------------------------------------------------------------------------------------------
     Aşağıdaki örnekte birkaç ioctl kodu işlenmiştir. Borudan atmadan byte okumak için özel peek'li ioctl fonksiyonları yazılmıştır. 
     ioctl fonksiyonun tek bir parametresi olabilir. Birden fazla parametre bir yapı biçiminde fonksiyona verilmelidir. Yukarıda da belirtildiği gibi
-    ioctl fonksiyonun geri dönüş değeri başarıszlık durumunda negatif hata kodu, başarı durumunda tipik olarak 0'dır. Ancak başarı durumunda 0 olması
+    ioctl fonksiyonun geri dönüş değeri başarısızlık durumunda negatif hata kodu, başarı durumunda tipik olarak 0'dır. Ancak başarı durumunda 0 olması
     mutlak bir zorunluluk değildir. Programcılar işlerini uzatmamak için başarı durumunda anlamlı başka bir değerle de geri dönebilmektedir. 
     Aşağıda örnekte peek için iki ayrı ioctl fonksiyonu bulundurulmuştur. IOC_PIPE_PEEK fonksiyonunda okunan byte miktarı ioctl fonksiyonun
     geri dönüş değeri biçimide bize verilmektedir. Halbuki IOC_PIPE_PEEK_BIDIREC fonksiyonunda okunan byte miktarı yapının yeniden size elemanına 
@@ -58098,7 +58130,7 @@ do
     /proc dizini içerisinde yaratılır. Son parametre proc dosya sistemindeki ilgi dosyaya yazma ve okuma yapldığında çalıştırılacak fonksiyonları belirtir. 
     Aslında birkaç sene önceki kernel'larda bu fonksiyonun son parametresi struct proc_ops biçiminde değil, struct file_operations biçimindeydi. Dolayısıyla
     kernelınızda hangi fonksiyonun bulunuyor olduğuna dikkat ediniz. Kursun yapıdlığı sistemde bu fonksiyonun son parametresi struct file_operations biçimindedir. 
-    Fonksiyon başarı durumunda yaratılan dosyanın bilgilerini içeren proc_dir_entry türünden bir yapı nesnesinin adresiyle, başarıszlık durumunda NULL adresle
+    Fonksiyon başarı durumunda yaratılan dosyanın bilgilerini içeren proc_dir_entry türünden bir yapı nesnesinin adresiyle, başarısızlık durumunda NULL adresle
     geri dönmektedir. 
 
     proc dosya sisteminde yaratılan dosya remove_proc_entry fonksiyonuyla silinebilmektedir. 
@@ -59065,7 +59097,7 @@ chmod $mode $module
 
     int wake_up_process(struct task_struct *tsk);
 
-    Fonksiyon başarı durumunda 0 değerine başarıszlık durumunda negatif error koduna geri dönmektedir. 
+    Fonksiyon başarı durumunda 0 değerine başarısızlık durumunda negatif error koduna geri dönmektedir. 
 
     Aslında yukarıdaki işlemi tek hamlede yapan kthread_run isimli bir fonksiyon da vardır:
 
@@ -59290,7 +59322,7 @@ chmod $mode $module
     const void *free_irq(unsigned int irq, void *dev_id);
 
     Fonksiyonun birinci parametresi silinecek irq numarasını, ikinci parametresi irq_reuest fonksiyonuna girilen son parametreyi belirtir. Fonksiyon başarı durumunda aygıt ismine, 
-    başarıszlık durumunda NULL adrese geri dönmektedir. 
+    başarısızlık durumunda NULL adrese geri dönmektedir. 
 
     Bazen sistem programcısı belli bir IRQ'yu belli süre için disable etmek isteyebilir. Bunun disable_irq ve enable_irq isimli iki kernel fonksiyonu kullanılmaktadır. 
     Bu fonksiyonlar belli numaralı bir IRQ'yu disable, enable etmeketdir. Bu işlemi doğrudan kesme denetleyicisini (PIC ya da IOAPIC) programlayarak yapmakmaktadır. 
@@ -59937,7 +59969,7 @@ chmod $mode $module
     void iowrite8(u16 value, void *addr);
     void iowrite8(u32 value, void *addr);
 
-    Yukarıdaki fonksiyonların rep'li versyonları da vardır:
+    Yukarıdaki fonksiyonların rep'li versiyonları da vardır:
 
     void ioread8_rep(void *addr, void *buf, unsigned long count);
     void ioread16_rep(void *addr, void *buf, unsigned long count);
