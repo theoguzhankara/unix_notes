@@ -209,10 +209,6 @@
 ------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------
-												3. Ders 12/03/2024 - Salı
-------------------------------------------------------------------------------------------------*/
-
-/*-----------------------------------------------------------------------------------------------
     Mikroişlemcileri tasarım mimarilerine göre iki CISC (Complex Instruction Set Computers) ve RISC (Reduced Instruction Set Computers)
     olmak üzere iki kısma ayırabiliriz. CISC ailesi işlemcilere Intel firmasının x86 ailesi işlemcilerini örnek verebiliriz. ARM, 
     MIPS, PowerPC, Itanium gibi işlemciler ise tipik RISC işlemcileridir. Her ne kadar CISC ve RISC isimleri komut kümesi ile 
@@ -289,12 +285,25 @@
     ADD R2, R1, R0
     STR R2, <c'nin bellek adresi>
 
-    Görüldüğü gibi ARM işlemcilerinde Load/Store komutları dışındaki komutlar üç operand'lıdır. Bu da yazmaçlardaki değerlerin
-    gerektiğinde bozulmamasına yol açmaktadır.
+    Burada R0, R1 ve R2 işlemcinin yazmaçlarıdır. Görüldüğü gibi ARM işlemcilerinde Load/Store komutları dışındaki komutlar 
+    üç operand'lıdır. Bu da yazmaçlardaki değerlerin gerektiğinde bozulmamasına yol açmaktadır.
+
+    7) RISC işlemcileri yukarıda belirttiğimiz tasarım prensiplerinden dolayı toplamda daha az güç harcama eğilimindedir. Bu da
+    onların mobil aygıtlarda kullanılmasının önemli bir gerekçesini oluşturmaktadır.
+
+    8) RISC işlemcilerinde makine komutlarının çalışma süreleri birbirine yakındır. Ancak CISC işlemcilerinde makine komutlarının 
+    çalışma süreleri arasında önemli farklılıklar olabilmektedir. Örneğin ARM işlemcilerinde toplama, çıkartma, çarpma gibi 
+    makine komutları 1 cycle'da yapılmaktadır. Ancak load/store komutlarının, jump komutlarının ve özel bazı komutların çalışma 
+    süreleri 1 cycle'dan fazla olabilmektedir. Oysa örneğin Intel x86 işlemcilerinde komut süreleri değişik faktörlere bağlı olarak
+    birbirinden çok farklılaşmaktadır.
 
     RISC ve CISC mimarilerini bir spektrum olarak düşünmek gerekir. Örneğin MIPS işlemcileri ARM işlemcilerine göre bu spektrumun 
-    daha fazla RISC tarafındadır. Intel'in x86 işlemcilerini kategori olarak CISC grubu işlemci olarak ele alsak da Pentium 
+    daha fazla RISC tarafındadır. Intel'in x86 işlemcilerini kategori olarak CISC grubu işlemciler olarak ele alsak da Pentium 
     işlemcileri ile birlikte bu işlemcilerde de RISC prensipleri gittikçe daha fazla kullanılır hale gelmiştir.
+------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------
+												3. Ders 12/03/2024 - Salı
 ------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------
@@ -352,73 +361,74 @@
 
     ARM dünyasında üç mimari profili (profile) bulunmaktadır:
 
-    1) A Profili (Apllication)
-    2) R Profili (Realtime)
-    3) M Profili (Microcontroller)
+    1) A (Application) Profili
+    2) R (Realtime) Profili
+    3) M (Microcontroller) Profili
 
     Bu profiller ilgili cortex'lerin hangi tür uygulamalarda ideal olarak kullanılabileceğini belirtmektedir. Profil isimleri 
-    cortex'lerde ve versiyon numaralarında '-' karakterinden sonra belirtilmektedir. Örneğin "Cortex-A8" ve "ARMV7-A" gibi.
-    A profilleri masasüstü işletim sistemlerinin çalıştırılabileceği, tamamen kişilsel bilgisayar olarak kullanılabilecek 
+    cortex'lerde ve versiyon numaralarında '-' karakterinden sonra A, R, M harfleriyle belirtilmektedir. Örneğin "Cortex-A8" ve 
+    "ARMV7-A" gibi.A profilleri masasüstü işletim sistemlerinin çalıştırılabileceği, tamamen kişilsel bilgisayar olarak kullanılabilecek 
     cortex'leri belirtmektedir. Biz kursumuzda "gömülü Linux programcısı" olarak bu "A" profilleriyle çalışacağız. R profilleri
-    "gerçek zamanlı (realtime)" uygulamalar için daha uygun olabilecek cortex'leri belirtmektedir. R profilleri A profilleri 
-    birbirlerine benzemektedir. R profilleri A profillerine göre çok daha seyrek kullanılmaktadır. M profilleri ARM'nin mikrodenetleyici
+    "gerçek zamanlı (realtime)" uygulamalar için daha uygun olabilecek cortex'leri belirtmektedir. R profilleri ile A profilleri 
+    birbirlerine benzemektedir. R profilleri A profillerine göre çok daha seyrek kullanılmaktadır. M profilleri ARM'ın mikrodenetleyici
     olarak kullanılan cortex'lerini belirtmektedir. Bu cortex'ler genel olarak Linux işletim sisteminin yüklenmesine izin vermemktedir. 
-    Bu cortex'ler genellikle "bare-metal" programlarla kullanılmaktadır. Ya da gerçek zamanlı işletim sistemleriyle de M profilleri
-    kullanılabilmektedir.
+    Bu cortex'ler genellikle "bare-metal" programlarla ya da gerçek zamanlı işletim sistemleriyle kullanılmaktadır.
 
     ARM'ın iki önemli versiyonu ARMV7-A ve ARMV8'A dır. ARMV7 32 bitlik bir arayüz sunmaktadır. Dolayısıyla bu komut mimarisini 
-    kullanan cortex'ler 32 bitlik core'ları içermektedir. ARMV8-A versiyonları 64 bitlik arayüz sunmaktadır. Dolayısıyla bu 
-    versiyonları kullanan core'lar 64 bitlik işlemcilerdir. Ancak ARM cortex'lerinin bir grubu hem 32 bit hem de 64 bit olarak 
-    kullanılabilmektedir. Bu core'larda işletim sistemleri 32 bitlik ve 64 bitlik programları zaman paylaşımlı olarak bir arada 
-    çalıştırabilmektedir.
+    kullanan cortex'ler 32 bitlik işlemciler içermektedir. ARMV8-A versiyonları ise 64 bitlik arayüz sunmaktadır. Dolayısıyla bu 
+    versiyonları kullanan cortex'ler 64 bitlik işlemcilere ilişkindir. Ancak ARM cortex'lerinin bir grubu hem 32 bit hem de 64 bit olarak 
+    kullanılabilmektedir. Bu cortex'lerdeki işlemcileri kullanan işletim sistemleri 32 bitlik ve 64 bitlik programları zaman 
+    paylaşımlı olarak bir arada çalıştırabilmektedir.
 ------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------
     Mikroişlemciler ilk çıktığında 8 bit işlemleri yapabiliyordu (örneğin 8080, 6800 gibi işlemciler). Bunlara 8 bitlik mikroişlemci 
-    deniyordu. Sonra 16 bitlik mikroişlemciler çıktı (örneğin Intel'in 8086 işlemcisi). Bunu 32 bit işlemciler izledi. Günümüzde 
-    artık ağırlıklı olarak 64 bit işlemciler kullanılmaktadır. Pekiyi bir işlemcinin N bitlik olmasının anlamı nedir?
+    deniyordu. Sonra 16 bitlik mikroişlemciler çıktı (örneğin Intel'in 8086, 8088 işlemcileri gibi). Bunu 32 bit işlemciler izledi. 
+    Günümüzde artık ağırlıklı olarak 64 bit işlemciler kullanılmaktadır. Pekiyi bir işlemcinin N bitlik olmasının anlamı nedir? 
+    Bu soruya yanıt verelim:
 
-    - N bitlik bir işlemcide tek hamlede (yani tek bir makine komutuyla) N bit üzerind işlem yapılabilmektedir. Örneğin 32 bitlik 
+    - N bitlik bir işlemcide tek hamlede (yani tek bir makine komutuyla) N bit üzerinde işlem yapılabilmektedir. Örneğin 32 bitlik 
     bir mikroişlemcide tek bir makine komutu ile 32 bitlik iki sayısıyı toplayıp çarpabiliriz.
 
-    - N bitlik bir mikroişlemci genellikle (ama her zaman değil) 2^N uzunlukta bir fiziksel RAM'i adresleyebilmektedir. Örneğin
+    - N bitlik bir mikroişlemciler genellikle (ama her zaman değil) 2^N uzunlukta bir fiziksel RAM'i adresleyebilmektedir. Örneğin
     32 bitlik bir mikroişlemciye biz tipik olarak 2^32 = 4GB'lik bir RAM bağlaybiliriz. Elimizdeki RAM 64GB olsa bile 32 bit
     bir mikroişlemci bu RAM'in ancak ilk 4GB'sini kullanabilmektedir. Tabii bu durum her zmana böyle değildir. Örneğin 8086 
     işlemcisi 16 bit olduğu halde 2^16 değil 2^20 uzunlupunda (1MB) fiziksel belleği adresleyebiliyordu. Benzer biçimde bugünkü
     64 bitlik Intel ve AMD işlemcileri gereksiz olduğu gerekçesiyle 2^64 değil 2^48 uzuluğundaki RAM'leri adresleyebilmektedir.
 
     - N bitlik bir mikroişlemcide genellikle işlemci ile RAM aarasında transfer N bit olarak yapılmaktadır. Örneğin 32 bitlik
-    bir mikroişlemcide tek bir makine komutuyla RAM'den CPU 32 bitlik bir veri alabilir.
+    bir mikroişlemcide tek bir makine komutuyla RAM'den CPU'ya 32 bitlik bir veri transfer edilebilir.
 
     8 bitten 16 bite geçişte ve 16 bitten 32 bite geçişte çok farkedilir bir hızlanma yaşanmıştır. Ancak 32 bitten 64 bite geçişte 
     hızlanma öncekiler kadar olmamıştır. Bunun nedeni 64 bitlik işlemlerin aslında yoğun olarak yapılmadığındandır. Ancak 32 bitten
     64 bite geçişin en önemli etkisi işlemciye bağlanabilecek RAM miktarı üzerinde olmuştur. Örneğin elimizde 8 GB RAM'li 
-    Raspberry Pi 5 olsun. Buradaki ARM cortex'i hem 32 bit hem de 64 bit işlemci gibi çalışabilmektedir. Dolayısıyla biz bu Kartımızda
-    32 bitlik de 64 bitlik de Linux yükleyebilriz. Ancak 32 bitlik Linux işletim sistemi işlemciyi 32 bit modda çalıştıracağı için 
-    biz 8GB RAM'in ancak 4GB'sini kullanabiliriz. Bu 8GB RAM'in tamamından istifade edebilmemiz için işlemcinin 64 bit modunda 
-    çalıştırılması dolayısıyla da işletim sisteminin 64 bit olması gerekir.
+    Raspberry Pi 5 olsun. Buradaki ARM cortex'i hem 32 bit hem de 64 bit işlemci gibi çalışabilmektedir. Dolayısıyla biz bu kartımıza
+    32 bitlik de 64 bitlik de Linux yükleyebiliriz. Ancak 32 bitlik Linux işletim sistemi işlemciyi 32 bit modda çalıştıracağı için 
+    işletim sistemi 8GB RAM'in ancak 4GB'sini kullanabilecektir. Bu 8GB RAM'in tamamından istifade edebilmemiz için işlemcinin 
+    64 bit modunda çalıştırılması dolayısıyla da işletim sisteminin 64 bit olması gerekecektir.
 
-    Pekiyi 128 bitlik bir işlemci daha iyi bir çalışam sunmaz mı? Neden 128 bitlik işlemciler yok? İşte 128 bitlik tamsayı işlemlerine
-    çok nadir gereksinim duyulmaktadır. 2^128 uzunlupunda RAM zaten şu an için erişilmesi imkansız bir RAM miktarıdır. O halde 
-    işlemcilerin 64 bitten 128 bite çıkartılmasının şu an için önemli bir faydası olmayacaktır.
+    Pekiyi 128 bitlik işlemciler tasarlansa, bunlar daha hızlı bir çalışam sunmaz mı? Neden 128 bitlik işlemciler tasarlanmıyor? 
+    İşte 128 bitlik tamsayı işlemlerine çok nadir gereksinim duyulmaktadır. 2^128 uzunlupunda RAM zaten şu an için erişilmesi 
+    imkansız bir RAM miktarıdır. O halde işlemcilerin 64 bitten 128 bite çıkartılmasının şu an için önemli bir faydası olmayacaktır.
+    Ancak tabii gelecekte böyle bir ihtiyaç ortaya çıkabilecektir.
 ------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------
-    Popüler ürünlerde kullanılan ARM işlemcileri (core'ları) şunlardır:
+    Popüler ürünlerde kullanılan ARM cortex'leri şunlardır:
 
-    iPhone 14: A15 isimli SoC'u kullanmaktadır. Apple'ın ARMv8.6‑A versiyonunu kullanan Avalanche Cortex'i vardır. Buradaki Core'lar
+    iPhone 14: Apple'ın A15 isimli SoC'unu kullanmaktadır. Bu SoC'un içerisinde Apple'ın ARMv8.6‑A versiyonunu kullanan Avalanche 
+    Cortex'i vardır. Buradaki core'lar yalnızca 64 biti desteklemektedir.
+
+    iPhone 15: Apple'ın A16 isimli SoC'unu kullanmaktadır. Bu SoC'un içerisinde Apple'ın ARMv8.6‑A versiyonunu kullanan Evereset
+    Cortex'i vardır. Buradaki core'lar yalnızca 64 biti desteklemektedir.
+
+    Apple M1 SoC: Apple'ın ARMv8.4‑A versiyonunu kullanan FireStorm isimli Cortex'i vardır. Buradaki core'lar yalnızca 64 biti 
+    desteklemektedir.
+
+    Apple M2 SoC: Apple'ın ARMv8.6‑A versiyonunu kullanan Avalanche ve Blizzard isimli Cortex'leri vardır. Buradaki Core'lar
     yalnızca 64 biti desteklemektedir.
 
-    iPhone 15: A16 isimli SoC'u kullanmaktadır. Apple'ın ARMv8.6‑A versiyonunu kullanan Evereset Cortex'i vardır. Buradaki Core'lar
-    yalnızca 64 biti desteklemektedir.
-
-    M1 SoC: Apple'ın ARMv8.4‑A versiyonunu kullanan FireStorm isimli Cortex'i vardır. Buradaki Core'lar
-    yalnızca 64 biti desteklemektedir.
-
-    M2 SoC: Apple'ın ARMv8.6‑A versiyonunu kullanan Avalanche ve Blizzard isimli Cortex'leri vardır. Buradaki Core'lar
-    yalnızca 64 biti desteklemektedir.
-
-    M3 SoC: Apple'ın ARMv8.6‑A versiyonunu Avalanche ve Blizzard kullanan isimli Cortex'i vardır. Buradaki Core'lar
+    Apple M3 SoC: Apple'ın ARMv8.6‑A versiyonunu kullanan Avalanche ve Blizzard kullanan isimli Cortex'i vardır. Buradaki core'lar
     yalnızca 64 biti desteklemektedir.
 
     Samsung Galaxy S24: Qualcomm firmasının Snapdragon-8 SoC'unu kullnamaktadır. Bu SoC içerisinde ARMv9-A versiyonunu kullanan 
@@ -429,28 +439,122 @@
 ------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------
-    Bu kursta kullanacağımız SBC'lerin üzerinde bulunan ARM cortex'leri ve bunların versiyon numaraları da şöyledir:
+    Bu kursta kullanacğımız SBC'lerin üzerinde bulunan ARM cortex'leri ve bunların versiyon numaraları da şöyledir:
 
-    Raspberry Pi 3: BCM2837 SoC kullanlmıştır. Bu SoC'un içerisinde ARMV8-A versiyonuna ilişkin Cortex-A53 bulunmaktadır. Bu 
-    cortex'teki core'lar hem 32 bit hem de 64 bit modda çalışabilmektedir.
+    Raspberry Pi 3: BCM2837 SoC'u kullanlmıştır. Bu SoC'un içerisinde ARMV8-A versiyonuna ilişkin Cortex-A53 bulunmaktadır. Bu 
+    cortex'teki işlemciler hem 32 bit hem de 64 bit modda çalışabilmektedir. Dolayıyla bunlara 32 bit ve 64 bit Linux sistemleri 
+    yüklenebilmektedir.
 
     Raspberry Pi 4: BCM2711 SoC kullanlmıştır. Bu SoC'un içerisinde ARMV8-A versiyonuna ilişkin Cortex-A72 bulunmaktadır. Bu 
-    cortex'teki core'lar hem 32 bit hem de 64 bit modda çalışabilmektedir.
+    cortex'teki işlemciler hem 32 bit hem de 64 bit modda çalışabilmektedir. Dolayıyla bunlara 32 bit ve 64 bit Linux sistemleri 
+    yüklenebilmektedir.
 
     Raspberry Pi 5: BCM2712 Bu SoC'un içerisinde ARMV8.2-A versiyonuna ilişkin Cortex-A76 bulunmaktadır. Bu cortex'teki 
-    core'lar hem 32 bit hem de 64 bit modda çalışabilmektedir.
+    işelmciler hem 32 bit hem de 64 bit modda çalışabilmektedir. Dolayıyla bunlara 32 bit ve 64 bit Linux sistemleri 
+    yüklenebilmektedir.
 
-    BlackBone Black 4G ve BeagleBone Black Wireless: Texas Instruments'ın Sitara-AM3358 SoC'unu kullanmaktadır. Bu SoC'un 
-    içerisinde Cortex-A8 kullanılmıştır. Bu cortex 32 bit core'lardan oluşmaktadır. Bunların kullandığı komut mimarisi de 
-    ARMV7-A'dır. (Yani BeagleBona Black'ler 32 bit ARM işlemcilerini kullanmaktadır. Dolayısıyla bunlara 32 bit Linux sistemleri
-    yüklenebilmektedir.)
+    BlackBone Black 4G ve BeagleBone Black Wireless: Texas Instruments firmasının Sitara-AM3358 SoC'unu kullanmaktadır. Bu SoC'un 
+    içerisinde Cortex-A8 kullanılmıştır. Bu cortex 32 bit işlemcilerden oluşmaktadır. Bunların kullandığı komut mimarisi de 
+    ARMV7-A'dır. BeagleBona Black'ler 32 bit ARM işlemcilerini kullandığı için bunlara yalnızca 32 bit Linux sistemleri
+    yüklenebilmektedir.
 ------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------
-
+												4. Ders 14/03/2024 - Perşembe
 ------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------
+    Şimdi de Raspberry Pi 5 donanımını inceleyelim. Kartın üzerinde BCM2712 SoC'u heme dikkati çekmektedir. Bu SoC'un hemen 
+    yanında RAM chip'i bulunmaktadır. Raspberyy Pi 5'in 1GB, 2GB, 4GB ve 8GB RAM'li modelleri bulunmaktadır. Raspberry Pi 5 
+    modelinde toplam 4 USB soketi bulunmaktadır. Bunlardan iki tanesi USB 2.0, diğer 2 tanesi de USB 3.0'dır. Klavye ve fare gibi 
+    yavaş aygıtları USB 2.0 girişlerine bağlayabilrsiniz. Bunların hemen yanında Ethernet girişi bulunmaktadır. KEnarlarda toplam 
+    40 tane (20'lik iki sıra) GPIO uçları bulunmaktadır. Bu GPIO uçları aygıtın dış dünya ile elektrisksel olarak haberleşmesin
+    için kullanılmaktadır. Raspberry Pi 5'te iki Micro HDMI girişi bulunmaktadır. Bu uçlardan birine monitörümüzü bağlamalıyız.
+    Raspberry Pi 5 modelinde arka tarafta SD kart girişine yakın bir bölgede çok küçük OO/OFF düğmesi bulunmaktadır. Bu düğme 
+    bilgisayarlarımızdaki Power Off düğmesi gibidir. Ayrıca kamera ve LCD bağlamak için iki adet MIP DSI/CSI bulunmaktadır. 
+    Kartın arka tarafında bir Micro SD kart girişi bulunmaktadır. Buraya disk görevini görecek olan micro SD kartımızı takacağız.
+    Giriş kısmında da belirttiğimiz gibi şu an için 64GB'lik SD kartlar fiyat bakımından uygun bir büyüklüktür. Ancak denemeler için 
+    birden fazla (bunlar daha küçük de olabilir) SD kart kullanabilirsiniz. Kart üzerindeki diğer bileşenlerin bazılarını ilerleyen
+    bölümlerde ayrıca ele alacağız.
+
+    Kart üzerindeki bileşenleri inceleyebilmek için aşağıdaki bağlantıyı kullanabilirsiniz:
+
+    https://grobotronics.com/raspberry-pi-5-4gb.html
+
+    Raspberry Pi'ın resmi iki sitesi raspberrypi.com ve raspberrypi.org siteleridir. Raspberry Pi ile ilgili tüm dokümanlar 
+    https://www.raspberrypi.com/documentation/ bağlantısından elde edilebilir.
+------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------
+    Raspberry Pi bir proje olarak özellikle az gelişmiş ülkelerde düşük fiyatlı bilgisayar oluşturmayı hedeflemiştir. Dolayısıyla
+    biz Raspberry Pi'ı tamamen Linux tabanlı bir kişisel bilgisayar olarak kullanabiliriz. Kursumuzda önce Raspberry Pi'ın 
+    kişisel bilgisayar olarak nasıl kullanıldığı üzerinde duracağız.
+------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------
+    Raspberry Pi için birkaç işletim sistemi oluşturulmuştur. Ancak bunlardan en yaygın kullanılan ikisi Linux'un "Raspberry Pi 
+    OS (eski ismiyle Raspbian)" ve "Ubuntu" dağıtımlarıdır. Raspberry Pi ile tam uyum içind eolan ana dağıtım "Raspberry Pi OS"
+    dağıtımıdır. Biz en azından "Raspberry Pi OS" ve "Ubuntu" dağıtımlarını ayrı micro SD kartlara yüklemenizi tavsiye ediyoruz.
+
+    Bir bilgisayar sistemini reset ettiğimizde işletim sisteminin (ya da bu görevdeki yazılımın) yüklenmesini sağlayan mekanizmalara
+    "boot loader" denilmektedir. Gömülü sistemlerde kullanılan "boot loader" mekanizmaları kursumuzun ayrı bir konusunu oluşturmaktadır. 
+    Ancak kabaca boot işlemi şöyle gerçekleşmektedir: Biz mikroişlemciyi reset ettiğimizda çalışma belli bir adresten başlatılmaktadır. 
+    Yani işlemci reset edildiğinde çalıştırılacak kodun önceden hazır bir biçimde kalıcı bir bellekte (bugün bunlar için flash EPROM'lar
+    kullanılmaktadır) bulunuyor olması gerekir. Buradaki kod çeşitli donanım birimlerini programlar ve onları kullanıma hazır hale 
+    getirir. Sonra boot loader'ın işletim sisteminin yüklenmesinden sorumlu olan kısmı RAM'e yüklenir. Boot Loader'ın bu kısmı 
+    işletim sistemini yükler. Zaten bu konular ileride ayrıntılarıyla ele alınacaktır. Bizim bu aşamada bilmemiz gereken şey 
+    işletim sistemimizin micro SD karta nasıl yükleneceğidir. Çünkü bu işlem yapıldıktan sonra artık her şey otomatik gerçekleşmektedir.
+------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------
+    Micro SD kartımıza işletim sisteminin yüklenmesi gelişi güzel yapılacak bir işlem değildir. Çünkü belli programların disk 
+    üzerinde belli sektörlerde bulunuyor olması gerekmektedir. Bunu sağlamanın basit bir yolu önceden hazırlanmış bir imaj dosyasını 
+    micro SD kartımıza aktarmaktır. Raspberry Pi için bu imaj dosyaları hazır bir biçimde zaten bulunmaktadır. O halde bizim 
+    tek yapacağımız şey bu imaj dosyalarını indirip micro SD kartımızın içerisine aktarmaktır. Ancak son birkaç yıldır bu işlemin
+    kolaylaştırılması için Raspberry Pi ekibi "Raspberry Pi Imager" denilen bir program geliştirmiştir. Bu program menüler
+    eşliğinde kullanıcının istediği işletim sisteminin imaj dosyasını indirip micro SD karta bunları yazmaktadır. Dolayısıyla 
+    bu program işimizi hepten kolaylaştırmaktadır. Raspberry Pi İmager programını aşağıdaki bağlantıdan indirebilirsiniz:
+
+    https://www.raspberrypi.com/software/
+
+    RaspberryImager programı indirilip kurulup çalıştırılınca program bize üç şey sormaktadır?
+
+    1) Hangi Rasperry Pi Modelini kullandığımızı
+    2) Hangi işletim sistemini yükleyeceğimizi
+    3) Hangi micro SD karta yüklemeyi yapacağımızı
+
+    Bu sorulara yanıt verdikten sonra yüklenecek Linux üzerinde bazı basit konfigürasyon işlemleri de "Edit Setting" seçeneği 
+    yapılabilmektedir. Tabii bunları yüklemeden sonra da yapabiliriz.
+
+    Raspberry Pi Imager her şeyi kendisi yapmaktadır. Program önce ilgili imajı yerel makineye indirir, sonra da micro SD karta 
+    yazma yapar.
+
+    Tabii biz Raspberry Pi Imager programını kullanmak zorunda değiliz. Zaten bu program eskiden yoktu. Eğer bu programı kullanmayacaksak
+    işletim sistminin SD kart imajını indirip SD karta yazma yapan bir programla onu karta aktarmamız gerekir. SD karta aktarma 
+    yapan pek çok bedava program vardır. Bunlşardan en popüler iki tanesi "Rufus" ve "Etcher" programlarıdır. Manuel kurulum 
+    için işletim sistemi imajlarını aşağıdaki bağlantıdan indirebilirsiniz:
+
+    https://www.raspberrypi.com/software/operating-systems/
+------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------
+    Gömülü sistemimize Linux'u kurduktan sonra ona başka bir makineden erişmek isteyebiliriz. Bunun çeşitli yolları varsa da 
+    en tipik üç yöntem kullanılmaktadır:
+
+    1) ssh protokolü ile erişim
+    2) VNC protokolü ile erişim
+    3) Microsoft Remote Desktop Protokolü (RDP) ile erişim
+
+    VNC ve RDP ile gömülü aygıtımızdaki Linux'a erişebilmemiz için orada bir pencere yönetici programın (yani masaüstü sisteminin)
+    kurulu olması gerekir. RSapberry Pi güçlü bir donanıma sahip olduğu için ve kişisel bir bilgisayar gibi kullanılabildiği için
+    buraya yüklediğimiz Linux sistemlerinde pencere yöneticisi zaten var olabilmektedir. Ancak server sistemlerinde ve pek çok 
+    gömülü Linux sisteminde bir pencere yöneticisi bulunmamaktadır. Bu durumda ssh protokolü ile erişim uygulanmaktadır. 
+    Eskiden ssh protokolünden önce telnet isimli benzer bir protokol vardı. Ancak telnet protokolünün güvenilirliği zayıf olduğu 
+    için ssh protokolü geliştirildi. Bugün konsol tabanlı bir ortamda bir Linux sistemine uzaktan bağlanmak için genellikle ssh
+    protokolü kullanılmaktadır. Her türlü TCP/IP uygulamalarında haberleşmenin yapılabilmesi için bir "server" program ile bir de
+    "client" programın bulunuyor olması gerekir. Bize erişimi sağlayan uzak makinedenki program "server" programdır. Bizim erişmek 
+    için kullandığımız program ise "client" programdır. ssh server ve client programlar zaten işletim sistemlerinin pek çoğunun 
+    içinde default bir biçimde bulunmaktadır.
 
 ------------------------------------------------------------------------------------------------*/
 
