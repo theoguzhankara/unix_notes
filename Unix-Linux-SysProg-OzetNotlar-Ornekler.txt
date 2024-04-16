@@ -51904,6 +51904,8 @@ int main()
     make dosyasına dışarıdan parametre aktarabiliriz. Bunun için komut satırında "değişken=değer" sentaksı kullanılmaktadır. 
     Burada geçirilen değer ${değişken} ifadesi ile make dosyasının içerisinden kullanılabilir. Örneğin:
 
+    # Makefile
+
     ${executable}: a.o b.o c.o
         gcc -o app a.o b.o c.o
     a.o: a.c
@@ -51923,12 +51925,14 @@ int main()
 
     make executable=app
 
-    Bu durumda app dosyası hede olarak ele alınacaktır.
+    Bu durumda "app" dosyası hedef olarak ele alınacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Make dosyası içerisinde değişkenler kullanılabilmektedir. Bir değişken "değişken = değer" sentaksıyla oluşturulur ve 
     make dosyasının herhangi bir yerinde ${değişken} biçiminde kullanılır. Örneğin:
+
+    # Makefile
 
     CC = gcc
     OBJECTS = a.o b.o c.o
@@ -51948,20 +51952,21 @@ int main()
         rm -f ${OBJECTS}
     install:
         sudo cp ${APP_NAME} ${INSTALL_DIR}
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Bir C programını derlediğimizde link işlemi için bir main fonksiyonunun bulunması gerekmektedir. Aslında GNU'nun linker
     programının ismi "ld" isimli programdır. gcc zaten bu ld linker'ını çalıştırmaktadır. Bir programın link edilebilmesi için 
     aslında main fonksiyonunun bulunması gerekmez. main fonksiyonu assembly düzeyinde anlamlı geçerli anlamlı bir fonksiyon 
-    değildir. C için için anlamlı bir fonksiyondur. Yani örneğin biz bir assembly programı yazarsak onu istediğimiz yerden 
+    değildir. C için anlamlı bir fonksiyondur. Yani örneğin biz bir assembly programı yazarsak onu istediğimiz yerden 
     çalışmaya başlatabiliriz. Bir dosya "executable" olarak link edilirken tek gerekli olan şey "entry point" denilen akışın
     başlatılacağı noktadır. Entry point ld linker'ında --entry seçeneği ile belirtilmektedir. Biz bir C programını gcc ile 
     derlediğimizde gcc aslında ld linker'ını çağırırken ismine "start-up modüller" denilen bir grup modülü de link işlemine 
     gizlice dahil etmektedir. Programın gerçek entry point'i bu start-up modül içerisinde bir yerdedir. Aslında main fonksiyonunu
     bu start-up modül çağırmaktadır. Bu start-up modülün görevi birtakım hazırlık işlemlerini yapıp komut satırı argümanlarıyla 
     main fonksiyonunu çağırmaktır. Zaten akış main fonksiyonunu bitirdiğinde yeniden start-up modüldeki koda döner orada exit 
-    yapılmıştır. Start-up modülün kodlarını şöyle süşünebilirsiniz:
+    yapılmıştır. Start-up modülün kodlarını şöyle düşünebilirsiniz:
 
     ...
     ...
@@ -51972,9 +51977,9 @@ int main()
     O halde link aşamsına bu start-up modül katıldığı için aslında main isimli bir fonksiyon aranmaktadır. Yani start-up modül 
     main fonksiyonunu çağırmasaydı linker onu aramayacaktı.
 
-    Biz aslında hiçbir kütüphaneyi link aşamasına dahil etmeden programın entry-point'ini kendismiz belirleyerek akışı istediğimiz
+    Biz aslında hiçbir kütüphaneyi link aşamasına dahil etmeden programın entry-point'ini kendimiz belirleyerek akışı istediğimiz
     fonksiyondan başlatabiliriz. Tabii bu durumda sistem fonksiyonlarını bile sembolik makine dilinde ya da gcc'nin inline 
-    sembolik makine dilinde kendimizin yazması gerekecektir. Aşağıda böyle bir örnek verilmişri. Buradaki programın isminin 
+    sembolik makine dilinde kendimizin yazması gerekecektir. Aşağıda böyle bir örnek verilmiştir. Buradaki programın isminin 
     "x.c" olduğunu varsayalım. Bu programı aşağıdaki gibi derleyip link edebilirsiniz:
 
     $ gcc -c x.c
@@ -52023,7 +52028,7 @@ void foo()
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    O anda makinemizdeki işletim sistemi hakındaki bilgi uname komutuyla elde edilebilir. Bu komut -r ile kullanılırsa o 
+    O anda makinemizdeki işletim sistemi hakındaki bilgi "uname" komutuyla elde edilebilir. Bu komut -r ile kullanılırsa o 
     makinede yüklü olan kernel versiyonu elde edilmektedir. Örneğin:
 
     $ uname -r
@@ -52037,7 +52042,7 @@ void foo()
     eğer kesme gibi bazı mekanizmaları kullanıyorsa ve bir donanım aygıtını yönetme iddiasındaysa bunlara özel olarak "aygıt 
     sürücüleri (device drivers)" da denilmektedir. Nasıl bir masaüstü bilgisayara kart taktığımızda artık o kart donanımın 
     bir parçası haline geliyorsa kernel modülleri ve aygıt sürücüleri de install edildiklerinde adeta kernel'ın bir parçası 
-    haqline gelmektedir. Her aygıt sürücü bir kernel modülüdür ancak her kennel modülü bir aygıt sürücü değildir. Bu nedenle
+    haline gelmektedir. Her aygıt sürücü bir kernel modülüdür ancak her kernel modülü bir aygıt sürücü değildir. Bu nedenle
     biz yalnızca "kernel modülü" dediğimizde genel olarak aygıt sürücüleri de dahil etmiş olacağız.
 
     Biz bu bölümde Linux sistemleri için kernel modüllerinin ve aygıt sürücülerinin nasıl yazılacağını ele alacağız.
@@ -52046,7 +52051,7 @@ void foo()
 /*--------------------------------------------------------------------------------------------------------------------------
     Kernel modülleri ve aygıt sürücüler genel bir konu değildir. Her işletim sisteminin o sisteme özgü bir aygıt sürücü mimarisi
     vardır. Hatta bu mimari işletim sisteminin versiyonundan versiyonuna da değişebilmektedir. Bu nedenle aygıt sürücü yazmak
-    genel bir konu değiş o işletim sistemine hatta işletim sisteminin belirli versiyonlarına özgü bir konudur.
+    genel bir konu değil, o işletim sistemine hatta işletim sisteminin belirli versiyonlarına özgü bir konudur.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -52064,10 +52069,10 @@ void foo()
     "linux-headers-$(uname -r)" dizini kaynak kodlar yüklü olmasa bile bulunan bir dizindir ve bu dizin çekirdek modülleri 
     ve aygıt sürücülerin "build edilmeleri" için gereken başlık dosyalarını barındırmaktadır. Benzer biçimde "/lib/modules"
     isimli dizinde $(uname -r) isimli bir dizin vardır. Bu dizin kernel modüllerinin build edilmesi için gereken bazı kodları
-    ve kütüphaneleri bulundurmaktadır. Özetle kernel modülleri ve aygıt sürü yazmak için gerekli olan dizinler şunlardır:
+    ve kütüphaneleri bulundurmaktadır. Özetle kernel modülleri ve aygıt sürücüleri yazmak için gerekli olan dizinler şunlardır:
 
     1) linux-headers-$(uname -r) dizini. Bu dizinde başlık dosyaları bulunmaktadır.
-    2) /lib/modules/$(uname -r) dizini. Burada da kernel modülün build eedilmei için gerekli olan dosyalar ve kütüphaneler 
+    2) /lib/modules/$(uname -r) dizini. Burada da kernel modülün build edilmesi için gerekli olan dosyalar ve kütüphaneler 
     bulunmaktadır.
 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -52075,8 +52080,8 @@ void foo()
 /*--------------------------------------------------------------------------------------------------------------------------
     Bir kernel modülünde biz user mod için yazılmış kodları kullanamayız. Çünkü orası ayrı bir dünyadır. Ayrıca biz kernel 
     modüllerinde kernel içerisindeki her fonksiyonu kullanamayız. Yalnızca bazı fonksiyonları kullanabiliriz. Bunlara "kernel 
-    tarafından export edilmiş fonksiyonlar" denilmektedir. "Kernel tarafından export edilmiş fonksiyon kavramının "sistem 
-    fonksiyonu" kavramınn bir ilgisi yoktur. Sistem fonksiyonları user moddan çağrılmak üzere tasarlanmış ayrı bir grup 
+    tarafından export edilmiş fonksiyonlar" denilmektedir. "Kernel tarafından export edilmiş fonksiyon" kavramıyla "sistem 
+    fonksiyonu" kavramının bir ilgisi yoktur. Sistem fonksiyonları user moddan çağrılmak üzere tasarlanmış ayrı bir grup 
     fonksiyondur. Oysa kernel tarafından export edilmiş fonksiyonlar user moddan çağrılamazlar. Yalnızca kernel modüllerinden
     çağrılabilirler. Buradan çıkan sonuç şudur: Bir kernel modül yazılırken ancak kernel'ın export ettiği fonksiyon ve datalar 
     kullanılabilmektedir. Tabii kernel'ın kaynak kodları çok büyüktür ancak buradaki kısıtlı sayıda fonksiyon export edilmiştir. 
@@ -52084,8 +52089,9 @@ void foo()
     Bu durumda bu fonksiyonlar da başka kernel modüllerinden kullanılabilirler. O halde özetle:
 
     1) Kernel modülleri yalnızca kernel içerisindeki export edilmiş fonksiyonları kullanabilirler. 
-    2) Kendi kernel modülümüzde bir de istediğimiz fonksiyonu export edebiliriz. Bu durumda bizim kernel modülümüz kernel'ın 
+    2) Kendi kernel modülümüzde biz de istediğimiz fonksiyonu export edebiliriz. Bu durumda bizim kernel modülümüz kernel'ın 
     bir parçası haline geldiğine göre başka kernel modüller de bizim export ettiğimiz fonksiyonları kullanabilir.
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -52094,22 +52100,21 @@ void foo()
     "kernel modül yazmak" ya da "aygıt sürücü yazmak" biçiminde genel bir konu yoktur. Her işletim sisteminin kernel modül ve 
     aygıt sürücü mimarisi diğerlerinden farklıdır. Dolayısıyla bu konu spesifik bir işletim sistemi için geçerli olabilecek
     oldukça platform bağımlı bir konudur. Hatta işletim sistemlerinde bazı versiyonlarda genel aygıt sürücü mimarisi bile 
-    değiştirilebilmektedir. Dolayısıyla eski aygıt sürücüler yeni versiyonlarda çalışamamakta yenileri de eski versiyonlarda 
-    çalışamamaktadır.
+    değiştirilebilmektedir. Dolayısıyla eski aygıt sürücüler yeni versiyonlarda, yenileri de eski versiyonlarda çalışamamaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Kernel modüllerinin ve aygıt sürücülerin yazımı için programcının genel olarak kernel yapısını bilmesi gerekmektedir. 
     Çünkü bunları yazarken kernel'ın içerisindeki export edilmiş fonksiyonlar kullanılmaktadır. Linux kernel modüller ve aygıt
     sürücüler hakkında yazılmış birkaç kitap vardır. Bunların en klasik olanı "Linux Device Drivers (3. Edition)" kitabıdır. 
-    Bu konudaki resmi dokğmanlar kernel.org sitesindeki "documentation" kısmında bulunmaktadır.
+    Bu konudaki resmi dokümanlar kernel.org sitesindeki "documentation" kısmında bulunmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Bir kernel modülünü derlemek ve link etmek maalesef sanıldığından daha zordur. Her ne kadar kernel modüller ELF object 
     dosyaları biçimindeyse de bunlarda özel bazı "bölümler (sections)" bulunmaktadır. Dolayısıyla bu modüllerin derlenmesinde 
     özel gcc seçenekleri devreye sokulur. Kernel modüllerin link edilmeleri de bazı kütüphane dosyalarının devreye sokulmasıyla 
-    yapılmaktadır. Dolayısıyla bir kernel modülün manuel biçimde "build edilmesi" için bazı ayrıntıı bilgilere gereksinim 
+    yapılmaktadır. Dolayısıyla bir kernel modülün manuel biçimde "build edilmesi" için bazı ayrıntılı bilgilere gereksinim 
     duyulmaktadır. İşte kernel tasarımcıları bu sıkıcı işlemleri kolaylaştırmak için özel "make dosyaları" düzenlemişlerdir. 
     Programcı bu make dosyalarından faydalanarak build işlemini çok daha kolay yapabilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -52156,7 +52161,7 @@ clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Tabii aslında make dosyası parametrik biçimde de oluşturabilmektedir. Bu durumda make programı çalıştırılıken bu parametrenin 
+    Tabii aslında make dosyası parametrik biçimde de oluşturabilmektedir. Bu durumda make programı çalıştırılırken bu parametrenin 
     değeri de belirtilmelidir. Örneğin:
 
     make file=hellomodule
@@ -52172,7 +52177,7 @@ clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Şimdi en basit bir kernel modülü oluştutup bunu bir başlangıç noktası olarak kullanalım. Bu odülümüze "helloworld" ismini
+    Şimdi en basit bir kernel modülü oluşturup bunu bir başlangıç noktası olarak kullanalım. Bu modülümüze "helloworld" ismini
     verelim:
 
     #include <linux/module.h>
@@ -52201,7 +52206,7 @@ clean:
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir kernel modül kernel'ın içerisine "insmod" isimli programla yerleştirilmektedir. Tabii bu programın sudo ile "root" 
+    Bir kernel modül, kernel'ın içerisine "insmod" isimli programla yerleştirilmektedir. Tabii bu programın sudo ile "root" 
     önceliğinde çalıştırılması gerekmektedir. Örneğin:
 
     $ sudo insmod helloworld.ko
@@ -52291,7 +52296,7 @@ clean:
     printk(KERN_INFO "This is test\n");
 
     Mesajın solundaki KERN_XXX biçimindeki makrolar aslında bir string açımı yapmaktadır. Dolayısıyla yan yana iki string birleştirildiği 
-    için mesaj yazısının başında küçük bir önek bulunur. Bu önek (yani bu makro) mesajın türünü ve aciliyetini belirtmektedir. 
+    için mesaj yazısının başında küçük bir önek bulunur. Bu önek (yani bu makro) mesajın türünü ve aciliyetini belirtmektedir.
     Tipik KERN_XXX makroları şunlardır:
 
     KERN_EMERG
