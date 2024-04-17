@@ -51635,7 +51635,7 @@ int main(void)
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-// util.hpp
+/* util.hpp */
 
 #ifndef UTIL_HPP_
 #define UTIL_HPP_
@@ -51657,7 +51657,7 @@ namespace CSD {
 
 #endif
 
-// libmyutil.cpp
+/* libmyutil.cpp */
 
 #include <iostream>
 #include "util.hpp"
@@ -51677,7 +51677,7 @@ namespace CSD
 	}
 }
 
-// app.cpp
+/* app.cpp */
 
 #include <iostream>
 #include "util.hpp"
@@ -51958,15 +51958,15 @@ int main()
 /*--------------------------------------------------------------------------------------------------------------------------
     Bir C programını derlediğimizde link işlemi için bir main fonksiyonunun bulunması gerekmektedir. Aslında GNU'nun linker
     programının ismi "ld" isimli programdır. gcc zaten bu ld linker'ını çalıştırmaktadır. Bir programın link edilebilmesi için 
-    aslında main fonksiyonunun bulunması gerekmez. main fonksiyonu assembly düzeyinde anlamlı geçerli anlamlı bir fonksiyon 
-    değildir. C için anlamlı bir fonksiyondur. Yani örneğin biz bir assembly programı yazarsak onu istediğimiz yerden 
-    çalışmaya başlatabiliriz. Bir dosya "executable" olarak link edilirken tek gerekli olan şey "entry point" denilen akışın
-    başlatılacağı noktadır. Entry point ld linker'ında --entry seçeneği ile belirtilmektedir. Biz bir C programını gcc ile 
-    derlediğimizde gcc aslında ld linker'ını çağırırken ismine "start-up modüller" denilen bir grup modülü de link işlemine 
-    gizlice dahil etmektedir. Programın gerçek entry point'i bu start-up modül içerisinde bir yerdedir. Aslında main fonksiyonunu
-    bu start-up modül çağırmaktadır. Bu start-up modülün görevi birtakım hazırlık işlemlerini yapıp komut satırı argümanlarıyla 
-    main fonksiyonunu çağırmaktır. Zaten akış main fonksiyonunu bitirdiğinde yeniden start-up modüldeki koda döner orada exit 
-    yapılmıştır. Start-up modülün kodlarını şöyle düşünebilirsiniz:
+    aslında main fonksiyonunun bulunması gerekmez. main fonksiyonu assembly düzeyinde anlamlı bir fonksiyon değildir. C için 
+    anlamlı bir fonksiyondur. Yani örneğin biz bir assembly programı yazarsak onu istediğimiz yerden çalışmaya başlatabiliriz. 
+    Bir dosya "executable" olarak link edilirken tek gerekli olan şey "entry point" denilen akışın başlatılacağı noktadır. Entry 
+    point ld linker'ında "--entry" seçeneği ile belirtilmektedir. Biz bir C programını gcc ile derlediğimizde gcc aslında ld 
+    linker'ını çağırırken ismine "start-up modüller" denilen bir grup modülü de link işlemine gizlice dahil etmektedir. Programın 
+    gerçek entry point'i bu start-up modül içerisinde bir yerdedir. Aslında main fonksiyonunu bu start-up modül çağırmaktadır. 
+    Bu start-up modülün görevi birtakım hazırlık işlemlerini yapıp komut satırı argümanlarıyla main fonksiyonunu çağırmaktır. 
+    Zaten akış main fonksiyonunu bitirdiğinde yeniden start-up modüldeki koda döner orada exit işlemi yapılmıştır. Start-up modülün 
+    kodlarını şöyle düşünebilirsiniz:
 
     ...
     ...
@@ -51974,7 +51974,7 @@ int main()
     call main
     call exit
 
-    O halde link aşamsına bu start-up modül katıldığı için aslında main isimli bir fonksiyon aranmaktadır. Yani start-up modül 
+    O halde link aşamasına bu start-up modül katıldığı için aslında main isimli bir fonksiyon aranmaktadır. Yani start-up modül 
     main fonksiyonunu çağırmasaydı linker onu aramayacaktı.
 
     Biz aslında hiçbir kütüphaneyi link aşamasına dahil etmeden programın entry-point'ini kendimiz belirleyerek akışı istediğimiz
@@ -51986,6 +51986,8 @@ int main()
     $ ld -o x x.o --entry=foo
 
 ---------------------------------------------------------------------------------------------------------------------------*/
+
+/* x.c */
 
 #include <unistd.h>
 #include <stdint.h>
@@ -52266,18 +52268,18 @@ clean:
     dosyalarının bulunduğu "/usr/include" içerisinde değildir.) Yukarıda kullandığımız make dosyası include dosyalarının bu 
     dizinde aranmasını sağlamaktadır.
 
-    Eskiden kernel modüllerine modül lisansının eklenmesi zorunlu değildir. Ancak belli bir süreden sonra bu zorunlu hale
+    Eskiden kernel modüllerine modül lisansının eklenmesi zorunlu değildi. Ancak belli bir süreden sonra bu zorunlu hale
     getirilmiştir. Modül lisansı MODULE_LICENSE isimli makro ile belirtilmektedir. Bu makro <linux/module.h> dosyası içerisinde
     bildirilmiştir. Tipik modül lisansı aşağıdaki gibi "GPL" biçiminde oluşturulabilir:
 
     MODULE_LICENSE("GPL");
 
     Bir kernel modül yüklendiğinde kernel modül içerisinde belirlenmiş olan bir fonksiyon çağrılır (bu fonksiyon C++'taki 
-    "constructor" gibi düşünülebilir.) Default çağrılacak fonksiyonun ismi init_module biiçimindedir. Bu fonksiyonun geri 
-    dönüş değeri int türdendir ve parametresi yoktur. Fonksiyon başarı durumunda 0 değerine başarısızlık durumunda negatif 
+    "constructor" gibi düşünülebilir.) Default çağrılacak fonksiyonun ismi init_module biçimindedir. Bu fonksiyonun geri 
+    dönüş değeri int türdendir ve parametresi yoktur. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda negatif 
     hata koduna geri dönmelidir. Bu fonksiyon başarısızlıkla geri dönerse modülün yüklenmesinden vazgeçilmektedir. Benzer 
     biçimde bir modül kernel alanından boşaltılırken de yine bir fonksiyon çağrılmaktadır. (Bu fonksiyon da C++'taki "destructor" 
-    gibi üşünülebilir.) Default çağrılacak fonksiyonun ismi cleanup_module biçimindedir. Bu fonksiyonun geri dönüş değeri ve 
+    gibi düşünülebilir.) Default çağrılacak fonksiyonun ismi cleanup_module biçimindedir. Bu fonksiyonun geri dönüş değeri ve 
     parametresi void biçimdedir.
 
     Kernel modüller tıpkı daha önce görmüş olduğumuz deamon'lar gibi ekrana değil log dosyalarına yazarlar. Bunun için kernel 
