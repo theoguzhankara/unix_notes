@@ -10828,7 +10828,7 @@ void exit_sys(const char *msg)
     veli
     selami
 
-    Bazı UNIX türevi sistemler bu durumda yalnızca boşlukla ayrılmış ilk argümanı (örneğmizde "ankara") programa aktarıp diğerlerini 
+    Bazı UNIX türevi sistemler bu durumda yalnızca boşlukla ayrılmış ilk argümanı (örneğimizde "ankara") programa aktarıp diğerlerini 
     ihmal edebilmektedir. Bu durumda programcının taşınabilirliği sağlamak için shenag dosyasının yanına tek bir argüman yerleştirmesi 
     uygun olmaktadır. 
 
@@ -52291,15 +52291,15 @@ clean:
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    helloworld modülünde kullanmış olduğumuz printk fonksiyonu "kernel'ın printf fonksiyonu" gibi düşünülebilir. printk fonksiyonun 
+    helloworld modülünde kullanmış olduğumuz printk fonksiyonu "kernel'ın printf fonksiyonu" gibi düşünülebilir. printk fonksiyonunun 
     genel kullanımı printf fonksiyonu gibidir. Default durumda bu fonksiyon mesajların "/var/log/syslog" dosyasına yazdırılması 
-    sağlamaktadır. printk fonksiyonun prototipi <linux/kernel.h> dosyası içerisindedir. printk fonksiyonun örnek kullanımı şöyledir:
+    sağlamaktadır. printk fonksiyonunun prototipi <linux/kernel.h> dosyası içerisindedir. printk fonksiyonunun örnek kullanımı şöyledir:
 
     printk(KERN_INFO "This is test\n");
 
     Mesajın solundaki KERN_XXX biçimindeki makrolar aslında bir string açımı yapmaktadır. Dolayısıyla yan yana iki string birleştirildiği 
-    için mesaj yazısının başında küçük bir önek bulunur. Bu önek (yani bu makro) mesajın türünü ve aciliyetini belirtmektedir.
-    Tipik KERN_XXX makroları şunlardır:
+    için mesaj yazısının başında küçük bir önek bulunur. Bu önek (yani bu makro) mesajın türünü ve aciliyetini belirtmektedir. Tipik 
+    KERN_XXX makroları şunlardır:
 
     KERN_EMERG
     KERN ALERT
@@ -52321,7 +52321,7 @@ clean:
     #define KERN_INFO	 "<6>"
     #define KERN_DEBUG	 "<7>"
 
-    Ancak bu makrolar daçeşitli kernel versiyonlarında değişiklikler yapılabilmektedir.
+    Ancak bu makrolarda çeşitli kernel versiyonlarında değişiklikler yapılabilmektedir.
 
     Aslında KERN_XXX makroları ile printk fonksiyonunu kullanmak yerine pr_xxx makroları da kullanılabilir. Şöyle ki:
 
@@ -52342,7 +52342,7 @@ clean:
     pr_info
     pr_debug
 
-    printk fonksiyonun yazdıklarını "/var/log/syslog" dosyasına bakarak görebiliriz. Örneğin:
+    printk fonksiyonunun yazdıklarını "/var/log/syslog" dosyasına bakarak görebiliriz. Örneğin:
 
     tail /var/log/syslog
 
@@ -52353,10 +52353,11 @@ clean:
     ve POSIX foksiyonları "user mode" programlar için oluşturulmuş kütüphanelerin içerisindedir. Biz kernel modüllerin içerisinde
     yalnızca "export edilmiş kernel fonksiyonlarını" kullanabiliriz.
 
-    Kernel modüller içerisinde kullanılabilecek export edilmiş kernel fonksiyonları "Linuz Kernel API" ismi altında "kernel.org"
-    tarafından dokümante edilmiştir. Örneğin bu fonksiyonların dokğmantasyonuna aşağıdaki bağlantıdan erişebilirsiniz:
+    Kernel modüller içerisinde kullanılabilecek export edilmiş kernel fonksiyonları "Linux Kernel API" ismi altında "kernel.org"
+    tarafından dokümante edilmiştir. Örneğin bu fonksiyonların dokümantasyonuna aşağıdaki bağlantıdan erişebilirsiniz:
 
     https://docs.kernel.org/core-api/kernel-api.html
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -52381,7 +52382,7 @@ clean:
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Aslında init_module ve cleanup_module fonksiyonlarının ismi değiştirilebilir. Fakat bunun için bildirimde bulunmak gerekir. 
-    Bildirimde bulunmak için ise module_init(...) ve modeul_exit(...) makroları kullanılmaktadır. Bu makrolar kaynak kodun 
+    Bildirimde bulunmak için ise module_init(...) ve module_exit(...) makroları kullanılmaktadır. Bu makrolar kaynak kodun 
     herhangi bir yerinde bulundurulabilir. Ancak makro içerisinde belirtilen fonksiyonların daha yukarıda bildirilmiş olması 
     gerekmektedir. Bu makrolar tipik olarak kaynak kodun sonuna yerleştirilmektedir. Örneğin:
 
@@ -52474,7 +52475,7 @@ clean:
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Kernel modüllerde init ve cleanup fonksiyonlarında fonksiyon isimlerinin soluna __init ve __exit makroları getirilebilmektedir. 
-    Bu makrolar <linux/init.h> dosyası içerisindedir. Bu dosya da <linux/module.h> dosyası içerisinden include edilmiştir. 
+    Bu makrolar <linux/init.h> dosyası içerisindedir. Bu dosya da <linux/module.h> dosyası içerisinde include edilmiştir. 
     __init makrosu ilgili fonksiyonu ELF dosyasının özel bir bölümüne (section) yerleştirir. Modül yüklendikten sonra bu bölüm 
     kernel alanından atılmaktadır. __exit makrosu ise kernel'ın içine gömülmüş modüllerde fonksiyonun dikkate alınmayacağını 
     (dolayısıyla hiç yüklenmeyeceğini) belirtir. Ancak sonradan yüklemelerde bu makronun bir etkisi yoktur.
@@ -52512,7 +52513,7 @@ clean:
 /*--------------------------------------------------------------------------------------------------------------------------
     insmod ile yüklediğimiz her modül için "/sys/module" dizinin içerisinde ismi modül ismiyle aynı olan bir dizin yaratılmaktadır. 
     "/proc/modules" dosyası ile bu dizini karıştırmayınız. "/proc/modules" dosyasının satırları yüklü olan modüllerin isimlerini 
-    ve bazı temel bilgilerini tutmaktadır. Modüllere ilikin asıl önemli bilgiler kenel tarafından "/sys/modules" dizininde 
+    ve bazı temel bilgilerini tutmaktadır. Modüllere ilişkin asıl önemli bilgiler kernel tarafından "/sys/module" dizininde 
     tutulmaktadır. sys dosya sistemi de proc dosya sistemi gibi kernel tarafından bellek üzerinde oluşturulan ve içeriği kernel 
     tarafından güncellenen bir dosya sistemidir. Örneğin "helloworld.ko" modülünü yükledikten sonra bu dizinin içeriği şöyle 
     görüntülenmektedir:
@@ -52563,11 +52564,11 @@ clean:
     bool
     invbool
 
-    Buradaki charp char türdne adresi, invbool ise geçirilen argümanın bool bakımdan tersini temsil etmektedir. module_param
+    Buradaki charp char türden adresi, invbool ise geçirilen argümanın bool bakımdan tersini temsil etmektedir. module_param
     makrosunun perm parametresi "/sys/modules/<modül ismi>" dizininde yaratılacak olan parameters dizininin erişim haklarını 
     belirtir. Bu makrolar global alanda herhangi bir yere yerleştirilebilir.
 
-    Örneğin kernel modülümüzde count ve msg isimli iki parametre olsun. Bunlara ilişkin module_param makroları şöyşe oluşturulmalıdır:
+    Örneğin kernel modülümüzde count ve msg isimli iki parametre olsun. Bunlara ilişkin module_param makroları şöyle oluşturulmalıdır:
 
     int count = 0;
     char *msg = "Ok";
@@ -52576,15 +52577,15 @@ clean:
     module_param(msg, charp, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
 
     char * türünden modül parametresi için makrodaki türün "charp" biçiminde olduğuna dikkat ediniz. Buradaki gösterici const 
-    olamamaktadır. Bizim bir parametre için module_param makrosunu kullanmış olmamız modül yüklenirken bu arametrenin belirtilmesini 
-    zorunlu hale getirmemektedir. Bu durumda bu parametreler default değerlerde kalacaktır. Yukarıdaki paraöetreleri helloworld modülüne
+    olamamaktadır. Bizim bir parametre için module_param makrosunu kullanmış olmamız modül yüklenirken bu parametrenin belirtilmesini 
+    zorunlu hale getirmemektedir. Bu durumda bu parametreler default değerlerde kalacaktır. Yukarıdaki parametreleri helloworld modülüne
     aşağıdaki gibi geçirebiliriz:
 
     sudo insmod helloworld.ko count=100 msg="\"this is a test\""
 
     Burada neden iç içe tırnakların kullanıldığını merak edebilirsiniz. Kabuk üzerinde tırnaklar "boşluklarla ayrılmış olan yazıların 
     tek bir komut satırı argümanı olarak ele alınacağını belirtmektedir. Ancak bizim ayrıca yazısal argümanları modüllere parametre 
-    yoluyla aktarırken onları tırnaklalamız gerekir. Bu nedenle iç içe iki tırnak kullanılmıştır.
+    yoluyla aktarırken onları tırnaklamamız gerekir. Bu nedenle iç içe iki tırnak kullanılmıştır.
 
     Modül parametreleri kernel tarafından "/sys/module" içerisindeki modül ismine ilişkin dizinin altındaki parameters dizininde 
     dosyalar biçiminde dış dünyaya sunulmaktadır. İşte makrodaki erişim hakları buradaki parametre dosyalarının erişim haklarını 
@@ -52602,6 +52603,10 @@ clean:
     bu işlem aşağıdaki gibi yapılabilir:
 
     $ sudo bash -c "echo 200 > /sys/module/helloworld/parameters/count"
+
+    yada
+
+    $ echo 200 | sudo tee /sys/module/helloworld/parameters/count
 
     Burada işlemi aşağıdaki gibi yapamayacağımıza dikkat ediniz:
 
@@ -53169,7 +53174,7 @@ clean:
 
     Bu türden bir yapı nesnesi programcı tarafından global olarak (statik ömürlü olarak) tanımlanabilir ya da alloc_cdev isimli 
     çekirdek fonksiyonuyla çekirdeğin heap sistemi (slab allocator) kullanılarak dinamik bir biçimde tahsis edilebilir. (İşletim 
-    sistemlerinin çekirdeğinin ayrı bir heap sistemi vardır. Linux çekirdeğinde spesifik türdne nesnelerin hızlı tahsis edilmesi 
+    sistemlerinin çekirdeğinin ayrı bir heap sistemi vardır. Linux çekirdeğinde spesifik türden nesnelerin hızlı tahsis edilmesi 
     için "slab allocator" denilen bir heap sistemi kullanılmaktadır.) Eğer bu yapı nesnesi programcı tarafından global bir biçimde 
     tanımlanacaksa yapının elemanlarına ilkdeğer vermek için cdev_init fonksiyonu çağrılmalıdır. Eğer cdev yapısı cdev_alloc fonksiyouyla 
     dinamik bir biçimde tahsis edilecekse bu işlem cdev_init yapılmaz, çünkü zaten cdev_alloc bu işlemi de yapmaktadır. Fakat yine 
@@ -59947,7 +59952,7 @@ chmod $mode $module
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Önceki konularda da UNIX/Linux sistemlerinde kernel modda çalışan işletim sistemine ait thread'ler olduğundan bahsetmiştik. Bu thread'ler
-    run kuyruğunda bulunan uykuya dalabilen işletim sisteminin programm gibi çalışan thread'leridir. Çeşitli işlemlerdne sorumludurlar. Linux 
+    run kuyruğunda bulunan uykuya dalabilen işletim sisteminin programm gibi çalışan thread'leridir. Çeşitli işlemlerden sorumludurlar. Linux 
     işletim sisteminde bunların da isimleri genellikle "user mode deamon"lar gibi sonu 'd' ile bitmektedir ve yine bunlar 
     isimleri genellikle 'k' harfi ile başlarlar. Örneğin "kupdate", "kswapd", "keventd" gibi. 
 
@@ -60231,7 +60236,7 @@ chmod $mode $module
     klavyenin içerisinde tuşa basılınca yapılmamaktadır. Işıklı tuşlara basıldığında gönderilen scan kod klavye denetleyicisi tarafından alınır ve kesme kodu yeniden klavye işlmcisine
     ışığı yak komutunu gönderir. Örneğin bilisayardaki işletim sistemi çökmüşse bu ışıklar yanmayacaktır. 
 
-    Aşağıdaki örnekte klavyedne tuşa basıldığında ve çekildiğinde oluşan IRQ-1 ele alınmıştır.
+    Aşağıdaki örnekte klavyeden tuşa basıldığında ve çekildiğinde oluşan IRQ-1 ele alınmıştır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* generic-char-driver.c */
