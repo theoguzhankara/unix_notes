@@ -52623,7 +52623,7 @@ clean:
     Kernel modüle birden fazla değer de bir dizi gibi aktarılabilir. Bunun için module_param_array makrosu kullanılmaktadır. 
     module_param_array makrosu da şöyledir:
 
-    define module_param_array(name, type, nump, perm)
+    module_param_array(name, type, nump, perm)
 
     Makronun birinci ve ikinci parametreleri yine değişken ismi ve türünü belirtir. Tabii buradaki değişken isminin bir dizi ismi 
     olarak girilmesi gerekmektedir. Üçüncü parametre toplam kaç değerin modüle dizi biçiminde aktarıldığını belirten int bir nesnenin 
@@ -52640,11 +52640,11 @@ clean:
     sudo insmod helloworld.ko values=1,2,3,4,5
 
     Burada eğer verilen değerler dizinin uzunluğundan fazla olursa zaten modül yüklenmemektedir. Bu örnekte biz girilen değerlerin 
-    sayısını size nesnesinden alabiliriz.
+    sayısını "size" nesnesinden alabiliriz.
 
     Aşağıdaki örnekte üç parametre komut satırından kernel modüle geçirilmiştir. Komut satırındaki isimlerle programın içerisindeki 
     değişken isimlerinin aynı olması gerektiğine dikkat ediniz. Yazıların geçirilmesinde iki tırnaklar kullanılır. Dizi geçirirken 
-    yanlışlıkla virgüllerin arasına boşluk karakterleri yerleştirmeyiniz. Programu şöyle make yapabilirsiniz:
+    yanlışlıkla virgüllerin arasına boşluk karakterleri yerleştirmeyiniz. Programı şöyle make yapabilirsiniz:
 
     make file=helloworld
 
@@ -52703,19 +52703,19 @@ clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    errno değişkeni aslında libc kütüphanesinin (standart C ve POSIX kütüphanesi) içerisinde tanımlanmış bir değişkendir. 
-    Kernel modda yani kernel'ın içerisinde errno isimli bir değişken yoktur. Bu nedenle kerneldaki fonksiyonlar POSIX fonksiyonları 
-    gibi başarısızlık durumunda -1 ile geri dönüp errno değişkeninin set etmezler. Kernel içerisindeki fonksiyonlar başarısızlık 
-    durumunda negatif errno değeri ile geri dönerler. Örneğin open POSIX fonksiyonu sys_open isimli kernel içerisinde bulunan sistem 
-    fonksiyonunu çağırdığında onun negatif bir değerle geri dönüp dönmediğine bakar. Eğer sys_open fonksiyonu negatif değerle geri 
-    dönerse bu durumda bu değerin pozitiflisini errno değişkenine yerleştirip -1 ile geri dönmektedir. Başka bir deyişle aslında bizim 
-    çağırdığımız int geri dönüş değerine sahip POSIX fonksiyonları sistem fonksiyonlarını çağırıp o fonksiyonlar negatif bir değerle 
-    geri dönmüş ise bir hata oluştuğunu düşünerek o negatif değerin pozitiflisini errno değişkenine yerleştirip -1 ile geri dönmektedir.
+    errno değişkeni aslında libc kütüphanesinin (standart C ve POSIX kütüphanesi) içerisinde tanımlanmış bir değişkendir. Kernel modda 
+    yani kernel'ın içerisinde errno isimli bir değişken yoktur. Bu nedenle kernel'daki fonksiyonlar POSIX fonksiyonları gibi başarısızlık 
+    durumunda -1 ile geri dönüp errno değişkenini set etmezler. Kernel içerisindeki fonksiyonlar başarısızlık durumunda negatif errno 
+    değeri ile geri dönerler. Örneğin "open" POSIX fonksiyonu "sys_open" isimli kernel içerisinde bulunan sistem fonksiyonunu çağırdığında 
+    onun negatif bir değerle geri dönüp dönmediğine bakar. Eğer "sys_open" fonksiyonu negatif değerle geri dönerse bu durumda bu değerin 
+    pozitiflisini errno değişkenine yerleştirip -1 ile geri dönmektedir. Başka bir deyişle aslında bizim çağırdığımız int geri dönüş değerine 
+    sahip POSIX fonksiyonları sistem fonksiyonlarını çağırıp o fonksiyonlar negatif bir değerle geri dönmüş ise bir hata oluştuğunu düşünerek 
+    o negatif değerin pozitiflisini errno değişkenine yerleştirip -1 ile geri dönmektedir.
 
     Kernel modül yazan programcıların da bu geleneğe uyması iyi bir tekniktir. Örneğin:
 
-    if (some_control_failed)       // burada kontrol yapılıyor
-        return -EXXXX;             // fonksiyon başarısız ise negatif errno değeriyle geri döndürülüyor
+    if (some_control_failed)		// burada kontrol yapılıyor
+        return -EXXX;				// fonksiyon başarısız ise negatif errno değeriyle geri döndürülüyor
 
     Özetle biz kernel içerisindeki geri dönüş değeri int olan bir fonksiyonu çağırdığımızda onun başarılı olup olmadığını geri dönüş 
     değerinin negatif olup olmadığı ile kontrol ederiz. Eğer çağırdığımız fonksiyonun geri dönüş değeri negatif ise onun pozitif hali
@@ -52743,7 +52743,7 @@ clean:
     {
         ...
         if (expression)
-            return ERR_PTR(-EXXXX);
+            return ERR_PTR(-EXXX);
         ...
     }
 
@@ -52754,7 +52754,7 @@ clean:
         return (void *) error;
     }
 
-    Bu işlemin tersi de PTR_ERR makrosu ya da iinline fonksiyonu ile yapılmaktadır. Yani PTR_ERR bir adresi alıp onu tamsayıya 
+    Bu işlemin tersi de PTR_ERR makrosu ya da inline fonksiyonu ile yapılmaktadır. Yani PTR_ERR bir adresi alıp onu tamsayıya 
     dönüştürmektedir. Bu fonksiyon da şöyle tanımlanmıştır:
 
     static inline long PTR_ERR(const void *ptr)
@@ -52763,7 +52763,7 @@ clean:
     }
 
     Pekiyi bir adres değerinin içerisinde errno hata kodunun olduğunu nasıl anlarız? İşte negatif errno değerleri bir adres 
-    gibi ele alındığında adeta adres alanın sonındaki adresler gibi bir görünümde olacaktır. errno değerleri için toplamda 
+    gibi ele alındığında adeta adres alanının sonundaki adresler gibi bir görünümde olacaktır. errno değerleri için toplamda 
     ayrılan sayılar da sınırlı olduğu için kontrol kolaylıkla yapılabilir. Ancak bu kontrol için IS_ERR isimli bir makro ya da 
     inline fonksiyon da bulundurulmuştur:
 
@@ -52772,7 +52772,7 @@ clean:
         return (unsigned long)ptr > (unsigned long)-4095;
     }
 
-    Burada fonksiyon adresin adres alanının son 4095 adresinden biri içerisinde mi kontrolünü yapmaktadır. Negatif errno 
+    Burada fonksiyon, adresin adres alanının son 4095 adresinden biri içerisinde mi kontrolünü yapmaktadır. Negatif errno 
     değerlerinin hepsi bu aralıktadır. Tabii 4095 errno değeri yoktur. Burada geleceğe uyumu korumak için 4095'lik bir 
     alan ayrılmıştır. Bu durumda kernel kodlarında adrese geri dönen fonksiyonların başarısızlığı aşağıdaki gibi kontrol 
     edilebilmektedir.
@@ -52788,27 +52788,27 @@ clean:
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Linux'ta bir kernel modül artık user mode'tan kullanılabilir hale getirildiyse buna "aygıt sürücü (device driver)" denilmektedir. 
+    Linux'ta bir kernel modül artık user mode'dan kullanılabilir hale getirildiyse buna "aygıt sürücü (device driver)" denilmektedir. 
     Aygıt sürücüler open fonksiyonuyla bir dosya gibi açılırlar. Bu açma işleminden bir dosya betimleyicisi elde edilir. Bu dosya
     betimleyicisi read, write, lseek, close gibi fonksiyonlarda kullanılabilir. Aygıt sürücülere ilişkin dosya betimleyicileri
     bu fonksiyonlarla kullanıldığında aygıt sürücü içerisindeki belirlenen bazı fonksiyonlar çağrılmaktadır. Yani tersten gidersek 
-    biz örneğin aygıt sürücümüze ilişkin dosya betimleyicisi ile read ve write fonksiyonu çağrıldığığımızda aslında aygıt sürücümüzdeki 
-    belli fonksiyonlar çalışırılmaktadır. Böylece aygıt sürücü ile user mod arasında veri transferleri yine dosyalarda olduğu gibi 
-    dosya fonksiyonlarıyla yapılabilmektedir. Pekiyi user mode'tan aygıt sürücümüzdeki herhangi bir fonksiyonu da çağırabilir miyiz? 
-    Yanıt evet. Bunun için ioctl isimli bir POSIX fonksiyonu (tabii bu POSIX fonksiyonu sys_ioctl isimli sistem fonksiyonunu 
-    çağırmaktadır) kullanılmaktadır. Aygıt sürücü içerisinde fonksiyonlara birer kod numarası atanır. Sonra ioctl fonksiyonunda bu kod numarası 
-    belirtilir. Böylece akış user mod'tan kernel moda geçerek belirlenen fonksiyonu kernel modda çalıştıracaktır.
+    biz örneğin aygıt sürücümüze ilişkin dosya betimleyicisi ile read ve write fonksiyonlarını çağırdığımızda aslında aygıt sürücümüzdeki 
+    belli fonksiyonlar çalıştırılmaktadır. Böylece aygıt sürücü ile user mode arasında veri transferleri yine dosyalarda olduğu gibi 
+    dosya fonksiyonlarıyla yapılabilmektedir. Ayrıca user mode'dan aygıt sürücümüzdeki herhangi bir fonksiyonu da çağırabiliriz. Bunun 
+    için ioctl isimli bir POSIX fonksiyonu (tabii bu POSIX fonksiyonu sys_ioctl isimli sistem fonksiyonunu çağırmaktadır) kullanılmaktadır. 
+    Aygıt sürücü içerisinde fonksiyonlara birer kod numarası atanır. Sonra ioctl fonksiyonunda bu kod numarası belirtilir. Böylece akış 
+    user mode'dan kernel mode'a geçerek belirlenen fonksiyonu kernel mode'da çalıştıracaktır.
 
-    Özetle bir aygıt sürücüsü kernel modda çalışmaktadır. Biz aygıt sürücüsünü open fonksiyonu ile açıp elde ettiğimiz betimleyici 
-    ile read, write, lseek ve close fonksiyonlarını çağırdığımızda aygıt sürücüsü içerisindeki ilgili fonksiyon çalıştırılmaktadır. 
-    Aygıt sürücüsü içerisindeki herhangi bir fonksiyon ise user mode'tan ioctl isimli fonksiyonla çalıştırılmaktadır. Tabii user mdoe 
-    programlar aygıt sürücü içerisindeki kodlaro read, write, lseek, close, ioctl gibi fonksiyonlar yoluyla çalıştırdıklarında 
-    proses user mode'tan geçici süre kernel mode'a geçer, ilgili kodlar kernel mode'da koruma engeline takılmadan çalıştırılır. 
+    Özetle bir aygıt sürücüsü kernel mode'da çalışmaktadır. Biz aygıt sürücüsünü open fonksiyonu ile açıp elde ettiğimiz betimleyici 
+    ile read, write, lseek ve close fonksiyonlarını çağırdığımızda aygıt sürücü içerisindeki ilgili fonksiyon çalıştırılmaktadır. 
+    Aygıt sürücüsü içerisindeki herhangi bir fonksiyon ise user mode'tan ioctl isimli fonksiyonla çalıştırılmaktadır. Tabii user mode 
+    programlar aygıt sürücü içerisindeki kodları read, write, lseek, close, ioctl gibi fonksiyonlar yoluyla çalıştırdıklarında 
+    proses user mode'dan geçici süre kernel mode'a geçer, ilgili kodlar kernel mode'da koruma engeline takılmadan çalıştırılır. 
     Fonksiyonların çalışması bittiğinde proses yine user mode'da döner.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir kernel modülü yazarken o modül le ilgili önemli bazı belirlemeler "modül makroları" denilen MODULE_XXXX biçimindeki 
+    Bir kernel modülü yazarken o modül ile ilgili önemli bazı belirlemeler "modül makroları" denilen MODULE_XXX biçimindeki 
     makrolarla yapılmaktadır. Her ne kadar bu modül makrolarının bulundurulması zorunlu değilse de şiddetle tavsiye edilmektedir. 
     En önemli üç makronun tipik kullanımı şöyledir:
 
@@ -52817,7 +52817,7 @@ clean:
     MODULE_DESCRIPTION("General Character Device Driver");
 
     Modül lisansı herhangi bir open source lisans olabilir. Tipik olarak "GPL" tercih edilmektedir. MODULE_AUTHOR makrosu ile modülün yazarı belirtilir. 
-    MODULE_DESCRPTION modülün ne iş yaprığına yönelik kısa bir başlık yazısı içermektedir.
+    MODULE_DESCRPTION modülün ne iş yapacağına yönelik kısa bir başlık yazısı içermektedir.
 
     Bu makrolar global alanda herhangi bir yere yerleştirilebilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -55506,7 +55506,7 @@ chmod $mode $module
     uyutulmadan da bu koşula bakılmaktadır. Bu koşul zaten sağlanıyorsa thread hiç uyutulmamaktadır.
 
     wait_event_interruptible_exclusive (bunun interrutible olmayan biçimi yoktur) fonksiyonu Lİnux çekirdeklerine 2.6'ının belli sürümünden sonra sokulmuştur.
-    Yine bu fonksiyonla birlikte aşağıda ele alınan wake_up_xxxx_nr fonksiyonları da eklenmiştir. Bir prosesin exclusive olarak wait kuyruğuna yerleştirilmes
+    Yine bu fonksiyonla birlikte aşağıda ele alınan wake_up_xxx_nr fonksiyonları da eklenmiştir. Bir prosesin exclusive olarak wait kuyruğuna yerleştirilmesi
     onlardan belli sayıda olanların uyandırılabilmesini sağlamaktadır.
 
     O halde wait_event makroları o andaki thread'i çizelgeden (yani run kuyruğundan) çıkartıp wait kuyruğuna yerleştirdikten sonra "task switch" işlemini
