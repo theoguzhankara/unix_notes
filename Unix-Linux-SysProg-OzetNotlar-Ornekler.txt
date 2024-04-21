@@ -10,7 +10,7 @@
 
                             (Notları okurken editörünüzün "Line Wrapping" özelliğini pasif hale getiriniz.)
 
-                                                    Son Güncelleme: 16/04/2024
+                                                    Son Güncelleme: 21/04/2024
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -7053,7 +7053,7 @@ int main(void)
 
     Pekiyi biz kendi programımızı kernel modda çalıştıramaz mıyız? Bu sorunun yanıtı genel olarak "hayır" biçimindedir. Bunun tek 
     yolu "aygıt sürücü" ya da "kernel modül" denilen biçimde kod yazmaktır. Zaten aygıt sürücülerin en önemli özelliği onların 
-    kernel modda çalışmasıdır. Tabii aygıt srücüler ancak sistem yöneticisitarafından bir parola eşiliğinde (yani sudo ile) 
+    kernel modda çalışmasıdır. Tabii aygıt sürücüler ancak sistem yöneticisitarafından bir parola eşiliğinde (yani sudo ile) 
     yüklenebilmektedir. 
 
     Sistem fonksiyonları kernel'ın içerisindeki fonksiyonlardır. Dolayısıyla bu fonksiyonlar özel makine komutalrını kullanırlar ve 
@@ -12655,89 +12655,94 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi 32 bit bir mimaride işletim sisteminin sayfa tablosu yukarıdaki şekillere göre ne kadar yer kaplar? 32 bit mimaride
     fiziksel RAM en fazla 4GB olabilir. Proseslerin sanal bellek alanları da 4GB'dir. O halde toplam sayfa sayısı 
-    4GB/4K = 2^32/2^12 = 2^20 = 1 MB olur. Her sayfa tablosu girişi Intel mimarisinde 4 byte'tır. Dolayısıyla yukarıdaki şekillere göre
-    bir prosesin sayfa tablosu 4MB yer kaplar. Bu alan sayfa tablosu için çok büyüktür. Bu nedenle işlemcileri tasarlayanlar 
-    sayfa tablolarının kapladığı alanı küçültmek için sanal adresleri iki parçaya değil, üç ya da dört parçaya ayırma yoluna gitmişlerdir. 
-    Gerçekten de örneğin Intel'in 32 bit mimarisinde bir sanal adres üç parçaya ayrılmaktadır. Bu ayrıntı kursumuzun konusu dışındadır ve
-    Derneğimizde "80X86 ve ARM Sembolik Makine Dilleri" kursunda ele alınmaktadır. Biz bu kursumuzda çeşitli gösterimlerde sanal adresleri
-    ikiye ayıracağız. 
+    4GB/4K = 2^32/2^12 = 2^20 = 1 MB olur. Her sayfa tablosu girişi Intel mimarisinde 4 byte'tır. Dolayısıyla yukarıdaki 
+    şekillere göre bir prosesin sayfa tablosu 4MB yer kaplar. Bu alan sayfa tablosu için çok büyüktür. Bu nedenle işlemcileri 
+    tasarlayanlar sayfa tablolarının kapladığı alanı küçültmek için sanal adresleri iki parçaya değil, üç ya da dört parçaya 
+    ayırma yoluna gitmişlerdir. Gerçekten de örneğin Intel'in 32 bit mimarisinde bir sanal adres üç parçaya ayrılmaktadır. Bu 
+    ayrıntı kursumuzun konusu dışındadır ve Derneğimizde "80X86 ve ARM Sembolik Makine Dilleri" kursunda ele alınmaktadır. 
+    Biz bu kursumuzda çeşitli gösterimlerde sanal adresleri ikiye ayıracağız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Biz yukarıda 32 bit sistemlere göre örnekler verdik. Pekiyi 64 bit sistemlerde durum nasıldır? 64 bit sistemlerde fiziksel RAM'in
-    teorik büyüklüğü 2^64 = 16 exabyte olmaktadır. Dolayısıyla prosesin sanal bellek alanı da bu kadar olacaktır. Burada eğer 
-    sanal adres iki parçaya ayrılırsa sayfa tablolarının aşırı büyük yer kaplaması kaçınılmazdır. Bu nedenle 64 bit sistemlerde 
+    Biz yukarıda 32 bit sistemlere göre örnekler verdik. Pekiyi 64 bit sistemlerde durum nasıldır? 64 bit sistemlerde fiziksel 
+    RAM'in teorik büyüklüğü 2^64 = 16 exabyte olmaktadır. Dolayısıyla prosesin sanal bellek alanı da bu kadar olacaktır. Burada 
+    eğer sanal adres iki parçaya ayrılırsa sayfa tablolarının aşırı büyük yer kaplaması kaçınılmazdır. Bu nedenle 64 bit sistemlerde 
     genellikle işlemcileri tasarlayanlar sanal adresleri dört parçaya ayırmaktadır. Bu konu yine kursumuzun kapsamı dışındadır. 
-    Ancak 64 bit sistemlerde değişen bir şey yoktur. Program yine çok geniş bir sanal belleğe sanki tek başına yüklenecekmiş gibi derlenir. 
-    Yine işletim sistemi proses için sayfa tablosu oluşturarak sanal sayfa numaralarını gerçek fiziksel sayfa numaralarına yönlendirir. 
-    Tabii pek çok işletim sistemi 16 exabyte sanal bellek alanı çok büyük olduğu için bunu kısıtlama yoluna gitmektedir. Örneğin Linux
-    yalnızca 256 TB alanı kullanmaktadır. Windows ise yalnızca 16 TB alan kullanır. Bu alanlar bile bugün için çok büyüktür. 
+    Ancak 64 bit sistemlerde değişen bir şey yoktur. Program yine çok geniş bir sanal belleğe sanki tek başına yüklenecekmiş 
+    gibi derlenir. Yine işletim sistemi proses için sayfa tablosu oluşturarak sanal sayfa numaralarını gerçek fiziksel sayfa 
+    numaralarına yönlendirir. Tabii pek çok işletim sistemi 16 exabyte sanal bellek alanı çok büyük olduğu için bunu kısıtlama 
+    yoluna gitmektedir. Örneğin Linux yalnızca 256 TB alanı kullanmaktadır. Windows ise yalnızca 16 TB alan kullanır. Bu alanlar 
+    bile bugün için çok büyüktür.
 
-    Sayfa tablolarının gerçek organizasyonu için kurs dokümanlarında /doc/ebooks klasöründe Intel'in AMD'nin ve ARM işlemcilerinin orijinal dokümanları 
-    bulundurulmuştur. 
+    Sayfa tablolarının gerçek organizasyonu için kurs dokümanlarında /doc/ebooks klasöründe Intel'in AMD'nin ve ARM işlemcilerinin 
+    orijinal dokümanları bulundurulmuştur.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi sayfalama (paging) mekanizmasının ne faydası vardır? İşte sayfalama mekanizmasının iki önemli işlevi vardır:
 
-    1) Sayfalama mekanizması programların fiziksel RAM'e ardışıl yüklenmesinin zorunluluğunu ortadan kaldırır. Böylece "bölünme (fragmentation)"
-    denilen olgunun olumsuz etkisini azaltır.
+    1) Sayfalama mekanizması programların fiziksel RAM'e ardışıl yüklenmesinin zorunluluğunu ortadan kaldırır. Böylece 
+    "bölünme (fragmentation)" denilen olgunun olumsuz etkisini azaltır.
 
-    2) Sayfalama mekanizması "sanal bellek (virtual memory)" denilen olgunun gerçekleştirimi için gerekmektedir. 
+    2) Sayfalama mekanizması "sanal bellek (virtual memory)" denilen olgunun gerçekleştirimi için gerekmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Bölünme (fragmentation) bellek yönetimi konusunda önemli bir problemdir. Bir nesnenin belleğe yüklenmesi ardışıl bir biçimde 
-    yapılırsa zamanla yükleme boşaltma işlemlerinin sonucunda bellekte çok sayıda küçük alan oluşmaktadır. Bu küçük alanlar ardışıl olmadığı için
-    genellikle bir işe yaramamaktadır. Küçük alanların toplamı oldukça büyük miktarlara varabilmekte ve toplam belleğin önemli miktarını
-    kaplayabilmektedir. Bu olguya "bölünme (fragmentation)" denilmektedir. Bölünmenin engellenmesi için ardışıl yükleme zorunluluğunun 
-    ortadan kaldırılması gerekir. Bu durumda bellek bloklara ayrılır. Yüklenecek nesne bloklara bölünerek ardışıl olmayacak biçimde 
-    boş bloklara atanır. Ancak nesnenin hangi parçasının hangi bloklarda olduğu da bir biçimde kaydedilir. Bu teknik hem RAM yönetiminde hem de 
-    disk yönetiminde benzer biçimde kullanılmaktadır. Ancak bloklama yöntemiyle bölünme ortadan kaldırılmaya çalışıldığında bu sefer başka bir problem
-    ortaya çıkmaktadır. Nesnelerin son bloklarında kullanılmayan alanlar kalabilmektedir. Bu da bir çeşit bölünmedir. Bu bölünme durumuna 
-    "içsel bölünme (internal fragmentation)" denilmektedir. İçsel bölünmede yapılabilecek bir şey yoktur. Ancak içsel bölünmenin etkisi diğerine göre daha 
-    az olmaktadır.
+    yapılırsa zamanla yükleme boşaltma işlemlerinin sonucunda bellekte çok sayıda küçük alan oluşmaktadır. Bu küçük alanlar ardışıl 
+    olmadığı için genellikle bir işe yaramamaktadır. Küçük alanların toplamı oldukça büyük miktarlara varabilmekte ve toplam 
+    belleğin önemli miktarını kaplayabilmektedir. Bu olguya "bölünme (fragmentation)" denilmektedir. Bölünmenin engellenmesi 
+    için ardışıl yükleme zorunluluğunun ortadan kaldırılması gerekir. Bu durumda bellek bloklara ayrılır. Yüklenecek nesne bloklara 
+    bölünerek ardışıl olmayacak biçimde boş bloklara atanır. Ancak nesnenin hangi parçasının hangi bloklarda olduğu da bir biçimde 
+    kaydedilir. Bu teknik hem RAM yönetiminde hem de disk yönetiminde benzer biçimde kullanılmaktadır. Ancak bloklama yöntemiyle 
+    bölünme ortadan kaldırılmaya çalışıldığında bu sefer başka bir problem ortaya çıkmaktadır. Nesnelerin son bloklarında 
+    kullanılmayan alanlar kalabilmektedir. Bu da bir çeşit bölünmedir. Bu bölünme durumuna "içsel bölünme (internal fragmentation)" 
+    denilmektedir. İçsel bölünmede yapılabilecek bir şey yoktur. Ancak içsel bölünmenin etkisi diğerine göre daha az olmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Sanal bellek (virtual memory) bir programın tamamının değil belli kısmının belleğe yüklenerek disk ile RAM arasında yer değiştirmeli 
-    bir biçimde çalıştırılmasına yönelik bir mekanizmadır. Bu mekanizma sayesinde örneğin 100MB'lık bir programın başlangıçta yalnızca 
-    64K'lık kısmı RAM'e yüklenebilir. Sonra program çalışmaya başlar. Çalışma sırasında programın bellekte olmayan bir kısmına erişildiğinde
-    programın o kısmı o anda diskten belleğe yüklenir ve çalışma devam ettirilir. 
+    Sanal bellek (virtual memory) bir programın tamamının değil belli kısmının belleğe yüklenerek disk ile RAM arasında yer 
+    değiştirmeli bir biçimde çalıştırılmasına yönelik bir mekanizmadır. Bu mekanizma sayesinde örneğin 100MB'lık bir programın 
+    başlangıçta yalnızca 64K'lık kısmı RAM'e yüklenebilir. Sonra program çalışmaya başlar. Çalışma sırasında programın bellekte 
+    olmayan bir kısmına erişildiğinde işletim sistemi programın bellekte olmayan kısmını o anda diskten belleğe yükler ve çalışma 
+    kesintisiz devam ettirilirir.
 
-    Sanal bellek kullanımında yine fiziksel RAM sayfalara ayrılır. Her sayfaya bir numara verilir. İşletim sistemi RAM'in hangi sayfasının 
-    hangi programın neresini tuttuğunu bir biçimde oluşturduğu veri yapılarıyla bilir duruma gelir. Bir programın RAM'de olmayan bir sayfasının 
-    diskten RAM'e yüklenmesine "swap in" denilmektedir. Ancak zamanla RAM'deki tüm fiziksel sayfalar dolu duruma gelir. Bu durumda işletim sistemi
-    bir programın bir parçasını RAM'e çekmek için RAM'deki bir sayfayı boşaltmak durumunda kalır. Bu işleme ise "swap out" denilmektedir. 
-    Tabii işletim sistemi hangi programın RAM'deki hangi sayfasının boşaltılacağı konusunda iyi bir karar vermek durumundadır. İşletim sistemine 
-    göre "gelecekte kullanılma olasılığı en düşük olan sayfanın" RAM'den atılması en iyi yöntemdir. 
+    Sanal bellek kullanımında yine fiziksel RAM sayfalara ayrılır. Her sayfaya bir numara verilir. İşletim sistemi RAM'in hangi 
+    sayfasının hangi programın neresini tuttuğunu bir biçimde oluşturduğu veri yapılarıyla bilir duruma gelir. Bir programın RAM'de 
+    olmayan bir sayfasının diskten RAM'e yüklenmesine "swap in" denilmektedir. Ancak zamanla RAM'deki tüm fiziksel sayfalar dolu 
+    duruma gelebilir. Bu durumda işletim sistemi bir programın bir parçasını RAM'e çekebilmek için RAM'deki bir sayfayı da RAM'dan 
+    atmak durumunda kalır. Bu işleme ise "swap out" denilmektedir. Tabii işletim sistemi hangi programın RAM'deki hangi sayfasının 
+    boşaltılacağı konusunda iyi bir karar vermek durumundadır. İşletim sistemine göre "gelecekte kullanılma olasılığı en düşük olan 
+    sayfanın" RAM'den atılması en iyi stratejidir.
 
-    Bu durumda bir program çalışırken aslında sürekli bir biçimde disk ile RAM arasında yer değiştirmeler yapılmaktadır. Bu yer değiştirmelere
-    genel olarak işletim sistemi dünyasında "swap" işlemi denilmektedir. Şüphesiz swap işlemi yavaş bir işlemdir ve toplam performans üzerinde 
-    en önemli zayıflatıcı etkilerden birini oluşturmaktadır. Swap işlemlerinin olumsuz etkisini azaltmak için ilk akla gelen fiziksel RAM'i büyütmektir. 
-    Ancak fiziksel RAM'in büyütülmesi maliyet içermektedir. Bugünkü SSD'ler hard disklere göre oldukça iyi performans göstermektedir. 
-    Dolayısıyla bilgisayarımızda harddisk yerine SSD varsa swap işlemleri daha hızlı yürütülecektir. Şüphesiz en önemli unsur aslında 
-    sayfaların yer değiştirilmesi konusunda uygulanan algoritmalardır. Bunlara "page replacement" algoritmaları denilmektedir. Tabii bugünkü 
-    işletim sistemleri bilinen en iyi algoritmaları zaten kullanmaktadır. 
+    Bu durumda bir program çalışırken aslında sürekli bir biçimde disk ile RAM arasında yer değiştirmeler yapılmaktadır. Bu yer 
+    değiştirmelere genel olarak işletim sistemi dünyasında "swap" işlemi denilmektedir. Şüphesiz swap işlemi yavaş bir işlemdir 
+    ve toplam performans üzerinde en önemli zayıflatıcı etkilerden birini oluşturmaktadır. Swap işlemlerinin olumsuz etkisini 
+    azaltmak için ilk akla gelen şey fiziksel RAM'i büyütmektir. Ancak fiziksel RAM'in büyütülmesi maliyet oluşturmaktadır. 
+    Bugünkü SSD'ler hard disklere göre oldukça iyi performans göstermektedir. Dolayısıyla bilgisayarımızda hard disk yerine SSD 
+    varsa swap işlemleri daha hızlı yürütülecektir. Şüphesiz en önemli unsur aslında sayfaların yer değiştirilmesi konusunda 
+    uygulanan algoritmalardır. Bunlara "page replacement" algoritmaları denilmektedir. Tabii bugünkü işletim sistemleri 
+    bilinen en iyi algoritmaları zaten kullanmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Pekiyi işletim sistemi programın RAM'de olmayan bir sayfasını yüklemek istediğinde RAM'den sayfa boşaltacağı zaman ya boşaltılacak sayfa
-    üzerinde yazma işlemleri (update) yapıldıysa ne olacaktır? İçeriği değiştirilmiş olan sayfanın RAM'den atılırken mecburen diskte saklanması gerekir. 
-    İşte işletim sistemleri bu işlemler için diskte ismine "swap file" ya da "page file" denilen dosyalar tutmaktadır. Değiştirilmiş olan 
-    sayfaları bu dosyalara yazmaktadır. Linux işletim sistemi swap alanı olarak genellikle ayrı bir disk bölümünü kullanmaktadır. Ancak
-    herhangi bir dosya da swap dosyası olarak kullanılabilmektedir. Kullanılacak swap disk alanının ya da dosyalarının toplamı bazen önemli olabilmektedir. 
-    Çünkü sistemin toplam sanal bellek kapasitesi bu swap dosyalarıyla da ilgilidir. Linux sistemlerinde o andaki toplam swap alanları
-    /proc/swaps dosyasından elde edilebilir. Ya da swapon -s komutuyla aynı bilgi elde edilebilir. 
+    Pekiyi işletim sistemi programın RAM'de olmayan bir sayfasını yüklemek istediğinde RAM'den sayfa boşaltacağı zaman ya 
+    boşaltılacak sayfa üzerinde daha önce yazma işlemleri (update) yapıldıysa ne olacaktır? İçeriği değiştirilmiş olan sayfanın 
+    RAM'den atılırken mecburen diskte saklanması gerekir. İşte işletim sistemleri bu işlemler için diskte ismine "swap file" ya 
+    da "page file" denilen dosyalar tutmaktadır. Değiştirilmiş olan sayfaları bu dosyalara yazmaktadır. Linux işletim sistemi 
+    swap alanı olarak genellikle ayrı bir disk bölümünü kullanmaktadır. Ancak herhangi bir dosya da swap dosyası olarak 
+    kullanılabilmektedir. Kullanılacak swap disk alanının ya da dosyalarının toplamı bazen önemli labilir. Çünkü sistemin toplam 
+    sanal bellek kapasitesi bu swap dosyalarıyla da ilgilidir. Linux sistemlerinde o andaki toplam swap alanları "/proc/swaps" 
+    dosyasından elde edilebilir. Buradaki değer Kilo Byte cinsindendir. Ya da "swapon -s" komutuyla aynı bilgi elde edilebilir. 
 
-    Pekiyi sistemin kullandığı swap alanı dolarsa ne olur? İşte bu durumda sistemin sanal bellek limiti dolmuş kabul edilir. Yapılacak şey 
-    sisteme yeni swap alanları eklemektir. Bunun Linux'ta nasıl yapılacağını ilgili kaynaklardan öğrenebilırsiniz.
+    Pekiyi sistemin kullandığı swap alanı dolarsa ne olur? İşte bu durumda sistemin sanal bellek limiti dolmuş kabul edilir. 
+    Yapılacak şey sisteme yeni swap alanları eklemektir. Bunun Linux'ta nasıl yapılacağını ilgili kaynaklardan öğrenebilırsiniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Pekiyi işletim sistemi programı belleğe yüklerken baştan kaç sayfayı yüklemektedir? İşte buna "minimum working set" denilmektedir. 
-    İşletim sistemleri genel olarak bir program için en fazla yüklenecebilecek sayfa sayısını belirlemiş durumdadır. Böylece yüklenmiş her programın 
-    en azından "minimum working set" kadar sayfası RAM'de bulunmak zorundadır. 
+    Pekiyi işletim sistemi programı belleğe yüklerken baştan kaç sayfayı yüklemektedir? İşte buna "minimum working set" 
+    denilmektedir. İşletim sistemleri genel olarak bir program için en az yüklenecebilecek sayfa sayısını belirlemiş durumdadır. 
+    Böylece yüklenmiş her programın en azından "minimum working set" kadar sayfası RAM'de bulunmak zorundadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -12837,22 +12842,22 @@ void exit_sys(const char *msg)
     brk ya da sbrk denilen sistem fonksiyonunu çağırabilmektedir. Ancak arka planda sanal bellek bakımından şunlar gerçekleşir:
 
     - İşletim sistemi malloc ile tahsis edilen alanı sayfa tablosunda oluşturur. Oluştururken de tahsis edilen alanın 
-    toplam swap alanından küçük olduğunu garanti etmeye çalışır. Çünkü malloc ile tahsis edilen alan eninde sonunda swap dosyası içerisinde 
-    bulundurulacaktır. 
+    toplam swap alanından küçük olduğunu garanti etmeye çalışır. Çünkü malloc ile tahsis edilen alan eninde sonunda swap dosyası 
+    içerisinde bulundurulacaktır. 
 
     - İşletim sistemi swap dosyasının boyutu yeterliyse tahsisatı kabul etmektedir. Ancak sistemden sisteme değişebilecek biçimde
     bu sırada swap dosyasında tahsisat yapılabilir ya da yapılmayabilir. Eğer swap dosyasında o anda tahsisat yapılırsa bu durumda 
-    swap alanı ciddi biçimde azalacak ve belki de başka proses artık aynı tahsisatı yapamayacaktır. Ancak işletim sistemi swap dosyasında 
-    tahsisatı henüz yapmayabilir. Bu işlemi dinamik alan kullanıldığında yapabilir. Genellikle Linux sistemleri bu yola başvurmaktadır. 
-    Literatürde dinamik alan için swap dosyasında baştan yer ayrılmasına "alanın commit edilmesi" denilmektedir. 
+    swap alanı ciddi biçimde azalacak ve belki de başka proses artık aynı tahsisatı yapamayacaktır. Ancak işletim sistemi swap 
+    dosyasında tahsisatı henüz yapmayabilir. Bu işlemi dinamik alan kullanıldığında yapabilir. Genellikle Linux sistemleri bu 
+    yola başvurmaktadır. Literatürde dinamik alan için swap dosyasında baştan yer ayrılmasına "alanın commit edilmesi" denilmektedir. 
 
     Aşağıdaki 3GB RAM olan 2GB swap alanına sahip 64 bit Linux sisteminde 5GB alan dinamik olarak tahsis edilmek istenmiştir. 
     Burada tahsisat başarılı gibi gözükse de tahsis edilen alan kullanılırken swap alanı yetersizliğinden dolayı sinyal oluşacak 
     ve proses sonlandırılacaktır.
 
     O halde 64 bit Linux sistemlerinde biz teorik olarak her biri 128 TB olan onlarca programı bir arada çalıştırabiliriz. Ancak 
-    bunun için swap alanımızın da yeterli büyüklükte diskte oluşturulmuş olması gerekir. Swap alanının yetersizliği durumunda bir sinyal 
-    ile proses sonlandırılmaktadır. 
+    bunun için swap alanımızın da yeterli büyüklükte diskte oluşturulmuş olması gerekir. Swap alanının yetersizliği durumunda 
+    bir sinyal ile proses sonlandırılmaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -12954,31 +12959,34 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    İşletim sistemleri dünyasında bir prosesin başka bir proses bilgi göndermesi ve başka bir prosesten bilgi almasına 
+    İşletim sistemleri dünyasında bir prosesin başka bir prosese bilgi göndermesi ve başka bir prosesten bilgi almasına 
     "proseslerarası haberleşme (interprocess communication - IPC)" denilmektedir. Burada bilgi gönderip almadan kastedilen şey 
-    aslında byte yığınlarını gönderip almadır. Proseslerarası haberleşme önemli bir konudur. Çünkü sayfa tabloları yoluyla 
+    bir grup byte'ın gönderilip alınmasıdır. Proseslerarası haberleşme önemli bir konudur. Çünkü sayfa tabloları yoluyla 
     birbirinden izole edilmiş proseslerin başka yöntemlerle birbirleriyle haberleşmesi gerekebilmektedir. Bir program başka 
-    bir programa bir şeyler gönderebilir, o program da bunları işleyebilir. Proseslerarası haberleşmenin en bariz örneği "client-server"
-    sistemlerdir. Bu sistemlerde client program server programa bir istek gönderir. Server program da bu isteği yerine getirip sonuçları 
-    client programa gönderir. Bu mekanizmanın kurulabilmesi için proseslerarası haberleşme denilen mekanizmanın kullanılması gerekir. 
-    Benzer biçimde "dağıtık sistemlerde (distributed systems)" de esas olarak proseslerarası haberleşme mekanizması kullanılmaktadır. 
+    bir programa bir şeyler gönderebilir, o program da bunları işleyebilir. Proseslerarası haberleşmenin en bariz örneği 
+    "client-server" sistemlerdir. Bu sistemlerde client program server programa bir istek gönderir. Server program da bu isteği 
+    yerine getirip sonuçları client programa iletir. Client-server tarzda haberleşmenin sağlanabilmesi için proseslerarası 
+    haberleşme denilen mekanizmanın kullanılması gerekir. Benzer biçimde "dağıtık sistemlerde (distributed systems)" de esas 
+    olarak proseslerarası haberleşme mekanizmaları kullanılmaktadır. 
 
     Proseslerarası haberleşme mekanizmaları iki bölümde ele alınıp incelenmektedir:
 
     1) Aynı makinenin prosesleri arasında haberleşme
     2) Farklı makinelerin prosesleri arasında haberleşme
 
-    Aynı makinenin prosesleri arasında haberleşme işletim sisteminin sağladığı özel yöntemlerle gerçekleştirilmektedir. Farklı makinenin
-    prosesleri arasında haberleşme için ortak uyulması gereken bazı kuralların belirlenmiş olması gerekir. Bu ortak kurallara "protokol (protocol)" 
-    denilmektedir. Farklı makinelerin prosesleri arasında haberleşme için çeşitli protokol aileleri oluşturulmuştur. Ancak bunlardan en 
-    yaygın kullanılanı "IP (Internet Protocol)" denilen protokol ailesidir. Biz kursumuzda önce aynı makinenin prosesleri arasında haberleşme yöntemlerini
-    inceleyeceğiz daha sonra farklı makinelerin prosesleri arasında haberleşme yöntemleri üzerinde duracağız. 
+    Aynı makinenin prosesleri arasında haberleşme işletim sisteminin sağladığı özel yöntemlerle gerçekleştirilmektedir. Farklı 
+    makinelerin prosesleri arasında haberleşme için ortak uyulması gereken bazı kuralların belirlenmiş olması gerekir. Bu ortak 
+    kurallara "protokol (protocol)" denilmektedir. Farklı makinelerin prosesleri arasında haberleşme için çeşitli protokol 
+    aileleri oluşturulmuştur. Ancak bunlardan en yaygın kullanılanı "IP (Internet Protocol)" isimli protokol ailesidir. Biz 
+    kursumuzda önce aynı makinenin prosesleri arasındaki haberleşme yöntemlerini inceleyeceğiz daha sonra farklı makinelerin 
+    prosesleri arasında haberleşme yöntemleri üzerinde duracağız. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Aynı makinenin prosesleri arasında haberleşme için çeşitli işletim sistemlerinde birbirine benzer yöntemler geliştirilmiştir. 
-    Örneğin "boru (pipe)" UNIX/Linux sistemleriyle Windows sistemleri arasında benzer biçimde yürütülür. Paylaşılan bellek alanları 
-    (shared memory)" yine benzer biçimde uygulanmaktadır. Ancak bazı işletim sistemlerinde o sisteme özgü özel yöntemler de olabilmektedir. 
+    Örneğin "boru (pipe)" haberleşmesi yöntemi UNIX/Linux sistemleriyle Windows sistemleri arasında benzer biçimde yürütülür. 
+    Paylaşılan bellek alanları (shared memory)" denilen haberleşme yöntemine yine benzer biçimde uygulanmaktadır. Ancak bazı 
+    işletim sistemlerinde o sisteme özgü özel yöntemler de olabilmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -12988,11 +12996,11 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    En yaygın kullanılan proseslerarası haberleşme yöntemi "boru (pipe)" denilen yöntemdir. Boru haberleşmesi hem bir ortam sunarken
-    senkronizasyonu da kendi içerisinde sağlamaktadır. Bu nedenle boru haberleşmesi kolay kullanılabilen bir IPC yöntemidir. 
-    Boru haberleşmeleri "isimsiz boru haberleşmeleri" ve "isimli boru haberleşmeleri" olmak üzere ikiye ayrılmaktadır. İsimsiz boru
-    haberleşmelerine İngilizce "unnamed pipe" ya da "anonymous pipe" denilmektedir. İsimli boru haberleşmelerine ise İngilizce
-    "named pipe" ya da "fifo" denilmektedir. 
+    En yaygın kullanılan proseslerarası haberleşme yöntemi "boru (pipe)" haberleşmesi denilen yöntemdir. Boru haberleşmesi 
+    hem bir ortam sunarken hem de senkronizasyonu kendi içerisinde sağlamaktadır. Bu nedenle boru haberleşmesi kolay kullanılabilen 
+    bir IPC yöntemidir. Boru haberleşmeleri "isimsiz boru haberleşmeleri" ve "isimli boru haberleşmeleri" olmak üzere ikiye 
+    ayrılmaktadır. İsimsiz boru haberleşmelerine İngilizce "unnamed pipe" ya da "anonymous pipe", isimli boru haberleşmelerine 
+    ise "named pipe" ya da "fifo" denilmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -13004,95 +13012,98 @@ int main(void)
     Boruların belli bir uzunlukları vardır. Eskiden BSD ve Linux sistemlerinde boru uzunlukları 4096 byte (bir sayfa) büyüklüğündeydi.
     Linux daha sonra default boru uzunluğunu 65536'ya (16 sayfaya) yükseltmiştir. 
 
-    UNIX/Linux sistemlerinde borular tek yönlüdür. Bu nedenle proseslerden biri boruya yazma yaparken diğeri okuma yapar. 
-    (Halbuki örneğin Windows sistemlerinde borular çift yönlüdür.) Borunun tek yönlü olması demek iki prosesin de yazdıklarının aynı boruya 
-    yazılması demektir. P1 prosesi boruya yazma yapıp yine P1 prosesi borudan okuma yaparsa kendi yazdığını okur. Bunun da bir anlamı olmaz. 
-    Halbuki çift yönlü borularda borudan hem okuma hem yazma yapılabilmektedir. Borudan okuma yapıldığında karşı tarafın yazdığı okunur.
-    Ancak UNIX/Linux sistemlerindeki borular tek yönlüdür. Dolayısıyla haberleşmede bir taraf yazma yaparken diğer taraf okuma yapmalıdır.
-    Eğer borularla karşılıklı okuma yazma yapılmak isteniyorsa iki boru kullanılmalıdır.
+    UNIX/Linux sistemlerinde borular tek yönlüdür. Bu nedenle proseslerden biri boruya yazma yaparken diğeri borudan okuma yapar. 
+    (Halbuki örneğin Windows sistemlerinde borular çift yönlüdür.) Borunun tek yönlü olması demek iki prosesin de yazdıklarının 
+    aynı boruya yazılması demektir. P1 prosesi boruya yazma yapıp yine P1 prosesi borudan okuma yaparsa kendi yazdığını okur. 
+    Bunun da bir anlamı olmaz. Halbuki çift yönlü borularda borudan hem okuma hem yazma yapılabilmektedir. Borudan okuma 
+    yapıldığında karşı tarafın yazdığı okunur. Ancak UNIX/Linux sistemlerindeki yukarıda da belirttiğimiz gibi borular tek 
+    yönlüdür. Dolayısıyla haberleşmede bir taraf yazma yaparken diğer taraf okuma yapmalıdır. Eğer borularla karşılıklı okuma 
+    yazma yapılmak isteniyorsa iki boru kullanılmalıdır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Borulara write POSIX fonksiyonu ile yazma yapılırken yazılmak istenen byte kadar boruda yer yoksa write işlemi blokeye 
     yol açar ve boruda yazılmak istenen miktar kadar boş alan oluşana kadar ilgili thread blokede bekletilir. Örneğin biz boruya
-    50 byte yazmak isteyelim. eğer boruda en az 50 byte'lık boş yer varsa biz bloke olmadan bu işlemi yaparız ve write fonksiyonu 50 
-    değeri ile geri döner. Ancak boruda örneğin 40 byte boş yer varsa bu durumda write fonksiyonu 50 byte'lık yer açılana kadar 
-    blokede bekler. 50 byte'lık yer açıldığında bu 50 byte'ı boruya yazar ve 50 değeri ile geri döner. Böylece bir proses sürekli
-    boruya yazma yapar ancak karşı taraf borudan okuma yapmazsa boru dolar en sonunda write fonksiyonu blokede bekler. Karşı taraf 
-    borudan okuma yaptığında boruda yer açılmaktadır. 
+    50 byte yazmak isteyelim. Eğer boruda en az 50 byte'lık boş yer varsa biz bloke olmadan bu işlemi yaparız ve write fonksiyonu 
+    50 değeri ile geri döner. Ancak boruda örneğin 40 byte boş yer varsa bu durumda write fonksiyonu 50 byte'lık yer açılana 
+    kadar blokede bekler. 50 byte'lık yer açıldığında bu 50 byte'ı boruya yazar ve 50 değeri ile geri döner. Böylece bir proses 
+    sürekli boruya yazma yapar ancak karşı taraf borudan okuma yapmazsa boru dolar en sonunda write fonksiyonu blokede bekler. 
+    Karşı taraf borudan okuma yaptığında boruda yer açılmaktadır. 
 
-    Borulara yazma işlemi atomik düzeyde yapılmaktadır. Farklı prosesler aynı boruya aynı anda yazma yapsalar bile bu yazılanlar 
-    iç içe geçmez. Ancak borularda PIPE_BUF denilen bir sembolik sabit değeri vardır. Eğer iki prosesten en az biri bu PIPE_BUF değerinden 
+    Borulara yazma işlemi atomik düzeyde yapılmaktadır. Atomik yazma demekle sanki yazma işleminin tek hamlede araya hiçbir akış 
+    girmeden yazılması kastedilmektedir. Farklı prosesler aynı boruya aynı anda yazma yapsalar bile bu yazılanlar iç içe geçmez. 
+    Ancak borularda PIPE_BUF denilen bir sembolik sabit değeri vardır. Eğer iki prosesten en az biri bu PIPE_BUF değerinden 
     daha yüksek miktarda byte'ı boruya yazmak isterse bu durumda iç içe geçme oluşabilir. Yani birden fazla prosesin aynı boruya 
-    aynı zamanda yazma yapması durumunda iç içe geçmenin olmaması için yazılanların PIPE_BUF sembolik sabitinden daha küçük ya da ona eşit olması gerekir. 
-    PIPE_BUF pek çok sistemde (Linux'ta da böyle) 4096 değerindedir. Burada önemli bir nokta şudur: Biz PIPE_BUF değerinden daha fazla
-    byte'ı boruya yazmak istediğimizde yine tüm bilgi boruya yazılana kadar bloke oluşmaktadır. Ancak bu durumda iç içe geçmeme garanti
-    edilememektedir. Ayrıca proses borunun uzunluğundan fazla bilgiyi boruya yazmaya çalışabilir. Bu durumda yine tüm bilgi boruya yazılana
-    kadar bloke oluşmaktadır.
+    aynı zamanda yazma yapması durumunda iç içe geçmenin olmaması için yazılanların PIPE_BUF sembolik sabitinden daha küçük 
+    ya da ona eşit olması gerekir. PIPE_BUF pek çok sistemde (Linux'ta da böyle) 4096 değerindedir. Burada önemli bir nokta şudur: 
+    Biz PIPE_BUF değerinden daha fazla byte'ı boruya yazmak istediğimizde yine tüm bilgi boruya yazılana kadar bloke oluşmaktadır. 
+    Ancak bu durumda iç içe geçmeme garanti edilememektedir. Ayrıca proses borunun uzunluğundan fazla bilgiyi boruya yazmaya 
+    çalışabilir. Bu durumda yine tüm bilgi boruya yazılana kadar bloke oluşmaktadır.
 
-    Normal olarak borulara yazma yaparken write tüm byte'lar yazılana kadar bloke oluşturduğuna göre write fonksiyonun yazılmak istenen 
-    byte sayısı ile geri dönmesi beklenir. Gerçekten de hemen her zaman böyle olmaktadır. Ancak write fonksiyonu ile boruya yazma yapılırken 
-    bir sinyal oluşursa bu durumda POSIX standartları kısmi yazma yapılabileceğini söylüyorsa da Linux sistemlerinde bu durumda boruya hiçbir şey yazmadan 
-    write fonksiyonu başarısız olur ve -1 değeri ile geri döner. errno değişkeni de EINTR değeriyle set edilir. Linux sistemlerinde yine write fonksiyonu boruda 
-    yeterince yer yoksa ve blokede bekliyorsa sinyal oluştuğunda boruya bir şey yazmadan -1 ile geri dönmektedir. 
-    (Yani blokeli boru yazımlarında POSIX standartlarına göre kısmi yazım söz konusu olabilirse de Linux sistemlerinde "kısmi yazım (partial write)" 
-    işlemi yapılmamaktadır.)
+    Normal olarak borulara yazma yaparken write fonksiyonu tüm byte'lar yazılana kadar bloke oluşturduğuna göre write fonksiyonun 
+    yazılmak istenen byte sayısı ile geri dönmesi beklenir. Gerçekten de hemen her zaman böyle olmaktadır. Ancak write fonksiyonu 
+    ile boruya yazma yapılırken bir sinyal oluşursa bu durumda POSIX standartları kısmi yazma yapılabileceğini söylüyorsa da 
+    Linux sistemlerinde bu durumda boruya hiçbir şey yazmadan write fonksiyonu başarısız olur ve -1 değeri ile geri döner. errno 
+    değişkeni de EINTR değeriyle set edilir. Linux sistemlerinde yine write fonksiyonu boruda yeterince yer yoksa ve blokede 
+    bekliyorsa sinyal oluştuğunda boruya bir şey yazmadan -1 ile geri dönmektedir. (Yani blokeli boru yazımlarında POSIX 
+    standartlarına göre kısmi yazım söz konusu olabilirse de Linux sistemlerinde "kısmi yazım (partial write)" işlemi 
+    yapılmamaktadır.)
 
-    Boruya 0 byte yazılmak istenirse bu durum POSIX standartlarında "unspecified" bırakılmıştır. Ancak pek çok UNIX türevi sistem
-    (Linux'ta da böyle) 0 byte yazma durumunda boruya bir şey yazmamakta basit bazı kontroller yapıp sonlanmaktadır. Eğer bu kontrollerde
-    bir sorun yoksa write fonksiyonu 0 ile geri dönmektedir. 
+    Boruya 0 byte yazılmak istenirse bu durum POSIX standartlarında "unspecified" bırakılmıştır. Ancak pek çok UNIX türevi 
+    sistem (Linux'ta da böyle) 0 byte yazma durumunda boruya bir şey yazmamakta basit bazı kontroller yapıp write fonksiyonunu 
+    sonlanmaktadır. Eğer bu kontrollerde bir sorun yoksa write fonksiyonu 0 ile geri dönmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     read fonksiyonu ile borudan okuma yapılırken read fonksiyonu eğer boru tamamen boşsa en az 1 byte boruda olana kadar blokeye
     yol açar. Ancak boruda en az 1 byte bilgi varsa read okuyabildiği kadar byte'ı okur, blokeye yol açmadan hemen okuyabildiği 
-    byte sayısı ile geri döner. Yani read tüm byte'lar okunan kadar değil, en az bir byte okunana kadar beklemeye yol açmaktadır. 
-    Bu bakımdan write gibi davranmamaktadır. Örneğin biz borudan 50 byte okumak isteyelim. Ancak boruda 10 byte bulunuyor olsun. read 
-    fonksiyonu 50 byte okunana kadar beklemez. O 10 byte'ı okur, bu 10 değeri ile geri döner. Ancak boruda hiç bilgi yoksa read 
-    blokede en az 1 byte boruda olana kadar blokede bekleyecektir. Örneğin biz borudan 50 byte okumak isteyelim. Ancak boruda 
-    hiç bilgi olmasın. read fonksiyonu blokede bekler. O sırada bir proses boruya 10 byte yazmış olsun. Şimdi read bu 10 byte'ı alarak 
-    işlemini sonlandırır ve 10 değeri ile geri döner. 
+    byte sayısı ile geri döner. Yani read tüm byte'lar okunana kadar değil, en az bir byte okunana kadar beklemeye yol açmaktadır. 
+    Bu bakımdan write gibi davranmamaktadır. Örneğin biz borudan 50 byte okumak isteyelim. Ancak boruda 10 byte bulunuyor olsun. 
+    read fonksiyonu 50 byte okunana kadar beklemez. O 10 byte'ı okur, bu 10 değeri ile geri döner. Ancak boruda hiç bilgi yoksa 
+    read blokede en az 1 byte boruda olana kadar blokede bekleyecektir. Örneğin biz borudan 50 byte okumak isteyelim. Ancak 
+    boruda hiç bilgi olmasın. read fonksiyonu blokede bekler. O sırada bir proses boruya 10 byte yazmış olsun. Şimdi read bu 
+    10 byte'ı alarak işlemini sonlandırır ve 10 değeri ile geri döner. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Pekiyi boru haberleşmesi nasıl sonlandırılmaktadır? Boruyu kesinlikle yazan tarafın kapatması gerekir. Bu durumda okuyan taraf önce
-    boruda kalanları okur. Artık boruda okunacak bir şey kalmamışsa ve yazan taraf da boruyu kapatmışsa read fonksiyonu 0 değeri ile geri döner. 
-    Normalde read fonksiyonu boruda hiç bilgi yoksa blokede beklemektedir. Ancak eğer boruya yazma potansiyelinde hiçbir betimleyici 
-    kalmadıysa bu durumda read fonksiyonu bloke olmadan 0 özel değeri ile geri döner. O halde sonlandırma şöyle yapılmalıdır: Önce 
-    yazan taraf boruyu kapatmalıdır. Sonra okuyan taraf boruda kalanları okumalı ve read fonksiyonu 0 ile geri döndüğünde okuyan taraf da 
-    boruyu kapatmalıdır. 
+    Pekiyi boru haberleşmesi nasıl sonlandırılmaktadır? Boruyu kesinlikle önce yazan tarafın kapatması gerekir. Bu durumda 
+    okuyan taraf önce boruda kalanları okur. Artık boruda okunacak bir şey kalmamışsa ve yazan taraf da boruyu kapatmışsa 
+    read fonksiyonu 0 değeri ile geri döner. Yukarıda da belirttiğimiz gibi normalde read fonksiyonu boruda hiç bilgi yoksa 
+    blokede beklemektedir. Ancak eğer boruya yazma potansiyelinde hiçbir betimleyici kalmadıysa bu durumda read fonksiyonu 
+    bloke olmadan 0 özel değeri ile geri döner. O halde sonlandırma şöyle yapılmalıdır: Önce yazan taraf boruyu kapatır. Sonra 
+    okuyan taraf boruda kalanları okur ve read fonksiyonu 0 ile geri döndüğünde okuyan taraf da boruyu kapatır.
 
-    Boru haberleşmesinde eğer boruyu yanlış bir biçimde önce okuyan taraf kapatırsa yazan taraf boruya yazma yaptığında SIGPIPE isimli
-    bir sinyal oluşmaktadır. Bu sinyal de prosesin sonlanmasına yol açacaktır. Yani okuma tarafı kapatılmış bir boruya yazma yapmak 
-    normal bir durum değildir. Ancak yazma tarafı kapatılmış bir borudan okuma yapmaya çalışmak normal bir durumdur. Bu durumda read 
-    boruda bir şey kalmadıysa 0 ile geri dönecektir.
+    Boru haberleşmesinde eğer boruyu yanlış bir biçimde önce okuyan taraf kapatırsa yazan taraf boruya yazma yaptığında SIGPIPE 
+    isimli bir sinyal oluşmaktadır. Bu sinyal de prosesin sonlanmasına yol açacaktır. Yani okuma tarafı kapatılmış bir boruya 
+    yazma yapmak normal bir durum değildir. Ancak yazma tarafı kapatılmış bir borudan okuma yapmaya çalışmak normal bir durumdur. 
+    Yukarıda da belirttiğimiz gibi bu durumda read boruda bir şey kalmadıysa 0 ile geri dönecektir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    İsimsiz boru haberleşmesi üst ve alt prosesler arasında yapılabilen bir haberleşmedir. İsimsiz boru haberleşmesi tipik olarak
-    şu aşamalardan geçilerek gerçekleştirilir:
+    İsimsiz boru haberleşmesi üst ve alt prosesler arasında yapılabilen bir haberleşmedir. İsimsiz boru haberleşmesi tipik 
+    olarak şu aşamalardan geçilerek gerçekleştirilir:
 
-    1) Üst proses henüz fork ile alt prosesi yaratmadan önce pipe isimli POSIX fonksiyonu ile isimsiz boruyu yaratmalıdır. pipe
-    fonksiyonunun prototipi şöyledir:
+    1) Üst proses henüz fork ile alt prosesi yaratmadan önce pipe isimli POSIX fonksiyonu ile isimsiz boruyu yaratmalıdır. 
+    pipe fonksiyonunun prototipi şöyledir:
 
     #include <unistd.h>
 
     int pipe(int pipefd[2]);
 
-    pipe fonksiyonu int türden bir dizinin başlangıç adresini parametre olarak alır. Prototipteki dekleratör bir gösterici dekleratörüdür. 
-    pipe fonksiyonu boruyu yaratır. Borudan okuma yapmak ve boruya yazma yapmak için iki dosya betimleyicisi oluşturur. O betimleyicilerin
-    numaralarını da bizim fonksiyona geçirdiğimiz iki elemanlı int bir diziye yerleştirir. Dizinin ilk elemanına borudan okuma yapmak için 
-    kullanılacak betimleyiciyi, ikinci elemanına ise boruya yazma yapmak için kullanılacak betimleyiciyi yerleştirmektedir. 
-    Tabii bu betimleyiciler dosya betimleyici tablosunda tahsis edilmiş durumdadır. Bu betimleyicilerin gösterdiği dosya 
-    nesneleri boruya erişmek için gereken bilgileri tutmaktadır. Bize verilen dizinin ilk elemanına yerleştirilen betimleyici read-only, 
-    dizinin ikinci elemanına yerleştirilen betimleyici ise write-only bir betimleyicidir. Yani biz ilk betimleyici ile yalnızca read 
-    işlemi ikinci betimleyici ile yalnızca write işlemi yapabiliriz. pipe fonksiyonunun dosya betimleyici tablosundaki en düşük numaralı
-    boş betimleyicileri vereceği POSIX standartlarında garanti edilmiştir. Ancak pipe fonksiyonun verdiği iki betimleyicinin hangisinin düşük numaralı 
-    betimleyici olacağının bir garantisi yoktur. 
+    pipe fonksiyonu int türden bir dizinin başlangıç adresini parametre olarak alır. Prototipteki dekleratör bir gösterici 
+    dekleratörüdür. pipe fonksiyonu boruyu yaratır. Borudan okuma yapmak ve boruya yazma yapmak için iki dosya betimleyicisi oluşturur. 
+    O betimleyicilerin numaralarını da bizim fonksiyona geçirdiğimiz iki elemanlı int diziye yerleştirir. Dizinin ilk elemanına 
+    borudan okuma yapmak için kullanılacak betimleyiciyi, ikinci elemanına ise boruya yazma yapmak için kullanılacak betimleyiciyi 
+    yerleştirmektedir. Tabii bu betimleyiciler dosya betimleyici tablosunda tahsis edilmiş durumdadır. Bu betimleyicilerin gösterdiği 
+    dosya nesneleri boruya erişmek için gereken bilgileri tutmaktadır. Bize verilen dizinin ilk elemanına yerleştirilen betimleyici 
+    read-only, dizinin ikinci elemanına yerleştirilen betimleyici ise write-only bir betimleyicidir. Yani biz ilk betimleyici 
+    ile yalnızca read işlemi ikinci betimleyici ile yalnızca write işlemi yapabiliriz. pipe fonksiyonunun dosya betimleyici 
+    tablosundaki en düşük numaralı boş betimleyicileri vereceği POSIX standartlarında garanti edilmiştir. Ancak pipe fonksiyonun 
+    verdiği iki betimleyicinin hangisinin düşük numaralı betimleyici olacağının bir garantisi yoktur. 
 
     2) Boru yaratıldıktan sonra üst prosesin fork işlemi ile alt prosesi yaratması gerekir. fork işlemiyle birlikte üst prosesteki
-    tüm betimleyiciler alt proseste de aynı değerlerle aynı dosya nesnelerini gösterir biçimde oluşturulacaktır. Yani artık üst 
-    ve alt prosesler aynı numaralı betimleyicilerle boruya erişebilir durumda olur.
+    tüm betimleyiciler alt proseste de aynı değerlerle aynı dosya nesnelerini gösterir biçimde oluşturulacaktır. Yani artık 
+    üst ve alt prosesler aynı numaralı betimleyicilerle boruya erişebilir durumda olur.
 
     3) Artık üst ve alt prosesler arasında haberleşme için bir karar verilmelidir. Kim yazacak kim okuyacaktır? Bundan sonra 
     boruya yazma ve okuma potansiyelinde olan birer betimleyici bırakılmalıdır. Yani yazan taraf okuma betimleyicisini okuyan
@@ -13101,7 +13112,7 @@ int main(void)
     4) Artık okuma ve yazma işlemleri read ve write fonksiyonlarıyla gerçekleştirilebilir. 
 
     5) Haberleşmeyi sonlandırmak için yazan taraf boruyu kapatır. Okuyan taraf önce boruda kalanları okur, sonra read fonksiyonu
-    0 ile geri döner. Sonra da okuyan taraf boruyu kapatır.
+    0 ile geri döner. Böylece okuyan taraf da boruyu kapatır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -13179,8 +13190,8 @@ void exit_sys(const char *msg)
     İşte read fonksiyonunun 0 ile geri dönmesi için boruya yazma potansiyelinde olan tek bir betimleyicinin bulunuyor olması gerekir. 
     Eğer okuyan taraf yazma betimleyicisini kapatmazsa yazan taraf yazma betimleyicisini kapatsa bile boruya hala yazma potansiyelinde 
     olan bir betimleyici kaldığı için read fonksiyonu 0 ile geri dönmeyecektir. Bu durumda haberleşmenin sonlandırılması sorunlu 
-    hale gelecektir. Yazan tarafın okuma betimleyicisini kapatmasının diğeri gibi kritik bir önemi yoktur. Ancak prensip olarak kullanılmayan
-    betimleyicilerin kapatılması iyi bir tekniktir.
+    hale gelecektir. Yazan tarafın okuma betimleyicisini kapatmasının diğeri gibi kritik bir önemi yoktur. Ancak prensip olarak 
+    kullanılmayan betimleyicilerin kapatılması iyi bir tekniktir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -13189,17 +13200,17 @@ void exit_sys(const char *msg)
     gerektiği önemli durumlar vardır. 
 
     Eskiden thread'ler yokken bir işi daha hızlı yapmak için prosesler kullanılıyordu. Üst proses fork işlemi yapıp alt prosesle 
-    koordineli bir biçimde işleri paylaşıyordu. O günlerde bu koordinasyonun sağlanması için üst ve alt prosesler arasında haberleşme de 
-    gerekiyordu. Thread'lerden sonra artık bu tür işlemler prosesler yerine thread'lerle yapılmaya başlanmıştır.
+    koordineli bir biçimde işleri paylaşıyordu. O günlerde bu koordinasyonun sağlanması için üst ve alt prosesler arasında 
+    haberleşme de gerekiyordu. Thread'lerden sonra artık bu tür işlemler prosesler yerine thread'lerle yapılmaya başlanmıştır.
 
     Üst ve alt prosesler arasında exec sonrasına da haberleşmeler yapılabilmektedir. Tabii bu durumda exec yapılan alt prosesin 
-    exec sonrasında boru betimleyicilerinin numaralarını biliyor olması gerekir. Ancak stdin, stdout ve stderr dosyalarının betimleyicileri
-    sabit olduğuna göre exec sonrasında haberleşme bu betimleyiciler yoluyla yapılabilmektedir. 
+    exec sonrasında boru betimleyicilerinin numaralarını biliyor olması gerekir. Ancak stdin, stdout ve stderr dosyalarının 
+    betimleyicileri sabit olduğuna göre exec sonrasında haberleşme bu betimleyiciler yoluyla yapılabilmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Aşağıdaki programda kabuktakine benzer bir boru yönlendirmesi yapılmıştır. Program komut satırı argümanı olarak aşağıdaki gibi bir 
-    yazı almaktadır:
+    Aşağıdaki programda kabuktakine benzer bir boru yönlendirmesi yapılmıştır. Program komut satırı argümanı olarak aşağıdaki 
+    gibi bir yazı almaktadır:
 
     "prog1 arg1 arg2 ... | prog2 arg1 arg2 ..."
 
@@ -13325,9 +13336,9 @@ void exit_sys_child(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Borularla ilgili iki yardımcı ve ilginç POSIX fonksiyonu vardır: popen ve pclose. popen fonksiyonu bir boru yaratır sonra 
-    kabuk programını interaktif olmayan bir biçimde (-c seçeneği ile) çalıştırır. Sonra kabuk programının stdin ya da stdout dosyalarını
-    bu yarattığı boruya yönlendirir. Borunun diğer ucunu da fdopen fonksiyonundan faydalanarak bir dosya bilgi göstericisine (stream)
-    dönüştürüp bize vermektedir. Fonksiyonun prototipi şöyledir:
+    kabuk programını interaktif olmayan bir biçimde (-c seçeneği ile) çalıştırır. Sonra kabuk programının stdin ya da stdout 
+    dosyalarını bu yarattığı boruya yönlendirir. Borunun diğer ucunu da fdopen fonksiyonundan faydalanarak bir dosya bilgi 
+    göstericisine (stream) dönüştürüp bize vermektedir. Fonksiyonun prototipi şöyledir:
 
     #include <stdio.h>
 
@@ -13339,17 +13350,19 @@ void exit_sys_child(const char *msg)
     Eğer ikinci parametre "w" olarak girilirse bu durumda biz bu dosyaya yazma yaptığımızda aslında kabukta çalıştırdığımız 
     program bunu stdin dosyasından okuyacaktır. Fonksiyon başarısızlık durumunda NULL adrese geri dönmektedir. 
 
-    popen ile yaratılmış olan boru ve dosya bilgi göstericisi pclose fonksiyonu ile yok edilmektedir. pclose fonksiyonunun prototipi de şöyledir:
+    popen ile yaratılmış olan boru ve dosya bilgi göstericisi pclose fonksiyonu ile yok edilmektedir. pclose fonksiyonunun 
+    prototipi de şöyledir:
 
     #include <stdio.h>
 
     int pclose(FILE *stream);
 
-    Fonksiyon dosya bilgi göstericisini parametre olarak alır ve daha önce yapılan işlemleri sonlandırır. pclose fonksiyonu aynı zamanda wait 
-    işlemini de uygulamaktadır. (Yani thread pclose çağrısında bloke olabilmektedir.) Fonksiyon başarı durumunda çalıştırdığı kabuk programının 
-    wait fonksiyonu ile elde edilen durum bilgisine, başarısızlık durumunda -1 değerine geri dönmektedir. Kabuk programlarının interaktif 
-    olmayan modda çalıştırıldıklarına çalıştırdıkları programın durum koduyla (yani wait fonksiyonlarından elde edilen değerleri kastediyoruz) sonlandığını 
-    anımsayınız. pclose kontrolü şöyle yapılabilir:
+    Fonksiyon dosya bilgi göstericisini parametre olarak alır ve daha önce yapılan işlemleri sonlandırır. pclose fonksiyonu 
+    aynı zamanda wait işlemini de uygulamaktadır. (Yani thread pclose çağrısında bloke olabilmektedir.) Fonksiyon başarı 
+    durumunda çalıştırdığı kabuk programının wait fonksiyonu ile elde edilen durum bilgisine, başarısızlık durumunda -1 
+    değerine geri dönmektedir. Kabuk programlarının interaktif olmayan modda çalıştırıldıklarına çalıştırdıkları programın 
+    durum koduyla (yani wait fonksiyonlarından elde edilen değerleri kastediyoruz) sonlandığını anımsayınız. pclose kontrolü 
+    şöyle yapılabilir:
 
     if ((status = pclose(f)) == -1)
         exit_sys("pclose");
@@ -13364,8 +13377,8 @@ void exit_sys_child(const char *msg)
     else
         printf("shell abnormal terminated!...\n");
 
-    Aşağıdaki programda "ls -l" komutu çalıştırılıp onun çıktısı elde edilmiştir. Programda pclose fonksiyonun geri dönüş değerinin 
-    alınıp kontrol edilmesine genellikle gerek yoktur. 
+    Aşağıdaki programda "ls -l" komutu çalıştırılıp onun çıktısı elde edilmiştir. Programda pclose fonksiyonun geri dönüş 
+    değerinin alınıp kontrol edilmesine genellikle gerek yoktur. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -13400,8 +13413,8 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Aşağıdaki örnekte popen fonksiyonu "w" moduyla çağrılmıştır. Bu durumda bizim dosyaya yazdıklarımız aslında boruya yazılacak ve
-    "wc" programı da stdin yerine borudan okuma yapacaktır.
+    Aşağıdaki örnekte popen fonksiyonu "w" moduyla çağrılmıştır. Bu durumda bizim dosyaya yazdıklarımız aslında boruya 
+    yazılacak ve "wc" programı da stdin yerine borudan okuma yapacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -13441,19 +13454,19 @@ void exit_sys(const char *msg)
     İsimsiz borular yalnızca üst ve alt prosesler arasındaki haberleşmelerde kullanılmaktadır. Halbuki isimli borular herhangi 
     iki proses arasında haberleşmede kullanılabilmektedir. İsimli borularla çalışma tipik olarak şu aşamalardan geçilerek yapılır:
 
-    1) Önce ismine "boru dosyası" ya da "fifo dosyası" denilen özel bir dosyanın yaratılması gerekir. Boru dosyaları "ls -l" komutunda
-    "p" dosya türü ile gösterilmektedir. Boru dosyaları gerçek disk dosyaları değildir. Yalnızca bir dizin girişi içerirler. 
-    Bunların diskte bir içerik olarak karşılıkları yoktur. Bu nedenle boru dosyaları hep 0 uzunlukta görüntülenmektedir. 
-    Boru dosyaları open fonksiyonuyla yaratılmaz. Bunları yaratmak için mkfifo isimli POSIX fonksiyonu kullanılmaktadır. 
-    mkfifo fonksiyonunun prototipi şöyledir:
+    1) Önce ismine "boru dosyası" ya da "fifo dosyası" denilen özel bir dosyanın yaratılması gerekir. Boru dosyaları "ls -l" 
+    komutunda "p" dosya türü ile gösterilmektedir. Boru dosyaları gerçek disk dosyaları değildir. Yalnızca bir dizin girişi 
+    içerirler. Bunların diskte bir içerik olarak karşılıkları yoktur. Bu nedenle boru dosyaları hep 0 uzunlukta görüntülenmektedir. 
+    Boru dosyaları open fonksiyonuyla yaratılmaz. Bunları yaratmak için mkfifo isimli POSIX fonksiyonu kullanılmaktadır. mkfifo 
+    fonksiyonunun prototipi şöyledir:
 
     #include <sys/stat.h>
 
     int mkfifo(const char *path, mode_t mode);
 
     Fonksiyonun birinci parametresi yaratılacak boru dosyasının yol ifadesini, ikinci parametresi ise erişim haklarını almaktadır.
-    Bu erişim hakları yine prosesin umask değeri ile maskelenmektedir. Fonksiyon başarı durumunda 0 başarısızlık durumunda -1 değerine 
-    geri dönmektedir. Örneğin:
+    Bu erişim hakları yine prosesin umask değeri ile maskelenmektedir. Fonksiyon başarı durumunda 0 başarısızlık durumunda -1 
+    değerine geri dönmektedir. Örneğin:
 
     if (mkfifo("testfifo", S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH) == -1)
         exit_sys("mkfifo");
@@ -13469,30 +13482,31 @@ void exit_sys(const char *msg)
     Tabii komut uygulanırken kabuğun umask değeri etkili olmamaktadır. 
 
     2) İki proses de boru dosyasını open fonksiyonuyla açar. Açım sırasında tipik olarak O_RDONLY ve O_WRONLY modları kullanılmalıdır.
-    Boru dosyaları O_RDWR modunda açılabilirse de bu durum genellikle uygun değildir. (Linux boru dosyalarının O_RDWR modunda açılmasına 
-    izin vermektedir. Ancak POSIX standartları bu durumu "undefined" bırakmıştır.) Örneğin:
+    Boru dosyaları O_RDWR modunda açılabilirse de bu durum genellikle uygun değildir. (Linux boru dosyalarının O_RDWR modunda 
+    açılmasına izin vermektedir. Ancak POSIX standartları bu durumu "undefined" bırakmıştır.) Örneğin:
 
     if ((fd = open("myfifo", O_WRONLY)) == -1)
         exit_sys("open");
 
-    Bir proses isimli boruyu O_WRONLY modunda açmışsa başka bir proses boruyu O_RDONLY (ya da O_RDWR modunda) açana kadar open blokede
-    beklemektedir. Benzer biçimde bir proses boruyu O_RDONLY modunda açmışsa diğer bir proses boruyu O_WRONLY (ya da O_RDWR modunda) açana kadar 
-    open fonksiyonu blokede bekler. Tabii boru O_RDWR modunda açılmışsa bloke oluşmaz. Ancak bu modda açım genel olarak uygun değildir ve POSIX
-    standartları bunu "undefined" olarak ele almaktadır. open fonksiyonunun dosya betimleyici tablosundaki en düşük betimleyiciyi verdiğini 
-    anımsayınız.
+    Bir proses isimli boruyu O_WRONLY modunda açmışsa başka bir proses boruyu O_RDONLY (ya da O_RDWR modunda) açana kadar open 
+    blokede beklemektedir. Benzer biçimde bir proses boruyu O_RDONLY modunda açmışsa diğer bir proses boruyu O_WRONLY (ya da 
+    O_RDWR modunda) açana kadar open fonksiyonu blokede bekler. Tabii boru O_RDWR modunda açılmışsa bloke oluşmaz. Ancak bu modda 
+    açım genel olarak uygun değildir ve POSIX standartları bunu "undefined" olarak ele almaktadır. open fonksiyonunun dosya 
+    betimleyici tablosundaki en düşük betimleyiciyi verdiğini anımsayınız.
 
     3) Artık haberleşecek iki proses de boruyu açmıştır. Haberleşme write ve read fonksiyonlarıyla yukarıda belirtildiği gibi 
-    yapılır. Yani buradaki haberleşmenin isimsiz boru haberleşmesinden bir farkı yoktur. write ve read fonksiyonları tamamen isimsiz boru
-    haberleşmesinde olduğu gibi davranmaktadır.
+    yapılır. Yani buradaki haberleşmenin isimsiz boru haberleşmesinden bir farkı yoktur. write ve read fonksiyonları tamamen 
+    isimsiz boru haberleşmesinde olduğu gibi davranmaktadır.
 
-    4) Haberleşmenin sonunda yine yazan taraf boruyu kapatır, okuyan tarafın read fonksiyonu 0 ile geri döner. Böylece okuyan taraf da
-    boruyu kapatır. İsimli boruyu kullanan hiçbir betimleyici kalmadığında isimli borunun içi silinmektedir. Örneğin isimli boruyu iki proses
-    de açmış olsun. Birinin yazdığını diğerinin okuduğunu varsayalım. Yazan taraf boruyu kapattıktan sonra okuyan taraf borudakilerin hepsini 
-    okumadan boruyu kapatırsa boru içinde kalan bilgiler silinmektedir. 
+    4) Haberleşmenin sonunda yine yazan taraf boruyu kapatır, okuyan tarafın read fonksiyonu 0 ile geri döner. Böylece okuyan 
+    taraf da boruyu kapatır. İsimli boruyu kullanan hiçbir betimleyici kalmadığında isimli borunun içi silinmektedir. Örneğin 
+    isimli boruyu iki proses de açmış olsun. Birinin yazdığını diğerinin okuduğunu varsayalım. Yazan taraf boruyu kapattıktan 
+    sonra okuyan taraf borudakilerin hepsini okumadan boruyu kapatırsa boru içinde kalan bilgiler silinmektedir. 
 
     5) Eğer boru dosyası proseslerden biri tarafından mkfifo fonksiyonuyla yaratılmışsa unlink ya da remove fonksiyonuyla yine 
     ilgili proses tarafından silinebilir. Eğer boru komut satırından mkfifo komutuyla yaratılmışsa bu durumda yine komut satırından 
-    rm komutu ile silme yapılabilir. Tabii boru dosyası başka bir haberleşme için de kullanılacaksa silinmeden bekletilebilir. Örneğin:
+    rm komutu ile silme yapılabilir. Tabii boru dosyası başka bir haberleşme için de kullanılacaksa silinmeden bekletilebilir. 
+    Örneğin:
 
     if (unlink("mypipe") == -1)
         exit_sys("mypipe")
@@ -13504,14 +13518,14 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Aşağıdaki örnekte "prog1" programı zaten komut satırında yaratılmış olan "mypipe" dosyasına yazma yapıp, "prog2" programı da 
-    bu borudan okuma yapmaktadır. "prog1" programı klavyeden (stdin dosyasından) bir yazı alır. Bu yazıyı borudan "prog2" programına 
-    borudan yollar. Ancak bu örnekte prog2 programı borudan ne kadar bilgi okuyacağını bilmemektedir. Dolayısıyla 4096 byte kadar 
-    bilgiyi okumak ister. Tabii read fonksiyonu borudan okuma yaparken 4096 byte okunanan kadar blokeye yol açmaz. Okuyabildiği 
-    kadar bilgiyi okur okuyabildiği byte sayısına geri döner. Yani böylede prog2 programındaki read fonksiyonu karşı tarafın atomik bir biçimde 
-    boruya yazdığı kadar bilgiyi okumaktadır. Haberleşme "prog1" programının klavyeden (stdin dosyasından) "quit" okumasıyla sonlanmaktadır. 
-    Bu durumda "prog1" döngüden çıkar boruyu kapatır."prog2"de ise read fonksiyonu 0 ile geri döner. Böylece "proc2" de döngüden 
-    çıkar ve boruyu kapatır.
+    Aşağıdaki örnekte "prog1" programı zaten komut satırında yaratılmış olan "mypipe" dosyasına yazma yapıp, "prog2" programı 
+    da bu borudan okuma yapmaktadır. "prog1" programı klavyeden (stdin dosyasından) bir yazı alır. Bu yazıyı borudan "prog2" 
+    programına borudan yollar. Ancak bu örnekte prog2 programı borudan ne kadar bilgi okuyacağını bilmemektedir. Dolayısıyla 
+    4096 byte kadar bilgiyi okumak ister. Tabii read fonksiyonu borudan okuma yaparken 4096 byte okunanan kadar blokeye yol 
+    açmaz. Okuyabildiği kadar bilgiyi okur okuyabildiği byte sayısına geri döner. Yani böylede prog2 programındaki read 
+    fonksiyonu karşı tarafın atomik bir biçimde boruya yazdığı kadar bilgiyi okumaktadır. Haberleşme "prog1" programının 
+    klavyeden (stdin dosyasından) "quit" okumasıyla sonlanmaktadır. Bu durumda "prog1" döngüden çıkar boruyu kapatır."prog2"de 
+    ise read fonksiyonu 0 ile geri döner. Böylece "proc2" de döngüden çıkar ve boruyu kapatır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* prog1.c */
@@ -13602,12 +13616,12 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Yukarıda da belirttiğimiz gibi boru dosyası haberleşecek proseslerden biri tarafından yaratılabilir. Bu durumda bu boru dosyasının 
-    onu yaratan proses tarafından silinmesi uygun olur. Fakat boru dosyalarının dışarıdan yaratılması çoğu kez tercih edilmektedir. 
-    Çünkü bu durumda iki programın çalıştırma sırasının bir önemi olmaktadır. Halbuki boru dosyası dışarıda yaratılırsa
-    programların çalıştırma sıralarının bir önemi olmaz. Anımsanacağı gibi UNIX/Linux sistemlerinde bir dosya remove ya da unlink 
-    fonksiyonu ile silindiğinde açık betimleyiciler normal olarak çalışmaya devam eder. Son betimleyici kapatıldığında dosya 
-    gerçek anlamda silinmektedir. Aynı durum boru dosyaları için de geçerlidir. 
+    Yukarıda da belirttiğimiz gibi boru dosyası haberleşecek proseslerden biri tarafından yaratılabilir. Bu durumda bu boru 
+    dosyasının onu yaratan proses tarafından silinmesi uygun olur. Fakat boru dosyalarının dışarıdan yaratılması çoğu kez 
+    tercih edilmektedir. Çünkü bu durumda iki programın çalıştırma sırasının bir önemi olmaktadır. Halbuki boru dosyası dışarıda 
+    yaratılırsa programların çalıştırma sıralarının bir önemi olmaz. Anımsanacağı gibi UNIX/Linux sistemlerinde bir dosya 
+    remove ya da unlink fonksiyonu ile silindiğinde açık betimleyiciler normal olarak çalışmaya devam eder. Son betimleyici 
+    kapatıldığında dosya gerçek anlamda silinmektedir. Aynı durum boru dosyaları için de geçerlidir. 
 
     Aşağıdaki örnekte "prog1" programı isimli boruyu mkfifo fonksiyonuyla yaratmış ve sonlanmadan önce unlink fonksiyonu ile
     boruyu silmiştir.
@@ -13713,20 +13727,21 @@ void exit_sys(const char *msg)
     İşte bu tür durumda iki yöntem akla gelmektedir:
 
     1) Yazan taraf önce değişken uzunluktaki kaydın byte miktarını boruya yazar, sonra değişken uzunluktaki kaydı boruya yazar. 
-    Okuyan taraf da önce uzunluğu okur sonra o uzunluk kadar yeniden okuma yapar. Bu yöntem etkin ve çoğu zaman tercih edilen yöntemdir. 
+    Okuyan taraf da önce uzunluğu okur sonra o uzunluk kadar yeniden okuma yapar. Bu yöntem etkin ve çoğu zaman tercih edilen 
+    yöntemdir. 
 
     2) Yazan taraf kayıtların sonuna özel bir byte yerleştirir. (Örneğin kayıtlar yazısalsa '\n' gibi bir karatker yerleştirilebilir.)
     Böylece okuyan taraf o özel byte'ı görene kadar okuma yapabilir. Buradaki problem bu özel byte'ın okuyan taraf tarafından nasıl 
-    tespit edileceğidir. read fonksiyonu ile sürekli 1 byte okumak etkin bir yöntem değildir. O zaman bir blok bilginin okunup bir tampona 
-    yerleştirilmesi ve o tampondan akıllıca kontrol yapılması yoluna gidilir. Buna benzer yazısal aktarımlarda bazen programcılar 
-    kaydın sonuna '\n' karakterini yerleştirip boru betimleyicisinden fdopen fonksiyonu ile dosya bilgi gösterici (stream) elde edip 
-    fgets gibi bir fonksiyonla okuma yapma yoluna gidebilmektedir. Ne de olsa fgets tamponlu biçimde çalıştığı için bizim yapmamız 
-    gerekenleri kendisi yapmaktadır. Tabii aslında önce boruyu açıp sonra fdopen fonksiyonunu kullanmak yerine doğrudan fopen fonksiyonuyla
-    da boru açılabilir. 
+    tespit edileceğidir. read fonksiyonu ile sürekli 1 byte okumak etkin bir yöntem değildir. O zaman bir blok bilginin okunup bir 
+    tampona yerleştirilmesi ve o tampondan akıllıca kontrol yapılması yoluna gidilir. Buna benzer yazısal aktarımlarda bazen 
+    programcılar kaydın sonuna '\n' karakterini yerleştirip boru betimleyicisinden fdopen fonksiyonu ile dosya bilgi gösterici 
+    (stream) elde edip fgets gibi bir fonksiyonla okuma yapma yoluna gidebilmektedir. Ne de olsa fgets tamponlu biçimde çalıştığı 
+    için bizim yapmamız gerekenleri kendisi yapmaktadır. Tabii aslında önce boruyu açıp sonra fdopen fonksiyonunu kullanmak 
+    yerine doğrudan fopen fonksiyonuyla da boru açılabilir. 
 
     Aşağıdaki örnekte "prog1" programı bir dizin'in yol ifadesini komut satırı argümanıyla almış o dizindeki dosyaları elde edip
-    önce onların uzunluklarını sonra da isimlerini boruya yazmıştır. Okuyan taraf da (prog2 programı) önce uzunluğu sonra içeriği okuyup kayıtları 
-    birbirinden ayırabilmiştir. 
+    önce onların uzunluklarını sonra da isimlerini boruya yazmıştır. Okuyan taraf da (prog2 programı) önce uzunluğu sonra 
+    içeriği okuyup kayıtları birbirinden ayırabilmiştir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* prog1.c */
@@ -13829,18 +13844,18 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Aşağıdaki örnekte yukarıda belirttiğimiz yöntemlerin ikincisi kullanılmıştır. Yani her kayıttan sonra özel bir sonlandırıcı 
-    karakter boruya eklenmiştir. Biz burada sonlandırıcı karakter için '\0' değil '\n' karakterini tercih ettik. Çünkü 
-    C'de '\0' görene kadar okuma yapan standart bir fonksiyon yoktur. Halbuki '\n' görene kadar okuma yapan bir fgets gibi bir standart
+    karakter boruya eklenmiştir. Biz burada sonlandırıcı karakter için '\0' değil '\n' karakterini tercih ettik. Çünkü C'de 
+    '\0' görene kadar okuma yapan standart bir fonksiyon yoktur. Halbuki '\n' görene kadar okuma yapan bir fgets gibi bir standart
     fonksiyon vardır. Aşağıdaki program hakkında şu özet açıklamaları yapmak istiyoruz:
 
     - Boruya yazan taraf dosya ismini boruya yazdıktan sonra '\n' karakterini de sonlandırıcı oluşturmak amacıyla boruya yazmıştır.
 
     - Okuyan taraf tek tek karakterleri read fonksiyonuyla borudan okumak yerine standart fgets fonksiyonundan faydalanmıştır. 
-    Tabii bunun için boruyu açtıktan sonra fdopen fonksiyonuyla ondan bir stream elde etmiştir. Şüphesiz bu tür durumlarda boru doğrudan 
-    fopen fonksiyonuyla da açılabilir. fopen fonksiyonuyla açım alternatifi "prog3.c" dosyasında verilmiştir. 
+    Tabii bunun için boruyu açtıktan sonra fdopen fonksiyonuyla ondan bir stream elde etmiştir. Şüphesiz bu tür durumlarda boru 
+    doğrudan fopen fonksiyonuyla da açılabilir. fopen fonksiyonuyla açım alternatifi "prog3.c" dosyasında verilmiştir. 
 
-    - Yazan taraf boruyu kapattığında fgets fonksiyonu NULL adresle geri dönecektir. Anımsanacağı gibi fgets en az bir byte okursa 
-    ikinci parametresi ile belirtilen adrese, hiç byte okuyamadan EOF ile karşılaşırsa NULL adrese geri dönmektedir.
+    - Yazan taraf boruyu kapattığında fgets fonksiyonu NULL adresle geri dönecektir. Anımsanacağı gibi fgets en az bir byte 
+    okursa ikinci parametresi ile belirtilen adrese, hiç byte okuyamadan EOF ile karşılaşırsa NULL adrese geri dönmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* prog1.c */
@@ -13973,8 +13988,8 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Client-Server haberleşme konusunda bir tasarım mimarisidir. Genellikle "client-server" denildiğinde konu TCP/IP
-    soket haberleşmesi ile ilişkilendirilmektedir. Ancak client-server haberleşme aslında genel bir konudur. Haberleşmedeki ortam 
+    Client-Server haberleşme konusunda bir tasarım mimarisidir. Genellikle "client-server" denildiğinde konu TCP/IP soket 
+    haberleşmesi ile ilişkilendirilmektedir. Ancak client-server haberleşme aslında genel bir konudur. Haberleşmedeki ortam 
     değişebilir. Haberleşecek birimler aynı makinenin prosesleri olabildiği gibi farklı makinelerin prosesleri de olabilmektedir. 
     İşte client-server haberleşme aynı makinenin prosesleri arasında borular kullanılarak da yapılabilmektedir. Client-Server 
     haberleşmede iki program söz konusudur: Client program ve server program. Burada asıl işi yapan program server programdır. 
@@ -13985,24 +14000,26 @@ void exit_sys(const char *msg)
     Client-Server tarzı haberleşme en çok TCP/IP protokolü ile yapılıyor olsa da borular yoluyla da yapılabilmektedir. 
     Pekiyi borular yoluyla çok client'lı (multi-client) bir client-server uygulama yapmak için kaç boruya ihtiyaç vardır?
     Client programların isteklerini farklı borularla server programa iletmesine gerek yoktur. Client ptogramlar ortak tek bir 
-    boru kullanarak isteklerini server programa iletebilirler. Bu durumda server program da belli uzunluktaki kayıtları okuyarak istekleri elde 
-    eder. O isteklerin hangi client'tan geldiğini mesajın içerisinden öğrenebilir. Ancak server programın isteğin yanıtını tek bir 
-    boruyla client programlara iletmesi mümkün değildir. Mecburen her client için farklı borunun kullanılması gerekir. 
-    O halde şunlar söylenebilir:
+    boru kullanarak isteklerini server programa iletebilirler. Bu durumda server program da belli uzunluktaki kayıtları okuyarak 
+    istekleri elde eder. O isteklerin hangi client'tan geldiğini mesajın içerisinden öğrenebilir. Ancak server programın isteğin 
+    yanıtını tek bir boruyla client programlara iletmesi mümkün değildir. Mecburen her client için farklı borunun kullanılması 
+    gerekir. O halde şunlar söylenebilir:
 
-    - Client programlar tek ve ortak bir boru ile server programa istekte bulunurlar. Bu borunun işin başında yaratılmış olması uygundur.
+    - Client programlar tek ve ortak bir boru ile server programa istekte bulunurlar. Bu borunun işin başında yaratılmış olması 
+    uygundur.
 
     - Server program da her client için farklı bir boru ile client'a istek sonucunu gönderir. Server'ın client'a mesaj gönderdiği 
     o client'a özgü boruların client tarafından yaratılması ancak "CONNECT" mesajında server programa iletilmesi daha uygun bir çözümdür. 
     Bu boru yine "DISCONNECT" mesajı sonrasında client program tarafından yok edilir. 
 
-    - Server programın kendisine bağlanmış olan tüm client'ların bilgilerini tutması gerekir. Client'ları birbirinden ayıran "sistem genelinde 
-    tek olan (unique)" bir değerin id olarak belirlenmesi uygundur. Bunun için akla ilk gelen proses id'lerin client'ları birbirinden 
-    ayırmak için kullanılmasıdır. Bu durumda server program bir id'ye göre client bilgilerine hızlı erişim sağlamalıdır. Bunun için 
-    en uygun veri yapısı şüphesiz "dengelenmiş ikili ağaçlar (balanced binary trees)" ya da "hash tabloları (hash tables)". Ancak bilindiği 
-    gibi C'de bu veri yapıları C'nin standart kütüphanesinde bulunmamaktadır. Halbuki nesne yönelimli dillerin neredeyse hemen hepsinde 
-    "sözlük (dictionary)" veri yapısı denilen bu veri yapıları o dillerin standart kütüphanelerinde hazır biçimde bulunmaktadır. Örneğin 
-    C++'taki "map" ya da "unordered_map" isimli sınıflar bu iş için idealdir. 
+    - Server programın kendisine bağlanmış olan tüm client'ların bilgilerini tutması gerekir. Client'ları birbirinden ayıran 
+    "sistem genelinde tek olan (unique)" bir değerin id olarak belirlenmesi uygundur. Bunun için akla ilk gelen proses id'lerin 
+    client'ları birbirinden ayırmak için kullanılmasıdır. Bu durumda server program bir id'ye göre client bilgilerine hızlı 
+    erişim sağlamalıdır. Bunun için en uygun veri yapısı şüphesiz "dengelenmiş ikili ağaçlar (balanced binary trees)" ya da 
+    "hash tabloları (hash tables)". Ancak bilindiği gibi C'de bu veri yapıları C'nin standart kütüphanesinde bulunmamaktadır. 
+    Halbuki nesne yönelimli dillerin neredeyse hemen hepsinde "sözlük (dictionary)" veri yapısı denilen bu veri yapıları o 
+    dillerin standart kütüphanelerinde hazır biçimde bulunmaktadır. Örneğin C++'taki "map" ya da "unordered_map" isimli sınıflar 
+    bu iş için idealdir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -14575,14 +14592,15 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Blokesiz boru işlemlerini ele almadan önce fcntl isimli POSIX fonksiyonunu (aynı zamanda bir sistem fonksiyonu olarak bulundurulmaktadır)
-    ele almak istiyoruz. fcntl zaten açılmış olan bir dosyanın çeşitli açım özelliklerini değiştirmek için kullanılmaktadır.
-    fcntl fonksiyonu sayesinde biz open fonksiyonu ile açım sırasında belirlediğimiz bazı açış bayraklarını daha sonra değiştirebilmekteyiz. 
-    fcntl fonksiyonu aynı zamanda open fonksiyonu kullanılmadan yaratılmış olan betimleyicilerin özelliklerini değiştirmekte de kullanılabilmektedir. 
-    Örneğin pipe fonksiyonu boruyu yarattıktan sonra bize iki betimleyici vermektedir. Bu iki betimleyiciyi open fonksiyonuyla biz açmadığımız
-    için onun bazı özelliklerini ancak fcntl fonksiyonu ile set edebiliriz. fcntl fonksiyonu yalnızca betimleyici bayraklarının set edilmesi için 
-    değil onların elde edilmesi için (get edilmesi için) de kullanılmaktadır. Biz daha önce close on exec bayrağını set etmek için fcntl fonksiyonunu 
-    zaten kullanmıştık. Ancak orada fonksiyonun genel tanıtımını yapmamıştık. 
+    Blokesiz boru işlemlerini ele almadan önce fcntl isimli POSIX fonksiyonunu (aynı zamanda bir sistem fonksiyonu olarak 
+    bulundurulmaktadır) ele almak istiyoruz. fcntl zaten açılmış olan bir dosyanın çeşitli açım özelliklerini değiştirmek için 
+    kullanılmaktadır. fcntl fonksiyonu sayesinde biz open fonksiyonu ile açım sırasında belirlediğimiz bazı açış bayraklarını 
+    daha sonra değiştirebilmekteyiz. fcntl fonksiyonu aynı zamanda open fonksiyonu kullanılmadan yaratılmış olan betimleyicilerin 
+    özelliklerini değiştirmekte de kullanılabilmektedir. Örneğin pipe fonksiyonu boruyu yarattıktan sonra bize iki betimleyici 
+    vermektedir. Bu iki betimleyiciyi open fonksiyonuyla biz açmadığımız için onun bazı özelliklerini ancak fcntl fonksiyonu ile 
+    set edebiliriz. fcntl fonksiyonu yalnızca betimleyici bayraklarının set edilmesi için değil onların elde edilmesi için 
+    (get edilmesi için) de kullanılmaktadır. Biz daha önce close on exec bayrağını set etmek için fcntl fonksiyonunu zaten 
+    kullanmıştık. Ancak orada fonksiyonun genel tanıtımını yapmamıştık. 
 
     fcntl fonksiyonunun prototipi şöyledir:
 
@@ -14590,15 +14608,15 @@ void exit_sys(const char *msg)
 
     int fcntl(int fd, int cmd, ...);
 
-    Fonksiyonun birinci parametresi bayrakları set ya da get edilecek betimleyicinin numarasını almaktadır. İkinci parametre ne yapılacağını
-    belirtir. Bu parametreye önceden belirlenmiş sembolik sabitlerle define edilmiş bazı değerler girilmektedir. Fonksiyon get etme
-    amacıyla kullanılıyorsa iki argümanla çağrılmaktadır. Ancak set etme amacıyla kullanılıyorsa üç argümanla çağrılmaktadır. 
-    Fonksiyon başarı durumunda get amaçlı kullanıldıysa ilgili get edilen değere, set amaçlı kullanıldıysa -1 dışındaki herhangi bir değere
-    ve başarısızlık durumunda -1 değerine geri dönmektedir. Tabii eğer fonksiyon get amaçlı kullanılıyorsa ve betimleyici ile komut parametresi 
-    doğru bir biçimde verilmişse fonksiyonun başarısız olma olasılığı yoktur. 
+    Fonksiyonun birinci parametresi bayrakları set ya da get edilecek betimleyicinin numarasını almaktadır. İkinci parametre 
+    ne yapılacağını belirtir. Bu parametreye önceden belirlenmiş sembolik sabitlerle define edilmiş bazı değerler girilmektedir. 
+    Fonksiyon get etme amacıyla kullanılıyorsa iki argümanla çağrılmaktadır. Ancak set etme amacıyla kullanılıyorsa üç argümanla 
+    çağrılmaktadır. Fonksiyon başarı durumunda get amaçlı kullanıldıysa ilgili get edilen değere, set amaçlı kullanıldıysa -1 
+    dışındaki herhangi bir değere ve başarısızlık durumunda -1 değerine geri dönmektedir. Tabii eğer fonksiyon get amaçlı 
+    kullanılıyorsa ve betimleyici ile komut parametresi doğru bir biçimde verilmişse fonksiyonun başarısız olma olasılığı yoktur. 
 
-    Fonksiyonun ikinci parametresi F_GETFL ve F_SETFL biçiminde girilirse bu durumda fonksiyon "dosya durum bayraklarını (file status flags)"
-    ve "erişim modunu (access modes)" get ve set etmektedir. Dosya durum bayrakları (file status flags) şunlardır:
+    Fonksiyonun ikinci parametresi F_GETFL ve F_SETFL biçiminde girilirse bu durumda fonksiyon "dosya durum bayraklarını (file 
+    status flags)" ve "erişim modunu (access modes)" get ve set etmektedir. Dosya durum bayrakları (file status flags) şunlardır:
 
     O_APPEND
     O_DSYNC
@@ -14606,7 +14624,8 @@ void exit_sys(const char *msg)
     O_RSYNC
     O_SYNC
 
-    Biz bu bayraklardan yalnızca O_APPEND bayrağını open fonksiyonunu anlatırken açıklamıştık. Dosya erişim modları da şunlardan oluşmaktadır:
+    Biz bu bayraklardan yalnızca O_APPEND bayrağını open fonksiyonunu anlatırken açıklamıştık. Dosya erişim modları da şunlardan 
+    oluşmaktadır:
 
     O_EXEC
     O_RDONLY
@@ -14614,17 +14633,17 @@ void exit_sys(const char *msg)
     O_SEARCH
     O_WRONLY
 
-    Eğer programcı dosya durum bayraklarını F_GETFL ile elde etmek istemişse fonksiyonun geri dönüş değerini dosya durum bayraklarıyla 
-    bit AND işlemine sokarak ilgili bayrağın set edilip edilmediğini anlayabilir. Örneğin:
+    Eğer programcı dosya durum bayraklarını F_GETFL ile elde etmek istemişse fonksiyonun geri dönüş değerini dosya durum 
+    bayraklarıyla bit AND işlemine sokarak ilgili bayrağın set edilip edilmediğini anlayabilir. Örneğin:
 
     result = fcntl(fd, F_GETFL);
     if (result & O_APPEND) {
         /* O_APPEND bayrağı set edilmiş */
     }
 
-    Eğer programcı dosya erişim modlarını elde etmek istiyorsa erişim modları ile bit AND işlemini kullanmamlıdır. Bunun için önce
-    fonksiyonun geri dönüş değeri O_ACCMODE değeri ile bit AND işlemine sokulup erişim modlarıyla == karşılaştıması yapılmalıdır. 
-    Örneğin biz dosyanın O_RDWR modunda açılıp açılmadığını anlam isteyelim. Bu işlemi şöyle yapmamalıyız:
+    Eğer programcı dosya erişim modlarını elde etmek istiyorsa erişim modları ile bit AND işlemini kullanmamlıdır. Bunun 
+    için önce fonksiyonun geri dönüş değeri O_ACCMODE değeri ile bit AND işlemine sokulup erişim modlarıyla == karşılaştıması 
+    yapılmalıdır.  Örneğin biz dosyanın O_RDWR modunda açılıp açılmadığını anlam isteyelim. Bu işlemi şöyle yapmamalıyız:
 
     result = fcntl(fd, F_GETFL);
     if (result & O_RDWR) {		/* dikkat! hatalı kullanım */
@@ -14645,8 +14664,8 @@ void exit_sys(const char *msg)
         exit_sys("fcntl");
 
     F_SETFL işleminde hem dosya durum bayraklarının hem de erişim modunun set edilmeye çalışıldığına dikkat ediniz. Diğer 
-    bayraklara dokunmadan yalnızca O_NONBLOCK bayrağının set edilmesi için önce get işleminin yapılması gerekir. Şimdi de O_NONBLOCK
-    bayrağını clear edelim:
+    bayraklara dokunmadan yalnızca O_NONBLOCK bayrağının set edilmesi için önce get işleminin yapılması gerekir. Şimdi de 
+    O_NONBLOCK bayrağını clear edelim:
 
     result = fcntl(fd, F_GETFL);
     if (fcntl(fd, F_SETFL, result & ~O_NONBLOCK) == -1)
@@ -14674,12 +14693,13 @@ void exit_sys(const char *msg)
     if (fcntl(fd, F_SETFD, result & ~FD_CLOEXEC) == -1)
         exit_sys("fcntl");
 
-    Biz dosya betimleyicisini çiftlemek için daha önce dup ve dup2 fonksiyonlarını kullanmıştık. Aslında dosya betimleyicilerinin çiftlenmesi 
-    fcntl fonksiyonuyla da yapılabilmektedir. Bunun fcntl fonksiyonunda komut kodu olarak F_DUPFD kullanılır. Bu komut kodunda
-    üçüncü parametre de girilmelidir. Fonksiyon üçüncü parametrede belirtilen betimleyici değerine eşit ya da ondan büyük olan düşük 
-    boş betimleyiciyi bize verir. Bu bakımdan fcntl ile dosya betimleyicisinin çiftlenmesi dup ve dup2 fonksiyonlarından farklıdır. 
-    Anımsanacağı gibi dup fonksiyonu bize ilk boş betimleyiciyi, dup2 fonksiyonu ise ikinci parametresiyle belirttiğimiz betimleyiciyi 
-    vermektedir. Oysa fcntl fonksiyonu F_DUPFD komut koduyla bize belli bir değerden büyük en düşük betimleyici verir. Örneğin:
+    Biz dosya betimleyicisini çiftlemek için daha önce dup ve dup2 fonksiyonlarını kullanmıştık. Aslında dosya betimleyicilerinin 
+    çiftlenmesi fcntl fonksiyonuyla da yapılabilmektedir. Bunun fcntl fonksiyonunda komut kodu olarak F_DUPFD kullanılır. Bu komut 
+    kodunda üçüncü parametre de girilmelidir. Fonksiyon üçüncü parametrede belirtilen betimleyici değerine eşit ya da ondan büyük 
+    olan düşük boş betimleyiciyi bize verir. Bu bakımdan fcntl ile dosya betimleyicisinin çiftlenmesi dup ve dup2 fonksiyonlarından 
+    farklıdır. Anımsanacağı gibi dup fonksiyonu bize ilk boş betimleyiciyi, dup2 fonksiyonu ise ikinci parametresiyle belirttiğimiz 
+    betimleyiciyi vermektedir. Oysa fcntl fonksiyonu F_DUPFD komut koduyla bize belli bir değerden büyük en düşük betimleyici verir. 
+    Örneğin:
 
     if ((fd2 = fcntl(fd, F_DUPFD, 50)) == -1)
         exit_sys("fcntl");
@@ -14690,16 +14710,16 @@ void exit_sys(const char *msg)
         exit_sys("fcntl");
 
     Ayrıca fcntl fonksiyonunun F_DUPFD_CLOEXEC biçiminde bir komut daha vardır. Bu komut kodu hem F_DUPFD hem de close on exec 
-    bayrağının set edilmesini birlikte yapmaktadır. Yani özetle bu komut kodu hem dosya betimleyicisini çiftler hem de çiftlenmiş olan 
-    yeni betimleyicinin close on exec bayrağını set eder. Örneğin:
+    bayrağının set edilmesini birlikte yapmaktadır. Yani özetle bu komut kodu hem dosya betimleyicisini çiftler hem de çiftlenmiş
+    olan yeni betimleyicinin close on exec bayrağını set eder. Örneğin:
 
     if ((fd2 = fcntl(fd, F_DUPFD_CLOEXEC, 0)) == -1)
         exit_sys("fcntl");
 
     fd2 betimleyicisinin aynı zamanda close on exec bayrağı set edilmiştir.
 
-    fcntl fonksiyonunun diğer komut kodları dosya kilitleme gibi özel bazı konulara ilişkindir. Bu bayraklar o konuların anlatıldığı bölümde 
-    ele alınmaktadır.
+    fcntl fonksiyonunun diğer komut kodları dosya kilitleme gibi özel bazı konulara ilişkindir. Bu bayraklar o konuların
+    anlatıldığı bölümde ele alınmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -14724,28 +14744,30 @@ void exit_sys(const char *msg)
     denilmektedir. 
 
     Blokesiz IO işlemlerinin temel fikri şudur: Bazı aygıtlardan (boru ve soketlerde dahil olmak üzere) okuma yazma yapılırken 
-    uzun süre beklemeye yol açabilecek bir bloke durumu oluşabilmektedir. Örneğin biz bir borudan okuma yapmak isteyelim. Ancak boruda 
-    hiç byte olmasın. Bu durumda read fonksiyonu blokeye yol açacak ve boruya bilgi gelene kadar program akışı kesilecektir. 
+    uzun süre beklemeye yol açabilecek bir bloke durumu oluşabilmektedir. Örneğin biz bir borudan okuma yapmak isteyelim. Ancak 
+    boruda hiç byte olmasın. Bu durumda read fonksiyonu blokeye yol açacak ve boruya bilgi gelene kadar program akışı kesilecektir. 
     İşte blokesiz işlemlerde eğer ilgili işlem blokeye yol açabilecekse bloke oluşturulmamakta read ve write fonksiyonları başarısızlıkla
     geri dönmekte errno değeri EAGAIN denilen özel bir değerle set edilmektedir. Örneğin biz içerisinde hiç byte olmayan bir borudan 
     read fonksiyonu ile 10 byte okumak isteyelim. Eğer boru default durumda olduğu gibi "blokeli modda" ise read fonksiyonu en az 1 byte 
     boruya yazılana kadar blokede kalır. Ancak eğer blokesiz modda isek bu durumda read bloke olmaz -1 değeriyle geri döner ve errno 
     değeri EAGAIN ile set edilir. Böylece programcı arka planda "mademki boruda bir şey yok o zaman ben de başka bir şey yapayım" 
-    diyebilmektedir. Aynı durum write sırasında da olmaktadır. Örneğin blokesiz modda biz bir boruya write işlemi yapmak isteyelim ancak boru tam olarak 
-    dolu olsun. Bu durumda write fonksiyonu -1 ile geri döner ve errno değeri EAGAIN değeri set edilir. Blokesiz modda işlemler blokeli moddaki işlemlere 
-    göre oldukça seyrek kullanılmaktadır. 
+    diyebilmektedir. Aynı durum write sırasında da olmaktadır. Örneğin blokesiz modda biz bir boruya write işlemi yapmak isteyelim 
+    ancak boru tam olarak dolu olsun. Bu durumda write fonksiyonu -1 ile geri döner ve errno değeri EAGAIN değeri set edilir. 
+    Blokesiz modda işlemler blokeli moddaki işlemlere göre oldukça seyrek kullanılmaktadır. 
 
     İsimli boru dosyaları open fonksiyonuyla O_NONBLOCK bayrağı kullanılarak açılırken artık open fonksiyonunda bloke oluşmaz. 
-    Anımsanacağı gibi blokesiz modda open karşı taraf boruyu ters modda açana kadar bloke oluşturuyordu. open fonksiyonunda O_NONBLOCK bayrağı 
-    kullanıldığında proses boruyu read modda açtığında henüz karşı taraf boruyu write modda açmamışsa read fonksiyonu boruyu yazma 
-    potansiyelinde olan hiçbir betimleyici olmadığı için 0 ile geri döner. 
+    Anımsanacağı gibi blokesiz modda open karşı taraf boruyu ters modda açana kadar bloke oluşturuyordu. open fonksiyonunda 
+    O_NONBLOCK bayrağı kullanıldığında proses boruyu read modda açtığında henüz karşı taraf boruyu write modda açmamışsa read 
+    fonksiyonu boruyu yazma potansiyelinde olan hiçbir betimleyici olmadığı için 0 ile geri döner. 
 
     İsimli borularda proses boruyu "write" modda açarken normalde blokeli modda open fonksiyonu karşı taraf boruyu "read" modda 
-    açana kadar bloke oluşuyordu. Halbuki isimli boruları O_NONBLOCK bayrağı ile "write" modda açmaya çalıştığımızda karşı taraf boruyu henüz 
-    "read" modda açmamışsa open başarısız olmaktadır. Bu durumda open fonksiyonu errno değerini ENXIO ile set etmektedir.
+    açana kadar bloke oluşuyordu. Halbuki isimli boruları O_NONBLOCK bayrağı ile "write" modda açmaya çalıştığımızda karşı 
+    taraf boruyu henüz "read" modda açmamışsa open başarısız olmaktadır. Bu durumda open fonksiyonu errno değerini ENXIO ile 
+    set etmektedir.
 
-    İsimli borularda iki taraf da boruyu O_NONBLOCK bayrağı ile açarsa yukarıda anlattığımız nedenden dolayı senkronizasyona dikkat etmek gerekir. 
-    Bu tür durumlarda işlemleri kolaylaştırmak için isimli borular blokeli modda açılıp (O_NONBLOCK kullanılmadan) sonrasında fcntl fonksiyonu ile blokesiz moda geçilebilir. 
+    İsimli borularda iki taraf da boruyu O_NONBLOCK bayrağı ile açarsa yukarıda anlattığımız nedenden dolayı senkronizasyona 
+    dikkat etmek gerekir. Bu tür durumlarda işlemleri kolaylaştırmak için isimli borular blokeli modda açılıp (O_NONBLOCK 
+    kullanılmadan) sonrasında fcntl fonksiyonu ile blokesiz moda geçilebilir. 
 
     Prosesler biri boruyu blokeli modda diğeri blokesiz modda açabilir. Bu da herhangi bir soruna yol açmaz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -14757,9 +14779,9 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Aşağıda isimsiz borularda blokesiz IO örneği verilmiştir. Bu örnekte borular blokesiz moda sokulmuş sonra read ve write 
     işlemleri başarısız olduğunda errno değerine bakılmıştır. Eğer başarısızlığın nedeni blokesiz IO yüzündense errno EAGAIN 
-    özel değerine set edileceği için bu sırada prosesler arka planda başka işlemler yapmıştır. Örnekte kasten üst proseste biraz bekleme 
-    yapılmıştır. Dolayısıyla program çalıştırıldığında alt proses read işleminde blokesiz IO yüzünden başarısız olup birtakım arka plan 
-    işlemleri yapacaktır. 
+    özel değerine set edileceği için bu sırada prosesler arka planda başka işlemler yapmıştır. Örnekte kasten üst proseste
+    biraz bekleme yapılmıştır. Dolayısıyla program çalıştırıldığında alt proses read işleminde blokesiz IO yüzünden başarısız 
+    olup birtakım arka plan işlemleri yapacaktır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -14849,11 +14871,11 @@ void exit_sys_child(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Aşağıda isimli boruların blokesiz modda kullanımına bir örnek verilmiştir. Burada "mypipe" isimli borusunun dışarıda yaratılmış olması 
-    gerekir. İki proses de boruyu önce blokeli modda açmış sonra fcntl fonksiyonu ile blokesiz moda geçmiştir. Yukarıda da belirttiğimiz 
-    gibi open fonksiyonu ile O_NONBLOCK bayrağı kullanılarak isimli boruların blokesiz modda açılması sırasında senkronizasyona 
-    dikkat edilmesi gerekir. Halbuki önce iki prosesin open fonksiyonu ile boruları blokeli modda açıp sonra fcntl fonksiyonu 
-    ile blokesiz moda geçirmesi bu senkronizasyon problemini bertaraf etmektedir.
+    Aşağıda isimli boruların blokesiz modda kullanımına bir örnek verilmiştir. Burada "mypipe" isimli borusunun dışarıda 
+    yaratılmış olması gerekir. İki proses de boruyu önce blokeli modda açmış sonra fcntl fonksiyonu ile blokesiz moda geçmiştir. 
+    Yukarıda da belirttiğimiz gibi open fonksiyonu ile O_NONBLOCK bayrağı kullanılarak isimli boruların blokesiz modda açılması 
+    sırasında senkronizasyona dikkat edilmesi gerekir. Halbuki önce iki prosesin open fonksiyonu ile boruları blokeli modda 
+    açıp sonra fcntl fonksiyonu ile blokesiz moda geçirmesi bu senkronizasyon problemini bertaraf etmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* proc1.c */
@@ -14964,8 +14986,8 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     UNIX/Linux dünyasında "IPC fonksiyonları" demekle geleneksel olarak "mesaj kuyrukları, paylaşılan bellek alanları ve semaphore'lar"
     anlaşılmaktadır. "IPC fonksiyonları" yerine "IPC nesneleri" terimi de kullanılabilmektedir. Borular tipik bir IPC mekanizması 
-    olduğu halde bu dünyada IPC fonksiyonları denildiğinde borular anlaşılmamaktadır. (Semaphore'lar senkronizasyon konusu ile ilgilidir. 
-    Ancak bir anlamda IPC konusuyla da ilgilidir. Biz semaphore'ları "thread'lerin anlatıldığı" bölümde ele alacağız.) 
+    olduğu halde bu dünyada IPC fonksiyonları denildiğinde borular anlaşılmamaktadır. (Semaphore'lar senkronizasyon konusu 
+    ile ilgilidir. Ancak bir anlamda IPC konusuyla da ilgilidir. Biz semaphore'ları "thread'lerin anlatıldığı" bölümde ele alacağız.) 
 
     Yinelemek gerekirse UNIX dünyasında -onların terminolojisiyle- üç IPC mekanizması vardır:
 
@@ -16395,27 +16417,27 @@ void exit_sys(const char *msg)
     gcc -o sample sample.c -lrt
 
 ---------------------------------------------------------------------------------------------------------------------------*/
-
+<BURADA KALDIK>
 /*--------------------------------------------------------------------------------------------------------------------------
     POSIX mesaj kuyrukları şöyle kullanılmaktadır:
 
-    1) İki proses de (daha fazla proses de olabilir) mesaj kuyruğunu mq_open fonksiyonuyla ortak bir isim altında anlaşarak açar. 
-    mq_open fonksiyonunun prototipi şöyledir:
+    1) İki proses de (daha fazla proses de olabilir) mesaj kuyruğunu mq_open fonksiyonuyla ortak bir isim altında anlaşarak 
+    açar. mq_open fonksiyonunun prototipi şöyledir:
 
     #include <mqueue.h>
 
     mqd_t mq_open(const char *name, int oflag, ...);
 
-    Fonksiyon ya iki argümanla ya da dört argümanla çağrılmaktadır. Eğer mesaj kuyruğu zaten varsa fonksiyon iki argümanla çağrılır. 
-    Ancak mesaj kuyruğunun yaratılması gibi bir durum söz konusu ise fonksiyon dört argümanla çağrılır. Eğer mesaj kuyruğunun yaratılması 
-    söz konusu ise son iki parametreye sırasıyla IPC nesnesinin erişim hakları ve "özellikleri (attribute)" girilmelidir. Yani mesaj kuyruğu
-    yaratılacaksa adeta fonksiyonun parametrik yapısının aşağıdaki gibi olduğu varsayılmalıdır:
+    Fonksiyon ya iki argümanla ya da dört argümanla çağrılmaktadır. Eğer mesaj kuyruğu zaten varsa fonksiyon iki argümanla 
+    çağrılır. Ancak mesaj kuyruğunun yaratılması gibi bir durum söz konusu ise fonksiyon dört argümanla çağrılır. Eğer mesaj 
+    kuyruğunun yaratılması söz konusu ise son iki parametreye sırasıyla IPC nesnesinin erişim hakları ve "özellikleri (attribute)" 
+    girilmelidir. Yani mesaj kuyruğu yaratılacaksa adeta fonksiyonun parametrik yapısının aşağıdaki gibi olduğu varsayılmalıdır:
 
     mqd_t mq_open(const char *name, int oflag, mode_t mode, const struct mq_attr *attr);
 
     Fonksiyonun birinci parametresi IPC nesnesinin kök dizindeki dosya ismi gibi uydurulmuş olan ismini belirtir. İkinci parametre 
-    açış bayraklarını belirtmektedir. Burada open fonksiyonundaki bayrakların bazıları kullanılmaktadır. Açış bayrakları aşağıdakilerden 
-    yalnızca birini içermek zorundadır:
+    açış bayraklarını belirtmektedir. Burada open fonksiyonundaki bayrakların bazıları kullanılmaktadır. Açış bayrakları 
+    aşağıdakilerden yalnızca birini içermek zorundadır:
 
     O_RDONLY
     O_WRONLY
@@ -52829,14 +52851,14 @@ clean:
 /*-------------------------------------------------------------------------------------------------------------------------- 
     Pekiyi aygıt sürücüleri açmak için open fonksiyonunda yol ifadesi olarak (yani dosya ismi olarak) ne verilecektir? İşte 
     aygıt sürücüler dosya sisteminde bir dizin girişiyle temsil edilmektedir. O dizin girişi open ile açıldığında aslında o 
-    dizin girişinin temsil ettiği aygıt sürücü açılmış olur. Bu biçimdeki aygıt srücüleri temsil eden dizin girişlerine 
+    dizin girişinin temsil ettiği aygıt sürücü açılmış olur. Bu biçimdeki aygıt sürücüleri temsil eden dizin girişlerine 
     "aygıt dosyaları (device files)" denilmektedir. Aygıt dosyaları diskte bir dosya belirtmemektedir. Kernel içerisindeki aygıt
     sürücüyü temsil eden bir dizin girişi belirtmektedir. Aygıt dosyalarının i-node tablosunda bir i-node elemanı vardır ancak 
     bu i-node elemanı diskte bir yer değil kernel'da bir aygıt sürücü belirtmektedir.
 
     Pekiyi bir aygıt dosyası nasıl yaratılmaktadır ve nasıl bir aygıt sürücüyü temsil eder hale getirilmektedir? İşte her aygıt 
     sürücünün majör ve minör numaraları vardır. Aynı zamanda aygıt dosyalarının da majör ve minör numaraları vardır. Bir aygıt 
-    sürücünün majör ve minör numarası bir aygıt dosyasının majör ve minör numarasıyla aynıysa bu durumda o aygıt dıosyası o aygıt 
+    sürücünün majör ve minör numarası bir aygıt dosyasının majör ve minör numarasıyla aynıysa bu durumda o aygıt dosyası o aygıt 
     sürücüyü temsil eder.
 
     Aygıt dosyaları özel dosyalardır. Bir dosyanın aygıt dosyası olup olmadığı "ls -l" komutunda dosya türü olarak 'c' (karakter 
@@ -52874,7 +52896,7 @@ clean:
     unsigned int major(dev_t dev);
     unsigned int minor(dev_t dev);
 
-    Yani aslında majör ve minör numaralar dev_t türünden bir bir değerin belli bitlerinde bulunmaktadır. Ancak bu numaraların dev_t 
+    Yani aslında majör ve minör numaralar dev_t türünden bir değerin belli bitlerinde bulunmaktadır. Ancak bu numaraların dev_t 
     türünden değerin hangi bitlerinde bulunduğu sistemden sisteme değişebileceği için bu makrolar kullanılmaktadır.
 
     Ancak kernel modda bu makrolar yerine aşağıdakiler kullanılmaktadır:
@@ -52889,14 +52911,14 @@ clean:
     12 biti majör numarayı, düşük anlamlı 20 biti ise minör numarayı temsil etmektedir. Ancak programcı bu varsayımlarla 
     kodunu düzenlememeli yukarıda belirtilen makroları kullanmalıdır.
 
-    mknod fonksiyonun ikinci parametresindeki erişim haklarına aygıt dosyasının türünü belirten aşağıdaki sembolik sabitlerden 
+    mknod fonksiyonunun ikinci parametresindeki erişim haklarına aygıt dosyasının türünü belirten aşağıdaki sembolik sabitlerden 
     biri de bit OR operatörü ile eklenmelidir:
 
     S_IFCHR (Karakter aygıt sürücüsü)
     S_IFBLK (Blok aygıt sürücüsü)
 
     Aslında mknod fonksiyonu ile Linux sistemlerinde isimli boru dosyaları, UNIX domain soket dosyaları ve hatta normal dosyalar 
-    da yaratılabilmektedir. Bu durumda fonksiyonun aygıt numarası belirten üçüncü parametresi fonksiyon tarafından dikkate 
+    da yaratılabilmektedir. Bu durumda fonksiyonun aygıt numarasını belirten üçüncü parametresi fonksiyon tarafından dikkate 
     alınmamaktadır. Bu özel dosyalar için erişim haklarına eklenecek makrolar da şunlardır:
 
     S_IFREG (Disk dosyası yaratmak için)
@@ -53580,7 +53602,10 @@ void exit_sys(const char *msg)
 
     Bazen user alanındaki adresin zaten geçerliliği sınanmıştır. Bu durumda yeniden geçerlilik sınaması yapmadan yukarıdaki 
     işlemleri yapan __copy_to_user ve __copy_from_user fonksiyonları kullanılabilir. Bu fonksiyonların parametrik yapıları aynıdır.
-    Bu fonksiyonların yukarıdakilerden tek farkı adres geçerliliğine ilişkin sınama yapmamalarıdır.
+    Bu fonksiyonların yukarıdakilerden tek farkı adres geçerliliğine ilişkin sınama yapmamalarıdır:
+
+    unsigned long __copy_to_user(void *to, const void *from, unsigned len);
+    unsigned long __copy_from_user(void *to, const void *from, unsigned len);
 
     Bazı durumlarda programcı 1 byte, 2 byte, 4 byte, 8 byte'lık verileri transfer etmek isteyebilir. Bu küçük miktardaki verilen 
     transfer edilmesi için daha hızlı çalışan özel iki makro vardır: put_user ve get_user. Bu makroların parametrik yapısı şöyledir:
@@ -53593,8 +53618,13 @@ void exit_sys(const char *msg)
     Başka bir deyişle biz makroya hangi türden nesne verirsek zaten makro o uzunlukta tranfer yapmaktadır.
 
     Makrolar başarı durumunda 0 başarısızlık durumunda negatif hata koduna geri dönmektedir. Bu makroların da geçerlilik kontrolü 
-    yapmayan __put_user ve __get_user isimli versiyonları vardır. Örneğin biz çekirdek modülümüzdeki 4 byte'lık int bir x 
-    nesnesinin içerisindeki bilgiyi puser ile temsil edilen user adresine kopyalamak isteyelim. Bu işlemi şöyle yaparız:
+    yapmayan __put_user ve __get_user isimli versiyonları vardır:
+
+    __put_user(x, ptr)
+    __get_user(x, ptr)
+
+    Örneğin biz çekirdek modülümüzdeki 4 byte'lık int bir x nesnesinin içerisindeki bilgiyi puser ile temsil edilen user adresine 
+    kopyalamak isteyelim. Bu işlemi şöyle yaparız:
 
     int x;
     int *puser;
@@ -53677,14 +53707,42 @@ void exit_sys(const char *msg)
     eklenmiştir. Ancak temel elemanlar yine aynıdır. 
 
     read ve write fonksiyonlarının ikinci parametresi user alanındaki transfer adresini belirtir. Üçüncü parametreler okunacak 
-    ya da yazılacak byte miktarını belirtmektedir. Son parametre dosya göstericisinin konumunu belirtir. (Aslında bu parametre 
-    file yapısı içerisindeki f_pos elemanın adresidir. Ancak kolay erişim için ayrı bir parametre olarak geçirilmiştir.) 
+    ya da yazılacak byte miktarını belirtmektedir. Son parametre dosya göstericisinin konumunu belirtir. Ancak bu parametre 
+    file yapısı içerisindeki f_pos elemanının adresi değildir. Çekirdek tarafından read ve write fonksiyonları çağrılmadan 
+    önce file yapısı içerisindeki f_pos elemanın değeri başka bir nesneye atanıp o nesnenin adresi read ve write fonksiyonlarına
+    geçirilmektedir. read ve write fonksiyonları sonlandığında çekirdek adresini geçirdiği nesnenin değerini file yapısının 
+    f_pos elemanına kendisi yerleştirmektedir.
+
     Fonksiyon başarı durumunda transfer edilen byte sayısına başarısızlık durumunda negatif errno değerine geri dönmelidir.
 
-    <BURADA KALDIK>
+    Biz aygıt sürücümüz için read ve write fonksiyonlarını yazarken transfer edilen byte miktarı kadar dosya göstericisini 
+    kendimizin ilerletmesi gerekir. Bu işlem fonksiyonların son parametresi olan off göstericisinin gösterdiği yerin güncellenmesi
+    ile yapılır. Örneğin n byte transfer edilmiş olsun. Bu durumda dosya göstericisinin konumu aşağıdaki gibi güncellenebilir:
+
+    static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
+    {
+        ...
+
+        *off += n;
+
+        return n;
+    }
+
+    Aygıt sürücüsünüzün read ve write fonksiyonlarında dosya göstericisini konumlandırmak için file yapısının f_pos elemanını
+    güncellemeyiniz. Dosya göstericisinin konumlandırılması her zaman read ve write fonksiyonlarının son parametresi yoluyla 
+    yapılmaktadır. Çekirdeğin dosya göstericisini nasıl güncellediğine ilişkin aşağıdaki gibi bir temsili kod örneği verebiliriz:
+
+    loff_t off;
+    ...
+    off = filp->f_pos;
+    read(filp, buf, size, &off);
+    filp_f_pos = off;
 
     Aşağıdaki örnekte aygıt sürücü için read fonksiyonu yazılmıştır. Bu fonksiyon aslında g_buf isimli dizinin içini dosya 
     gibi vermektedir.
+
+    Aşağıda aygıt sürücüye read ve write fonksiyonları içi boş bir biçimde yerleştirilmiştir. Eser mode'tan read ve 
+    write yapıldığında aygıt sürücümüzün içerisindeki bu fonksiyonların çalıştığını gözlemleyiniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* generic-char-driver.c */
@@ -53693,100 +53751,98 @@ void exit_sys(const char *msg)
 #include <linux/kernel.h>
 #include <linux/fs.h>
 #include <linux/cdev.h>
-#include <linux/uaccess.h>
-
-MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("General Character Device Driver");
-MODULE_AUTHOR("Kaan Aslan");
 
 #define DEV_MAJOR		25
 #define DEV_MINOR		0
 
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Kaan Aslan");
+MODULE_DESCRIPTION("General Character Device Driver");
+
 static int generic_open(struct inode *inodep, struct file *filp);
 static int generic_release(struct inode *inodep, struct file *filp);
 static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off);
+static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off);
 
-static dev_t g_dev = MKDEV(DEV_MAJOR, DEV_MINOR);
-static struct cdev *g_cdev;
-static struct file_operations g_file_ops = {
+static struct cdev g_cdev;
+static struct file_operations g_fops = {
 	.owner = THIS_MODULE,
 	.open = generic_open,
-	.release = generic_release,
 	.read = generic_read,
+	.write = generic_write,
+	.release = generic_release
 };
-
-char g_buf[] = "abcdefghijklmnoprstuvyz";
 
 static int __init generic_init(void)
 {
 	int result;
 
-	if ((result = register_chrdev_region(g_dev, 1, "generic-char-driver")) < 0) {
-		printk(KERN_INFO "Cannot register driver!...\n");
+	printk(KERN_INFO "generic-char-driver module intitialization...\n");
+
+	if ((result = register_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1, "generic-char-driver")) < 0) {
+		printk(KERN_ERR "cannot register device!..\n");
 		return result;
 	}
 
-	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!..\n");
-		return -ENOMEM;
-	}
-
-	g_cdev->owner = THIS_MODULE;
-	g_cdev->ops = &g_file_ops;
-
-	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
-		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+	cdev_init(&g_cdev, &g_fops);
+	if ((result = cdev_add(&g_cdev, MKDEV(DEV_MAJOR, DEV_MINOR), 1)) < 0) {
+		unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
+		printk(KERN_ERR "cannot add device!..\n");
 		return result;
 	}
-
-	printk(KERN_INFO "Success...\n");
 
 	return 0;
 }
 
 static void __exit generic_exit(void)
 {
-	cdev_del(g_cdev);
-	unregister_chrdev_region(g_dev, 1);
+	cdev_del(&g_cdev);
+	unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
 
-	printk(KERN_INFO "Goodbye...\n");
+	printk(KERN_INFO "generic-char-driver module exit...\n");
 }
 
 static int generic_open(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Generic device opened!..\n");
+	printk(KERN_INFO "generic-char-driver opened...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Generic device released!..\n");
+	printk(KERN_INFO "generic-char-driver-closed...\n");
 
 	return 0;
 }
 
 static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
 {
-	size_t asize;
+	printk(KERN_INFO "generic_read called...\n");
 
-	asize = size + *off > strlen(g_buf) ? strlen(g_buf) - *off : size;
+	return size;
+}
 
-	if (copy_to_user(buf, g_buf + *off, asize) != 0)
-		return -EFAULT;
+static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
+{
+	printk(KERN_INFO "generic_write called...\n");
 
-	*off += asize;
-
-	printk(KERN_INFO "Reading...\n");
-
-	return asize;
+	return size;
 }
 
 module_init(generic_init);
 module_exit(generic_exit);
 
-/* sample.c */
+# Makefile
+
+obj-m += ${file}.o
+
+all:
+	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
+clean:
+	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
+
+/* app.c */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -53799,18 +53855,12 @@ int main(void)
 {
 	int fd;
 	char buf[100];
-	ssize_t result;
 
-	if ((fd = open("generic", O_RDWR)) == -1)
+	if ((fd = open("mydriver", O_RDWR)) == -1)
 		exit_sys("open");
 
-	while ((result = read(fd, buf, 3)) > 0) {
-		buf[result] = '\0';
-		printf("Read from %ld bytes: %s\n", (long)result, buf);
-	}
-
-	if (result < 0)
-		exit_sys("read");
+	read(fd, buf, 100);
+	write(fd, buf, 100);
 
 	close(fd);
 
@@ -53824,20 +53874,43 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
-# Makefile
-
-obj-m += $(file).o
-
-all:
-	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
-clean:
-	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
+/*--------------------------------------------------------------------------------------------------------------------------
+												134. Ders 19/04/2024 - Cuma
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Aygıt sürücü için write fonksiyonu da tamamen read fonksiyonuna benzer biçimde yazılmaktadır. write fonksiyonu içerisinde
-    biz user moddaki bilgiyi copy_from_user ya da get_user fonksiyonlarıyla alırız. Yine write fonksiyonu da bir sorun çıktığında
-    -EFAULT değeri ile başarılı sonlanmada yazılan (kernel alanına yazılan) byte miktarı ile geri dönmelidir. Aşağıda erite
-    işlemine bir örnek verilmiştir.
+    Şimdi de aygıt sürücümüzün read fonksiyonunun gerçekten bir dosyadan okuma yapıyormuş gibi davranmasını sağlayalım. 
+    Bunun için dosyamızı temsil eden aşağıdaki gibi globaş bir dizi kullanacağız:
+
+    static char g_buf[] = "01234567890ABCDEFGH";
+
+    Buradaki diziyi sanki bir dosya gibi ele alacağız. Aygıt sürücümüzün read fonksiyonu aşağıdaki gibi olacaktır:
+
+    static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
+    {
+        size_t esize;
+        size_t slen;
+
+        slen = strlen(g_buf);
+        esize = *off + size > slen ? slen - *off : size;
+
+        if (copy_to_user(buf, g_buf + *off, esize) != 0)
+            return -EFAULT;
+
+        *off += esize;
+
+        return esize;
+    }
+
+    Burada önce dosya göstericisinin gösterdiği yerden itibaren size kadar byte'ın gerçekten dizi içerisinde olup olmadığına 
+    bakılmıştır. Eğer *off + size değeri bu dizinin udunluğundan fazlaysa size kadar değer değil slen - *off kadar değer 
+    okunmuştur. Aygıt sürücülerin read ve write fonksiyonlarında dosya göstericisinin ilerletilmesi programcının sorumluluğundadır.
+    Bu nedenle okuma işlemi yapıldığında dosya göstericisinin konumu aşağıdaki gibi artırılmıştır:
+
+    *off += size;
+
+    read fonksiyonunun okunabilen byte sayısına geri döndürüldüğüne dikkat ediniz. copy_to_user fonksiyonu ile tüm byte'lar
+    user alanına kopyalanamamışsa fonksiyon -EFAULT değeri ile geri döndürülmüştür.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* generic-char-driver.c */
@@ -53846,113 +53919,93 @@ clean:
 #include <linux/kernel.h>
 #include <linux/fs.h>
 #include <linux/cdev.h>
-#include <linux/uaccess.h>
-
-MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("General Character Device Driver");
-MODULE_AUTHOR("Kaan Aslan");
 
 #define DEV_MAJOR		25
 #define DEV_MINOR		0
 
-#define BUFFER_SIZE		128
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Kaan Aslan");
+MODULE_DESCRIPTION("General Character Device Driver");
 
 static int generic_open(struct inode *inodep, struct file *filp);
 static int generic_release(struct inode *inodep, struct file *filp);
 static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off);
 static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off);
 
-static dev_t g_dev = MKDEV(DEV_MAJOR, DEV_MINOR);
-static struct cdev *g_cdev;
-static struct file_operations g_file_ops = {
+static struct cdev g_cdev;
+static struct file_operations g_fops = {
 	.owner = THIS_MODULE,
 	.open = generic_open,
-	.release = generic_release,
 	.read = generic_read,
 	.write = generic_write,
+	.release = generic_release
 };
-
-char g_buf[BUFFER_SIZE];
+static char g_buf[] = "01234567890ABCDEFGH";
 
 static int __init generic_init(void)
 {
 	int result;
 
-	if ((result = register_chrdev_region(g_dev, 1, "generic-char-driver")) < 0) {
-		printk(KERN_INFO "Cannot register driver!...\n");
+	printk(KERN_INFO "generic-char-driver module intitialization...\n");
+
+	if ((result = register_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1, "generic-char-driver")) < 0) {
+		printk(KERN_ERR "cannot register device!..\n");
 		return result;
 	}
 
-	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!..\n");
-		return -ENOMEM;
-	}
-
-	g_cdev->owner = THIS_MODULE;
-	g_cdev->ops = &g_file_ops;
-
-	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
-		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+	cdev_init(&g_cdev, &g_fops);
+	if ((result = cdev_add(&g_cdev, MKDEV(DEV_MAJOR, DEV_MINOR), 1)) < 0) {
+		unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
+		printk(KERN_ERR "cannot add device!..\n");
 		return result;
 	}
-
-	printk(KERN_INFO "Success...\n");
 
 	return 0;
 }
 
 static void __exit generic_exit(void)
 {
-	cdev_del(g_cdev);
-	unregister_chrdev_region(g_dev, 1);
+	cdev_del(&g_cdev);
+	unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
 
-	printk(KERN_INFO "Goodbye...\n");
+	printk(KERN_INFO "generic-char-driver module exit...\n");
 }
 
 static int generic_open(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Generic device opened!..\n");
+	printk(KERN_INFO "generic-char-driver opened...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Generic device released!..\n");
+	printk(KERN_INFO "generic-char-driver-closed...\n");
 
 	return 0;
 }
 
 static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
 {
-	size_t asize;
+	size_t esize;
+	size_t slen;
 
-	asize = size + *off > BUFFER_SIZE ? BUFFER_SIZE - *off : size;
+	slen = strlen(g_buf);
+	esize = *off + size > slen ? slen - *off : size;
 
-	if (copy_to_user(buf, g_buf + *off, asize) != 0)
+	if (copy_to_user(buf, g_buf + *off, esize) != 0)
 		return -EFAULT;
 
-	*off += asize;
+	*off += esize;
 
-	printk(KERN_INFO "Reading...\n");
-
-	return asize;
+	return esize;
 }
 
 static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
 {
-	size_t asize;
+	printk(KERN_INFO "generic_write called...\n");
 
-	asize = size + *off > BUFFER_SIZE ? BUFFER_SIZE - *off : size;
-	if (copy_from_user(g_buf + *off, buf, asize) != 0)
-		return -EFAULT;
-
-	*off += asize;
-
-	printk(KERN_INFO "Writing...\n");
-
-	return asize;
+	return size;
 }
 
 module_init(generic_init);
@@ -53960,18 +54013,18 @@ module_exit(generic_exit);
 
 # Makefile
 
-obj-m += $(file).o
+ obj-m += ${file}.o
 
 all:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
-/* sample.c */
+/* app.c */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <stdint.h>
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -53980,28 +54033,35 @@ void exit_sys(const char *msg);
 int main(void)
 {
 	int fd;
-	char wbuf[100] = "this is a test";
-	char rbuf[100];
+	char buf[1024];
 	ssize_t result;
 
-	if ((fd = open("generic", O_WRONLY)) == -1)
+	if ((fd = open("mydriver", O_RDONLY)) == -1)
 		exit_sys("open");
 
-	if ((result = write(fd, wbuf, strlen(wbuf))) == -1)
-		exit_sys("write");
-
-	printf("%ld bytes written...\n", (long)result);
-
-	close(fd);
-
-	if ((fd = open("generic", O_RDONLY)) == -1)
-		exit_sys("open");
-
-	if ((result = read(fd, rbuf, 10)) == -1)
+	if ((result = read(fd, buf, 3)) == -1)
 		exit_sys("read");
-	rbuf[result] = '\0';
+	buf[result] = '\0';
 
-	printf("%ld bytes read: %s\n", result, rbuf);
+	printf("%jd bytes read: \"%s\"\n", (intmax_t)result, buf);
+
+	if ((result = read(fd, buf, 5)) == -1)
+		exit_sys("read");
+	buf[result] = '\0';
+
+	printf("%jd bytes read: \"%s\"\n", (intmax_t)result, buf);
+
+	if ((result = read(fd, buf, 30)) == -1)
+		exit_sys("read");
+	buf[result] = '\0';
+
+	printf("%jd bytes read: \"%s\"\n", (intmax_t)result, buf);
+
+	if ((result = read(fd, buf, 30)) == -1)
+		exit_sys("read");
+	buf[result] = '\0';
+
+	printf("%jd bytes read: \"%s\"\n", (intmax_t)result, buf);
 
 	close(fd);
 
@@ -54016,18 +54076,60 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    User moddan aygıt dosyası betimleyicisi ile lseek işlemi yapıldığında aygıt sürücünün file_operations yapısı içerisine yerleştirilen
-    llseek fonksiyonu çağrılmaktadır. Fonksiyonun parametrik yapısı şöyledir:
+    Aygıt sürücü için write fonksiyonu da tamamen read fonksiyonuna benzer biçimde yazılmaktadır. write fonksiyonu içerisinde
+    biz user moddaki bilgiyi copy_from_user ya da get_user fonksiyonlarıyla alırız. Yine write fonksiyonu da bir sorun çıktığında
+    -EFAULT değeri ile, başarılı sonlanmada ise yazılan (kernel alanına yazılan) byte miktarı ile geri dönmelidir.
 
-    static loff_t generic_llseek(struct file *filp, loff_t off, int whence);
+    Aşağıdaki örnekte aygıt sürücü bellekte oluşturulmuş bir dosya gibi davranmaktadır. Aygıt sürücünün taklit ettiği dosya
+    en fazla 4096 byte olabilmektedir:
 
-    Fonksiyonun birinci parametresi dosya nesnesini, ikinci parametresi konumlandırılmak istenen offset'i üçüncü parametresi ise 
-    konumlandırmanın nereye göre yapılacağını belirtir. Bu fonksiyonu gerçekleştiriken programcı file yapısı içerisindeki f_pos 
-    elemanını güncellemelidir. Tipik olarak programcı whence parametresini switch içerisine alır. Hedeflene offset'i hesaplar ve en sonunda
-    file yapsının f_pos elemanına bu hedeflenen offset'i yerleştirir. Hedeflenen offset uygun değilse fonksiyon tipik olarak -EINVAL değeriyle
-    geri döndürülür. Eğer konumlandırma offset'i başarılı ise fonksiyon dosya gösterivcisinin yenri değerine geri dönmelidir. 
+    #define FILE_MEMORY_MAX_SIZE	4096
+    ...
+    static char g_fmem[FILE_MEMORY_MAX_SIZE];
 
-    Aşağıda llseek fonksiyonunun gerçekleştirilmesine ilişkin bir örnek verilmiştir.
+    Ancak buradaki FILE_MEMORY_MAX_SIZE bellek dosyasının maksimum uzunluğunu belirtmektedir. Bellke dosyasının gerçek 
+    uzunluğu g_fmem_size nesnesinde tutulmaktadır. Aygıt sürücünün write fonksiyonu aşağıdaki gibi yazılmıştır:
+
+    static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
+    {
+        size_t esize;
+
+        esize = *off + size > FILE_MEMORY_MAX_SIZE ? FILE_MEMORY_MAX_SIZE - *off : size;
+        if (copy_from_user(g_fmem + *off, buf, esize) != 0)
+            return -EFAULT;
+
+        *off += esize;
+        if (*off > g_fmem_size)
+            g_fmem_size = *off;
+
+        return esize;
+    }
+
+    Burada yine dosya göstericisinin gösterdiği yerden itibaren yazılmak istenen byte sayısı FILE_MEMORY_MAX_SIZE değerini 
+    aşıyorsa geri kalan miktar kadar yazma yapılmıştır. Burada yine dosya göstericisinin ilerletildiğine dikkat ediniz. 
+    Dosya göstericisinin ilerletilmesi her zaman programcının sorumluluğundadır. Aygıt sürücümüzün read fonksiyonu da 
+    şöyledir:
+
+    static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
+    {
+        size_t esize;
+
+        esize = *off + size > g_fmem_size ? g_fmem_size - *off : size;
+
+        if (copy_to_user(buf, g_fmem + *off, esize) != 0)
+            return -EFAULT;
+
+        *off += esize;
+
+        return esize;
+    }
+
+    Burada da dosya göstericisinin gösterdiği yerden itibaren okunmak istenen byte sayısının g_fmem_size değerinden büyük
+    olup olmadığına bakılmıştır. Yine göstericisi fonksiyon tarafından güncellenmiştir.
+
+    Buradaki aygıt sürücüyü test etmek için "app-write.c" ve "app-read.c" isimli iki ayrı programdan faydalanılmıştır. 
+    "app-write.c" bellek dosyasına yazma yapmakta, "app-read.c" ise bellek dosyasındna okuma yapmaktadır. Bu örnekte bellek 
+    dosyasına yazılanların aygıt sürücü çekirdekte bulunduğu sürece kalıcı olduğuna dikkat ediniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* generic-char-driver.c */
@@ -54036,16 +54138,264 @@ void exit_sys(const char *msg)
 #include <linux/kernel.h>
 #include <linux/fs.h>
 #include <linux/cdev.h>
-#include <linux/uaccess.h>
+
+#define DEV_MAJOR				25
+#define DEV_MINOR				0
+
+#define FILE_MEMORY_MAX_SIZE	4096
 
 MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("General Character Device Driver");
 MODULE_AUTHOR("Kaan Aslan");
+MODULE_DESCRIPTION("General Character Device Driver");
 
-#define DEV_MAJOR		25
-#define DEV_MINOR		0
+static int generic_open(struct inode *inodep, struct file *filp);
+static int generic_release(struct inode *inodep, struct file *filp);
+static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off);
+static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off);
 
-#define BUFFER_SIZE		128
+static struct cdev g_cdev;
+static struct file_operations g_fops = {
+	.owner = THIS_MODULE,
+	.open = generic_open,
+	.read = generic_read,
+	.write = generic_write,
+	.release = generic_release
+};
+static char g_fmem[FILE_MEMORY_MAX_SIZE];
+static size_t g_fmem_size;
+
+static int __init generic_init(void)
+{
+	int result;
+
+	printk(KERN_INFO "generic-char-driver module intitialization...\n");
+
+	if ((result = register_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1, "generic-char-driver")) < 0) {
+		printk(KERN_ERR "cannot register device!..\n");
+		return result;
+	}
+
+	cdev_init(&g_cdev, &g_fops);
+	if ((result = cdev_add(&g_cdev, MKDEV(DEV_MAJOR, DEV_MINOR), 1)) < 0) {
+		unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
+		printk(KERN_ERR "cannot add device!..\n");
+		return result;
+	}
+
+	return 0;
+}
+
+static void __exit generic_exit(void)
+{
+	cdev_del(&g_cdev);
+	unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
+
+	printk(KERN_INFO "generic-char-driver module exit...\n");
+}
+
+static int generic_open(struct inode *inodep, struct file *filp)
+{
+	printk(KERN_INFO "generic-char-driver opened...\n");
+
+	return 0;
+}
+
+static int generic_release(struct inode *inodep, struct file *filp)
+{
+	printk(KERN_INFO "generic-char-driver-closed...\n");
+
+	return 0;
+}
+
+static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
+{
+	size_t esize;
+
+	esize = *off + size > g_fmem_size ? g_fmem_size - *off : size;
+
+	if (copy_to_user(buf, g_fmem + *off, esize) != 0)
+		return -EFAULT;
+
+	*off += esize;
+
+	return esize;
+}
+
+static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
+{
+	size_t esize;
+
+	esize = *off + size > FILE_MEMORY_MAX_SIZE ? FILE_MEMORY_MAX_SIZE - *off : size;
+	if (copy_from_user(g_fmem + *off, buf, esize) != 0)
+		return -EFAULT;
+
+	*off += esize;
+	if (*off > g_fmem_size)
+		g_fmem_size = *off;
+
+	return esize;
+}
+
+module_init(generic_init);
+module_exit(generic_exit);
+
+/* app-write.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int fd;
+	ssize_t result;
+	char buf[5000];
+
+	if ((fd = open("mydriver", O_WRONLY)) == -1)
+		exit_sys("open");
+
+	if ((result = write(fd, "ankara", 6)) == -1)
+		exit_sys("write");
+	printf("%jd bytes written\n", (intmax_t)result);
+
+	if ((result = write(fd, "izmir", 5)) == -1)
+		exit_sys("write");
+	printf("%jd bytes written\n", (intmax_t)result);
+
+	memset(buf, 'x', 5000);
+
+	if ((result = write(fd, buf, 5000)) == -1)
+		exit_sys("write");
+	printf("%jd bytes written\n", (intmax_t)result);
+
+	close(fd);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+# Makefile
+
+ obj-m += ${file}.o
+
+all:
+	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
+clean:
+	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
+
+/* app-read.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#define BUFFER_SIZE		5
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int fd;
+	ssize_t result;
+	char buf[BUFFER_SIZE + 1];
+
+	if ((fd = open("mydriver", O_RDONLY)) == -1)
+		exit_sys("open");
+
+	while ((result = read(fd, buf, BUFFER_SIZE)) > 0) {
+		buf[result] = '\0';
+		printf("%s", buf);
+		fflush(stdout);
+	}
+	putchar('\n');
+
+	if (result == -1)
+		exit_sys("read");
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    User moddan aygıt dosyası betimleyicisi ile lseek işlemi yapıldığında aygıt sürücünün file_operations yapısı içerisine 
+    yerleştirilen llseek fonksiyonu çağrılmaktadır. Fonksiyonun parametrik yapısı şöyledir:
+
+    static loff_t generic_llseek(struct file *filp, loff_t off, int whence);
+
+    Fonksiyonun birinci parametresi dosya nesnesini, ikinci parametresi konumlandırılmak istenen offset'i üçüncü parametresi 
+    ise konumlandırmanın nereye göre yapılacağını belirtmektedir. Bu fonksiyonu gerçekleştirirken programcı file yapısı 
+    içerisindeki f_pos elemanını güncellemelidir. Tipik olarak programcı whence parametresini switch içerisine alır. Hedeflenen 
+    offset'i hesaplar ve en sonunda file yapsının f_pos elemanına bu hedeflenen offset'i yerleştirir. Hedeflenen offset uygun 
+    değilse fonksiyon tipik olarak -EINVAL değeriyle geri döndürülür. Eğer konumlandırma offset'i başarılı ise fonksiyon 
+    dosya göstericisinin yeni değerine geri dönmelidir.
+
+    Aşağıda daha önce yapmış olduğumuz bellek dosyası örneğine llseek fonksiyonu da eklenmiştir. Fonksiyon aşağıdaki gibi 
+    yazılmıştır:
+
+    static loff_t generic_llseek(struct file *filp, loff_t off, int whence)
+    {
+        loff_t newpos;
+
+        switch (whence) {
+            case 0:
+                newpos = off;
+                break;
+            case 1:
+                newpos = filp->f_pos + off;
+                break;
+            case 2:
+                newpos = g_fmem_size + off;
+                break;
+            default:
+                return -EINVAL;
+        }
+
+        if (newpos < 0 || newpos > g_fmem_size)
+            return -EINVAL;
+
+        filp->f_pos = newpos;
+
+        return newpos;
+    }
+
+    Burada önce whence parametresine bakılarak dosya göstericisinin konumlandırlaacağı offse belirlenmiştir. Sonra dosya 
+    nesnesinin f_pos elemanı güncellenmiştir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* generic-char-driver.c */
+
+#include <linux/module.h>
+#include <linux/kernel.h>
+#include <linux/fs.h>
+#include <linux/cdev.h>
+
+#define DEV_MAJOR				25
+#define DEV_MINOR				0
+
+#define FILE_MEMORY_MAX_SIZE	4096
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Kaan Aslan");
+MODULE_DESCRIPTION("General Character Device Driver");
 
 static int generic_open(struct inode *inodep, struct file *filp);
 static int generic_release(struct inode *inodep, struct file *filp);
@@ -54053,126 +54403,114 @@ static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *o
 static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off);
 static loff_t generic_llseek(struct file *filp, loff_t off, int whence);
 
-static dev_t g_dev = MKDEV(DEV_MAJOR, DEV_MINOR);
-static struct cdev *g_cdev;
-static struct file_operations g_file_ops = {
+static struct cdev g_cdev;
+static struct file_operations g_fops = {
 	.owner = THIS_MODULE,
 	.open = generic_open,
-	.release = generic_release,
 	.read = generic_read,
 	.write = generic_write,
 	.llseek = generic_llseek,
+	.release = generic_release
 };
-
-char g_buf[BUFFER_SIZE];
+static char g_fmem[FILE_MEMORY_MAX_SIZE];
+static size_t g_fmem_size;
 
 static int __init generic_init(void)
 {
 	int result;
 
-	if ((result = register_chrdev_region(g_dev, 1, "generic-char-driver")) < 0) {
-		printk(KERN_INFO "Cannot register driver!...\n");
+	printk(KERN_INFO "generic-char-driver module intitialization...\n");
+
+	if ((result = register_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1, "generic-char-driver")) < 0) {
+		printk(KERN_ERR "cannot register device!..\n");
 		return result;
 	}
 
-	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!..\n");
-		return -ENOMEM;
-	}
-
-	g_cdev->owner = THIS_MODULE;
-	g_cdev->ops = &g_file_ops;
-
-	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
-		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+	cdev_init(&g_cdev, &g_fops);
+	if ((result = cdev_add(&g_cdev, MKDEV(DEV_MAJOR, DEV_MINOR), 1)) < 0) {
+		unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
+		printk(KERN_ERR "cannot add device!..\n");
 		return result;
 	}
-
-	printk(KERN_INFO "Success...\n");
 
 	return 0;
 }
 
 static void __exit generic_exit(void)
 {
-	cdev_del(g_cdev);
-	unregister_chrdev_region(g_dev, 1);
+	cdev_del(&g_cdev);
+	unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
 
-	printk(KERN_INFO "Goodbye...\n");
+	printk(KERN_INFO "generic-char-driver module exit...\n");
 }
 
 static int generic_open(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Generic device opened!..\n");
+	printk(KERN_INFO "generic-char-driver opened...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Generic device released!..\n");
+	printk(KERN_INFO "generic-char-driver-closed...\n");
 
 	return 0;
 }
 
 static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
 {
-	size_t asize;
+	size_t esize;
 
-	asize = size + *off > BUFFER_SIZE ? BUFFER_SIZE - *off : size;
+	esize = *off + size > g_fmem_size ? g_fmem_size - *off : size;
 
-	if (copy_to_user(buf, g_buf + *off, asize) != 0)
+	if (copy_to_user(buf, g_fmem + *off, esize) != 0)
 		return -EFAULT;
 
-	*off += asize;
+	*off += esize;
 
-	printk(KERN_INFO "Reading...\n");
-
-	return asize;
+	return esize;
 }
 
 static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
 {
-	size_t asize;
+	size_t esize;
 
-	asize = size + *off > BUFFER_SIZE ? BUFFER_SIZE - *off : size;
-	if (copy_from_user(g_buf + *off, buf, asize) != 0)
+	esize = *off + size > FILE_MEMORY_MAX_SIZE ? FILE_MEMORY_MAX_SIZE - *off : size;
+	if (copy_from_user(g_fmem + *off, buf, esize) != 0)
 		return -EFAULT;
 
-	*off += asize;
+	*off += esize;
+	if (*off > g_fmem_size)
+		g_fmem_size = *off;
 
-	printk(KERN_INFO "Writing...\n");
-
-	return asize;
+	return esize;
 }
 
 static loff_t generic_llseek(struct file *filp, loff_t off, int whence)
 {
-	loff_t toff;
+	loff_t newpos;
 
 	switch (whence) {
-		case SEEK_SET:
-			toff = off;
+		case 0:
+			newpos = off;
 			break;
-		case SEEK_CUR:
-			toff = filp->f_pos + off;
+		case 1:
+			newpos = filp->f_pos + off;
 			break;
-		case SEEK_END:
-			toff = BUFFER_SIZE + off;
+		case 2:
+			newpos = g_fmem_size + off;
 			break;
 		default:
 			return -EINVAL;
 	}
 
-	if (toff > BUFFER_SIZE || toff < 0)
+	if (newpos < 0 || newpos > g_fmem_size)
 		return -EINVAL;
 
-	filp->f_pos = toff;
+	filp->f_pos = newpos;
 
-	printk(KERN_INFO "file pointer positioning...\n");
-
-	return toff;
+	return newpos;
 }
 
 module_init(generic_init);
@@ -54180,18 +54518,18 @@ module_exit(generic_exit);
 
 # Makefile
 
-	obj-m += $(file).o
+ obj-m += ${file}.o
 
 all:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
-/* sample.c */
+/* app.c */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <stdint.h>
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -54200,35 +54538,46 @@ void exit_sys(const char *msg);
 int main(void)
 {
 	int fd;
-	char wbuf[100] = "0123456789012345678901234567890";
-	char rbuf[100];
 	ssize_t result;
+	char buf[4096];
 
-	if ((fd = open("generic", O_RDWR)) == -1)
+	if ((fd = open("mydriver", O_RDWR)) == -1)
 		exit_sys("open");
 
-	if ((result = write(fd, wbuf, strlen(wbuf))) == -1)
+	if ((result = write(fd, "ankara", 6)) == -1)
 		exit_sys("write");
 
-	printf("%ld bytes written...\n", (long)result);
+	printf("%jd bytes written\n", (intmax_t)result);
 
-	if (lseek(fd, 0, SEEK_SET) == -1)
+	if ((result = write(fd, "izmir", 5)) == -1)
+		exit_sys("write");
+
+	printf("%jd bytes written\n", (intmax_t)result);
+
+	if (lseek(fd, 0, 0) == -1)
 		exit_sys("lseek");
 
-	if ((result = read(fd, rbuf, 10)) == -1)
-		exit_sys("read");
-	rbuf[result] = '\0';
+	if ((result = read(fd, buf, 8)) == -1)
+		exit_sys("write");
+	buf[result] = '\0';
 
-	printf("%ld bytes read: %s\n", result, rbuf);
+	printf("%s\n", buf);
 
-	if (lseek(fd, -5, SEEK_CUR) == -1)
+	if (lseek(fd, -2, 1) == -1)
 		exit_sys("lseek");
 
-	if ((result = read(fd, rbuf, 10)) == -1)
+	if ((result = read(fd, buf, 8)) == -1)
 		exit_sys("read");
-	rbuf[result] = '\0';
+	buf[result] = '\0';
 
-	printf("%ld bytes read: %s\n", result, rbuf);
+	if (lseek(fd, -2, 2) == -1)
+		exit_sys("lseek");
+
+	if ((result = read(fd, buf, 8)) == -1)
+		exit_sys("read");
+	buf[result] = '\0';
+
+	printf("%s\n", buf);
 
 	close(fd);
 
@@ -54243,24 +54592,34 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Biz şimdiye kadarki örneklerimizde aygıt sürücümüzün majör ve minör numarasını batan belirledik. Bunun en önemli sakıncası zaten o numaralı
-    bir aygıt sürücünün yüklü olarak bulunuyor olmasıdır. Bu durumda aygıt sürücümüz yüklenemeyecektir. Aslında daha doğru bir strateji tersten
-    gitmektir. Yani önce aygıt sürücümüz içerisinde biz boş bir aygıt numarasını bulup onu kullanmalıyız. Sonra user moddan bu numaralı bir aygıt
-    dosyası yaratmalıyız.
+    Biz şimdiye kadarki örneklerimizde aygıt sürücümüzün majör ve minör numarasını baştan belirledik. Bunun en önemli sakıncası 
+    zaten o numaralı bir aygıt sürücünün yüklü olarak bulunuyor olmasıdır. Bu durumda aygıt sürücümüz yüklenemeyecektir. Aslında 
+    daha doğru bir strateji tersten gitmektir. Yani önce aygıt sürücümüz içerisinde biz boş bir aygıt numarasını bulup onu 
+    kullanabiliriz. Tabii sonra user moddan bu aygıt numarasına ilişkin bir aygıt dosyasını da yaratmamız gerekir.
 
-    Boş bir aygıt numarasını bize veren alloc_chrdev_region isimli bir kernel fonksiyonu vardır. Fonksiyonun parametrik yapısı şöyledir:
+    Boş bir aygıt numarasını bize veren alloc_chrdev_region isimli bir kernel fonksiyonu vardır. Fonksiyonun parametrik yapısı 
+    şöyledir:
 
     int alloc_chrdev_region(dev_t *dev, unsigned baseminor, unsigned count, const char *name);
 
-    Fonksiyonun birinci parametresi boş aygıt numarasının yerleştirileceği dev_t nesnesinin adresini alır. İkinci ve üçüncü parametreler başlangıç
-    minör numarası ve onun sayısıdır. Son parametre ise aygıt rüsücünün /proc/devices dosyasında ve /sys/dev dizininde görüntülenecek ismini 
-    belirtir. alloc_chrdev_region fonksiyonu zaten register_chrdev_region fonksiyonun yaptığını da yapmaktadır. Dolayısıyla bu iki fonksiyondan
-    yalnızca biri kullanılmalıdır. Fonksiyon başarı durumunda 0 başarısızlık durumunda negatif errno değerine geri döner.
+    Fonksiyonun birinci parametresi boş aygıt numarasının yerleştirileceği dev_t nesnesinin adresini alır. İkinci ve üçüncü 
+    parametreler başlangıç minör numarası ve onun sayısını belirtir. Son parametre ise aygıt sürücüsünün "/proc/devices" dosyasında 
+    ve "/sys/dev" dizininde görüntülenecek olan ismini belirtmektedir. alloc_chrdev_region fonksiyonu zaten register_chrdev_region 
+    fonksiyonun yaptığını da yapmaktadır. Dolayısıyla bu iki fonksiyondan yalnızca biri kullanılmalıdır. Fonksiyon başarı durumunda 
+    0 değerine başarısızlık durumunda negatif errno değerine geri döner. Örneğin:
 
-    Aygıt sürücümüzde alloc_chrdev_region fonksiyonu ile boş bir majör numara numaranın bulunup augıt sürücümüzün register ettirildiğini düşünelim.
-    Pekiyi biz bu numaraya nasıl bilip bu numaraya uygun aygıt dosyası yaratacağız? İşte bunun genellikle izlenen yöntem /proc/devices dosyasına bakıp
-    oradan majör numarayı alıp aygıt dosyasını yaratmaktır. Tabii bu manuel olarak yapılabilir ancak bir shell script ile otomatize de edilebilir. 
-    Aşağıdaki load isimli script bu işlemi yapmaktadır.
+    dev_t g_dev;
+    ...
+
+	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "generic-char-driver")) < 0) {
+		printk(KERN_ERR "cannot register device!..\n");
+		return result;
+	}
+
+    Aygıt sürücümüzde alloc_chrdev_region fonksiyonu ile boş bir majör numara numaranın bulunup aygıt sürücümüzün register 
+    ettirildiğini düşünelim. Pekiyi biz bu numarayı nasıl bilip bu numaraya uygun aygıt dosyası yaratacağız? İşte bunun için genellikle 
+    izlenen yöntem "/proc/devices" dosyasına bakıp oradan majör numarayı alıp aygıt dosyasını yaratmaktır. Tabii bu manuel olarak 
+    yapılabilir ancak bir shell script ile otomatize de edilebilir. Aşağıdaki "load" isimli script bu işlemi yapmaktadır:
 
     #!/bin/bash
 
@@ -54273,13 +54632,16 @@ void exit_sys(const char *msg)
     mknod $module c $major 0
     chmod $mode $module
 
-    Artık biz bu load script'i ile aygıt sürücümüzü yükleyip aygıt dosyasımızı yaratacağız. Bu script'i load ismiyle yazıp aşağıdaki gibi x hakkı vermelisiniz:
+    Artık biz bu load script'i ile aygıt sürücümüzü yükleyip aygıt dosyasımızı yaratacağız. Bu script'i load ismiyle yazıp 
+    aşağıdaki gibi x hakkı vermelisiniz:
 
     chmod +x load
 
+    <BURADA KALDIK>
+
     Çalıştırmayı komut satırı argümanı vererek aşağıdaki gibi yapmalısınız:
 
-    ./load generic-char-driver
+    sudo ./load generic-char-driver
 
     Aşağıdaki örnekte majör numara alloc_chrdev_region fonksiyonuyla elde edilmiştir. Yüklemyi load scripti ile yapınız.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -60934,12 +61296,12 @@ chmod $mode $module
     İşte onların yniden sıralanması gibi faaliyetler IO çizelgeleycisinin önemli görevleerindendir. 
 
     Blok aygıt sürücüleri bazı bakımlardan karakter aygıt aygıt sürücülerine benzese de bu IO çizelgelemesi yüzünden tasarımsal farklılıklara sahiptir. Karakter aygıt sürücülerinde
-    her read ve write işlemi için bir IO çizelgelemesi yapılmadan aygıt sürücünün fonksiyonları çağrılmaktadır. Çünkü karakter aygıt srücülerinde neticede disk gibi zaman alıcı birimler
+    her read ve write işlemi için bir IO çizelgelemesi yapılmadan aygıt sürücünün fonksiyonları çağrılmaktadır. Çünkü karakter aygıt sürücülerinde neticede disk gibi zaman alıcı birimler
     ile uğraşılmamaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Blok aygıt srücünde de ilk yapılacak işlem blok aygıt sürücüsünün bir isim altında aygıt numarası belirtilerek register ettirilmesidir. 
+    Blok aygıt sürücünde de ilk yapılacak işlem blok aygıt sürücüsünün bir isim altında aygıt numarası belirtilerek register ettirilmesidir. 
     Bu işlem register_blkdev fonkiyonuyla yapılmaktadır:
 
     int register_blkdev(unsigned int major, const char *name);
