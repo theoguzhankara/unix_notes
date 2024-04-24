@@ -52937,7 +52937,7 @@ clean:
 
     int mknodat(int fd, const char *path, mode_t mode, dev_t dev);
 
-    Bu at'li versiyon daha önce görmüş dolduğumuz at'li fonksiyonlar gibi çalışmaktadır. Yani fonksiyon ilgili dizine ilişkin 
+    Bu at'li versiyon daha önce görmüş olduğumuz at'li fonksiyonlar gibi çalışmaktadır. Yani fonksiyon ilgili dizine ilişkin 
     dosya betimleyicisini ve göreli yol ifadesini parametre olarak alır. O dizinden göreli biçimde yol ifadesini oluşturur. 
     Yine fonksiyonun birinci parametresine AT_FDCWD özel değeri geçilebilir. Bu durumda fonksiyon at'siz versiyondaki gibi 
     çalışır. Diğer at'li fonksiyonlarda olduğu gibi bu fonksiyonun da ikinci parametresindeki yol ifadesi mutlak ise birinci 
@@ -52948,7 +52948,7 @@ clean:
 
     Aşağıdaki aygıt dosyası yaratan mymknode isimli bir fonksiyon yazılmıştır. Fonksiyonun genel kullanımı şöyledir:
 
-    ./mymknod [-m ya da --mode <erişim hakları>] <path> [c ya da b] <majör numara> <minör numara>
+    ./mymknod [-m ya da --mode <erişim hakları>] <path> <c ya da b> <majör numara> <minör numara>
 
     Örnek bir çalıştırma şöyle olabilir:
 
@@ -53067,16 +53067,16 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Aslında yukarıda yazdığımız mymknod programının aynısı zaten mknod isimli kabuk komutu biçimide bulunmaktadır. Bu komutun
+    Aslında yukarıda yazdığımız mymknod programının aynısı zaten mknod isimli kabuk komutu biçiminde bulunmaktadır. Bu komutun
     genel biçimi şöyledir:
 
-    sudo mknod [-m ya da --mode <erişim hakları] <dosya ismi> <c ya da b> <majör numara> <minör numara>
+    sudo mknod [-m ya da --mode <erişim hakları>] <dosya ismi> <c ya da b> <majör numara> <minör numara>
 
     Örneğin:
 
     sudo mknod devfile c 25 0
 
-    mknod komutunu sodu ile çalıştırmayı unutmayınız. Yukarıdaki komut uygulandığında oluşturulan dosya şöyle olacaktır:
+    mknod komutunu sudo ile çalıştırmayı unutmayınız. Yukarıdaki komut uygulandığında oluşturulan dosya şöyle olacaktır:
 
     crw-rw-rw- 1 root root 25, 0 Mar 29 22:05 mydriver
 
@@ -53084,17 +53084,17 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Bir kernel modülün karakter aygıt sürücüsü haline getirilebilmesi için öncelikle bir aygıt numarasıyla (majör ve minör 
-    numara ile) temsil edilip çekirdeğe kaydettirilmesi (register ettirlmesi) gerekmektedir. Bu işlem tipik olarak 
-    register_chrdev_region isimli fonksiyonla yapılır. Fonksiyonun prototpi şöyledir:
+    numara ile) temsil edilip çekirdeğe kaydettirilmesi (register ettirilmesi) gerekmektedir. Bu işlem tipik olarak 
+    register_chrdev_region isimli fonksiyonla yapılır. Fonksiyonun prototipi şöyledir:
 
     #include <linux/fs.h>
 
-    int register_chrdev_region(dev_t from, unsigned count, const char *name)
+    int register_chrdev_region(dev_t from, unsigned count, const char *name);
 
     Fonksiyonun birinci parametresi aygıt sürücünün majör ve minör numaralarına ilişkin dev_t türünden değeri almaktadır. Bu 
     parametre için argüman genellikle MKDEV makrosuyla oluşturulmaktadır. MKDEV makrosu majör ve minör numarayı argüman olarak alıp 
     bundan dev_t türünden aygıt numarası oluşturmaktadır. Fonksiyonun ikinci parametresi ilk parametrede belirtilen minör numaradan 
-    itibaren kaç minör numaranın kaydettirileceğini belirtmektedir. Örneğin biz majör= 20, minör=0'dan itibaren 5 minör numarayı 
+    itibaren kaç minör numaranın kaydettirileceğini belirtmektedir. Örneğin biz majör=20, minör=0'dan itibaren 5 minör numarayı 
     kaydettirebiliriz. Fonksiyonun son parametresi proc ve sys dosya sistemlerindeki görüntülenecek olan aygıt sürücünün ismini 
     belirtmektedir. Kernel modüllerin isimleri kernel modül dosyasından gelmektedir. Ancak karakter aygıt sürücülerinin isimlerini 
     biz istediğimiz gibi veririz. Tabii her aygıt sürücü bir kernel modül biçiminde yazılmak zorundadır.
@@ -53103,7 +53103,7 @@ void exit_sys(const char *msg)
 
     register_chrdev_region fonksiyonu ile register ettirilen majör ve minör numaralar unregister_chrdev_region fonksiyonuyla 
     geri bırakılmalıdır. Aksi halde modül kernel alanından rmmod komutuyla atılsa bile bu aygıt numaraları tahsis edilmiş bir biçimde 
-    kalmaya devam etmektedir. unregister_chrdev_region fonksiyonun prototipi şöyledir:
+    kalmaya devam etmektedir. unregister_chrdev_region fonksiyonunun prototipi şöyledir:
 
     #include <linux/fs.h>
 
@@ -55829,7 +55829,6 @@ chmod $mode $module
 
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-
 /*--------------------------------------------------------------------------------------------------------------------------
     Bir thread nasıl bloke olmaktadır? Aslında bloke olma demek kabaca ilgi thread'i (yani task_struct nesnesini) Run kuyruğundan
     çıkartarak bir wait kuyruğuna yerleştirmek demektir. Pekiyi wait kuyrukları nerededir ve biz bir thread'i wait kuyruklarına nasıl yerleştirip
@@ -57258,7 +57257,6 @@ chmod $mode $module
     64 Bit Linux sistemlerinde çekirdeğin sanal bellek alanı 128 TB olduğu için bu 128'TB'nin başından itibaren tüm fiziksel RAM haritalandırılmıştır. Dolayısıya 
     64 bit Linux sistemlerinde "normal memory zone" tüm fiziksel RAM'i kapsamaktadır. 64 bit Linuz sistemlerinde "high memory zone" yoktur.
 
-
     Biz kernel modda kod yazarken belli bir fiziksel adrese erişmek istersek onun sanal adresini bulmamız gerekir. Bu işin manuel yapılması yerine bunun için
     __va isimli makro kullanılmaktadır. Biz bu makroya bir fiziksel adres veririz o da bize o fiziksel adrese erişmek için gereken sanal adresi verir. Benzer biçimde
     bir sanal adresin fiziksel RAM karşılığını bulmak için de __pa makrosu kullanılmaktadır. Biz bu makroya sanal adresi veririz o da bize o sanal adresin aslında
@@ -58523,7 +58521,6 @@ done
     Bu fonksiyon başarı durumunda 0 değerine başarısızlık durumunda negatif hata koduna geri dönmelidir. Fakat bazen programcı doğrudan iletilecek değeri 
     geri dönüş değeri biçiminde oluşturabilir. Bu durumda geri dönüş değeri pozitif değer olabilir.
 
-
     ioctl işleminde fonksiyonun ikinci parametresi olan kontrol kodu belli bir biçime göre (konvansiyona göre) oluşturulmaktadır. Bu biçime göre
     kontrol kodu toplam 32 bitlik dört parçadan oluşturulmalıdır. Bu dört parça istenirse _IOC isimli makro ile birleştirilebilir. Bu makro şu 
     parametrelere sahiptir:
@@ -58613,7 +58610,6 @@ static int generic_release(struct inode *inodep, struct file *filp);
 static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off);
 static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off);
 long generic_ioctl(struct file *filp, unsigned int cmd, unsigned long arg);
-
 
 static dev_t g_dev;
 static struct file_operations g_file_ops = {
@@ -61143,7 +61139,6 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
-
 #!/bin/bash
 
 module=$1
@@ -61190,7 +61185,6 @@ chmod $mode $module
     outb(cmd2, port2);
 
 ---------------------------------------------------------------------------------------------------------------------------*/
-
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Memory Mapped IO işlemi pek çok mimaride göstericilerle yapılabilmektedir. Yani aslında bu mimarilerde bunlar için özel kernel fonksiyonlarının
@@ -61357,15 +61351,6 @@ all:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
-
-
-obj-m += $(file).o
-
-all:
-	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
-clean:
-	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
-
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Blok aygıt sürücülerine deneme amaçlı verilebilecek en iyi örneklerden birisi "ramdisk"lerdir. Ramdisk pek çok sistemde bulunan
@@ -61846,7 +61831,6 @@ static int generic_open(struct block_device *bdev, fmode_t mode);
 static void generic_release(struct gendisk *gdisk, fmode_t mode);
 static void request_proc(struct request_queue *rq);
 static void transfer_block(struct BLOCKDEV *bdev, sector_t sector, char *buf, size_t len, int direction);
-
 
 static struct block_device_operations g_devops = {
 	.owner = THIS_MODULE,
