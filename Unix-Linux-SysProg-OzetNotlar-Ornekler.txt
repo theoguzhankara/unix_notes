@@ -16456,8 +16456,8 @@ void exit_sys(const char *msg)
     Eğer açış bayrağında O_CREAT belirtilmişse bu durumda programcının fonksiyona iki argüman daha girmesi gerekir. Tabii eğer 
     nesne varsa bu iki argüman zaten kullanılmayacaktır. Yani bu argüman IPC nesnesi yaratılacaksa (yoksa) kullanılmaktadır. 
     Mesaj kuyruğu yaratılırken erişim haklarını tıpkı dosyalarda olduğu gibi kuyruğu yaratan kişi S_IXXX sembolik sabitleriyle
-    (ya da 2008 sonrasında doğrudan sayısal biçimde) vermelidir. Eğer mesaj kuyruğu yaratılacaksa son parametre mq_attr isimli yapı türünden 
-    bir nesnenin adresi biçiminde girilmelidir. mq_attr yapısı şöyle bildirilmiştir:
+    (ya da 2008 sonrasında doğrudan sayısal biçimde) vermelidir. Eğer mesaj kuyruğu yaratılacaksa son parametre mq_attr isimli 
+    yapı türünden bir nesnenin adresi biçiminde girilmelidir. mq_attr yapısı şöyle bildirilmiştir:
 
     struct mq_attr {
         long mq_flags;       /* Flags: 0 or O_NONBLOCK */
@@ -16486,6 +16486,18 @@ void exit_sys(const char *msg)
     fonksiyonun geri dönüş değerini mqd_t türüyle temsil etmiştir. Bu durum değişik çekirdeklerde mesaj kuyruklarının dosya sisteminin dışında
     başka biçimlerde de gerçekleştirilebileceği anlamına gelmektedir. POSIX standartlarına göre mqd_t herhangi bir tür olarak (yapı da dahil olmak üzere)
     <mqueue.h> dosyasında typedef edilebilir. 
+
+    Örneğin:
+
+	mqd_t mqdes;
+	struct mq_attr attr;
+
+	attr.mq_maxmsg = 10;
+	attr.mq_msgsize = 32;
+
+	if ((mqdes = mq_open(MSGQUEUE_NAME, O_WRONLY|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH, &attr)) == -1)
+		exit_sys("mq_open");
+
 
     2) POSIX mesaj kuyruğuna mesaj yollamak için mq_send fonksiyonu kullanılmaktadır. Fonksiyonun prototipi şöyledir:
 
@@ -17444,7 +17456,7 @@ void exit_sys(const char *msg)
     aslında fonksiyon herhangi bir şey yapmayacaktır. Yani aslında ftruncate fonksiyonu paylaşılan bellek alanı ilk kez yaratılırken 
     bir kez çağrılır. Ancak yukarıda da belirttiğimiz gibi aynı uzunlukta ftruncate işleminin bir etkisi yoktur. 
 
-    POSIX paylaşılan bellek alanı nesneleri Linux'ta dosya sisteminde /dev/shm dizini içerisinde görüntülenmektedir. Yani programcı 
+    POSIX paylaşılan bellek alanı nesneleri Linux'ta dosya sisteminde "/dev/shm" dizini içerisinde görüntülenmektedir. Yani programcı 
     isterse bu dizin içerisindeki nesneleri komut satırında rm komutuyla silebilir. 
 
     3) Artık paylaşılan bellek alanı nesnesinin belleğe "map" edilmesi gerekmektedir. (Klasik Sistem 5 paylaşılan bellek alanlarında 
@@ -53143,7 +53155,7 @@ static int __init generic_init(void)
 {
 	int result;
 
-	printk(KERN_INFO "generic-char-driver module intitialization...\n");
+	printk(KERN_INFO "generic-char-driver module initialization...\n");
 
 	if ((result = register_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1, "generic-char-driver")) < 0) {
 		printk(KERN_ERR "cannot register device!..\n");
