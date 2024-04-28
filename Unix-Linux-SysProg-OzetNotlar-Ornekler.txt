@@ -10,7 +10,7 @@
 
                             (Notları okurken editörünüzün "Line Wrapping" özelliğini pasif hale getiriniz.)
 
-                                                    Son Güncelleme: 21/04/2024
+                                                    Son Güncelleme: 28/04/2024
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -2875,7 +2875,7 @@ void exit_sys(const char *msg)
     Dosya türünün tespiti için ikinci yöntem st_mode içerisindeki dosya tür bitlerinin S_IFMT sembolik sabiti ile bit AND işlemi ile 
     elde edilip aşağıdaki sembolik sabitlerle karşılaştırılmasıdır. 
 
-    S_IFBLK         Blok aygır dosyası
+    S_IFBLK         Blok aygıt dosyası
     S_IFCHR         Karakter aygıt dosyası
     S_IFIFO         Boru dosyası
     S_IFREG         Sıradan disk dosyası
@@ -7267,7 +7267,7 @@ int main(void)
 
     Pekiyi fopen tarafından bu FILE yapısı nasıl tahsis edilmektedir? Standart C kütüphanelerini yazanlar birkaç teknik 
     kullanabilmektedir. Birincisi doğrudan tahsisatın malloc fonksiyonu ile yapılmasıdır. Tabii bu durumda free işlemi fclose 
-    fonksiyonu tarafından yapılacaktır. İkincisi bu FILE yapsı zaten işin başında static düzeyde tahsis edilmiş bir FILE 
+    fonksiyonu tarafından yapılacaktır. İkincisi bu FILE yapısı zaten işin başında static düzeyde tahsis edilmiş bir FILE 
     dizisinin içerisinde alınabilir. Örneğin:
 
     static FILE g_files[FILE_MAX];
@@ -12651,7 +12651,7 @@ void exit_sys(const char *msg)
     İki prosesin sayfa tablosunda Fiziksel Sayfa Numaraları birbirinden ayrıldığında zaten bu iki proses asla birbirlerinin 
     alanlarına erişemeyecektir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
-<BURADA KALDIK>
+
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi 32 bit bir mimaride işletim sisteminin sayfa tablosu yukarıdaki şekillere göre ne kadar yer kaplar? 32 bit mimaride
     fiziksel RAM en fazla 4GB olabilir. Proseslerin sanal bellek alanları da 4GB'dir. O halde toplam sayfa sayısı 
@@ -16497,7 +16497,6 @@ void exit_sys(const char *msg)
 
 	if ((mqdes = mq_open(MSGQUEUE_NAME, O_WRONLY|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH, &attr)) == -1)
 		exit_sys("mq_open");
-
 
     2) POSIX mesaj kuyruğuna mesaj yollamak için mq_send fonksiyonu kullanılmaktadır. Fonksiyonun prototipi şöyledir:
 
@@ -47272,7 +47271,7 @@ int main(void)
 	if (WIFEXITED(status))
 		printf("Shell exits normally with exit code: %d\n", WEXITSTATUS(status));
 	else
-		printf("shell exits abnormally!..\n");
+		printf("shell exits abnormally!...\n");
 
 	close(fdsin[0]);
 	close(fdsout[1]);
@@ -52316,7 +52315,7 @@ clean:
     gibi düşünülebilir.) Default çağrılacak fonksiyonun ismi cleanup_module biçimindedir. Bu fonksiyonun geri dönüş değeri ve 
     parametresi void biçimdedir.
 
-    Kernel modüller tıpkı daha önce görmüş olduğumuz deamon'lar gibi ekrana değil log dosyalarına yazarlar. Bunun için kernel 
+    Kernel modüller tıpkı daha önce görmüş olduğumuz daemon'lar gibi ekrana değil log dosyalarına yazarlar. Bunun için kernel 
     içindeki printk isimli fonksiyon kullanılmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -53027,7 +53026,7 @@ int main(int argc, char *argv[])		/* ./mymknod [-m <mode>] <path> <type> <major>
 
 	if (m_flag) {
 		if (!ismode_correct(m_arg)) {
-			fprintf(stderr, "incorrect mode argument!..\n");
+			fprintf(stderr, "incorrect mode argument!...\n");
 			exit(EXIT_FAILURE);
 		}
 		sscanf(m_arg, "%o", &mode);
@@ -53129,13 +53128,13 @@ void exit_sys(const char *msg)
     "/proc/devices" dosyasındaki satır silinmektedir.
 
     Aşağıdaki örnekte kernel modülün init fonksiyonunda register_chrdev_region fonksiyonu ile Majör: 25, Minor:1 olacak biçimde 
-    bir aygır numarası kernel'a kaydettirilmiştir. Bu kayıt modülün exit fonksiyonunda unregister_chrdev_region fonksiyonu 
+    bir aygıt numarası kernel'a kaydettirilmiştir. Bu kayıt modülün exit fonksiyonunda unregister_chrdev_region fonksiyonu 
     ile silinmiştir. Kernel modülü aşağıdaki gibi derleyebilirsiniz:
 
     $ make file=generic-char-driver
 
     Modülü install ettikten sonra "/proc/modules" ve "/proc/devices" dosyalarına bakınız. "proc/devices" dosyasında aygıt
-    sürücünün belirlediğiiz isimle kaydettirildiğini göreceksiniz.
+    sürücünün belirlediğimiz isimle kaydettirildiğini göreceksiniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* generic-char-driver.c */
@@ -53158,7 +53157,7 @@ static int __init generic_init(void)
 	printk(KERN_INFO "generic-char-driver module initialization...\n");
 
 	if ((result = register_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1, "generic-char-driver")) < 0) {
-		printk(KERN_ERR "cannot register device!..\n");
+		printk(KERN_ERR "cannot register device!...\n");
 		return result;
 	}
 
@@ -53210,13 +53209,13 @@ clean:
     çekirdek fonksiyonuyla çekirdeğin heap sistemi (slab allocator) kullanılarak dinamik bir biçimde tahsis edilebilir. (İşletim 
     sistemlerinin çekirdeğinin ayrı bir heap sistemi vardır. Linux çekirdeğinde spesifik türden nesnelerin hızlı tahsis edilmesi 
     için "slab allocator" denilen bir heap sistemi kullanılmaktadır.) Eğer bu yapı nesnesi programcı tarafından global bir biçimde 
-    tanımlanacaksa yapının elemanlarına ilkdeğer vermek için cdev_init fonksiyonu çağrılmalıdır. Eğer cdev yapısı cdev_alloc fonksiyouyla 
-    dinamik bir biçimde tahsis edilecekse bu işlem cdev_init yapılmaz, çünkü zaten cdev_alloc bu işlemi de yapmaktadır. Fakat yine 
+    tanımlanacaksa yapının elemanlarına ilkdeğer vermek için cdev_init fonksiyonu çağrılmalıdır. Eğer cdev yapısı cdev_alloc fonksiyonuyla 
+    dinamik bir biçimde tahsis edilecekse bu işlem cdev_init ile yapılmaz, çünkü zaten cdev_alloc bu işlemi de yapmaktadır. Fakat yine 
     de programcının bu kez manuel olarak bu yapının bazı elemanlarına değer ataması gerekir. Bu iki yoldan biriyle oluşturulmuş olan 
-    cdev yapısının en sonunda cdev_add isimli fonkiyonla çekirdek veri yapılarına yerleştirilmeleri gerekir. Tabii aygıt sürücü 
-    boşaltılırken bu yerleştirme işlemi cdev_del fonksiyonuyla geri alınmalıdır. cdev_del fonksiyonu struct cdev yapısı cdev_alloc
+    cdev yapısının en sonunda cdev_add isimli fonksiyonla çekirdek veri yapılarına yerleştirilmeleri gerekir. Tabii aygıt sürücü 
+    boşaltılırken bu yerleştirme işlemi cdev_del fonksiyonuyla geri alınmalıdır. cdev_del fonksiyonu, struct cdev yapısı cdev_alloc
     ile tahsis edilmişse aynı zamanda onu free hale de getirmektedir. Özetle çekirdek modülümüzün tam bir karakter aygıt sürücüsü haline 
-    geitirilmesi için şunlar yapılmalıdır:
+    getirilmesi için şunlar yapılmalıdır:
 
     1) struct cdev isimli bir yapı türünden nesne global olarak (statik ömürlü olarak) tanımlanmalı ya da cdev_alloc fonksiyonu ile
     çekirdeğin heap sistemi içerisinde tahsis edilmelidir. Eğer bu nesne global olarak tanımlanacaksa nesneye cdev_init fonksiyonu 
@@ -53229,13 +53228,13 @@ clean:
     3) Çekirdek modülü çekirdek alanından atılırken modülün exit fonksiyonunda cdev_add işleminin geri alınması için cdev_del 
     fonksiyonunun çağrılması gerekmektedir.
 
-    cdev_init fonksiyonun parametrik yapısı şöyledir:
+    cdev_init fonksiyonunun parametrik yapısı şöyledir:
 
     #include <linux/cdev.h>
 
     void cdev_init(struct cdev *cdev, const struct file_operations *fops);
 
-    Fonksiyonun birinci parametresi ilkdeğer verilecek global cdev nesnenin adresini alır. İkinci parametre ise file_operations 
+    Fonksiyonun birinci parametresi ilkdeğer verilecek global cdev nesnesinin adresini alır. İkinci parametre ise file_operations 
     türünden bir yapı nesnesinin adresi almaktadır. file_operations isimli yapı birtakım fonksiyon adreslerinden oluşmaktadır. 
     Yani yapının tüm elemanları birer fonksiyon göstericisidir. Bu yapı user moddaki program tarafından ilgili aygıt dosyası 
     açılıp çeşitli işlemler yapıldığında çağrılacak fonksiyonların adreslerini tutmaktadır. Örneğin user moddaki program open, 
@@ -53269,16 +53268,13 @@ clean:
         ssize_t (*splice_write)(struct pipe_inode_info *, struct file *, loff_t *, size_t, unsigned int);
         ssize_t (*splice_read)(struct file *, loff_t *, struct pipe_inode_info *, size_t, unsigned int);
         int (*setlease)(struct file *, long, struct file_lock **, void **);
-        long (*fallocate)(struct file *file, int mode, loff_t offset,
-                loff_t len);
+        long (*fallocate)(struct file *file, int mode, loff_t offset, loff_t len);
         void (*show_fdinfo)(struct seq_file *m, struct file *f);
     #ifndef CONFIG_MMU
         unsigned (*mmap_capabilities)(struct file *);
     #endif
-        ssize_t (*copy_file_range)(struct file *, loff_t, struct file *,
-                loff_t, size_t, unsigned int);
-        loff_t (*remap_file_range)(struct file *file_in, loff_t pos_in,
-                    struct file *file_out, loff_t pos_out,
+        ssize_t (*copy_file_range)(struct file *, loff_t, struct file *, loff_t, size_t, unsigned int);
+        loff_t (*remap_file_range)(struct file *file_in, loff_t pos_in, struct file *file_out, loff_t pos_out,
                     loff_t len, unsigned int remap_flags);
         int (*fadvise)(struct file *, loff_t, loff_t, int);
     };
@@ -53305,14 +53301,14 @@ clean:
 
     struct cdev *cdev_alloc(void);
 
-    Fonksiyon başarı durumunda cdev yapısının adresine başarısılık durumunda NULL adrese geri dönmektedir. Yukarıda da belirtildiğimiz
+    Fonksiyon başarı durumunda cdev yapısının adresine, başarısızlık durumunda NULL adrese geri dönmektedir. Yukarıda da belirttiğimiz
     gibi cdev yapısı cdev_alloc ile tahsis edilmişse cdev_init yapılmasına gerek yoktur. Ancak bu durumda programcının manuel olarak 
     yapının owner ve ops elemanlarına değer ataması gerekir. Örneğin:
 
     struct cdev *g_cdev;
     ...
     if ((gcdev = cdev_alloc()) == NULL) {
-        printk(KERN_ERROR "Cannot allocate cdev!..\n");
+        printk(KERN_ERROR "Cannot allocate cdev!...\n");
         return -ENOMEM;
     }
     g_cdev->owner = THIS_MODULE;
@@ -53325,9 +53321,9 @@ clean:
 
     int cdev_add(struct cdev *devp, dev_t dev, unsigned count);
 
-    Fonksiyonun birinci paranetresi cdev türünden yapı nesnesinin adresini almaktadır. İkinci parametre aygıt sürücünün majör ve 
+    Fonksiyonun birinci parametresi cdev türünden yapı nesnesinin adresini almaktadır. İkinci parametre aygıt sürücünün majör ve 
     minör numarasını belirtmektedir. Üçüncü parametresi ise ilgili minör numaradan itibaren kaç minör numaranın kullanılacağı belirtir. 
-    Fonksiyon başarı durumunda sıfır değerine başarısızlık durumunda negatif errno değerine geri döner. Örneğin:
+    Fonksiyon başarı durumunda sıfır değerine, başarısızlık durumunda negatif errno değerine geri döner. Örneğin:
 
     if ((result = cdev_add(&g_cdev, MKDEV(DEV_MAJOR, DEV_MINOR), 1)) < 0) {
         ...
@@ -53354,7 +53350,7 @@ clean:
 
     sudo mknod mydriver -m=666 c 25 0
 
-    Bu aygıt sürücü insmod ile yüklendiğinde artık biz user mode'ta "mydriver" dosyasını açıp kapattığımızda file_operations
+    Bu aygıt sürücü insmod ile yüklendiğinde artık biz user mode'da "mydriver" dosyasını açıp kapattığımızda file_operations
     yapısına yerleştirdiğimiz generic_open ve generic_release fonksiyonları çağrılacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -53386,17 +53382,17 @@ static int __init generic_init(void)
 {
 	int result;
 
-	printk(KERN_INFO "generic-char-driver module intitialization...\n");
+	printk(KERN_INFO "generic-char-driver module initialization...\n");
 
 	if ((result = register_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1, "generic-char-driver")) < 0) {
-		printk(KERN_ERR "cannot register device!..\n");
+		printk(KERN_ERR "cannot register device!...\n");
 		return result;
 	}
 
 	cdev_init(&g_cdev, &g_fops);
 	if ((result = cdev_add(&g_cdev, MKDEV(DEV_MAJOR, DEV_MINOR), 1)) < 0) {
 		unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
-		printk(KERN_ERR "cannot add device!..\n");
+		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
 
@@ -53466,9 +53462,10 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Yukarıdaki programda biz cdev nesnesini global olarak tanımladık. Aşağıdaki nesnenin cdev_alloc fonksiyonu işe dinamik
+    Yukarıdaki programda biz cdev nesnesini global olarak tanımladık. Aşağıda nesnenin cdev_alloc fonksiyonu ile dinamik
     biçimde tahsis edilmesine bir örnek verilmiştir.
 ---------------------------------------------------------------------------------------------------------------------------*/
+
 /* generic-char-driver.c */
 
 #include <linux/module.h>
@@ -53497,16 +53494,16 @@ static int __init generic_init(void)
 {
 	int result;
 
-	printk(KERN_INFO "generic-char-driver module intitialization...\n");
+	printk(KERN_INFO "generic-char-driver module initialization...\n");
 
 	if ((result = register_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1, "generic-char-driver")) < 0) {
-		printk(KERN_ERR "cannot register device!..\n");
+		printk(KERN_ERR "cannot register device!...\n");
 		return result;
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
 		unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
-		printk(KERN_ERR "cannot alloc cdev!..\n");
+		printk(KERN_ERR "cannot alloc cdev!...\n");
 		return result;
 	}
 	g_cdev->owner = THIS_MODULE;
@@ -53514,7 +53511,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, MKDEV(DEV_MAJOR, DEV_MINOR), 1)) < 0) {
 		unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
-		printk(KERN_ERR "cannot add device!..\n");
+		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
 
@@ -53584,6 +53581,10 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												133. Ders 07/04/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Çekirdek kodları ya da aygıt sürücü kodları çoğu zaman çekirdek alanı ile user alanı arasında veri transfer yapmak isterler. 
     Örneğin sys_read sistem fonksiyonu çekirdek alanında elde ettiği bilgileri user alanındaki programcının verdiği adrese kopyalar. 
     Benzer biçimde sys_write fonksiyonu da bunun tersini yapmaktadır. Çekirdek alanı ile user alanı arasında memcpy fonksiyonu 
@@ -53609,31 +53610,37 @@ void exit_sys(const char *msg)
     adrestir. Son parametre transfer edilecek byte sayısını belirtmektedir. Fonksiyonlar başarı durumunda 0 değerine, başarısızlık 
     durumunda transfer edilemeyen byte sayısına geri dönerler. Kernel mod programcılarının bu fonksiyonlar başarısızken bunu 
     çağıran foksiyonlarını -EFAULT (Bad address) ile geri döndürmesi uygun olur. (Örneğin sys_read ve sys_write fonksiyonlarına 
-    biz geçersiz bir user mode adresi verirsek bu sistem fonksiyonları da -FAULT değeri ile geri dönmektedir. Bu hata kodunun 
+    biz geçersiz bir user mode adresi verirsek bu sistem fonksiyonları da -EFAULT değeri ile geri dönmektedir. Bu hata kodunun 
     yazısal karşılığı "Bad address" biçimindedir.)
 
     Bazen user alanındaki adresin zaten geçerliliği sınanmıştır. Bu durumda yeniden geçerlilik sınaması yapmadan yukarıdaki 
     işlemleri yapan __copy_to_user ve __copy_from_user fonksiyonları kullanılabilir. Bu fonksiyonların parametrik yapıları aynıdır.
     Bu fonksiyonların yukarıdakilerden tek farkı adres geçerliliğine ilişkin sınama yapmamalarıdır:
 
+    #include <linux/uaccess.h>
+
     unsigned long __copy_to_user(void *to, const void *from, unsigned len);
     unsigned long __copy_from_user(void *to, const void *from, unsigned len);
 
-    Bazı durumlarda programcı 1 byte, 2 byte, 4 byte, 8 byte'lık verileri transfer etmek isteyebilir. Bu küçük miktardaki verilen 
+    Bazı durumlarda programcı 1 byte, 2 byte, 4 byte, 8 byte'lık verileri transfer etmek isteyebilir. Bu küçük miktardaki verilerin 
     transfer edilmesi için daha hızlı çalışan özel iki makro vardır: put_user ve get_user. Bu makroların parametrik yapısı şöyledir:
 
-    put_user(x, ptr)
-    get_user(x, ptr)
+    #include <linux/uaccess.h>
+
+    put_user(x, ptr);
+    get_user(x, ptr);
 
     Burada x aktarılacak nesneyi belirtir. (Bu nesnenin adresini programcı almaz, makro içinde bu işlem yapılmaktadır.) ptr 
     ise transfer adresini belirtmektedir. Aktarım ikinci parametrede belirtilen adresin türünün uzunluğu kadar yapılmaktadır. 
     Başka bir deyişle biz makroya hangi türden nesne verirsek zaten makro o uzunlukta tranfer yapmaktadır.
 
-    Makrolar başarı durumunda 0 başarısızlık durumunda negatif hata koduna geri dönmektedir. Bu makroların da geçerlilik kontrolü 
+    Makrolar başarı durumunda 0, başarısızlık durumunda negatif hata koduna geri dönmektedir. Bu makroların da geçerlilik kontrolü 
     yapmayan __put_user ve __get_user isimli versiyonları vardır:
 
-    __put_user(x, ptr)
-    __get_user(x, ptr)
+    #include <linux/uaccess.h>
+
+    __put_user(x, ptr);
+    __get_user(x, ptr);
 
     Örneğin biz çekirdek modülümüzdeki 4 byte'lık int bir x nesnesinin içerisindeki bilgiyi puser ile temsil edilen user adresine 
     kopyalamak isteyelim. Bu işlemi şöyle yaparız:
@@ -53645,12 +53652,14 @@ void exit_sys(const char *msg)
 
     Nihayet user alanındaki adresin geçerliliği de access_ok isimli makroyla sorgulanabilmektedir. Makro şöyledir:
 
-    access_ok(type, addr, size)
+    #include <linux/uaccess.h>
 
-    Buradaki type sınancak geçerliliğin türünü anlatmaktadır. Okuma geçerliliği için bu paraetre VERIFY_READ, yazma geçerliliği 
+    access_ok(type, addr, size);
+
+    Buradaki type sınanacak geçerliliğin türünü anlatmaktadır. Okuma geçerliliği için bu parametre VERIFY_READ, yazma geçerliliği 
     için VERIFY_WRITE ve hem okuma hem de yazma geçerliliği için VERIFY_READ|VERIFY_WRITE biçiminde girilmelidir. İkinci parametre
     geçerliliği sınanacak adresi ve üçüncü parametre de o adresten başlayan alanın uzunluğunu belirtmektedir. Fonksiyon başarı 
-    durumunda sıfır dışı bir değere başarısızlık durumunda sıfır değerine geri dönmektedir. Örneğin biz user alanında puser
+    durumunda sıfır dışı bir değere, başarısızlık durumunda sıfır değerine geri dönmektedir. Örneğin biz user alanında puser
     adresiyle başlayan 100 byte'lık alanın yazma bakımından geçerli bir alan olup olmadığını sınamak isteyelim. Bu sınamayı
     çekirdek modülümüzde şöyle yapabiliriz:
 
@@ -53662,7 +53671,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Biz şimdiye kadar aygıt dosyası open ile açıldığında ve close ile kapatıldığında aygıt sürücümüz içerisindeki 
-    fonksiyonlarımızın çağrılmasını sağladık. Şimdi de aygıt dosyası üzeirnde read ve write fonksiyonları uygulandığında 
+    fonksiyonlarımızın çağrılmasını sağladık. Şimdi de aygıt dosyası üzerinde read ve write fonksiyonları uygulandığında 
     aygıt sürücümüzdeki ilgili fonksiyonların çağrılması üzerinde duracağız.
 
     Aygıt sürücümüz için read ve write fonksiyonları aşağıdaki parametrik yapıya uygun olacak biçiminde file_operations yapısına 
@@ -53691,28 +53700,28 @@ void exit_sys(const char *msg)
     şöyledir:
 
     struct file {
-        struct list_head	    f_list;
-        struct dentry		    *f_dentry;
-        struct vfsmount         *f_vfsmnt;
+        struct list_head		f_list;
+        struct dentry			*f_dentry;
+        struct vfsmount			*f_vfsmnt;
         struct file_operations	*f_op;
-        atomic_t		        f_count;
-        unsigned int 		    f_flags;
-        mode_t			        f_mode;
-        loff_t			        f_pos;
-        unsigned long 		    f_reada, f_ramax, f_raend, f_ralen, f_rawin;
-        struct fown_struct	    f_owner;
-        unsigned int		    f_uid, f_gid;
-        int			            f_error;
+        atomic_t				f_count;
+        unsigned int			f_flags;
+        mode_t					f_mode;
+        loff_t					f_pos;
+        unsigned long			f_reada, f_ramax, f_raend, f_ralen, f_rawin;
+        struct fown_struct		f_owner;
+        unsigned int			f_uid, f_gid;
+        int						f_error;
 
-        size_t			        f_maxcount;
-        unsigned long		    f_version;
+        size_t					f_maxcount;
+        unsigned long			f_version;
 
-        /* needed for tty driver, and maybe others */
-        void			        *private_data;
+        // needed for tty driver, and maybe others
+        void					*private_data;
 
-        /* preallocated helper kiobuf to speedup O_DIRECT */
-        struct kiobuf		    *f_iobuf;
-        long			    f_iobuf_lock;
+        // preallocated helper kiobuf to speedup O_DIRECT
+        struct kiobuf			*f_iobuf;
+        long					f_iobuf_lock;
     };
 
     Biz burada bilerek sadelik yüzünden eski bir çekirdeğin file yapısını verdik. Yeni çekirdeklerde buna birkaç eleman daha 
@@ -53721,11 +53730,11 @@ void exit_sys(const char *msg)
     read ve write fonksiyonlarının ikinci parametresi user alanındaki transfer adresini belirtir. Üçüncü parametreler okunacak 
     ya da yazılacak byte miktarını belirtmektedir. Son parametre dosya göstericisinin konumunu belirtir. Ancak bu parametre 
     file yapısı içerisindeki f_pos elemanının adresi değildir. Çekirdek tarafından read ve write fonksiyonları çağrılmadan 
-    önce file yapısı içerisindeki f_pos elemanın değeri başka bir nesneye atanıp o nesnenin adresi read ve write fonksiyonlarına
+    önce file yapısı içerisindeki f_pos elemanının değeri başka bir nesneye atanıp o nesnenin adresi read ve write fonksiyonlarına
     geçirilmektedir. read ve write fonksiyonları sonlandığında çekirdek adresini geçirdiği nesnenin değerini file yapısının 
     f_pos elemanına kendisi yerleştirmektedir.
 
-    Fonksiyon başarı durumunda transfer edilen byte sayısına başarısızlık durumunda negatif errno değerine geri dönmelidir.
+    Fonksiyon başarı durumunda transfer edilen byte sayısına, başarısızlık durumunda negatif errno değerine geri dönmelidir.
 
     Biz aygıt sürücümüz için read ve write fonksiyonlarını yazarken transfer edilen byte miktarı kadar dosya göstericisini 
     kendimizin ilerletmesi gerekir. Bu işlem fonksiyonların son parametresi olan off göstericisinin gösterdiği yerin güncellenmesi
@@ -53753,7 +53762,7 @@ void exit_sys(const char *msg)
     Aşağıdaki örnekte aygıt sürücü için read fonksiyonu yazılmıştır. Bu fonksiyon aslında g_buf isimli dizinin içini dosya 
     gibi vermektedir.
 
-    Aşağıda aygıt sürücüye read ve write fonksiyonları içi boş bir biçimde yerleştirilmiştir. Eser mode'tan read ve 
+    Aşağıda aygıt sürücüye read ve write fonksiyonları içi boş bir biçimde yerleştirilmiştir. User mode'dan read ve 
     write yapıldığında aygıt sürücümüzün içerisindeki bu fonksiyonların çalıştığını gözlemleyiniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -53789,17 +53798,17 @@ static int __init generic_init(void)
 {
 	int result;
 
-	printk(KERN_INFO "generic-char-driver module intitialization...\n");
+	printk(KERN_INFO "generic-char-driver module initialization...\n");
 
 	if ((result = register_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1, "generic-char-driver")) < 0) {
-		printk(KERN_ERR "cannot register device!..\n");
+		printk(KERN_ERR "cannot register device!...\n");
 		return result;
 	}
 
 	cdev_init(&g_cdev, &g_fops);
 	if ((result = cdev_add(&g_cdev, MKDEV(DEV_MAJOR, DEV_MINOR), 1)) < 0) {
 		unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
-		printk(KERN_ERR "cannot add device!..\n");
+		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
 
@@ -53892,7 +53901,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Şimdi de aygıt sürücümüzün read fonksiyonunun gerçekten bir dosyadan okuma yapıyormuş gibi davranmasını sağlayalım. 
-    Bunun için dosyamızı temsil eden aşağıdaki gibi globaş bir dizi kullanacağız:
+    Bunun için dosyamızı temsil eden aşağıdaki gibi global bir dizi kullanacağız:
 
     static char g_buf[] = "01234567890ABCDEFGH";
 
@@ -53914,8 +53923,8 @@ void exit_sys(const char *msg)
         return esize;
     }
 
-    Burada önce dosya göstericisinin gösterdiği yerden itibaren size kadar byte'ın gerçekten dizi içerisinde olup olmadığına 
-    bakılmıştır. Eğer *off + size değeri bu dizinin udunluğundan fazlaysa size kadar değer değil slen - *off kadar değer 
+    Burada önce dosya göstericisinin gösterdiği yerden itibaren "size" kadar byte'ın gerçekten dizi içerisinde olup olmadığına 
+    bakılmıştır. Eğer "*off + size" değeri bu dizinin uzunluğundan fazlaysa "size" kadar değer değil, "slen - *off" kadar değer 
     okunmuştur. Aygıt sürücülerin read ve write fonksiyonlarında dosya göstericisinin ilerletilmesi programcının sorumluluğundadır.
     Bu nedenle okuma işlemi yapıldığında dosya göstericisinin konumu aşağıdaki gibi artırılmıştır:
 
@@ -53958,17 +53967,17 @@ static int __init generic_init(void)
 {
 	int result;
 
-	printk(KERN_INFO "generic-char-driver module intitialization...\n");
+	printk(KERN_INFO "generic-char-driver module initialization...\n");
 
 	if ((result = register_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1, "generic-char-driver")) < 0) {
-		printk(KERN_ERR "cannot register device!..\n");
+		printk(KERN_ERR "cannot register device!...\n");
 		return result;
 	}
 
 	cdev_init(&g_cdev, &g_fops);
 	if ((result = cdev_add(&g_cdev, MKDEV(DEV_MAJOR, DEV_MINOR), 1)) < 0) {
 		unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
-		printk(KERN_ERR "cannot add device!..\n");
+		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
 
@@ -54099,7 +54108,7 @@ void exit_sys(const char *msg)
     ...
     static char g_fmem[FILE_MEMORY_MAX_SIZE];
 
-    Ancak buradaki FILE_MEMORY_MAX_SIZE bellek dosyasının maksimum uzunluğunu belirtmektedir. Bellke dosyasının gerçek 
+    Ancak buradaki FILE_MEMORY_MAX_SIZE bellek dosyasının maksimum uzunluğunu belirtmektedir. Bellek dosyasının gerçek 
     uzunluğu g_fmem_size nesnesinde tutulmaktadır. Aygıt sürücünün write fonksiyonu aşağıdaki gibi yazılmıştır:
 
     static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
@@ -54140,7 +54149,7 @@ void exit_sys(const char *msg)
     olup olmadığına bakılmıştır. Yine göstericisi fonksiyon tarafından güncellenmiştir.
 
     Buradaki aygıt sürücüyü test etmek için "app-write.c" ve "app-read.c" isimli iki ayrı programdan faydalanılmıştır. 
-    "app-write.c" bellek dosyasına yazma yapmakta, "app-read.c" ise bellek dosyasındna okuma yapmaktadır. Bu örnekte bellek 
+    "app-write.c" bellek dosyasına yazma yapmakta, "app-read.c" ise bellek dosyasından okuma yapmaktadır. Bu örnekte bellek 
     dosyasına yazılanların aygıt sürücü çekirdekte bulunduğu sürece kalıcı olduğuna dikkat ediniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -54180,17 +54189,17 @@ static int __init generic_init(void)
 {
 	int result;
 
-	printk(KERN_INFO "generic-char-driver module intitialization...\n");
+	printk(KERN_INFO "generic-char-driver module initialization...\n");
 
 	if ((result = register_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1, "generic-char-driver")) < 0) {
-		printk(KERN_ERR "cannot register device!..\n");
+		printk(KERN_ERR "cannot register device!...\n");
 		return result;
 	}
 
 	cdev_init(&g_cdev, &g_fops);
 	if ((result = cdev_add(&g_cdev, MKDEV(DEV_MAJOR, DEV_MINOR), 1)) < 0) {
 		unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
-		printk(KERN_ERR "cannot add device!..\n");
+		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
 
@@ -54251,6 +54260,15 @@ static ssize_t generic_write(struct file *filp, const char *buf, size_t size, lo
 module_init(generic_init);
 module_exit(generic_exit);
 
+# Makefile
+
+ obj-m += ${file}.o
+
+all:
+	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
+clean:
+	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
+
 /* app-write.c */
 
 #include <stdio.h>
@@ -54296,15 +54314,6 @@ void exit_sys(const char *msg)
 
 	exit(EXIT_FAILURE);
 }
-
-# Makefile
-
- obj-m += ${file}.o
-
-all:
-	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
-clean:
-	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
 /* app-read.c */
 
@@ -54353,10 +54362,10 @@ void exit_sys(const char *msg)
 
     static loff_t generic_llseek(struct file *filp, loff_t off, int whence);
 
-    Fonksiyonun birinci parametresi dosya nesnesini, ikinci parametresi konumlandırılmak istenen offset'i üçüncü parametresi 
+    Fonksiyonun birinci parametresi dosya nesnesini, ikinci parametresi konumlandırılmak istenen offset'i, üçüncü parametresi 
     ise konumlandırmanın nereye göre yapılacağını belirtmektedir. Bu fonksiyonu gerçekleştirirken programcı file yapısı 
     içerisindeki f_pos elemanını güncellemelidir. Tipik olarak programcı whence parametresini switch içerisine alır. Hedeflenen 
-    offset'i hesaplar ve en sonunda file yapsının f_pos elemanına bu hedeflenen offset'i yerleştirir. Hedeflenen offset uygun 
+    offset'i hesaplar ve en sonunda file yapısının f_pos elemanına bu hedeflenen offset'i yerleştirir. Hedeflenen offset uygun 
     değilse fonksiyon tipik olarak -EINVAL değeriyle geri döndürülür. Eğer konumlandırma offset'i başarılı ise fonksiyon 
     dosya göstericisinin yeni değerine geri dönmelidir.
 
@@ -54389,7 +54398,7 @@ void exit_sys(const char *msg)
         return newpos;
     }
 
-    Burada önce whence parametresine bakılarak dosya göstericisinin konumlandırlaacağı offse belirlenmiştir. Sonra dosya 
+    Burada önce whence parametresine bakılarak dosya göstericisinin konumlandırılacağı offset belirlenmiştir. Sonra dosya 
     nesnesinin f_pos elemanı güncellenmiştir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -54431,17 +54440,17 @@ static int __init generic_init(void)
 {
 	int result;
 
-	printk(KERN_INFO "generic-char-driver module intitialization...\n");
+	printk(KERN_INFO "generic-char-driver module initialization...\n");
 
 	if ((result = register_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1, "generic-char-driver")) < 0) {
-		printk(KERN_ERR "cannot register device!..\n");
+		printk(KERN_ERR "cannot register device!...\n");
 		return result;
 	}
 
 	cdev_init(&g_cdev, &g_fops);
 	if ((result = cdev_add(&g_cdev, MKDEV(DEV_MAJOR, DEV_MINOR), 1)) < 0) {
 		unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
-		printk(KERN_ERR "cannot add device!..\n");
+		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
 
@@ -54570,7 +54579,7 @@ int main(void)
 		exit_sys("lseek");
 
 	if ((result = read(fd, buf, 8)) == -1)
-		exit_sys("write");
+		exit_sys("read");
 	buf[result] = '\0';
 
 	printf("%s\n", buf);
@@ -54604,6 +54613,10 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												135. Ders 21/04/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Biz şimdiye kadarki örneklerimizde aygıt sürücümüzün majör ve minör numarasını baştan belirledik. Bunun en önemli sakıncası 
     zaten o numaralı bir aygıt sürücünün yüklü olarak bulunuyor olmasıdır. Bu durumda aygıt sürücümüz yüklenemeyecektir. Aslında 
     daha doğru bir strateji tersten gitmektir. Yani önce aygıt sürücümüz içerisinde biz boş bir aygıt numarasını bulup onu 
@@ -54617,14 +54630,14 @@ void exit_sys(const char *msg)
     Fonksiyonun birinci parametresi boş aygıt numarasının yerleştirileceği dev_t nesnesinin adresini alır. İkinci ve üçüncü 
     parametreler başlangıç minör numarası ve onun sayısını belirtir. Son parametre ise aygıt sürücüsünün "/proc/devices" dosyasında 
     ve "/sys/dev" dizininde görüntülenecek olan ismini belirtmektedir. alloc_chrdev_region fonksiyonu zaten register_chrdev_region 
-    fonksiyonun yaptığını da yapmaktadır. Dolayısıyla bu iki fonksiyondan yalnızca biri kullanılmalıdır. Fonksiyon başarı durumunda 
-    0 değerine başarısızlık durumunda negatif errno değerine geri döner. Örneğin:
+    fonksiyonunun yaptığını da yapmaktadır. Dolayısıyla bu iki fonksiyondan yalnızca biri kullanılmalıdır. Fonksiyon başarı durumunda 
+    0 değerine, başarısızlık durumunda negatif errno değerine geri döner. Örneğin:
 
     dev_t g_dev;
     ...
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "generic-char-driver")) < 0) {
-		printk(KERN_ERR "cannot register device!..\n");
+		printk(KERN_ERR "cannot register device!...\n");
 		return result;
 	}
 
@@ -54644,18 +54657,44 @@ void exit_sys(const char *msg)
     mknod $module c $major 0
     chmod $mode $module
 
-    Artık biz bu load script'i ile aygıt sürücümüzü yükleyip aygıt dosyasımızı yaratacağız. Bu script'i load ismiyle yazıp 
+    Artık biz bu load script'i ile aygıt sürücümüzü yükleyip aygıt dosyamızı yaratacağız. Bu script'i load ismiyle yazıp 
     aşağıdaki gibi x hakkı vermelisiniz:
 
     chmod +x load
 
-    <BURADA KALDIK>
-
     Çalıştırmayı komut satırı argümanı vererek aşağıdaki gibi yapmalısınız:
 
-    sudo ./load generic-char-driver
+    $ sudo ./load generic-char-driver
 
-    Aşağıdaki örnekte majör numara alloc_chrdev_region fonksiyonuyla elde edilmiştir. Yüklemyi load scripti ile yapınız.
+    Burada load script'i çalıştırıldığında hem aygıt sürücü çekirdek alanına yüklenmekte hem de yüklenen aygıt sürücünün 
+    majör numarasıyla minör numara 1 olacak biçimde "generic-char-driver" isimli aygıt dosyası yaratılmaktadır. Aygıt sürücünün 
+    çekirdek alanından atılması manuel bir biçimde "rmmod" komutuyla yapılabilir. Tabii aynı zamanda bu aygıt sürücü için 
+    yaratılan aygıt dosyasının da silinmesi gerekir. Yukarıdaki script'te aygıt dosyası zaten varsa aynı zamanda o silinmektedir. 
+    Tabii aygıt dosyasını çekirdek alanından atarak silen ayrı bir "unload" isimli script'i de aşağıdaki gibi yazabiliriz:
+
+    #!/bin/bash
+
+    module=$1
+    mode=666
+
+    /sbin/rmmod ./$module.ko || exit 1
+    rm -f $module
+
+    Tabii yine bu script dosyasının da "x" hakkına sahip olması gerekmektedir:
+
+    $ chmod +x unload
+
+    unload Script'ini aşağıdaki gibi çalıştırabilirsiniz:
+
+    $ sudo ./unload generic-char-driver
+
+    Aşağıdaki örnekte alloc_chrdev_region fonksiyonuyla hem boş aygıt numarası elde edilip hem de bu aygıt numarası register 
+    ettirilmiştir. Yükleme işlemi yukarıdaki "load" scrip'i ile yapılmalıdır. Kernel modülün boşaltılması işlemi manuel olarak
+    ya da "unload" script'i ile yapılabilir. Örneğin:
+
+    $ sudo ./load generic-char-driver
+    ...
+    $ sudo ./unload generic-char-driver
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* generic-char-driver.c */
@@ -54666,11 +54705,11 @@ void exit_sys(const char *msg)
 #include <linux/cdev.h>
 #include <linux/uaccess.h>
 
-MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("General Character Device Driver");
-MODULE_AUTHOR("Kaan Aslan");
+#define FILE_MEMORY_MAX_SIZE	4096
 
-#define BUFFER_SIZE		128
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Kaan Aslan");
+MODULE_DESCRIPTION("General Character Device Driver");
 
 static int generic_open(struct inode *inodep, struct file *filp);
 static int generic_release(struct inode *inodep, struct file *filp);
@@ -54680,20 +54719,23 @@ static loff_t generic_llseek(struct file *filp, loff_t off, int whence);
 
 static dev_t g_dev;
 static struct cdev *g_cdev;
-static struct file_operations g_file_ops = {
+static struct file_operations g_fops = {
 	.owner = THIS_MODULE,
 	.open = generic_open,
-	.release = generic_release,
 	.read = generic_read,
 	.write = generic_write,
 	.llseek = generic_llseek,
+	.release = generic_release
 };
 
-char g_buf[BUFFER_SIZE];
+static char g_fmem[FILE_MEMORY_MAX_SIZE];
+static size_t g_fmem_size;
 
 static int __init generic_init(void)
 {
 	int result;
+
+	printk(KERN_INFO "generic-char-driver module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "generic-char-driver")) < 0) {
 		printk(KERN_INFO "Cannot alloc char driver!...\n");
@@ -54701,20 +54743,18 @@ static int __init generic_init(void)
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!..\n");
+		printk(KERN_INFO "Cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
 	g_cdev->owner = THIS_MODULE;
-	g_cdev->ops = &g_file_ops;
+	g_cdev->ops = &g_fops;
 
-	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
+	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
-
-	printk(KERN_INFO "Module initialized with %d:%d device number...\n", MAJOR(g_dev), MINOR(g_dev));
 
 	return 0;
 }
@@ -54724,79 +54764,76 @@ static void __exit generic_exit(void)
 	cdev_del(g_cdev);
 	unregister_chrdev_region(g_dev, 1);
 
-	printk(KERN_INFO "Goodbye...\n");
+	printk(KERN_INFO "generic-char-driver module exit...\n");
 }
 
 static int generic_open(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Generic device opened!..\n");
+	printk(KERN_INFO "generic-char-driver opened...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Generic device released!..\n");
+	printk(KERN_INFO "generic-char-driver-closed...\n");
 
 	return 0;
 }
 
 static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
 {
-	size_t asize;
+	size_t esize;
 
-	asize = size + *off > BUFFER_SIZE ? BUFFER_SIZE - *off : size;
+	esize = *off + size > g_fmem_size ? g_fmem_size - *off : size;
 
-	if (copy_to_user(buf, g_buf + *off, asize) != 0)
+	if (copy_to_user(buf, g_fmem + *off, esize) != 0)
 		return -EFAULT;
 
-	*off += asize;
+	*off += esize;
 
-	printk(KERN_INFO "Reading...\n");
-
-	return asize;
+	return esize;
 }
 
 static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
 {
-	size_t asize;
+	size_t esize;
 
-	asize = size + *off > BUFFER_SIZE ? BUFFER_SIZE - *off : size;
-	if (copy_from_user(g_buf + *off, buf, asize) != 0)
+	esize = *off + size > FILE_MEMORY_MAX_SIZE ? FILE_MEMORY_MAX_SIZE - *off : size;
+	if (copy_from_user(g_fmem + *off, buf, esize) != 0)
 		return -EFAULT;
 
-	*off += asize;
+	*off += esize;
+	if (*off > g_fmem_size)
+		g_fmem_size = *off;
 
-	printk(KERN_INFO "Writing...\n");
-
-	return asize;
+	return esize;
 }
 
 static loff_t generic_llseek(struct file *filp, loff_t off, int whence)
 {
-	loff_t toff;
+	loff_t newpos;
 
 	switch (whence) {
-		case SEEK_SET:
-			toff = off;
+		case 0:
+			newpos = off;
 			break;
-		case SEEK_CUR:
-			toff = filp->f_pos + off;
+		case 1:
+			newpos = filp->f_pos + off;
 			break;
 		case 2:
-			toff = BUFFER_SIZE + off;
+			newpos = g_fmem_size + off;
+			break;
 		default:
 			return -EINVAL;
 	}
 
-	if (toff > BUFFER_SIZE || toff < 0)
+	if (newpos < 0 || newpos > g_fmem_size)
 		return -EINVAL;
 
-	filp->f_pos = toff;
+	filp->f_pos = newpos;
 
-	printk(KERN_INFO "file pointer positioning...\n");
-
-	return toff;
+	return newpos;
 }
 
 module_init(generic_init);
@@ -54804,67 +54841,12 @@ module_exit(generic_exit);
 
 # Makefile
 
-obj-m += $(file).o
+ obj-m += ${file}.o
 
 all:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
-
-/* sample.c */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <unistd.h>
-
-void exit_sys(const char *msg);
-
-int main(void)
-{
-	int fd;
-	char wbuf[100] = "0123456789012345678901234567890";
-	char rbuf[100];
-	ssize_t result;
-
-	if ((fd = open("generic-char-driver", O_RDWR)) == -1)
-		exit_sys("open");
-
-	if ((result = write(fd, wbuf, strlen(wbuf))) == -1)
-		exit_sys("write");
-
-	printf("%ld bytes written...\n", (long)result);
-
-	if (lseek(fd, 0, SEEK_SET) == -1)
-		exit_sys("lseek");
-
-	if ((result = read(fd, rbuf, 10)) == -1)
-		exit_sys("read");
-	rbuf[result] = '\0';
-
-	printf("%ld bytes read: %s\n", result, rbuf);
-
-	if (lseek(fd, -5, SEEK_CUR) == -1)
-		exit_sys("lseek");
-
-	if ((result = read(fd, rbuf, 10)) == -1)
-		exit_sys("read");
-	rbuf[result] = '\0';
-
-	printf("%ld bytes read: %s\n", result, rbuf);
-
-	close(fd);
-
-	return 0;
-}
-
-void exit_sys(const char *msg)
-{
-	perror(msg);
-
-	exit(EXIT_FAILURE);
-}
 
 /* load */
 
@@ -54879,26 +54861,117 @@ rm -f $module
 mknod $module c $major 0
 chmod $mode $module
 
+/* unload */
+
+#!/bin/bash
+
+module=$1
+mode=666
+
+/sbin/rmmod ./$module.ko || exit 1
+rm -f $module
+
+/* app.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int fd;
+	ssize_t result;
+	char buf[4096];
+
+	if ((fd = open("generic-char-driver", O_RDWR)) == -1)
+		exit_sys("open");
+
+	if ((result = write(fd, "ankara", 6)) == -1)
+		exit_sys("write");
+
+	printf("%jd bytes written\n", (intmax_t)result);
+
+	if ((result = write(fd, "izmir", 5)) == -1)
+		exit_sys("write");
+
+	printf("%jd bytes written\n", (intmax_t)result);
+
+	if (lseek(fd, 0, 0) == -1)
+		exit_sys("lseek");
+
+	if ((result = read(fd, buf, 8)) == -1)
+		exit_sys("read");
+	buf[result] = '\0';
+
+	printf("%s\n", buf);
+
+	if (lseek(fd, -2, 1) == -1)
+		exit_sys("lseek");
+
+	if ((result = read(fd, buf, 8)) == -1)
+		exit_sys("read");
+	buf[result] = '\0';
+
+	if (lseek(fd, -2, 2) == -1)
+		exit_sys("lseek");
+
+	if ((result = read(fd, buf, 8)) == -1)
+		exit_sys("read");
+	buf[result] = '\0';
+
+	printf("%s\n", buf);
+
+	close(fd);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
 /*--------------------------------------------------------------------------------------------------------------------------
-    Aşağıda gelinen noktaya kadar görülmüş olan konulara kullanılarak yazılmış basit bir boru örneği verilmiştir. 
-    Bu boru örneğinde bir proses boruyu yazma modunda açar ve write fonksiyonuyla yazdıkları aygıt sürücü içerisindeki bir kuyruğa
-    yazılır. Diğer proses de read fonksiyonuyla bu kuyruktan okuma yapar. Bu gerçekleştirimin özellekleri şöyledir:
+												136. Ders 26/04/2024 - Cuma
+---------------------------------------------------------------------------------------------------------------------------*/
 
-    1) write fonksiyonu borudaki boş alan miktarından daha fazla bilgi yazılmaya çalışılırsa blokeye yol açmaz, -NOMEM ile geri döner.
+/*--------------------------------------------------------------------------------------------------------------------------
+    Aşağıda gelinen noktaya kadar görülmüş olan konular kullanılarak yazılmış basit bir boru örneği verilmiştir. Bu boru 
+    örneğinde bir proses boruyu yazma modunda açar ve prosesin write fonksiyonuyla yazdıkları aygıt sürücü içerisindeki bir 
+    FIFO kuyruk sistemine yazılır. Diğer proses de read fonksiyonuyla bu FIFO kuyruk sisteminden kuyruktan okuma yapar. Bu 
+    gerçekleştirim orijinal "isimli boru (named pipe)" gerçekleştirimine benziyorsa da ondan farklıdır. Burada yapılan 
+    gerçekleştirimin önemli noktaları şunlardır:
 
-    2) read fonksiyonu boruda hiçbir bilgi yoksa blokeye yol açmaz 0 ile geri döner. Ancak read diğer durumda okuyabildiği kadar
-    byte sayısını okuyup onunla geri döner.
+    - write fonksiyonu borudaki boş alan miktarından daha fazla bilgi yazılmaya çalışılırsa blokeye yol açmaz, yazabildiği kadar 
+    byte'ı yazar ve boruya yazabildiği byte sayısına geri döner. Halbuki anımsanacağı gibi orijinal borularda talep edilen miktarın
+    tamamı yazılana kadar write bloke oluşturmaktadır.
 
-    3) Aygıt sürücünün read/write fonksiyonlarında hiçbir senkronizasyon uygulanmamıştır. Dolayısıyla eşzamanlı işlemlerde tanımsız davranış
-    ortaya çıkabilir.
+    - read fonksiyonu boruda hiçbir bilgi yoksa blokeye yol açmaz 0 ile geri döner. Ancak read eğer boruda en az bir byte varsa 
+    okuyabildiği kadar byte'ı okuyup okuyabildiği byte sayısına geri döner.
 
-    4) İki proses de boruyu kapatsa bile boru silinmemektedir.
+    - Aygıt sürücünün read/write fonksiyonlarında hiçbir senkronizasyon uygulanmamıştır. Dolayısıyla eşzamanlı işlemlerde tanımsız 
+    davranışlar ortaya çıkabilir. Örneğin iki farklı proses bu boruya yazma yaparsa senkronizasyondan kaynaklanan sorunlar oluşabilir.
 
-    Aygıt sürücüyü önce build edip sonra aşağıdaki gibi yükleyiniz:
+    - İki proses de boruyu kapatsa bile boru silinmemektedir. Halbuki orijinal borularda prosesler isimli boruyu kapatınca 
+    boru içerisindeki tüm bilgiler silinmektedir.
 
-    make file=pipe-dirver
-    sudo ./load pipe-driver
+    - Bu uygulamada sistem genelinde tek bir boru yaratılmaktadır. Yani bizim boru aygıt sürücümüz tek bir boru üzerinde işlemler
+    yapmaktadır. Halbuki orijinal isimli borularda programcılar birbirinden bağımsız istedikleri kadar çok isimli boru yaratabilmektedir.
 
+    Aygıt sürücünüzü önce build edip sonra aşağıdaki gibi yüklemelisiniz:
+
+    $ make file=pipe-dirver
+    $ sudo ./load pipe-driver
+
+    Buradaki boruyu aygıt sürücüsünü test etmek için "prog1" ve "prog2" isimli iki program yazılmıştır. "prog1" klavyeden 
+    alınan yazıları boruya yazmakta, "prog2" ise klavyeden alınan uzunlukta byte'ı borudan okumaktadır. Boruyu test temek 
+    için boru uzunluğunu azaltabilirsiniz. Biz örneğimizde boru uzunluğunu 4096 aldık.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* pipe-driver.c */
@@ -54909,13 +54982,13 @@ chmod $mode $module
 #include <linux/cdev.h>
 #include <linux/uaccess.h>
 
-MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("General Character Device Driver");
-MODULE_AUTHOR("Kaan Aslan");
-
 #define MIN(a, b)		((a) < (b) ? (a) : (b))
 
-#define PIPE_SIZE		4096
+#define PIPE_BUFSIZE		20
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Kaan Aslan");
+MODULE_DESCRIPTION("Pipe Driver");
 
 static int generic_open(struct inode *inodep, struct file *filp);
 static int generic_release(struct inode *inodep, struct file *filp);
@@ -54924,21 +54997,24 @@ static ssize_t generic_write(struct file *filp, const char *buf, size_t size, lo
 
 static dev_t g_dev;
 static struct cdev *g_cdev;
-static struct file_operations g_file_ops = {
+static struct file_operations g_fops = {
 	.owner = THIS_MODULE,
 	.open = generic_open,
-	.release = generic_release,
 	.read = generic_read,
 	.write = generic_write,
+	.release = generic_release
 };
 
-static char g_pipebuf[PIPE_SIZE];
-static size_t g_head = 0, g_tail = 0;
-static size_t g_count = 0;
+static unsigned char g_pipebuf[PIPE_BUFSIZE];
+static size_t g_head;
+static size_t g_tail;
+static size_t g_count;
 
 static int __init generic_init(void)
 {
 	int result;
+
+	printk(KERN_INFO "pipe-driver module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "pipe-driver")) < 0) {
 		printk(KERN_INFO "Cannot alloc char driver!...\n");
@@ -54946,20 +55022,18 @@ static int __init generic_init(void)
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!..\n");
+		printk(KERN_INFO "Cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
 	g_cdev->owner = THIS_MODULE;
-	g_cdev->ops = &g_file_ops;
+	g_cdev->ops = &g_fops;
 
-	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
+	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+		printk(KERN_ERR "Cannot add device!...\n");
 		return result;
 	}
-
-	printk(KERN_INFO "Pipe driver initialized with %d:%d device number...\n", MAJOR(g_dev), MINOR(g_dev));
 
 	return 0;
 }
@@ -54969,72 +55043,73 @@ static void __exit generic_exit(void)
 	cdev_del(g_cdev);
 	unregister_chrdev_region(g_dev, 1);
 
-	printk(KERN_INFO "Goodbye...\n");
+	printk(KERN_INFO "pipe-driver module exit...\n");
 }
 
 static int generic_open(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device opened!..\n");
+	printk(KERN_INFO "pipe-driver opened...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device released!..\n");
+	printk(KERN_INFO "pipe-driver-closed...\n");
 
 	return 0;
 }
 
 static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
 {
-	size_t len;
+	size_t esize, size1, size2;
 
-	size = MIN(size, g_count);
+	esize = MIN(g_count, size);
 
-	if (size == 0)
-		return 0;
-
-	if (g_head >= g_tail)
-		len = MIN(size, PIPE_SIZE - g_head);
+	if (g_tail < g_head)
+		size1 = MIN(PIPE_BUFSIZE - g_head, esize);
 	else
-		len = size;
+		size1 = esize;
 
-	if (copy_to_user(buf, g_pipebuf + g_head, len) != 0)
+	size2 = esize - size1;
+
+	if (copy_to_user(buf, g_pipebuf + g_head, size1) != 0)
+		return -EFAULT;
+
+	if (size2 != 0)
+		if (copy_to_user(buf + size1, g_pipebuf, size2) != 0)
 			return -EFAULT;
-	if (size > len)
-		if (copy_to_user(buf + len, g_pipebuf, size - len) != 0)
-			return -EFAULT;
 
-	g_head = (g_head + size ) % PIPE_SIZE;
-	g_count -= size;
+	g_head = (g_head + esize) % PIPE_BUFSIZE;
+	g_count -= esize;
 
-	return size;
+	return esize;
 }
 
 static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
 {
-	size_t len;
+	size_t esize, size1, size2;
 
-	if (size > PIPE_SIZE - g_count)
-		return -ENOMEM;
+	esize = MIN(PIPE_BUFSIZE - g_count, size);
 
-	if (g_tail >= g_head)
-		len = MIN(size, PIPE_SIZE - g_tail);
+	if (g_tail > g_head)
+		size1 = MIN(PIPE_BUFSIZE - g_tail, esize);
 	else
-		len = size;
+		size1 = esize;
 
-	if (copy_from_user(g_pipebuf + g_tail, buf, len) != 0)
+	size2 = esize - size1;
+
+	if (copy_from_user(g_pipebuf + g_tail, buf, size1) != 0)
 		return -EFAULT;
 
-	if (size > len)
-		if (copy_from_user(g_pipebuf, buf + len, size - len) != 0)
+	if (size2 != 0)
+		if (copy_from_user(g_pipebuf, buf + size1, size2) != 0)
 			return -EFAULT;
 
-	g_tail = (g_tail + size ) % PIPE_SIZE;
-	g_count += size;
+	g_tail = (g_tail + esize) % PIPE_BUFSIZE;
+	g_count += esize;
 
-	return size;
+	return esize;
 }
 
 module_init(generic_init);
@@ -55049,103 +55124,7 @@ all:
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
-/* pipeproc1.c */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <unistd.h>
-
-#define PIPE_SIZE		4096
-
-void exit_sys(const char *msg);
-
-int main(void)
-{
-	int fd;
-	char buf[PIPE_SIZE];
-	char *str;
-	size_t len;
-
-	if ((fd = open("pipe-driver", O_WRONLY)) == -1)
-		exit_sys("open");
-
-	for (;;) {
-		printf("Enter text:");
-		fflush(stdout);
-		fgets(buf, PIPE_SIZE, stdin);
-		if ((str = strchr(buf, '\n')) != NULL)
-			*str = '\0';
-		if (!strcmp(buf, "quit"))
-			break;
-		len = strlen(buf);
-		if (write(fd, buf, len) == -1) {
-			fprintf(stderr, "Cannot write pipe! Maybe pipe is full!\n");
-			continue;
-		}
-
-		printf("%lu bytes written...\n", (unsigned long)len);
-	}
-
-	close(fd);
-
-	return 0;
-}
-
-void exit_sys(const char *msg)
-{
-	perror(msg);
-
-	exit(EXIT_FAILURE);
-}
-
-/* pipeproc2.c */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <unistd.h>
-
-#define PIPE_SIZE		4096
-
-void exit_sys(const char *msg);
-
-int main(void)
-{
-	int fd;
-	char buf[PIPE_SIZE + 1];
-	int len;
-	ssize_t result;
-
-	if ((fd = open("pipe-driver", O_RDONLY)) == -1)
-		exit_sys("open");
-
-	for (;;) {
-		printf("How many bytes to read? ");
-		fflush(stdout);
-		scanf("%d", &len);
-		if (!len)
-			break;
-		if ((result = read(fd, buf, len)) == -1)
-			exit_sys("read");
-		buf[result] = '\0';
-
-		printf("%ld bytes read: \"%s\"\n", (long)result, buf);
-	}
-
-	close(fd);
-
-	return 0;
-}
-
-void exit_sys(const char *msg)
-{
-	perror(msg);
-
-	exit(EXIT_FAILURE);
-}
+/* load */
 
 #!/bin/bash
 
@@ -55158,23 +55137,132 @@ rm -f $module
 mknod $module c $major 0
 chmod $mode $module
 
+/* unload */
+
+#!/bin/bash
+
+module=$1
+mode=666
+
+/sbin/rmmod ./$module.ko || exit 1
+rm -f $module
+
+/* prog1.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#define BUFFER_SIZE 4096
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int pdriver;
+	char buf[BUFFER_SIZE];
+	char *str;
+	ssize_t result;
+
+	if ((pdriver = open("pipe-driver", O_WRONLY)) == -1)
+		exit_sys("open");
+
+	for (;;) {
+		printf("Text:");
+		if (fgets(buf, BUFFER_SIZE, stdin) == NULL)
+			continue;
+		if ((str = strchr(buf, '\n')) != NULL)
+			*str = '\0';
+		if (!strcmp(buf, "quit"))
+			break;
+		if ((result = write(pdriver, buf, strlen(buf))) == -1)
+			exit_sys("write");
+		printf("%jd bytes written...\n", (intmax_t)result);
+	}
+
+	close(pdriver);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/* prog2.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#define BUFFER_SIZE		4096
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int pdriver;
+	char buf[BUFFER_SIZE + 1];
+	int size;
+	ssize_t result;
+
+	if ((pdriver = open("pipe-driver", O_RDONLY)) == -1)
+		exit_sys("open");
+
+	for (;;) {
+		printf("Size:");
+		scanf("%d", &size);
+		if (size > BUFFER_SIZE) {
+			printf("size is very long!..\n");
+			continue;
+		}
+		if (size == 0)
+			break;
+		if ((result = read(pdriver, buf, size)) == -1)
+			exit_sys("read");
+		buf[result] = '\0';
+		printf("%jd bytes read: %s\n", (intmax_t)result, buf);
+	}
+
+	close(pdriver);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+<BURADA KALDIK>
 /*--------------------------------------------------------------------------------------------------------------------------
     Kernel modda da senkronizasyon nesneleri vardır. Aygıt sürücülerde bu senkronizasyon nesneleri mecburen çok yoğun kullanılmaktadır. 
-    Çünkü aynı anda aygıt sürücü kodları değişik prosesler tarafından kullanıldığında buradaki değerler bozulabilir. Yukarıdaki boru örneğinde
-    iki proses aynı anda read/write yaparsa kuyruğu oluşturan veri yapıları bozulacaktır.
+    Çünkü aynı anda aygıt sürücü kodları değişik prosesler tarafından kullanıldığında buradaki değerler bozulabilir. Yukarıdaki 
+    boru örneğinde iki proses aynı anda read/write yaparsa kuyruğu oluşturan veri yapıları bozulacaktır.
 
-    Biz kernel modda user moddaki senkronizasyon nesnelerini kullanamayız. User modda kullandığımız bütün o senkronizasyon nesnelerinin 
-    birer kernel mod karşılıkları vardır. Aslında pthread kütüphanesi de arka planda bu mekaznizmaları kullanmaktadır.
+    Biz kernel modda user moddaki senkronizasyon nesnelerini kullanamayız. User modda kullandığımız bütün o senkronizasyon 
+    nesnelerinin birer kernel mod karşılıkları vardır. Aslında pthread kütüphanesi de arka planda bu mekaznizmaları kullanmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Kernel modda mutex mekanizması 2.6 kernel'ında eklenmiştir. Bu mutex mekanizması user moddaki mutex mekanizmasına çok benzemektedir. 
-    Yine kernel moddaki mutex'in thread temelinde sahpliği vardır. Thread'e bloke edip sleep kuyruklarında bekletebilmektedir. Kernel mod mutex
-    mekanizmasının tipik çalışması şöyledir:
+    Kernel modda mutex mekanizması 2.6 kernel'ında eklenmiştir. Bu mutex mekanizması user moddaki mutex mekanizmasına çok 
+    benzemektedir. Yine kernel moddaki mutex'in thread temelinde sahpliği vardır. Thread'i bloke edip sleep kuyruklarında 
+    bekletebilmektedir. Kernel mod mutex mekanizmasının tipik gerçekleştirimi şöyledir:
 
-    1) lock işlemi sırasında maliyersiz compare/jump komutlarıyla mutex'in kilitli olup olmadığına bakılır.
+    1) lock işlemi sırasında maliyetsiz compare/jump komutlarıyla mutex'in kilitli olup olmadığına bakılır.
     2) mutex kilitliyse biraz spin işlemi yapılır (diğer bir işlemcideki proses kilitlemişse boşuna bloke olmamak için).
-    3) spin işleminden sonuç elde eidlemese bloke oluşturulur.
+    3) spin işleminden sonuç elde edilemezse bloke oluşturulur.
 
     Kernel moddaki mutex'ler tipik olarak şöyle kullanılmaktadır:
 
@@ -55256,7 +55344,7 @@ static int __init generic_init(void)
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!..\n");
+		printk(KERN_INFO "Cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -55284,14 +55372,14 @@ static void __exit generic_exit(void)
 
 static int generic_open(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device opened!..\n");
+	printk(KERN_INFO "Pipe device opened!...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device released!..\n");
+	printk(KERN_INFO "Pipe device released!...\n");
 
 	return 0;
 }
@@ -55584,7 +55672,7 @@ static int __init generic_init(void)
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!..\n");
+		printk(KERN_INFO "Cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -55612,14 +55700,14 @@ static void __exit generic_exit(void)
 
 static int generic_open(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device opened!..\n");
+	printk(KERN_INFO "Pipe device opened!...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device released!..\n");
+	printk(KERN_INFO "Pipe device released!...\n");
 
 	return 0;
 }
@@ -55846,7 +55934,7 @@ chmod $mode $module
     çıkartarak bir wait kuyruğuna yerleştirmek demektir. Pekiyi wait kuyrukları nerededir ve biz bir thread'i wait kuyruklarına nasıl yerleştirip
     yeniden run kuyruğuna atayabiliriz?
 
-    İşte aslında wait kuyrukları istenildiği kadar çok olabilir. Her aygıt sürücü kendi wait kuyruğunu yaratabilir. Kernel içeisinde
+    İşte aslında wait kuyrukları istenildiği kadar çok olabilir. Her aygıt sürücü kendi wait kuyruğunu yaratabilir. Kernel içerisinde
     wait kuyruğu yaratan mekanizmalar vardır. Bir thread'i (yani task_struct nesnesini) run kuyruğundan wait kuyruğuna, wait kuyruğundan run
     kuyruğuna yerleştiren hazır fonksiyonlar bulunmaktadır.
 
@@ -55952,7 +56040,7 @@ static int __init generic_init(void)
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!..\n");
+		printk(KERN_INFO "Cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -55980,27 +56068,27 @@ static void __exit generic_exit(void)
 
 static int generic_open(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device opened!..\n");
+	printk(KERN_INFO "Pipe device opened!...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device released!..\n");
+	printk(KERN_INFO "Pipe device released!...\n");
 
 	return 0;
 }
 
 static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
 {
-	printk(KERN_INFO "Process sleeping!..\n");
+	printk(KERN_INFO "Process sleeping!...\n");
 
 	g_cond = 0;
 	if (wait_event_interruptible(g_wq, g_cond != 0))
 		return -ERESTARTSYS;
 
-	printk(KERN_INFO "Process waking up!..\n");
+	printk(KERN_INFO "Process waking up!...\n");
 
 	return 0;
 }
@@ -56080,7 +56168,7 @@ int main(void)
 	if ((fd = open("generic-char-driver", O_WRONLY)) == -1)
 		exit_sys("open");
 
-	printf("Press ENTER to write!..\n");
+	printf("Press ENTER to write!...\n");
 	getchar();
 
 	if (write(fd, "a", 1) == -1)
@@ -56152,7 +56240,7 @@ static int __init generic_init(void)
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!..\n");
+		printk(KERN_INFO "Cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -56180,27 +56268,27 @@ static void __exit generic_exit(void)
 
 static int generic_open(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Generic device opened!..\n");
+	printk(KERN_INFO "Generic device opened!...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Generic device released!..\n");
+	printk(KERN_INFO "Generic device released!...\n");
 
 	return 0;
 }
 
 static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
 {
-	printk(KERN_INFO "Process sleeping!..\n");
+	printk(KERN_INFO "Process sleeping!...\n");
 
 	g_cond = 0;
 	if (wait_event_interruptible_exclusive(g_wq, g_cond != 0))
 		return -ERESTARTSYS;
 
-	printk(KERN_INFO "Process waking up!..\n");
+	printk(KERN_INFO "Process waking up!...\n");
 
 	return 0;
 }
@@ -56289,7 +56377,7 @@ static int __init generic_init(void)
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!..\n");
+		printk(KERN_INFO "Cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -56317,14 +56405,14 @@ static void __exit generic_exit(void)
 
 static int generic_open(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device opened!..\n");
+	printk(KERN_INFO "Pipe device opened!...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device released!..\n");
+	printk(KERN_INFO "Pipe device released!...\n");
 
 	return 0;
 }
@@ -56658,7 +56746,7 @@ static int __init generic_init(void)
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!..\n");
+		printk(KERN_INFO "Cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -56686,14 +56774,14 @@ static void __exit generic_exit(void)
 
 static int generic_open(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device opened!..\n");
+	printk(KERN_INFO "Pipe device opened!...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device released!..\n");
+	printk(KERN_INFO "Pipe device released!...\n");
 
 	return 0;
 }
@@ -56982,7 +57070,7 @@ static int __init generic_init(void)
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!..\n");
+		printk(KERN_INFO "Cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -57010,14 +57098,14 @@ static void __exit generic_exit(void)
 
 static int generic_open(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device opened!..\n");
+	printk(KERN_INFO "Pipe device opened!...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device released!..\n");
+	printk(KERN_INFO "Pipe device released!...\n");
 
 	return 0;
 }
@@ -57414,14 +57502,14 @@ static void __exit generic_exit(void)
 
 static int generic_open(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device opened!..\n");
+	printk(KERN_INFO "Pipe device opened!...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device released!..\n");
+	printk(KERN_INFO "Pipe device released!...\n");
 
 	return 0;
 }
@@ -57865,14 +57953,14 @@ static int generic_open(struct inode *inodep, struct file *filp)
 
 	filp->private_data = pdev;
 
-	printk(KERN_INFO "Pipe device opened!..\n");
+	printk(KERN_INFO "Pipe device opened!...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device released!..\n");
+	printk(KERN_INFO "Pipe device released!...\n");
 
 	return 0;
 }
@@ -58196,7 +58284,7 @@ static int __init generic_init(void)
 
 	if ((g_devs = (struct pipe_dev *)kmalloc(sizeof(struct pipe_dev) * ndevice, GFP_KERNEL)) == NULL) {
 		unregister_chrdev_region(g_dev, ndevice);
-		printk(KERN_INFO "Cannot allocate memory!..\n");
+		printk(KERN_INFO "Cannot allocate memory!...\n");
 		return -ENOMEM;
 	}
 
@@ -58241,14 +58329,14 @@ static int generic_open(struct inode *inodep, struct file *filp)
 
 	filp->private_data = pdev;
 
-	printk(KERN_INFO "Pipe device opened!..\n");
+	printk(KERN_INFO "Pipe device opened!...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device released!..\n");
+	printk(KERN_INFO "Pipe device released!...\n");
 
 	return 0;
 }
@@ -58662,7 +58750,7 @@ static int __init generic_init(void)
 
 	if ((g_devs = (struct pipe_dev *)kmalloc(sizeof(struct pipe_dev) * ndevice, GFP_KERNEL)) == NULL) {
 		unregister_chrdev_region(g_dev, ndevice);
-		printk(KERN_INFO "Cannot allocate memory!..\n");
+		printk(KERN_INFO "Cannot allocate memory!...\n");
 		return -ENOMEM;
 	}
 
@@ -58707,14 +58795,14 @@ static int generic_open(struct inode *inodep, struct file *filp)
 
 	filp->private_data = pdev;
 
-	printk(KERN_INFO "Pipe device opened!..\n");
+	printk(KERN_INFO "Pipe device opened!...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device released!..\n");
+	printk(KERN_INFO "Pipe device released!...\n");
 
 	return 0;
 }
@@ -59005,7 +59093,7 @@ static int __init generic_init(void)
 
 	if ((g_devs = (struct pipe_dev *)kmalloc(sizeof(struct pipe_dev) * ndevice, GFP_KERNEL)) == NULL) {
 		unregister_chrdev_region(g_dev, ndevice);
-		printk(KERN_INFO "Cannot allocate memory!..\n");
+		printk(KERN_INFO "Cannot allocate memory!...\n");
 		return -ENOMEM;
 	}
 
@@ -59051,14 +59139,14 @@ static int generic_open(struct inode *inodep, struct file *filp)
 	filp->private_data = pdev;
 	atomic_inc(&g_nopens);
 
-	printk(KERN_INFO "Pipe device opened!..\n");
+	printk(KERN_INFO "Pipe device opened!...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device released!..\n");
+	printk(KERN_INFO "Pipe device released!...\n");
 
 	atomic_dec(&g_nopens);
 
@@ -59435,7 +59523,7 @@ static int __init generic_init(void)
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!..\n");
+		printk(KERN_INFO "Cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -59543,7 +59631,7 @@ static int __init generic_init(void)
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!..\n");
+		printk(KERN_INFO "Cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -59762,7 +59850,7 @@ static int __init generic_init(void)
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!..\n");
+		printk(KERN_INFO "Cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -59899,7 +59987,7 @@ chmod $mode $module
     belirlemeyi içermez, default durumu belirtir. Timer periyodunun ne olacağı aslında boot işlemi sırasında kernel konfigürasyonlarına da bakılarak 
     belirlenmektedir. İşte genellikle bu süre 1 ms 4 ms ya da 10 ms olmaktadır. (Ancak değişik mimarilerde farklı değerlerde olabilir.)
 
-    İşte Global timer her bir kesme oluşturduğunda işletim sisteminin kesme kodu (interrupt handler) devereye girip "jiffies" isimli global dğeişkeni
+    İşte Global timer her bir kesme oluşturduğunda işletim sisteminin kesme kodu (interrupt handler) devereye girip "jiffies" isimli global değişkeni
     1 artırmaktadır. Bu jiffies değişkeni unsigned long türdendir. Bildindiği gibi unsigned long türü 32 bit Linux sistemlerinde 32 bit 64 bit Linux sistemlerinde 
     64 bittir. 32 bit Linux sistemlerinde ayrıca jiffies_64 isimli bir değişken daha vardır. bu değişken hem 32 bit sistemde hem de 64 bit sistemde 64 bitliktir. 
 
@@ -59944,7 +60032,7 @@ static int __init generic_init(void)
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!..\n");
+		printk(KERN_INFO "Cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -60237,7 +60325,7 @@ static int __init generic_init(void)
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!..\n");
+		printk(KERN_INFO "Cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -60323,7 +60411,7 @@ chmod $mode $module
 /*--------------------------------------------------------------------------------------------------------------------------
     Önceki konularda da UNIX/Linux sistemlerinde kernel modda çalışan işletim sistemine ait thread'ler olduğundan bahsetmiştik. Bu thread'ler
     run kuyruğunda bulunan uykuya dalabilen işletim sisteminin programm gibi çalışan thread'leridir. Çeşitli işlemlerden sorumludurlar. Linux 
-    işletim sisteminde bunların da isimleri genellikle "user mode deamon"lar gibi sonu 'd' ile bitmektedir ve yine bunlar 
+    işletim sisteminde bunların da isimleri genellikle "user mode daemon"lar gibi sonu 'd' ile bitmektedir ve yine bunlar 
     isimleri genellikle 'k' harfi ile başlarlar. Örneğin "kupdate", "kswapd", "keventd" gibi. 
 
     İşte aygıt sürücüler de isterlerse arka planda kernel modda bir proses gibi çalışan thread'ler yaratabilirler. Ancak bu thread'ler
@@ -60419,7 +60507,7 @@ static int __init generic_init(void)
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!..\n");
+		printk(KERN_INFO "Cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -60516,7 +60604,7 @@ chmod $mode $module
     bazı uçlarına zaten üretimden bazı birimler bağlanmıştır. Ancak bunların bazıları boştadır. Genişleme yuvalarına takılan kartlar bu boştaki kesme uçlarını
     kullanabilmektedir. Bugün PC'lerde kullanılan modern genişleme yuvalarına PCI ve PCI-X denilmektedir. 
 
-    Bugün Pentium ve eşdeğer AMD ieşlemcilerinin içeisinde de ismine "Local APIC" denilen bir kesme denetleyicisi vardır. Bu local APIC iki uca sahiptir.
+    Bugün Pentium ve eşdeğer AMD ieşlemcilerinin içerisinde de ismine "Local APIC" denilen bir kesme denetleyicisi vardır. Bu local APIC iki uca sahiptir.
     Aynı zamanda bir timer devresi de bulundurmaktadır. Bu local APIC içerisindeki timer devresi o işlemcide jiffy oluşturulmasında ve context switch
     yapılmasında kullanılmaktadır. Local APIC'in en önemli özelliklerinden birisi "data bus" yoluyla kesme alabilmesidir. Bu özellik sayesinde hiç işlemcinin
     INT uyarılmadan çok fazla sayıda kesme sanki belleğe bir değer yazıyormuş ginbi oluşturulabilmektedir. Gerçekten de bugün PCI slotlara takılan bazı
@@ -60639,7 +60727,7 @@ static int __init generic_init(void)
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!..\n");
+		printk(KERN_INFO "Cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -60653,7 +60741,7 @@ static int __init generic_init(void)
 	}
 
 	if ((result = request_irq(1, keyboard_irq_handler, IRQF_SHARED, "generic-char-driver-irq", &g_cdev)) != 0) {
-		printk(KERN_ERR "interrupt couldn't registered!..\n");
+		printk(KERN_ERR "interrupt couldn't registered!...\n");
 		return result;
 	}
 
@@ -60838,7 +60926,7 @@ static int __init generic_init(void)
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!..\n");
+		printk(KERN_INFO "Cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -60852,7 +60940,7 @@ static int __init generic_init(void)
 	}
 
 	if ((result = request_irq(1, keyboard_irq_handler, IRQF_SHARED, "generic-char-driver-irq", &g_cdev)) != 0) {
-		printk(KERN_ERR "interrupt couldn't registered!..\n");
+		printk(KERN_ERR "interrupt couldn't registered!...\n");
 		return result;
 	}
 
@@ -61016,7 +61104,7 @@ static int __init generic_init(void)
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!..\n");
+		printk(KERN_INFO "Cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -61030,7 +61118,7 @@ static int __init generic_init(void)
 	}
 
 	if ((result = request_irq(1, keyboard_irq_handler, IRQF_SHARED, "generic-char-driver-irq", &g_cdev)) != 0) {
-		printk(KERN_ERR "interrupt couldn't registered!..\n");
+		printk(KERN_ERR "interrupt couldn't registered!...\n");
 		return result;
 	}
 
@@ -61167,7 +61255,7 @@ chmod $mode $module
     kullanılabilmektedir. Ancak bu aygıt sürücünün read ve/veya write modda açılabilmesi için prosrdin etkin kullanıcı id'sinin 0 olması 
     gerekmektedir. (Yani böyle programları sudo yaparak çalıştırmalıyız.)
 
-    Bu kullanım için aygıt sürücü user moddan open fonksiyonuyla açılır. Her byte bir portu beirtmektedir. lseek fonksiyonu ile ilgili porta dosya göstericisi
+    Bu kullanım için aygıt sürücü user moddan open fonksiyonuyla açılır. Her byte bir portu belirtmektedir. lseek fonksiyonu ile ilgili porta dosya göstericisi
     konumlandırılır. Sonra read/write işlemi uygulanır. 
 
     /dev/mem isimli karakter aygıt sürücüsü de fiziksel belleğe erişmek için kullanılmaktadır. Bu aygıt sürücü açılıp lseek ile belli bir offset'e konumlanılırsa
@@ -61181,7 +61269,7 @@ chmod $mode $module
     Bu tür yer değiştirmeler normak user mod programlarda hiçbir davranış değişiklğine yol açmazlar. Ancak işletim sistemi ve aygıt sürücü kodlarında
     ve özellikle IO portlarına erişim söz konusu olduğunda bu optimizasyon olumsuz yan etkilere yol açabilmektedir. Örneğin birbirleriyle alakasız iki adrese
     yazma yapılması durumunda yazma komutlarının yer değiştirmesi işlemcinin bu işleri daha hızlı yapabilmesine yol açabilmektedir. Fakat IO portları ve Memory mapped IO 
-    söz konusu olduğunda bu sıralama değişikliği istenmeyen olumsuz sonuçlar doğurabilmektedir. İşte bu yer dğeiştimeyi ortadan kaldırmak için bariyer koyma yöntemi
+    söz konusu olduğunda bu sıralama değişikliği istenmeyen olumsuz sonuçlar doğurabilmektedir. İşte bu yer değiştirmeyi ortadan kaldırmak için bariyer koyma yöntemi
     uygulanmaktadır. Bariyerin yukarısı ve aşağısı derleyici ve işlemci tarafından yer değiştiremez. 
 
     void rmb(void);
@@ -61238,7 +61326,7 @@ chmod $mode $module
     void iowrite16_rep(void *addr, const void *buf, unsigned long count);
     void iowrite32_rep(void *addr, const void *buf, unsigned long count);
 
-    Bu fonksiyonlar da ikinci parametreiyle belirtilen adresten başlayarak count kadar 1 byte, 2 byte, 4 byte'lık bilgileri hep birinci parametreyle belşrtşlen adrese 
+    Bu fonksiyonlar da ikinci parametresiyle belirtilen adresten başlayarak count kadar 1 byte, 2 byte, 4 byte'lık bilgileri hep birinci parametreyle belşrtşlen adrese 
     aktarmaktadır. Bir de blok kopyalaması yapan fonksiyonlar vardır:
 
     void memcpy_fromio(void *dest, const void *source, unsigned int count);
@@ -61270,7 +61358,7 @@ chmod $mode $module
     Bu tür yer değiştirmeler normak user mod programlarda hiçbir davranış değişiklğine yol açmazlar. Ancak işletim sistemi ve aygıt sürücü kodlarında
     ve özellikle IO portlarına erişim söz konusu olduğunda bu optimizasyon olumsuz yan etkilere yol açabilmektedir. Örneğin birbirleriyle alakasız iki adrese
     yazma yapılması durumunda yazma komutlarının yer değiştirmesi işlemcinin bu işleri daha hızlı yapabilmesine yol açabilmektedir. Fakat IO portları ve Memory mapped IO 
-    söz konusu olduğunda bu sıralama değişikliği istenmeyen olumsuz sonuçlar doğurabilmektedir. İşte bu yer dğeiştimeyi ortadan kaldırmak için bariyer koyma yöntemi
+    söz konusu olduğunda bu sıralama değişikliği istenmeyen olumsuz sonuçlar doğurabilmektedir. İşte bu yer değiştirmeyi ortadan kaldırmak için bariyer koyma yöntemi
     uygulanmaktadır. Bariyerin yukarısı ve aşağısı derleyici ve işlemci tarafından yer değiştiremez. 
 
     void rmb(void);
@@ -61290,7 +61378,7 @@ chmod $mode $module
 /*--------------------------------------------------------------------------------------------------------------------------
     Blok aygıt sürücüleri (block device drivers) disk benzeri birimlerden bloklu okuma ve yazma yapabilmek için kullanılan özel aygıt sürücülerdir. 
     Disk benzeri birimlerden bir hamlede okunabilecek ya da yazılabilecek bilgi miktarına "sektör" denilmektedir. Yani bu tür aygıtlar transferi 
-    byte byte değil blok blok yaparlar. Örneğin bir diskten 1 byte okuma bir şey yoktur. Ya da diske 1 yazma diye bir şey yoktur. Diskteki 1 byte dğeiştirilecekse
+    byte byte değil blok blok yaparlar. Örneğin bir diskten 1 byte okuma bir şey yoktur. Ya da diske 1 yazma diye bir şey yoktur. Diskteki 1 byte değiştirilecekse
     önce onun bulunduğu sektör okunur, değişiklik RAM üzerinde yapılır. Sonra o sektör yeniden diske yazılır. Tipik transfer bu adımlardan geçilerek gerçekleştirilmektedir. 
     Bir sektör değişebilse de hemen her zaman 512 byte'tır. 
 
@@ -61338,7 +61426,7 @@ int g_major = 0;
 static int __init generic_init(void)
 {
 	if ((g_major = register_blkdev(g_major, "generic-bdriver")) < 0) {
-		printk(KERN_ERR "Cannot register block driver!..\n");
+		printk(KERN_ERR "Cannot register block driver!...\n");
 		return g_major;
 	}
 
@@ -61500,12 +61588,12 @@ static int __init generic_init(void)
 	int result = 0;
 
 	if ((g_major = register_blkdev(g_major, "generic-bdriver")) < 0) {
-		printk(KERN_ERR "Cannot register block driver!..\n");
+		printk(KERN_ERR "Cannot register block driver!...\n");
 		return g_major;
 	}
 
 	if ((g_bdev = kmalloc(sizeof(struct BLOCKDEV), GFP_KERNEL)) == NULL) {
-		printk(KERN_ERR "Cannot allocate memory!..\n");
+		printk(KERN_ERR "Cannot allocate memory!...\n");
 		result = -ENOMEM;
 		goto EXIT1;
 	}
@@ -61514,7 +61602,7 @@ static int __init generic_init(void)
 
 	spin_lock_init(&g_bdev->sl);
 	if ((g_bdev->rq = blk_init_queue(request_proc, &g_bdev->sl)) == NULL) {
-		printk(KERN_ERR "Canno allocate queue!..\n");
+		printk(KERN_ERR "Canno allocate queue!...\n");
 		result = -ENOMEM;
 		goto EXIT2;
 	}
@@ -61629,7 +61717,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Blok aygıt sürücülerinde yukarıda belirtilen işlemlerden sonra artık transfer işleminin yapılması için bulundurulan fonksiyonun
     (örneğimizde request_proc) yazılması aşamasına geldik. Anımsanacağı gibi user mode ya da kernel mode kodlar tarafından blok transferine yönelik
-    bir istek oluşturğunda kernel IO çizelgeleyicisi bunları çizelgeleio uygun bir zamanda transfer edilebilmesi için bizim belirtitğimiz bu fonksiyonu çağırıyordu.
+    bir istek oluştuğunda kernel IO çizelgeleyicisi bunları çizelgeleio uygun bir zamanda transfer edilebilmesi için bizim belirtitğimiz bu fonksiyonu çağırıyordu.
     Yani örneğimizdeki request_proc bizim tarafımızdan değil kernel tarafından callback fonksiyon olarak çağrılmaktadır. Bizim de bu fonksiyon içerisinde kuyruğa
     bırakılmış blok transfer isteklerini kuyruktan alarak gerçekleştirmemiz gerekir. 
 
@@ -61798,7 +61886,7 @@ void exit_sys(const char *msg)
 
     Burada transferin yapılacağı sektörün numarası bio_vec içerisinde bulunmadığında iterator yolu ile iterator.iter.bi_sector ifadesiyle alınmıuştır.
     Transfer adresi olan buf biov.bv_page adresinden biov.bv_offset kadar ileridedir. Yine transferin yönü doğrudan bio_vec yapısının içerisinde değildir. 
-    Bu yön bilgisinin bio_data_dir makrosuyla iterator yoluyla alındığına dikkat ediniz. (Aslında yön bilgisi bio yapısının içeirsindedir. Bu makro onu buradan almaktadır.)
+    Bu yön bilgisinin bio_data_dir makrosuyla iterator yoluyla alındığına dikkat ediniz. (Aslında yön bilgisi bio yapısının içerisindedir. Bu makro onu buradan almaktadır.)
     Örneğimizde transferin transfer_block isimli fonksiyonla yapldığını görüyorsunuz. Bu fonksiyon bizim tarafımızdan yazılan gerçek transferin yapıldığı fonksiyondur. 
     Aygıt sürücünün en önemli bilgilerinin BLOCKDEV isimli yapıda tutulduğunu anımsayınız. Her ne kadar bu yapı nesnesinin adresi global g_bdev göstericisinde tutuluyorsa da 
     yine de o bilgi örneğimizde requeat_queue nesnesinin queuedata elemanından çekilerek alınıp transfer_block fonksiyonuna verilmiştir. Bu durum yukarıdaki örnek için gereksiz olsa da 
@@ -61857,12 +61945,12 @@ static int __init generic_init(void)
 	int result = 0;
 
 	if ((g_major = register_blkdev(g_major, "generic-bdriver")) < 0) {
-		printk(KERN_ERR "Cannot register block driver!..\n");
+		printk(KERN_ERR "Cannot register block driver!...\n");
 		return g_major;
 	}
 
 	if ((g_bdev = kmalloc(sizeof(struct BLOCKDEV), GFP_KERNEL)) == NULL) {
-		printk(KERN_ERR "Cannot allocate memory!..\n");
+		printk(KERN_ERR "Cannot allocate memory!...\n");
 		result = -ENOMEM;
 		goto EXIT1;
 	}
@@ -61870,14 +61958,14 @@ static int __init generic_init(void)
 	g_bdev->capacity = CAPACITY;
 
 	if ((g_bdev->data = vmalloc(CAPACITY)) == NULL) {
-		printk(KERN_ERR "Cannot allocate memory!..\n");
+		printk(KERN_ERR "Cannot allocate memory!...\n");
 		result = -ENOMEM;
 		goto EXIT2;
 	}
 
 	spin_lock_init(&g_bdev->sl);
 	if ((g_bdev->rq = blk_init_queue(request_proc, &g_bdev->sl)) == NULL) {
-		printk(KERN_ERR "Canno allocate queue!..\n");
+		printk(KERN_ERR "Canno allocate queue!...\n");
 		result = -ENOMEM;
 		goto EXIT3;
 	}
