@@ -1409,7 +1409,7 @@ void exit_sys(const char *format, ...)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Aslında errno değişkeni Linux'ta çekirdek tarafından set edilen bir değişken değildir. errno değişkeni tamamen user moddaki 
+    Aslında errno değişkeni Linux'ta çekirdek tarafından set edilen bir değişken değildir. errno değişkeni tamamen user mode'daki 
     POSIX kütüphanesi tarafından set edilmektedir. Tipik olarak Linux çekirdeğinde bir sistem fonksiyonu başarısız olduğunda 
     negatif errno değerine geri dönmektedir. Sistem fonksiyonunu çağıran POSIX fonksiyonu bu negatif errno değerini pozitife 
     dönüştürerek errno değişkenini set etmektedir. 
@@ -6318,7 +6318,7 @@ void exit_sys(const char *msg)
     bir disk dosyasına ilişkin olabileceği gibi bir "aygıt sürücü (device driver)" dosyasına ilişkin de olabilmektedir. 
     Gerçekten de 0, 1 ve 2 numaralı betimnleyicilerin gösterdiği dosya nesneleri "terminal aygıt sürücüsüne" ilişkindir. 
 
-    Bir aygıt sürücü kernel modda çalışan bir kod topluluğudur. Bir dosya betimleyicisi bir aygıt sürücüne ilişkinse bu betimleyici 
+    Bir aygıt sürücü kernel mode'da çalışan bir kod topluluğudur. Bir dosya betimleyicisi bir aygıt sürücüne ilişkinse bu betimleyici 
     ile read fonksiyonu çağrıldığında aygıt sürücüsünü yazanların "read" olarak tanımladıkları fonksiyon çağrılmaktadır. Benzer 
     biçimde bir aygıt sürücüne ilişkinse bu betimleyici ile write fonksiyonu çağrıldığında aygıt sürücüsünü yazanların "write" 
     diye tanımladıkları fonksiyon çağrılmaktadır. 
@@ -7043,30 +7043,30 @@ int main(void)
     mekanizmasından muaf olması gerekmektedir. 
 
     İşlemcileri tasarlayanlar genellikle prosesler için iki çalışma modu tanımlamışlardır: "Kernel Mode" ve "User Mode".
-    Eğer bir kod "kernel modda" çalışıyorsa işlemci koruma mekanizmasını o kod için işletmez. Böylece o kod her şeyi yapabilir. 
-    Ancak eğer bir kod "user modda" çalışıyorsa işlemci o kod için koruma mekanizmasını işletmektedir. Normal programların hepsi 
-    user modda çalışmaktadır. Ancak kernel kodları ve aygıt sürücüler (kernel modülleri) kernel modda çalışırlar. 
+    Eğer bir kod "kernel mode'da" çalışıyorsa işlemci koruma mekanizmasını o kod için işletmez. Böylece o kod her şeyi yapabilir. 
+    Ancak eğer bir kod "user mode'da" çalışıyorsa işlemci o kod için koruma mekanizmasını işletmektedir. Normal programların hepsi 
+    user mode'da çalışmaktadır. Ancak kernel kodları ve aygıt sürücüler (kernel modülleri) kernel mode'da çalışırlar.
 
     Bir programın "sudo" ile çalıştırılmasının (yani programın proses id'sinin 0 olmasının) bu konuyla hiçbir ilgisi yoktur. 
     Proses id'nin 0 olması yalnızca dosya erişimleri için avantaj sağlayabilmektedir. Yoksa biz bir programı "sudo" ile çalıştırsak 
-    bile o program yine "user modda" çalıştırılmaktadır.
+    bile o program yine "user mode'da" çalıştırılmaktadır.
 
-    Pekiyi biz kendi programımızı kernel modda çalıştıramaz mıyız? Bu sorunun yanıtı genel olarak "hayır" biçimindedir. Bunun tek 
+    Pekiyi biz kendi programımızı kernel mode'da çalıştıramaz mıyız? Bu sorunun yanıtı genel olarak "hayır" biçimindedir. Bunun tek 
     yolu "aygıt sürücü" ya da "kernel modül" denilen biçimde kod yazmaktır. Zaten aygıt sürücülerin en önemli özelliği onların 
-    kernel modda çalışmasıdır. Tabii aygıt sürücüler ancak sistem yöneticisitarafından bir parola eşiliğinde (yani sudo ile) 
+    kernel mode'da çalışmasıdır. Tabii aygıt sürücüler ancak sistem yöneticisitarafından bir parola eşiliğinde (yani sudo ile) 
     yüklenebilmektedir. 
 
     Sistem fonksiyonları kernel'ın içerisindeki fonksiyonlardır. Dolayısıyla bu fonksiyonlar özel makine komutalrını kullanırlar ve 
     bellekte her yere erişebilirler. Aksi takdirde bu fonksiyonların yazılabilmesi mümkün değildir. Pekiyi bizim programlarımız
-    user modda çalıştığına göre biz bir sistem fonksiyonunu çağırdığımızda ne olacaktır? İşte user mod bir proses bir sistem 
+    user mode'da çalıştığına göre biz bir sistem fonksiyonunu çağırdığımızda ne olacaktır? İşte user mod bir proses bir sistem 
     fonksiyonunu çağırdığında prosesin modu otomatik olarak kernel moda geçirilmektedir. Böylece sistem fonksiyonu yine kernel 
-    modda çalışmış olmaktadır. Sistem fonksiyonunun çalışması bittiğinde proses yine otomatik olarak user moda dönmektedir. 
-    Örneğin Intel işlemcilerinde bu geçişi sağlayan mekanizmaya "kapı (gate)" denilmektedir. Tabii kapı yerleştirmek kernel modda 
+    mode'da çalışmış olmaktadır. Sistem fonksiyonunun çalışması bittiğinde proses yine otomatik olarak user moda dönmektedir. 
+    Örneğin Intel işlemcilerinde bu geçişi sağlayan mekanizmaya "kapı (gate)" denilmektedir. Tabii kapı yerleştirmek kernel mode'da 
     yapılabilecek ir işlemdir. Dolayısıyla user mod proses yalnızca zaten belirlenmiş olan kodları çalıştırmak üzere kernel moda 
     geçebilmektedir. 
 
-    Sistem fonksiyonlarını çağırmanın zamansal bir maliyeti vardır. Çünkü prosesin user moddan kernel moda geçmesi ve birtakım 
-    gerekli kontrollerin kernel modda yapılması zaman kaybına yol açmaktadır. Örneğin:
+    Sistem fonksiyonlarını çağırmanın zamansal bir maliyeti vardır. Çünkü prosesin user mode'dan kernel moda geçmesi ve birtakım 
+    gerekli kontrollerin kernel mode'da yapılması zaman kaybına yol açmaktadır. Örneğin:
 
     read(fd, (char *)0x123456, 10)
 
@@ -7075,8 +7075,8 @@ int main(void)
     kesinlikle adreslerin o prosesin alanı içerisinde olup olmadığını test ederler. Bunun gibi pek çok yapılması egreken irili ufaklı 
     kontroller vardır. 
 
-    O halde aslında bir proses yaşamının önemli bir kısmını user modda geçrirken bir kısmını da kernel modda geçirebilmektedir. 
-    Örneğin "time" isimli kabuk komutuyla biz prosesin ne kadar zamanı kernel modda ne kadar zamanı user modda geçirdiğini görebiliriz:
+    O halde aslında bir proses yaşamının önemli bir kısmını user mode'da geçrirken bir kısmını da kernel mode'da geçirebilmektedir. 
+    Örneğin "time" isimli kabuk komutuyla biz prosesin ne kadar zamanı kernel mode'da ne kadar zamanı user mode'da geçirdiğini görebiliriz:
 
     kaan@kaan-virtual-machine:~/Study/Unix-Linux-SysProg$ time ./sample
 
@@ -7676,7 +7676,7 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    stdin dosyası hem Windows hem de UNIX/Linux sistemlerinde dosyaya yönlendirilmemişse satır amponlamalı moddadır. Dolayısıyla 
+    stdin dosyası hem Windows hem de UNIX/Linux sistemlerinde dosyaya yönlendirilmemişse satır tamponlamalı moddadır. Dolayısıyla 
     biz klavyeden bir karakter bile okumak istesek UNIX/Linux sistemlerinde read fonksiyonu 0 numaralı betimleyici ile çağrılarak 
     bir satırlık bilgi okunup tampona yerleştirilmektedir. Artık tamponda bilgi olduğu sürece okuma fonksiyonları tampondakileri 
     okuyacaktır. Örneğin üst üste ik getchar çağrısı ile iki karakteri stdin dosyasından okumak isteyelim:
@@ -11007,7 +11007,7 @@ for i in range(10):
     Buradan şu sonuç çıkmaktadır: exec fonksiyonlarının p'li versiyonları ile bir shell script dosyasını biz başında shebang 
     satırı olmadan da çalıştırabiliriz. Ancak exec fonksiyonlarının p'siz versiyonlarında bunu yapamayız. Öte yandan Linux 
     sistemlerinde zaten execve dışındaki exec fonksiyonlarının sistem fonksiyonu olmadığını anımsayınız. O halde exec fonksiyonlarının 
-    p'li versiyonları tamamen user modda script dosyasını execve yaptıktan sonra ENOEXEC errno değeri ile fonksiyonun başarısız 
+    p'li versiyonları tamamen user mode'da script dosyasını execve yaptıktan sonra ENOEXEC errno değeri ile fonksiyonun başarısız 
     olduğunu gördüklerinde bu kez "/bin/sh" dosyasını execve ile exec yapmaktadır. Dosya isminin içerisinde "/" karakteri kullanılsa 
     bile exec fonksiyonlarının p'li versiyonlarının davranışı yine bu biçimdedir. exec fonksiyonlarının p'li versiyonlarının 
     bu davranışı POSIX'te eskiden isteğe bağlı bırakılmıştı. Ancak sonra standartlarda bu davranış zorunlu tutulmuştur. Ancak 
@@ -12374,7 +12374,7 @@ void exit_sys(const char *msg)
     kendileri yapmaktadır. 
 
     Thread'in çalıştırma kuyruğundan çıkartılıp wait kuyruğuna alınması nasıl ve kimin tarafından yapılmaktadır? Böyle bir işlem
-    user modda sıradan prosesler tarafından yapılamaz. Hemen her zaman kernel modda işletim sisteminin sistem fonksiyonları 
+    user mode'da sıradan prosesler tarafından yapılamaz. Hemen her zaman kernel mode'da işletim sisteminin sistem fonksiyonları 
     tarafından ya da aygıt sürücüler tarafından yapılmaktadır. Yani thread'in bloke olması programın çalışması sırasında 
     çağrılan bir sistem fonksiyonu (ya da aygıt sürücü fonksiyonu) tarafından yapılmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -18356,7 +18356,7 @@ void exit_sys(const char *msg)
     sıfırlanmaz. Bazen programcılar tahsisatı hızlandırmak için MAP_ANONYMOUS|MAP_PRIVATE|MAP_UNINITIALIZED biçiminde bayrak kullanabilmektedir. 
 
     Daha önceden de "çalıştırılabilir dosyaların exec fonksiyonları tarafından bölüm bölüm (section section) belleğe mmap 
-    mekanizmasıyla map edildiğini belirtmiştik. İşte ilkdeğer verilmemiş global değişkenlerin bulunduğu ".bss" alanı da 
+    mekanizmasıyla map edildiğini belirtmiştik. İşte ilk değer verilmemiş global değişkenlerin bulunduğu ".bss" alanı da 
     zaten mapping işlemi yapılırken sıfırlanmaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -18757,7 +18757,7 @@ void exit_sys(const char *msg)
 
     Ancak prosesin bütün thread'leri aynı ".data" ve ".bss" ve "heap" alanını ortak kullanmaktadır. Bu nedenle thread'lerden biri yukarıdaki 
     örnekte "++g_x" global değişkenini artırdığında diğeri onu artırılmış olarak görecektir. Fonksiyonların static yerel değişkenleri stack'te
-    yaratılmamaktadır. Eğer ilkdeğer verilmişse bunlar ".data" alanında, ilkdeğer verilmemişse ".bss" alanında yaratılmaktadır. Dolayısıyla 
+    yaratılmamaktadır. Eğer ilk değer verilmişse bunlar ".data" alanında, ilk değer verilmemişse ".bss" alanında yaratılmaktadır. Dolayısıyla 
     örneğin bir thread static bir yerel değişkeni değiştirirse diğer thread onu değişmiş olarak görmektedir. 
 
     İşletim sistemlerinde yaratılan bir thread'in default stack büyüklüğü sistemden sisteme değişebilmektedir. Linux sistemlerinde thread'ler default olarak 
@@ -19789,13 +19789,13 @@ void exit_sys_errno(const char *msg, int eno)
 
     1) Önce pthread_attr_t türünden bir nesne yaratılır. 
 
-    2) Yaratılan bu nesneye pthread_attr_init fonksiyonuyla ilkdeğer verilir. Fonksiyonun prototipi şöyledir:
+    2) Yaratılan bu nesneye pthread_attr_init fonksiyonuyla ilk değer verilir. Fonksiyonun prototipi şöyledir:
 
     #include <pthread.h>
 
     int pthread_attr_init(pthread_attr_t *attr);
 
-    Fonksiyon pthread_attr_t türünden nesnenin adresini alarak nesneye ilkdeğer vermektedir. Fonksiyon başarı durumunda 0, 
+    Fonksiyon pthread_attr_t türünden nesnenin adresini alarak nesneye ilk değer vermektedir. Fonksiyon başarı durumunda 0, 
     başarısızlık durumunda errno değeri ile geri dönmektedir. Fonksiyon, Linux'ta her zaman başarılı olmaktadır. Ancak bazı sistemlerde 
     bu pthread_attr_t yapısı içerisinde bazı göstericiler için alan tahsis ediliyor olabilir ve bu tahsisat başarısızlıkla sonuçlanabilir. 
     Bu durumda pthread_attr_init fonksiyonu ENOMEM değeri ile geri döner. ENOMEM errno değeri malloc, calloc, realloc gibi fonksiyonlarda da
@@ -20199,8 +20199,8 @@ void exit_sys_errno(const char *msg, int eno)
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi kritik kod blokları nasıl oluşturulmaktadır? İşte kritik kodlar "işletim sisteminin de işe karıştığı" birtakım 
     "senkronizasyon nesneleriyle" oluşturulmaktadır. Bu senkronizasyon nesneleri genel olarak kernel moda geçiş yapabilmektedir.
-    Kernel modda atomik işlemler yapmak işlemcilerin sağladığı bazı özel makine komutlarıyla mümkün olabilmektedir. Artık 
-    pek çok modern masasütü ve mobil işlemci "user modda" bazı senkronizasyon problemleri için "atomik bir biçimde çalışan" 
+    Kernel mode'da atomik işlemler yapmak işlemcilerin sağladığı bazı özel makine komutlarıyla mümkün olabilmektedir. Artık 
+    pek çok modern masasütü ve mobil işlemci "user mode'da" bazı senkronizasyon problemleri için "atomik bir biçimde çalışan" 
     özel komutlar barındırmaktadır. Bazı senkronizasyon nesneleri daha az kernel moda geçerek bu makine komutlarının 
     yardımıyla daha etkin kilitleme yapabilmektedir. 
 
@@ -20228,18 +20228,18 @@ void exit_sys_errno(const char *msg, int eno)
 
     pthread_mutex_t g_mutex;
 
-    Bu nesneye ilkdeğer vermenin iki yolu vardır. İlkdeğer doğrudan PTHREAD_MUTEX_INITIALIZER isimli makro kullanılarak verilebilir. 
-    Bu makro tipik olarak küme parantezleri içerisinde yapıya ilkdeğer verme biçiminde açılmaktadır. Örneğin:
+    Bu nesneye ilk değer vermenin iki yolu vardır. İlkdeğer doğrudan PTHREAD_MUTEX_INITIALIZER isimli makro kullanılarak verilebilir. 
+    Bu makro tipik olarak küme parantezleri içerisinde yapıya ilk değer verme biçiminde açılmaktadır. Örneğin:
 
     pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-    Mutex nesnesine ilkdeğer vermenin ikinci yolu pthread_mutex_init fonksiyonunu kullanmaktır. Fonksiyonun prototipi şöyledir:
+    Mutex nesnesine ilk değer vermenin ikinci yolu pthread_mutex_init fonksiyonunu kullanmaktır. Fonksiyonun prototipi şöyledir:
 
     #include <pthread.h>
 
     int pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutexattr_t *attr);
 
-    Fonksiyonun birinci parametresi ilkdeğer verilecek mutex nesnesinin adresini almaktadır. İkinci parametresi mutex nesnesinin 
+    Fonksiyonun birinci parametresi ilk değer verilecek mutex nesnesinin adresini almaktadır. İkinci parametresi mutex nesnesinin 
     bazı özelliklerini belirten "özellik nesnesinin" adresini almaktadır. Mutex özellikleri daha sonra ele alınacaktır. Bu ikinci 
     parametreye NULL adres geçilirse mutex default özelliklerle yaratılır. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda errno 
     değerine geri dönmektedir. Örneğin:
@@ -20248,19 +20248,19 @@ void exit_sys_errno(const char *msg, int eno)
         exit_sys_errno("pthread_mutex_init", result);
 
     Mutex nesnesi PTHREAD_MUTEX_INITIALIZER makrosuyla yaratıldığında mutex nesnesinin özellik bilgisi de default değerlerle oluşturulmaktadır. 
-    Yani aşağıdaki iki ilkdeğer verme biçimi eşdeğerdir:
+    Yani aşağıdaki iki ilk değer verme biçimi eşdeğerdir:
 
     pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_init(&g_mutex, NULL);
 
-    Tabii bir mutex nesnesine yalnızca bir kez ilkdeğer vermeliyiz. POSIX standartlarına göre nesneye birden fazla kez ilkdeğer vermek tanımsız
+    Tabii bir mutex nesnesine yalnızca bir kez ilk değer vermeliyiz. POSIX standartlarına göre nesneye birden fazla kez ilk değer vermek tanımsız
     davranışa yol açmaktadır. 
 
     Programcı mutex nesnesinin kullanımı bittikten sonra pthread_mutex_destroy fonksiyonu ile onu boşaltmalıdır. Aslında bazı sistemlerde bu pthread_mutex_destroy
     fonksiyonu boşaltım için bir şey yapmamaktadır. Yani bazı sistemlerde bu içi boş bir fonksiyondur. Ancak POSIX standartlarına göre mutex nesnesi
     yaratılırken birtakım tahsisatlar yapılmış olabilir ve bu tahsisatların geri alınması pthread_mutex_destroy fonksiyonuyla sağlanmaktadır. 
-    Yine bazı sistemlerde mutex nesnesine PTHREAD_MUTEX_INITIALIZER makrosuyla ilkdeğer verilmişse onun boşaltımının yapılması gerekmeyebilmektedir. 
-    Ancak POSIX standartlarına göre nesneye makro ile ilkdeğer verilmiş olsa bile nesnenin boşaltımı yine yapılmalıdır. 
+    Yine bazı sistemlerde mutex nesnesine PTHREAD_MUTEX_INITIALIZER makrosuyla ilk değer verilmişse onun boşaltımının yapılması gerekmeyebilmektedir. 
+    Ancak POSIX standartlarına göre nesneye makro ile ilk değer verilmiş olsa bile nesnenin boşaltımı yine yapılmalıdır. 
 
     #include <pthread.h>
 
@@ -20274,7 +20274,7 @@ void exit_sys_errno(const char *msg, int eno)
     if ((result = pthread_mutex_destroy(&g_mutex)) != 0)
         exit_sys_errno("pthread_mutex_destory", result);
 
-    Burada bir noktayı yeniden vurgulamak istiyoruz: Eğer mutex nesnesine PTHREAD_MUTEX_INITIALIZER makrosuyla ilkdeğer verilmişse
+    Burada bir noktayı yeniden vurgulamak istiyoruz: Eğer mutex nesnesine PTHREAD_MUTEX_INITIALIZER makrosuyla ilk değer verilmişse
     mutex nesnesinin destroy edilmesi pek çok sistemde gerekmemektedir. Ancak POSIX standartlarında bu durum belirtilmemiştir, bu da mutex nesnesi 
     makroyla initialize edilse bile destroy işlemini yapılması gerektiği anlamına gelmektedir. Ancak pek çok programcı bu tür durumlarda
     destroy işlemini yapmamaktadır. 
@@ -20282,7 +20282,7 @@ void exit_sys_errno(const char *msg, int eno)
     Pekiyi mademki PTHREAD_MUTEX_INITIALIZER makrosu daha pratik bir kullanım sunmaktadır o halde neden pthread_mutex_init fonksiyonuna 
     gereksinim duyulmuştur? İşte bazen mutex nesneleri dinamik bir biçimde de tahsis edilebilmektedir. Örneğin bir yapı nesnesini senkronize 
     etmek için bir mutex kullanılacaksa, mutex o yapının içerisinde yapı elemanı olarak bildirilebilir. Bu durumda ona statik biçimde makroyla
-    ilkdeğer vermek mümkün olmaz. Çünkü C'de bir yapı nesnesine küme parantezleri ile atama yapamayız. (C99 ile birlikte ismine "compound literals" 
+    ilk değer vermek mümkün olmaz. Çünkü C'de bir yapı nesnesine küme parantezleri ile atama yapamayız. (C99 ile birlikte ismine "compound literals" 
     denilen bir sentaks ile bu durum mümkün hale getirilmiştir.)
 
     Örneğin (kontroller ihmal edilmiştir):
@@ -20947,9 +20947,9 @@ void exit_sys_errno(const char *msg, int eno)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Mutex nesnesine pthread_mutex_init fonksiyonu ile ilkdeğer verilirken mutex özellikleri de bu fonksiyonun ikinci parametresinde
-    belirtilebilir. Eğer mutex nesnesine PTHREAD_MUTEX_INITIALIZER makrosuyla ilkdeğer verilmişse bu durumda mutex default özelliklerle
-    yaratılmaktadır. Daha önceden de belirttiğimiz gibi aşağıdaki iki ilkdeğer verme tamamen eşdeğerdir:
+    Mutex nesnesine pthread_mutex_init fonksiyonu ile ilk değer verilirken mutex özellikleri de bu fonksiyonun ikinci parametresinde
+    belirtilebilir. Eğer mutex nesnesine PTHREAD_MUTEX_INITIALIZER makrosuyla ilk değer verilmişse bu durumda mutex default özelliklerle
+    yaratılmaktadır. Daha önceden de belirttiğimiz gibi aşağıdaki iki ilk değer verme tamamen eşdeğerdir:
 
     pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_init(&g_mutex, NULL);
@@ -20959,7 +20959,7 @@ void exit_sys_errno(const char *msg, int eno)
 
     1) Önce pthread_mutexattr_t türünden bir özellik nesnesi tanımlanır. 
 
-    2) Bu özellik nesnesine pthread_mutexattr_init fonksiyonu ile ilk değerleri verilir. Bu nesneye ilkdeğer vermek için bir makro yoktur.
+    2) Bu özellik nesnesine pthread_mutexattr_init fonksiyonu ile ilk değerleri verilir. Bu nesneye ilk değer vermek için bir makro yoktur.
     Fonksiyonun prototipi şöyledir:
 
     #include <pthread.h>
@@ -21640,7 +21640,7 @@ namespace CSD
 
     Örneğimizde iki proses de count değerini asenkron biçimde mutex koruması eşliğinde birer milyar kez artırmaktadır. 
     Bu örnekte paylaşılan bellek alanı "prog1.c" programı tarafından yaratılmış ve oradaki mutex nesnesine bu program tarafından 
-    ilkdeğer verilmiştir. Dolayısıyla bizim önce "prog1" programını çalıştırmamız gerekmektedir. Mutex nesnesinin ve count nesnesinin
+    ilk değer verilmiştir. Dolayısıyla bizim önce "prog1" programını çalıştırmamız gerekmektedir. Mutex nesnesinin ve count nesnesinin
     paylaşılan bellek alanında bulunduğuna dikkat ediniz. Bu paylaşılan bellek alanı "prog1.c" programı tarafından shm_unlik fonksiyonu 
     ile yok edilmiştir. Tabii anımsanacağı gibi shm_unlink fonksiyonu başka bir proses paylaşılan bellek alanını kullanıyorsa o proses 
     paylaşılan bellek alanı nesnesini bırakana kadar zaten gerçek bir silme yapılmamaktadır. Pekiyi buradaki mutex nesnesi ne zaman 
@@ -21832,15 +21832,15 @@ void exit_sys_errno(const char *msg, int eno)
 /*--------------------------------------------------------------------------------------------------------------------------
     Mutex nesneleri, UNIX/Linux sistemlerinde nispeten hızlı senkronizasyon nesneleridir. Linux sistemlerinde senkronizasyon nesnelerinin
     hepsi zaten "futex (fast user space mutex)" denilen sistem fonksiyonu çağrılarak gerçekleştirilmektedir. mutex fonksiyonları 
-    duruma göre hiç kernel moda geçmeden işlemini user modda yapabilmektedir. Şöyle ki: Biz mutex nesnesini pthread_mutex_lock 
+    duruma göre hiç kernel moda geçmeden işlemini user mode'da yapabilmektedir. Şöyle ki: Biz mutex nesnesini pthread_mutex_lock 
     fonksiyonu ile kilitlemek isteyelim. Mutex nesnesi kendi içerisinde bayrak değişkenleri tutarak kilitleme işlemini atomik bir biçimde 
     yapmak isteyecektir. Atomikliği sağlamanın bir yolu "kernel moda geçerek CLI gibi makine komutuyla kesme mekanizmasını kapatıp bayrak
     değişkenlerini set etmek" olabilir. Ancak kernel moda geçmenin maliyeti yüksektir. İşte daha önceden de belirttiğimiz gibi yeni 
     modern işlemcilere "compare and set" gibi atomik makine komutları eklenmiştir. Bu makine komutları sayesinde bu tür flag değişkenleri 
-    hiç kernel moda geçmeden user modda atomik bir biçimde set edilebilmektedir. 
+    hiç kernel moda geçmeden user mode'da atomik bir biçimde set edilebilmektedir. 
 
     Ancak pthread_mutex_lock gibi bir fonksiyonun hiç kernel moda geçmeden işlem yapma olanağı da yoktur. Eğer mutex nesnesi kilitli 
-    değilse onun kilitlenmesi user modda "compare and set" komutlarıyla yapılabilmektedir. Ancak ya mutex nesnesi zaten kilitliyse? 
+    değilse onun kilitlenmesi user mode'da "compare and set" komutlarıyla yapılabilmektedir. Ancak ya mutex nesnesi zaten kilitliyse? 
     İşte bu durumda mecburen fonksiyon kernel moda geçerek thread'i bloke edecektir. Tabii aslında mutex kilitliyken bu fonksiyonlar
     hemen kernel moda geçip bloke oluşturmazlar. Çünkü pek çok senkronizasyon nesnesi çok kısa bir süre için kilitlenip açılmaktadır. 
     Bu nedenle pthread_mutex_lock, mutex'in kilitli olduğunu gördüğünde birden fazla işlemci ya da çekirdek varsa başka bir işlemci ya da 
@@ -21872,8 +21872,8 @@ void exit_sys_errno(const char *msg, int eno)
 
     Programcı yine koşul değişkenlerini farklı thread'ler erişebilsin diye tipik olarak global bir değişken biçiminde tanımlar.
 
-    2) Koşul değişkenlerine tıpkı mutex nesnelerinde olduğu gibi statik ya da dinamik olarak ilkdeğer verilebilmektedir. Biz koşul değişkenlerine
-    statik düzeyde PTHREAD_COND_INITIALIZER makrosuyla ilkdeğer verebiliriz. Örneğin:
+    2) Koşul değişkenlerine tıpkı mutex nesnelerinde olduğu gibi statik ya da dinamik olarak ilk değer verilebilmektedir. Biz koşul değişkenlerine
+    statik düzeyde PTHREAD_COND_INITIALIZER makrosuyla ilk değer verebiliriz. Örneğin:
 
     pthread_cond_t g_cond = PTHREAD_COND_INITIALIZER;
 
@@ -22771,7 +22771,7 @@ void exit_sys_errno(const char *msg, int eno)
 /*--------------------------------------------------------------------------------------------------------------------------
     Koşul değişkenleri de özellik (attribute) parametresine sahiptir. Ancak koşul değişkenlerinin set edilebilecek yalnızca 
     iki özelliği vardır. Koşul değişkenlerine özellik iliştirmek diğer nesnelerde olduğu gibi yapılmaktadır. Programcı önce
-    pthread_condattr_t türünden bir nesne tanımlar. Sonra bu nesneye pthread_condattr_init fonksiyonuyla ilkdeğer verir. 
+    pthread_condattr_t türünden bir nesne tanımlar. Sonra bu nesneye pthread_condattr_init fonksiyonuyla ilk değer verir. 
     Sonra pthread_condattr_setxxx fonksiyonlarıyla özellikleri nesne içerisine set eder. Oluşturduğu bu özellik nesnesini de
     pthread_cond_init fonksiyonunda kullanır. Yine özellik nesnesinin pthread_cond_init fonksiyonundan sonra korunmasına gerek yoktur. 
     Özellik nesnesi, pthread_condattr_destroy fonksiyonu ile boşaltılabilir. Fonksiyonların prototipileri şöyledir:
@@ -24382,7 +24382,7 @@ void exit_sys_errno(const char *msg, int eno)
 
     Biz bu notlarda "Sistem 5 semaphore nesnesi" demekle aslında bir semaphore kümesini kastetmiş olacağız. 
 
-    2) Sistem 5 semaphore nesnesi yaratıldıktan sonra artık bu semaphore nesnesi içerisindeki semaphore'ların ilkdeğerlerinin 
+    2) Sistem 5 semaphore nesnesi yaratıldıktan sonra artık bu semaphore nesnesi içerisindeki semaphore'ların ilk değerlerinin 
     verilmesi gerekir. Çünkü Sistem 5 semaphore nesneleri aslında bir semaphore kümesi içermektedir. Yani biz semget ile 
     aslında bir semaphore kümesi yaratmış olmaktayız. Yaratılan semaphore kümesindeki her semaphore'un ilk semaphore "0" olmak üzere 
     bir indeks numarası vardır. Semaphore kümesindeki semaphore'lar üzerinde işlem yapmak için semctl isimli fonksiyon kullanılmaktadır. 
@@ -24615,7 +24615,7 @@ void exit_sys_errno(const char *msg, int eno)
 
     Bu yapının ilk elemanı yine IPC nesnesinin erişim haklarını belirtir. İkinci ve üçüncü elemanları semaphore nesnesi üzerinde
     yapılan son işlemlerin zamanları hakkında bilgi verir. Son elemanı ise semaphore kümesindeki semaphore sayısını belirtmektedir. 
-    semctl ile ilkdeğer verilmemiş semaphore'lar için yapının sem_ctime ve sem_nsems elemanları çöp değerlerdedir. Standartlar
+    semctl ile ilk değer verilmemiş semaphore'lar için yapının sem_ctime ve sem_nsems elemanları çöp değerlerdedir. Standartlar
     henüz semop fonksiyonu uygulanmadan yapının sem_otime elemanının 0 olacağını garanti etmektedir. Bu garanti sayesinde iki 
     proses aynı semaphore'a ilişkin initialize işlemi yapmak istediğinde oluşan sorun çözülebilmektedir. İzleyen paragraflarda 
     bu durum yeniden açıklanacaktır.
@@ -24903,7 +24903,7 @@ void exit_sys(const char *msg)
     semaphore'u yaratıp diğeri yaratılmış olanı açacaktır. Buradaki semaphore sayacının başlangıç değeri 0'da tutulur. Böylece tüketici
     bu semaphore'u bekler. Üretici, IPC nesnelerini yarattığında semaphore sayacını 1 artırarak tüketiciyi blokeden kurtarır. Ancak 
     üreticinin de henüz IPC nesnelerini silmeden tüketicinin işini bitirdiğinden emin olması gerekir. Bunun için yine aynı 
-    semaphore kullanılabilir. Ancak burada başka bir sorun ortaya çıkmaktadır. Bu semaphore'un sayacına ilkdeğer olan 0'ı 
+    semaphore kullanılabilir. Ancak burada başka bir sorun ortaya çıkmaktadır. Bu semaphore'un sayacına ilk değer olan 0'ı 
     kim verecektir. Eğer üretici önce çalışırsa IPC nesnelerini yaratıp semaphore sayacını artırdıktan sonra tüketici çalışınca, 
     tüketici de semaphore sayacına 0 değerini verirse "kilitlenme (deadlock)" oluşur. Bu problem aslında yaygın bir problemdir. 
     İşte standartlar semid_ds yapısının sem_otime elemanının henüz semop işlem yapılmadıysa 0 olmasını garanti etmektedir. 
@@ -25192,7 +25192,7 @@ void exit_sys(const char *msg)
 
     pthread_barrier_t g_barrier;
 
-    2) Tanımlanan bu global barrier nesnesine pthread_barrier_init fonksiyonu ile ilkdeğer verilmesi gerekmektedir. Fonksiyonun 
+    2) Tanımlanan bu global barrier nesnesine pthread_barrier_init fonksiyonu ile ilk değer verilmesi gerekmektedir. Fonksiyonun 
     prototipi şöyledir:
 
     #include <pthread.h>
@@ -25633,7 +25633,7 @@ int check(const int *nums)
 
     Fonksiyonun birinci parametresi spinlock nesnesinin adresini alır. İkinci parametre, nesnenin prosesler arasında kullanılıp 
     kullanılmayacağını belirtmektedir. Bu parametre 0 ya da PTHREAD_PROCESS_SHARED biçiminde geçilir. Nesnenin ayrıca bir 
-    özellik (attribute) parametresinin olmadığına dikkat ediniz. Spinlock nesnesine ilkdeğer vermek için bir makro bulunmamaktadır. 
+    özellik (attribute) parametresinin olmadığına dikkat ediniz. Spinlock nesnesine ilk değer vermek için bir makro bulunmamaktadır. 
     Örneğin:
 
     if ((result = pthread_spin_init(&g_spinlock, 0)) != 0)
@@ -25933,7 +25933,7 @@ void exit_sys_errno(const char *msg, int eno)
 
     pthread_rwlock_t g_rwlock;
 
-    2) pthread_rwlock_t nesnesine, PTHREAD_RWLOCK_INITIALIZER makrosuyla ya da pthread_rwlock_init fonksiyonuyla ilkdeğer verilebilir. 
+    2) pthread_rwlock_t nesnesine, PTHREAD_RWLOCK_INITIALIZER makrosuyla ya da pthread_rwlock_init fonksiyonuyla ilk değer verilebilir. 
     pthread_rwlock_init fonksiyonunun prototipi şöyledir:
 
     #include <pthread.h>
@@ -25944,7 +25944,7 @@ void exit_sys_errno(const char *msg, int eno)
     Özellik parametresine NULL adres geçilebilmektedir. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda errno değerine 
     geri dönmektedir. 
 
-    Bu durumda nesneye ilkdeğer verme işlemi aşağıdaki iki biçimden biri ile yapılabilir:
+    Bu durumda nesneye ilk değer verme işlemi aşağıdaki iki biçimden biri ile yapılabilir:
 
     pthread_rwlock_t g_rwlock = PTHREAD_RWLOCK_INITIALIZER;
     ...
@@ -25992,7 +25992,7 @@ void exit_sys_errno(const char *msg, int eno)
 
     5) Reader-writer lock nesnelerinin de bir özellik bilgisi vardır. Özellik oluşturma daha önce görmüş olduğumuz nesnelerdekine benzer
     biçimde yapılmaktadır. Önce pthread_rwlockattr_t türünden bir özellik nesnesi tanımlanır. Sonra bu özellik nesnesine 
-    pthread_rwlockattr_init fonksiyonu ile ilkdeğer verilir. Sonra da özellik nesnesine pthread_rwlockattr_setxxx fonksiyonlarıyla 
+    pthread_rwlockattr_init fonksiyonu ile ilk değer verilir. Sonra da özellik nesnesine pthread_rwlockattr_setxxx fonksiyonlarıyla 
     özellikler iliştirilir. Sonra da bu özellik nesnesi kullanılarak reader-writer lock nesnesi pthread_rwlock_init fonksiyonuyla
     yaratılır. Aslında şu anda nesnenin tek bir özelliği vardır. O da onun prosesler arasında paylaşılabilirliğini belirtmektedir. 
     Nesne default durumda (yani PTHREAD_RWLOCK_INITIALIZER ile yatarıldığında ya da pthread_rwlock_init fonksiyonunda özellik parametresi 
@@ -29548,7 +29548,7 @@ void exit_sys_errno(const char *msg, int eno)
     int pthread_once(pthread_once_t *once_control, void (*init_routine)(void));
 
     Fonksiyon pthread_once_t türünden bir nesnesnin adresini ve bir de çağrılacak fonksiyonun adresini alır. Fonksiyonun birinci 
-    parametresine geçirilecek olan pthread_once_t nesnesine aşağıdaki gibi ilkdeğer verilmiş olması gerekmektedir:
+    parametresine geçirilecek olan pthread_once_t nesnesine aşağıdaki gibi ilk değer verilmiş olması gerekmektedir:
 
     pthread_once_t tonce = PTHREAD_ONCE_INIT;
 
@@ -29734,7 +29734,7 @@ void exit_sys_errno(const char *msg, int eno)
     TSD kullanan fonksiyonları biz yazıyorsak bu durumda TSD anahtarını (yani slotunu) daha thread'leri yaratmadan pthread_key_create
     fonksiyonu ile yaratabiliriz. Böylece thread'lerimiz zaten yaratılmış olan TSD slotlarını kullanabilir. Zaten biz yukarıdaki 
     örnekte böyle yaptık. Pekiyi TSD kullanan fonksiyonları biz yazmamışsak örneğin bunlar bir kütüphanede bulunuyorsa ve bu 
-    fonksiyonları biz kütüphaneden çağırıyorsak bu fonksiyonlar TSD slotunu nasıl yaratmaktadır ve bu TSD alanına nasıl ilkdeğerlerini 
+    fonksiyonları biz kütüphaneden çağırıyorsak bu fonksiyonlar TSD slotunu nasıl yaratmaktadır ve bu TSD alanına nasıl ilk değerlerini 
     vermektedir? Bunun bir yolu eğer ilgili kütüphane standart C kütüphanesi gibi temel bir kütüphane ise TSD slotlarının 
     derleyicilerin başlangıç kodlarında (start-up codes) yaratılması olabilir. Tabii bunun için söz konusu kütüphanenin derleyici 
     ile bağlantılı aşağı seviyeli bir kütüphane olması gerekir. Örneğin Microsoft, standart C fonksiyonlarını bu biçimde thread 
@@ -32335,7 +32335,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     SIGSEGV sinyali ile aynı biçimde ele alınan diğer sinyaller SIGBUS, SIGEMT, SIGFPE, SIGILL, SIGTRAP sinyalleridir. SIGFPE 
-    sinyali "floating point birimi (FPU)" tarafından oluşturulmaktadır. SIGILL sinyali user modda çalışan prosesin özel makine 
+    sinyali "floating point birimi (FPU)" tarafından oluşturulmaktadır. SIGILL sinyali user mode'da çalışan prosesin özel makine 
     komutlarını kullanmasından dolayı oluşmaktadır (illegal instruction). Bu sinyallerin davranışı SIGSEGV sinyalinde olduğu 
     gibidir.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -34938,7 +34938,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir prosesin user modda ve kernel modda harcadığı zamanlar işletim sistemi tarafından proses kontrol bloğunda saklanmaktadır. 
+    Bir prosesin user mode'da ve kernel mode'da harcadığı zamanlar işletim sistemi tarafından proses kontrol bloğunda saklanmaktadır. 
     Proses kontrol bloğundan bu bilgiler times isimli POSIX fonksiyonu ile (doğrudan ilgili sistem fonksiyonunu çağırmaktadır)
     elde edilebilmektedir. Fonksiyonun prototipi şöyledir:
 
@@ -34959,17 +34959,17 @@ void exit_sys(const char *msg)
         clock_t tms_cstime; /* system time of children */
     };
 
-    Yapının tms_utime elemanı prosesin user modda harcadığı zamanı, tms_stime elemanı kernel modda harcadığı zamanı vermektedir. 
-    tms_cutime elemanı wait fonksiyonlarıyla beklenen tüm alt proseslerin (ve onların alt proseslerinin de) user moddaki zamanlarını
-    tms_cstime da wait fonksiyonu ile beklenen tüm alt proseslerin (ve onların alt proseslerinin de) kernel moddaki zamanlarını 
+    Yapının tms_utime elemanı prosesin user mode'da harcadığı zamanı, tms_stime elemanı kernel mode'da harcadığı zamanı vermektedir. 
+    tms_cutime elemanı wait fonksiyonlarıyla beklenen tüm alt proseslerin (ve onların alt proseslerinin de) user mode'daki zamanlarını
+    tms_cstime da wait fonksiyonu ile beklenen tüm alt proseslerin (ve onların alt proseslerinin de) kernel mode'daki zamanlarını 
     vermektedir. Fonksiyonun verdiği zamanlar proses kontrol bloktan alınmaktadır. Proses kontrol bloğa da zamanlar "timer tick" 
     olarak yazılmaktadır. Timer tick değerleri günümüzün masaüstü sistemlerinde 1 milisaniye, yavaş sistemlerde 10 milisaniye 
     periyottadır. Bu fonksiyon prosesin bloke olup uykuda beklediği zamanları bize herhangi bir biçimde vermemektedir. Yalnızca
-    prosesin ve alt proseslerin user modda ve kernel modda harcadığı zamanları bize vermektedir. 
+    prosesin ve alt proseslerin user mode'da ve kernel mode'da harcadığı zamanları bize vermektedir. 
 
     Standard time kabuk komutu bu fonksiyon ve muhtemelen clock_gettime fonksiyonu kullanılarak gerçekleştirilmiştir. 
 
-    Aşağıdaki örnekte komut satırından alınan program çalıştırılmış ve onun user ve kernel moddaki zamanı yazdırılmıştır. 
+    Aşağıdaki örnekte komut satırından alınan program çalıştırılmış ve onun user ve kernel mode'daki zamanı yazdırılmıştır. 
     Ancak programın çalışması için gereken gerçek zaman yazdırılmamıştır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -39461,7 +39461,7 @@ void exit_sys(const char *msg)
     ya da daemon'lar tipik olarak boot sırasında çalışmaya başlatılırlar ve yine tipik olarak makine reboot edilene kadar çalışmaya 
     devam ederler. Tabii böyle bir zorunluluk yoktur. Yani servis ya da daemon programlar istenildiği zaman başlatılıp istenildiği 
     zaman sonlandırılabilmektedir. "Servis" ya da "daemon" kernel mod bir kavram değildir. Yani servisler ve daemon'lar genellikle
-    "user modda" çalışmak üzere yazılırlar. UNIX/Linux dünyasında geleneksel olarak daemon'lar "xxxxxd" biçiminde sonuna 'd' harfi 
+    "user mode'da" çalışmak üzere yazılırlar. UNIX/Linux dünyasında geleneksel olarak daemon'lar "xxxxxd" biçiminde sonuna 'd' harfi 
     getirilerek isimlendirilmektedir. Çekirdeğe ilişkin bazı thread'ler de servis benzeri işlemler yaptıkları için bunlar da çoğu 
     kez sonu 'd' ile bitecek ancak başı da 'k' ile başlayacak biçimde isimlendirilmiştir. Bu kernel daemon'ların bizim şu andaki 
     konumuz olan daemon'larla hiçbir ilgisi yoktur. Yalnızca işlev bakımından bir benzerlik söz konusudur. UNIX/Linux dünyasında 
@@ -40172,7 +40172,7 @@ void exit_sys(const char *msg)
     anlatım uygulayacağız. Linux sistemlerindeki merkezi syslog mekanizması ile diğer sistemlerdeki syslog mekanizması bazı 
     ayrıntılar dışında birbirine benzemektedir.
 
-    Merkezi syslog mekanizmasının üst seviye önemli bir bileşeni "syslogd" isimli bir daemon programdır. Bu program user modda
+    Merkezi syslog mekanizmasının üst seviye önemli bir bileşeni "syslogd" isimli bir daemon programdır. Bu program user mode'da
     çalışmaktadır. syslogd daemon programı iki kaynaktan mesajları alarak hedefte oluşturmaktadır. Loglamanın hedefi değiştirilebilmektedir. 
     syslogd daemon programının mesajları okuduğu iki kaynak şöyledir:
 
@@ -40186,7 +40186,7 @@ void exit_sys(const char *msg)
     user (syslog POSIX fonksiyonu) ---> /dev/log (UDP UNIX domain soket) <--- syslogd daemon okuyor
 
     /dev/log dosyasına yazan ikinci aktör ise aygıt sürücüler ve kernel modüllerdir. Bu kodlar kernel fonksiyonları ile "klogd" 
-    isimli kernel moddaki daemon programa mesajları aktarmaktadır. Bu kernel mod daemon programı da /dev/log dosyasına yazma yapmaktadır:
+    isimli kernel mode'daki daemon programa mesajları aktarmaktadır. Bu kernel mod daemon programı da /dev/log dosyasına yazma yapmaktadır:
 
     Aygıt sürücüler ve kernel modüller (printk) <--- klogd daemon'ı okuyor ---> /dev/log <--- syslogd daemon okuyor
 
@@ -40200,7 +40200,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    User modda loglama işlemleri için üç POSIX fonksiyonu kullanılmaktadır:
+    User mode'da loglama işlemleri için üç POSIX fonksiyonu kullanılmaktadır:
 
     openlog
     syslog
@@ -50656,7 +50656,7 @@ void exit_sys(const char *msg)
     yürütülmektedir: execve fonksiyonu önce işletim sistemi için gereken çeşitli veri yapılarını oluşturur sonra çalıştırılabilen 
     dosyayı belleğe yükler. Sonra da dinamik linker kütüphanesini belleğe yükler. Bundan sonra akış dinamik linker'daki koda
     aktarılır. Dinamik linker da çalıştırılabilir dosyada belirtilen dinamik kütüphaneleri yükler. Sonra da akışı çalıştırılabilen
-    dosyada belirtilen gerçek başlangıç adresine (entry point) aktarır. Dinamik linker kodları aslında user modda mmap sistem 
+    dosyada belirtilen gerçek başlangıç adresine (entry point) aktarır. Dinamik linker kodları aslında user mode'da mmap sistem 
     fonksiyonunu kullanarak diğer dinamik kütüphaneleri yüklemektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -52072,7 +52072,7 @@ void foo()
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Kernel'ın bir parçası gibi işlev gören, herhangi bir koruma engeline takılmayan, kernel modda çalışan özel olarak hazırlanmış 
+    Kernel'ın bir parçası gibi işlev gören, herhangi bir koruma engeline takılmayan, kernel mode'da çalışan özel olarak hazırlanmış 
     modüllere (yani kod parçalarına) Linux dünyasında "kernel modülleri (kernel modules)" denilmektedir. Kernel modülleri 
     eğer kesme gibi bazı mekanizmaları kullanıyorsa ve bir donanım aygıtını yönetme iddiasındaysa bunlara özel olarak "aygıt 
     sürücüleri (device drivers)" da denilmektedir. Nasıl bir masaüstü bilgisayara kart taktığımızda artık o kart donanımın 
@@ -52116,8 +52116,8 @@ void foo()
     Bir kernel modülünde biz user mod için yazılmış kodları kullanamayız. Çünkü orası ayrı bir dünyadır. Ayrıca biz kernel 
     modüllerinde kernel içerisindeki her fonksiyonu kullanamayız. Yalnızca bazı fonksiyonları kullanabiliriz. Bunlara "kernel 
     tarafından export edilmiş fonksiyonlar" denilmektedir. "Kernel tarafından export edilmiş fonksiyon" kavramıyla "sistem 
-    fonksiyonu" kavramının bir ilgisi yoktur. Sistem fonksiyonları user moddan çağrılmak üzere tasarlanmış ayrı bir grup 
-    fonksiyondur. Oysa kernel tarafından export edilmiş fonksiyonlar user moddan çağrılamazlar. Yalnızca kernel modüllerinden
+    fonksiyonu" kavramının bir ilgisi yoktur. Sistem fonksiyonları user mode'dan çağrılmak üzere tasarlanmış ayrı bir grup 
+    fonksiyondur. Oysa kernel tarafından export edilmiş fonksiyonlar user mode'dan çağrılamazlar. Yalnızca kernel modüllerinden
     çağrılabilirler. Buradan çıkan sonuç şudur: Bir kernel modül yazılırken ancak kernel'ın export ettiği fonksiyon ve datalar 
     kullanılabilmektedir. Tabii kernel'ın kaynak kodları çok büyüktür ancak buradaki kısıtlı sayıda fonksiyon export edilmiştir. 
     Benzer biçimde programcının oluşturduğu bir kernel modül içerisindeki belli fonksiyonları da programcı export edebilir. 
@@ -52736,7 +52736,7 @@ clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    errno değişkeni aslında libc kütüphanesinin (standart C ve POSIX kütüphanesi) içerisinde tanımlanmış bir değişkendir. Kernel modda 
+    errno değişkeni aslında libc kütüphanesinin (standart C ve POSIX kütüphanesi) içerisinde tanımlanmış bir değişkendir. Kernel mode'da 
     yani kernel'ın içerisinde errno isimli bir değişken yoktur. Bu nedenle kernel'daki fonksiyonlar POSIX fonksiyonları gibi başarısızlık 
     durumunda -1 ile geri dönüp errno değişkenini set etmezler. Kernel içerisindeki fonksiyonlar başarısızlık durumunda negatif errno 
     değeri ile geri dönerler. Örneğin "open" POSIX fonksiyonu "sys_open" isimli kernel içerisinde bulunan sistem fonksiyonunu çağırdığında 
@@ -52910,7 +52910,7 @@ clean:
     Yani aslında majör ve minör numaralar dev_t türünden bir değerin belli bitlerinde bulunmaktadır. Ancak bu numaraların dev_t 
     türünden değerin hangi bitlerinde bulunduğu sistemden sisteme değişebileceği için bu makrolar kullanılmaktadır.
 
-    Ancak kernel modda bu makrolar yerine aşağıdakiler kullanılmaktadır:
+    Ancak kernel mode'da bu makrolar yerine aşağıdakiler kullanılmaktadır:
 
     #include <linux/fs.h>
 
@@ -53209,7 +53209,7 @@ clean:
     çekirdek fonksiyonuyla çekirdeğin heap sistemi (slab allocator) kullanılarak dinamik bir biçimde tahsis edilebilir. (İşletim 
     sistemlerinin çekirdeğinin ayrı bir heap sistemi vardır. Linux çekirdeğinde spesifik türden nesnelerin hızlı tahsis edilmesi 
     için "slab allocator" denilen bir heap sistemi kullanılmaktadır.) Eğer bu yapı nesnesi programcı tarafından global bir biçimde 
-    tanımlanacaksa yapının elemanlarına ilkdeğer vermek için cdev_init fonksiyonu çağrılmalıdır. Eğer cdev yapısı cdev_alloc fonksiyonuyla 
+    tanımlanacaksa yapının elemanlarına ilk değer vermek için cdev_init fonksiyonu çağrılmalıdır. Eğer cdev yapısı cdev_alloc fonksiyonuyla 
     dinamik bir biçimde tahsis edilecekse bu işlem cdev_init ile yapılmaz, çünkü zaten cdev_alloc bu işlemi de yapmaktadır. Fakat yine 
     de programcının bu kez manuel olarak bu yapının bazı elemanlarına değer ataması gerekir. Bu iki yoldan biriyle oluşturulmuş olan 
     cdev yapısının en sonunda cdev_add isimli fonksiyonla çekirdek veri yapılarına yerleştirilmeleri gerekir. Tabii aygıt sürücü 
@@ -53219,7 +53219,7 @@ clean:
 
     1) struct cdev isimli bir yapı türünden nesne global olarak (statik ömürlü olarak) tanımlanmalı ya da cdev_alloc fonksiyonu ile
     çekirdeğin heap sistemi içerisinde tahsis edilmelidir. Eğer bu nesne global olarak tanımlanacaksa nesneye cdev_init fonksiyonu 
-    ile ilkdeğerleri verilmelidir. Eğer nesne cdev_alloc fonksiyonu ile çekirdeğin heap alanında tahsis edilecekse bu durumda ilkdeğer
+    ile ilk değerleri verilmelidir. Eğer nesne cdev_alloc fonksiyonu ile çekirdeğin heap alanında tahsis edilecekse bu durumda ilk değer
     verme işlemi bu fonksiyon tarafından yapılmaktadır. Ancak programcının yine yapının bazı elemanlarını manuel olarak doldurması 
     gerekmektedir.
 
@@ -53234,10 +53234,10 @@ clean:
 
     void cdev_init(struct cdev *cdev, const struct file_operations *fops);
 
-    Fonksiyonun birinci parametresi ilkdeğer verilecek global cdev nesnesinin adresini alır. İkinci parametre ise file_operations 
+    Fonksiyonun birinci parametresi ilk değer verilecek global cdev nesnesinin adresini alır. İkinci parametre ise file_operations 
     türünden bir yapı nesnesinin adresi almaktadır. file_operations isimli yapı birtakım fonksiyon adreslerinden oluşmaktadır. 
-    Yani yapının tüm elemanları birer fonksiyon göstericisidir. Bu yapı user moddaki program tarafından ilgili aygıt dosyası 
-    açılıp çeşitli işlemler yapıldığında çağrılacak fonksiyonların adreslerini tutmaktadır. Örneğin user moddaki program open, 
+    Yani yapının tüm elemanları birer fonksiyon göstericisidir. Bu yapı user mode'daki program tarafından ilgili aygıt dosyası 
+    açılıp çeşitli işlemler yapıldığında çağrılacak fonksiyonların adreslerini tutmaktadır. Örneğin user mode'daki program open, 
     close, read, write yaptığında çağrılacak fonksiyonlarımızı burada belirtiriz. file_operations yapısı büyük bir yapıdır:
 
     struct file_operations {
@@ -53589,7 +53589,7 @@ void exit_sys(const char *msg)
     Örneğin sys_read sistem fonksiyonu çekirdek alanında elde ettiği bilgileri user alanındaki programcının verdiği adrese kopyalar. 
     Benzer biçimde sys_write fonksiyonu da bunun tersini yapmaktadır. Çekirdek alanı ile user alanı arasında memcpy fonksiyonu 
     ile transfer yapmaya çalışmak uygun değildir. Bunun birkaç nedeni vardır. Bu tür transferlerde kernel mod programcılarının 
-    user alanındaki adresin geçerliliğini kontrol etmesi gerekir. Aksi takdirde kernel modda geçersiz bir alana kopyalama yapmak 
+    user alanındaki adresin geçerliliğini kontrol etmesi gerekir. Aksi takdirde kernel mode'da geçersiz bir alana kopyalama yapmak 
     sistemin çökmesine yol açabilmektedir. Ayrıca user alanına ilişkin prosesin sayfa tablosunun bazı bölümleri o anda bellekte 
     olmayabilir (yani swap out yapılmış olabilir). Böyle bir durumda işleme devam etmek çekirdek tasarımı açısından sorun olmaktadır. 
     Eğer böyle bir durum varsa çekirdek kodlarının önce sayfa tablosunu RAM'e geri yükleyip işlemine devam etmesi gerekmektedir.
@@ -54098,7 +54098,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Aygıt sürücü için write fonksiyonu da tamamen read fonksiyonuna benzer biçimde yazılmaktadır. write fonksiyonu içerisinde
-    biz user moddaki bilgiyi copy_from_user ya da get_user fonksiyonlarıyla alırız. Yine write fonksiyonu da bir sorun çıktığında
+    biz user mode'daki bilgiyi copy_from_user ya da get_user fonksiyonlarıyla alırız. Yine write fonksiyonu da bir sorun çıktığında
     -EFAULT değeri ile, başarılı sonlanmada ise yazılan (kernel alanına yazılan) byte miktarı ile geri dönmelidir.
 
     Aşağıdaki örnekte aygıt sürücü bellekte oluşturulmuş bir dosya gibi davranmaktadır. Aygıt sürücünün taklit ettiği dosya
@@ -54357,7 +54357,7 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    User moddan aygıt dosyası betimleyicisi ile lseek işlemi yapıldığında aygıt sürücünün file_operations yapısı içerisine 
+    User mode'dan aygıt dosyası betimleyicisi ile lseek işlemi yapıldığında aygıt sürücünün file_operations yapısı içerisine 
     yerleştirilen llseek fonksiyonu çağrılmaktadır. Fonksiyonun parametrik yapısı şöyledir:
 
     static loff_t generic_llseek(struct file *filp, loff_t off, int whence);
@@ -54620,7 +54620,7 @@ void exit_sys(const char *msg)
     Biz şimdiye kadarki örneklerimizde aygıt sürücümüzün majör ve minör numarasını baştan belirledik. Bunun en önemli sakıncası 
     zaten o numaralı bir aygıt sürücünün yüklü olarak bulunuyor olmasıdır. Bu durumda aygıt sürücümüz yüklenemeyecektir. Aslında 
     daha doğru bir strateji tersten gitmektir. Yani önce aygıt sürücümüz içerisinde biz boş bir aygıt numarasını bulup onu 
-    kullanabiliriz. Tabii sonra user moddan bu aygıt numarasına ilişkin bir aygıt dosyasını da yaratmamız gerekir.
+    kullanabiliriz. Tabii sonra user mode'dan bu aygıt numarasına ilişkin bir aygıt dosyasını da yaratmamız gerekir.
 
     Boş bir aygıt numarasını bize veren alloc_chrdev_region isimli bir kernel fonksiyonu vardır. Fonksiyonun parametrik yapısı 
     şöyledir:
@@ -54657,17 +54657,17 @@ void exit_sys(const char *msg)
     mknod $module c $major 0
     chmod $mode $module
 
-    Artık biz bu load script'i ile aygıt sürücümüzü yükleyip aygıt dosyamızı yaratacağız. Bu script'i load ismiyle yazıp 
+    Artık biz bu "load" script'i ile aygıt sürücümüzü yükleyip aygıt dosyamızı yaratacağız. Bu script'i "load" ismiyle yazıp 
     aşağıdaki gibi x hakkı vermelisiniz:
 
-    chmod +x load
+    $ chmod +x load
 
     Çalıştırmayı komut satırı argümanı vererek aşağıdaki gibi yapmalısınız:
 
     $ sudo ./load generic-char-driver
 
-    Burada load script'i çalıştırıldığında hem aygıt sürücü çekirdek alanına yüklenmekte hem de yüklenen aygıt sürücünün 
-    majör numarasıyla minör numara 1 olacak biçimde "generic-char-driver" isimli aygıt dosyası yaratılmaktadır. Aygıt sürücünün 
+    Burada "load" script'i çalıştırıldığında hem aygıt sürücü çekirdek alanına yüklenmekte hem de yüklenen aygıt sürücünün 
+    majör numarasıyla minör numarası 1 olacak biçimde "generic-char-driver" isimli aygıt dosyası yaratılmaktadır. Aygıt sürücünün 
     çekirdek alanından atılması manuel bir biçimde "rmmod" komutuyla yapılabilir. Tabii aynı zamanda bu aygıt sürücü için 
     yaratılan aygıt dosyasının da silinmesi gerekir. Yukarıdaki script'te aygıt dosyası zaten varsa aynı zamanda o silinmektedir. 
     Tabii aygıt dosyasını çekirdek alanından atarak silen ayrı bir "unload" isimli script'i de aşağıdaki gibi yazabiliriz:
@@ -54684,17 +54684,18 @@ void exit_sys(const char *msg)
 
     $ chmod +x unload
 
-    unload Script'ini aşağıdaki gibi çalıştırabilirsiniz:
+    "unload" script'ini aşağıdaki gibi çalıştırabilirsiniz:
 
     $ sudo ./unload generic-char-driver
 
     Aşağıdaki örnekte alloc_chrdev_region fonksiyonuyla hem boş aygıt numarası elde edilip hem de bu aygıt numarası register 
-    ettirilmiştir. Yükleme işlemi yukarıdaki "load" scrip'i ile yapılmalıdır. Kernel modülün boşaltılması işlemi manuel olarak
+    ettirilmiştir. Yükleme işlemi yukarıdaki "load" script'i ile yapılmalıdır. Kernel modülün boşaltılması işlemi manuel olarak
     ya da "unload" script'i ile yapılabilir. Örneğin:
 
     $ sudo ./load generic-char-driver
     ...
     $ sudo ./unload generic-char-driver
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* generic-char-driver.c */
@@ -54944,22 +54945,22 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Aşağıda gelinen noktaya kadar görülmüş olan konular kullanılarak yazılmış basit bir boru örneği verilmiştir. Bu boru 
     örneğinde bir proses boruyu yazma modunda açar ve prosesin write fonksiyonuyla yazdıkları aygıt sürücü içerisindeki bir 
-    FIFO kuyruk sistemine yazılır. Diğer proses de read fonksiyonuyla bu FIFO kuyruk sisteminden kuyruktan okuma yapar. Bu 
-    gerçekleştirim orijinal "isimli boru (named pipe)" gerçekleştirimine benziyorsa da ondan farklıdır. Burada yapılan 
-    gerçekleştirimin önemli noktaları şunlardır:
+    FIFO kuyruk sistemine yazılır. Diğer proses de read fonksiyonuyla bu FIFO kuyruk sisteminden okuma yapar. Bu gerçekleştirim 
+    orijinal "isimli boru (named pipe)" gerçekleştirimine benziyorsa da ondan farklıdır. Burada yapılan gerçekleştirimin önemli 
+    noktaları şunlardır:
 
     - write fonksiyonu borudaki boş alan miktarından daha fazla bilgi yazılmaya çalışılırsa blokeye yol açmaz, yazabildiği kadar 
     byte'ı yazar ve boruya yazabildiği byte sayısına geri döner. Halbuki anımsanacağı gibi orijinal borularda talep edilen miktarın
     tamamı yazılana kadar write bloke oluşturmaktadır.
 
     - read fonksiyonu boruda hiçbir bilgi yoksa blokeye yol açmaz 0 ile geri döner. Ancak read eğer boruda en az bir byte varsa 
-    okuyabildiği kadar byte'ı okuyup okuyabildiği byte sayısına geri döner.
+    okuyabildiği kadar byte'ı okuyup, okuyabildiği byte sayısına geri döner.
 
     - Aygıt sürücünün read/write fonksiyonlarında hiçbir senkronizasyon uygulanmamıştır. Dolayısıyla eşzamanlı işlemlerde tanımsız 
     davranışlar ortaya çıkabilir. Örneğin iki farklı proses bu boruya yazma yaparsa senkronizasyondan kaynaklanan sorunlar oluşabilir.
 
-    - İki proses de boruyu kapatsa bile boru silinmemektedir. Halbuki orijinal borularda prosesler isimli boruyu kapatınca 
-    boru içerisindeki tüm bilgiler silinmektedir.
+    - İki proses de boruyu kapatsa bile boru silinmemektedir. Halbuki orijinal borularda prosesler isimli boruyu kapatınca boru 
+    içerisindeki tüm bilgiler silinmektedir.
 
     - Bu uygulamada sistem genelinde tek bir boru yaratılmaktadır. Yani bizim boru aygıt sürücümüz tek bir boru üzerinde işlemler
     yapmaktadır. Halbuki orijinal isimli borularda programcılar birbirinden bağımsız istedikleri kadar çok isimli boru yaratabilmektedir.
@@ -54969,8 +54970,8 @@ void exit_sys(const char *msg)
     $ make file=pipe-dirver
     $ sudo ./load pipe-driver
 
-    Buradaki boruyu aygıt sürücüsünü test etmek için "prog1" ve "prog2" isimli iki program yazılmıştır. "prog1" klavyeden 
-    alınan yazıları boruya yazmakta, "prog2" ise klavyeden alınan uzunlukta byte'ı borudan okumaktadır. Boruyu test temek 
+    Buradaki boru aygıt sürücüsünü test etmek için "prog1" ve "prog2" isimli iki program yazılmıştır. "prog1" klavyeden 
+    alınan yazıları boruya yazmakta, "prog2" ise klavyeden alınan uzunlukta byte'ı borudan okumaktadır. Boruyu test etmek 
     için boru uzunluğunu azaltabilirsiniz. Biz örneğimizde boru uzunluğunu 4096 aldık.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -54984,7 +54985,7 @@ void exit_sys(const char *msg)
 
 #define MIN(a, b)		((a) < (b) ? (a) : (b))
 
-#define PIPE_BUFSIZE		20
+#define PIPE_BUFSIZE		4096
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Kaan Aslan");
@@ -55055,7 +55056,7 @@ static int generic_open(struct inode *inodep, struct file *filp)
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "pipe-driver-closed...\n");
+	printk(KERN_INFO "pipe-driver closed...\n");
 
 	return 0;
 }
@@ -55245,36 +55246,69 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
-<BURADA KALDIK>
 /*--------------------------------------------------------------------------------------------------------------------------
-    Kernel modda da senkronizasyon nesneleri vardır. Aygıt sürücülerde bu senkronizasyon nesneleri mecburen çok yoğun kullanılmaktadır. 
-    Çünkü aynı anda aygıt sürücü kodları değişik prosesler tarafından kullanıldığında buradaki değerler bozulabilir. Yukarıdaki 
-    boru örneğinde iki proses aynı anda read/write yaparsa kuyruğu oluşturan veri yapıları bozulacaktır.
-
-    Biz kernel modda user moddaki senkronizasyon nesnelerini kullanamayız. User modda kullandığımız bütün o senkronizasyon 
-    nesnelerinin birer kernel mod karşılıkları vardır. Aslında pthread kütüphanesi de arka planda bu mekaznizmaları kullanmaktadır.
+												137. Ders 28/04/2024 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Kernel modda mutex mekanizması 2.6 kernel'ında eklenmiştir. Bu mutex mekanizması user moddaki mutex mekanizmasına çok 
-    benzemektedir. Yine kernel moddaki mutex'in thread temelinde sahpliği vardır. Thread'i bloke edip sleep kuyruklarında 
-    bekletebilmektedir. Kernel mod mutex mekanizmasının tipik gerçekleştirimi şöyledir:
+    Aygıt sürücülerdeki kodlar user mode'dan farklı prosesler tarafından kullanılıyor olabilir. Ayrıca ileride göreceğimiz gibi 
+    aygıt sürücüler donanım kesmelerini de kullanıyor olabilir. Dolayısıyla aygıt sürücü kodları eşzamanlı (concurrent) erişime 
+    uygun biçimde yazılmalıdır. User mode'daki bir proses aygıt sürücü içerisindeki bir kaynağı kullanıyorken user mode'daki diğer
+    prosesin o kaynağın bozulmaması için diğerini beklemesi gerekebilmektedir.
 
-    1) lock işlemi sırasında maliyetsiz compare/jump komutlarıyla mutex'in kilitli olup olmadığına bakılır.
-    2) mutex kilitliyse biraz spin işlemi yapılır (diğer bir işlemcideki proses kilitlemişse boşuna bloke olmamak için).
+    Kernel mode'da aygıt sürücü kodları daha önce user mode'da gördüğümüz senkronizasyon nesnelerini kullanamaz. Çünkü daha önce
+    gördüğümüz senkronizasyon nesneleri user mode'dan kullanılsın diye oluşturulmuştur. Çekirdeğin içerisinde kernel mode'dan
+    kullanılabilecek ayrı senkronizasyon nesneleri bulunmaktadır. Bu bölümde aygıt sürücülerin kernel mode'da kullanabileceği
+    senkronizasyon nesnelerini göreceğiz.
+
+    Kernel mode için user mode'dakine benzer senkronizasyon nesneleri kullanılmaktadır. Bunların genel çalışma biçimi user 
+    mode'dakilere benzemektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Kernel mutex mekanizması 2.6 çekirdeğinde çekirdeğe eklenmiştir. Bundan önce mutex işlemleri binary semaphore'larla 
+    yapılıyordu. Bu mutex mekanizması user mode'daki mutex mekanizmasına çok benzemektedir. Yine kernel mode'daki mutex'in thread 
+    temelinde sahipliği vardır. Bu mutex mekanizması yine thread'i bloke edip sleep kuyruklarında bekletebilmektedir. Kernel 
+    mode mutex mekanizmasının tipik gerçekleştirimi şöyledir:
+
+    1) lock işlemi sırasında işlemcinin maliyetsiz compare/set (compare/exchange) komutlarıyla mutex'in kilitli olup olmadığına 
+    bakılır.
+    2) diğer bir işlemcideki proses mutex'i kilitlemişse boşuna bloke olmamak için yine compare/set komutlarıyla biraz spin işlemi 
+    yapılır.
     3) spin işleminden sonuç elde edilemezse bloke oluşturulur.
 
-    Kernel moddaki mutex'ler tipik olarak şöyle kullanılmaktadır:
+    Kernel mode'daki mutex'ler tipik olarak şöyle kullanılmaktadır:
 
-    1) mutex DEFINE_MUTEX(name) makrosuyla ya da mutex_init fonksiyonuyla ilkdeğerlenir. Örneğin:
+    1) Mutex nesnesi "mutex" isimli bir yapıyla temsil edilmektedir. Sistem programcısı bu yapı türünden bir nesne yaratır ve ona
+    ilk değerini verir. DEFINE_MUTEX(name) makrosu hem mutex türünden nesneyi tanımlamakta hem de ona ilk değerini vermektedir. 
+    Örneğin:
 
-    DEFINE_MUTEX(g_name);
+    #include <linux/mutex.h>
 
-    ile aşağıdaki işlem işlevsel olarak eşdeğerdir:
+    DEFINE_MUTEX(g_mutex);
+
+    Burada biz hem g_mutex isminde bir global nesne tanımlamış olduk hem de ona ilk değer vermiş olduk. Aynı işlem önce nesneyi 
+    tanımlayıp sonra mutex_init fonksiyonuyla da yapılabilir. Örneğin:
 
     struct mutex g_mutex;
     ...
     mutex_init(&g_mutex);
+
+    DEFINE_MUTEX makrosuna nesnenin adresinin verilmediğine dikkat ediniz. Bu makro ve mutex_init fonksiyonunun prototipleri
+    <linux/mutex.h> başlık dosyasında bulunmaktadır.
+
+    Her ne kadar mutex_init bir fonksiyon görünümündeyse de aslında çekirdek kodlarında hem bir makro olarak hem de bir fonksiyon 
+    olarak bulunmaktadır. Mevcut Linux çekirdeklerinde fonksiyonların makro gerçekleştirimleri aşağıdaki gibidir:
+
+    #define DEFINE_MUTEX(mutexname)						    \
+	    struct mutex mutexname = __MUTEX_INITIALIZER(mutexname)
+
+    #define mutex_init(mutex)				\
+    do {							\
+        static struct lock_class_key __key;		\
+                                \
+        __mutex_init((mutex), #mutex, &__key);		\
+    } while (0)
 
     2) Mutex'i kilitlemek için mutex_lock fonksiyonu kullanılır:
 
@@ -55282,17 +55316,43 @@ void exit_sys(const char *msg)
 
     Mutex'in kilitli olup olmadığı ise mutex_trylock fonksiyonuyla kontrol edilebilir:
 
+    #include <linux/mutex.h>
+
     int mutex_trylock(struct mutex *lock);
 
-    Sinyal geldiğinde uykudaki thread'in uyandrılması için mutex_lock_interruptible fonksiyonu kullanılmaktadır:
+    Eğer mutex kilitliyse fonksiyon bloke olmadan 0 değeriyle geri döner. Eğer mutex kilitli değilse mutex kilitlenir ve fonksiyon
+    1 değeri ile geri döner.
+
+    Mutex nesnesi mutex_lock ile kilitlenmek istendiğinde bloke oluşursa bu blokeden sinyal yoluyla çıkılamamaktadır. Örneğin mutex_lock 
+    ile kernel mode'da biz mutex kilidini alamadığımızdan dolayı bloke oluştuğunu düşünelim. Bu durumda ilgili prosese bir sinyal gelirse 
+    ve eğer o sinyal için sinyal fonksiyonu set edilmişse thread uyandırılıp sinyal fonksiyonu çalıştırılmamaktadır. İşte eğer mutex'in 
+    kilitli olması nedeniyle bloke oluştuğunda sinyal yoluyla thread'in uyandırılıp sinyal fonksiyonunun çalıştırması isteniyorsa mutex 
+    nesnesi mutex_lock ile değil, mutex_lock_interrupible fonksiyonu ile kilitlenmeye çalışılmalıdır. mutex_lock_interruptible fonksiyonunun 
+    prototipi şöyledir:
+
+    #include <linux/mutex.h>
 
     int mutex_lock_interruptible(struct mutex *lock);
 
-    Fonksiyon başarı normal sonlanmada 0 değerine, sinyal dolayıyla sonlandığında -EINTR değerine geri dönmektedir.
+    Fonksiyon eğer mutex kilidini alarak sonlanırsa 0 değerine, bloke olup sinyal dolayısıyla sonlanırsa -EINTR değerine 
+    geri dönmektedir. Programcı bu fonksiyonun -EINTR ile sonlandığını tespit ettiğinde ilgili sistem fonksiyonunun yeniden 
+    çalıştırılabilirliğini sağlamak için -ERESTARTSYS ile geri dönebilir.
 
-    3) Mutex'i unlock etmek için mutex_unlock fonksiyonu kullanılmaktadır:
+    3) Mutex nesnesinin kilidini bırakmak için (unlock etmek için) mutex_unlock fonksiyonu kullanılmaktadır:
 
     void mutex_unlock(struct mutex *lock);
+
+    Bu durumda örneğin tipik olarak aygıt sürücü içerisinde belli bir bölgeyi mutex yoluyla koruma şöyle yapılmaktadır:
+
+    DEFINE_MUTEX(g_mutex);
+    ...
+
+    if (mutex_lock_interruptible(&g_mutex) < 0)
+        return -ERESTARTSYS;
+    ...
+    ... <KRİTİK KOD>
+    ...
+    mutex_unlock(&g_mutex);
 
     Aşağıdaki örnekte yukarıdaki boru sürücüsü daha güvenli olacak biçimde mutex nesneleriyle senkronize edilmiştir.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -55306,13 +55366,13 @@ void exit_sys(const char *msg)
 #include <linux/uaccess.h>
 #include <linux/mutex.h>
 
-MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("General Character Device Driver");
-MODULE_AUTHOR("Kaan Aslan");
-
 #define MIN(a, b)		((a) < (b) ? (a) : (b))
 
-#define PIPE_SIZE		4096
+#define PIPE_BUFSIZE		4096
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Kaan Aslan");
+MODULE_DESCRIPTION("Pipe Driver");
 
 static int generic_open(struct inode *inodep, struct file *filp);
 static int generic_release(struct inode *inodep, struct file *filp);
@@ -55321,22 +55381,26 @@ static ssize_t generic_write(struct file *filp, const char *buf, size_t size, lo
 
 static dev_t g_dev;
 static struct cdev *g_cdev;
-static struct file_operations g_file_ops = {
+static struct file_operations g_fops = {
 	.owner = THIS_MODULE,
 	.open = generic_open,
-	.release = generic_release,
 	.read = generic_read,
 	.write = generic_write,
+	.release = generic_release
 };
 
-static char g_pipebuf[PIPE_SIZE];
-static size_t g_head = 0, g_tail = 0;
-static size_t g_count = 0;
 static DEFINE_MUTEX(g_mutex);
+
+static unsigned char g_pipebuf[PIPE_BUFSIZE];
+static size_t g_head;
+static size_t g_tail;
+static size_t g_count;
 
 static int __init generic_init(void)
 {
 	int result;
+
+	printk(KERN_INFO "pipe-driver module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "pipe-driver")) < 0) {
 		printk(KERN_INFO "Cannot alloc char driver!...\n");
@@ -55349,15 +55413,13 @@ static int __init generic_init(void)
 	}
 
 	g_cdev->owner = THIS_MODULE;
-	g_cdev->ops = &g_file_ops;
+	g_cdev->ops = &g_fops;
 
-	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
+	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+		printk(KERN_ERR "Cannot add device!...\n");
 		return result;
 	}
-
-	printk(KERN_INFO "Pipe driver initialized with %d:%d device number...\n", MAJOR(g_dev), MINOR(g_dev));
 
 	return 0;
 }
@@ -55367,101 +55429,83 @@ static void __exit generic_exit(void)
 	cdev_del(g_cdev);
 	unregister_chrdev_region(g_dev, 1);
 
-	printk(KERN_INFO "Goodbye...\n");
+	printk(KERN_INFO "pipe-driver module exit...\n");
 }
 
 static int generic_open(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device opened!...\n");
+	printk(KERN_INFO "pipe-driver opened...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device released!...\n");
+	printk(KERN_INFO "pipe-driver-closed...\n");
 
 	return 0;
 }
 
 static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
 {
-	size_t len;
-	ssize_t result;
+	size_t esize, size1, size2;
 
-	if (mutex_lock_interruptible(&g_mutex))
+	if (mutex_lock_interruptible(&g_mutex) < 0)
 		return -ERESTARTSYS;
 
-	size = MIN(size, g_count);
+	esize = MIN(g_count, size);
 
-	if (size == 0) {
-		result = 0;
-		goto EXIT;
-	}
-
-	if (g_head >= g_tail)
-		len = MIN(size, PIPE_SIZE - g_head);
+	if (g_tail < g_head)
+		size1 = MIN(PIPE_BUFSIZE - g_head, esize);
 	else
-		len = size;
+		size1 = esize;
 
-	if (copy_to_user(buf, g_pipebuf + g_head, len) != 0) {
-		result = -EFAULT;
-		goto EXIT;
-	}
+	size2 = esize - size1;
 
-	if (size > len)
-		if (copy_to_user(buf + len, g_pipebuf, size - len) != 0) {
-			result = -EFAULT;
-			goto EXIT;
-		}
+	if (copy_to_user(buf, g_pipebuf + g_head, size1) != 0)
+		return -EFAULT;
 
-	g_head = (g_head + size ) % PIPE_SIZE;
-	g_count -= size;
+	if (size2 != 0)
+		if (copy_to_user(buf + size1, g_pipebuf, size2) != 0)
+			return -EFAULT;
 
-	result = size;
-EXIT:
+	g_head = (g_head + esize) % PIPE_BUFSIZE;
+	g_count -= esize;
+
 	mutex_unlock(&g_mutex);
 
-	return result;
+	return esize;
 }
 
 static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
 {
-	size_t len;
-	ssize_t result;
+	size_t esize, size1, size2;
 
-	if (mutex_lock_interruptible(&g_mutex))
+	if (mutex_lock_interruptible(&g_mutex) < 0)
 		return -ERESTARTSYS;
 
-	if (size > PIPE_SIZE - g_count) {
-		result = -ENOMEM;
-		goto EXIT;
-	}
+	esize = MIN(PIPE_BUFSIZE - g_count, size);
 
-	if (g_tail >= g_head)
-		len = MIN(size, PIPE_SIZE - g_tail);
+	if (g_tail > g_head)
+		size1 = MIN(PIPE_BUFSIZE - g_tail, esize);
 	else
-		len = size;
+		size1 = esize;
 
-	if (copy_from_user(g_pipebuf + g_tail, buf, len) != 0) {
-		result = -EFAULT;
-		goto EXIT;
-	}
+	size2 = esize - size1;
 
-	if (size > len)
-		if (copy_from_user(g_pipebuf, buf + len, size - len) != 0) {
-			result = -EFAULT;
-			goto EXIT;
-		}
+	if (copy_from_user(g_pipebuf + g_tail, buf, size1) != 0)
+		return -EFAULT;
 
-	g_tail = (g_tail + size ) % PIPE_SIZE;
-	g_count += size;
+	if (size2 != 0)
+		if (copy_from_user(g_pipebuf, buf + size1, size2) != 0)
+			return -EFAULT;
 
-	result = size;
+	g_tail = (g_tail + esize) % PIPE_BUFSIZE;
+	g_count += esize;
 
 	mutex_unlock(&g_mutex);
-EXIT:
-	return result;
+
+	return esize;
 }
 
 module_init(generic_init);
@@ -55476,103 +55520,7 @@ all:
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
-/* pipeproc1.c */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <unistd.h>
-
-#define PIPE_SIZE		4096
-
-void exit_sys(const char *msg);
-
-int main(void)
-{
-	int fd;
-	char buf[PIPE_SIZE];
-	char *str;
-	size_t len;
-
-	if ((fd = open("pipe-driver", O_WRONLY)) == -1)
-		exit_sys("open");
-
-	for (;;) {
-		printf("Enter text:");
-		fflush(stdout);
-		fgets(buf, PIPE_SIZE, stdin);
-		if ((str = strchr(buf, '\n')) != NULL)
-			*str = '\0';
-		if (!strcmp(buf, "quit"))
-			break;
-		len = strlen(buf);
-		if (write(fd, buf, len) == -1) {
-			fprintf(stderr, "Cannot write pipe! Maybe pipe is full!\n");
-			continue;
-		}
-
-		printf("%lu bytes written...\n", (unsigned long)len);
-	}
-
-	close(fd);
-
-	return 0;
-}
-
-void exit_sys(const char *msg)
-{
-	perror(msg);
-
-	exit(EXIT_FAILURE);
-}
-
-/* pipeproc2.c */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <unistd.h>
-
-#define PIPE_SIZE		4096
-
-void exit_sys(const char *msg);
-
-int main(void)
-{
-	int fd;
-	char buf[PIPE_SIZE + 1];
-	int len;
-	ssize_t result;
-
-	if ((fd = open("pipe-driver", O_RDONLY)) == -1)
-		exit_sys("open");
-
-	for (;;) {
-		printf("How many bytes to read? ");
-		fflush(stdout);
-		scanf("%d", &len);
-		if (!len)
-			break;
-		if ((result = read(fd, buf, len)) == -1)
-			exit_sys("read");
-		buf[result] = '\0';
-
-		printf("%ld bytes read: \"%s\"\n", (long)result, buf);
-	}
-
-	close(fd);
-
-	return 0;
-}
-
-void exit_sys(const char *msg)
-{
-	perror(msg);
-
-	exit(EXIT_FAILURE);
-}
+/* load */
 
 #!/bin/bash
 
@@ -55585,8 +55533,118 @@ rm -f $module
 mknod $module c $major 0
 chmod $mode $module
 
+/* unload */
+
+#!/bin/bash
+
+module=$1
+mode=666
+
+/sbin/rmmod ./$module.ko || exit 1
+rm -f $module
+
+/* prog1.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#define BUFFER_SIZE		4096
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int pdriver;
+	char buf[BUFFER_SIZE];
+	char *str;
+	ssize_t result;
+
+	if ((pdriver = open("pipe-driver", O_WRONLY)) == -1)
+		exit_sys("open");
+
+	for (;;) {
+		printf("Text:");
+		if (fgets(buf, BUFFER_SIZE, stdin) == NULL)
+			continue;
+		if ((str = strchr(buf, '\n')) != NULL)
+			*str = '\0';
+		if (!strcmp(buf, "quit"))
+			break;
+		if ((result = write(pdriver, buf, strlen(buf))) == -1)
+			exit_sys("write");
+		printf("%jd bytes written...\n", (intmax_t)result);
+	}
+
+	close(pdriver);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/* prog2.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#define BUFFER_SIZE		4096
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int pdriver;
+	char buf[BUFFER_SIZE + 1];
+	int size;
+	ssize_t result;
+
+	if ((pdriver = open("pipe-driver", O_RDONLY)) == -1)
+		exit_sys("open");
+
+	for (;;) {
+		printf("Size:");
+		scanf("%d", &size);
+		if (size > BUFFER_SIZE) {
+			printf("size is very long!..\n");
+			continue;
+		}
+		if (size == 0)
+			break;
+		if ((result = read(pdriver, buf, size)) == -1)
+			exit_sys("read");
+		buf[result] = '\0';
+		printf("%jd bytes read: %s\n", (intmax_t)result, buf);
+	}
+
+	close(pdriver);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+<BURADA KALDIK>
+
 /*--------------------------------------------------------------------------------------------------------------------------
-    Kernel semaphore nesneleri de tamamen user modda kullandığımız semaphore nesneleri gibidir. Bunların sayacı vardır. Sayaç 0'dan büyükse
+    Kernel semaphore nesneleri de tamamen user mode'da kullandığımız semaphore nesneleri gibidir. Bunların sayacı vardır. Sayaç 0'dan büyükse
     semaphore açık durumdadır. Kritik koda girildiğinde sayaç eksiltilir. Sayaç 0 olduğunda thread bloke edilir. Yine bloke işleminde 
     biraz spin işlemi yapılıp sonra bloke uygulanmaktadır. Semaphore nesneleri şöyle kullanılmaktadır:
 
@@ -55942,7 +56000,7 @@ chmod $mode $module
 
     DECLARE_WAIT_QUEUE_HEAD(g_wq);
 
-    Ya da nesne tanımlanıp init_waitqueueu_head fonksiyonuyla da ilkdeğerlenebilir:
+    Ya da nesne tanımlanıp init_waitqueueu_head fonksiyonuyla da ilk değerlenebilir:
 
     wait_queeue_head_t g_wq;
     ...
@@ -56643,7 +56701,7 @@ chmod $mode $module
 
     DEFINE_WAIT(entry);
 
-    Ya da açıkça tanımlanıp init_wait makrosuyle ilkdeğerlenebilir. Örneğin:
+    Ya da açıkça tanımlanıp init_wait makrosuyle ilk değerlenebilir. Örneğin:
 
     struct wait_queue_entry entry;
     ...
@@ -57347,8 +57405,8 @@ chmod $mode $module
     Çekirdeğin bulunduğu sayfa tabloları prosesler arası geçişte sabit kalır. Dolayısıyla o andaki proses ne olursa olsun her zaman çekirdek aynı 
     sanal adrestedir. Tabii çekirdek fiziksel RAM'in de istediği yerine erişebilmelidir. Bunn için Linux'ta çekirdeğin sanal bellekte başlangıç yerinden 
     itibaren fiziksel RAM sayfa tablosunda haritalandırılmıştır. Yani örneğin 32 bit Linuz sistemlerinde çekirdek alanı 0xC0000000'dan (3GB) başlar. 
-    biz bu sistemlerde kernel moddayken (örneğin aygıt sürücü içerisindeyken 0xC0000000 adresine eriştiğimizde aslında fiziksel RAM'in 0'ıncı adresine erişmiş oluruz.)
-    Böylece 32 bit Linux sistemlerinde kernel moddaki kodlar fiziksel RAM'de ptr adresine erişmek istediklerinde aslında erişimi 0xC0000000 + ptr biçiminde yaparlar.
+    biz bu sistemlerde kernel mode'dayken (örneğin aygıt sürücü içerisindeyken 0xC0000000 adresine eriştiğimizde aslında fiziksel RAM'in 0'ıncı adresine erişmiş oluruz.)
+    Böylece 32 bit Linux sistemlerinde kernel mode'daki kodlar fiziksel RAM'de ptr adresine erişmek istediklerinde aslında erişimi 0xC0000000 + ptr biçiminde yaparlar.
     Ancak 32 bit Linux sistemleri tüm fiziksel RAM'i bu biçimde haritalandırmamaktadır. (Bunun nedeni çekirdeğin kendisinin de sanal bellekte beli bir yer kaplamasıdır.)
     32 Bit Linux sistemleri 0xC0000000'dan itibaren ancak fiziksel RAM'in 896 MB'ını bu biçimde haritalandırabilmektedir. 32 Linux sistemlerinde RAM'in ilk 896 MB'dinr
     "normal memory zone" denilmektedir. 32 bit Linux sistemleri 896 MB'ın yukarısındaki RAM'e sayfat tablosunu değiştirerek biraz daha fazla çabayla eriçmektedir. 
@@ -57357,12 +57415,12 @@ chmod $mode $module
     64 Bit Linux sistemlerinde çekirdeğin sanal bellek alanı 128 TB olduğu için bu 128'TB'nin başından itibaren tüm fiziksel RAM haritalandırılmıştır. Dolayısıya 
     64 bit Linux sistemlerinde "normal memory zone" tüm fiziksel RAM'i kapsamaktadır. 64 bit Linuz sistemlerinde "high memory zone" yoktur.
 
-    Biz kernel modda kod yazarken belli bir fiziksel adrese erişmek istersek onun sanal adresini bulmamız gerekir. Bu işin manuel yapılması yerine bunun için
+    Biz kernel mode'da kod yazarken belli bir fiziksel adrese erişmek istersek onun sanal adresini bulmamız gerekir. Bu işin manuel yapılması yerine bunun için
     __va isimli makro kullanılmaktadır. Biz bu makroya bir fiziksel adres veririz o da bize o fiziksel adrese erişmek için gereken sanal adresi verir. Benzer biçimde
     bir sanal adresin fiziksel RAM karşılığını bulmak için de __pa makrosu kullanılmaktadır. Biz bu makroya sanal adresi veririz o da bize o sanal adresin aslında
     RAM'deki hangi fiziksel adres olduğunu verir.
 
-    Kernel modda RAM'in her yerine erişebildiğimize ve bu konuda bizi engelleyen hiçbir mekanizmanın olmadığına dikkat ediniz.
+    Kernel mode'da RAM'in her yerine erişebildiğimize ve bu konuda bizi engelleyen hiçbir mekanizmanın olmadığına dikkat ediniz.
 
     Linux çekirdeği için RAM temel olarak 3 bölgeye (zone) ayrılmıştır:
 
@@ -57401,7 +57459,7 @@ yukarısındaki fiziksel RAM'dir. 64 bit Intel işlemcilerinde ZONE_NORMAL tüm 
     bayrakları içermektedir. Bu ikinci parametre çeşitli sembolik sabitlerden oluşturulmaktadır. Burada önemli birkaç byrak şunlardır:
 
     GFP_KERNEL: Kernel alanı içerisinde normal tahsisat. En sık bu bayrak kullanılmaktadır. Burada RAM doluysa swap işlemi yapılabilir. Bu işlem sırasında
-    akış kernel modda wait kuruklarında bekletilebilir. Tahsisat ZONE_NORMAL alanından yapılmaktadır.
+    akış kernel mode'da wait kuruklarında bekletilebilir. Tahsisat ZONE_NORMAL alanından yapılmaktadır.
 
     GFP_NOWAIT: GFP_KERNEL gibidir. Ancak hazırda bellek yoksa proses uykuya yatılmaz. Fonksiyon başarısız olur.
 
@@ -58613,7 +58671,7 @@ done
 
     Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri döner. errno uygun biçimde set edilmektedir.
 
-    User moddan bir program aygıt sürücü için ioctl fonksiyonunu çağırdığında proses use r moddan kernel moda geçer ve aygıt sürücüdeki 
+    User mode'dan bir program aygıt sürücü için ioctl fonksiyonunu çağırdığında proses user mode'dan kernel moda geçer ve aygıt sürücüdeki 
     file_operations yapısının unlocked_ioctl elemanında belirtilen fonksiyon çağrılır. Bu fonksiyonun parametrik yapısı şöyle olmalıdır:
 
     long generic_ioctl(struct file *filp, unsigned int cmd, unsigned long arg);
@@ -58660,7 +58718,7 @@ done
     #define PIPE_MAGIC              'x'
     #define IOC_PIPE_GETBUFSIZE     _IOR(PIPE_MAGIC, 0, int)
 
-    ioctl için kontrol kodları hem aygıt sürücünün içerisinden hem de user moddan kullanılacağına göre user moddan kullanım için bir başlık dosyasının 
+    ioctl için kontrol kodları hem aygıt sürücünün içerisinden hem de user mode'dan kullanılacağına göre user mode'dan kullanım için bir başlık dosyasının 
     oluşturulması uygun olur. Örneğin:
 
     #ifndef PIPE_DRIVER_H_
@@ -58680,7 +58738,7 @@ done
     gibi adresin geçerliliğini sorguladıktan sonr tranfers yapan fonksiyonlar kullanılabilir.
 
     2) User mod programcısının olmayan bir komut kodu girmesi durumunda ioctl fonksiyonu -ENOTTY değeri ile geri döndürülmelidir. Bu tuhaf hata kodu
-    tarihsel bir durumdan kaynaklanmaktadır. Bu hata kodu için user modda "Inappropriate ioctl for device" biçiminde bir hata yazısı elde edilmektedir.
+    tarihsel bir durumdan kaynaklanmaktadır. Bu hata kodu için user mode'da "Inappropriate ioctl for device" biçiminde bir hata yazısı elde edilmektedir.
 
     Aşağıdaki örnekte boru sürücüne bir IOCTL komutu gönderilmektedir. Bu komut borunun uzunluğunu user mod programa vermektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -59460,15 +59518,15 @@ do
 /*--------------------------------------------------------------------------------------------------------------------------
     Anımsanacağı gibi proc dosya sistemi disk tabanlı bir dosya sistemi değildir. Kernel çalışması sırasında dış dümyaya bilgi vermek
     için bazen de davranışını dış dünyadan gelen verilerle değiştirebilmek için proc dosya sistemini kullanmaktadır. Daha sonra proc
-    gibi sys isimli dosya sistemi de Linuc sistemlerine eklenmiştir. 
+    gibi sys isimli dosya sistemi de Linuc sistemlerine eklenmiştir.
 
     proc dosya sistemi aslında yalnızca kernel tarafından değil aygıt sürücüler tarafından da kullanılabilmektedir. Ancak bu dosya sisteminin
-    içerisinde user moddan dosyalar ya da dizinler yaratılamamktadır. 
+    içerisinde user mode'dan dosyalar ya da dizinler yaratılamamaktadır.
 
     proc dosya sisteminin kernel ve aygıt sürücüler tarafından kullanılmasına ilişkin fonksiyonlar birkaç kere değişik kernel versiyonlarında değiştirilmiştir.
-    Dolayısıyla eski kernel'larda çalışan kodlar yeni kernel'larda derlenmeyecektir. Biz burada en yeni fonksiyonları ele alacağız. 
+    Dolayısıyla eski kernel'larda çalışan kodlar yeni kernel'larda derlenmeyecektir. Biz burada en yeni fonksiyonları ele alacağız.
 
-    proc dosya sisteminde bir dosya yaratabilmek için proc_create isimli fonksiyon kullanılmaktadır. 
+    proc dosya sisteminde bir dosya yaratabilmek için proc_create isimli fonksiyon kullanılmaktadır.
 
     struct proc_dir_entry *proc_create(const char *name, umode_t mode, struct proc_dir_entry *parent, const struct proc_ops *proc_ops);
 
@@ -60186,7 +60244,7 @@ static ssize_t proc_read(struct file *filp, char *buf, size_t size, loff_t *off)
     void ssleep(unsigned int secs);
     void ssleep_interruptible(unsigned int secs);
 
-    Aşağıdaki örnekte /proc/generic dosyasından okuma yapılmaya çalışıldığında 5 saniye kernel modda thread bekletilecektir. 
+    Aşağıdaki örnekte /proc/generic dosyasından okuma yapılmaya çalışıldığında 5 saniye kernel mode'da thread bekletilecektir. 
     Burada yalnızca proc_read fonksiyonu verilmiştir. Yukarıdaki programı bu fonksiyonu değiştirerek kullanabilirsiniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -60250,7 +60308,7 @@ static ssize_t proc_read(struct file *filp, char *buf, size_t size, loff_t *off)
     çaprıldığında biz current değişkeni ile o andaki prosese erişemeyiz. O anda çalışan prosesin user alanına kopyalamalar yapamayız. Çünkü bu fonksiyon timer tick kesmeleri 
     tarafından çağrılmaktadır. Son Linux çekirdeklerindeki kernel timer kullanımı şöyledir:
 
-    1) struct timer_list türünden bir yapı nesnesi statik düzeyde tanımlanır ve bu yapı nesnesine ilkdeğeri verilir. İlkdeğer verme işlemi DEFINE_TIMER makrosuyla
+    1) struct timer_list türünden bir yapı nesnesi statik düzeyde tanımlanır ve bu yapı nesnesine ilk değeri verilir. İlkdeğer verme işlemi DEFINE_TIMER makrosuyla
     yapılabilir. 
 
     #define DEFINE_TIMER(_name, _function)
@@ -60409,17 +60467,17 @@ mknod $module c $major 0
 chmod $mode $module
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Önceki konularda da UNIX/Linux sistemlerinde kernel modda çalışan işletim sistemine ait thread'ler olduğundan bahsetmiştik. Bu thread'ler
+    Önceki konularda da UNIX/Linux sistemlerinde kernel mode'da çalışan işletim sistemine ait thread'ler olduğundan bahsetmiştik. Bu thread'ler
     run kuyruğunda bulunan uykuya dalabilen işletim sisteminin programm gibi çalışan thread'leridir. Çeşitli işlemlerden sorumludurlar. Linux 
     işletim sisteminde bunların da isimleri genellikle "user mode daemon"lar gibi sonu 'd' ile bitmektedir ve yine bunlar 
     isimleri genellikle 'k' harfi ile başlarlar. Örneğin "kupdate", "kswapd", "keventd" gibi. 
 
-    İşte aygıt sürücüler de isterlerse arka planda kernel modda bir proses gibi çalışan thread'ler yaratabilirler. Ancak bu thread'ler
+    İşte aygıt sürücüler de isterlerse arka planda kernel mode'da bir proses gibi çalışan thread'ler yaratabilirler. Ancak bu thread'ler
     bir proses ile ilişkisiz çalıştırılmaktadır. Bu nedenle bunlar içerisinde current değişkeni kullanılamaz ve copy_to_user ya da copy_from_user
     gibi fonksiyonlar kullanılmaz. 
 
-    Aygıt sürücüdeki kodlarımız genellikle bir olay olduğunda (örneğin kesme gibi), ya da user moddan çağrıldığında (read, write, ioctl) gibi
-    çalıştırılmaktadır. Ancak kernel thread'ler aygıt sürücüye sanki bir programmış gibi kernel modda sürekli çalışma imkanı verirler. 
+    Aygıt sürücüdeki kodlarımız genellikle bir olay olduğunda (örneğin kesme gibi), ya da user mode'dan çağrıldığında (read, write, ioctl) gibi
+    çalıştırılmaktadır. Ancak kernel thread'ler aygıt sürücüye sanki bir programmış gibi kernel mode'da sürekli çalışma imkanı verirler. 
 
     Kernel thread'ler şöyle kullanılırlar:
 
@@ -60805,7 +60863,7 @@ module_exit(generic_exit);
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    İşlemcilerin IN, OUT gibi makine komutları "özel (privileged)" komutlardır. Bunlar user moddan kullanılırsa işlemci koruma mekanizması gereği
+    İşlemcilerin IN, OUT gibi makine komutları "özel (privileged)" komutlardır. Bunlar user mode'dan kullanılırsa işlemci koruma mekanizması gereği
     bir içsel kesme oluşturur, işletim sistemi de bu kesme kodunda prosesi sonlandırır. Dolayısıyla bu komutları kullanarak donanım aygıtlarıyla konuşabilmek için
     kernel mod aygıt sürücü yazmak gerekir. 
 
@@ -61255,7 +61313,7 @@ chmod $mode $module
     kullanılabilmektedir. Ancak bu aygıt sürücünün read ve/veya write modda açılabilmesi için prosrdin etkin kullanıcı id'sinin 0 olması 
     gerekmektedir. (Yani böyle programları sudo yaparak çalıştırmalıyız.)
 
-    Bu kullanım için aygıt sürücü user moddan open fonksiyonuyla açılır. Her byte bir portu belirtmektedir. lseek fonksiyonu ile ilgili porta dosya göstericisi
+    Bu kullanım için aygıt sürücü user mode'dan open fonksiyonuyla açılır. Her byte bir portu belirtmektedir. lseek fonksiyonu ile ilgili porta dosya göstericisi
     konumlandırılır. Sonra read/write işlemi uygulanır. 
 
     /dev/mem isimli karakter aygıt sürücüsü de fiziksel belleğe erişmek için kullanılmaktadır. Bu aygıt sürücü açılıp lseek ile belli bir offset'e konumlanılırsa
@@ -61721,8 +61779,8 @@ void exit_sys(const char *msg)
     Yani örneğimizdeki request_proc bizim tarafımızdan değil kernel tarafından callback fonksiyon olarak çağrılmaktadır. Bizim de bu fonksiyon içerisinde kuyruğa
     bırakılmış blok transfer isteklerini kuyruktan alarak gerçekleştirmemiz gerekir. 
 
-    Örneğin bir blok aygıt sürücüsünü user modda open fonksiyonuyla açıp içerisinden 10 byte'ı read fonksiyonuyşa okumak isteyelim. Eğer bu aygıt sürücü karakter aygıt sürücüsü olsaydı 
-    kernel doğrudan aygıt sürücünün read fonksiyonunu çağıracaktı. Aygı tüsürücü de tam belirlenen değer olan 10 byte'ı user moddaki adrese transfer edecekti. Halbuki blok aygıt
+    Örneğin bir blok aygıt sürücüsünü user mode'da open fonksiyonuyla açıp içerisinden 10 byte'ı read fonksiyonuyşa okumak isteyelim. Eğer bu aygıt sürücü karakter aygıt sürücüsü olsaydı 
+    kernel doğrudan aygıt sürücünün read fonksiyonunu çağıracaktı. Aygıt sürücü de tam belirlenen değer olan 10 byte'ı user mode'daki adrese transfer edecekti. Halbuki blok aygıt
     sürücüsü durumunda kernel aygıt sürücüden 10 byte transfer istemeyecektir. İlgili 10 byte'ın blunduğu bloğun (block ardışıl n sektördür) transferini isteyecektir. User mod programa
     o bloğun içerisindeki 10 byte'ı vermek kernel'ın görevidir. Şüphesiz kernel 10 byte okuma isteğine konu olan yerin aygıttaki sektör numarasını hesap eder ve o sektörden itibaren
     blok transferi ister. 
