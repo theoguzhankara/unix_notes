@@ -12,7 +12,7 @@
 
                     (Notları okurken editörünüzün "Line Wrapping" özelliğini pasif hale getiriniz.)
 
-                                                Son Güncelleme: 18/04/2024
+                                                Son Güncelleme: 30/04/2024
 
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -467,15 +467,15 @@
     Şimdi de Raspberry Pi 5 donanımını inceleyelim. Kartın üzerinde BCM2712 SoC'u hemen dikkati çekmektedir. Bu SoC'un hemen 
     yanında RAM chip'i bulunmaktadır. Raspberyy Pi 5'in 1GB, 2GB, 4GB ve 8GB RAM'li modelleri bulunmaktadır. Raspberry Pi 5 
     modelinde toplam 4 USB soketi bulunmaktadır. Bunlardan iki tanesi USB 2.0, diğer 2 tanesi de USB 3.0'dır. Klavye ve fare gibi 
-    yavaş aygıtları USB 2.0 girişlerine bağlayabilrsiniz. Bunların hemen yanında Ethernet girişi bulunmaktadır. Kenarlarda toplam 
-    40 tane (20'lik iki sıra) GPIO uçları bulunmaktadır. Bu GPIO uçları aygıtın dış dünya ile elektrisksel olarak haberleşmesin
+    yavaş aygıtları USB 2.0 girişlerine bağlayabilirsiniz. Bunların hemen yanında Ethernet girişi bulunmaktadır. Kenarlarda toplam 
+    40 tane (20'lik iki sıra) GPIO uçları bulunmaktadır. Bu GPIO uçları aygıtın dış dünya ile elektriksel olarak haberleşmesi
     için kullanılmaktadır. Raspberry Pi 5'te iki Micro HDMI girişi bulunmaktadır. Bu uçlardan birine monitörümüzü bağlamalıyız.
     Raspberry Pi 5 modelinde arka tarafta SD kart girişine yakın bir bölgede çok küçük ON/OFF düğmesi bulunmaktadır. Bu düğme 
-    bilgisayarlarımızdaki Power Off düğmesi gibidir. Ayrıca kamera ve LCD bağlamak için iki adet MIP DSI/CSI bulunmaktadır. 
+    bilgisayarlarımızdaki "Power Off" düğmesi gibidir. Ayrıca kamera ve LCD bağlamak için iki adet MIP DSI/CSI bulunmaktadır. 
     Kartın arka tarafında bir Micro SD kart girişi bulunmaktadır. Buraya disk görevini görecek olan micro SD kartımızı takacağız.
-    Giriş kısmında da belirttiğimiz gibi şu an için 64GB'lik SD kartlar fiyat bakımından uygun bir büyüklüktür. Ancak denemeler için 
-    birden fazla (bunlar daha küçük de olabilir) SD kart kullanabilirsiniz. Kart üzerindeki diğer bileşenlerin bazılarını ilerleyen
-    bölümlerde ayrıca ele alacağız.
+    Giriş kısmında da belirttiğimiz gibi şu an için 64GB'lik SD kartlar fiyat bakımından uygun bir büyüklüktür. Ancak denemeler 
+    için birden fazla (bunlar daha küçük de olabilir) SD kart kullanabilirsiniz. Kart üzerindeki diğer bileşenlerin bazılarını 
+    ilerleyen bölümlerde ayrıca ele alacağız.
 
     Kart üzerindeki bileşenleri inceleyebilmek için aşağıdaki bağlantıyı kullanabilirsiniz:
 
@@ -498,12 +498,13 @@
 
     Bir bilgisayar sistemini reset ettiğimizde işletim sisteminin (ya da bu görevdeki yazılımın) yüklenmesini sağlayan mekanizmalara
     "boot loader" denilmektedir. Gömülü sistemlerde kullanılan "boot loader" mekanizmaları kursumuzun ayrı bir konusunu oluşturmaktadır. 
-    Ancak kabaca boot işlemi şöyle gerçekleşmektedir: Biz mikroişlemciyi reset ettiğimizda çalışma belli bir adresten başlatılmaktadır. 
-    Yani işlemci reset edildiğinde çalıştırılacak kodun önceden hazır bir biçimde kalıcı bir bellekte (bugün bunlar için flash EPROM'lar
-    kullanılmaktadır) bulunuyor olması gerekir. Buradaki kod çeşitli donanım birimlerini programlar ve onları kullanıma hazır hale 
-    getirir. Sonra boot loader'ın işletim sisteminin yüklenmesinden sorumlu olan kısmı RAM'e yüklenir. Boot Loader'ın bu kısmı 
-    işletim sistemini yükler. Zaten bu konular ileride ayrıntılarıyla ele alınacaktır. Bizim bu aşamada bilmemiz gereken şey 
-    işletim sistemimizin micro SD karta nasıl yükleneceğidir. Çünkü bu işlem yapıldıktan sonra artık her şey otomatik gerçekleşmektedir.
+    Ancak kabaca boot işlemi şöyle gerçekleşmektedir: Biz mikroişlemciyi reset ettiğimizde çalışma belli bir adresten başlatılmaktadır. 
+    Yani işlemci reset edildiğinde çalıştırılacak kodun önceden hazır bir biçimde kalıcı bir bellekte (bugün bunlar için flash 
+    EPROM'lar kullanılmaktadır) bulunuyor olması gerekir. Buradaki kod çeşitli donanım birimlerini programlar ve onları kullanıma 
+    hazır hale getirir. Sonra boot loader'ın işletim sisteminin yüklenmesinden sorumlu olan kısmı RAM'e yüklenir. Boot loader'ın 
+    bu kısmı işletim sistemini yükler. Zaten bu konular ileride ayrıntılarıyla ele alınacaktır. Bizim bu aşamada bilmemiz gereken 
+    şey işletim sistemimizin micro SD karta nasıl yükleneceğidir. Çünkü bu işlem yapıldıktan sonra artık her şey otomatik 
+    gerçekleşmektedir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -519,7 +520,7 @@
 
     RaspberryImager programı indirilip kurulup çalıştırılınca program bize üç şey sormaktadır?
 
-    1) Hangi Rasperry Pi Modelini kullandığımızı
+    1) Hangi Rasperry Pi modelini kullandığımızı
     2) Hangi işletim sistemini yükleyeceğimizi
     3) Hangi micro SD karta yüklemeyi yapacağımızı
 
@@ -540,7 +541,7 @@
 
     1) SD kartınızı Raspberry Pi'ınıza yerleştiriniz.
     2) Monitörünüzü Raspberry Pi'ınızın micro HDMI soketine takınız.
-    3) Klavye ve Farenizi Raspberry Pi'ınızın USB soketlerine takınız.
+    3) Klavye ve farenizi Raspberry Pi'ınızın USB soketlerine takınız.
     4) USB Type-C soketi ile Raspberry Pi'ınıza güç veriniz.
 
 -----------------------------------------------------------------------------------------------------------------------------*/
@@ -553,7 +554,7 @@
     Gömülü sistemimize Linux'u kurduktan sonra ona başka bir makineden erişmek isteyebiliriz. Bunun çeşitli yolları varsa da 
     en tipik üç yöntem kullanılmaktadır:
 
-    1) ssh protokolü ile erişim
+    1) SSH protokolü ile erişim
     2) VNC protokolü ile erişim
     3) Microsoft Remote Desktop Protokolü (RDP) ile erişim
 
