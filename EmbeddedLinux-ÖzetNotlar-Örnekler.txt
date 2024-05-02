@@ -96,20 +96,21 @@
 
     - Gömülü sistemler genellikle (fakat her zaman değil) daha düşük güç harcamaktadır. Bu durum onların bataryalarla beslenebilmesini 
     dolayısıyla fiziksel taşınabilirliğini de artırmaktadır. Tabii genel olarak gömülü sistemler düşük güç harcama eğiliminde olan 
-    sistemler olsalar da bu durum her zaman böyle olmak zorunda değildir. Bazı gömülü sistemlerin gömüldüğü sistemlerde bir güç kullanma
-    sorunu yoktur. (Örneğin araba kantarı zaten bu işlevi gerçekleştirmek için önemli bir güç harcamaktadır. Dolayısıyla bu sistemdeki
-    gömülü sistemin harcadığı gücün önemi olmayabilir.)
+    sistemler olsalar da bu durum her zaman böyle olmak zorunda değildir. Bazı gömülü sistemlerin gömüldüğü sistemlerde bir güç 
+    kullanma sorunu yoktur. (Örneğin araba kantarı zaten bu işlevi gerçekleştirmek için önemli bir güç harcamaktadır. Dolayısıyla 
+    bu sistemdeki gömülü sistemin harcadığı gücün önemi olmayabilir.)
 
     - Gömülü sistemlerin önemli bir bölümü "gerçek zamanlı (real time)" olaylarla ilişkilidir. Bu sistemlerin belli bir bölümü 
     dış dünyadaki değişimlere karşı bir yanıt oluşturmaya çalışmaktadır. Örneğin bir gömülü sistem otamdaki ısı belli bir kritik 
-    düzeye geldiğinde bir işlemi başlatabilir. Ya da bir gömülü sistem kalp ritmi bozulduğunda kalbe uyarılar göndererek ritim bozukluğunu
-    düzeltmeye çalışabilir. Hava araçlarındaki gömülü sistemler o anki hava şartlarına göre bir otomatik kumanda sistemi işlevini 
-    görüyor olabilir. Tabii gömülü istemlerin bu gerçek zamanlı işlem doğası bazı uygulamalarda "çok katı (hard realtime)" olurken bazı 
-    uygulamalarda "daha gevşek (soft realtime)" olabilmektedir.
+    düzeye geldiğinde bir işlemi başlatabilir. Ya da bir gömülü sistem kalp ritmi bozulduğunda kalbe uyarılar göndererek ritim 
+    bozukluğunu düzeltmeye çalışabilir. Hava araçlarındak gömülü sistemler o anki hava şartlarına göre bir otomatik kumanda sistemi 
+    işlevini görüyor olabilir. Tabii gömülü istemlerin bu gerçek zamanlı işlem doğası bazı uygulamalarda "çok katı (hard realtime)" 
+    olurken bazı uygulamalarda "daha gevşek (soft realtime)" olabilmektedir.
 
-    - Gömülü sistemlerin bazılarında hiç girdi/çıktı birimi olmayabilir. Bazılarında ise girdi/çıktı birimi olarak "düğmeler", basit tuş 
-    takımları, küçük LCD'ler olabilir. Oysa genel amaçlı bilgisayar sistemlerinde genellikle girdi/çıktı birimi olarak klavye, fare ve 
-    gelişmiş monitörler kullanılmaktadır. Başka bir deyişle gömülü sistemler kullanıcı arayüzü bakımından minimal olma eğilimindedir.
+    - Gömülü sistemlerin bazılarında hiç girdi/çıktı birimi olmayabilir. Bazılarında ise girdi/çıktı birimi olarak "düğmeler", 
+    basit tuş takımları, küçük LCD'ler olabilir. Oysa genel amaçlı bilgisayar sistemlerinde genellikle girdi/çıktı birimi olarak 
+    klavye, fare ve gelişmiş monitörler kullanılmaktadır. Başka bir deyişle gömülü sistemler kullanıcı arayüzü bakımından minimal 
+    olma eğilimindedir.
 
     - Gömülü sistemlerdeki donanım birimleri nispeten ucuz olma eğilimindedir. Genel amaçlı bilgisayarlara göre bunlar çok daha ucuz
     olarak temin edilebilmektedir.
@@ -209,10 +210,10 @@
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Mikroişlemcileri tasarım mimarilerine göre iki CISC (Complex Instruction Set Computers) ve RISC (Reduced Instruction Set Computers)
-    olmak üzere iki kısma ayırabiliriz. CISC ailesi işlemcilere Intel firmasının x86 ailesi işlemcilerini örnek verebiliriz. ARM, 
-    MIPS, PowerPC, Itanium gibi işlemciler ise tipik RISC işlemcileridir. Her ne kadar CISC ve RISC isimleri komut kümesi ile 
-    ilgili biçimde uydurulmuşsa da CISC ve RISC tasarımları başka bakımlardan da farklılık göstermektedir.
+    Mikroişlemcileri tasarım mimarilerine göre iki CISC (Complex Instruction Set Computers) ve RISC (Reduced Instruction Set 
+    Computers) olmak üzere iki kısma ayırabiliriz. CISC ailesi işlemcilere Intel firmasının x86 ailesi işlemcilerini örnek 
+    verebiliriz. ARM, MIPS, PowerPC, Itanium gibi işlemciler ise tipik RISC işlemcileridir. Her ne kadar CISC ve RISC isimleri 
+    komut kümesi ile ilgili biçimde uydurulmuşsa da CISC ve RISC tasarımları başka bakımlardan da farklılık göstermektedir.
 
     İşlemciler (makro ve mikro) ortaya çıktığında çok fazla makine komutunun bulunmasının bir avantaj olduğu düşünülüyordu. 
     Ancak daha sonraları bunun avantajdan ziyade dezavantaj oluşturduğu görüldü. Belli bir süreden sonra artık RISC mimarisinin
@@ -561,40 +562,40 @@
     VNC ve RDP ile gömülü aygıtımızdaki Linux'a erişebilmemiz için orada bir pencere yönetici programın (yani masaüstü sisteminin)
     kurulu olması gerekir. RSapberry Pi güçlü bir donanıma sahip olduğu için ve kişisel bir bilgisayar gibi kullanılabildiği için
     buraya yüklediğimiz Linux sistemlerinde pencere yöneticisi zaten bulunuyor olacaktır. Ancak server sistemlerinde ve pek çok 
-    gömülü Linux sisteminde bir pencere yöneticisi bulunmamaktadır. Bu durumda ssh protokolü ile erişim sağlanmakaktadır. Eskiden 
-    ssh protokolünden önce telnet isimli benzer bir protokol vardı. Ancak telnet protokolünün güvenilirliği zayıf olduğu için 
-    ssh protokolü geliştirildi. Bugün konsol tabanlı bir ortamda bir Linux sistemine uzaktan bağlanmak için genellikle ssh protokolü 
+    gömülü Linux sisteminde bir pencere yöneticisi bulunmamaktadır. Bu durumda SSH protokolü ile erişim sağlanmaktadır. Eskiden 
+    SSH protokolünden önce telnet isimli benzer bir protokol vardı. Ancak telnet protokolünün güvenilirliği zayıf olduğu için 
+    SSH protokolü geliştirildi. Bugün konsol tabanlı bir ortamda bir Linux sistemine uzaktan bağlanmak için genellikle SSH protokolü 
     kullanılmaktadır.
 
     Her türlü TCP/IP uygulamalarında haberleşmenin yapılabilmesi için bir "server" program ile bir de "client" programın bulunuyor 
-    olması gerekir. Bize erişimi sağlayan uzak makinedenki program "server" programdır. Bizim erişmek için kullandığımız program 
-    ise "client" programdır. ssh server ve client programlar zaten işletim sistemlerinin pek çoğunun içinde default bir biçimde 
-    bulunmaktadır. Biz Raspberry Pi'ımıza Raspberry OS işletim sistemini kurduğumuzda zaten ssh client ve server programlar yüklü 
-    durumdadır. Ancak eğer gömülü sisteminizde ssh server program bulunmuyorsa onu şöyle kurabilirsiniz:
+    olması gerekir. Bize erişimi sağlayan uzak makinedeki program "server" programdır. Bizim erişmek için kullandığımız program 
+    ise "client" programdır. SSH server ve client programlar zaten işletim sistemlerinin pek çoğunun içinde default bir biçimde 
+    bulunmaktadır. Biz Raspberry Pi'ımıza Raspberry OS işletim sistemini kurduğumuzda zaten SSH client ve server programlar yüklü 
+    durumdadır. Ancak eğer gömülü sisteminizde SSH server program bulunmuyorsa onu şöyle kurabilirsiniz:
 
     $ sudo apt-get install openssh-server
 
-    Bu işlem sshserver programının kurulup çalışır hale getirilmesini sağlamaktadır. client program da benzer biçime kurulabilir:
+    Bu işlem SSH server programının kurulup çalışır hale getirilmesini sağlamaktadır. client program da benzer biçime kurulabilir:
 
     $ sudo apt-get install openssh-client
 
-    ssh client ptogramıyla bağlantı aşağıdaki gibi sağlanabilir:
+    ssh client programıyla bağlantı aşağıdaki gibi sağlanabilir:
 
-    ssh user_name@host_name
+    $ ssh user_name@host_name
 
-    Bizim bağlantı sağlayabilmek için uzak makinede bir kullanıcının ismini ve parolasını biliyor olmamız gerekir. ssh client programı 
+    Bizim bağlantı sağlayabilmek için uzak makinede bir kullanıcının ismini ve parolasını biliyor olmamız gerekir. SSH client programı 
     benzer komut satırı argümanlarıyla Windows sistemlerinde ve macOS sistemlerinde de hazır bir biçimde bulunmaktadır. Dolayısıyla
-    Windows ve macOS sistemlerinden de gömülü aygıtınıza benzer biçimde bağlanabilirsiniz. ssh programı ile bağlantı yapılırken 
+    Windows ve macOS sistemlerinden de gömülü aygıtınıza benzer biçimde bağlanabilirsiniz. SSH programı ile bağlantı yapılırken 
     kullanıcı ismini "-l" seçeneği ile de belirtebilirsiniz. Örneğin:
 
-    ssh -l user_name host_name
+    $ ssh -l user_name host_name
 
-    VNC ile bağlantıda yine bir VNC server programıyla bir de VNC client programının karşılıklı makinelerde yüklü olması gerekmektedir. 
-    Bizim bağlanmak istediğimiz makinede server programının çalışıyor olması, bağlantıyı sağlamak istediğimiz tarafta da client progmın 
+    VNC ile bağlantı da yine bir VNC server programıyla bir de VNC client programının karşılıklı makinelerde yüklü olması gerekmektedir. 
+    Bizim bağlanmak istediğimiz makinede server programının çalışıyor olması, bağlantıyı sağlamak istediğimiz tarafta da client programın 
     yüklü olması gerekir. Raspberry Pi'daki eski Raspbian işletim sisteminde VNC server hazır bir biçimde bulunmuyordu. Ancak belli 
-    süre sonra artık Raspberry Pi OS içerisinde zaten VNC server programı hazır bir biçimde bulunmaktadır. Ancak VNC server hazır 
-    bir biçimde bulunuyor olsa da onun çalışır getirilmesi gerekmektedir. Bu işlem pratik olarak ana menüden Preferences/Raspberry Pi 
-    Configurations/Interfaces sekmensinden yapılabilir. Yukarıda da belirttiğimiz gibi VNC server için Linux sistemimizde bir pencere 
+    süre sonra artık Raspberry Pi OS içerisinde zaten VNC server programı hazır bir biçimde bulunmaktadır. Ancak VNC server hazır bir 
+    biçimde bulunuyor olsa da onun çalışır hale getirilmesi gerekmektedir. Bu işlem pratik olarak ana menüden "Preferences/Raspberry Pi 
+    Configurations/Interfaces" sekmesinden yapılabilir. Yukarıda da belirttiğimiz gibi VNC server için Linux sistemimizde bir pencere 
     yöneticisinin çalışıyor olması gerekir. Yani içerisine grafik arayüz yüklenmemiş olan bir Linux sistemine VNC ile bağlanmanın da 
     bir anlamı yoktur.
 
@@ -606,7 +607,7 @@
     Ancak server program kurulduktan sonra bazı ayarlamaların yapılması gerekmektedir. Bu konu ileride başka bir bölümde ele 
     alınacaktır.
 
-    Biz pencere yönetici sistemin bulunduğu bir Linux sistemine Microsoft'un "Remote Desktop Protocolünü (RDP)" kullanarak da 
+    Biz pencere yönetici sisteminin bulunduğu bir Linux sistemine Microsoft'un "Remote Desktop Protocol(RDP)"ünü kullanarak da 
     bağlanabiliriz. Tabii bunun için de bağlanacağımız makinede RDP server programının çalışıyor durumda olması gerekmektedir. 
     Bu protokol Microsoft'a ait olduğu için Linux sistemleri tarafından aktif bir biçimde kullanılmamaktadır. RDP server programı
     aşağıdaki gibi kurulabilir:
@@ -617,8 +618,8 @@
     protokol için başka client programlar da bulunmaktadır.
 
     VNC ve RDP protokolleri hem Linux sistemlerinde hem de Windows ve macOS sistemlerinde kullanılabilmektedir. Windows dünyasında
-    RDP programları hızlı bir biçimde çalışmaktadır. Ancak Linux'ta VNC programları RDP programlarına göre daha hızlıdır. Windows'ta 
-    da RDP programları VNC programlarına göre daha hızlıdır.
+    RDP programları VNC programlarına göre daha hızlı bir biçimde çalışmaktadır. Ancak Linux'ta VNC programları RDP programlarına 
+    göre daha hızlıdır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -655,16 +656,16 @@
     https://www.terasic.com.tw/wiki/Disable_Driver_Signature_Enforcement_in_Windows10_x64
 
     Biz bu biçimde USB bağlantısı yaptığımızda artık IP ptotokol ailesini USB üzerinden kullanabilir duruma geliriz. Dolayısıyla
-    ssh ile BBB'ye bağlanabiliriz. BBB'de yüklü olan Debian dağıtımının default kullanıcı ismi "debian" default parolası ise "temppwd"
+    SSH ile BBB'ye bağlanabiliriz. BBB'de yüklü olan Debian dağıtımının default kullanıcı ismi "debian" default parolası ise "temppwd"
     biçimindedir. Tabii hazır yüklü olan Linux dağıtımının klavye ayarları İngilizcedir. Türkçe klavye ile yazarken buna dikkat 
-    ediniz. ssh bağlantısı için BBB'deki IPV4 adresi "192.168.7.2" biçimindedir. Yani bağlantı aşağıdaki gibi yapılabilir:
+    ediniz. SSH bağlantısı için BBB'deki IPV4 adresi "192.168.7.2" biçimindedir. Yani bağlantı aşağıdaki gibi yapılabilir:
 
     $ ssh debian@192.168.7.2
 
     parola olarak da "temppwd" girilmelidir. On-board flash üzerine yüklenmiş olan Debian dağıtımında bir pencere yönetici program
     bulunmamaktadır. Zaten BBB'nin on-board flash belleği 4GB'dir.
 
-    Biz BBB'nin mini USB kablosunu host makinemize bağladığımızda artık host makinemizden BBB'ye ssh yoluyla erişebiliriz. Ancak
+    Biz BBB'nin mini USB kablosunu host makinemize bağladığımızda artık host makinemizden BBB'ye SSH yoluyla erişebiliriz. Ancak
     BBB'deki Linux sisteminin masaüstü host makinemizdeki Internet'i kullanabilmesi için Windows ve Linux sistemlerinde bazı 
     ayarların da yapılması gerekmektedir. Tabii BBB'nin Internet'i kullanabilmesini sağlamanın en normal ve hızlı yolu doğrudan 
     ADSL Router'ımızdan gelen Ethernet RJ45 jakını BBB'ye takmaktır. Biz "Internet over USB" yerine bu yöntemi kullanmanızı 
@@ -857,7 +858,7 @@
     Kursumuzda kimi zaman çapraz derleme (cross compile) işlemleri yapacağız. Bu durumda host makine ile hedef makine arasında 
     dosya transfleri yapmamız gerekecek. İki makine arasında dosya transferi yapmak için genellikle IP prtokol ailesinin sunduğu 
     olanaklar kullanılmaktadır. Bunun için en çok kullanılan utility program "scp" isimli programdır. Bu program "Secure Copy 
-    Protocol" denilen bir protokol yoluyla arka planda ssh kullanarak dosya transferini yapmaktadır. scp programının tipik 
+    Protocol" denilen bir protokol yoluyla arka planda SSH kullanarak dosya transferini yapmaktadır. scp programının tipik 
     kullanımı şöyledir:
 
     $ scp dosya_yol_ifadesi kullanıcı_ismi@uzak_makine
@@ -1278,7 +1279,7 @@
     - Remote Cammand Shell Console
 
     2) Window/Show View/Remote Systems seçilir. Linux seçilerek yeni bir bağlantı olşturulur. Bağlantıya bir isim verilerek Next 
-    düğmesine basılır. Configuration penceresinden ssh files seçilir. Next düğmesine basılır. Bu kez Configuration sekmesinden 
+    düğmesine basılır. Configuration penceresinden SSH files seçilir. Next düğmesine basılır. Bu kez Configuration sekmesinden 
     "processes.shell.linux" seçilir ve Next seçilir. Oradan da "ssh.shells" seçilir ve Finish düğmesine basılır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
