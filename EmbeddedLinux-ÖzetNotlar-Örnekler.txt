@@ -628,10 +628,10 @@
 
     https://docs.beagleboard.org/latest/https://docs.beagleboard.org/latest/
 
-    BBB kendi içerisinde ismine "eMMC (Embedded Multi-MEdia Card)" denilen on-board flash belleğe sahiptir. Zaten ürün satın 
-    alındığında vu flash belleğin çerisinde bir Debian Linux dağıtımı yüklü durumdadır. Bu nedenle biz board'umuzu güç kaynağına 
-    taktığmızda zaten default olarak bu on-board flash içerisindeki Linux boot edilmektedir. BBB'yi kullanıma hazır hale getirmek 
-    için şunlar yapılmaldır:
+    BBB kendi içerisinde ismine "eMMC (Embedded Multi-Media Card)" denilen on-board flash belleğe sahiptir. Zaten ürün satın 
+    alındığında bu flash belleğin içerisinde bir Debian Linux dağıtımı yüklü durumdadır. Bu nedenle biz board'umuzu güç kaynağına 
+    taktığımızda zaten default olarak bu on-board flash içerisindeki Linux boot edilmektedir. BBB'yi kullanıma hazır hale getirmek 
+    için şunlar yapılmalıdır:
 
     1) BBB'ye güç kaynağını bağlamak için iki soket kullanılabilmektedir. Birincisi eski tip yuvarlak sokettir (DC barrel jack). 
     İkincisi ise mini USB soketidir. Kullanıcılar genellikle güç kaynağını mini USB soketine bağlamaktadır. (Tabii bu mini USB 
@@ -640,10 +640,10 @@
     2) BBB üzerinde bir tane standart USB soket vardır. Genellikle bu sokete combo klavye fare bağlanmaktadır. Ancak birden fazla
     bağlantı için USB hub kullanılabilir.
 
-    3) BBB'nin klasik modellerinde Internet için "wireless" bağlantı yoktur. Dolayısıyla Internet bağlantısı sağlamak için ethernet
-    soketi kullanılmaktadır. Ancak on-board flash üzerine yükllenmiş olan Debian içerisinde "Internet over USB" için gerekli aygıt
+    3) BBB'nin klasik modellerinde internet için "wireless" bağlantı yoktur. Dolayısıyla internet bağlantısı sağlamak için ethernet
+    soketi kullanılmaktadır. Ancak on-board flash üzerine yüklenmiş olan Debian içerisinde "Internet over USB" için gerekli aygıt
     sürücüler (device drivers) bulunmaktadır. Bu sayede biz örneğin mini USB kablosu ile BBB'yi Windows ya da Linux makinemize 
-    bağlayıp BBB'nin oradaki Internet'i kullanmasını sağlayabiliriz.
+    bağlayıp BBB'nin oradaki interneti kullanmasını sağlayabiliriz.
 
     4) BBB'de de Raspberry Pi'da olduğu gibi micro HDMI soketi vardır. Bu sokete doğrudan monitörümüzü bağlayabiliriz.
 
@@ -655,10 +655,10 @@
 
     https://www.terasic.com.tw/wiki/Disable_Driver_Signature_Enforcement_in_Windows10_x64
 
-    Biz bu biçimde USB bağlantısı yaptığımızda artık IP ptotokol ailesini USB üzerinden kullanabilir duruma geliriz. Dolayısıyla
-    SSH ile BBB'ye bağlanabiliriz. BBB'de yüklü olan Debian dağıtımının default kullanıcı ismi "debian" default parolası ise "temppwd"
-    biçimindedir. Tabii hazır yüklü olan Linux dağıtımının klavye ayarları İngilizcedir. Türkçe klavye ile yazarken buna dikkat 
-    ediniz. SSH bağlantısı için BBB'deki IPV4 adresi "192.168.7.2" biçimindedir. Yani bağlantı aşağıdaki gibi yapılabilir:
+    Biz bu biçimde USB bağlantısı yaptığımızda artık IP protokol ailesini USB üzerinden kullanabilir duruma geliriz. Dolayısıyla
+    SSH ile BBB'ye bağlanabiliriz. BBB'de yüklü olan Debian dağıtımının default kullanıcı ismi "debian", default parolası ise "temppwd"
+    biçimindedir. Tabii hazır yüklü olan Linux dağıtımının klavye ayarları İngilizce'dir. Türkçe klavye ile yazarken buna dikkat 
+    ediniz. SSH bağlantısı için BBB'deki IPv4 adresi "192.168.7.2" biçimindedir. Yani bağlantı aşağıdaki gibi yapılabilir:
 
     $ ssh debian@192.168.7.2
 
@@ -666,8 +666,8 @@
     bulunmamaktadır. Zaten BBB'nin on-board flash belleği 4GB'dir.
 
     Biz BBB'nin mini USB kablosunu host makinemize bağladığımızda artık host makinemizden BBB'ye SSH yoluyla erişebiliriz. Ancak
-    BBB'deki Linux sisteminin masaüstü host makinemizdeki Internet'i kullanabilmesi için Windows ve Linux sistemlerinde bazı 
-    ayarların da yapılması gerekmektedir. Tabii BBB'nin Internet'i kullanabilmesini sağlamanın en normal ve hızlı yolu doğrudan 
+    BBB'deki Linux sisteminin masaüstü host makinemizdeki interneti kullanabilmesi için Windows ve Linux sistemlerinde bazı 
+    ayarların da yapılması gerekmektedir. Tabii BBB'nin interneti kullanabilmesini sağlamanın en normal ve hızlı yolu doğrudan 
     ADSL Router'ımızdan gelen Ethernet RJ45 jakını BBB'ye takmaktır. Biz "Internet over USB" yerine bu yöntemi kullanmanızı 
     öneriririz.
 -----------------------------------------------------------------------------------------------------------------------------*/
@@ -689,13 +689,13 @@
 
     AM335x 11.7 2023-09-02 4GB eMMC IoT Flasher
 
-    Buradaki "IOT" sözcüğü indirilecek Debian dağıtımının IOT amaçla oluşturulmuş minimalist bir dağıtım olduğunu belirtmektedir. 
+    Buradaki "IoT" sözcüğü indirilecek Debian dağıtımının IoT amaçla oluşturulmuş minimalist bir dağıtım olduğunu belirtmektedir. 
     Örneğin alternatif bir imaj da şu olabilir:
 
     AM335x 11.7 2023-09-02 4GB eMMC Xfce Flasher
 
-    Burada "IOT" ibaresi yerine "Xfce" ibaresi bulunmaktadır. Xfce küçük bir pencere yöneticisidir. Ancak maalesef bu pencere 
-    yöneticisi bile BBB'nin pek çok verisyonunda sistem kısıtları nedeniyle çok yavaş çalışma eğilimindedir.
+    Burada "IoT" ibaresi yerine "Xfce" ibaresi bulunmaktadır. Xfce küçük bir pencere yöneticisidir. Ancak maalesef bu pencere 
+    yöneticisi bile BBB'nin pek çok versiyonunda sistem kısıtları nedeniyle çok yavaş çalışma eğilimindedir.
 
     2) İndirilen imaj zip'li olduğu için açılmalıdır. Açılan imajın uzantısının ".img" olması gerekir.
 
@@ -901,7 +901,7 @@
 
     $ sshfs BBB debian@192.168.7.2:
 
-    Artık BBB dizinimiz uzak makinedeki kullanıcının home dizini gibi olmuştur. Yani biz bu BBB dizinine dosya kopyaladığmızda 
+    Artık BBB dizinimiz uzak makinedeki kullanıcının home dizini gibi olmuştur. Yani biz bu BBB dizinine dosya kopyaladığımızda 
     aslında onu uzak makineye kopyalamış oluruz. Bezer biçimde uzak makinede home dizinine bir dosya kopyalandığında biz bu 
     dosyayı BBB dizininde otomatik olarak görürüz.
 
@@ -1675,7 +1675,7 @@
 
     Artık bundan sonra "menuconfig" yaparsak eski konfigürasyon dosyasını yüklemiş oluruz.
 
-    Daha önce yapılan build işleminde kalan birtakım dosyaların kaldırılması için ise "distclean" argğmanıyla yapılabilmektedir. 
+    Daha önce yapılan build işleminde kalan birtakım dosyaların kaldırılması için ise "distclean" argümanıyla yapılabilmektedir. 
     Örneğin:
 
     # bin/ct-ng distclean
@@ -1991,9 +1991,11 @@
     - Bölüm eğer yükleyici tarafından belleğe yüklenecekse sanal belleğin neresine yükleneceğine ilişkin adres bilgisi. Tabii 
     bölüm belleğe yüklenmeyecekse bu adres bilgisi kullanılmaz. Burada 0 değeri bulunur.
 
-    - Bölümün dosyanın hangi offsetin'dne başladığı bilgisi.
+    - Bölümün dosyanın hangi offsetin'den başladığı bilgisi.
 
     - Bölümün kaç byte uzunlukta olduğu bilgisi.
+
+    - Bölümün hangi string tablosunu ya da sembol tablosunu kullandığı bilgisi.
 
     - Diğer bazı bilgiler.
 
@@ -2306,7 +2308,8 @@
     çalıştırılabilir dosya içerisinde derleyici ya da bağlayıcı tarafından değil onu belleğe yükleyen yükleyici tarafından 
     yapılmaktadır.
 
-    Pekiyi aşağıdaki gibi bir tanımlama yapılsaydı derleyici bu sembolü amaç dosyanın hangi bölümüne yerleştirirdi?
+    Pekiyi aşağıdaki gibi bir tanımlama yapılsaydı derleyici bu sembolü amaç dosyanın ".bss" bölümüne mi ".data" bölümüne mi
+    yerleştirirdi?
 
     char g_a[100000] = {1};
 
@@ -2315,6 +2318,352 @@
     ".data" bölümüne yerleştirse amaç dosyada 999999 tane 0 olan byte bulunacaktır. Aslında burada ne olacağını dosyaysı derleyip 
     amaç dosyanın uzunluğuna bakarak hemen anlayabilirsiniz. UNIX/Linux sistemlerinde derleyiciler tipik olarak böylesi bir 
     durumda ellerinden bir şey gelmediği için sembolü ".data" bölümüne yerleştirip amaç dosyayı mecburen büyütmektedir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+												15. Ders 02/05/2024 - Perşembe
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Derleyicilerin "amaç dosya (object file)" oluşturduğunu bu amaç dosyaların linker tarafından birleştirilerek çalıştırılabilir
+    bir dosya haline getirildiğini anımsayınız. Pekiyi derleyici üreteceği makine kodlarındaki nesne ve fonksiyon adreslerini nasıl 
+    belirlemektedir? Çünkü derleme aşamasında henüz amaç dosyalar birleştirilmemiş ve program belleğe yüklenmemiştir. Örneğin 
+    aşağıdaki gibi "a.c" ve "b.c" programları bulunuyor olsun:
+
+    // a.c
+
+    #include <stdio.h>
+
+    void foo(void);
+    int g_a;
+
+    int main(void)
+    {
+        g_a = 10;
+        foo();
+
+        return 0;
+    }
+
+    // b.c
+
+    extern int g_a;
+
+    void foo(void)
+    {
+        printf("%d\n", g_a);
+    }
+
+    Derleyicimizin 32 bit Intel kodu üreteceğini varsayalım. Şimdi "a.c" dosyasındaki foo çağrımına dikkat ediniz:
+
+    foo();
+
+    Derleyici bu çağrı için Intel işlemcilerinde CALL makine komutu üretecektir. CALL makine komutunun operand'ı call edilecek
+    fonksiyonun bellekteki başlangıç adresini almaktadır. Yani CALL makine komutu aşağıdaki gibi bir komuttur:
+
+    CALL <adres>
+
+    Ancak derleyici derleme sırasında foo fonksiyonunun adresini bilmemektedir. Çünkü foo fonksiyonu "b.c" dosyasında tanımlanmıştır. 
+    Bu durumda derleyici CALL makine komutunun operand'ına hangi adresi yazacaktır? İşte henüz bilinmeyen bellek adreslerinin sonraki 
+    aşamada başka bir program tarafından düzeltilmesine "relocation işlemi", henüz bilinmeyen adreslere de (foo için üretilen CALL 
+    makine komutunda olduğu gibi) "relocatable adresler" denilmektedir. Derleyiciler bu tür durumlarda henüz bilmedikleri adresleri 
+    boş bırakırlar (tipik olarak o adresler yerine 0 yerleştirirler).
+
+    Pekiyi derleyiciler tarafından oluşturulan bu relocatable adresleri kim ve nasıl düzeltmektedir? İşte bugünkü modern ve gelişmiş 
+    işlemcilerin kullanıldığı sistemlerde ileride de açıklanacağı gibi program belli bir adresten itibaren sanal belleğe yüklenecekmiş 
+    gibi kod üretilmektedir. Yani link aşamasından geçmiş olan bir program eğer öngörülen adresten itibaren yüklenirse (bu konuda 
+    ayrıntılar vardır) sorunsuz çalışabilmektedir. (Tabii şimdi programın belli bir adresten itibaren yükleneceğinin garantisinin nasıl 
+    verilebildiğini merak edebilirsiniz. Bu budurm bazı konular ele alındıktan sonra anlaşılacaktır.) Ancak şimdilik biz çalıştırılabilen 
+    programların belli bir adresten itibaren yüklenecek biçimde oluşturulduğunu varsayalım. Derleyici programın hangi adresten itibaren 
+    belleğe yükleneceğini bilse bile yukarıdaki CALL komutunun adres operandın'ı derleme aşamasında oluşturamaz. Çünkü linker başka 
+    modüllerdeki kod ve verileri de çalıştırılabilen dosyaya yazmaktadır. Bu yüzden derleyici yukarıdaki foo çağrısında CALL makine 
+    komutundaki adresi boş bırakmaktadır.
+
+    Pekiyi bu CALL makine komutundaki adresi kim doğru biçimde tespit edebilir? İşte linker farklı amaç dosyaların bölümlerini 
+    çalıştırılabilir dosyada bir araya getirmektedir. Linker eğer programın nereye yükleneceğini biliyorsa buradaki adresi düzeltebilir. 
+    Çünkü linker link işlemi sırasında zaten bu foo fonksiyonunu diğer amaç dosyalarda arayacak, foo fonksiyonunun o amaç dosyanın 
+    hangi bölümünde ve o bölümün kaçıncı offset'inde olduğunu tespit edebilecektir. Çalıştırılabilir dosyanın nereye yükleneceği de belli 
+    olduğuna göre linker artık foo fonksiyonunun program çalışırkenki gerçek bellek adresini hesaplayabilecektir. Yani eğer linker 
+    programın sanal belleğe hangi adresten itibaren yükleneceğini biliyorsa CALL komutundaki adresi doğru bir biçimde düzeltebilecektir.
+    Burada ELF formatında "Program Başlık Tablosu (Program Header Table)" denilen tablo ile ilgili bazı ayrıntılar vardır. Ancak biz 
+    burada kabaca linker'ın foo çağrısı için oluşturulan CALL makine komutundaki adresi nasıl düzelettiğini aşama aşama anlatalım:
+
+    1) ELF formatında amaç dosyada nerelerin düzeltileceğini belirten "relocation tablosu" denilen bir tablo bulunmaktadır. Linker 
+    "a.o" dosyasının "relocation tablosunu" incelediğinde orada "foo" isimli bir fonksiyonun yerinin tespit edilmesi gerektiğini 
+    ve bu tespit yapıldıktan sonra da "a.o" içerisinde nerenin değiştirilmesi gerektiğini anlamaktadır. (Başka bir deyişle linker "
+    a.o" dosyasındaki relocation tablosundan "hangi sembolün nihai adresinin nereye yazılması gerektiğini" anlamaktadır.) Yani adeta 
+    "a.o" dosyasının relocation tablosu foo çağrımı için linker'a şunları söylemektedir: "Git diğer modüllerde "foo" isimli fonksiyonu 
+    bul, birleştirme sonucunda onun nihai adresini tespit et ve kodun şu kısmını düzelt".
+
+    2) Linker "a.o" dosyasının relocation tablosunda belirtilen "foo" fonksiyonunu diğer modüllerin sembol tablolarında arar. Bizim 
+    örneğimizde bu sembol "b.o" dosyasının sembol tablosunda bulunacaktır. (Sembol tablosunda ilgili sembolün hangi bölümün (section) 
+    kaçıncı offset'inde olduğu belirtiliyordu.) Linker "a.o" ve "b.o" dosyalarının bölümlerini çalıştırılabilir dosyada birleştirdiğinde 
+    artık foo fonksiyonunun hangi adreste olduğunu da tespit edebilmektedir. Linker'lar eğer aranan sembol birden fazla amaç dosyada 
+    bulunursa bu durumda error oluşturmaktadır. Tabii aranan sembol hiçbir amaç dosyada bulunamazsa yine error oluşturmaktadır.
+
+    Yukarıdaki örnekte "a.c" dosyası içerisinde main fonksiyonunda g_a global değişkeni aşağıdaki gibi kullanılmıştır:
+
+    g_a = 10;
+
+    Bu ifadenin kodunun derleyici tarafından üretilebilmesi için yine g_a global değişkeninin adresinin biliniyor olması gerekmektedir. 
+    Örneğin Intel işlemcilerinde bu işlem aşağıdaki gibi bir makine koduyla yapılabilmektedir:
+
+    mov [<g_a'nın adresi>], 10
+
+    Pekiyi derleyici g_a global değişkeninin adresini derleme sırasında bilmekte midir? Burada her ne kadar g_a aynı modülde tanımlanmış 
+    olsa da derleyici yine bu nesnenin bellek adresini derleme zamanında tespit edemeyecektir. Çünkü linker'ın diğer modüllerle birleştirme 
+    yapması sonucunda bu global nesnenin adresi değişmiş olacaktır. O halde buradaki g_a nesnesinin adresi de "relocatable" bir adrestir. 
+    Bu adres de derleyici tarafından boş bırakılır ve relocation tablosunda belirtilir. Linker bu adresin de nihai değerini tespit edip 
+    kodda ilgili yeri düzeltir.
+
+    Pekiyi yerel nesnelerin adresleri de relocatable adresler midir? Hayır yerel nesnelerin yerleri o fonksiyonda stack göstericisine 
+    (stack pointer) göreli uzaklıkla tespit edilebilmektedir. Yani yerel nesnelerin adresleri derleme sırasında derleyici tarafından 
+    gçreli bir biçimde tespit edilebilmektedir.
+
+    Pekiyi çalıştırılabilir bir dosya bellekte eğer yüklenmesi gereken yere yüklenemezse, başka yere yüklenirse ne olur? Linker
+    nihai adresleri çalıştırılabilir dosyanın belli bir adresten itibaren yükleneceği fikriyle oluşturmaktadır. Eğer dosya bellekte 
+    başka bir yere yüklenirse program düzgün çalışmayacaktır.
+
+    Relocation işlemi aslında yalnızca linker tarafından değil yükleyici tarafından da yapılabilmektedir. İşte bazı sistemlerde 
+    çalıştırılabilir programlar için de relocation tabloları oluşturulabilmektedir. Böylece yükleyici programı başka bir adresten 
+    itibaren yüklerse bu relocation tablosundan hareketle dosya içerisindeki adresleri de düzeltebilmektedir. Yani amaç dosya 
+    içerisindeki relocation tablosu "linker" için, çalıştırılabilir dosyadaki relocation tablosu "yükleyici" için düzeltme bilgilerini
+    bulundurmaktadır. Yukarıda da belirttiğimiz gibi genellikle çalıştırılabilir dosyaların sanal belleğin neresine yükleneceği 
+    bilinmektedir. Ancak dinamik kütüphanelerin belleğin neresine yükleneceği önceden belirlenememektedir. Linker için relocation 
+    tablosunun derleyici tarafından, yükleyici için relocation tablosunun ise linker tarafından oluşturulduğuna dikkat ediniz.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Yukarıda da belirtildiği gibi yerel nesnelerin (yani fonksiyonlar içerisinde tanımlanmış nesnelerin) relocation işlemi ile 
+    bir ilgisi yoktur. Yerel nesnelerin yerleri ismine "Stack Pointer (SP)" denilen bir yazmaca göreli bir biçimde tespit 
+    edilmektedir. Stack oldukça zekice düşünülmüş çok pratik bir kullanıma sahip bir kavramdır. Aşağıdaki gibi bir C fonksiyonu 
+    olsun:
+
+    void foo(void)
+    {
+        int a = 10;
+        int b = 20;
+        int c;
+
+        c = a + b;
+        ...
+    }
+
+    Derleyici fonksiyonun başında makine komutuyla SP yazmacını fonksiyonun yerel değişkenlerinin toplam uzunluğu kadar yukarı çeker 
+    (yani azaltır):
+
+    Yeni SP'nin gösterdiği yer  ----->
+    ....
+    Eski SP'in gösterdiği yer   ----->
+
+    Sonra yerel nesneleri SP'nin bulunduğu yere göreli bir biçimde konumlandırır:
+
+    Yeni SP'nin gösterdiği yer  ----->
+                                            a
+                                            b
+                                            c
+    Eski SP'in gösterdiği yer   ----->
+
+    Artık makine kodlarını SP'nin bulunduğu yere göreli bir biçimde oluşturmaktadır. Örneğin 32 bit Intel işlemcileri için aşağıda
+    sembolik bir kod örneği verilmiştir:
+
+    SUB     ESP, 12
+    MOV     [ESP + 0], 10           ; a = 10
+    MOV     [ESP + 4], 20           ; b = 20
+    MOV     EAX, [ESP + 0]          ; a değeri EAX yazmacına yükledi
+    ADD     EAX, [ESP + 4]          ; a ile b'yi topladı, sonuç EAX yazmacında
+    MOV     [ESP + 8], EAX          ; toplam c'ye atanıyor
+    ...
+    ADD     ESP, 12                 ; ESP'yi eski değerine çekiyor
+
+    Burada dikkat edilecek bir nokta yerel nesnelerin adreslerinin yalnızca o fonksiyon tarafından bilinebileceğidir. Bu nedenle
+    yerel nesneler yalnızca o fonksiyon içerisinde kullanılabilmektedir. Global değişkenlerin adresleri bir yazmaca göreli değil, 
+    mutlak olarak belirlendiği için onlar her fonksiyondan kullanılabilmektedir.
+
+    Ayrıca buradan yerel nesnelerin içerisinde neden çöp değer olduğu da anlaşılmaktadır. SP yazmacı sürekli yukarı aşağı gittiği için 
+    Stack'teki değerler de çöp değerler haline gelmektedir. Yerel nesneler SP yazmacının yukarı çekilmesiyle bir hamlede yaratılmaktadır. 
+    Oradaki değerler de daha önceki rastgele stack değerlerinden oluşmaktadır. Derleyicinin yerel nesneleri sıfırlaması da uygun 
+    değildir. Çünkü bu sıfırlama işlemi ancak makine komutlarıyla yapılabilir. Bu da programı yavaşlatacaktır. Oysa global nesnelerin 
+    sıfırlanması program çalışırken değil yüklenirken yalnızca bir kez yapılmaktadır.
+
+    Yerel nesnelerin çok hızlı yaratrılıp (tek bir makine komutuyla), çok hızlı yok edildiğine (tek bir makine komutuyla) de dikkat
+    ediniz. C'de yerel değişkenlere "otomatik değişkenler" de denilmektedir.
+
+    Pekiyi iç içe çok fazla fonksiyon çağrılırsa ne olur? İşte bu durumda her fonksiyon SP yazmacını bir miktar yukarı çekeceğine 
+    göre ve stack için belli bir alan ayrıldığına göre stack yukarıdan taşabilmektedir. Bu yukarıdan taşmaya İngilizce "stack 
+    overflow" da denilmektedir. Bu tür durumlarda muhtemelen program çökecektir. Windows sistemlerinde thread'lerin default stack 
+    büyüklüğü 1 MB, Linux sistemlerinde ise 8 MB kadardır. Bu stack miktarları küçük değildir. Ancak programcı büyük dizileri 
+    yerel dizi olarak yaratırken dikkat etmelidir. Büyük dizilerin yerel olarak yaratılması stack'i taşırabilir. Bunların static 
+    yerel ya da global tanımlanması uygundur. Stack alanı ".data" ve ".bss" alanlarına göre çok küçük bir alandır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    ELF formatının relocation tablosu SHT_REL ya da SHT_RELA bölüm türüyle belirtilen bölümler içerisinde bulunmaktadır. Tipik 
+    olarak derleyiciler relocation işlemi hangi bölüm ile ilgiliyse relocation bilgilerini ".rel<isim>" ya da ".rela<isim>" 
+    ismindeki bölümlere yerleştirmektedir. Örneğin yukarıdaki "a.c" dosyası derlendiğinde relocation tablosu da ".rela.text" 
+    isimli bölümde bulunacaktır. 32 bit ELF formatında relocation bölümlerinin içerisindeki her relocation bilgisi aşağıdaki 
+    yapılar ile temsil edilmektedir:
+
+    typedef struct {
+        Elf32_Addr r_offset;            /* Address of reference */
+        Elf32_Word r_info;              /* Symbol index and type of relocation */
+    } Elf32_Rel;
+
+    typedef struct {
+        Elf32_Addr r_offset;            /* Address of reference */
+        Elf32_Word r_info;              /* Symbol index and type of relocation */
+        Elf32_Sword r_addend;           /* Constant part of expression */
+    } Elf32_Rela;
+
+    64 bit ELF formatında da bu yapılar şöyledir:
+
+    typedef struct {
+        Elf64_Addr r_offset;            /* Address of reference */
+        Elf64_Xword r_info;             /* Symbol index and type of relocation */
+    } Elf64_Rel;
+
+    typedef struct {
+        Elf64_Addr r_offset;            /* Address of reference */
+        Elf64_Xword r_info;             /* Symbol index and type of relocation */
+        Elf64_Sxword r_addend;          /* Constant part of expression */
+    } Elf64_Rela;
+
+    SHT_REL bölüm türüyle belirtilen bölümün yapısı ile SHT_RELA bölüm türüyle belirtilen bölümün yapısının birbirinden farklı
+    olduğuna dikkat ediniz. Bu yapılardaki r_offset elemanı linker'ın ya da yükleyicinin düzelteceği yeri belirtmektedir. 
+    Burada relocation uygulanacak yer hangi bölümdeyse o bölümün başından itibaren bir offset bilgisi ya da sanal bellek adresi
+    tutulmaktadır. Böylece linker ya da yükleyici dosyanın neresini düzelteceğini anlamaktadır. Yapıların r_info elemanları 
+    kendi içerisinde iki parçaya ayrılmaktadır. Bu elemanın yüksek anlamlı 4 byte'ı düzeltilecek yere ilişkin sembolün sembol 
+    tablosundaki indeksini (byte offset'ini değil sembolün indeksini), düşük anlamlı 4 byte ise düzeltme türünü (relocation type) 
+    belirtmektedir. Düzeltme türü platforma göre farklılıklar gösterebilmektedir. Yapılardaki r_addend elemanı ayrıntı içermektedir. 
+    Burada ele almayacağız.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
