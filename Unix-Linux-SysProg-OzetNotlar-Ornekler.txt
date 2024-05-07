@@ -16417,7 +16417,7 @@ void exit_sys(const char *msg)
     gcc -o sample sample.c -lrt
 
 ---------------------------------------------------------------------------------------------------------------------------*/
-<BURADA KALDIK>
+
 /*--------------------------------------------------------------------------------------------------------------------------
     POSIX mesaj kuyrukları şöyle kullanılmaktadır:
 
@@ -16429,7 +16429,7 @@ void exit_sys(const char *msg)
     mqd_t mq_open(const char *name, int oflag, ...);
 
     Fonksiyon ya iki argümanla ya da dört argümanla çağrılmaktadır. Eğer mesaj kuyruğu zaten varsa fonksiyon iki argümanla 
-    çağrılır. Ancak mesaj kuyruğunun yaratılması gibi bir durum söz konusu ise fonksiyon dört argümanla çağrılır. Eğer mesaj 
+    çağrılır. Ancak mesaj kuyruğunun yaratılması gibi bir durum söz konusu ise fonksiyon dört argümanla çağrılmalıdır. Eğer mesaj 
     kuyruğunun yaratılması söz konusu ise son iki parametreye sırasıyla IPC nesnesinin erişim hakları ve "özellikleri (attribute)" 
     girilmelidir. Yani mesaj kuyruğu yaratılacaksa adeta fonksiyonun parametrik yapısının aşağıdaki gibi olduğu varsayılmalıdır:
 
@@ -16466,26 +16466,28 @@ void exit_sys(const char *msg)
         long mq_curmsgs;     /* # of messages currently in queue */
     };
 
-    Yapının mq_flags parametresi yalnızca O_NONBLOCK içerebilir. max_msg elemanı kuyruktaki tutulacak maksimum mesaj sayısını belirtmektedir. 
-    Yapının mq_msgsize elemanı bir mesajın maksimum uzunluğunu belirtmektedir. mq_curmsgs elemanı ise o anda kuyruktaki mesaj sayısını belirtmektedir. 
-    Programcı mesaj kuyruğunu yaratırken yapının mq_maxmsg ve mq_msgsize elemanlarına uygun değerler girip mesaj kuyruğunun istediği gibi 
-    yaratılmasını sağlayabilir. Yani mesaj kuyruğu yaratılırken programcı mq_attr yapısının yalnızca mq_maxmsg ve mq_msgsize elemanlarını doldurur. 
-    Yapının diğer elemanları mq_open tarafından dikkate alınmamaktadır. Ancak bu özellik parametresi NULL adres biçiminde de geçilebilir. 
-    Bu durumda mesaj kuyruğu default değerlerle yaratılır. Bu default değerler değişik sistemlerde değişik biçimlerde olabilir. Linux sistemlerinde
-    genel olarak default durumda maksimum mesaj mq_maxmsg değeri 10, mq_msgsize değeri ise 8192 alınmaktadır. mq_open fonksiyonunda kuyruk özelliklerini 
-    girerken mq_maxmsg ve mq_msgsize elemanlarına girilecek değerler için işletim sistemleri alt ve üst limit belirlemiş olabilirler. Eğer yapının bu 
-    elemanları bu limitleri aşarsa mq_open fonksiyonu başarısız olur ve errno değişkeni EINVAL olarak set edilir. Örneğin Linux sistemlerinde 
-    sıradan prosesler (yani root olmayan prosesler) mq_maxmsg değerini 10'un yukarısına çıkartamamaktadır. Ancak uygun önceliğe sahip prosesler 
-    bu değeri 10'un yukarısında belirleyebilmektedir. Ancak POSIX standartları bu default limitler hakkında bir şey söylememiştir. Linux sistemlerinde
-    sonraki paragraflarda açıklanacağı gibi bu limitler proc dosya sisteminden elde edilebilmektedir. 
+    Yapının mq_flags parametresi yalnızca O_NONBLOCK içerebilir. max_msg elemanı kuyruktaki tutulacak maksimum mesaj sayısını 
+    belirtmektedir. Yapının mq_msgsize ise elemanı bir mesajın maksimum uzunluğunu belirtmektedir. mq_curmsgs elemanı da o anda 
+    kuyruktaki mesaj sayısını belirtmektedir. Programcı mesaj kuyruğunu yaratırken yapının mq_maxmsg ve mq_msgsize elemanlarına 
+    uygun değerler girip mesaj kuyruğunun istediği gibi yaratılmasını sağlayabilir. Yani mesaj kuyruğu yaratılırken programcı mq_attr 
+    yapısının yalnızca mq_maxmsg ve mq_msgsize elemanlarını doldurur. Yapının diğer elemanları mq_open tarafından dikkate alınmamaktadır. 
+    Ancak bu özellik parametresi NULL adres biçiminde de geçilebilir. Bu durumda mesaj kuyruğu default değerlerle yaratılır. Bu 
+    default değerler değişik sistemlerde değişik biçimlerde olabilir. Linux sistemlerinde genel olarak default durumda maksimum mesaj 
+    mq_maxmsg değeri 10, mq_msgsize değeri ise 8192 alınmaktadır. mq_open fonksiyonunda kuyruk özelliklerini girerken mq_maxmsg ve 
+    mq_msgsize elemanlarına girilecek değerler için işletim sistemleri alt ve üst limit belirlemiş olabilirler. Eğer yapının bu 
+    elemanları bu limitleri aşarsa mq_open fonksiyonu başarısız olur ve errno değişkeni EINVAL olarak set edilir. Örneğin Linux 
+    sistemlerinde sıradan prosesler (yani root olmayan prosesler) mq_maxmsg değerini 10'un yukarısına çıkartamamaktadır. Ancak 
+    uygun önceliğe sahip prosesler bu değeri 10'un yukarısında belirleyebilmektedir. Ancak POSIX standartları bu default limitler 
+    hakkında bir şey söylememiştir. Linux sistemlerinde sonraki paragraflarda açıklanacağı gibi bu limitler proc dosya sisteminden 
+    elde edilebilmektedir. 
 
-    mq_open fonksiyonu başarı durumunda yaratılan mesaj kuyruğunu temsil eden betimleyici değeriyle, başarısızlık durumunda -1 değeriyle geri dönmektedir. 
-    Fonksiyonun geri döndürdüğü "mesaj kuyruğu betimleyicisi (message queue descriptor)" diğer fonksiyonlarda bir handle değeri gibi 
-    kullanılmaktadır. Linux çekirdeği aslında mesaj kuyruklarını tamamen birer dosya gibi ele almaktadır. Yani mq_open fonksiyonu
-    Linux sistemlerinde dosya betimleyici tablosunda bir betimleyici tahsis edip ona geri dönmektedir. Ancak POSIX standartları, 
-    fonksiyonun geri dönüş değerini mqd_t türüyle temsil etmiştir. Bu durum değişik çekirdeklerde mesaj kuyruklarının dosya sisteminin dışında
-    başka biçimlerde de gerçekleştirilebileceği anlamına gelmektedir. POSIX standartlarına göre mqd_t herhangi bir tür olarak (yapı da dahil olmak üzere)
-    <mqueue.h> dosyasında typedef edilebilir. 
+    mq_open fonksiyonu başarı durumunda yaratılan mesaj kuyruğunu temsil eden betimleyici değeriyle, başarısızlık durumunda -1 
+    değeriyle geri dönmektedir. Fonksiyonun geri döndürdüğü "mesaj kuyruğu betimleyicisi (message queue descriptor)" diğer 
+    fonksiyonlarda bir handle değeri gibi kullanılmaktadır. Linux çekirdeği aslında mesaj kuyruklarını tamamen birer dosya gibi 
+    ele almaktadır. Yani mq_open fonksiyonu Linux sistemlerinde dosya betimleyici tablosunda bir betimleyici tahsis edip ona 
+    geri dönmektedir. Ancak POSIX standartları fonksiyonun geri dönüş değerini mqd_t türüyle temsil etmiştir. Bu durum değişik 
+    çekirdeklerde mesaj kuyruklarının dosya sisteminin dışında başka biçimlerde de gerçekleştirilebileceği anlamına gelmektedir. 
+    POSIX standartlarına göre mqd_t herhangi bir tür olarak (yapı da dahil olmak üzere) <mqueue.h> dosyasında typedef edilebilir. 
 
     Örneğin:
 
@@ -16504,21 +16506,22 @@ void exit_sys(const char *msg)
 
     int mq_send(mqd_t mqdes, const char *msg_ptr, size_t msg_len, unsigned msg_prio);
 
-    Fonksiyonun birinci parametresi, mesaj kuyruğunun betimleyicisini belirtir. Fonksiyonun ikinci parametresi mesajın bulunduğu 
+    Fonksiyonun birinci parametresi mesaj kuyruğunun betimleyicisini belirtir. Fonksiyonun ikinci parametresi mesajın bulunduğu 
     dizinin adresini almaktadır. Ancak bu parametrenin void bir adres olmadığına dikkat ediniz. Eğer mesaj başka türlere ilişkinse 
-    tür dönüştürmesinin yapılması gerekmektedir. Üçüncü parametre gönderilecek mesajın uzunluğunu belirtir. Dördüncü parametre 
-    mesajın öncelik derecesini belirtmektedir. Bu öncelik derecesi >= 0 bir değer olarak girilmelidir. POSIX mesaj kuyruklarında
-    öncelik derecesi yüksek olan mesajlar FIFO sırasına göre önce alınmaktadır. Bu mesaj kuyruklarının klasik Sistem 5 mesaj kuyruklarında 
-    olduğu gibi belli bir öncelik derecesine sahip mesajları alabilme yeteneği yoktur. Buradaki öncelik derecesinin <limits.h> içerisindeki 
-    MQ_PRIO_MAX değerinden küçük olması gerekmektedir. Bu değer ise işletim sistemlerini yazanlar tarafından belirlenmektedir. Ancak bu değer 
-    _POSIX_MQ_PRIO_MAX (32) değerinden düşük olamaz. Yani başka bir deyişle buradaki desteklenen değer 32'den küçük olamamaktadır. 
-    (Mevcut Linux sistemlerinde bu değer 32768 biçimindedir.)
+    tür dönüştürmesinin yapılması gerekmektedir. Üçüncü parametre gönderilecek mesajın uzunluğunu, dördüncü parametre ise mesajın 
+    öncelik derecesini belirtmektedir. Bu öncelik derecesi >= 0 bir değer olarak girilmelidir. POSIX mesaj kuyruklarında öncelik 
+    derecesi yüksek olan mesajlar FIFO sırasına göre önce alınmaktadır. Bu mesaj kuyruklarının klasik Sistem 5 mesaj kuyruklarında 
+    olduğu gibi belli bir öncelik derecesine sahip mesajları alabilme yeteneği yoktur. Buradaki öncelik derecesinin <limits.h> 
+    içerisindeki  MQ_PRIO_MAX değerinden küçük olması gerekmektedir. Bu değer ise işletim sistemlerini yazanlar tarafından 
+    belirlenmektedir. Ancak bu değer _POSIX_MQ_PRIO_MAX (32) değerinden düşük olamaz. Yani başka bir deyişle buradaki desteklenen 
+    değer 32'den küçük olamamaktadır. (Mevcut Linux sistemlerinde bu değer 32768 biçimindedir.)
 
-    Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri döner ve errno değişkeni uygun biçimde set edilir. 
+    Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri döner ve errno değişkeni uygun biçimde set 
+    edilir. 
 
-    POSIX mesaj kuyruklarının da izleyen paragraflarda açıklanacağı üzere belli limitleri vardır. Eğer mesaj kuyruğu dolarsa mq_send 
-    fonksiyonu bloke olmaktadır. Ancak açış sırasında O_NONBLOCK bayrağı belirtilmişse mq_send kuyruk doluysa bloke olmaz. Kuyruğa 
-    hiçbir şey yazmadan başarısızlıkla (-1 değeriyle) geri döner ve errno EAGAIN değeri ile set edilir. 
+    POSIX mesaj kuyruklarının da izleyen paragraflarda açıklanacağı üzere belli limitleri vardır. Eğer mesaj kuyruğu dolarsa 
+    mq_send fonksiyonu blokeye yol açmaktadır. Ancak açış sırasında O_NONBLOCK bayrağı belirtilmişse mq_send kuyruk doluysa 
+    blokeye yol açmaz, kuyruğa hiçbir şey yazmadan başarısızlıkla (-1 değeriyle) geri döner ve errno EAGAIN değeri ile set edilir. 
 
     Örneğin:
 
@@ -16540,18 +16543,19 @@ void exit_sys(const char *msg)
     ssize_t mq_receive(mqd_t mqdes, char *msg_ptr, size_t msg_len, unsigned *msg_prio);
 
     Fonksiyonun birinci parametresi mq_open fonksiyonundan elde edilen mesaj kuyruğu betimleyicisidir. İkinci parametre mesajın 
-    yerleştirileceği adresi belirtmektedir. Yine bu parametrenin void bir gösterici olmadığına char türden bir gösterici olduğuna dikkat ediniz. 
-    Yani char türünden farklı bir adres buraya geçilecekse tür dönüştürmesi uygulanmalıdır. Üçüncü parametre, ikinci parametredeki 
-    mesajın yerleştirileceği alanın uzunluğunu belirtir. Ancak dikkat edilmesi gereken nokta buradaki uzunluk değerinin mesaj kuyruğundaki 
-    mq_msgsize değerinden küçük olmaması gerektiğidir. Eğer bu parametreye girilen değer mesaj kuyruğuna ilişkin mq_msgsize değerinden 
-    küçük ise fonksiyon hemen başarısız olmaktadır. Bu durumda errno değişkeni EMSGSIZE değeri ile set edilmektedir. Pekiyi bu değeri 
-    mq_receive fonksiyonunu uygulayacak programcı nasıl bilecektir? Eğer kuyruğu kendisi yaratmışsa ve yaratım sırasında mq_attr parametresiyle
-    özellik belirtmişse programcı zaten bunu biliyor durumdadır. Ancak genellikle mq_receive fonksiyonunu kullanan programcılar bunu bilmezler. Çünkü 
-    genellikle kuyruk mq_receive yapan programcı tarafından yaratılmamıştır ya da kuyruk default özelliklerle yaratılmıştır. Bu durumda mecburen 
-    programcı mq_getattr fonksiyonu ile bu bilgiyi elde etmek zorunda kalır. Tabii bu işlem programın çalışma zamanında yapıldığına göre programcının 
-    mesajın yerleştirileceği alanı da malloc fonksiyonu ile dinamik bir biçimde tahsis etmesi gerekmektedir. mq_receive fonksiyonun son parametresi 
-    kuyruktan alınan mesajın öncelik derecesinin yerleştirileceği unsigned int türden nesnenin adresini almaktadır. Ancak bu parametre NULL 
-    adres biçiminde geçilebilir. Bu durumda fonksiyon mesajın öncelik derecesini yerleştirmez.
+    yerleştirileceği adresi belirtmektedir. Yine bu parametrenin void bir gösterici olmadığına char türden bir gösterici olduğuna 
+    dikkat ediniz. Yani char türünden farklı bir adres buraya geçilecekse tür dönüştürmesi uygulanmalıdır. Üçüncü parametre, 
+    ikinci parametredeki mesajın yerleştirileceği alanın uzunluğunu belirtir. Ancak dikkat edilmesi gereken nokta buradaki uzunluk 
+    değerinin mesaj kuyruğundaki mq_msgsize değerinden küçük olmaması gerektiğidir. Eğer bu parametreye girilen değer mesaj kuyruğuna 
+    ilişkin mq_msgsize değerinden küçük ise fonksiyon hemen başarısız olmaktadır. Bu durumda errno değişkeni EMSGSIZE değeri ile set 
+    edilmektedir. Pekiyi bu değeri mq_receive fonksiyonunu uygulayacak programcı nasıl bilecektir? Eğer kuyruğu kendisi yaratmışsa 
+    ve yaratım sırasında mq_attr parametresiyle özellik belirtmişse programcı zaten bunu biliyor durumdadır. Ancak genellikle mq_receive
+    fonksiyonunu kullanan programcılar bunu bilmezler. Çünkü  genellikle kuyruk mq_receive yapan programcı tarafından yaratılmamıştır 
+    ya da kuyruk default özelliklerle yaratılmıştır. Bu durumda mecburen programcı mq_getattr fonksiyonu ile bu bilgiyi elde etmek 
+    zorunda kalır. Tabii bu işlem programın çalışma zamanında yapıldığına göre programcının mesajın yerleştirileceği alanı da malloc 
+    fonksiyonu ile dinamik bir biçimde tahsis etmesi gerekmektedir. mq_receive fonksiyonun son parametresi kuyruktan alınan mesajın 
+    öncelik derecesinin yerleştirileceği unsigned int türden nesnenin adresini almaktadır. Ancak bu parametre NULL  adres biçiminde 
+    geçilebilir. Bu durumda fonksiyon mesajın öncelik derecesini yerleştirmez.
 
     Fonksiyon başarı durumunda kuyruktaki mesajın uzunluğu ile, başarısızlık durumunda -1 ile geri dönmektedir ve errno değişkeni 
     uygun biçimde set edilmektedir.
@@ -16563,8 +16567,8 @@ void exit_sys(const char *msg)
     if (mq_receive(mqdes, buf, 65536, NULL) == -1)
             exit_sys("mq_receive");
 
-    Burada biz mesajın önceliğini almak istemedik. Bu nedenle son parametreye NULL adres geçtik. Tampon uzunluğunu öylesine 
-    büyük bir değer olarak uydurduk. Aslında yukarıda da belirttiğimiz gibi mq_receive uyguladığımız noktada bizim tampon uzunluğunu 
+    Burada biz mesajın önceliğini almak istemedik. Bu nedenle son parametreye NULL adres geçtik. Tampon uzunluğunu öylesine büyük 
+    bir değer olarak uydurduk. Aslında yukarıda da belirttiğimiz gibi mq_receive uyguladığımız noktada bizim tampon uzunluğunu 
     biliyor durumda olmamız gerekir. 
 
     4) Pekiyi POSIX mesaj kuyruklarında mesaj haberleşmesi nasıl sonlandırılacaktır? Burada da karşı taraf betimleyiciyi kapattığında diğer taraf bunu 
@@ -16572,21 +16576,23 @@ void exit_sys(const char *msg)
     göndermesi gerekir. Eğer 0 uzunluklu mesaj gönderilirse alan tarafta mq_receive fonksiyonu 0 ile geri dönecek ve alan taraf haberleşmenin 
     bittiğini anlayabilecektir.
 
-    5) POSIX mesaj kuyruğu ile işlemler bitince programcı mesaj kuyruğunu mq_close fonksiyonu ile kapatmalıdır. Fonksiyonun prototipi şöyledir:
+    5) POSIX mesaj kuyruğu ile işlemler bitince programcı mesaj kuyruğunu mq_close fonksiyonu ile kapatmalıdır. Fonksiyonun 
+    prototipi şöyledir:
 
     #include <mqueue.h>
 
     int mq_close(mqd_t mqdes);
 
-    Fonksiyon parametre olarak mesaj kuyruğu betimleyicicisini alır. Başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri döner. 
-    Programcı her şeyi doğru yaptığına inanıyorsa başarının kontrol edilmesine gerek yoktur. 
+    Fonksiyon parametre olarak mesaj kuyruğu betimleyicicisini alır. Başarı durumunda 0 değerine, başarısızlık durumunda -1 
+    değerine geri döner. Programcı her şeyi doğru yaptığına inanıyorsa başarının kontrol edilmesine gerek yoktur. 
 
     Tabii eğer programcı mq_close fonksiyonunu hiç kullanmazsa proses bittiğinde otomatik olarak betimleyici kapatılmaktadır.
 
     6) POSIX mesaj kuyrukları mq_unlink fonksiyonu ile silinmektedir. Tabii yukarıda da belirttiğimiz gibi mesaj kuyruğu 
-    açıkça silinmezse reboot edilene kadar (kernel persistant) yaşamaya ve içerisindeki mesajları tutmaya devam etmektedir. Bir POSIX mesaj 
-    kuyruğu mq_unlink fonksiyonu ile silindiğinde halen mesaj kuyruğunu kullanan programlar varsa onlar kullanmaya devam ederler. 
-    Mesaj kuyruğu gerçek anlamda son mesaj kuyruğu betimleyicisi kapatıldığında yok edilmektedir. mq_unlink fonksiyonunun prototipi şöyledir:
+    açıkça silinmezse reboot edilene kadar (kernel persistant) yaşamaya ve içerisindeki mesajları tutmaya devam etmektedir. 
+    Bir POSIX mesaj kuyruğu mq_unlink fonksiyonu ile silindiğinde halen mesaj kuyruğunu kullanan programlar varsa onlar kullanmaya 
+    devam ederler. Mesaj kuyruğu gerçek anlamda son mesaj kuyruğu betimleyicisi kapatıldığında yok edilmektedir. mq_unlink 
+    fonksiyonunun prototipi şöyledir:
 
     #include <mqueue.h>
 
@@ -16594,8 +16600,8 @@ void exit_sys(const char *msg)
 
     Fonksiyon mesaj kuyruğunun ismini alır. Başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri döner. 
 
-    Mesaj kuyruğunu, kuyruğu yaratan tarafın silmesi en normal durumdur. Ancak kuyruğu kimin yarattığı bilinmiyorsa taraflardan biri 
-    kuyruğu silebilir. 
+    Mesaj kuyruğunu, kuyruğu yaratan tarafın silmesi en normal durumdur. Ancak kuyruğu kimin yarattığı bilinmiyorsa taraflardan 
+    biri kuyruğu silebilir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* prog1.c */
@@ -16688,8 +16694,8 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Pekiyi mesajı alan taraf tutacağı tamponun büyüklüğünü nasıl anlayacaktır? Çünkü oluşturulması gereken tampon mesaj 
-    kuyruğu yaratılırken kullanılan struct mq_attr yapısının içerisinde belirtilmektedir. Anımsanacağı gibi mesaj kuyruğu yaratılırken
+    Pekiyi mesajı alan taraf tutacağı tamponun büyüklüğünü nasıl anlayacaktır? Çünkü oluşturulması gereken tampon mesaj kuyruğu 
+    yaratılırken kullanılan struct mq_attr yapısının içerisinde belirtilmektedir. Anımsanacağı gibi mesaj kuyruğu yaratılırken
     mq_open fonksiyonunda mq_attr parametresi NULL geçilirse mesaj kuyruğundaki mesaj uzunlukları için default değer alınmaktadır. 
     Her ne kadar Linux sistemlerinde şu anda bu default değer 8192 ise de başka sistemlerde ve Linux'ta ileride bunun böyle 
     olacağının bir garantisi yoktur. Yukarıdaki örnekte olduğu gibi mesaj kuyruğu yaratılırken bu değer programcı tarafından 
@@ -16704,8 +16710,8 @@ void exit_sys(const char *msg)
     int mq_getattr(mqd_t mqdes, struct mq_attr *attr);
 
     Fonksiyonun birinci parametresi mq_open fonksiyonu ile elde edilen mesaj kuyruğu betimleyicisidir. İkinci parametre ise 
-    mesaj kuyruğu özelliklerinin yerleştirileceği mq_attr yapısının adresini almaktadır. Fonksiyon başarı durumunda 0, başarısızlık durumunda 
-    -1 değerine geri dönmektedir. 
+    mesaj kuyruğu özelliklerinin yerleştirileceği mq_attr yapısının adresini almaktadır. Fonksiyon başarı durumunda 0, başarısızlık 
+    durumunda -1 değerine geri dönmektedir. 
 
     Mesaj kuyruğu yaratıldıktan sonra mesaj kuyruğunun özellikleri mq_setattr fonksiyonu ile değiştirilebilir. Fonksiyonun prototipi 
     şöyledir:
@@ -16714,20 +16720,21 @@ void exit_sys(const char *msg)
 
     int mq_setattr(mqd_t mqdes, struct mq_attr *newattr, struct mq_attr *oldattr);
 
-    Fonksiyonun birinci parametresi, mesaj kuyruğu betimleyicisini belirtir. İkinci parametre yeni özelliklerin bulunduğu struct mq_attr
-    yapı nesnesinin adresini alır. Üçüncü parametre ise değiştirilmeden önceki mesaj kuyruğu özelliklerini elde etmek için kullanılan 
-    yapı nesnesinin adresini belirtir. Bu parametre NULL adres olarak geçilebilir. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda 
-    -1 değerine geri dönmektedir. mq_setattr fonksiyonu ile mq_attr yapısının yalnızca flags parametresi dikkate alınmaktadır. 
-    Dolayısıyla değiştirilebilecek tek özellik aslında O_NONBLOCK bayrağıdır. Yapının diğer elemanları, fonksiyon tarafından dikkate alınmamaktadır. 
-    (Mesaj kuyruğu yaratıldıktan sonra maksimum mesaj sayısının ya da mesaj uzunluklarının değiştirilmesi zaten genel olarak uygun değildir.)
+    Fonksiyonun birinci parametresi, mesaj kuyruğu betimleyicisini belirtir. İkinci parametre yeni özelliklerin bulunduğu struct 
+    mq_attr yapı nesnesinin adresini alır. Üçüncü parametre ise değiştirilmeden önceki mesaj kuyruğu özelliklerini elde etmek 
+    için kullanılan yapı nesnesinin adresini belirtir. Bu parametre NULL adres olarak geçilebilir. Fonksiyon başarı durumunda 0 
+    değerine, başarısızlık durumunda -1 değerine geri dönmektedir. mq_setattr fonksiyonu ile mq_attr yapısının yalnızca flags 
+    parametresi dikkate alınmaktadır. Dolayısıyla değiştirilebilecek tek özellik aslında O_NONBLOCK bayrağıdır. Yapının diğer 
+    elemanları, fonksiyon tarafından dikkate alınmamaktadır. (Mesaj kuyruğu yaratıldıktan sonra maksimum mesaj sayısının ya da 
+    mesaj uzunluklarının değiştirilmesi zaten genel olarak uygun değildir.)
 
     Aşağıdaki örnekte "prog1" programı stdin dosyasından mesajı ve mesajın öncelik değerini alarak mesaj kuyruğuna yazmaktadır. 
     "prog2" programı da mesaj kuyruğundan bu bilgileri alarak stdout dosyasında bunları görüntülemektedir. Burada öncelikteki 
-    yüksek değerin gerçek yüksek öncelik anlamına geldiğine dikkat ediniz. (Halbuki klasik Sistem 5 mesaj kuyruklarında yüksek öncelik 
-    düşük değerler temsil edilmektedir.) Bu programları çalıştırırken öncelik testini yapabilmek için önce "prog1" programını çalıştırıp 
-    kuyruğua çeşitli önceliklerde mesajlar gönderiniz. Sonra "prog2" programını çalıştırıp durumu gözleyiniz. Örnekteki prog2 
-    programı önce mq_getattr fonksiyonu ile mesaj kuyruğundaki maksimum mesaj uzunluğunu elde etmiş ve o uzunlukta dinamik bir alan tahsis 
-    etmiştir. 
+    yüksek değerin gerçek yüksek öncelik anlamına geldiğine dikkat ediniz. (Halbuki klasik Sistem 5 mesaj kuyruklarında yüksek 
+    öncelik düşük değerler temsil edilmektedir.) Bu programları çalıştırırken öncelik testini yapabilmek için önce "prog1" 
+    programını çalıştırıp kuyruğua çeşitli önceliklerde mesajlar gönderiniz. Sonra "prog2" programını çalıştırıp durumu gözleyiniz. 
+    Örnekteki prog2 programı önce mq_getattr fonksiyonu ile mesaj kuyruğundaki maksimum mesaj uzunluğunu elde etmiş ve o 
+    uzunlukta dinamik bir alan tahsis etmiştir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* prog1.c */
@@ -16860,7 +16867,7 @@ void exit_sys(const char *msg)
     Yani biz "/dev/mqueue" dizinine geçtiğimizde ls komutuyla o anda yaşamakta olan tüm POSIX mesaj kuyruklarını görüntüleyebiliriz. 
     İstersek rm komutuyla onları silebiliriz. Örneğin:
 
-    kaan@kaan-virtual-machine:/dev/mqueue$ ls -l
+    $ /dev/mqueue$ ls -l
     toplam 0
     -rw-r--r-- 1 kaan kaan 80 Nis  8 11:25 my_message_queue
 
@@ -16882,38 +16889,38 @@ void exit_sys(const char *msg)
     Anımsanacağı gibi mesaj kuyrukları için iki önemli limit vardı: Bir mesaj kuyruğuna yazılabilecek maksimum mesajların sayısı 
     (Linux'ta default 10 demiştik) ve mesaj kuyruğundaki bir mesajın maksimum uzunluğu (Linux'ta default 8192 demiştik). Pekiyi 
     bunların default değerleri nereden gelmektedir? POSIX standartları bu konuda bir şey söylememektedir. Ancak Linux sistemlerinde 
-    bu değerler "/proc/sys/fs/mqueue" dizini içerisinde çeşitli dosyalar tarafından temsil edilmiştir. Buradaki dosyaların ve içerisindeki
-    değerlerin anlamları şöyledir:
+    bu değerler "/proc/sys/fs/mqueue" dizini içerisinde çeşitli dosyalar tarafından temsil edilmiştir. Buradaki dosyaların ve 
+    içerisindeki değerlerin anlamları şöyledir:
 
     msg_default: Bu değer, mq_open ile mesaj kuyruğu yaratılırken fonksiyonun özellik parametresi NULL geçildiğinde yaratılacak 
-    kuyruğa en fazla yerleştirilecek mesaj sayısını belirtmektedir. Bu dosyanın içini "cat" komutu ile yazdırırsak mevcut sistemlerde 10 
-    değerini görürüz. 
+    kuyruğa en fazla yerleştirilecek mesaj sayısını belirtmektedir. Bu dosyanın içini "cat" komutu ile yazdırırsak mevcut sistemlerde 
+    10 değerini görürüz. 
 
     msg_max: Bu dosya, mq_open ile özellik girilerek mesaj kuyruğu yaratıldığında mq_attr yapısının mq_maxmsg elemanına yerleştirilecek
-    maksimum değeri belirtmektedir. Linux sistemlerinde de şimdilik bu dosyanın içerisinde 10 yazmaktadır. Yani biz mesaj kuyruğunu yaratırken 
-    10'dan daha fazla mesajı tutabilecek biçimde yaratamayız. 
+    maksimum değeri belirtmektedir. Linux sistemlerinde de şimdilik bu dosyanın içerisinde 10 yazmaktadır. Yani biz mesaj kuyruğunu 
+    yaratırken 10'dan daha fazla mesajı tutabilecek biçimde yaratamayız. 
 
-    msgsize_default: Bu dosya, mq_open ile mesaj kuyruğu yaratılırken özellik parametresine NULL geçildiğinde kuyruğa yazılabilecek maksimum mesaj 
-    uzunluğunu belirtmektedir. Bu değerin zaten daha önce 8192 olduğunu belirtmiştik. O halde, bu dosyanın içeriğini yazdırırsak 8192 
-    değerini görürüz. 
+    msgsize_default: Bu dosya, mq_open ile mesaj kuyruğu yaratılırken özellik parametresine NULL geçildiğinde kuyruğa yazılabilecek 
+    maksimum mesaj uzunluğunu belirtmektedir. Bu değerin zaten daha önce 8192 olduğunu belirtmiştik. O halde, bu dosyanın içeriğini 
+    yazdırırsak 8192 değerini görürüz. 
 
     msgsize_max: Bu dosyada da mesaj kuyruğunu yaratırken özellik bilgisinde mq_attr yapısının mq_msgsize elemanına yerleştirilebilecek 
-    maksimum değer bulunmaktadır. Bu dosya yazdırılırsa 8192 değeri görülmektedir. Yani biz kuyruktaki mesajların uzunluğunu bu değerin yukarısına 
-    çekemeyiz. 
+    maksimum değer bulunmaktadır. Bu dosya yazdırılırsa 8192 değeri görülmektedir. Yani biz kuyruktaki mesajların uzunluğunu bu 
+    eğerin yukarısına çekemeyiz. 
 
     queues_max: Bu değer, sistem genelinde yaratılabilecek mesaj kuyruklarının toplam sayısını belirtmektedir. 
 
-    Uygun önceliğe sahip prosesler yukarıdaki limitlerden etkilenmezler. Ayrıca, buradaki değerler proc dosya sisteminden bu dosyalara yazma yapılarak 
-    değiştirilebilmektedir. Örneğin:
+    Uygun önceliğe sahip prosesler yukarıdaki limitlerden etkilenmezler. Ayrıca, buradaki değerler proc dosya sisteminden bu 
+    dosyalara yazma yapılarak değiştirilebilmektedir. Örneğin:
 
     sudo sh -c "echo 20 > /proc/sys/fs/mqueue/msg_max"
 
     Buradaki değerlerin ayrı bir tavan limiti de vardır. Örneğin msg_max değerinin tavan limiti 3.5 ve sonrasındaki 
-    çekirdeklerde 65536'dır. Yine örneğin msgsize_max değerinin de tavan limiti 3.5 ve sonrasındaki çekirdeklerde 16,777,216 biçimindedir. 
-    Uygun önceliğe sahip prosesler /proc/sys/fs/mqueue içerisindeki limitlere takılmasalar da bu tavan limitlerine takılabilirler. Ayrıca belli 
-    bir kullanıcının maksimum kullanacağı mesaj kuyrukları için byte sayısı da bir limittir. Şu andaki çekirdeklerde bu 819200 byte'tır. Yani 
-    belli bir kullanıcı toplam mesaj kuyruklarının sayısı * bir mesajdaki maksimum byte sayısını bu değerin yukarısında set edemez. 
-    Bu konudaki detaylar için mq_overview(7) man sayfasına başvurabilirsiniz. 
+    çekirdeklerde 65536'dır. Yine örneğin msgsize_max değerinin de tavan limiti 3.5 ve sonrasındaki çekirdeklerde 16,777,216 b
+    içimindedir. Uygun önceliğe sahip prosesler /proc/sys/fs/mqueue içerisindeki limitlere takılmasalar da bu tavan limitlerine 
+    takılabilirler. Ayrıca belli bir kullanıcının maksimum kullanacağı mesaj kuyrukları için byte sayısı da bir limittir. Şu 
+    andaki çekirdeklerde bu 819200 byte'tır. Yani belli bir kullanıcı toplam mesaj kuyruklarının sayısı * bir mesajdaki maksimum 
+    byte sayısını bu değerin yukarısında set edemez. Bu konudaki detaylar için mq_overview(7) man sayfasına başvurabilirsiniz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -16965,9 +16972,9 @@ void exit_sys(const char *msg)
     kalkacaktır. Fonksiyon, başarısızlıkla geri dönecek ve errno ETIMEDOUT özel değeri ile set edilecektir. Böylece programcı 
     arka planda başka şeyler yapabilecektir. Bu zaman aşımlı işlemleri, blokesiz işlemlerle karıştırmayınız. Blokesiz işlemlerde 
     bloke hiç oluşmamaktadır. Halbuki zaman aşımlı işlemlerde bloke oluşur ancak en fazla belirlenen zaman aşımı kadar bloke sürer. 
-    Zaman aşımlı işlemlerde, zaten zaman aşımı geçmişse ve kuyruk dolu ya da boşsa fonksiyon hemen başarısız olmaktadır. Fonksiyonlar zaman 
-    aşımına kuyruk doluysa ya da boşsa bakmaktadır. Eğer kuyruk, blokesiz modda açılmışsa zaman aşımlı fonksiyonların zaman aşımlı 
-    olmayanlardan davranış olarak bir farkı kalmaz. 
+    Zaman aşımlı işlemlerde, zaten zaman aşımı geçmişse ve kuyruk dolu ya da boşsa fonksiyon hemen başarısız olmaktadır. Fonksiyonlar 
+    zaman aşımına kuyruk doluysa ya da boşsa bakmaktadır. Eğer kuyruk, blokesiz modda açılmışsa zaman aşımlı fonksiyonların zaman 
+    aşımlı olmayanlardan davranış olarak bir farkı kalmaz. 
 
     Aşağıdaki örnekte bir mesaj kuyruğu okuma amaçlı yaratılmış sonra mq_timedreceive fonksiyonu ile şimdiki zamandan 10 saniye 
     kadar blokeli beklenmiştir. Bu programı çalıştırdığınızda 10 saniye sonra "timeout" yazısının basıldığını göreceksiniz. 
@@ -17029,7 +17036,8 @@ void exit_sys(const char *msg)
 
     - POSIX mesaj kuyrukları dosyalar gibi kullanılmaktadır. Dolayısıyla "her şeyin dosya olduğu" tasarımı ile daha uyumludur.
 
-    - Klasik Sistem 5 mesaj kuyruklarında belli bir önceliğe ilişkin mesajlar alınabilmektedir. POSIX mesaj kuyruklarında bu yapılamamaktadır.
+    - Klasik Sistem 5 mesaj kuyruklarında belli bir önceliğe ilişkin mesajlar alınabilmektedir. POSIX mesaj kuyruklarında bu 
+    yapılamamaktadır.
 
     - POSIX mesaj kuyrukları silindiğinde onu kullanan prosesler kullanmaya devam ederler. Ancak klasik Sistem 5 mesaj kuyruklarında
     mesaj kuyruğu silindiğinde onu kullanan prosesler artık mesaj kuyruğunu kullanamaz hale gelirler.
@@ -17042,15 +17050,15 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Diğer önemli proseslerarası haberleşme yöntemleriden biri de "paylaşılan bellek alanları (shared memory)" denilen yöntemdir. 
-    Paylaşılan bellek alanlarında işletim sistemi iki prosesin sayfa tablosundaki farklı sanal sayfa numaralarını aynı fiziksel sayfaya
-    yönlendirir. Böylece iki proses, farklı sanal adreslerle aynı fiziksel sayfaya erişirler. Proseslerden biri oraya bir şey yazdığında 
-    diğeri onu hemen görür. Dolayısıyla yöntem çok hızlıdır. Ancak bu yöntem kendi içerisinde bir senkronizasyon içermemektedir. 
-    Dolayısıyla senkronizasyonun sağlanması için semaphore gibi bir senkronizasyon nesnesine de gereksinim duyulur. Zaten bu nedenle
-    IPC nesnelerine semaphore'lar eklenmiştir.
+    Paylaşılan bellek alanlarında işletim sistemi iki prosesin sayfa tablosundaki farklı sanal sayfa numaralarını aynı fiziksel 
+    sayfaya yönlendirir. Böylece iki proses, farklı sanal adreslerle aynı fiziksel sayfaya erişirler. Proseslerden biri oraya 
+    bir şey yazdığında diğeri onu hemen görür. Dolayısıyla yöntem çok hızlıdır. Ancak bu yöntem kendi içerisinde bir senkronizasyon 
+    içermemektedir. Dolayısıyla senkronizasyonun sağlanması için semaphore gibi bir senkronizasyon nesnesine de gereksinim duyulur. 
+    Zaten bu nedenle IPC nesnelerine semaphore'lar eklenmiştir.
 
     Paylaşılan bellek alanları da UNIX/Linux dünyasında tıpkı mesaj kuyruklarında olduğu gibi iki arayüzle kullanılabilmektedir:
-    Klasik Sistem 5 paylaşılan bellek alanları ve POSIX paylaşılan bellek alanları. Biz de burada önce klasik Sistem 5 paylaşılan bellek 
-    alanlarını sonra da POSIX paylaşılan bellek alanlarını göreceğiz.
+    Klasik Sistem 5 paylaşılan bellek alanları ve POSIX paylaşılan bellek alanları. Biz de burada önce klasik Sistem 5 paylaşılan 
+    bellek alanlarını sonra da POSIX paylaşılan bellek alanlarını göreceğiz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -17259,11 +17267,12 @@ void exit_sys(const char *msg)
     ya da prosesin uygun önceliğe sahip olması gerekmektedir. 
 
     IPC_RMID: Bu parametre değeri IPC nesnesini silmek için kullanılmaktadır. Benzer biçimde bu işlemin yapılabilmesi için de 
-    IPC_SET koşulunda belirtilen koşulların sağlanması gerekmektedir. Paylaşılan bellek alanları nesnesini bunu yaratan prosesin silmesi uygun olur. 
-    Klasik Sistem 5 mesaj kuyruklarında, bir proses mesaj kuyruğunu silerse mesaj kuyruğu hemen siliniyordu. Dolayısıyla onu kullanan bir proses
-    ilgili işlemlerde başarısızlıkla karşılaşıyordu. Ancak paylaşılan bellek alanlarında durum böyle değildir. Bir klasik Sistem 5
-    paylaşılan bellek alanı, shmctl fonksiyonu ile bir proses tarafından silinse bile gerçek silinme onu kullanan tüm proseslerin bellek alanını "detach" yapmasıyla
-    gerçekleşmektedir. IPC nesnesi, IPC_RMID parametresiyle silinecekse artık fonksiyonun son parametresi kullanılmaz. NULL adres geçilebilir. 
+    IPC_SET koşulunda belirtilen koşulların sağlanması gerekmektedir. Paylaşılan bellek alanları nesnesini bunu yaratan prosesin 
+    silmesi uygun olur. Klasik Sistem 5 mesaj kuyruklarında, bir proses mesaj kuyruğunu silerse mesaj kuyruğu hemen siliniyordu. 
+    Dolayısıyla onu kullanan bir proses ilgili işlemlerde başarısızlıkla karşılaşıyordu. Ancak paylaşılan bellek alanlarında durum 
+    böyle değildir. Bir klasik Sistem 5 paylaşılan bellek alanı, shmctl fonksiyonu ile bir proses tarafından silinse bile gerçek 
+    silinme onu kullanan tüm proseslerin bellek alanını "detach" yapmasıyla gerçekleşmektedir. IPC nesnesi, IPC_RMID parametresiyle 
+    silinecekse artık fonksiyonun son parametresi kullanılmaz. NULL adres geçilebilir.
 
     Paylaşılan bellek alanları komut satırında "ipcrm" komutuyla da silinebilmektedir. Komutta -M seçeneği anahtar ile silmek için -m 
     seçeneği id ile silmek için kullanılmaktadır. Örneğin:
@@ -17275,8 +17284,8 @@ void exit_sys(const char *msg)
 
     shmctl fonksiyonu başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri dönmektedir. 
 
-    Aşağıdaki örnekte prog1 programı paylaşılan bellek alanına bir yazı yerleştirir. prog2 programı da bu yazıyı oradan alıp ekrana (stdout dosyasına)
-    yazdırmaktadır. 
+    Aşağıdaki örnekte prog1 programı paylaşılan bellek alanına bir yazı yerleştirir. prog2 programı da bu yazıyı oradan alıp 
+    ekrana (stdout dosyasına) yazdırmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* prog1.c */
@@ -17407,8 +17416,8 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     POSIX paylaşılan bellek alanları tipik olarak şu adımlardan geçilerek kullanılmaktadır:
 
-    1) POSIX paylaşılan bellek alanı nesnesi iki proses tarafında shm_open fonksiyonuyla yaratılabilir ya da zaten olan nesne shm_open 
-    fonksiyonu ile açılabilir. Fonksiyonun prototipi şöyledir:
+    1) POSIX paylaşılan bellek alanı nesnesi iki proses tarafından shm_open fonksiyonuyla yaratılabilir ya da zaten var olan 
+    nesne shm_open fonksiyonu ile açılabilir. shm_open fonksiyonunun prototipi şöyledir:
 
     #include <sys/mman.h>
 
@@ -17428,9 +17437,9 @@ void exit_sys(const char *msg)
     O_EXCL: O_CREAT bayrağı ile birlikte kullanılabilir. Paylaşılan bellek alanı zaten varsa fonksiyon başarısız olur.
     O_TRUNC: Paylaşılan bellek alanı varsa sıfırlanarak açılır. Bu mod için O_RDWR bayrağının kullanılmış olması gerekmektedir. 
 
-    Fonksiyonun üçüncü parametresi paylaşılan bellek alanının erişim haklarını belirtmektedir. Tabii ancak ikinci parametrede O_CREAT
-    bayrağı kullanılmışsa bu parametreye gereksinim duyulmaktadır. İkinci parametrede O_CREAT bayrağı kullanılmamışsa üçüncü parametre
-    hiç kullanılmamaktadır. Ancak shm_open fonksiyonunun bu üçüncü parametresi kullanılmayacak olsa bile girilmek 
+    Fonksiyonun üçüncü parametresi paylaşılan bellek alanının erişim haklarını belirtmektedir. Tabii ancak ikinci parametrede
+    O_CREAT bayrağı kullanılmışsa bu parametreye gereksinim duyulmaktadır. İkinci parametrede O_CREAT bayrağı kullanılmamışsa 
+    üçüncü parametre hiç kullanılmamaktadır. Ancak shm_open fonksiyonunun bu üçüncü parametresi kullanılmayacak olsa bile girilmek 
     zorundadır. Örneğin bu tür durumlarda bu parametre için 0 değerini girebilirsiniz. (open fonksiyonunun üçüncü parametresinin 
     eğer gerek yoksa girilmeyebileceğini anımsayınız.)
 
@@ -17445,8 +17454,8 @@ void exit_sys(const char *msg)
 	if ((fdshm = shm_open(SHM_NAME, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)) == -1)
 		exit_sys("shm_open");
 
-    2) Paylaşılan bellek alanı yaratıldığında 0 uzunluktadır. Ona ftruncate fonksiyonu ile ona bir büyüklük vermek gerekir. truncate
-    ve ftruncate fonksiyonlarının bir dosyayı büyütmek ya da küçültmek amacıyla kullanıldığını anımsayınız. Örneğin:
+    2) Paylaşılan bellek alanı yaratıldığında 0 uzunluktadır. Ona ftruncate fonksiyonu ile ona bir büyüklük vermek gerekir. 
+    truncate ve ftruncate fonksiyonlarının bir dosyayı büyütmek ya da küçültmek amacıyla kullanıldığını anımsayınız. Örneğin:
 
     if (ftruncate(fdshm, SHM_SIZE) == -1)
 		exit_sys("ftruncate");
@@ -17458,12 +17467,14 @@ void exit_sys(const char *msg)
     POSIX paylaşılan bellek alanı nesneleri Linux'ta dosya sisteminde "/dev/shm" dizini içerisinde görüntülenmektedir. Yani programcı 
     isterse bu dizin içerisindeki nesneleri komut satırında rm komutuyla silebilir. 
 
+    <BURADA KALDIK>
+
     3) Artık paylaşılan bellek alanı nesnesinin belleğe "map" edilmesi gerekmektedir. (Klasik Sistem 5 paylaşılan bellek alanlarında 
     "map etmek" yerine "attach etmek" terimi kullanılmaktaydı. Bu arayüzde ise "attach" yerine "mapping" sözcüğü tercih edilmiştir.)
     Bunun için mmap isimli bir POSIX fonksiyonu kullanılmaktadır. mmap fonksiyonu pek çok UNIX türevi sistemde bir sistem fonksiyonu 
-    olarak gerçekleştirilmiştir. mmap, paylaşılan bellek alanlarının dışında başka amaçlarla da kullanılabilen ayrıntılı bir sistem 
-    fonksiyonudur. Bu nedenle, biz burada önce fonksiyonun paylaşılan bellek alanlarında kullanımına kısaca değineceğiz. Sonra bu 
-    fonksiyonu ayrıca daha ayrıntılı biçimde ele alacağız. mmap fonksiyonunun prototipi şöyledir:
+    olarak gerçekleştirilmiştir. mmap, paylaşılan bellek alanlarının dışında başka amaçlarla da kullanılabilen ayrıntılı bir 
+    sistem fonksiyonudur. Bu nedenle, biz burada önce fonksiyonun paylaşılan bellek alanlarında kullanımına kısaca değineceğiz. 
+    Sonra bu fonksiyonu ayrıca daha ayrıntılı biçimde ele alacağız. mmap fonksiyonunun prototipi şöyledir:
 
     #include <sys/mman.h>
 
@@ -17491,16 +17502,17 @@ void exit_sys(const char *msg)
     PROT_EXEC
     PROT_NONE
 
-    PROT_READ sayfanın "read only" olduğunu belirtir. Böyle sayfalara yazma yapılırsa, işlemci exception oluşturur ve program SIGSEGV 
-    sinyali ile sonlandırılır. PROT_WRITE sayfaya yazma yapılabileceğini belirtmektedir. Örneğin PROT_READ|PROT_WRITE hem okuma hem de 
-    yazma anlamına gelmektedir. PROT_EXEC ilgili sayfada bir kod varsa (örneğin oraya bir fonksiyon yerleştirilmişse) o kodun 
-    çalıştırılabilirliği üzerinde etkili olmaktadır. Örneğin Intel ve ARM işlemcilerinde, fiziksel sayfa PROT_EXEC ile özelliklendirilmemişse 
-    o sayfadaki bir kod çalıştırılamamaktadır. PROT_NONE o sayfaya herhangi bir erişimin mümkün olamayacağını belirtmektedir. Yani 
-    PROT_NONE olan bir sayfa ne okunabilir ne de yazılabilir. Bu tür sayfa özellikleri "guard page" oluşturmak için kullanılabilmektedir. 
-    Tabii bir sayfanın koruma özelliği daha sonra da değiştirilebilir. Aslında bütün işlemciler buradaki koruma özelliklerinin hepsini 
-    desteklemeyebilirler. Örneğin Intel işlemcilerinde PROT_WRITE zaten okuma özelliğini de kapsamaktadır. Bazı işlemciler sayfalarda
-    PROT_EXEC özelliğini hiç bulundurmamaktadır. Ancak ne olursa olsun programcı sanki bu özelliklerin hepsi çalıştıkları işlemcide 
-    varmış gibi bu parametreyi oluşturmalıdır. Böylece kodun başka bir işlemcinin bulunduğu sistemde de düzgün çalışması sağlanacaktır.
+    PROT_READ sayfanın "read only" olduğunu belirtir. Böyle sayfalara yazma yapılırsa, işlemci exception oluşturur ve program 
+    SIGSEGV sinyali ile sonlandırılır. PROT_WRITE sayfaya yazma yapılabileceğini belirtmektedir. Örneğin PROT_READ|PROT_WRITE 
+    hem okuma hem de yazma anlamına gelmektedir. PROT_EXEC ilgili sayfada bir kod varsa (örneğin oraya bir fonksiyon yerleştirilmişse) 
+    o kodun çalıştırılabilirliği üzerinde etkili olmaktadır. Örneğin Intel ve ARM işlemcilerinde, fiziksel sayfa PROT_EXEC ile 
+    özelliklendirilmemişse o sayfadaki bir kod çalıştırılamamaktadır. PROT_NONE o sayfaya herhangi bir erişimin mümkün olamayacağını 
+    belirtmektedir. Yani PROT_NONE olan bir sayfa ne okunabilir ne de yazılabilir. Bu tür sayfa özellikleri "guard page" oluşturmak 
+    için kullanılabilmektedir. Tabii bir sayfanın koruma özelliği daha sonra da değiştirilebilir. Aslında bütün işlemciler buradaki 
+    koruma özelliklerinin hepsini desteklemeyebilirler. Örneğin Intel işlemcilerinde PROT_WRITE zaten okuma özelliğini de kapsamaktadır. 
+    Bazı işlemciler sayfalarda PROT_EXEC özelliğini hiç bulundurmamaktadır. Ancak ne olursa olsun programcı sanki bu özelliklerin 
+    hepsi çalıştıkları işlemcide varmış gibi bu parametreyi oluşturmalıdır. Böylece kodun başka bir işlemcinin bulunduğu sistemde 
+    de düzgün çalışması sağlanacaktır.
 
     Fonksiyonun dördüncü parametresi olan flags aşağıdaki değerlerden yalnızca birini alabilir:
 
@@ -54849,7 +54861,7 @@ all:
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
-/* load */
+/* load (bu satırı dosyaya kopyalamayınız) */
 
 #!/bin/bash
 
@@ -54862,7 +54874,7 @@ rm -f $module
 mknod $module c $major 0
 chmod $mode $module
 
-/* unload */
+/* unload (bu satırı dosyaya kopyalamayınız ) */
 
 #!/bin/bash
 
@@ -55125,7 +55137,7 @@ all:
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
-/* load */
+/* load (bu satırı dosyaya kopyalamayınız) */
 
 #!/bin/bash
 
@@ -55138,7 +55150,7 @@ rm -f $module
 mknod $module c $major 0
 chmod $mode $module
 
-/* unload */
+/* unload (bu satırı dosyaya kopyalamayınız ) */
 
 #!/bin/bash
 
@@ -55520,7 +55532,7 @@ all:
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
-/* load */
+/* load (bu satırı dosyaya kopyalamayınız) */
 
 #!/bin/bash
 
@@ -55533,7 +55545,7 @@ rm -f $module
 mknod $module c $major 0
 chmod $mode $module
 
-/* unload */
+/* unload (bu satırı dosyaya kopyalamayınız) */
 
 #!/bin/bash
 
@@ -55641,19 +55653,31 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
-<BURADA KALDIK>
+/*--------------------------------------------------------------------------------------------------------------------------
+                                            138. Ders 03/05/2024 - Cuma
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Kernel semaphore nesneleri de tamamen user mode'da kullandığımız semaphore nesneleri gibidir. Bunların sayacı vardır. Sayaç 0'dan büyükse
-    semaphore açık durumdadır. Kritik koda girildiğinde sayaç eksiltilir. Sayaç 0 olduğunda thread bloke edilir. Yine bloke işleminde 
-    biraz spin işlemi yapılıp sonra bloke uygulanmaktadır. Semaphore nesneleri şöyle kullanılmaktadır:
+    Kernel'da da user moddakine benzer semaphore nesneleri vardır. Kernel semaphore nesneleri de sayaçlıdır. Yine bunların 
+    sayaçları 0'dan büyükse semaphore açık durumdadır, sayaçlar 0 değerinde ise semaphore kapalı durumdadır. Kritik koda 
+    girildiğinde yine sayaç 1 eksiltilir. Sayaç 0 olduğunda thread bloke edilir. Yine bloke işleminde biraz spin işlemi yapılıp 
+    sonra bloke uygulanmaktadır. Kernel semaphore nesneleri şöyle kullanılmaktadır:
 
     1) Semaphore nesnesi struct semaphore isimli bir yapıyla temsil edilmiştir. Bir semaphore nesnesi DEFINE_SEMAPHORE(name) makrosuyla 
     aşağıdaki gibi oluşturulabilir.
 
+    #define <linux/semaphore.h>
+
     DEFINE_SEMAPHORE(g_sem);
 
-    Bu biçimde yaratılan semaphore nesnesinin sayaç değeri başlangıçta 1'dir. Semaphore nesneleri sema_init fonksiyonuyla da yaratılabilmektedir:
+    Bu biçimde yaratılan semaphore nesnesinin başlangıçta sayaç değeri 1'dir. Yani çekirdeklerde bu makro iki parametreli olarak 
+    da kullanılabilmektedir:
+
+    DEFINE_SEMAPHORE(g_sem, n);
+
+    Buradaki ikinci parametre semaphore sayacının başlangıçtaki değerini belirtmektedir.
+
+    Semaphore nesneleri sema_init fonksiyonuyla da yaratılabilmektedir:
 
     struct semaphore g_sem;
     ...
@@ -55661,8 +55685,10 @@ void exit_sys(const char *msg)
 
     Fonksiyonun ikinci parametresi başlangıç sayaç numarasıdır.
 
-    2) Kritik kod down ve up fonksiyonları arasına alınır. down fonksiyonları sayacı bir eksilterek kritik koda giriş yapar. up fonksiyonu ise
-    sayacı bir artırmaktadır. Fonksiyonların prototipleri şöyledir:
+    2) Kritik kod down ve up fonksiyonları arasına alınır. down fonksiyonları sayacı bir eksilterek kritik koda giriş yapar. 
+    up fonksiyonu ise sayacı bir artırmaktadır. Fonksiyonların prototipleri şöyledir:
+
+    #define <linux/semaphore.h>
 
     void down(struct semaphore *sem);
     int down_interruptible(struct semaphore *sem);
@@ -55671,16 +55697,33 @@ void exit_sys(const char *msg)
     int down_timeout(struct semaphore *sem, long jiffies);
     void up(struct semaphore *sem);
 
-    Yine down_interruptible sinyal geldiğinde sonlanabilen bir fonksiyondur. down_killable yalnızca SIGKILL sinyali geldiğinde sonlanabilir. 
-    down fonksiyonu sinyal gelse de sonlanmaz. down_trylock yine nesnenin açık olup olmadığına bakmaktadır. down_timeout en kötü olasılıkla belli miktar
-    jiffy zamanı kadar blokeye yol açar.
+    Kritik kod down fonksiyonu ile oluşturulduğunda thread bloke olursa sinyal yoluyla uyandırılamamaktadır. Ancak kritik kod 
+    down_interruptible fonksiyonu ile oluşturulduğunda thread bloke olursa sinyal yoluyla uyandırılabilmektedir. down_killable 
+    bloke olmuş thread'i yalnızca SIGKILL sinyali geldiğinde blokeden kurtarıp sonlandırabilmektedir. down_killable fonksiyonunda 
+    eğer thread bloke olursa diğer sinyaller yine blokeyi sonlandıramamaktadır. down_trylock yine nesnenin açık olup olmadığına 
+    bakmak için kullanılır. Eğer nesne açıksa yine sayaç 1 eksiltilir ve kritik koda girilir. Bu duurmda fonksiyon 0 dışı bir 
+    değerle geri döner. Nesne kapalıysa fonksiyon bloke olmadan 0 değerine geri döner. down_timeout iaw en kötü olasılıkla 
+    belli miktar "jiffy" zamanı kadar blokeye yol açmaktadır. ("jiffy" kavramı ileride ele alınacaktır.) Fonksiyon zaman aşımı 
+    dolduğundan dolayı sonlanmışsa negatif hata koduna normal bir biçimde sonlanmışsa 0 değerine geri dönmektedir. down_interruptible 
+    fonksiyonu normal sonlanmada 0 değerine, sinyal yoluyla sonlanmada -ERESTARTSYS değeri ile geri döner. Normal uygulama eğer 
+    bu fonksiyonlar -ERESTARTSYS ile geri dönerse aygıt sürücüdeki fonksiyonun da aynı değerle geri döndürülmesidir. Zaten çekirdek
+    bu -ERESTARTSYS geri dönüş değerini aldığında asıl sistem fonksiyonunu eğer sinyal için otomatik restart mekanizması aktif 
+    değilse -EINTR değeri ile geri döndürmektedir. Bu da tabii POSIX fonksiyonlarının başarısız olup errno değerini EINTR 
+    biçiminde set edilmesine yol açmaktadır. up fonksiyonu yukarıda da belirttiğimiz gibi semaphore sayacını 1 artırmaktadır.
 
-    interruptible down fonksiyonları normal sonlanmada 0 değerine, sinyal yoluyla sonlanmada -ERESTARTSYS değeri ile geri dönmektedir. 
-    Normal uygulama eğer bu fonksiyonlar -ERESTARTSYS ile geri dönerse aygıt sürücüdeki fonksiyonu da aynı değerle geri döndürmektedir. Zaten VFS
-    bu -ERESTARTSYS geri dönüş değerini aldığında asıl sistem fonksiyonunu -EINTR değeri ile geri dönddürmektedir. Bu da tabii POSIX fonksiyonlarının 
-    başarısız olup errno değerinin EINTR biçiminde set edilmesine yol açmaktadır.
+    Kernel semaphore nesneleriyle kritik kod aşağıdaki gibi oluşturulmaktadır:
 
-    Yukarıdaki boru örneğinde biz mutex nesnesi yerine binary semaphore nesnesi de kullanabilirdik.
+    DEFINE_SEMAPHORE(g_sem);
+    ...
+
+    down_interruptible(&g_sem);
+    ...
+    ... <KRİTİK KOD>
+    ...
+    up
+
+    Yukarıdaki boru örneğinde biz mutex nesnesi yerine binary semaphore nesnesi de kullanabilirdik. Aşağıda aynı örneğin 
+    binary semaphore ile gerçekleştirimi görülmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* pipe-driver.c */
@@ -55692,13 +55735,13 @@ void exit_sys(const char *msg)
 #include <linux/uaccess.h>
 #include <linux/semaphore.h>
 
-MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("General Character Device Driver");
-MODULE_AUTHOR("Kaan Aslan");
-
 #define MIN(a, b)		((a) < (b) ? (a) : (b))
 
-#define PIPE_SIZE		4096
+#define PIPE_BUFSIZE		4096
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Kaan Aslan");
+MODULE_DESCRIPTION("Pipe Driver");
 
 static int generic_open(struct inode *inodep, struct file *filp);
 static int generic_release(struct inode *inodep, struct file *filp);
@@ -55707,22 +55750,26 @@ static ssize_t generic_write(struct file *filp, const char *buf, size_t size, lo
 
 static dev_t g_dev;
 static struct cdev *g_cdev;
-static struct file_operations g_file_ops = {
+static struct file_operations g_fops = {
 	.owner = THIS_MODULE,
 	.open = generic_open,
-	.release = generic_release,
 	.read = generic_read,
 	.write = generic_write,
+	.release = generic_release
 };
 
-static char g_pipebuf[PIPE_SIZE];
-static size_t g_head = 0, g_tail = 0;
-static size_t g_count = 0;
 static DEFINE_SEMAPHORE(g_sem);
+
+static unsigned char g_pipebuf[PIPE_BUFSIZE];
+static size_t g_head;
+static size_t g_tail;
+static size_t g_count;
 
 static int __init generic_init(void)
 {
 	int result;
+
+	printk(KERN_INFO "pipe-driver module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "pipe-driver")) < 0) {
 		printk(KERN_INFO "Cannot alloc char driver!...\n");
@@ -55735,15 +55782,13 @@ static int __init generic_init(void)
 	}
 
 	g_cdev->owner = THIS_MODULE;
-	g_cdev->ops = &g_file_ops;
+	g_cdev->ops = &g_fops;
 
-	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
+	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+		printk(KERN_ERR "Cannot add device!...\n");
 		return result;
 	}
-
-	printk(KERN_INFO "Pipe driver initialized with %d:%d device number...\n", MAJOR(g_dev), MINOR(g_dev));
 
 	return 0;
 }
@@ -55753,101 +55798,83 @@ static void __exit generic_exit(void)
 	cdev_del(g_cdev);
 	unregister_chrdev_region(g_dev, 1);
 
-	printk(KERN_INFO "Goodbye...\n");
+	printk(KERN_INFO "pipe-driver module exit...\n");
 }
 
 static int generic_open(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device opened!...\n");
+	printk(KERN_INFO "pipe-driver opened...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device released!...\n");
+	printk(KERN_INFO "pipe-driver-closed...\n");
 
 	return 0;
 }
 
 static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
 {
-	size_t len;
-	ssize_t result;
+	size_t esize, size1, size2;
 
-	if (down_interruptible(&g_sem))
+	if (down_interruptible(&g_sem) < 0)
 		return -ERESTARTSYS;
 
-	size = MIN(size, g_count);
+	esize = MIN(g_count, size);
 
-	if (size == 0) {
-		result = 0;
-		goto EXIT;
-	}
-
-	if (g_head >= g_tail)
-		len = MIN(size, PIPE_SIZE - g_head);
+	if (g_tail < g_head)
+		size1 = MIN(PIPE_BUFSIZE - g_head, esize);
 	else
-		len = size;
+		size1 = esize;
 
-	if (copy_to_user(buf, g_pipebuf + g_head, len) != 0) {
-		result = -EFAULT;
-		goto EXIT;
-	}
+	size2 = esize - size1;
 
-	if (size > len)
-		if (copy_to_user(buf + len, g_pipebuf, size - len) != 0) {
-			result = -EFAULT;
-			goto EXIT;
-		}
+	if (copy_to_user(buf, g_pipebuf + g_head, size1) != 0)
+		return -EFAULT;
 
-	g_head = (g_head + size ) % PIPE_SIZE;
-	g_count -= size;
+	if (size2 != 0)
+		if (copy_to_user(buf + size1, g_pipebuf, size2) != 0)
+			return -EFAULT;
 
-	result = size;
-EXIT:
+	g_head = (g_head + esize) % PIPE_BUFSIZE;
+	g_count -= esize;
+
 	up(&g_sem);
 
-	return result;
+	return esize;
 }
 
 static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
 {
-	size_t len;
-	ssize_t result;
+	size_t esize, size1, size2;
 
-	if (down_interruptible(&g_sem))
+	if (down_interruptible(&g_sem) < 0)
 		return -ERESTARTSYS;
 
-	if (size > PIPE_SIZE - g_count) {
-		result = -ENOMEM;
-		goto EXIT;
-	}
+	esize = MIN(PIPE_BUFSIZE - g_count, size);
 
-	if (g_tail >= g_head)
-		len = MIN(size, PIPE_SIZE - g_tail);
+	if (g_tail > g_head)
+		size1 = MIN(PIPE_BUFSIZE - g_tail, esize);
 	else
-		len = size;
+		size1 = esize;
 
-	if (copy_from_user(g_pipebuf + g_tail, buf, len) != 0) {
-		result = -EFAULT;
-		goto EXIT;
-	}
+	size2 = esize - size1;
 
-	if (size > len)
-		if (copy_from_user(g_pipebuf, buf + len, size - len) != 0) {
-			result = -EFAULT;
-			goto EXIT;
-		}
+	if (copy_from_user(g_pipebuf + g_tail, buf, size1) != 0)
+		return -EFAULT;
 
-	g_tail = (g_tail + size ) % PIPE_SIZE;
-	g_count += size;
+	if (size2 != 0)
+		if (copy_from_user(g_pipebuf, buf + size1, size2) != 0)
+			return -EFAULT;
 
-	result = size;
+	g_tail = (g_tail + esize) % PIPE_BUFSIZE;
+	g_count += esize;
 
 	up(&g_sem);
-EXIT:
-	return result;
+
+	return esize;
 }
 
 module_init(generic_init);
@@ -55862,103 +55889,7 @@ all:
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
-/* pipeproc1.c */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <unistd.h>
-
-#define PIPE_SIZE		4096
-
-void exit_sys(const char *msg);
-
-int main(void)
-{
-	int fd;
-	char buf[PIPE_SIZE];
-	char *str;
-	size_t len;
-
-	if ((fd = open("pipe-driver", O_WRONLY)) == -1)
-		exit_sys("open");
-
-	for (;;) {
-		printf("Enter text:");
-		fflush(stdout);
-		fgets(buf, PIPE_SIZE, stdin);
-		if ((str = strchr(buf, '\n')) != NULL)
-			*str = '\0';
-		if (!strcmp(buf, "quit"))
-			break;
-		len = strlen(buf);
-		if (write(fd, buf, len) == -1) {
-			fprintf(stderr, "Cannot write pipe! Maybe pipe is full!\n");
-			continue;
-		}
-
-		printf("%lu bytes written...\n", (unsigned long)len);
-	}
-
-	close(fd);
-
-	return 0;
-}
-
-void exit_sys(const char *msg)
-{
-	perror(msg);
-
-	exit(EXIT_FAILURE);
-}
-
-/* pipeproc2.c */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <unistd.h>
-
-#define PIPE_SIZE		4096
-
-void exit_sys(const char *msg);
-
-int main(void)
-{
-	int fd;
-	char buf[PIPE_SIZE + 1];
-	int len;
-	ssize_t result;
-
-	if ((fd = open("pipe-driver", O_RDONLY)) == -1)
-		exit_sys("open");
-
-	for (;;) {
-		printf("How many bytes to read? ");
-		fflush(stdout);
-		scanf("%d", &len);
-		if (!len)
-			break;
-		if ((result = read(fd, buf, len)) == -1)
-			exit_sys("read");
-		buf[result] = '\0';
-
-		printf("%ld bytes read: \"%s\"\n", (long)result, buf);
-	}
-
-	close(fd);
-
-	return 0;
-}
-
-void exit_sys(const char *msg)
-{
-	perror(msg);
-
-	exit(EXIT_FAILURE);
-}
+/* load (bu satırı dosyaya kopyalamayınız) */
 
 #!/bin/bash
 
@@ -55971,12 +55902,551 @@ rm -f $module
 mknod $module c $major 0
 chmod $mode $module
 
+/* unload (bu satırı dosyaya kopyalamayınız) */
+
+#!/bin/bash
+
+module=$1
+mode=666
+
+/sbin/rmmod ./$module.ko || exit 1
+rm -f $module
+
+/* prog1.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#define BUFFER_SIZE		4096
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int pdriver;
+	char buf[BUFFER_SIZE];
+	char *str;
+	ssize_t result;
+
+	if ((pdriver = open("pipe-driver", O_WRONLY)) == -1)
+		exit_sys("open");
+
+	for (;;) {
+		printf("Text:");
+		if (fgets(buf, BUFFER_SIZE, stdin) == NULL)
+			continue;
+		if ((str = strchr(buf, '\n')) != NULL)
+			*str = '\0';
+		if (!strcmp(buf, "quit"))
+			break;
+		if ((result = write(pdriver, buf, strlen(buf))) == -1)
+			exit_sys("write");
+		printf("%jd bytes written...\n", (intmax_t)result);
+	}
+
+	close(pdriver);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/* prog2.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#define BUFFER_SIZE		4096
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int pdriver;
+	char buf[BUFFER_SIZE + 1];
+	int size;
+	ssize_t result;
+
+	if ((pdriver = open("pipe-driver", O_RDONLY)) == -1)
+		exit_sys("open");
+
+	for (;;) {
+		printf("Size:");
+		scanf("%d", &size);
+		if (size > BUFFER_SIZE) {
+			printf("size is very long!..\n");
+			continue;
+		}
+		if (size == 0)
+			break;
+		if ((result = read(pdriver, buf, size)) == -1)
+			exit_sys("read");
+		buf[result] = '\0';
+		printf("%jd bytes read: %s\n", (intmax_t)result, buf);
+	}
+
+	close(pdriver);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
 /*--------------------------------------------------------------------------------------------------------------------------
-    Tıpkı thread'lerde olduğu gibi aygıt sürücülerde de basit atama, artırma, eksiltme gibi işlemlerin atomic yapılmasını sağlayan
-    özel fonksiyonlar vardır. Aslında bu işlemler thread konusunda görmüş olduğumuz gcc'nin built-in atimic fonksiyonlarıyla
+    User modda gördüğümüz diğer senkronizasyon nesnelerinin benzerleri de çekirdte içerisinde bulunmaktadır. Örneğin spinlock
+    kullanımına çekirdek kodlarında ve aygıt sürücülerde sıkça rastlanmaktadır. Anımsanacağı gibi spinlock uykuya dalarak değil
+    (yani bloke olarak değil) meşgul bir döngü içerisinde kilidin açılmasını bekleyen senkronizasyon nesnelerini belirtiyordu. 
+    Spinlock nesnelerinin çok işlemcili ya da çekirdekli sistemlerde kullanılabileceğini belirtmiştik. Tek işlemcili ya da 
+    çekirdekli sistemlerde spinlock ile kritik kod oluşturmak kötü bir tekniktir. Çünkü kilidi başka bir thread alırsa diğer
+    thread CPU'yu meşgul bir döngüde bekleyecektir. Spinlock nesneleri küçük kod blokları için ve özellikle çok işlemcili ya da 
+    çok çekirdekli sistemlerde kullanılması gereken senkronizasyon nesneleridir. Spinlock nesnesinin kilidini alan thread'in 
+    bloke olmaması gerekir. Aksi takdirde istenmeyen sonuçlar oluşabilir. Özetle spinlock nesnesinin kilidini alan thread 
+    şu durumlara dikkat etmelidir:
+
+    - Thread kilidi uzun süre kapalı tutmalıdır.
+    - Thread kilidi aldıktan sonra bloke olmamlıdır.
+    - Thread kilidi aldıktan sonra IRQ (donanım kesmeleri) dolayısıyla kontrolü bırakma konusunda dikkatli olmalıdır.
+
+    Linux'ta bir thread spinlock kilidini almışsa artık quanta süresi dolsa bile therad'ler arası geçiş kapatılmaktadır.
+
+    Kernel spinlock nesneleri tipik olarak şöyle kullanılmaktadır:
+
+    1) Spinlock nesnesi spinlock_t türü ile temsil edilmektedir. Spinlock nesnesinin yaratılması statik düzeyde aşağıdaki gibi
+    yapılabilir:
+
+    #include <linux/spinlock.h>
+
+    spinlock_t g_spinlock = SPIN_LOCK_UNLOCKED;
+
+    Burada spinlock nesnesi kilit açık bir biçimde oluşturulmuştur. Ancak bu makro yeni çekirdeklerde kaldırılmıştır. Yeni 
+    çekirdeklerde DEFINE_SPINLOCK makrosu spinlock nesnesini kapalkı olarak oluşturmakta kullanılabilmektedir. Örneğin:
+
+    DEFINE_SPINLOCK(g_spinlock);
+
+    Aynı işlem spin_lock_init fonksiyonuyla da yapılabilmektedir:
+
+    #include <linux/spinlock.h>
+
+    void spin_lock_init(spinlock_t *lock);
+
+    2) Kritik koda giriş için aşağıdaki fonksiyonlar kullanılmaktadır:
+
+    #include <linux/spinlock.h>
+
+    void spin_lock(spinlock_t *lock);
+    void spin_lock_irq(spinlock_t *lock);
+    void spin_lock_irqsave(spinlock_t *lock, unsigned long flags);
+    void spin_lock_bh(spinlock_t *lock);
+
+    spin_lock fonksiyonu klasik spin yapan fonksiyondur. spin_lock_irq fonksiyonu o anda çalışlan işlemci ya da çekirdekteki 
+    IRQ'ları (yani donanım kesmelerini) kapatarak kilidi almaktadır. Yani biz bu fonksiyonla kilidi almışsak kilidi bırakana 
+    kadar donanım kesmeleri oluşmayacaktır. spin_lock_irqsave fonksiyonu kritik koda girerken donanım kesmelerini kapatmakla 
+    birlikte önceki bir durumu geri yükleme yeteneğine sahiptir. Aslında bu fonksiyonların bazıları makro olarak yaızlmıştır. 
+    Örneğin spin_lock_irqsave aslında bir makrodur. Biz bu fonksiyonun ikinci parametresine nesne adresini geçmemiş olsak da 
+    bu bir makro olduğu için aslında ikinci parametrede verdiğimiz nesnenin içerisine irq durumlarını yazmaktadır. spin_lock_bh 
+    fonksiyonu yalnızca yazılım kesmelerini  kapatmaktadır.
+
+    3) Kilidin geri bırakılması için ise aşağıdaki fonksiyonlar kullanılmaktadır:
+
+    #include <linux/spinlock.h>
+
+    void spin_unlock(spinlock_t *lock);
+    void spin_unlock_irqrestore(spinlock_t *lock, unsigned long flags);
+    void spin_unlock_irq(spinlock_t *lock);
+    void spin_unlock_bh(spinlock_t *lock);
+
+    Yukarıdaki lock fonksiyonlarının hepsinin bir unlock karşılığının olduğunu görüyorsunuz. Biz kilidi hangi lock fonksiyonu 
+    ile almışsa o unlock fonksiyonu ile bırakmalıyız. Örneğin:
+
+    spinlock_t g_spinlock = SPIN_LOCK_UNLOCKED;
+    ...
+
+    spin_lock(&g_spinlock);
+    ...
+    ... <KRİTİK KOD>
+    ...
+    spin_unlock(&g_spinlock);
+
+    Ya da örneğin:
+
+    spinlock_t g_spinlock = SPIN_LOCK_UNLOCKED;
+    ...
+    unsigned long irqstate;
+    ...
+
+    spin_lock_irqsave(&g_spinlock, irqstate);
+    ...
+    ... <KRİTİK KOD>
+    ...
+    spin_unlock_irqrestore(&g_spinlock, irqstate);
+
+    Yine kernel spinlock nesnelerinde try'lı lock fonksiyonları bulunmaktadır:
+
+    #include <linux/spinlock.h>
+
+    int spin_trylock(spinlock_t *lock);
+    int spin_trylock_bh(spinlock_t *lock);
+
+    Bu fonksiyonlar eğer spinlock kilitliyse spin yapmazlar ve 0 ile geri dönerler. Eğer kilidi alırsarsa sıfır dışı bir değerle
+    geri dönerler.
+
+    Her ne kadar yukarıdaki boru sürücünde read ve write fonksiyonlarında kuyruğu korumak için spinlock kullanımı uygun değilse 
+    de biz yine kullanım biçimini göstermek için aşağıdaki örneği veriyoruz.
+----------------------------------------------------------------------------------------------------------------------------*/
+
+/* pipe-driver.c */
+
+#include <linux/module.h>
+#include <linux/kernel.h>
+#include <linux/fs.h>
+#include <linux/cdev.h>
+#include <linux/uaccess.h>
+#include <linux/spinlock.h>
+
+#define MIN(a, b)		((a) < (b) ? (a) : (b))
+
+#define PIPE_BUFSIZE		4096
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Kaan Aslan");
+MODULE_DESCRIPTION("Pipe Driver");
+
+static int generic_open(struct inode *inodep, struct file *filp);
+static int generic_release(struct inode *inodep, struct file *filp);
+static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off);
+static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off);
+
+static dev_t g_dev;
+static struct cdev *g_cdev;
+static struct file_operations g_fops = {
+	.owner = THIS_MODULE,
+	.open = generic_open,
+	.read = generic_read,
+	.write = generic_write,
+	.release = generic_release
+};
+
+spinlock_t g_spinlock;
+
+static unsigned char g_pipebuf[PIPE_BUFSIZE];
+static size_t g_head;
+static size_t g_tail;
+static size_t g_count;
+
+static int __init generic_init(void)
+{
+	int result;
+
+	printk(KERN_INFO "pipe-driver module initialization...\n");
+
+	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "pipe-driver")) < 0) {
+		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		return result;
+	}
+
+	if ((g_cdev = cdev_alloc()) == NULL) {
+		printk(KERN_INFO "Cannot allocate cdev!...\n");
+		return -ENOMEM;
+	}
+
+	g_cdev->owner = THIS_MODULE;
+	g_cdev->ops = &g_fops;
+
+	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
+		unregister_chrdev_region(g_dev, 1);
+		printk(KERN_ERR "Cannot add device!...\n");
+		return result;
+	}
+
+	spin_lock_init(&g_spinlock);
+
+	return 0;
+}
+
+static void __exit generic_exit(void)
+{
+	cdev_del(g_cdev);
+	unregister_chrdev_region(g_dev, 1);
+
+	printk(KERN_INFO "pipe-driver module exit...\n");
+}
+
+static int generic_open(struct inode *inodep, struct file *filp)
+{
+	printk(KERN_INFO "pipe-driver opened...\n");
+
+	return 0;
+}
+
+static int generic_release(struct inode *inodep, struct file *filp)
+{
+	printk(KERN_INFO "pipe-driver-closed...\n");
+
+	return 0;
+}
+
+static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
+{
+	size_t esize, size1, size2;
+
+	spin_lock(&g_spinlock);
+
+	esize = MIN(g_count, size);
+
+	if (g_tail < g_head)
+		size1 = MIN(PIPE_BUFSIZE - g_head, esize);
+	else
+		size1 = esize;
+
+	size2 = esize - size1;
+
+	if (copy_to_user(buf, g_pipebuf + g_head, size1) != 0)
+		return -EFAULT;
+
+	if (size2 != 0)
+		if (copy_to_user(buf + size1, g_pipebuf, size2) != 0)
+			return -EFAULT;
+
+	g_head = (g_head + esize) % PIPE_BUFSIZE;
+	g_count -= esize;
+
+	spin_unlock(&g_spinlock);
+
+	return esize;
+}
+
+static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
+{
+	size_t esize, size1, size2;
+
+	spin_lock(&g_spinlock);
+
+	esize = MIN(PIPE_BUFSIZE - g_count, size);
+
+	if (g_tail > g_head)
+		size1 = MIN(PIPE_BUFSIZE - g_tail, esize);
+	else
+		size1 = esize;
+
+	size2 = esize - size1;
+
+	if (copy_from_user(g_pipebuf + g_tail, buf, size1) != 0)
+		return -EFAULT;
+
+	if (size2 != 0)
+		if (copy_from_user(g_pipebuf, buf + size1, size2) != 0)
+			return -EFAULT;
+
+	g_tail = (g_tail + esize) % PIPE_BUFSIZE;
+	g_count += esize;
+
+	spin_unlock(&g_spinlock);
+
+	return esize;
+}
+
+module_init(generic_init);
+module_exit(generic_exit);
+
+# Makefile
+
+obj-m += $(file).o
+
+all:
+	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
+clean:
+	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
+
+/* load (bu satırı dosyaya kopyalamayınız) */
+
+#!/bin/bash
+
+module=$1
+mode=666
+
+/sbin/insmod ./$module.ko ${@:2} || exit 1
+major=$(awk "\$2 == \"$module\" {print \$1}" /proc/devices)
+rm -f $module
+mknod $module c $major 0
+chmod $mode $module
+
+/* unload (bu satırı dosyaya kopyalamayınız) */
+
+#!/bin/bash
+
+module=$1
+mode=666
+
+/sbin/rmmod ./$module.ko || exit 1
+rm -f $module
+
+/* prog1.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#define BUFFER_SIZE		4096
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int pdriver;
+	char buf[BUFFER_SIZE];
+	char *str;
+	ssize_t result;
+
+	if ((pdriver = open("pipe-driver", O_WRONLY)) == -1)
+		exit_sys("open");
+
+	for (;;) {
+		printf("Text:");
+		if (fgets(buf, BUFFER_SIZE, stdin) == NULL)
+			continue;
+		if ((str = strchr(buf, '\n')) != NULL)
+			*str = '\0';
+		if (!strcmp(buf, "quit"))
+			break;
+		if ((result = write(pdriver, buf, strlen(buf))) == -1)
+			exit_sys("write");
+		printf("%jd bytes written...\n", (intmax_t)result);
+	}
+
+	close(pdriver);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/* prog2.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#define BUFFER_SIZE		4096
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int pdriver;
+	char buf[BUFFER_SIZE + 1];
+	int size;
+	ssize_t result;
+
+	if ((pdriver = open("pipe-driver", O_RDONLY)) == -1)
+		exit_sys("open");
+
+	for (;;) {
+		printf("Size:");
+		scanf("%d", &size);
+		if (size > BUFFER_SIZE) {
+			printf("size is very long!..\n");
+			continue;
+		}
+		if (size == 0)
+			break;
+		if ((result = read(pdriver, buf, size)) == -1)
+			exit_sys("read");
+		buf[result] = '\0';
+		printf("%jd bytes read: %s\n", (intmax_t)result, buf);
+	}
+
+	close(pdriver);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Biz daha önce user modda reader/writer lock nesnelerini görmüştük. Bu nesneler birden fazla thread'in kritik koda okuma
+    amaçlı girmesine izin veriyordu. Ancak bir thread kritik koda yazma amaçlı girmişse diğer bir thread'in okuma ya da 
+    yazma amaçlı kritik koda girmesine izin vermiyordu. İşte user moddaki reader/write lock nesnelerinin bir benzeri kernel 
+    modda reader/writer spinlock nesneleri biçiminde bulunmaktadır. Yine kernel modda da kritik koda okuma amaçlı ya da yazma
+    amaçlı giren fonksiyonlar vardır.
+
+    reader/writer spinlock nesneleri rwlock_t türüyle temsil edilmektedir. Bunların yaratılması rwlock_init fonksiyonuyla 
+    yapılmaktadır:
+
+    #include <linux/rwlock.h>
+
+    void rwlock_init(rwlock_t *lock);
+
+    reader/writer spinlock nesneleri ile ilgili diğer çekirdek fonksiyonları şunlardır:
+
+    #include <linux/rwlock.h>
+
+    void read_lock(rwlock_t *lock);
+    void read_lock_irqsave(rwlock_t *lock, unsigned long flags);
+    void read_lock_irq(rwlock_t *lock);
+    void read_lock_bh(rwlock_t *lock);
+
+    void read_unlock(rwlock_t *lock);
+    void read_unlock_irqrestore(rwlock_t *lock, unsigned long flags);
+    void read_unlock_irq(rwlock_t *lock);
+    void read_unlock_bh(rwlock_t *lock);
+
+    void write_lock(rwlock_t *lock);
+    void write_lock_irqsave(rwlock_t *lock, unsigned long flags);
+    void write_lock_irq(rwlock_t *lock);
+    void write_lock_bh(rwlock_t *lock);
+    int write_trylock(rwlock_t *lock);
+
+    void write_unlock(rwlock_t *lock);
+    void write_unlock_irqrestore(rwlock_t *lock, unsigned long flags);
+    void write_unlock_irq(rwlock_t *lock);
+    void write_unlock_bh(rwlock_t *lock);
+
+    Nesne read amaçlı lock edilmişse read amaçlı unlock işlemi, write amaçlı lock edilmişse write amaçlı unlock işlemi 
+    uygulanmalıdır. Fonskiyonların diğer işlevleri normal spinlock nesnelerinde olduğu gibidir.
+----------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Tıpkı user modda olduğu gibi aygıt sürücülerde de basit atama, artırma, eksiltme gibi işlemlerin atomic yapılmasını sağlayan
+    özel fonksiyonlar vardır. Aslında bu işlemler thread'ler konusunda görmüş olduğumuz gcc'nin built-in atomic fonksiyonlarıyla
     yaplabilir. Ancak çekirdek içerisindeki fonksiyonların kullanılması uyum bakımından daha uygundur. Bu fonksiyonların hepsi 
-    nesneyi atomic_t türü biçiminde istemektedir. Bu aslında içerisinde yalnızca int bir nesne olan bir yapı türüdür. Bu yapı nesnesinin
-    içerisindeki değeri alan atomic_read isimli bir fonksiyon da vardır. Atomic fonksiyonların bazıları şunlardır:
+    nesneyi atomic_t türü biçiminde istemektedir. Bu aslında içerisinde yalnızca int bir nesne olan bir yapı türüdür. Bu yapı 
+    nesnesinin içerisindeki değeri alan atomic_read isimli bir fonksiyon da vardır. Atomic fonksiyonların bazıları şunlardır:
+
+    #include <asm/atomic.h>
 
     atomic_set
     atomic_add
@@ -55985,29 +56455,82 @@ chmod $mode $module
     atomic_dec
     ...
 
+    Vu fonksiyonların hepsinin birinci parametreleri atomic_t türünden nesnenin adresini almaktadır. atomic_set fonksiyonunun
+    ikinci parametresi set edilecek değeri almaktadır.
+
+    Yukarıda da belirtitğimiz gibi atomic_t türü aslında int bir elemana sahip bir yapı biçimindedir. atomic_t türünden 
+    bir değişkene ilkdeğer vermek için ATOMIC_INIT makrosu da kullanılanılabilir. Örneğin:
+
+    atomic_t g_count = ATOMIC_INIT(0);
+
+    Yukarıda da belirttiğimiz gibi atomic_t nesnesi içerisindeki değeri atomic_read makrosuyla elde edebiliriz. Örneğin:
+
+    val = atomic_read&(g_count);
+
+    Bit işlemlerine yönelik atomik işlemler de yapılabilmektedir:
+
+    void set_bit(nr, void *addr);
+    void clear_bit(nr, void *addr);
+    void change_bit(nr, void *addr);
+    test_bit(nr, void *addr);
+    int test_and_set_bit(nr, void *addr);
+    int test_and_clear_bit(nr, void *addr);
+    int test_and_change_bit(nr, void *addr);
+
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir thread nasıl bloke olmaktadır? Aslında bloke olma demek kabaca ilgi thread'i (yani task_struct nesnesini) Run kuyruğundan
-    çıkartarak bir wait kuyruğuna yerleştirmek demektir. Pekiyi wait kuyrukları nerededir ve biz bir thread'i wait kuyruklarına nasıl yerleştirip
-    yeniden run kuyruğuna atayabiliriz?
+                                                    139. Ders 05/05/2024 - Pazar
+----------------------------------------------------------------------------------------------------------------------------*/
 
-    İşte aslında wait kuyrukları istenildiği kadar çok olabilir. Her aygıt sürücü kendi wait kuyruğunu yaratabilir. Kernel içerisinde
-    wait kuyruğu yaratan mekanizmalar vardır. Bir thread'i (yani task_struct nesnesini) run kuyruğundan wait kuyruğuna, wait kuyruğundan run
-    kuyruğuna yerleştiren hazır fonksiyonlar bulunmaktadır.
+/*--------------------------------------------------------------------------------------------------------------------------
+    Biz user modda çeşitli fonksiyonlar çeşitli koşullar altında blokeye yol açtığını belirtmiştik. Bir thread'in bloke olduğunda
+    thread geçici süre (belli bir koşul sağlanana kadar) ilgili CPU'nun "çalışma kuyruğundan (run queue)" çıkartılır, ismine 
+    "bekleme kuyruğu (wait queue)" denilen bir kuyruğa yerleştirilir. Blokeye yol açan koşul ortadan kalktığında ise thread 
+    yeniden bekleme kuyruğundan alınarak CPU'nun çalışma kuyruğuna yerleştirilir. Biz şimdiye kadar user modda hep sistem 
+    sistem fonksiyonları yoluyla blokelerin oluştuğunu gördük. Ancak kernel moddaki aygıt sürücülerde blokeyi aygıt sürücünün 
+    kendisi oluşturmaktadır. Örneğin biz boru aygıt sürücümüzde read işlemi yapıldığında eğer boruda okunacak hiç bilgi yoksa
+    read işlemini yapan user moddaki thread'i bloke edebiliriz. Boruya bilgi geldiğinde de thread'i yeniden çalışma kuyruğuna 
+    yerleştirip blokeyi çözebiliriz. İşte bu bölümde aygıt sürücüde thread'lerin nasıl bloke edileceği ve blokenin nasıl çözüleceği
+    üzerinde duracağız.
 
-    Wait kuyrukları wait_queue_head_t isimli yapıyla temsil edilmektedir. Bir wait kuyruğu DECLARE_WAIT_QUEUE_HEAD(name) makrosuyla oluşturulabilir:
+    Mevcut Linux sistemlerinde her CPU ya da çekirdeğin ayrı bir çalışma kuyruğu (run queue) bulunmaktadır. Ancak bir ara 
+    O(1) çizelgelemesi ismiyle Linux'ta bu konuda bir değişikliğe gidilmişti. O(1) çizelgelemesi tekniğinde toplam tek bir 
+    çalışma kuyruğu bulunuyordu. Hangi CPU ya da çekirdeğe atama yapılacaksa bu bir tane olan çalışma kuyruğundan thread alınıyordu.
+    O(1) çizelgelemesi Linux'ta kısa bir süre kullanılmıştır. Bunun yerine "CFS (Completely Fair Scheduling)" çeizelgeleme 
+    sistemine geçilmiştir.
+
+    Çalışmakta olan bir thread'in bloke olması sırasında thread'in yerleştirileceği tek bir "bekleme kuyruğu (wait queue)"
+    yoktur. Her CPU ya da çekirdek için de ayrı bir bekleme kuyruğu bulundurulmamaktadır. Bekleme kuyrukları ilgili olay 
+    temelinde oluşturulmaktadır. Örneğin sleep fonksiyonu dolayısıyla bloke olan thread'ler ayrı bir bekleme kuyruğuna, boru 
+    dolayısıyla bloke olan thread'ler ayrı bir bekleme kuyruğuna yerleştirilmektedir. Aygıt sürücüleri yazanlar da kendi olayları
+    için kendi bekleme kuyruklarını yaratmaktadır. Tabii kernel'daki mutex ve semaphore fonksiyonları da aslında kendi içerisinde 
+    bir bekleme kuyruğu kullanmaktadır. Çünkü bu fonksiyonlar da blokeye yol açmaktadır.
+----------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Yukarıda da belirtitğimiz gibi her aygıt sürücü kendi bloke olayları için kendinin kullanacağı bekleme kuyrukları yaratabilmektedir.
+    Çekşirdek içerisinde bekleme kuyruklarını yaratan ve yok eden çekirdek fonksiyonları bulunmaktadır. Yine çekirdek içerisinde
+    bir thread'i çalışma kuyruğundan çıkartıp bekleme kuyruğuna yerleştiren, bekleme kuyruğundan çıkartıp çalışma kuyruğuna 
+    yerleştiren fonksiyonlar bulunmaktadır.
+
+    Linux'ta bekleme kuyrukları wait_queue_head_t isimli bir yapıyla temsil edilmektedir. Bir bekleme kuyruğu DECLARE_WAIT_QUEUE_HEAD(name) 
+    makrosuyla oluşturulabilir. Örneğin:
+
+    #include <linux/wait.h>
 
     DECLARE_WAIT_QUEUE_HEAD(g_wq);
 
     Ya da nesne tanımlanıp init_waitqueueu_head fonksiyonuyla da ilk değerlenebilir:
 
-    wait_queeue_head_t g_wq;
+    #include <linux/wait.h>
+
+    wait_queue_head_t g_wq;
     ...
     init_waitqueue_head(&g_wq);
 
-    Bir thread'i (yani task_struct nesnesini) run kuyruğundan çıkartıp istenilen wait kuyruğuna yerleştirme işlemi event_wait makrolarıyla
-    gerçekleştirilmektedir. Temel wait_event makroları şunlardır:
+    Bir thread'i (yani task_struct nesnesini) çalışma kuyruğundan çıkartıp istenilen bekleme kuyruğuna yerleştirme işlemi wait_event 
+    makrolarıyla gerçekleştirilmektedir. Temel wait_event makroları şunlardır:
 
     wait_event(wq_head, condition);
     wait_event_interruptible(wq_head, condition);
@@ -56016,13 +56539,20 @@ chmod $mode $module
     wait_event_interruptible_timeout(wq_head, condition, timeout);
     wait_event_interruptible_exclusive(wq_head, condition);
 
-    wait_event fonksiyonu "uninterruptible" biçimdedir. Yani o andaki thread akışını wait kuyruğuna yerleştirir. Dolayısıyla run kuyruğundan çıkartır. 
-    Fakat sinyal oluştuğunda thread uykudan uyanmaz. wait_queue_interruptible makrosu ise aynı işlemi "interruptible" olarak yapmaktadır. Yani sinyal
-    geldiğinde thread uyandırılır. wait_event_killable makrosu yalnızca SIGKILL sinyali için thread'i uyandırır. wait_event_timeout ise belli bir jiffy değerini
-    zaman aşımı olarak kullanır. Makrolardaki condition (koşul) parametresi aslında bool bir ifade biçiminde oluşturulmakatadır. Bu ifade ya sıfır
-    olur ya da sıfır dışı olur. Bu koşul ifadesi "uyanık kalmak için bir koşul" belirtmektedir. Ancak bu koşul uyandırma koşulu değildir. Uyanık kalma koşuludur.
-    Thread uyandırılır, sonra uyanmış olan thread bu koşula bakar. Koşul sağlanmıyorsa (condition == 0 ise) yeniden uyutulur. Tabii aslında thread henüz
-    uyutulmadan da bu koşula bakılmaktadır. Bu koşul zaten sağlanıyorsa thread hiç uyutulmamaktadır.
+    wait_event fonksiyonu thread'i "uninterruptible" biçimde bekleme kuyruğuna yerleştirir. Bu biçimde bloke olmuş thread'lerin
+    blokeleri sinyal dolayısıyla çözülememektedir. wait_event_interruptible makrosu ise aynı işlemi "interruptible" olarak yapmaktadır. 
+    Yani sinyal geldiğinde thread bekleme kuyruğundan uyandırılır. wait_event_killable makrosu yalnızca SIGKILL sinyali için thread'i 
+    uyandırmaktadır. Yani bu biçimde bekleme kuyruğuna yerleştirilmiş bir thread'in blokesi sinyal geldiğinde çözülmez, ancak SIGKILL
+    sinyali ile yok edilebilir. wait_event_timeout ve wait_event_interruptible_timeout makrolarının wait_event makrolarından farkı
+    thread'i en kötü olasılıkla belli bir jiffy zaman aşımı ile uyandırabilmesidir.
+
+    Makrolardaki "condition (koşul)" parametresi bool bir ifade biçiminde oluşturulmalıdır. Bu ifade ya sıfır olur ya da sıfır dışı bir 
+    değer olur. Bu koşul ifadesi "uyanık kalmak için bir koşul" belirtmektedir. Bu koşul uyandırma koşulu değildir. Uyanık kalma koşuludur. 
+    Çünkü bu makrolarda koşula bakılması uyandırılma işleminden sonra yapılmaktadır. Yani thread uyandırılır, uyanmış olan thread 
+    koşula bakar. Koşul sağlanmamışsa yeniden uyutulur. Tabii aslında thread henüz uyutulmadan da bu koşula bakılmaktadır. Bu koşul 
+    zaten sağlanıyorsa thread hiç uyutulmamaktadır.
+
+    <BURADA KALDIK>
 
     wait_event_interruptible_exclusive (bunun interrutible olmayan biçimi yoktur) fonksiyonu Lİnux çekirdeklerine 2.6'ının belli sürümünden sonra sokulmuştur.
     Yine bu fonksiyonla birlikte aşağıda ele alınan wake_up_xxx_nr fonksiyonları da eklenmiştir. Bir prosesin exclusive olarak wait kuyruğuna yerleştirilmesi
@@ -56380,10 +56910,11 @@ module_exit(generic_exit);
             return -ERESTARTSYS;
     }
 
-    Burada birden fazla proses uykudan uyandırılabilir. Ancak bunlardna biri semaphore'dan geçecektir. Bu durumda semaphore'dan geçen proses
-    her şeyi okuyabileceği için uyanmış olup semaphore'da kalan prosesin semaphore'dan çıktığında yeniden koşula bakması gerekir. Bu nedenle yukarıdaki kodda
-    mecburen if deyimi yerine while deyimi kullanılmıştır. Aynı durum write işleminde de söz konusudur. Ayrıca bu örnekte uyandırma işlemi tüm kuyruktaki prosslerin
-    wake_up_all ile uyandırılması biçiminde gerçekleştirilmektedir. Çünkü birden fazla proses boruda kalanları okuyabilmelidir.
+    Burada birden fazla proses uykudan uyandırılabilir. Ancak bunlardna biri semaphore'dan geçecektir. Bu durumda semaphore'dan 
+    geçen proses her şeyi okuyabileceği için uyanmış olup semaphore'da kalan prosesin semaphore'dan çıktığında yeniden koşula 
+    bakması gerekir. Bu nedenle yukarıdaki kodda mecburen if deyimi yerine while deyimi kullanılmıştır. Aynı durum write işleminde 
+    de söz konusudur. Ayrıca bu örnekte uyandırma işlemi tüm kuyruktaki prosslerin wake_up_all ile uyandırılması biçiminde 
+    gerçekleştirilmektedir. Çünkü birden fazla proses boruda kalanları okuyabilmelidir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* pipe-driver.c */
@@ -57428,10 +57959,13 @@ chmod $mode $module
     ZONE_NORMAL
     ZONE_HIGHMEM
 
-ZONE_DMA ilgili sistemde disk ile RAM arasında transfer yapan DMA'nın erişebildiği RAM alanıdır. Bazı sistemlerde DMA tüm fiziksel RAM'in her yerine transfer yapamamaktadır.
-ZONE_NORMAL doğrudan çekirdeğin sayfa tablosu yoluyla haritalandırdığı fizilsel bellek bölgesidir. Intel 32 bit Linuz sistemlerinde bu bölge ilk 896 MB'dir. 
-ZONE_HIGHMEM ise çekirdeğin doğrudan haritalandıramadığı sayfa tablosu değişimiyle erişebildiği fiziksel RAM alanıdır. 32 Bit Intel Linuz sistemlerinde 896 MB'nin
-yukarısındaki fiziksel RAM'dir. 64 bit Intel işlemcilerinde ZONE_NORMAL tüm fiziksel RAM'i kapsar. Bu sistemlerde ZONE_HIGHMEM yoktur.
+    ZONE_DMA ilgili sistemde disk ile RAM arasında transfer yapan DMA'nın erişebildiği RAM alanıdır. Bazı sistemlerde DMA tüm 
+    fiziksel RAM'in her yerine transfer yapamamaktadır. ZONE_NORMAL doğrudan çekirdeğin sayfa tablosu yoluyla haritalandırdığı 
+    fizilsel bellek bölgesidir. Intel 32 bit Linuz sistemlerinde bu bölge ilk 896 MB'dir.
+
+    ZONE_HIGHMEM ise çekirdeğin doğrudan haritalandıramadığı sayfa tablosu değişimiyle erişebildiği fiziksel RAM alanıdır. 
+    32 Bit Intel Linuz sistemlerinde 896 MB'nin yukarısındaki fiziksel RAM'dir. 64 bit Intel işlemcilerinde ZONE_NORMAL tüm 
+    fiziksel RAM'i kapsar. Bu sistemlerde ZONE_HIGHMEM yoktur.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
