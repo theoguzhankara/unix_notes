@@ -11249,7 +11249,7 @@ int main(void)
 
     $ chmod 4755 sample
 
-    Burada en soldaki octal ditit 4 olduğu için dosyanın set-user-id bayrağı da set edilmiştir.
+    Burada en soldaki octal digit 4 olduğu için dosyanın set-user-id bayrağı da set edilmiştir.
 
     chmod fonksiyonunda yukarıda belirttiğimiz bayrakları kullanarak set-user-id, set-group-id ve stick bayraklarını set edebiliriz. 
     Örneğin biz "sample" programını rwsrwxrwx haline şöyle getirebiliriz:
@@ -53616,7 +53616,7 @@ void exit_sys(const char *msg)
     unsigned long copy_to_user(void *to, const void *from, unsigned len);
     unsigned long copy_from_user(void *to, const void *from, unsigned len);
 
-    Fonskiyonların birinci parametreleri kopyalamanın yapılacağı hedef adresi belirtmektedir. Yani copy_to_user için birinci 
+    Fonksiyonların birinci parametreleri kopyalamanın yapılacağı hedef adresi belirtmektedir. Yani copy_to_user için birinci 
     parametre user alanındaki adres, copy_from_user için birinci parametre kernel alanındaki adrestir. İkinci parametre kaynak 
     adresi belirtmektedir. Bu kaynak adres copy_to_user için kernel alanındaki adres, copy_from_user için user alanındaki 
     adrestir. Son parametre transfer edilecek byte sayısını belirtmektedir. Fonksiyonlar başarı durumunda 0 değerine, başarısızlık 
@@ -55654,7 +55654,7 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-                                            138. Ders 03/05/2024 - Cuma
+												138. Ders 03/05/2024 - Cuma
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -55670,8 +55670,8 @@ void exit_sys(const char *msg)
 
     DEFINE_SEMAPHORE(g_sem);
 
-    Bu biçimde yaratılan semaphore nesnesinin başlangıçta sayaç değeri 1'dir. Yani çekirdeklerde bu makro iki parametreli olarak 
-    da kullanılabilmektedir:
+    Bu biçimde yaratılan semaphore nesnesinin başlangıçta sayaç değeri 1'dir. Yeni çekirdeklerde (v6.4-rc1 ve sonrası) bu makro iki 
+    parametreli olarak da kullanılabilmektedir:
 
     DEFINE_SEMAPHORE(g_sem, n);
 
@@ -55685,8 +55685,8 @@ void exit_sys(const char *msg)
 
     Fonksiyonun ikinci parametresi başlangıç sayaç numarasıdır.
 
-    2) Kritik kod down ve up fonksiyonları arasına alınır. down fonksiyonları sayacı bir eksilterek kritik koda giriş yapar. 
-    up fonksiyonu ise sayacı bir artırmaktadır. Fonksiyonların prototipleri şöyledir:
+    2) Kritik kod "down" ve "up" fonksiyonları arasına alınır. "down" fonksiyonları sayacı bir eksilterek kritik koda giriş yapar. 
+    "up" fonksiyonu ise sayacı bir artırmaktadır. Fonksiyonların prototipleri şöyledir:
 
     #define <linux/semaphore.h>
 
@@ -55697,19 +55697,19 @@ void exit_sys(const char *msg)
     int down_timeout(struct semaphore *sem, long jiffies);
     void up(struct semaphore *sem);
 
-    Kritik kod down fonksiyonu ile oluşturulduğunda thread bloke olursa sinyal yoluyla uyandırılamamaktadır. Ancak kritik kod 
-    down_interruptible fonksiyonu ile oluşturulduğunda thread bloke olursa sinyal yoluyla uyandırılabilmektedir. down_killable 
-    bloke olmuş thread'i yalnızca SIGKILL sinyali geldiğinde blokeden kurtarıp sonlandırabilmektedir. down_killable fonksiyonunda 
-    eğer thread bloke olursa diğer sinyaller yine blokeyi sonlandıramamaktadır. down_trylock yine nesnenin açık olup olmadığına 
-    bakmak için kullanılır. Eğer nesne açıksa yine sayaç 1 eksiltilir ve kritik koda girilir. Bu duurmda fonksiyon 0 dışı bir 
-    değerle geri döner. Nesne kapalıysa fonksiyon bloke olmadan 0 değerine geri döner. down_timeout iaw en kötü olasılıkla 
+    Kritik kod "down" fonksiyonu ile oluşturulduğunda thread bloke olursa sinyal yoluyla uyandırılamamaktadır. Ancak kritik kod 
+    "down_interruptible" fonksiyonu ile oluşturulduğunda thread bloke olursa sinyal yoluyla uyandırılabilmektedir. "down_killable" 
+    bloke olmuş thread'i yalnızca SIGKILL sinyali geldiğinde blokeden kurtarıp sonlandırabilmektedir. "down_killable" fonksiyonunda 
+    eğer thread bloke olursa diğer sinyaller yine blokeyi sonlandıramamaktadır. "down_trylock" yine nesnenin açık olup olmadığına 
+    bakmak için kullanılır. Eğer nesne açıksa yine sayaç 1 eksiltilir ve kritik koda girilir. Bu durumda fonksiyon 0 dışı bir 
+    değerle geri döner. Nesne kapalıysa fonksiyon bloke olmadan 0 değerine geri döner. "down_timeout" ise en kötü olasılıkla 
     belli miktar "jiffy" zamanı kadar blokeye yol açmaktadır. ("jiffy" kavramı ileride ele alınacaktır.) Fonksiyon zaman aşımı 
-    dolduğundan dolayı sonlanmışsa negatif hata koduna normal bir biçimde sonlanmışsa 0 değerine geri dönmektedir. down_interruptible 
+    dolduğundan dolayı sonlanmışsa negatif hata koduna, normal bir biçimde sonlanmışsa 0 değerine geri dönmektedir. "down_interruptible" 
     fonksiyonu normal sonlanmada 0 değerine, sinyal yoluyla sonlanmada -ERESTARTSYS değeri ile geri döner. Normal uygulama eğer 
     bu fonksiyonlar -ERESTARTSYS ile geri dönerse aygıt sürücüdeki fonksiyonun da aynı değerle geri döndürülmesidir. Zaten çekirdek
     bu -ERESTARTSYS geri dönüş değerini aldığında asıl sistem fonksiyonunu eğer sinyal için otomatik restart mekanizması aktif 
     değilse -EINTR değeri ile geri döndürmektedir. Bu da tabii POSIX fonksiyonlarının başarısız olup errno değerini EINTR 
-    biçiminde set edilmesine yol açmaktadır. up fonksiyonu yukarıda da belirttiğimiz gibi semaphore sayacını 1 artırmaktadır.
+    biçiminde set edilmesine yol açmaktadır. "up" fonksiyonu yukarıda da belirttiğimiz gibi semaphore sayacını 1 artırmaktadır.
 
     Kernel semaphore nesneleriyle kritik kod aşağıdaki gibi oluşturulmaktadır:
 
@@ -55720,7 +55720,7 @@ void exit_sys(const char *msg)
     ...
     ... <KRİTİK KOD>
     ...
-    up
+    up(&g_sem);
 
     Yukarıdaki boru örneğinde biz mutex nesnesi yerine binary semaphore nesnesi de kullanabilirdik. Aşağıda aynı örneğin 
     binary semaphore ile gerçekleştirimi görülmektedir.
@@ -56011,8 +56011,8 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    User modda gördüğümüz diğer senkronizasyon nesnelerinin benzerleri de çekirdte içerisinde bulunmaktadır. Örneğin spinlock
-    kullanımına çekirdek kodlarında ve aygıt sürücülerde sıkça rastlanmaktadır. Anımsanacağı gibi spinlock uykuya dalarak değil
+    User modda gördüğümüz diğer senkronizasyon nesnelerinin benzerleri de çekirdek içerisinde bulunmaktadır. Örneğin spinlock
+    kullanımına çekirdek kodlarında ve aygıt sürücülerde sıkça rastlanmaktadır. Anımsanacağı gibi spinlock uykuya dalarak değil,
     (yani bloke olarak değil) meşgul bir döngü içerisinde kilidin açılmasını bekleyen senkronizasyon nesnelerini belirtiyordu. 
     Spinlock nesnelerinin çok işlemcili ya da çekirdekli sistemlerde kullanılabileceğini belirtmiştik. Tek işlemcili ya da 
     çekirdekli sistemlerde spinlock ile kritik kod oluşturmak kötü bir tekniktir. Çünkü kilidi başka bir thread alırsa diğer
@@ -56021,11 +56021,11 @@ void exit_sys(const char *msg)
     bloke olmaması gerekir. Aksi takdirde istenmeyen sonuçlar oluşabilir. Özetle spinlock nesnesinin kilidini alan thread 
     şu durumlara dikkat etmelidir:
 
-    - Thread kilidi uzun süre kapalı tutmalıdır.
-    - Thread kilidi aldıktan sonra bloke olmamlıdır.
-    - Thread kilidi aldıktan sonra IRQ (donanım kesmeleri) dolayısıyla kontrolü bırakma konusunda dikkatli olmalıdır.
+    - Thread, kilidi uzun süre kapalı tutmamalıdır.
+    - Thread, kilidi aldıktan sonra bloke olmamalıdır.
+    - Thread, kilidi aldıktan sonra IRQ (donanım kesmeleri) dolayısıyla kontrolü bırakma konusunda dikkatli olmalıdır.
 
-    Linux'ta bir thread spinlock kilidini almışsa artık quanta süresi dolsa bile therad'ler arası geçiş kapatılmaktadır.
+    Linux'ta bir thread spinlock kilidini almışsa artık quanta süresi dolsa bile thread'ler arası geçiş kapatılmaktadır.
 
     Kernel spinlock nesneleri tipik olarak şöyle kullanılmaktadır:
 
@@ -56037,7 +56037,7 @@ void exit_sys(const char *msg)
     spinlock_t g_spinlock = SPIN_LOCK_UNLOCKED;
 
     Burada spinlock nesnesi kilit açık bir biçimde oluşturulmuştur. Ancak bu makro yeni çekirdeklerde kaldırılmıştır. Yeni 
-    çekirdeklerde DEFINE_SPINLOCK makrosu spinlock nesnesini kapalkı olarak oluşturmakta kullanılabilmektedir. Örneğin:
+    çekirdeklerde DEFINE_SPINLOCK makrosu spinlock nesnesini kapalı olarak oluşturmakta kullanılabilmektedir. Örneğin:
 
     DEFINE_SPINLOCK(g_spinlock);
 
@@ -56056,13 +56056,13 @@ void exit_sys(const char *msg)
     void spin_lock_irqsave(spinlock_t *lock, unsigned long flags);
     void spin_lock_bh(spinlock_t *lock);
 
-    spin_lock fonksiyonu klasik spin yapan fonksiyondur. spin_lock_irq fonksiyonu o anda çalışlan işlemci ya da çekirdekteki 
+    "spin_lock" fonksiyonu klasik spin yapan fonksiyondur. "spin_lock_irq" fonksiyonu o anda çalışılan işlemci ya da çekirdekteki 
     IRQ'ları (yani donanım kesmelerini) kapatarak kilidi almaktadır. Yani biz bu fonksiyonla kilidi almışsak kilidi bırakana 
-    kadar donanım kesmeleri oluşmayacaktır. spin_lock_irqsave fonksiyonu kritik koda girerken donanım kesmelerini kapatmakla 
-    birlikte önceki bir durumu geri yükleme yeteneğine sahiptir. Aslında bu fonksiyonların bazıları makro olarak yaızlmıştır. 
-    Örneğin spin_lock_irqsave aslında bir makrodur. Biz bu fonksiyonun ikinci parametresine nesne adresini geçmemiş olsak da 
-    bu bir makro olduğu için aslında ikinci parametrede verdiğimiz nesnenin içerisine irq durumlarını yazmaktadır. spin_lock_bh 
-    fonksiyonu yalnızca yazılım kesmelerini  kapatmaktadır.
+    kadar donanım kesmeleri oluşmayacaktır. "spin_lock_irqsave" fonksiyonu kritik koda girerken donanım kesmelerini kapatmakla 
+    birlikte önceki bir durumu geri yükleme yeteneğine sahiptir. Aslında bu fonksiyonların bazıları makro olarak yazılmıştır. 
+    Örneğin "spin_lock_irqsave" aslında bir makrodur. Biz bu fonksiyonun ikinci parametresine nesne adresini geçmemiş olsak da 
+    bu bir makro olduğu için aslında ikinci parametrede verdiğimiz nesnenin içerisine IRQ durumlarını yazmaktadır. "spin_lock_bh" 
+    fonksiyonu yalnızca yazılım kesmelerini kapatmaktadır.
 
     3) Kilidin geri bırakılması için ise aşağıdaki fonksiyonlar kullanılmaktadır:
 
@@ -56098,17 +56098,17 @@ void exit_sys(const char *msg)
     ...
     spin_unlock_irqrestore(&g_spinlock, irqstate);
 
-    Yine kernel spinlock nesnelerinde try'lı lock fonksiyonları bulunmaktadır:
+    Yine kernel spinlock nesnelerinde de try'lı lock fonksiyonları bulunmaktadır:
 
     #include <linux/spinlock.h>
 
     int spin_trylock(spinlock_t *lock);
     int spin_trylock_bh(spinlock_t *lock);
 
-    Bu fonksiyonlar eğer spinlock kilitliyse spin yapmazlar ve 0 ile geri dönerler. Eğer kilidi alırsarsa sıfır dışı bir değerle
+    Bu fonksiyonlar eğer spinlock kilitliyse spin yapmazlar ve 0 ile geri dönerler. Eğer kilidi alırlarsa sıfır dışı bir değerle
     geri dönerler.
 
-    Her ne kadar yukarıdaki boru sürücünde read ve write fonksiyonlarında kuyruğu korumak için spinlock kullanımı uygun değilse 
+    Her ne kadar yukarıdaki boru sürücüsündeki read ve write fonksiyonlarında kuyruğu korumak için spinlock kullanımı uygun değilse 
     de biz yine kullanım biçimini göstermek için aşağıdaki örneği veriyoruz.
 ----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -56436,13 +56436,13 @@ void exit_sys(const char *msg)
     void write_unlock_bh(rwlock_t *lock);
 
     Nesne read amaçlı lock edilmişse read amaçlı unlock işlemi, write amaçlı lock edilmişse write amaçlı unlock işlemi 
-    uygulanmalıdır. Fonskiyonların diğer işlevleri normal spinlock nesnelerinde olduğu gibidir.
+    uygulanmalıdır. Fonksiyonların diğer işlevleri normal spinlock nesnelerinde olduğu gibidir.
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Tıpkı user modda olduğu gibi aygıt sürücülerde de basit atama, artırma, eksiltme gibi işlemlerin atomic yapılmasını sağlayan
     özel fonksiyonlar vardır. Aslında bu işlemler thread'ler konusunda görmüş olduğumuz gcc'nin built-in atomic fonksiyonlarıyla
-    yaplabilir. Ancak çekirdek içerisindeki fonksiyonların kullanılması uyum bakımından daha uygundur. Bu fonksiyonların hepsi 
+    yapılabilir. Ancak çekirdek içerisindeki fonksiyonların kullanılması uyum bakımından daha uygundur. Bu fonksiyonların hepsi 
     nesneyi atomic_t türü biçiminde istemektedir. Bu aslında içerisinde yalnızca int bir nesne olan bir yapı türüdür. Bu yapı 
     nesnesinin içerisindeki değeri alan atomic_read isimli bir fonksiyon da vardır. Atomic fonksiyonların bazıları şunlardır:
 
@@ -56455,17 +56455,17 @@ void exit_sys(const char *msg)
     atomic_dec
     ...
 
-    Vu fonksiyonların hepsinin birinci parametreleri atomic_t türünden nesnenin adresini almaktadır. atomic_set fonksiyonunun
+    Bu fonksiyonların hepsinin birinci parametreleri atomic_t türünden nesnenin adresini almaktadır. atomic_set fonksiyonunun
     ikinci parametresi set edilecek değeri almaktadır.
 
-    Yukarıda da belirtitğimiz gibi atomic_t türü aslında int bir elemana sahip bir yapı biçimindedir. atomic_t türünden 
-    bir değişkene ilkdeğer vermek için ATOMIC_INIT makrosu da kullanılanılabilir. Örneğin:
+    Yukarıda da belirttiğimiz gibi atomic_t türü aslında int bir elemana sahip bir yapı biçimindedir. atomic_t türünden 
+    bir değişkene ilkdeğer vermek için ATOMIC_INIT makrosu da kullanılabilir. Örneğin:
 
     atomic_t g_count = ATOMIC_INIT(0);
 
     Yukarıda da belirttiğimiz gibi atomic_t nesnesi içerisindeki değeri atomic_read makrosuyla elde edebiliriz. Örneğin:
 
-    val = atomic_read&(g_count);
+    val = atomic_read(&g_count);
 
     Bit işlemlerine yönelik atomik işlemler de yapılabilmektedir:
 
@@ -56480,25 +56480,24 @@ void exit_sys(const char *msg)
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-                                                    139. Ders 05/05/2024 - Pazar
+												139. Ders 05/05/2024 - Pazar
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Biz user modda çeşitli fonksiyonlar çeşitli koşullar altında blokeye yol açtığını belirtmiştik. Bir thread'in bloke olduğunda
+    Biz user modda çeşitli fonksiyonların çeşitli koşullar altında blokeye yol açtığını belirtmiştik. Bir thread bloke olduğunda
     thread geçici süre (belli bir koşul sağlanana kadar) ilgili CPU'nun "çalışma kuyruğundan (run queue)" çıkartılır, ismine 
     "bekleme kuyruğu (wait queue)" denilen bir kuyruğa yerleştirilir. Blokeye yol açan koşul ortadan kalktığında ise thread 
     yeniden bekleme kuyruğundan alınarak CPU'nun çalışma kuyruğuna yerleştirilir. Biz şimdiye kadar user modda hep sistem 
-    sistem fonksiyonları yoluyla blokelerin oluştuğunu gördük. Ancak kernel moddaki aygıt sürücülerde blokeyi aygıt sürücünün 
-    kendisi oluşturmaktadır. Örneğin biz boru aygıt sürücümüzde read işlemi yapıldığında eğer boruda okunacak hiç bilgi yoksa
-    read işlemini yapan user moddaki thread'i bloke edebiliriz. Boruya bilgi geldiğinde de thread'i yeniden çalışma kuyruğuna 
-    yerleştirip blokeyi çözebiliriz. İşte bu bölümde aygıt sürücüde thread'lerin nasıl bloke edileceği ve blokenin nasıl çözüleceği
-    üzerinde duracağız.
+    fonksiyonları yoluyla blokelerin oluştuğunu gördük. Ancak kernel moddaki aygıt sürücülerde blokeyi aygıt sürücünün kendisi 
+    oluşturmaktadır. Örneğin biz boru aygıt sürücümüzde read işlemi yapıldığında eğer boruda okunacak hiç bilgi yoksa read işlemini 
+    yapan user moddaki thread'i bloke edebiliriz. Boruya bilgi geldiğinde de thread'i yeniden çalışma kuyruğuna yerleştirip blokeyi 
+    çözebiliriz. İşte bu bölümde aygıt sürücüde thread'lerin nasıl bloke edileceği ve blokenin nasıl çözüleceği üzerinde duracağız.
 
-    Mevcut Linux sistemlerinde her CPU ya da çekirdeğin ayrı bir çalışma kuyruğu (run queue) bulunmaktadır. Ancak bir ara 
-    O(1) çizelgelemesi ismiyle Linux'ta bu konuda bir değişikliğe gidilmişti. O(1) çizelgelemesi tekniğinde toplam tek bir 
-    çalışma kuyruğu bulunuyordu. Hangi CPU ya da çekirdeğe atama yapılacaksa bu bir tane olan çalışma kuyruğundan thread alınıyordu.
-    O(1) çizelgelemesi Linux'ta kısa bir süre kullanılmıştır. Bunun yerine "CFS (Completely Fair Scheduling)" çeizelgeleme 
-    sistemine geçilmiştir.
+    Mevcut Linux sistemlerinde her CPU ya da çekirdeğin ayrı bir çalışma kuyruğu (run queue) bulunmaktadır. Ancak bir ara O(1) 
+    çizelgelemesi ismiyle Linux'ta bu konuda bir değişikliğe gidilmişti. O(1) çizelgelemesi tekniğinde toplam tek bir çalışma 
+    kuyruğu bulunuyordu. Hangi CPU ya da çekirdeğe atama yapılacaksa bu tek olan çalışma kuyruğundan thread alınıyordu. O(1) 
+    çizelgelemesi Linux'ta kısa bir süre kullanılmıştır. Bunun yerine "CFS (Completely Fair Scheduling)" çizelgeleme sistemine 
+    geçilmiştir.
 
     Çalışmakta olan bir thread'in bloke olması sırasında thread'in yerleştirileceği tek bir "bekleme kuyruğu (wait queue)"
     yoktur. Her CPU ya da çekirdek için de ayrı bir bekleme kuyruğu bulundurulmamaktadır. Bekleme kuyrukları ilgili olay 
@@ -56509,8 +56508,8 @@ void exit_sys(const char *msg)
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Yukarıda da belirtitğimiz gibi her aygıt sürücü kendi bloke olayları için kendinin kullanacağı bekleme kuyrukları yaratabilmektedir.
-    Çekşirdek içerisinde bekleme kuyruklarını yaratan ve yok eden çekirdek fonksiyonları bulunmaktadır. Yine çekirdek içerisinde
+    Yukarıda da belirttiğimiz gibi her aygıt sürücü kendi bloke olayları için kendinin kullanacağı bekleme kuyrukları yaratabilmektedir.
+    Çekirdek içerisinde bekleme kuyruklarını yaratan ve yok eden çekirdek fonksiyonları bulunmaktadır. Yine çekirdek içerisinde
     bir thread'i çalışma kuyruğundan çıkartıp bekleme kuyruğuna yerleştiren, bekleme kuyruğundan çıkartıp çalışma kuyruğuna 
     yerleştiren fonksiyonlar bulunmaktadır.
 
@@ -56539,11 +56538,11 @@ void exit_sys(const char *msg)
     wait_event_interruptible_timeout(wq_head, condition, timeout);
     wait_event_interruptible_exclusive(wq_head, condition);
 
-    wait_event fonksiyonu thread'i "uninterruptible" biçimde bekleme kuyruğuna yerleştirir. Bu biçimde bloke olmuş thread'lerin
-    blokeleri sinyal dolayısıyla çözülememektedir. wait_event_interruptible makrosu ise aynı işlemi "interruptible" olarak yapmaktadır. 
-    Yani sinyal geldiğinde thread bekleme kuyruğundan uyandırılır. wait_event_killable makrosu yalnızca SIGKILL sinyali için thread'i 
+    "wait_event" fonksiyonu thread'i "uninterruptible" biçimde bekleme kuyruğuna yerleştirir. Bu biçimde bloke olmuş thread'lerin
+    blokeleri sinyal dolayısıyla çözülememektedir. "wait_event_interruptible" makrosu ise aynı işlemi "interruptible" olarak yapmaktadır. 
+    Yani sinyal geldiğinde thread bekleme kuyruğundan uyandırılır. "wait_event_killable" makrosu yalnızca SIGKILL sinyali için thread'i 
     uyandırmaktadır. Yani bu biçimde bekleme kuyruğuna yerleştirilmiş bir thread'in blokesi sinyal geldiğinde çözülmez, ancak SIGKILL
-    sinyali ile yok edilebilir. wait_event_timeout ve wait_event_interruptible_timeout makrolarının wait_event makrolarından farkı
+    sinyali ile yok edilebilir. "wait_event_timeout" ve "wait_event_interruptible_timeout" makrolarının "wait_event" makrolarından farkı
     thread'i en kötü olasılıkla belli bir jiffy zaman aşımı ile uyandırabilmesidir.
 
     Makrolardaki "condition (koşul)" parametresi bool bir ifade biçiminde oluşturulmalıdır. Bu ifade ya sıfır olur ya da sıfır dışı bir 
@@ -56554,7 +56553,7 @@ void exit_sys(const char *msg)
 
     <BURADA KALDIK>
 
-    wait_event_interruptible_exclusive (bunun interrutible olmayan biçimi yoktur) fonksiyonu Lİnux çekirdeklerine 2.6'ının belli sürümünden sonra sokulmuştur.
+    wait_event_interruptible_exclusive (bunun interrutible olmayan biçimi yoktur) fonksiyonu Linux çekirdeklerine 2.6'ının belli sürümünden sonra sokulmuştur.
     Yine bu fonksiyonla birlikte aşağıda ele alınan wake_up_xxx_nr fonksiyonları da eklenmiştir. Bir prosesin exclusive olarak wait kuyruğuna yerleştirilmesi
     onlardan belli sayıda olanların uyandırılabilmesini sağlamaktadır.
 
@@ -56637,7 +56636,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+		printk(KERN_INFO "Cannot add character device driver!...\n");
 		return result;
 	}
 
@@ -56837,7 +56836,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+		printk(KERN_INFO "Cannot add character device driver!...\n");
 		return result;
 	}
 
@@ -56975,7 +56974,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+		printk(KERN_INFO "Cannot add character device driver!...\n");
 		return result;
 	}
 
@@ -57344,7 +57343,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+		printk(KERN_INFO "Cannot add character device driver!...\n");
 		return result;
 	}
 
@@ -57668,7 +57667,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+		printk(KERN_INFO "Cannot add character device driver!...\n");
 		return result;
 	}
 
@@ -58074,7 +58073,7 @@ static int __init generic_init(void)
 	if ((result = cdev_add(&g_pdev->cdev, g_dev, 1)) != 0) {
 		kfree(g_pdev);
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+		printk(KERN_INFO "Cannot add character device driver!...\n");
 		return result;
 	}
 
@@ -60124,7 +60123,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+		printk(KERN_INFO "Cannot add character device driver!...\n");
 		return result;
 	}
 
@@ -60232,7 +60231,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+		printk(KERN_INFO "Cannot add character device driver!...\n");
 		return result;
 	}
 
@@ -60451,7 +60450,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+		printk(KERN_INFO "Cannot add character device driver!...\n");
 		return result;
 	}
 
@@ -60633,7 +60632,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+		printk(KERN_INFO "Cannot add character device driver!...\n");
 		return result;
 	}
 
@@ -60926,7 +60925,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+		printk(KERN_INFO "Cannot add character device driver!...\n");
 		return result;
 	}
 
@@ -61108,7 +61107,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+		printk(KERN_INFO "Cannot add character device driver!...\n");
 		return result;
 	}
 
@@ -61269,7 +61268,7 @@ chmod $mode $module
     void disable_irq(unsigned int irq);
     void enable_irq(unsigned int irq);
 
-    Fonksiyonlar irq numarasını parametre olarak alır. 
+    Fonksiyonlar IRQ numarasını parametre olarak alır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -61328,7 +61327,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+		printk(KERN_INFO "Cannot add character device driver!...\n");
 		return result;
 	}
 
@@ -61527,11 +61526,11 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+		printk(KERN_INFO "Cannot add character device driver!...\n");
 		return result;
 	}
 
-	if ((result = request_irq(1, keyboard_irq_handler, IRQF_SHARED, "generic-char-driver-irq", &g_cdev)) != 0) {
+	if ((result = request_irq(1, keyboard_irq_handler, IRQF_SHARED, "keyboard-char-driver-irq", &g_cdev)) != 0) {
 		printk(KERN_ERR "interrupt couldn't registered!...\n");
 		return result;
 	}
@@ -61705,7 +61704,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add charecter device driver!...\n");
+		printk(KERN_INFO "Cannot add character device driver!...\n");
 		return result;
 	}
 
@@ -62309,7 +62308,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Blok aygıt sürücülerinde yukarıda belirtilen işlemlerden sonra artık transfer işleminin yapılması için bulundurulan fonksiyonun
     (örneğimizde request_proc) yazılması aşamasına geldik. Anımsanacağı gibi user mode ya da kernel mode kodlar tarafından blok transferine yönelik
-    bir istek oluştuğunda kernel IO çizelgeleyicisi bunları çizelgeleio uygun bir zamanda transfer edilebilmesi için bizim belirtitğimiz bu fonksiyonu çağırıyordu.
+    bir istek oluştuğunda kernel IO çizelgeleyicisi bunları çizelgeleio uygun bir zamanda transfer edilebilmesi için bizim belirttiğimiz bu fonksiyonu çağırıyordu.
     Yani örneğimizdeki request_proc bizim tarafımızdan değil kernel tarafından callback fonksiyon olarak çağrılmaktadır. Bizim de bu fonksiyon içerisinde kuyruğa
     bırakılmış blok transfer isteklerini kuyruktan alarak gerçekleştirmemiz gerekir. 
 
