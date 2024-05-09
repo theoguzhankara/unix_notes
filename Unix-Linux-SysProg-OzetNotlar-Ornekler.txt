@@ -17464,10 +17464,8 @@ void exit_sys(const char *msg)
     aslında fonksiyon herhangi bir şey yapmayacaktır. Yani aslında ftruncate fonksiyonu paylaşılan bellek alanı ilk kez yaratılırken 
     bir kez çağrılır. Ancak yukarıda da belirttiğimiz gibi aynı uzunlukta ftruncate işleminin bir etkisi yoktur. 
 
-    POSIX paylaşılan bellek alanı nesneleri Linux'ta dosya sisteminde "/dev/shm" dizini içerisinde görüntülenmektedir. Yani programcı 
-    isterse bu dizin içerisindeki nesneleri komut satırında rm komutuyla silebilir. 
-
-    <BURADA KALDIK>
+    POSIX paylaşılan bellek alanı nesneleri Linux'ta dosya sisteminde "/dev/shm" dizini içerisinde görüntülenmektedir. Yani 
+    programcı isterse bu dizin içerisindeki nesneleri komut satırında rm komutuyla silebilir.
 
     3) Artık paylaşılan bellek alanı nesnesinin belleğe "map" edilmesi gerekmektedir. (Klasik Sistem 5 paylaşılan bellek alanlarında 
     "map etmek" yerine "attach etmek" terimi kullanılmaktaydı. Bu arayüzde ise "attach" yerine "mapping" sözcüğü tercih edilmiştir.)
@@ -17480,18 +17478,19 @@ void exit_sys(const char *msg)
 
     void *mmap(void *addr, size_t len, int prot, int flags, int fd, off_t off);
 
-    Fonksiyonun birinci parametresi, "mapping için" önerilen sanal adresi belirtmektedir. Programcı, belli bir sanal adresin 
-    mapping için kullanılmasını isteyebilir. Ancak fonksiyon, flags parametresinde MAP_FIXED geçilmemişse bu adresi tam (exact) 
-    olarak yani verildiği gibi kullanmayabilir. Fonksiyon bu önerilen adresin yakınındaki bir sayfayı tahsis edebilir. Bu tahsisatın 
-    burada belirtilen adresin neresinde yapılacağı garanti edilmemiştir. Yani buradaki adres eğer fonksiyonun flags parametresinde 
-    MAP_FIXED kullanılmamışsa bir öneri niteliğindedir. Eğer bu adres NULL olarak geçilirse bu durumda mapping işlemi işletim 
-    sisteminin kendi belirlediği bir adresten itibaren yapılır. Tabii en normal durum bu parametrenin NULL adres olarak geçilmesidir. 
+    Fonksiyonun birinci parametresi, "mapping için" önerilen (preferred) sanal adresi belirtmektedir. Programcı, belli bir sanal 
+    adresin mapping için kullanılmasını isteyebilir. Ancak fonksiyon, flags parametresinde MAP_FIXED geçilmemişse bu adresi 
+    tam (exact) olarak yani verildiği gibi kullanmayabilir. Fonksiyon bu önerilen adresin yakınındaki bir sayfayı tahsis edebilir. 
+    Bu tahsisatın burada belirtilen adresin neresinde yapılacağı garanti edilmemiştir. Yani buradaki adres eğer fonksiyonun flags 
+    parametresinde MAP_FIXED kullanılmamışsa bir öneri niteliğindedir. Eğer bu adres NULL olarak geçilirse bu durumda mapping işlemi 
+    işletim sisteminin kendi belirlediği bir adresten itibaren yapılır. Tabii en normal durum bu parametrenin NULL adres olarak 
+    geçilmesidir.
 
-    Fonksiyonun ikinci parametresi, paylaşılan bellek alanının ne kadarının map edileceğini belirtir. Örneğin paylaşılan bellek alanı 
-    nesnesi 1 MB olabilir. Ancak biz onun 100K'lık bir kısmını map etmek isteyebiliriz. Ya da tüm paylaşılan bellek alanını da map 
-    etmek isteyebiliriz. Bu uzunluk sayfa katlarında olmak zorunda değildir. Ancak pek çok sistem, bu uzunluğu sayfa katlarına doğru 
-    yukarı yuvarlamaktadır. Yani biz uzunluğu örneğin 100 byte verebiliriz. Ancak sistem 100 byte yerine sayfa uzunluğu olan 4096 
-    byte'ı map edecektir. 
+    Fonksiyonun ikinci parametresi, paylaşılan bellek alanının ne kadarının map edileceğini belirtir. Örneğin paylaşılan bellek 
+    alanı nesnesi 1 MB olabilir. Ancak biz onun 100K'lık bir kısmını map etmek isteyebiliriz. Ya da tüm paylaşılan bellek alanını 
+    da map etmek isteyebiliriz. Bu uzunluk sayfa katlarında olmak zorunda değildir. Ancak pek çok sistem, bu uzunluğu sayfa katlarına 
+    doğru yukarı yuvarlamaktadır. Yani biz uzunluğu örneğin 100 byte verebiliriz. Ancak sistem 100 byte yerine sayfa uzunluğu olan 
+    4096 byte'ı map edecektir.
 
     Fonksiyonun üçüncü parametresi, mapping işleminin koruma özelliklerini belirtmektedir. Başka bir deyişle bu parametre paylaşılan 
     bellek alanı için ayrılacak fiziksel sayfaların işlemci düzeyinde koruma özelliklerini belirtir. Bu özellikler şu sembolik 
@@ -17512,7 +17511,10 @@ void exit_sys(const char *msg)
     koruma özelliklerinin hepsini desteklemeyebilirler. Örneğin Intel işlemcilerinde PROT_WRITE zaten okuma özelliğini de kapsamaktadır. 
     Bazı işlemciler sayfalarda PROT_EXEC özelliğini hiç bulundurmamaktadır. Ancak ne olursa olsun programcı sanki bu özelliklerin 
     hepsi çalıştıkları işlemcide varmış gibi bu parametreyi oluşturmalıdır. Böylece kodun başka bir işlemcinin bulunduğu sistemde 
-    de düzgün çalışması sağlanacaktır.
+    de düzgün çalışması sağlanacaktır. Tabii burada belirtilen koruma bayraklarının paylaşılan bellek alanı nesnesi oluşturulurken 
+    (yan shm_open fonksiyonundaki) belirtilen dosya bayraklarından daha geniş bir koruma içermemesi gerekir. Örneğin shm_open 
+    fonksiyonunda O_RDONLY bayrağı kullanılmışsa mapping işlemi PROT_READ|PROT_WRITE biçiminde yapılamaz. Ancak shm_open fonksiyonunda
+    O_RDWR bayrağı belirtilmişse mmap fonksiyonundaki koruma bayrakları PROT_READ ya da PROT_WRITE ya da PROT_READ|PROT_WRITE seçilebilir.
 
     Fonksiyonun dördüncü parametresi olan flags aşağıdaki değerlerden yalnızca birini alabilir:
 
@@ -17531,10 +17533,10 @@ void exit_sys(const char *msg)
 
     Bir proses ilgili paylaşılan bellek alanı nesnesini MAP_PRIVATE ile map ettiğinde ve diğer proses o alana yazma yaptığında onun 
     yazdığını MAP_PRIVATE yapan prosesin görüp görmeyeceği POSIX standartlarında belirsiz (unspecified) bırakılmıştır. Linux 
-    sistemlerinin man sayfasında da bu durum "unspecified" olarak belirtilmiş olsa da mevcut Linux çekirdeklerinde başka bir proses 
-    private mapping yapılmış yere yazma yaptığında bu yazma private mapping'in yapıldığı proseste görülmektedir. Ancak private mapping 
-    yapan proses sayfaya yazma yaptığında artık o sayfanın kopyasından çıkartılacağı için bu yazma işleminden sonraki diğer prosesin 
-    yaptığı yazma işlemleri görülmemektedir.
+    sistemlerinin man sayfasında da bu durum "unspecified" olarak belirtilmiş olsa da mevcut Linux çekirdeklerinde başka bir 
+    proses private mapping yapılmış yere yazma yaptığında bu yazma private mapping'in yapıldığı proseste görülmektedir. Ancak 
+    private mapping yapan proses sayfaya yazma yaptığında artık o sayfanın kopyasından çıkartılacağı için bu yazma işleminden 
+    sonraki diğer prosesin yaptığı yazma işlemleri görülmemektedir.
 
     MAP_SHARED ise yazma işleminin paylaşılan bellek alanına yapılacağını yani "copy on write" yapılmayacağını belirtmektedir. 
     Dolayısıyla MAP_SHARED bir mapping'te paylaşılan alana yazılanlar diğer prosesler tarafından görülür. Normal olarak programcılar
@@ -17547,12 +17549,12 @@ void exit_sys(const char *msg)
     adres NULL geçilmemişse bu adresin kendisinin aynen (hiç değiştirilmeden) kullanılacağını belirtmektedir. Yani bu adresin 
     yakınındaki herhangi bir sayfa değil tam olarak bu adresten itibaren tahsisat yapılacak ve fonksiyon bu adresin aynısıyla 
     geri dönecektir. (Tabii bu durumda programcının verdiği adres uygun olmayabilir. Bu durumda fonksiyon da başarısız olur.)
-    Eğer MAP_FIXED bayrağı belirtilmişse Linux sistemlerinde birinci parametredeki adresin sayfa katlarında olma zorunlululuğu vardır. 
-    Ancak POSIX standartlarının son versiyonları "may require" ifadesiyle bunun zorunlu olmayabileceğini belirtmektedir. 
+    Eğer MAP_FIXED bayrağı belirtilmişse Linux sistemlerinde birinci parametredeki adresin sayfa katlarında olma zorunlululuğu 
+    vardır. Ancak POSIX standartlarının son versiyonları "may require" ifadesiyle bunun zorunlu olmayabileceğini belirtmektedir.
 
     Fonksiyonun son iki parametresi dosya betimleyicisi ve bir de offset içermektedir. Paylaşılan bellek alanının belli bir 
-    offset'ten sonraki kısmı map edilebilmektedir. Örneğin paylaşılan bellek alanı nesnemiz 4 MB olsun. Biz bu nesnenin 1 MB'sinden 
-    itibaren 64K'lık kısmını map edebiliriz. Örneğin mmap fonksiyonunu şöyle çağırabiliriz:
+    offset'ten sonraki kısmı map edilebilmektedir. Örneğin paylaşılan bellek alanı nesnemiz 4 MB olsun. Biz bu nesnenin 1 
+    MB'sinden itibaren 64K'lık kısmını map edebiliriz. Örneğin mmap fonksiyonunu şöyle çağırabiliriz:
 
     shmaddr = mmap(NULL, SHM_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fdshm, 0);
 
@@ -17833,14 +17835,14 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Bellek tabanlı dosyalar (memory mapped files) 90'lı yıllarla birlikte işletim sistemlerine sokulmuştur. 90'ların ortalarında 
     bellek tabanlı dosyalar POSIX IPC nesneleriyle birlikte UNIX türevi sistemlere de resmi olarak sokulmuştur. macOS sistemleri 
-    de bellek tabanlı dosyaları desteklemektedir. Microsoft ise ilk kez 32 bit Windows sistemlerinde (Windows NT (1993) ve sonra da 
-    Windows 95 (1995)) bellek tabanlı dosyaları işletim sisteminin çekirdeğine dahil etmiştir. 
+    de bellek tabanlı dosyaları desteklemektedir. Microsoft ise ilk kez 32 bit Windows sistemlerinde (Windows NT (1993) ve 
+    sonra da Windows 95 (1995)) bellek tabanlı dosyaları işletim sisteminin çekirdeğine dahil etmiştir.
 
     Bellek tabanlı dosyalar (memory mapped files) adeta diskte bulunan bir dosyanın prosesin sanal bellek alanına çekilmesi 
     anlamına gelmektedir. Biz bir disk dosyasını bellek tabanlı biçimde açıp kullandığımızda dosya sanki bellekteymiş gibi bir 
     durum oluşturulur. Biz bellekte göstericilerle dosyanın byte'larına erişiriz. Bellekte birtakım değişikler yapıldığında 
-    bu değişiklikler dosyaya yansıtılmaktadır. Böylece dosya üzerinde işlemler yapılırken read ve write sistem fonksiyonları yerine
-    doğrudan göstericilerle bellek üzerinde işlem yapılmış olur. 
+    bu değişiklikler dosyaya yansıtılmaktadır. Böylece dosya üzerinde işlemler yapılırken read ve write sistem fonksiyonları 
+    yerine doğrudan göstericilerle bellek üzerinde işlem yapılmış olur.
 
     Örneğin read fonksiyonu ile dosyanın bir kısmını okumak isteyelim:
 
@@ -17848,11 +17850,11 @@ void exit_sys(const char *msg)
 
     Burada genellikle işletim sistemlerinde arka planda iki işlem yapılmaktadır: Önce dosyanın ilgili bölümü işletim sisteminin
     çekirdeği içerisindeki bir alana (bu alana buffer cache ya da page cache denilmektedir) çekilir. Sonra bu alandan bizim 
-    belirttiğimiz alana aktarım yapılır. Halbuki bellek tabanlı dosyalarda genel olarak bu iki aktarım yerine dosya doğrudan prosesin 
-    bellek alanına map edilmektedir. Yani bu anlamda bellek tabanlı dosyalar hız ve bellek kazancı sağlamaktadır. Ayrıca her 
-    read ve write işleminin kontrol edilme zorunluluğu da bellek tabanlı dosyalarda ortadan kalkmaktadır. Bir dosya üzerinde 
+    belirttiğimiz alana aktarım yapılır. Halbuki bellek tabanlı dosyalarda genel olarak bu iki aktarım yerine dosya doğrudan 
+    prosesin bellek alanına map edilmektedir. Yani bu anlamda bellek tabanlı dosyalar hız ve bellek kazancı sağlamaktadır. Ayrıca 
+    her read ve write işleminin kontrol edilme zorunluluğu da bellek tabanlı dosyalarda ortadan kalkmaktadır. Bir dosya üzerinde 
     dosyanın farklı yerlerinden okuma ve yazma işlemlerinin sürekli yapıldığı durumlarda bellek tabanlı dosyalar klasik read/write 
-    sistemine göre oldukça avantaj sağlamaktadır. 
+    sistemine göre oldukça avantaj sağlamaktadır.
 
     Bu noktada kişilerin akıllarına şu soru gelmektedir? Biz bir dosyayı open ile açsak dosyanın tamamını read ile belleğe okusak 
     sonra işlemleri bellek üzerinde yapsak, sonra da write fonksiyonu ile tek hamlede yine onları diske yazsak bu yöntemin 
@@ -17861,7 +17863,7 @@ void exit_sys(const char *msg)
     iki tamponun devreye girmesine yol açmaktadır. İkincisi ise bellek tabanlı dosyaların bir mapping oluşturması ve dolayısıyla 
     prosesler arasında etkin bir kullanıma yol açmasıdır. Yani örneğin iki proses aynı dosyayı bellek tabanlı olarak açtığında 
     işletim sistemi her proses için ayrı bir alan oluşturmamakta dosyanın parçalarını fiziksel bellekte bir yere yerleştirip o 
-    proseslerin aynı yerden çalışmasını sağlamaktadır. 
+    proseslerin aynı yerden çalışmasını sağlamaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -17904,10 +17906,11 @@ void exit_sys(const char *msg)
         putchar(maddr[i]);
 
     mapping işleminden sonra artık dosya betimleyicisi close fonksiyonuyla kapatılabilir. Yani kapatım için unmap işleminin 
-    beklenmesine gerek yoktur. 
+    beklenmesine gerek yoktur.
 
     3) Tıpkı POSIX paylaşılan bellek alanlarında olduğu gibi işimiz bittikten sonra yapılan mapping işlemini munmap fonksiyonu ile 
-    serbest bırakabiliriz. Eğer bu işlemi yapmazsak proses sonlandığında zaten map edilmiş alanlar otomatik olarak unmap edilecektir. Örneğin:
+    serbest bırakabiliriz. Eğer bu işlemi yapmazsak proses sonlandığında zaten map edilmiş alanlar otomatik olarak unmap edilecektir. 
+    Örneğin:
 
     if (munmap(maddr, finfo.st_size) == -1)
         exit_sys("munmap");
@@ -17976,20 +17979,20 @@ void exit_sys(const char *msg)
     Bellek tabanlı dosyaları (memory mapped files) açarken ve kullanırken bazı ayrıntılara dikkat edilmesi gerekir. Burada 
     bu ayrıntılar üzerinde duracağız. 
 
-   - Dosyayı bizim mmap fonksiyonundaki sayfa koruma özelliklerine uygun açmamız gerekmektedir. Örneğin biz dosyayı O_RDONLY modunda 
-    açıp buna ilişkin sayfaları mmap fonksiyonunda PROT_READ|PROT_WRITE olarak belirlersek mmap başarısız olacak ve errno EACCESS
-    değeri ile set edilecektir. Eğer biz dosyayı O_RDWR modunda açtığımız halde mmap fonksiyonunda yalnızca PROT_READ kullanırsak 
-    bu durumda dosyaya yazma hakkımız olsa da sayfa özellikleri "read only" olduğu için o bellek bölgesine yazma yapılırken 
-    program SIGSEGV sinyali ile çökecektir. 
+   - Dosyayı bizim mmap fonksiyonundaki sayfa koruma özelliklerine uygun açmamız gerekmektedir. Örneğin biz dosyayı O_RDONLY 
+   modunda açıp buna ilişkin sayfaları mmap fonksiyonunda PROT_READ|PROT_WRITE olarak belirlersek mmap başarısız olacak ve errno 
+   EACCESS değeri ile set edilecektir. Eğer biz dosyayı O_RDWR modunda açtığımız halde mmap fonksiyonunda yalnızca PROT_READ 
+   kullanırsak bu durumda dosyaya yazma hakkımız olsa da sayfa özellikleri "read only" olduğu için o bellek bölgesine yazma 
+   yapılırken program SIGSEGV sinyali ile çökecektir.
 
     - Bellek tabanlı dosyaların O_WRONLY modunda açılması probleme yol açabilmektedir. Çünkü böyle açılmış olan bir dosyanın mmap 
     fonksiyonunda PROT_WRITE olarak map edilmesi gerekir. Halbuki Intel gibi bazı işlemcilerde PROT_WRITE zaten aynı zamanda okuma
     izni anlamına da gelmektedir. Yani örneğin Intel'de PROT_READ diye bir sayfa özelliği yoktur. PROT_WRITE aslında PROT_READ|PROT_WRITE
     anlamına gelmektedir. Dolayısıyla biz dosyayı O_WRONLY modunda açıp mmap fonksiyonunda PROT_WRITE özelliğini belirtirsek 
     bu PROT_WRITE aynı zamanda okuma izni anlamına da geldiği için mmap başarısız olacak ve errno EACCESS değeri ile set edilecektir. 
-    POSIX standartlarında da bellek tabanlı dosyaların (aynı durum shm_open için de geçerli) açılırken "read" özelliğinin olması gerektiği 
-    belirtilmiştir. Yani POSIX standartları da bellek tabanlı dosyaların O_WRONLY modda açılamayacağını açılırsa mmap fonksiyonun 
-    başarısız olacağını ve errno değerinin EACCESS olarak set edileceğini belirtmektedir. 
+    POSIX standartlarında da bellek tabanlı dosyaların (aynı durum shm_open için de geçerli) açılırken "read" özelliğinin olması 
+    gerektiği belirtilmiştir. Yani POSIX standartları da bellek tabanlı dosyaların O_WRONLY modda açılamayacağını açılırsa mmap 
+    fonksiyonun başarısız olacağını ve errno değerinin EACCESS olarak set edileceğini belirtmektedir.
 
     - Bir dosyanın uzunluğu 0 ise biz mmap fonksiyonunda length parametresini 0 yapamayız. Fonksiyon doğrudan başarısızlıkla 
     sonlanıp errno değeri EINVAL olarak set edilmektedir. 
@@ -17998,16 +18001,17 @@ void exit_sys(const char *msg)
     (POSIX bunu "may require" biçimde belirtmiştir). Yani Linux'ta biz dosyayı zaten sayfa katlarından itibaren map edebilmekteyiz. 
     Bu durumda Linux'ta zaten map edilen adres, sayfanın başında olmaktadır. 
 
-    - Biz normal bir dosyayı büyütmek için dosya göstericisini EOF durumuna çekip yazma yapıyorduk. Ya da benzer işlemi truncate, ftruncate
-    fonksiyonlarıyla da yapabiliyorduk. Halbuki bellek tabanlı olarak açılmış olan dosyalar bellek üzerinde hiçbir biçimde büyütülememektedir. 
-    Biz bir dosyayı mmap fonksiyonu ile dosya uzunluğundan daha fazla uzunlukta map edebiliriz. Örneğin dosya 10000 byte uzunlukta olduğu 
-    halde biz dosyayı 20000 byte olarak map edebiliriz. Bu durumda dosyanın sonundan o sayfanın sonuna kadarki alana biz istediğimiz gibi 
-    erişebiliriz. Dosyanın uzunluğu 10000 byte ise dosyanın son sayfasında dosyaya dahil olmayan 2288 byte bulunacaktır (3 * 4096 - 10000). 
-    İşte bizim bu son sayfadaki 2288 byte'a erişmemizde hiçbir sakınca yoktur. Ancak bu sayfanın ötesinde erişim yapamayız. Yani
-    bizim artık 3 * 4096 = 12288'den 20000'e kadarki alana erişmeye çalışmamamız gerekir. Eğer bu alana erişmeye çalışırsak 
-    SIGBUS sinyali oluşur ve prosesimiz sonlandırılır. Pekiyi bir dosyanın uzunluğundan fazla yerin map edilmesinin bir anlamı olabilir mi?
-    Daha önceden de belirttiğimiz gibi bellek tabanlı dosyalar bellek üzerinde büyütülemezler. Yani biz dosyayı uzunluğunun ötesinde 
-    map ederek oraya yazma yapmak suretiyle büyütemeyiz. Ancak dosyalar dışarıdan büyütülebilmektedir. 
+    - Biz normal bir dosyayı büyütmek için dosya göstericisini EOF durumuna çekip yazma yapıyorduk. Ya da benzer işlemi truncate, 
+    ftruncate fonksiyonlarıyla da yapabiliyorduk. Halbuki bellek tabanlı olarak açılmış olan dosyalar bellek üzerinde hiçbir 
+    biçimde büyütülememektedir. Biz bir dosyayı mmap fonksiyonu ile dosya uzunluğundan daha fazla uzunlukta map edebiliriz. Örneğin 
+    dosya 10000 byte uzunlukta olduğu halde biz dosyayı 20000 byte olarak map edebiliriz. Bu durumda dosyanın sonundan o 
+    sayfanın sonuna kadarki alana biz istediğimiz gibi erişebiliriz. Dosyanın uzunluğu 10000 byte ise dosyanın son sayfasında 
+    dosyaya dahil olmayan 2288 byte bulunacaktır (3 * 4096 - 10000). İşte bizim bu son sayfadaki 2288 byte'a erişmemizde hiçbir 
+    sakınca yoktur. Ancak bu sayfanın ötesinde erişim yapamayız. Yani bizim artık 3 * 4096 = 12288'den 20000'e kadarki alana 
+    erişmeye çalışmamamız gerekir. Eğer bu alana erişmeye çalışırsak SIGBUS sinyali oluşur ve prosesimiz sonlandırılır. Pekiyi 
+    bir dosyanın uzunluğundan fazla yerin map edilmesinin bir anlamı olabilir mi? Daha önceden de belirttiğimiz gibi bellek 
+    tabanlı dosyalar bellek üzerinde büyütülemezler. Yani biz dosyayı uzunluğunun ötesinde map ederek oraya yazma yapmak suretiyle 
+    büyütemeyiz. Ancak dosyalar dışarıdan büyütülebilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -18050,10 +18054,11 @@ void exit_sys(const char *msg)
     fonksiyonunun çağrılması gerekmektedir. Her ne kadar POSIX standartları bu msync fonksiyonunun çağrılması gerektiğini belirtiyorsa 
     da Linux gibi pek çok UNIX türevi sistem "unifed file system" tasarımı nedeniyle aslında msync çağrısına gereksinim 
     duymamaktadır. Örneğin Linux'ta biz bir bellek tabanlı dosyayı map ettiğimizde aslında sayfa tablosunda bizim map ettiğimiz kısım
-    doğrudan zaten işletim sisteminin tamponunu (page cache) göstermektedir. Sistem dosyanın o parçası için her zaman o tamponu kullandığından dolayı
-    aslında bellek tabanlı dosyanın bellek alanına yazma yapıldığında Linux'ta o yazma adeta o anda dosyaya yapılmış gibi bir 
-    durum oluşmaktadır. Benzer biçimde başka bir proses dosyaya yazma yaptığında aslında o da aynı tampona (page cache) yazma yapmış 
-    olmaktadır. Ancak ne olursa olsun taşınabilir programların bu msync fonksiyonunu aşağıda belirteceğimiz biçimde çağırması gerekmektedir. 
+    doğrudan zaten işletim sisteminin tamponunu (page cache) göstermektedir. Sistem dosyanın o parçası için her zaman o tamponu 
+    kullandığından dolayı aslında bellek tabanlı dosyanın bellek alanına yazma yapıldığında Linux'ta o yazma adeta o anda dosyaya 
+    yapılmış gibi bir durum oluşmaktadır. Benzer biçimde başka bir proses dosyaya yazma yaptığında aslında o da aynı tampona 
+    (page cache) yazma yapmış olmaktadır. Ancak ne olursa olsun taşınabilir programların bu msync fonksiyonunu aşağıda belirteceğimiz 
+    biçimde çağırması gerekmektedir.
 
     Aşağıdaki örnekte "sample.c" programı bir dosyayı bellek tabanlı olarak açıp beklemiştir. "mample.c" isimli program ise 
     aynı dosyayı open fonksiyonu ile açıp dosyanın başına write işlemi yapıp beklemiştir. Linux sistemlerinde hiç msync fonksiyonu
@@ -18173,17 +18178,17 @@ void exit_sys(const char *msg)
 
     int msync(void *addr, size_t len, int flags);
 
-    Fonksiyonun birinci parametresi flush edilecek bellek tabanlı dosyanın bellek adresini, ikinci parametresi bunun uzunluğunu belirtmektedir. 
-    POSIX standartlarına göre birinci parametrede belirtilen adresin "sayfa katlarında olması zorunlu değildir, ancak işletim sistemi 
-    bunu zorunlu yapabilir (may require)". Linux sistemlerinde bu adresin sayfa katlarında olması zorunlu tutulmuştur. Fonksiyonun ikinci parametresi 
-    flush edilecek byte miktarını belirtmektedir. Burada belirtilen byte miktarı ve girilen adresi kapsayan tüm sayfalar işleme sokulmaktadır. (Örneğin
-    birinci parametrede belirtilen adres sayfa katlarında olsun. Biz ikinci parametre için 7000 girsek sayfa uzunluğu 4K ise sanki 
-    8192 girmiş gibi etki oluşacaktır.) Fonksiyonun son parametresi flush işleminin yönünü belirtmektedir. Bu parametre aşağıdaki bayraklardan 
-    yalnızca birini alabilir:
+    Fonksiyonun birinci parametresi flush edilecek bellek tabanlı dosyanın bellek adresini, ikinci parametresi bunun uzunluğunu 
+    belirtmektedir. POSIX standartlarına göre birinci parametrede belirtilen adresin "sayfa katlarında olması zorunlu değildir, 
+    ancak işletim sistemi bunu zorunlu yapabilir (may require)". Linux sistemlerinde bu adresin sayfa katlarında olması zorunlu 
+    tutulmuştur. Fonksiyonun ikinci parametresi flush edilecek byte miktarını belirtmektedir. Burada belirtilen byte miktarı 
+    ve girilen adresi kapsayan tüm sayfalar işleme sokulmaktadır. (Örneğin birinci parametrede belirtilen adres sayfa katlarında 
+    olsun. Biz ikinci parametre için 7000 girsek sayfa uzunluğu 4K ise sanki 8192 girmiş gibi etki oluşacaktır.) Fonksiyonun son 
+    parametresi flush işleminin yönünü belirtmektedir. Bu parametre aşağıdaki bayraklardan yalnızca birini alabilir:
 
     MS_SYNC: Burada yön bellekten diske doğrudur. Yani biz bellek tabanlı dosyanın bellek alanında değişiklik yaptığımızda bunun
-    diskteki dosyaya yansıtılabilmesi için MS_SYNC kullanabiliriz. Bu bayrak aynı zamanda msync fonksiyonu geri döndüğünde flush işleminin
-    bittiğinin garanti edilmesini sağlamaktadır. Yani bu bayrağı kullandığımızda msync flush işlemi bitince geri dönmektedir.
+    diskteki dosyaya yansıtılabilmesi için MS_SYNC kullanabiliriz. Bu bayrak aynı zamanda msync fonksiyonu geri döndüğünde flush 
+    işleminin bittiğinin garanti edilmesini sağlamaktadır. Yani bu bayrağı kullandığımızda msync flush işlemi bitince geri dönmektedir.
 
     MS_ASYNC: MS_SYNC bayrağı gibidir. Ancak bu bayrakta flush işlemi başlatılıp msync fonksiyonu hemen geri dönmektedir. Yani
     bu bayrakta msync geri döndüğünde flush işlemi başlatılmıştır ancak bitmiş olmak zorunda değildir. 
@@ -18209,8 +18214,8 @@ void exit_sys(const char *msg)
         exit_sys("msync");
 
     Yine POSIX standartlarına uygunluk bakımından dışarıdan bir prosesin bellek tabanlı dosyada değişiklik yapması durumunda
-    onun bellek tabanlı dosyanın bellek alanına yansıtılabilmesi için MS_INVALIDATE bayrağı ile msync fonksiyonunun çağrılması gerekmektedir. 
-    Örneğin:
+    onun bellek tabanlı dosyanın bellek alanına yansıtılabilmesi için MS_INVALIDATE bayrağı ile msync fonksiyonunun çağrılması 
+    gerekmektedir. Örneğin:
 
     if ((maddr = (char *)mmap(NULL, finfo.st_size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0)) == MAP_FAILED) 
         exit_sys("mmap");
@@ -18278,14 +18283,16 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Pekiyi bellek tabanlı dosyanın MAP_PRIVATE ile private olarak map edilmesinin nasıl bir amacı olabilir? İşte daha önceden de belirtildiği 
-    gibi "private mapping" "copy on write" mekanizması için kullanılmaktadır. Örneğin iki porses aynı dosyayı private mapping yaptığında
-    işletim sistemi bu iki prosesin dosyasını fiziksel bellekte aynı tamponu (page cache) belirtecek biçimde ayarlamaktadır. 
-    Ancak proseslerden biri dosyaya yazma yaptığında bu yazma dosyaya değil, tamponun o anda çıkartılan başka bir kopyasına yapılmaktadır. 
-    Yani "copy on write" şu anlama gelmektedir: "Okuma yapıldığı sürece aynı tamponu paylaş, yazma yapıldığında o sayfayı ayır". 
+    Pekiyi bellek tabanlı dosyanın MAP_PRIVATE ile private olarak map edilmesinin nasıl bir amacı olabilir? İşte daha önceden 
+    de belirtildiği gibi "private mapping" "copy on write" mekanizması için kullanılmaktadır. Örneğin iki porses aynı dosyayı 
+    private mapping yaptığında işletim sistemi bu iki prosesin dosyasını fiziksel bellekte aynı tamponu (page cache) belirtecek 
+    biçimde ayarlamaktadır. Ancak proseslerden biri dosyaya yazma yaptığında bu yazma dosyaya değil, tamponun o anda çıkartılan 
+    başka bir kopyasına yapılmaktadır. Yani "copy on write" şu anlama gelmektedir: "Okuma yapıldığı sürece aynı tamponu paylaş, 
+    yazma yapıldığında o sayfayı ayır".
 
-    Bellek tabanlı dosyalarda private mapping özellikle işletim sistemi tarafından "çalıştırılabilir (executable)" dosyaların ve "dinamik kütüphanelerin"
-    yüklenmesi sırasında kullanılmaktadır. Örneğin "sample" isimli çalıştırılabilir bir ELF dosyasının içeriği "kabaca" şöyledir:
+    Bellek tabanlı dosyalarda private mapping özellikle işletim sistemi tarafından "çalıştırılabilir (executable)" dosyaların 
+    ve "dinamik kütüphanelerin" yüklenmesi sırasında kullanılmaktadır. Örneğin "sample" isimli çalıştırılabilir bir ELF dosyasının 
+    içeriği "kabaca" şöyledir:
 
     .text
     .data
@@ -18293,8 +18300,8 @@ void exit_sys(const char *msg)
     diğer bölümler (sections)
 
     ELF formatı "bölümlerden (sections)" oluşmaktadır. exec fonksiyonları ELF formatını yüklerken her bölümü "sections" private 
-    mapping yaparak belleğe yüklemektedir. Dolayısıyla bir programı ikinci kez çalıştırdığımızda aslında mümkün olduğunca aynı fiziksel 
-    bellek kullanılmakta bir proses yazma yaptığında ilgili sayfa "copy on write" mekanizması yoluyla farklılaştırılmaktadır.
+    mapping yaparak belleğe yüklemektedir. Dolayısıyla bir programı ikinci kez çalıştırdığımızda aslında mümkün olduğunca aynı 
+    fiziksel bellek kullanılmakta bir proses yazma yaptığında ilgili sayfa "copy on write" mekanizması yoluyla farklılaştırılmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -18420,12 +18427,12 @@ void exit_sys(const char *msg)
     int munlock(const void *addr, size_t len);
 
     Fonksiyonun birinci parametresi unlock edilecek sayfalara ilişkin adresi, ikinci parametresi de uzunluğu belirtmektedir. 
-    Yine bu adres + uzunluk değerini içeren tüm sayfalar unlock edilmektedir. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda 
-    -1 değerine geri döner ve errno uygun biçimde set edilir. Tabii en kötü olasılıkla proses sonlandığında sayfalar zaten unlock 
-    edilip boşaltılmaktadır. 
+    Yine bu adres + uzunluk değerini içeren tüm sayfalar unlock edilmektedir. Fonksiyon başarı durumunda 0 değerine, başarısızlık 
+    durumunda -1 değerine geri döner ve errno uygun biçimde set edilir. Tabii en kötü olasılıkla proses sonlandığında sayfalar 
+    zaten unlock edilip boşaltılmaktadır.
 
-    mlock ve mulock fonksiyonlarında bir sayaç mekanizması yoktur. Yani bir alan birden fazla kez lock yapılsa bile tek bir unlock işlemi 
-    ile unlock yapılabilmektedir. 
+    mlock ve mulock fonksiyonlarında bir sayaç mekanizması yoktur. Yani bir alan birden fazla kez lock yapılsa bile tek bir 
+    unlock işlemi ile unlock yapılabilmektedir.
 
     Aşağıdaki örnekte mlock fonksiyonu ile bir global dizinin bulunduğu sanal sayfa kilitlenmiştir. Tabii bu örnekte aslında 
     dizi 4096 byte olmasına karşın iki sayfa da kilitlenmiş olabilir. 
@@ -18508,40 +18515,44 @@ void exit_sys(const char *msg)
     aynı zamanda lock edebilmekteyiz. Tabii burada da prosesin RLIMIT_MEMLOCK kaynak limiti bir kısıt oluşturabilmektedir. 
     Ancak Linux sistemlerinde mmap fonksiyonundaki MAP_LOCKED bayrağı tüm map edilen sayfaları o anda RAM'e çekemeyebilmektedir. 
     Bu durumda fonksiyon başarısız olmamaktadır. Yani başka bir deyişle bu davranış mlock kadar kesin değildir. Aynı davranış 
-    aslında Linux'a özgü biçimde klasik Sistem 5 paylaşılan bellek alanlarında da chmctl fonksiyonunda bazı küçük farklılıklarla bulunmaktadır. 
+    aslında Linux'a özgü biçimde klasik Sistem 5 paylaşılan bellek alanlarında da chmctl fonksiyonunda bazı küçük farklılıklarla 
+    bulunmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Thread'ler 90'lı yıllarda işletim sistemlerine sokulmuştur. Microsoft'un thread'li ilk işletim sistemi Windows NT (1993) ve 
-    sonra da Windows 95 (1995) sistemleridir. Benzer biçimde UNIX/Linux dünyasına da thread'ler ilk kez 90'lı yıllarla sokulmuştur. 
+    Thread'ler 90'lı yıllarda işletim sistemlerine sokulmuştur. Microsoft'un thread'li ilk işletim sistemi Windows NT (1993) 
+    ve sonra da Windows 95 (1995) sistemleridir. Benzer biçimde UNIX/Linux dünyasına da thread'ler ilk kez 90'lı yıllarla sokulmuştur. 
     Yani thread'ler daha önce denemeler yapılmış olsa da 90'lı yılların başlarında işletim sistemlerine sokulmuş durumdadır. 
     Bugün pek çok programlama dili ve framework kendi içerisinde thread'leri barındıran kütüphanelere sahiptir. Hatta yeni dillerin
-    bazıları artık thread'leri anahtar sözcüklerle dilin sentaksına dahil etmektedir. Örneğin C++ Programlama Dili'ne 2011 versiyonuyla (C++11)
-    bir thread kütüphanesi eklenmiştir. Benzer biçimde .NET ve C#'ın ilk sürümlerinde (2002) bile framework bir thread kütüphanesine sahipti.
-    Benzer biçimde Java Dilininde kütüphanesi içerisinde thread'lerle işlem yapan sınıflar bulunuyordu. Microsoft'un MFC framework'ü gibi,
-    yaygın kullanılan Qt framework'ü gibi pek çok framework kendi içerisinde bir thread kütüphanesi barındırmaktadır. Tabii thread işlemleri 
-    bir dilin ya da bir framework'ün kontrolü altında olan işlemler değildir. Doğrudan işletim sisteminin kontrolü altında olan işlemlerdir. 
-    Dolayısıyla programlama dilleri ya da framework'ler işletim sistemlerinin sunduğu mekanizmayı kullanmaktadır. Tabii bu diller 
-    ve framework'ler thread kullanımını "platform bağımsız" hale de getirmektedir. Yani örneğin Windows'un ve Linux'un sağladığı thread 
-    mekanizması farklı olmasına karşın C++'ın standart thread kütüphanesi "platform bağımsız" bir kütüphanedir. Başka bir deyişle C++'ın
-    standart thread kütüphanesi Windows sistemlerinde "Windows API Fonksiyonları" kullanılarak UNIX/Linux sistemlerinde "POSIX fonksiyonları"
-    kullanılarak gerçekleştirilmiştir. C Programlama Dili'ne de 2011 sürümüyle (C11) birlikte "isteğe bağlı (optional)" mini 
-    bir thread kütüphanesi eklenmiştir. Ancak bu mini thread kütüphanesi Microsoft C derleyicisi tarafından ve gcc derleyicileri tarafından 
-    desteklenmiyordu. Ancak gcc derleyicilerinin son versiyonları bu thread kütüphanesini desteklemektedir. 
+    bazıları artık thread'leri anahtar sözcüklerle dilin sentaksına dahil etmektedir. Örneğin C++ Programlama Dili'ne 2011 
+    versiyonuyla (C++11) bir thread kütüphanesi eklenmiştir. Benzer biçimde .NET ve C#'ın ilk sürümlerinde (2002) bile framework 
+    bir thread kütüphanesine sahipti. Benzer biçimde Java Dilininde kütüphanesi içerisinde thread'lerle işlem yapan sınıflar 
+    bulunuyordu. Microsoft'un MFC framework'ü gibi, yaygın kullanılan Qt framework'ü gibi pek çok framework kendi içerisinde 
+    bir thread kütüphanesi barındırmaktadır. Tabii thread işlemleri bir dilin ya da bir framework'ün kontrolü altında olan işlemler 
+    değildir. Doğrudan işletim sisteminin kontrolü altında olan işlemlerdir. Dolayısıyla programlama dilleri ya da framework'ler 
+    işletim sistemlerinin sunduğu mekanizmayı kullanmaktadır. Tabii bu diller ve framework'ler thread kullanımını "platform bağımsız" 
+    hale de getirmektedir. Yani örneğin Windows'un ve Linux'un sağladığı thread mekanizması farklı olmasına karşın C++'ın standart 
+    thread kütüphanesi "platform bağımsız" bir kütüphanedir. Başka bir deyişle C++'ın standart thread kütüphanesi Windows sistemlerinde 
+    "Windows API Fonksiyonları" kullanılarak UNIX/Linux sistemlerinde "POSIX fonksiyonları" kullanılarak gerçekleştirilmiştir. 
+    C Programlama Dili'ne de 2011 sürümüyle (C11) birlikte "isteğe bağlı (optional)" mini bir thread kütüphanesi eklenmiştir. 
+    Ancak bu mini thread kütüphanesi Microsoft C derleyicisi tarafından ve gcc derleyicileri tarafından desteklenmiyordu. Ancak 
+    gcc derleyicilerinin son versiyonları bu thread kütüphanesini desteklemektedir.
 
-    Biz kursumuzda (kursumuz bir sistem programlama kursu olduğu için) UNIX/Linux sistemlerindeki işletim sistemi çekirdeği ile ilgili 
-    olan aşağı seviyeli thread mekanizması üzerinde duracağız. Yukarıda da belirttiğimiz gibi programlama dili ya da framework ne olursa olsun
-    UNIX/Linux sistemlerinde eninde sonunda işlemler burada anlatacak olduğumuz thread mekanizması yoluyla yapılmaktadır.
+    Biz kursumuzda (kursumuz bir sistem programlama kursu olduğu için) UNIX/Linux sistemlerindeki işletim sistemi çekirdeği 
+    ile ilgili olan aşağı seviyeli thread mekanizması üzerinde duracağız. Yukarıda da belirttiğimiz gibi programlama dili ya da 
+    framework ne olursa olsun UNIX/Linux sistemlerinde eninde sonunda işlemler burada anlatacak olduğumuz thread mekanizması 
+    yoluyla yapılmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     İşletim sistemlerinde bir prosesin bağımsız olarak çizelgelenen akışlarına "thread" denilmektedir. Thread sözcüğü İngilizce 
-    "iplik" anlamına gelmektedir. Akışlar ipliklere benzetilerek bu sözcük türetilmiştir. Proses kavramı çalışmakta olan programın tüm bilgisini
-    içermektedir. Oysa thread'ler yalnızca akış belirtmektedir. Bir proses tek bir akışa sahip olmak zorunda değildir. Prosesler
-    birden fazla akışa sahip olabilmektedir. İşte prosesin bu bağımsız akışlarına "thread" denilmektedir. İşletim sistemlerinin 
-    "çizelgeleyici (scheduler)" alt sistemleri prosesleri değil thread'leri çizelgelemektedir. Yani çizelgeleyici alt sistem bir 
-    thread'i çalıştırıp belli bir quanta süresi dolduğunda ona ara vermekte ve diğer bir thread'i CPU'ya atamaktadır. Ara verilen 
-    thread ile akışın CPU'ya verildiği thread aynı prosesin thread'leri olabileceği gibi farklı proseslerin thread'leri de olabilmektedir. 
+    "iplik" anlamına gelmektedir. Akışlar ipliklere benzetilerek bu sözcük türetilmiştir. Proses kavramı çalışmakta olan programın 
+    tüm bilgisini içermektedir. Oysa thread'ler yalnızca akış belirtmektedir. Bir proses tek bir akışa sahip olmak zorunda değildir. 
+    Prosesler birden fazla akışa sahip olabilmektedir. İşte prosesin bu bağımsız akışlarına "thread" denilmektedir. İşletim 
+    sistemlerinin "çizelgeleyici (scheduler)" alt sistemleri prosesleri değil thread'leri çizelgelemektedir. Yani çizelgeleyici 
+    alt sistem bir thread'i çalıştırıp belli bir quanta süresi dolduğunda ona ara vermekte ve diğer bir thread'i CPU'ya atamaktadır. 
+    Ara verilen thread ile akışın CPU'ya verildiği thread aynı prosesin thread'leri olabileceği gibi farklı proseslerin thread'leri 
+    de olabilmektedir.
 
     Prosesler çalışmasına tek bir thread'le başlamaktadır. Yani fork işlemi ile aslında tek bir thread yaratılmaktadır. Bir proses
     birden fazla thread'e sahipken fork işlemi yapılsa bile yeni yaratılan alt proses tek bir thread ile yaratılmaktadır. O da 
@@ -18633,21 +18644,21 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Thread işlemleri işletim sistemlerinde aslında birtakım sistem fonksiyonlarıyla gerçekleştirilmektedir. Örneğin Linux sistemlerinde
     thread yaratan sys_clone isimli bir sistem fonksiyonu bulunmaktadır. Ancak daha önce de ifade ettiğimiz gibi sistem fonksiyonları 
-    taşınabilir değildir ve sistem fonksiyonları genellikle düşük seviyeli fonksiyonlardır. Yani bunların kullanılmaları zordur. Eskiden 
-    thread'ler UNIX/Linux sistemlerine ilk sokulduğunda farklı thread kütüphaneleri oluşturulmuştu. Programcılar bu kütüphanelerden birini 
-    kullanıyorlardı. Ancak 90'lı yılların ortalarında thread kütüphanesi "Realtime Extensions" başlığı altında POSIX standartlarına 
-    sokulmuştur. POSIX tarafından desteklenen bu thread kütüphanesine "POSIX Thread kütüphanesi" ya da kısaca "pthread" kütüphanesi 
-    denilmektedir. POSIX thread kütüphanesinin içerisindeki bütün fonksiyonlar pthread_xxx biçiminde "pthread_" öneki ile başlatılmış durumdadır. 
-    POSIX thread kütüphanesi "libpthread" isimli bir kütüphane biçiminde oluşturulmuştur. Bu kütüphaneyi kullanırken derleme sırasında 
-    "-lpthread" seçeneğinin bulundurulması gerekmektedir. Bu seçenek link aşamasında POSIX thread kütüphanesinin linker tarafından 
-    işleme sokulacağını belirtmektedir. Diğer programlama dillerindeki thread kütüphaneleri de UNIX/Linux sistemlerinde pthread 
-    kütüphanesi kullanılarak gerçekleştirilmiştir. Yani bu anlamda pthread kütüphanesi "taban (base)" bir kütüphanedir. 
-    (Örneğin C++11 ile birlikte C++'a bir thread kütüphanesi eklenmiştir. Bu kütüphanenin UNIX/Linux sistemlerindeki gerçekleştirimi 
-    pthread kütüphanesi kullanılarak yapılmıştır. Tabii C++'ın thread kütüphanesi C++'ın standart kütüphanesinin bir parçasıdır. 
-    Dolayısıyla "cross platform" özelliği vardır. Yani örneğin aynı kütüphane Windows sistemlerinde Windows API fonksiyonları kullanılarak
-    gerçekleştirilmiş durumdadır.)
+    taşınabilir değildir ve sistem fonksiyonları genellikle düşük seviyeli fonksiyonlardır. Yani bunların kullanılmaları zordur. 
+    Eskiden thread'ler UNIX/Linux sistemlerine ilk sokulduğunda farklı thread kütüphaneleri oluşturulmuştu. Programcılar bu 
+    kütüphanelerden birini kullanıyorlardı. Ancak 90'lı yılların ortalarında thread kütüphanesi "Realtime Extensions" başlığı 
+    altında POSIX standartlarına sokulmuştur. POSIX tarafından desteklenen bu thread kütüphanesine "POSIX Thread kütüphanesi" 
+    ya da kısaca "pthread" kütüphanesi denilmektedir. POSIX thread kütüphanesinin içerisindeki bütün fonksiyonlar pthread_xxx 
+    biçiminde "pthread_" öneki ile başlatılmış durumdadır. POSIX thread kütüphanesi "libpthread" isimli bir kütüphane biçiminde 
+    oluşturulmuştur. Bu kütüphaneyi kullanırken derleme sırasında "-lpthread" seçeneğinin bulundurulması gerekmektedir. Bu seçenek 
+    link aşamasında POSIX thread kütüphanesinin linker tarafından işleme sokulacağını belirtmektedir. Diğer programlama dillerindeki 
+    thread kütüphaneleri de UNIX/Linux sistemlerinde pthread kütüphanesi kullanılarak gerçekleştirilmiştir. Yani bu anlamda pthread 
+    kütüphanesi "taban (base)" bir kütüphanedir. (Örneğin C++11 ile birlikte C++'a bir thread kütüphanesi eklenmiştir. Bu kütüphanenin 
+    UNIX/Linux sistemlerindeki gerçekleştirimi pthread kütüphanesi kullanılarak yapılmıştır. Tabii C++'ın thread kütüphanesi C++'ın 
+    standart kütüphanesinin bir parçasıdır. Dolayısıyla "cross platform" özelliği vardır. Yani örneğin aynı kütüphane Windows 
+    sistemlerinde Windows API fonksiyonları kullanılarak gerçekleştirilmiş durumdadır.)
 ---------------------------------------------------------------------------------------------------------------------------*/
-
+<BURADA KALDIK>
 /*--------------------------------------------------------------------------------------------------------------------------
     Thread'ler aynı prosesin bağımsız çizelgelenen farklı akışlarıdır. Bir işi iki thread'e yaptırmakla iki prosese yaptırmak arasında 
     şu önemli farklılıklar vardır:
@@ -21877,15 +21888,15 @@ void exit_sys_errno(const char *msg, int eno)
 /*--------------------------------------------------------------------------------------------------------------------------
     Koşul değişkenleri tipik olarak şu adımlardan geçilerek kullanılmaktadır:
 
-    1) Koşul değişkenleri pthread_cond_t türü ile temsil edilmiştir. Bu tür <pthread.h> ve <sys/types.h> içerisinde typedef edilmiştir. 
-    pthread_cont_t türü, sistemlerde tipik olarak bir yapı biçiminde typedef edilmektedir. Örneğin:
+    1) Koşul değişkenleri pthread_cond_t türü ile temsil edilmiştir. Bu tür <pthread.h> ve <sys/types.h> içerisinde typedef 
+    edilmiştir. pthread_cont_t türü, sistemlerde tipik olarak bir yapı biçiminde typedef edilmektedir. Örneğin:
 
     pthread_cond_t g_cond;
 
     Programcı yine koşul değişkenlerini farklı thread'ler erişebilsin diye tipik olarak global bir değişken biçiminde tanımlar.
 
-    2) Koşul değişkenlerine tıpkı mutex nesnelerinde olduğu gibi statik ya da dinamik olarak ilk değer verilebilmektedir. Biz koşul değişkenlerine
-    statik düzeyde PTHREAD_COND_INITIALIZER makrosuyla ilk değer verebiliriz. Örneğin:
+    2) Koşul değişkenlerine tıpkı mutex nesnelerinde olduğu gibi statik ya da dinamik olarak ilk değer verilebilmektedir. Biz 
+    koşul değişkenlerine statik düzeyde PTHREAD_COND_INITIALIZER makrosuyla ilk değer verebiliriz. Örneğin:
 
     pthread_cond_t g_cond = PTHREAD_COND_INITIALIZER;
 
@@ -21895,10 +21906,10 @@ void exit_sys_errno(const char *msg, int eno)
 
     int pthread_cond_init(pthread_cond_t *cond, const pthread_condattr_t *attr);
 
-    Fonksiyonun birinci parametresi koşul değişken nesnesinin adresini, ikinci parametresi onun özellik bilgilerinin bulunduğu özellik nesnesinin 
-    adresini almaktadır. Koşul değişkenlerinin de özellik bilgisi vardır. Koşul değişkenlerinin özellikleri üzerinde daha ileride duracağız. 
-    İkinci parametre NULL geçilirse koşul değişkenleri default özelliklerle yaratılmış olur. Aşağıdaki iki yaratım işlevsel olarak 
-    eşdeğer etkiyi sağlamaktadır:
+    Fonksiyonun birinci parametresi koşul değişken nesnesinin adresini, ikinci parametresi onun özellik bilgilerinin bulunduğu 
+    özellik nesnesinin  adresini almaktadır. Koşul değişkenlerinin de özellik bilgisi vardır. Koşul değişkenlerinin özellikleri 
+    üzerinde daha ileride duracağız. İkinci parametre NULL geçilirse koşul değişkenleri default özelliklerle yaratılmış olur. 
+    Aşağıdaki iki yaratım işlevsel olarak eşdeğer etkiyi sağlamaktadır:
 
     pthread_cond_t g_cond = PTHREAD_COND_INITIALIZER;
     pthread_cond_init_(&g_cond, NULL);
@@ -21911,8 +21922,8 @@ void exit_sys_errno(const char *msg, int eno)
 
     4) Programcının bazı değişkenlerle ilişkili bir koşul oluşturması gerekmektedir. Örneğin koşul "g_flag değişkeninin 1 olması"
     biçiminde olabilir. Koşul "thread'in bloke olmaması için gerekli olan durumu" belirtmektedir. Bizim koşulumuz g_flag değişkeninin 1 
-    olması ise bu durum "eğer g_flag değişkeni 1 değilse blokede beklemek istediğimiz" anlamına gelmektedir. Yani programcının oluşturduğu koşul 
-    sağlanmadığı sürece programcı thread'ini blokede bekletmek istemektedir. 
+    olması ise bu durum "eğer g_flag değişkeni 1 değilse blokede beklemek istediğimiz" anlamına gelmektedir. Yani programcının 
+    oluşturduğu koşul sağlanmadığı sürece programcı thread'ini blokede bekletmek istemektedir.
 
     5) Koşul sağlanmadığı sürece blokede beklemek için, koşul sağlanıyorsa bloke oluşturmadan akışın devam etmesi için tipik kalıp 
     aşağıdaki gibidir (kontroller yapılmamıştır):
@@ -21932,31 +21943,33 @@ void exit_sys_errno(const char *msg, int eno)
 
     int pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t *mutex);
 
-    Fonksiyonun birinci parametresi koşul değişken nesnesinin adresini, ikinci parametresi mutex nesnesinin adresini almaktadır. Fonksiyon 
-    başarı durumunda 0 değerine, başarısızlık durumunda errno değerine geri dönmektedir. 
+    Fonksiyonun birinci parametresi koşul değişken nesnesinin adresini, ikinci parametresi mutex nesnesinin adresini almaktadır. 
+    Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda errno değerine geri dönmektedir.
 
     6) Durum değişkenlerinde blokede bekleme işlemi pthread_cond_wait tarafından sağlanmaktadır. Bu fonksiyon doğrudan thread'i bloke
-    etmektedir. Koşul değişkenini bekleyen bir thread'in uyandırılması iki fonksiyonla yapılabilir: pthread_cond_signal ve 
-    pthread_cond_broadcast. Fonksiyonların prototipleri şöyledir:
+    etmektedir. Koşul değişkenini bekleyen bir thread'in uyandırılması iki fonksiyonla yapılabilir: pthread_cond_signal ve pthread_cond_broadcast. 
+    Fonksiyonların prototipleri şöyledir:
 
     #include <pthread.h>
 
     int pthread_cond_broadcast(pthread_cond_t *cond);
     int pthread_cond_signal(pthread_cond_t *cond);
 
-    Her iki fonksiyon da koşul değişkeni nesnesinin adresini almaktadır. Fonksiyonlar yine başarı durumunda 0 değerine, başarısızlık durumunda 
-    errno değerine geri dönmektedir. Bir thread, pthread_cond_wait fonksiyonunda blokede beklerken o thread'in blokesini kaldırmak için 
-    başka bir thread'in pthread_cond_signal ya da pthread_cond_broadcast fonksiyonlarını çağırması gerekmektedir. pthread_cond_signal 
-    fonksiyonunun asıl amacı koşul değişkeninde blokede bekleyen herhangi tek bir thread'i uyandırmaktır. Ancak işletim sistemlerinde 
-    kernel tasarımından dolayı bu mümkün olamayabilmektedir. Her ne kadar pthread_cond_signal aslında tek bir thread'i uyandırmak 
-    için düşünülmüşse de işletim sisteminin tasarımından dolayı birden fazla thread'i de uyandırabilmektedir. Bu nedenle POSIX standartlarında
-    pthread_cond_signal fonksiyonunun "koşul değişkeninde bekleyen en az bir thread'i uyandıracağı" söylenmiştir. Ancak pthread_cond_broadcast 
-    fonksiyonu, kesinlikle o koşul değişkeni ile blokede bekleyen tüm thread'leri uyandırmaktadır. Genellikle algoritmalarda "koşul değişkenini bekleyen 
-    tek bir thread'in uyandırılması" istenir. Bu nedenle pthread_cond_broadcast yerine çoğu kez pthread_cond_signal fonksiyonu kullanılır. 
+    Her iki fonksiyon da koşul değişkeni nesnesinin adresini almaktadır. Fonksiyonlar yine başarı durumunda 0 değerine, başarısızlık 
+    durumunda errno değerine geri dönmektedir. Bir thread, pthread_cond_wait fonksiyonunda blokede beklerken o thread'in blokesini 
+    kaldırmak için başka bir thread'in pthread_cond_signal ya da pthread_cond_broadcast fonksiyonlarını çağırması gerekmektedir. 
+    pthread_cond_signal fonksiyonunun asıl amacı koşul değişkeninde blokede bekleyen herhangi tek bir thread'i uyandırmaktır. Ancak 
+    işletim sistemlerinde kernel tasarımından dolayı bu mümkün olamayabilmektedir. Her ne kadar pthread_cond_signal aslında tek bir 
+    thread'i uyandırmak için düşünülmüşse de işletim sisteminin tasarımından dolayı birden fazla thread'i de uyandırabilmektedir. 
+    Bu nedenle POSIX standartlarında pthread_cond_signal fonksiyonunun "koşul değişkeninde bekleyen en az bir thread'i uyandıracağı" 
+    söylenmiştir. Ancak pthread_cond_broadcast fonksiyonu, kesinlikle o koşul değişkeni ile blokede bekleyen tüm thread'leri 
+    uyandırmaktadır. Genellikle algoritmalarda "koşul değişkenini bekleyen tek bir thread'in uyandırılması" istenir. Bu nedenle 
+    pthread_cond_broadcast yerine çoğu kez pthread_cond_signal fonksiyonu kullanılır.
 
-    pthread_cond_wait fonksiyonu koşul değişkeni nesnesinin yanı sıra bir de mutex nesnesini de bizden istemektedir. Fonksiyon atomik 
-    bir biçimde (yani tek bir işlem gibi) uykuya dalaken (yani bloke olurken) aynı zamanda bu mutex nesnesinin sahipliğini bırakmaktadır.
-    Yani mutex nesnesinin sahipliği yukarıdaki kalıpta aslında pthread_cond_wait tarafından bırakılmaktadır. Örneğin:
+    pthread_cond_wait fonksiyonu koşul değişkeni nesnesinin yanı sıra bir de mutex nesnesini de bizden istemektedir. Fonksiyon 
+    atomik bir biçimde (yani tek bir işlem gibi) uykuya dalaken (yani bloke olurken) aynı zamanda bu mutex nesnesinin sahipliğini 
+    bırakmaktadır. Yani mutex nesnesinin sahipliği yukarıdaki kalıpta aslında pthread_cond_wait tarafından bırakılmaktadır. 
+    Örneğin:
 
     pthread_mutex_lock(&g_mutex);				/* mutex'in sahipliği alındı */
 
@@ -21968,12 +21981,13 @@ void exit_sys_errno(const char *msg, int eno)
     pthread_mutex_unlock(&g_mutex);				/* mutex'in sahipliği bırakılıyor */
 
     Burada mutex nesnesinin sahipliği alınmış daha sonra koşul sağlanmıyorsa pthread_cond_wait fonksiyonuna girilmiştir. 
-    İşte bu fonksiyon thread'i uykuya yatırırken aynı zamanda mutex'in sahipliğini de bırakmaktadır. Pekiyi koşul değişkeni pthread_cond_signal 
-    ya da pthread_cond_broadcast fonksiyonuyla uyandırıldığında ne olacaktır? İşte pthread_cond_wait fonksiyonu ile koşul değişkeninin 
-    blokesi çözüldüğünde fonksiyon buradaki mutex'in sahipliğini de yeniden alarak fonksiyondan çıkmaya çalışır. Koşul değişkeni nesnesi 
-    ile mutex nesnesi farklı nesnelerdir. Diğer bir thread, pthread_cond_signal ya da pthread_cond_broadcast uyguladığında koşul 
-    değişkeninin blokesinden uyanılmaktadır. Ancak pthread_cond_wait fonksiyonu, geri dönmeden önce mutex nesnesinin de sahipliğini 
-    almaya çalışır. pthread_cond_wait fonksiyonunun "sözde kodu (pseudo code)" şöyle düşünülebilir:
+    İşte bu fonksiyon thread'i uykuya yatırırken aynı zamanda mutex'in sahipliğini de bırakmaktadır. Pekiyi koşul değişkeni
+    pthread_cond_signal ya da pthread_cond_broadcast fonksiyonuyla uyandırıldığında ne olacaktır? İşte pthread_cond_wait fonksiyonu 
+    ile koşul değişkeninin blokesi çözüldüğünde fonksiyon buradaki mutex'in sahipliğini de yeniden alarak fonksiyondan çıkmaya 
+    çalışır. Koşul değişkeni nesnesi ile mutex nesnesi farklı nesnelerdir. Diğer bir thread, pthread_cond_signal ya da 
+    pthread_cond_broadcast uyguladığında koşul değişkeninin blokesinden uyanılmaktadır. Ancak pthread_cond_wait fonksiyonu, 
+    geri dönmeden önce mutex nesnesinin de sahipliğini almaya çalışır. pthread_cond_wait fonksiyonunun "sözde kodu (pseudo code)" 
+    şöyle düşünülebilir:
 
     int pthread_mutex_wait(pthread_cond_t *cond, pthread_mutex_t *mutex)
     {
@@ -21991,12 +22005,12 @@ void exit_sys_errno(const char *msg, int eno)
     sahipliği bırakılana kadar. Tabii bu durumda her ne kadar pthread_cond_wait geri dönmüyorsa da onun geri dönmesi için artık 
     pthread_cond_signal ya da pthread_cond_broadcast çağrılarına gerek yoktur. Yalnızca mutex kilidinin açılması gerekmektedir. 
 
-    Böylece yukarıdaki kalıpta mutex'in kilidi iki kez açılmamaktadır. Zaten pthread_cond_wait fonksiyonundan çıkıldığında mutex yeniden 
-    kilitlendiği için kilitli olan mutex'in kilidi kritik kodun sonunda açılmaktadır. 
+    Böylece yukarıdaki kalıpta mutex'in kilidi iki kez açılmamaktadır. Zaten pthread_cond_wait fonksiyonundan çıkıldığında mutex 
+    yeniden kilitlendiği için kilitli olan mutex'in kilidi kritik kodun sonunda açılmaktadır.
 
     Pekiyi biz yukarıdaki kalıpta mutex'in sahipliğini almadan pthread_mutex_unlock fonksiyonunu çağırabilir miyiz? pthread_mutex_wait 
-    fonksiyonu, mutex'in sahipliğini bırakacağına göre sahipliğin alınmış olması gerekmektedir. Anımsanacağı gibi sahipliği alınmayan 
-    mutex'lerin unlock edilmesi duruma göre "undefined behavior" ya da işlemin başarısız olmasına yol açmaktadır. 
+    fonksiyonu, mutex'in sahipliğini bırakacağına göre sahipliğin alınmış olması gerekmektedir. Anımsanacağı gibi sahipliği 
+    alınmayan mutex'lerin unlock edilmesi duruma göre "undefined behavior" ya da işlemin başarısız olmasına yol açmaktadır.
 
     Yukarıdaki kalıpta diğer önemli bir nokta, pthread_cond_wait fonksiyonundan çıkıldığında koşul değişkenin bir döngü 
     içerisinde kontrol edilmesidir. Örneğin, biz g_flag değişkenin 1 olması koşulunu uygulayalım. Bu durumda buradaki döngü 
@@ -22016,23 +22030,25 @@ void exit_sys_errno(const char *msg, int eno)
 
     pthread_mutex_lock(&g_mutex);
     g_flag = 1;
+    pthread_cond_signal(&g_cond);
     pthread_mutex_unlock(&g_mutex);
 
-    pthread_cond_signal(&g_cond);
+    En normal durum, koşul değişkeninin koşulun sağlanması biçiminde ayarlanması işleminin ve pthread_cond_signal ya da 
+    pthread_cond_broadcast işleminin de aynı mutex'i kullanarak kritik kod içerisinde yapılmasıdır. Çünkü programda başka bir 
+    thread bu değişkene aynı anda erişirse yine sorun ortaya çıkabilir. Tabii böyle bir durum yoksa koşul kritik kod içerisinde
+    set edilmeye de bilir. Özetle diğer bir thread koşul değişkenindeki blokeyi pthread_cond_signal ya da pthread_cond_broadcast 
+    ile kaldırmadan önce koşul değişkenini koşul sağlanacak biçimde set etmesi gerekir. Aksi takdirde koşul sağlanmadığı için 
+    pthread_cond_wait fonksiyonundan uyanan thread döngü içerisinde yeniden uykuya dalacaktır.
 
-    En normal durum, koşul değişkeninin koşulun sağlanması biçiminde ayarlanması işleminin de aynı mutex'i kullanarak kritik kod 
-    içerisinde yapılmasıdır. Çünkü programda başka bir thread bu değişkene aynı anda erişirse yine sorun ortaya çıkabilir. Tabii 
-    böyle bir durum yoksa koşul kritik kod içerisinde set edilmeye de bilir. Özetle diğer bir thread koşul değişkenindeki blokeyi 
-    pthread_cond_signal ya da pthread_cond_broadcast ile kaldırmadan önce koşul değişkenini koşul sağlanacak biçimde set etmesi 
-    gerekir. Aksi takdirde koşul sağlanmadığı için pthread_cond_wait fonksiyonundan uyanan thread döngü içerisinde yeniden uykuya dalacaktır.
-
-    7) Kullanım bittikten sonra koşul değişkeni pthread_cond_destroy fonksiyonu ile boşaltılmalıdır. Fonksiyonun prototipi şöyledir:
+    7) Kullanım bittikten sonra koşul değişkeni pthread_cond_destroy fonksiyonu ile boşaltılmalıdır. Fonksiyonun prototipi 
+    şöyledir:
 
     #include <pthread.h>
 
     int pthread_cond_destroy(pthread_cond_t *cond);
 
-    Fonksiyon koşul değişken nesnesinin adresini alır. Başarı durumunda 0 değerine, başarısızlık durumunda errno değerine geri döner. 
+    Fonksiyon koşul değişken nesnesinin adresini alır. Başarı durumunda 0 değerine, başarısızlık durumunda errno değerine 
+    geri döner.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -22107,11 +22123,11 @@ void *thread_proc1(void *param)
 
 	g_flag = 1;
 
-	if ((result = pthread_mutex_unlock(&g_mutex)) != 0)
-		exit_sys_errno("pthread_mutex_unlock", result);
-
 	if ((result = pthread_cond_signal(&g_cond)) != 0)
 		exit_sys_errno("pthread_cond_signal", result);
+
+	if ((result = pthread_mutex_unlock(&g_mutex)) != 0)
+		exit_sys_errno("pthread_mutex_unlock", result);
 
 	printf("Thread1 continues...\n");
 
@@ -22209,7 +22225,7 @@ void exit_sys_errno(const char *msg, int eno)
     bir thread pthread_cond_wait fonksiyonuna girerse bloke olur. pthread_cond_signal ya da pthread_cond_broadcast işlemi sadece 
     o anda koşul değişkeninde bekleyen thread'ler için bir uyandırma yapmaktadır. 
 
-    Pekiyi biz pthread_cond_signal ya da pthread_cond_broadcast işlemlerini mutex kilitliyken yapsak ne olur? Örneğin:
+    Şimdi de pthread_cond_signal fonksiyonunun mutex kilidi içerisinde uygulanması üzerinde duralım. Aşağıdaki kodu inceleyiniz:
 
     pthread_mutex_lock(&g_mutex);
     g_flag = 1;
@@ -22218,83 +22234,97 @@ void exit_sys_errno(const char *msg, int eno)
     ...
     pthread_mutex_unlock(&g_mutex);
 
-    Bu durumda biz pthread_cond_signal işleminde koşul değişkeninde bekleyen thread'i uyandırmış olmaktayız. Ancak pthread_cond_wait 
-    koşul değişkeninden uyanmakla birlikte mutex'in sahipliğini almak için bloke olur. Tabii biz mutex'in sahipliğini bırakınca 
-    o thread mutex'in sahipliğini alıp pthread_cond_wait fonksiyonundan çıkacaktır. Tabii pthread_cond_signal ya da pthread_cond_broadcast 
-    fonksiyonlarını mutex'in sahipliğini bıraktıktan sonra uygulamak normal olan durumdur. Örneğin:
+    Burada biz pthread_cond_signal işleminde koşul değişkeninde bekleyen thread'i uyandırmış olmaktayız. Ancak pthread_cond_wait koşul 
+    değişkeninden uyanmakla birlikte mutex'in sahipliğini almak için bloke olur. Tabii biz mutex'in sahipliğini bırakınca o thread mutex'in 
+    sahipliğini alıp pthread_cond_wait fonksiyonundan çıkacaktır. Aslında pthread_cond_signal ya da pthread_cond_broadcast fonksiyonlarını 
+    mutex'in sahipliğini bıraktıktan sonra da uygulayabiliriz: Örneğin:
 
     pthread_mutex_lock(&g_mutex);
     g_flag = 1;
     pthread_mutex_unlock(&g_mutex);
     pthread_cond_signal(&g_cond);
 
-    Döngünün oluşturulmasının bir nedeni de şudur: Birden fazla thread koşulu sağlayıp pthread_cond_signal uygulamış olsun. 
+    Ancak burada duruma göre aşağıdaki gibi bir senkronizasyon sorunu ortaya çıkabilir:
 
-    Örneğin:
-
-    <Threadlerden biri>
-
+    Bekleyen Thread                                      Diğer Thread
+    ---------------                                     ------------
+                                                        pthread_mutex_lock(&g_mutex);
+                                                        g_flag = 1;
+                                                        pthread_mutex_unlock(&g_mutex);
     pthread_mutex_lock(&g_mutex);
-    <koşulun sağlanması yapılıyor>
+
+    while (g_flag != 1)
+                                                        phread_cond_signal(&g_cond);
+        pthread_cond_wait(&g_cond, &g_mutex)
+
     pthread_mutex_unlock(&g_mutex);
 
-    pthread_cond_signal(&g_cond);
+    Burada diğer thread'in uyguladığı pthread_cond_signal boşa düşebilecektir. Koşul değişkeninde bekleme döngüsünün oluşturulmasının 
+    bir nedeni de şudur: Birden fazla thread koşulu sağlayıp pthread_cond_signal uygulamış olsun. Örneğin:
 
-    <Diğer bir thread>
-
+    Threadlerden Biri
+    ------------------
     pthread_mutex_lock(&g_mutex);
-    <koşulun sağlanması yapılıyor>
+    <koşulun sağlanıyor>
+    pthread_cond_signal(&g_cond);
     pthread_mutex_unlock(&g_mutex);
 
+    Diğer Bir Thread
+    ----------------
+    pthread_mutex_lock(&g_mutex);
+    <koşulun saplanıyor>
     pthread_cond_signal(&g_cond);
+    pthread_mutex_unlock(&g_mutex);
 
-    Burada iki ayrı thread bir üretici-tüketici probleminde değer üretip tüketiciyi uyandırmak istesin. Burada koşul değişkeninde bekleyen 
-    birden fazla tüketici thread koşul değişkeninden uyandırılacak ancak bunların bir tanesi muetex'in sahipliğini alacaktır. İşte mutex 
-    sahipliğini alan thread tüm tüketimi yapıp kritik koddan çıktığında eğer bir döngü olmazsa artık diğer thread kritik koda girecektir. 
-    Üretici-tüketici problemini izleyen paragraflarda ele alacağız.
+    Burada iki ayrı thread bir üretici-tüketici probleminde değer üretip tüketiciyi uyandırmak istesin. Burada koşul değişkeninde 
+    bekleyen birden fazla tüketici thread koşul değişkeninden uyandırılabilecektir. Ancak bunların yalnızca bir tanesi mutex'in 
+    sahipliğini alacaktır. İşte mutex'in sahipliğini alan thread kritik koda girip tüm tüketimi yapıp kritik koddan çıktığında 
+    eğer bir döngü olmazsa artık diğer thread kritik koda girecektir. Üretici-tüketici problemini izleyen paragraflarda ele 
+    alacağız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Üretici-Tüketici Problemi (Producer-Consumer Problem) gerçek hayatta en fazla karşılaşılan senkronizasyon problemlerinden biridir. 
-    Problemin çeşitli varyasyonları vardır. Üretici-Tükettici problemi aynı prosesin thread'leri arasında uygulanabileceği gibi 
-    farklı proseslerin thread'leri arasında da uygulanabilmektedir. Üretici-Tüketici probleminde en az bir üretici thread ve en az bir 
-    tüketici thread vardır. Biz bir üretici bir de tüketici thread'in olduğunu varsayalım. Üretici thread belli bir işlemden sonra bir 
-    değer üretir. Ancak o değerin işlenmesini tüketici thread'e havale eder. Bunun için ortak bir paylaşılan alan oluşturulur. Üretici 
-    thread elde ettiği değeri paylaşılan alana yerleştirir. Tüketici thread de onu oradan alarak kullanır. Yani üretici thread'in görevi
-    değer elde edip onu bir paylaşılan bellek alanına yazmaktır. Tüketici thread'in görevi de onu paylaşılan bellek alanından alıp işlemektir. 
-    Tabii eğer problem aynı prosesin thread'leri arasında uygulanacaksa bu durumda paylaşılan alan global bir nesne olabilir. 
-    Ancak problem farklı proseslerin thread'leri arasında uygulanacaksa bu durumda paylaşılan alan gerçekten "paylaşılan bellek alanı 
-    (shared memory)" olarak oluşturulmalıdır. Problemdeki ana unsur üretici thread'in ve tüketici thread'in asenkron çalışması nedeniyle 
-    koordine edilmesi gerekliliğidir. Eğer üretici thread tüketici thread'ten daha hızlı davranırsa daha tüketici thread önceki değeri 
-    paylaşılan bellek alanından almadan üretici thread yeni bir değeri oraya yerleştirerek önceki değeri ezebilir. Benzer biçimde 
-    eğer tüketici thread, üretici thread'ten daha hızlı davranırsa bu durumda önceki değeri yeniden alıp işlemeye çalışabilir. O halde
-    bu problemde "tüketici thread'in önceki değeri almadan üretici thread'in yeni bir değeri paylaşılan alana yerleştirmemesi" gerekir. 
-    Benzer biçimde tüketici thread de "üretici thread yeni bir değeri paylaşılan alana yerleştirmeden aynı değeri ikinci kez" almamalıdır.
-    Yani iki thread'in birbirlerini beklemesi gerekmektedir. 
+    Üretici-Tüketici Problemi (Producer-Consumer Problem) gerçek hayatta en fazla karşılaşılan senkronizasyon problemlerinden 
+    biridir.  Problemin çeşitli varyasyonları vardır. Üretici-Tükettici problemi aynı prosesin thread'leri arasında uygulanabileceği 
+    gibi farklı proseslerin thread'leri arasında da uygulanabilmektedir. Üretici-Tüketici probleminde en az bir üretici thread 
+    ve en az bir tüketici thread vardır. Biz bir üretici bir de tüketici thread'in olduğunu varsayalım. Üretici thread belli 
+    bir işlemden sonra bir değer üretir. Ancak o değerin işlenmesini tüketici thread'e havale eder. Bunun için ortak bir 
+    paylaşılan alan oluşturulur. Üretici thread elde ettiği değeri paylaşılan alana yerleştirir. Tüketici thread de onu oradan 
+    alarak kullanır. Yani üretici thread'in görevi değer elde edip onu bir paylaşılan bellek alanına yazmaktır. Tüketici thread'in 
+    görevi de onu paylaşılan bellek alanından alıp işlemektir. Tabii eğer problem aynı prosesin thread'leri arasında uygulanacaksa 
+    bu durumda paylaşılan alan global bir nesne olabilir. Ancak problem farklı proseslerin thread'leri arasında uygulanacaksa 
+    bu durumda paylaşılan alan gerçekten "paylaşılan bellek alanı (shared memory)" olarak oluşturulmalıdır. Problemdeki ana 
+    unsur üretici thread'in ve tüketici thread'in asenkron çalışması nedeniyle koordine edilmesi gerekliliğidir. Eğer üretici 
+    thread tüketici thread'ten daha hızlı davranırsa daha tüketici thread önceki değeri paylaşılan bellek alanından almadan 
+    üretici thread yeni bir değeri oraya yerleştirerek önceki değeri ezebilir. Benzer biçimde eğer tüketici thread, üretici 
+    thread'ten daha hızlı davranırsa bu durumda önceki değeri yeniden alıp işlemeye çalışabilir. O halde bu problemde "tüketici 
+    thread'in önceki değeri almadan üretici thread'in yeni bir değeri paylaşılan alana yerleştirmemesi" gerekir. Benzer biçimde 
+    tüketici thread de "üretici thread yeni bir değeri paylaşılan alana yerleştirmeden aynı değeri ikinci kez" almamalıdır. Yani 
+    iki thread'in birbirlerini beklemesi gerekmektedir.
 
     Bu problemde neden tek bir thread'in hem değeri elde edip hem de onu işlemek yerine iki ayrı thread'in bu işi yapmaya çalıştığını 
-    merak edebilirsiniz. Bunun amacı hız kazancı sağlamaktır. Bu sayede üretici thread üretim yaparken tüketici thread de tüketim yapabilmektedir. 
-    Halbuki bu işlemler seri bir biçimde yapılırsa üretim ve tüketim faaliyetlerinin eş zamanlı yapılması mümkün olmaz. Tabii 
-    birden fazla thread de seri olarak üretim ve tüketim faaliyetlerinde bulunabilir. Ancak çoğu kez üretim faaliyetinin de koordineli 
-    bir biçimde yapılması gerekmektedir. Yani bu çözüm de gerekli hızlanmayı sağlamayabilmektedir. 
+    merak edebilirsiniz. Bunun amacı hız kazancı sağlamaktır. Bu sayede üretici thread üretim yaparken tüketici thread de tüketim 
+    yapabilmektedir. Halbuki bu işlemler seri bir biçimde yapılırsa üretim ve tüketim faaliyetlerinin eş zamanlı yapılması mümkün 
+    olmaz. Tabii birden fazla thread de seri olarak üretim ve tüketim faaliyetlerinde bulunabilir. Ancak çoğu kez üretim faaliyetinin 
+    de koordineli bir biçimde yapılması gerekmektedir. Yani bu çözüm de gerekli hızlanmayı sağlamayabilmektedir.
 
     Tek bir işlemcinin ya da çekirdeğin olduğu durumda üretici-tüketici problemi bir hızlanma sağlayabilir mi? Burada da yine 
-    prosesin toplam CPU zamanı birden fazla thread'le fazlalaştırılabilmektedir. Yani üretici thread, üretim işlemi bittiğinde kesildiğinde 
-    hemen tüketici thread daha hızlı devreye girebilmektedir. Ancak şüphesiz çok işlemcili ya da çekirdekli sistemlerde performansın daha 
-    fazla artması beklenir. 
+    prosesin toplam CPU zamanı birden fazla thread'le fazlalaştırılabilmektedir. Yani üretici thread, üretim işlemi bittiğinde 
+    kesildiğinde hemen tüketici thread daha hızlı devreye girebilmektedir. Ancak şüphesiz çok işlemcili ya da çekirdekli sistemlerde 
+    performansın daha fazla artması beklenir.
 
     Üretici-tüketici probleminin değişik biçimleri vardır. Örneğin ortadaki paylaşılan bellek alanı tek bir nesneyi tutacak biçimde 
-    değil birden fazla nesneyi tutacak biçimde bir "FIFO kuyruk sistemi olarak" oluşturulabilir. Paylaşılan bir kuyruk sistemi olursa 
-    üretici ve tüketicinin birbirlerini bekleme olasılığı azaltılmış olur. Artık üretici thread kuyruk tam dolmuşken, tüketici thread'te 
-    kuyruk tam boşken bloke olacaktır. 
+    değil birden fazla nesneyi tutacak biçimde bir "FIFO kuyruk sistemi olarak" oluşturulabilir. Paylaşılan bir kuyruk sistemi 
+    olursa üretici ve tüketicinin birbirlerini bekleme olasılığı azaltılmış olur. Artık üretici thread kuyruk tam dolmuşken,
+    tüketici thread de kuyruk tam boşken bloke olacaktır.
 
     Üretici-tüketici probleminde, üretici ve tüketici thread'ler birden fazla da olabilmektedir. Yani çok üretici ve çok tüketici 
     paralel biçimde çalıştırılabilmektedir. Böylece tek işlemcili ya da çekirdekli sistemlerde bile performans artırılabilmektedir. 
 
     Üretici tüketici probleminin gerçek hayat uygulamalarına çok yerde kaşılaşılmaktadır. Örneğin client-server sistemlerde 
-    client'lar üretici durumdadır, server'lar da tüketici durumdadır. Burada birden fazla client thread üretim yapmakta ve birden fazla
-    server thread de tüketim yapmaktadır. Örneğin bir satranç prgramında üretici thread "geçerli hamleleri" elde ederken tüketici thread 
-    bu geçerli hamleleri analiz ediyor olabilir. 
+    client'lar üretici durumdadır, server'lar da tüketici durumdadır. Burada birden fazla client thread üretim yapmakta ve 
+    birden fazla server thread de tüketim yapmaktadır. Örneğin bir satranç prgramında üretici thread "geçerli hamleleri" elde 
+    ederken tüketici thread bu geçerli hamleleri analiz ediyor olabilir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -22421,9 +22451,9 @@ void exit_sys_errno(const char *msg, int eno)
 
         g_flag = 1;
 
-        pthread_mutex_unlock(&g_mutex);
-
         pthread_cond_signal(&g_cond_consumer);
+
+        pthread_mutex_unlock(&g_mutex);
     }
 
     Üretici thread'in sembolik kodu şöyledir:
@@ -22438,16 +22468,17 @@ void exit_sys_errno(const char *msg, int eno)
 
         g_flag = 0;
 
+        pthread_cond_signal(&g_cond_producer);
+
         pthread_mutex_unlock(&g_mutex);
 
-        pthread_cond_signal(&g_cond_producer);
     }
 
     Burada kodu dikkatlice inceleyiniz. g_flag değişkeninin başlangıçtaki değeri 0'dır. Bu durumda başlangıçta tüketici thread 
-    bekleyecek ancak üretici thread beklemeden değeri üretip paylaşılan alana yerleştirecektir. Tüketici çok yavaş çalışsa bile üretici 
-    thread değeri paylaşılan bellek alanına yerleştirdikten sonra artık g_flag değişkenini 1 yaptığı için pthread_cond_wait 
-    fonksiyonunda bekleyecektir. Bu sırada tüketici thread paylaşılan alandan bilgiyi alıp g_flag değişkenini 0 yaptıktan sonra üreticiyi
-    blokeden kurtaracaktır. Görüldüğü gibi üretici-tüketiciyi, tüketici de üreticiyi beklemektedir. 
+    bekleyecek ancak üretici thread beklemeden değeri üretip paylaşılan alana yerleştirecektir. Tüketici çok yavaş çalışsa bile 
+    üretici thread değeri paylaşılan bellek alanına yerleştirdikten sonra artık g_flag değişkenini 1 yaptığı için pthread_cond_wait 
+    fonksiyonunda bekleyecektir. Bu sırada tüketici thread paylaşılan alandan bilgiyi alıp g_flag değişkenini 0 yaptıktan sonra 
+    üreticiyi blokeden kurtaracaktır. Görüldüğü gibi üretici-tüketiciyi, tüketici de üreticiyi beklemektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -22538,11 +22569,11 @@ void *thread_producer(void *param)
 		g_shared = val;
 		g_flag = 1;
 
-		if ((result = pthread_mutex_unlock(&g_mutex)) != 0)
-			exit_sys_errno("pthread_mutex_unlock", result);
-
 		if ((result = pthread_cond_signal(&g_cond_consumer)) != 0)
 			exit_sys_errno("pthread_cond_signal", result);
+
+		if ((result = pthread_mutex_unlock(&g_mutex)) != 0)
+			exit_sys_errno("pthread_mutex_unlock", result);
 
 		if (val == 99)
 			break;
@@ -22571,11 +22602,11 @@ void *thread_consumer(void *param)
 		val = g_shared;
 		g_flag = 0;
 
-		if ((result = pthread_mutex_unlock(&g_mutex)) != 0)
-			exit_sys_errno("pthread_mutex_unlock", result);
-
 		if ((result = pthread_cond_signal(&g_cond_producer)) != 0)
 			exit_sys_errno("pthread_cond_signal", result);
+
+		if ((result = pthread_mutex_unlock(&g_mutex)) != 0)
+			exit_sys_errno("pthread_mutex_unlock", result);
 
 		usleep(rand_r(&seed) % 300000);
 		printf("%d ", val);
@@ -22614,8 +22645,8 @@ void exit_sys_errno(const char *msg, int eno)
     while (g_count == QUEUE_SIZE)
         pthread_cond_wait(&g_cond_producer, &g_mutex);
 
-    Bu koşul üreticinin yalnızca kuyruktaki eleman sayısı kuyruk uzunluğuna eşit olduğunda bloke olacağı anlamına gelmektedir. Yani kuyruk
-    tam doluysa üretici bloke olacaktır. Tüketicinin bekleme koşulu da şöyle oluşturulabilir:
+    Bu koşul üreticinin yalnızca kuyruktaki eleman sayısı kuyruk uzunluğuna eşit olduğunda bloke olacağı anlamına gelmektedir. 
+    Yani kuyruk tam doluysa üretici bloke olacaktır. Tüketicinin bekleme koşulu da şöyle oluşturulabilir:
 
     while (g_count == 0)
         pthread_cond_wait(&g_cond_consumer, &g_mutex);
@@ -22708,11 +22739,11 @@ void *thread_producer(void *param)
 		g_tail %= QUEUE_SIZE;
 		++g_count;
 
-		if ((result = pthread_mutex_unlock(&g_mutex)) != 0)
-			exit_sys_errno("pthread_mutex_unlock", result);
-
 		if ((result = pthread_cond_signal(&g_cond_consumer)) != 0)
 			exit_sys_errno("pthread_cond_signal", result);
+
+		if ((result = pthread_mutex_unlock(&g_mutex)) != 0)
+			exit_sys_errno("pthread_mutex_unlock", result);
 
 		if (val == 99)
 			break;
@@ -22742,11 +22773,11 @@ void *thread_consumer(void *param)
 		g_head %= QUEUE_SIZE;
 		--g_count;
 
-		if ((result = pthread_mutex_unlock(&g_mutex)) != 0)
-			exit_sys_errno("pthread_mutex_unlock", result);
-
 		if ((result = pthread_cond_signal(&g_cond_producer)) != 0)
 			exit_sys_errno("pthread_cond_signal", result);
+
+		if ((result = pthread_mutex_unlock(&g_mutex)) != 0)
+			exit_sys_errno("pthread_mutex_unlock", result);
 
 		usleep(rand_r(&seed) % 300000);
 		printf("%d ", val);
@@ -22776,8 +22807,8 @@ void exit_sys_errno(const char *msg, int eno)
 
     Burada yine timespec yapısı ile belirtilen zaman aşımı değeri göreli değil mutlaktır. Fonksiyon yine atomik bir biçimde
     mutex'in sahipliğini bırakır ve çıkışta yine mutex'in sahipliğini almaya çalışır. Ancak koşul değişkeninde bekleme en kötü 
-    olasılıkla zaman aşımı dolduğunda sonlanmaktadır. Fonksiyon başarı durumunda 0, başarısızlık durumunda errno değerine geri döner. 
-    Yine fonksiyon eğer zaman aşımı dolayısıyla sonlanmışsa ETIMEDOUT değeri ile geri dönmektedir. 
+    olasılıkla zaman aşımı dolduğunda sonlanmaktadır. Fonksiyon başarı durumunda 0, başarısızlık durumunda errno değerine geri 
+    döner. Yine fonksiyon eğer zaman aşımı dolayısıyla sonlanmışsa ETIMEDOUT değeri ile geri dönmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -22785,16 +22816,16 @@ void exit_sys_errno(const char *msg, int eno)
     iki özelliği vardır. Koşul değişkenlerine özellik iliştirmek diğer nesnelerde olduğu gibi yapılmaktadır. Programcı önce
     pthread_condattr_t türünden bir nesne tanımlar. Sonra bu nesneye pthread_condattr_init fonksiyonuyla ilk değer verir. 
     Sonra pthread_condattr_setxxx fonksiyonlarıyla özellikleri nesne içerisine set eder. Oluşturduğu bu özellik nesnesini de
-    pthread_cond_init fonksiyonunda kullanır. Yine özellik nesnesinin pthread_cond_init fonksiyonundan sonra korunmasına gerek yoktur. 
-    Özellik nesnesi, pthread_condattr_destroy fonksiyonu ile boşaltılabilir. Fonksiyonların prototipileri şöyledir:
+    pthread_cond_init fonksiyonunda kullanır. Yine özellik nesnesinin pthread_cond_init fonksiyonundan sonra korunmasına gerek 
+    yoktur. Özellik nesnesi, pthread_condattr_destroy fonksiyonu ile boşaltılabilir. Fonksiyonların prototipileri şöyledir:
 
     #include <pthread.h>
 
     int pthread_condattr_destroy(pthread_condattr_t *attr);
     int pthread_condattr_init(pthread_condattr_t *attr);
 
-    Koşul değişkenlerine iki özellik set edip bunları alabiliriz. Birincisi, koşul değişkeninin proseslerarası kullanımını sağlayan
-    özelliktir. Bu özellik pthread_condattr_setpshared fonksiyonu ile set edilmektedir. Fonksiyonun prototipi şöyledir:
+    Koşul değişkenlerine iki özellik set edip bunları alabiliriz. Birincisi, koşul değişkeninin proseslerarası kullanımını 
+    sağlayan özelliktir. Bu özellik pthread_condattr_setpshared fonksiyonu ile set edilmektedir. Fonksiyonun prototipi şöyledir:
 
     #include <pthread.h>
 
@@ -23078,9 +23109,9 @@ void exit_sys_errno(const char *msg, int eno)
     benzer işlevselliklerle bulunmaktadır. UNIX/Linux sistemlerinde semaphore'lar IPC konusuyla ilişkilendirilmiştir. Bu nedenle 
     tıpkı paylaşılan bellek alanlarında ve mesaj kuyruklarında olduğu gibi semaphore'lar için de iki ayrı arayüz fonksiyon grubu
     bulunmaktadır. Ancak Sistem 5 semaphore'ları maalesef oldukça karışık ve kötü bir arayüzle tasarlanmıştır. POSIX semaphore'larında
-    bu tasarım düzeltilmiştir. Biz kursumuzda IPC nesnelerini, önce Sistem 5 sonra POSIX olacak biçimde açıklamıştık. Ancak burada bunun tersini 
-    yapacağız. Yani önce POSIX semaphore'larını açıklayıp sonra Sistem 5 semaphore'ları üzerinde duracağız. Uygulamada özel bir 
-    gerekçe yoksa POSIX semaphore'ları tercih edilmelidir. 
+    bu tasarım düzeltilmiştir. Biz kursumuzda IPC nesnelerini, önce Sistem 5 sonra POSIX olacak biçimde açıklamıştık. Ancak burada 
+    bunun tersini yapacağız. Yani önce POSIX semaphore'larını açıklayıp sonra Sistem 5 semaphore'ları üzerinde duracağız. 
+    Uygulamada özel bir gerekçe yoksa POSIX semaphore'ları tercih edilmelidir.
 
     Semaphore'lar "sayaçlı" senkronizasyon nesneleridir. Semaphore sözcüğü "trafikteki dur-geç lambalarından" gelmektedir. 
     (Bu sözcüğü "anafor" sözcüğü ile karıştırmayınız.) Semaphore'lar bir kritik koda en fazla n tane akışın girmesini sağlamak 
@@ -23091,8 +23122,8 @@ void exit_sys_errno(const char *msg, int eno)
     girmesi kişilere anlamsız gelebilmektedir. Çünkü iki thread bile ortak kaynağı bozabilir. O halde kritik koda n tane thread'in 
     girmesinin ne anlamı olabilir? İşte bunun en önemli kullanım gerekçesi "kaynak paylaşımının" sağlanmasıdır. Örneğin elimizde 
     üç tane makine olsun. Ancak 10 tane thread bu makineleri kullanmak istesin. Bizim bu üç makineyi yalnızca üç thread'e 
-    tahsis etmemiz gerekir. Makineyi kullanmak isteyen diğer thread'ler bu makinelerden biri boşaltılana kadar CPU zamanı harcamadan 
-    blokede bekletilmelidir. İşte burada tipik bir semaphore kullanımı söz konusudur. Örneğin:
+    tahsis etmemiz gerekir. Makineyi kullanmak isteyen diğer thread'ler bu makinelerden biri boşaltılana kadar CPU zamanı 
+    harcamadan blokede bekletilmelidir. İşte burada tipik bir semaphore kullanımı söz konusudur. Örneğin:
 
     <kritik kodun başı>
     ...
