@@ -50648,22 +50648,23 @@ void exit_sys(const char *msg)
     1) Çalıştırılabilen dosyalar fonksiyon kodlarını içermezler. Dolayısıyla önemli bir disk hacmi kazanılmış olur. Oysa statik 
     kütüphanelerde statik kütüphanelerden çağrılan fonksiyonlar çalıştırılabilen dosyalara yazılmaktadır.
 
-    2) Dinamik kütüphaneler birden fazla program proses tarafından fiziksel belleğe tekrar tekrar yüklenmeden kullanılabilmektedir.
+    2) Dinamik kütüphaneler birden fazla proses tarafından fiziksel belleğe tekrar tekrar yüklenmeden kullanılabilmektedir.
     Yani işletim sistemi arka planda aslında aynı dinamik kütüphaneyi kullanan programlarda bu kütüphaneyi tekrar tekrar fiziksel 
     belleğe yüklememektedir. Bu da statik kütüphanelere göre önemli bir bellek kullanım avantaj oluşturmaktadır. Bu durumda eğer 
-    dinamik kütüphanenin ilgili kısmı daha önce fiziksel yüklenmişse bu durum dinamik kütüphane kullanan programın daha hızlı 
-    yüklemesine de yol açabilmektedir. Process1 ve Process2 biçiminde iki programın çalıştığını düşünelim. Bunlar aynı dinamik 
+    dinamik kütüphanenin ilgili kısmı daha önce fiziksel belleğe yüklenmişse bu durum dinamik kütüphane kullanan programın daha hızlı 
+    yüklemesine de yol açabilmektedir. Prog1 ve Prog2 biçiminde iki programın çalıştığını düşünelim. Bunlar aynı dinamik 
     kütüphaneyi kullanıyor olsun. İşletim sistemi bu dinamik kütüphaneyi bu proseslerin sanal bellek alanlarının farklı yerlerine 
     yükleyebilir. Ancak aslında işletim sistemi sayfa tablolarını kullanarak mümkün olduğunca aslında bu iki dinamik kütüphaneyi 
-    aynı fiziksel sayfaya eşlemeye çalışacaktır. Tabii bu durumda proseslerden biri dinamik kütüphane içerisindeki bir statik nesneyi 
-    değiştirdiğinde artık "copy on write" mekanizması devreye girecek ve dinamik kütüphanenin o sayfasının yeni bir kopyası oluşturulacaktır. 
-    Aslında bu durum fork fonksiyonu ile yeni bir prosesin yaratılması durumuna çok benzemektedir.
+    aynı fiziksel sayfaya eşlemeye çalışacaktır. Tabii bu durumda proseslerden biri dinamik kütüphane içerisindeki bir statik 
+    nesneyi değiştirdiğinde artık "copy on write" mekanizması devreye girecek ve dinamik kütüphanenin o sayfasının yeni bir kopyası 
+    oluşturulacaktır. Aslında bu durum fork fonksiyonu ile yeni bir prosesin yaratılması durumuna çok benzemektedir. Burada anlatılan 
+    unsurların ayrıntıları "sayfalama ve sanal bellek" kullanımın açıklandığı paragraflarda ele alınacaktır/
 
     3) Dinamik kütüphaneleri kullanan programlar bu dinamik kütüphanelerdeki değişikliklerden etkilenmezler. Yani biz dinamik 
     kütüphanenin yeni bir versiyonunu oluşturduğumuzda bunu kullanan programları derlemek ya da link etmek zorunda kalmayız. 
     Örneğin bir dinamik kütüphaneden foo fonksiyonunu çağırmış olalım. Bu foo fonksiyonunun kodları bizim çalıştırılabilir dosyamızın
-    içerisinde değil de dinamik kütüphanede olduğuna göre dinamik kütüphanedeki foo fonksiyonu değiştirildiğinde bizim programımız artık 
-    değişmiş olan foo fonksiyonunu çağıracaktır.
+    içerisinde değil de dinamik kütüphanede olduğuna göre dinamik kütüphanedeki foo fonksiyonu değiştirildiğinde bizim programımız 
+    artık değişmiş olan foo fonksiyonunu çağıracaktır.
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 

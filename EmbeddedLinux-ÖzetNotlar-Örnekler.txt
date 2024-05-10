@@ -747,7 +747,7 @@
 
     $ sudo setupcon
 
-    Artık klavyemiz Türkçe olarak ayarlanmıştır. Ancak iki problem daha vardır. Birincisi BBB'deki Debian dağırtımındaki default 
+    Artık klavyemiz Türkçe olarak ayarlanmıştır. Ancak iki problem daha vardır. Birincisi BBB'deki Debian dağıtımındaki default 
     console fontu Türkçe'yi desteklememektedir. Yani klavyedeki tuşların yerleri doğru olarak ele alınmaktadır ama Türkçe 
     karakterler doğru görüntülenememektedir. İkinci sorun ise BBB'yi reboot ettiğimizde yaptığımız ayarların otomatik devreye 
     girmemesidir.
@@ -777,7 +777,7 @@
     Biz klavyeyi ve console fontlarını ayarlarken bazı dosyaları güncelledik. Aslında bu dosyaları manuel olarak edit etmek yerine 
     bunları güncelleyen küçük programlardan da faydalanılabilir. Örneğin aslında "sudo dpkg-reconfigure locales" komutu 
     "/etc/default/locale" dosyası üzerinde güncelleme yapmaktadır. Benzer biçimde "sudo dpkg-reconfigure console-data" komutu 
-    da aslında "/etc/default/console-setup" dosyasını güncellemektedir. Bazen klavye ayaralarını çalışırken o anda başka bir dille 
+    da aslında "/etc/default/console-setup" dosyasını güncellemektedir. Bazen klavye ayarlarını çalışırken o anda başka bir dille 
     de değiştirmek isteyebiliriz. Bunun için "loadkeys" isimli program kullanılmaktadır. Bu program klavye düzenek dosyasını 
     argüman olarak alıp klavyeyi ona göre ayarlamaktadır.
 
@@ -788,10 +788,10 @@
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Yukarıdaki ayarlama işlemlerinden de görüldüğü gibi aslında birtakım ayarlar "/etc" dizinini altındaki çeşitli dosyalarda 
+    Yukarıdaki ayarlama işlemlerinden de görüldüğü gibi aslında birtakım ayarlar "/etc" dizinin altındaki çeşitli dosyalarda 
     saklanmaktadır. Çeşitli programlar da ayarları bu dosyalara bakarak set etmektedir. Microsoft eskiden Linux'takilere benzer
     ismine "ini dosyaları" denilen ayar dosyalarını kullanıyordu. Daha sonra "registry" denilen tüm ayarların saklandığı mini 
-    bir hiyerarişik veritabanı sistemine geçti. Ancak UNIX/Linux sistemlerinde böyle bir merkezi ayar sistemi kullanılmamaktadır. 
+    bir hiyerarşik veritabanı sistemine geçti. Ancak UNIX/Linux sistemlerinde böyle bir merkezi ayar sistemi kullanılmamaktadır. 
     Her ayar "/etc" dizininin altında belli formattaki dosyaların içerisinde saklanmaktadır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -799,11 +799,12 @@
     Sizin de gördüğünüz gibi Raspberry Pi donanımı BBB'ye göre oldukça güçlüdür. Raspberry Pi'ın SD kartına yüklediğimiz 
     işletim sistemleri oldukça dolu bir biçimdedir. Çünkü bu sistemler tam bir bilgisayar gibi kullanılsın istenmiştir. Halbuki
     BBB'nin kaynakları zayıf olduğu için hazır imajlar genellikle dolu bir biçimde değildir. Örneğin UNIX/Linux sistemlerinde 
-    yardım almak için kullanılan "man" programı BBB'nin default imajında bulunmamaktadır. man programını ve onun kullandığı 
+    yardım almak için kullanılan "man" programı BBB'nin default imajında bulunmamaktadır. "man" programını ve onun kullandığı 
     önemli veri dosyalarını aşağıdaki gibi yükleyebiliriz:
 
     $ sudo apt install man-db manpages-posix
     $ sudo apt install manpages-dev manpages-posix-dev
+
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -812,7 +813,7 @@
     basılı olan boot switch'ten el bırakılır. Böylece boot işlemi SD karttan harekeetle başlatılacaktır. BBB kartlarının ileri 
     sürümlerinde SD karttan boot işlemi için boot switch'e basmaya gerek kalmamıştır. Bu ileri modellerde SD kart takılıysa 
     zaten boot işlemi SD karttan başlatılmaktadır. SD karta yazacağınız Linux sistemine dikkat ediniz. Buraya "flasher" olmayan 
-    bir imajı yerleştirmelisiniz. SD kartınıza yükleyceğiniz hazır Debian imajını aşağıdaki bağlantıdan indirebilirsiniz:
+    bir imajı yerleştirmelisiniz. SD kartınıza yükleyeceğiniz hazır Debian imajını aşağıdaki bağlantıdan indirebilirsiniz:
 
     https://www.beagleboard.org/distros
 
@@ -856,7 +857,7 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Kursumuzda kimi zaman çapraz derleme (cross compile) işlemleri yapacağız. Bu durumda host makine ile hedef makine arasında 
-    dosya transfleri yapmamız gerekecek. İki makine arasında dosya transferi yapmak için genellikle IP prtokol ailesinin sunduğu 
+    dosya transfleri yapmamız gerekecek. İki makine arasında dosya transferi yapmak için genellikle IP protokol ailesinin sunduğu 
     olanaklar kullanılmaktadır. Bunun için en çok kullanılan utility program "scp" isimli programdır. Bu program "Secure Copy 
     Protocol" denilen bir protokol yoluyla arka planda SSH kullanarak dosya transferini yapmaktadır. scp programının tipik 
     kullanımı şöyledir:
@@ -872,7 +873,7 @@
 
     $ scp app debian@192.168.7.2:/Test
 
-    Burada app dosyası uzak makinedeki debian kullanıcısının home dizini içerisindeki Test dizinine kopyalanacaktır. Tabii scp 
+    Burada app dosyası uzak makinedeki debian kullanıcısının home dizini içerisindeki "Test" dizinine kopyalanacaktır. Tabii scp 
     ile hedef makineden host makineye ters yönde de kopyalama yapabiliriz. Örneğin:
 
     $ scp debian@192.168.7.2:app app
@@ -902,16 +903,16 @@
     $ sshfs BBB debian@192.168.7.2:
 
     Artık BBB dizinimiz uzak makinedeki kullanıcının home dizini gibi olmuştur. Yani biz bu BBB dizinine dosya kopyaladığımızda 
-    aslında onu uzak makineye kopyalamış oluruz. Bezer biçimde uzak makinede home dizinine bir dosya kopyalandığında biz bu 
+    aslında onu uzak makineye kopyalamış oluruz. Benzer biçimde uzak makinede home dizinine bir dosya kopyalandığında biz bu 
     dosyayı BBB dizininde otomatik olarak görürüz.
 
-    Mount ettiğimiz dizininin uzak bağlantı yaptığımız makineden kopartılması için "umount" işleminin uygulanması gerekir.
+    Mount ettiğimiz dizinin uzak bağlantı yaptığımız makineden kopartılması için "umount" işleminin uygulanması gerekir.
     umount komutunda dizin ismi argüman olarak verilmektedir. Örneğin:
 
     $ umount BBB
 
     Yerel makine ile uzak makine arasında dosya transfer etmenin diğer bir yolu da FTP (File Tranfer Protocol) protokülünü 
-    kullanmaktır. Ancak bunun için uzak makinede bir FTP sunucusunun yüklü olması gerekir. Düşük kapasitei gömülü aygıtlarda 
+    kullanmaktır. Ancak bunun için uzak makinede bir FTP sunucusunun yüklü olması gerekir. Düşük kapasiteli gömülü aygıtlarda 
     geliştirici bu server'ı uzak makineye yüklemek istemeyebiir. FTP server ve client programların Linux sistemlerine nasıl 
     kurulacağını ilgili dokümanlardan öğrenebilirsiniz.
 -----------------------------------------------------------------------------------------------------------------------------*/
@@ -931,14 +932,14 @@
     olduğu için doğrudan bunların üzerinde geliştirme yapmak zor hatta bazen olanaksız hale gelebilmektedir.
 
     Çapraz araç zincirleri (cross toolchains) geliştirmenin güçlü bir makine üzerinde yapılmasını sağlayan, hedef aygıt için kod 
-    üreten araç zincirleridir. Buradaki çapraz (cross) sözcüğü üretilen kodun geliştirmenin yapıldığı makineye değil başka bir 
+    üreten araç zincirleridir. Buradaki çapraz (cross) sözcüğü üretilen kodun geliştirmenin yapıldığı makineye değil, başka bir 
     hedef (target) makineye ilişkin olduğunu belirtmektedir. Eğer hedef makine etkin bir geliştirme yapmaya olanak sağlamıyorsa 
     bu durumda çapraz araç zincirleri kullanılabilir. Örneğin Beaglebone Black için tipik olarak çapraz araç zincirleri kullanılmaktadır.
 
     Pekiyi doğal araç zincirleri mi yoksa çapraz araç zincirleri mi tercih edilmelidir? İşte eğer Raspberry Pi'da olduğu gibi 
     hedef donanım güçlüyse doğal araç zincirlerinin kullanılmasını tavsiye ederiz. Çünkü doğal ortamda geliştirme yapılırken denemeler
     o anda geliştirme yapılan makinede çok daha hızlı yapılabilmektedir. Ancak hedef makine yeteri kadar güçlü değilse güçlü bir
-    host makşinede çapraz araç zincirleriyle geliştirmenin yapılmasını öneririz. Araç zinciri denildiğinde zaten default olarak
+    host makinede çapraz araç zincirleriyle geliştirmenin yapılmasını öneririz. Araç zinciri denildiğinde zaten default olarak
     çapraz araç zincirleri kastedilmektedir.
 
     Araç zincirlerini başka bakımlardan da sınıflandırabiliriz. Örneğin araç zincirini "tedarik eden (vendor)" kuruma göre, 
@@ -951,7 +952,7 @@
 
     CPU-Tedarikçi-İşletimSistemi
 
-    Dörtlü isimlendirmede ayrıca bir de ABI alanı bulundurulmaktadır. Dörtlü isimlendirmenin de genel biçimi şeyledir:
+    Dörtlü isimlendirmede ayrıca bir de ABI alanı bulundurulmaktadır. Dörtlü isimlendirmenin de genel biçimi şöyledir:
 
     CPU-Tedarikçi-İşletimSistemi-ABI
 
@@ -959,35 +960,35 @@
     tarafından uyulan, resmi bir standardı olan kural niteliğindeki biçimler değildir. Gevşek kurallardır. Üçlü ya da dörtlü 
     isimlendirmeye uymayan ya da kısmen uyan araç zincirleri de bulunmaktadır.
 
-    Şimdi bazı örnekler vermek istiyoruz. Örneğin:
+    Şimdi bazı örnekler vermek istiyoruz.
 
     i686-apple-darwin10-gcc-4.2.1
 
-    Bu araç zinciri Intel'in 32 bit işlemcilerine ilişkin (X86) kod üretilmektedir. Tedarikçi (vendor) Apple şirketidir. Yani araç 
+    Bu araç zinciri Intel'in 32 bit işlemcilerine ilişkin (x86) kod üretilmektedir. Tedarikçi (vendor) Apple şirketidir. Yani araç 
     zinciri Apple firması tarafından hazırlanmıştır. Hedef işletim sistemi darwin10'dur. Yani oluşturulacak kod bu işletim sistemi 
-    tarafından çalıştırılacaktır. (macOS işletim sisteminin kernel'ına "Darwin" denilmektedir. Dolayısıyla buadaki Darwin aslında 
-    macOS anlamındadır.) Kullanılan ABI versiyonu gcc-4.2.1 tarafından kullanılan default ABI'yi belirtmektedir. Örneğin:
+    tarafından çalıştırılacaktır. (macOS işletim sisteminin kernel'ına "Darwin" denilmektedir. Dolayısıyla buradaki Darwin aslında 
+    macOS anlamındadır.) Kullanılan ABI versiyonu gcc-4.2.1 tarafından kullanılan default ABI'yi belirtmektedir.
 
     arm-none-linux-gnueabi
 
     Burada ARM kodu üretilmektedir. Tedarikçinin olmaması bunun manuel üretildiği anlamına gelebilmektedir. Burada yine kodun 
     Linux işletim sistemi için üretileceği belirtilmektedir. ABI için kullanılan "gnueabi" tipik olarak GNU araç zincirini ve 
-    gömülü sistemler için kullanılan ABI'yi belirtmektedir. (Buradaki eabi "extended abi" anlamına gelmektedir.). Örneğin:
+    gömülü sistemler için kullanılan ABI'yi belirtmektedir. (Buradaki eabi "extended abi" anlamına gelmektedir.).
 
     arm-linux-gcc
 
     Burada ARM üzerinde çalışan Linux sistemleri için kod üretilecektir. gcc derleyicisinin o sistemdeki default ABI'si 
-    kullanılacaktır. Örneğin:
+    kullanılacaktır.
 
     i686-unknown-linux-gnu
 
     Burada tipik olarak 32 bit Intel işlemcileri üzerinde çalışan Linux sistemleri için kod üretilecektir. ABI bu sistemlerde 
-    kullanılan default ABI'dir. Buradaki "gnu" GNU araç zincirini belirtmektedir. Örneğin:
+    kullanılan default ABI'dir. Buradaki "gnu" GNU araç zincirini belirtmektedir.
 
     x86_64-w64-mingw32
 
     Buradaki araç zinciri 64 bit Intel işlemcilerini kullanan 64 bit Windows sistemleri için kod üretmektedir. Araç zinciri 
-    MinGW dağıtımını referans almaktadır. Dolayısıyla oradaki ABI'yi kullanmaktadır. Örneğin:
+    MinGW dağıtımını referans almaktadır. Dolayısıyla oradaki ABI'yi kullanmaktadır.
 
     arm-none-eabi
 
@@ -1032,7 +1033,7 @@
     öğelerin kaynak kodlardan hareketle derlenmesi gerekmektedir. Bu işlemleri manuel yapmak için iyi bir deneyime sahip olmak 
     gerekir.
 
-    Biz kursumuzda önce ARM platfotrmu için hazır araç zincirlerini tanıtacağız. Sonra "crosstool-NG" yazılımı ile araç 
+    Biz kursumuzda önce ARM platformu için hazır araç zincirlerini tanıtacağız. Sonra "crosstool-NG" yazılımı ile araç 
     zinciri oluşturmayı göreceğiz. Buildroot ve Yocto projeleri araç zinciri oluşturmaktan daha fazla işlevselliğe sahiptir.
     Biz kursumuzda bunları ileride ayrı bir bölümde ele alacağız.
 -----------------------------------------------------------------------------------------------------------------------------*/
@@ -1060,12 +1061,12 @@
 
     Burada yapılacak şey bu dosyaları indirip aşağıdaki örnekte olduğu gibi açmaktır:
 
-    tar -xf gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf.tar.xz
+    $ tar -xf gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf.tar.xz
 
     Tabii açımı dosya yöneticileri ile de yapabilirsiniz.
 
     ARM firmasının yukarıda belirttiğimiz sitedeki hazır araç zincirleri ARM tarafından "discontinued" yapılmıştır. Yani ARM 
-    yeni araç zinciri sistemine geçmiştir. ARM'ın yeni en yeni araç zincirleri aşağıdaki bağlantıdan indirilebilir:
+    yeni araç zinciri sistemine geçmiştir. ARM'ın en yeni araç zincirleri aşağıdaki bağlantıdan indirilebilir:
 
     https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads
 
@@ -1091,7 +1092,7 @@
     share
 
     Genel olarak araç zincirlerinin çoğundaki dizin yapısı bu biçimdedir. Burada bizim için en önemli dizin "bin" dizinidir. 
-    Çünkü bütün çapraz araçlar bu dizin içerisinde bulnmaktadır. Bu dizini görüntülediğimizde içeriği şöyle listelenmektedir:
+    Çünkü bütün çapraz araçlar bu dizin içerisinde bulunmaktadır. Bu dizini görüntülediğimizde içeriği şöyle listelenmektedir:
 
     arm-none-linux-gnueabihf-addr2line
     2021 arm-none-linux-gnueabihf-ar
@@ -1139,8 +1140,8 @@
 
     $ ./gcc-arm -o sample sample.c
 
-    2) Linaro Kurumu Tarafından Oluşturulmuş Araç Zincirleri: Yaygın kullanılan hazır araç zincirlerindne biri de "Linaro" 
-    tarafından olutşurulmuş araç zincirleridir. Linaro kar amacı gütmeyen bir organizasyondur. Linaro araç zincirlerini 
+    2) Linaro Kurumu Tarafından Oluşturulmuş Araç Zincirleri: Yaygın kullanılan hazır araç zincirlerinden biri de "Linaro" 
+    tarafından oluşturulmuş araç zincirleridir. Linaro kar amacı gütmeyen bir organizasyondur. Linaro araç zincirlerini 
     aşağıdaki bağlantıdan indirebilirsiniz:
 
     https://releases.linaro.org/components/toolchain/binaries
@@ -1191,7 +1192,7 @@
 
     Derlemeyi de şöyle yapabiliriz:
 
-    ./gcc-linaro -o sample sample.c
+    $ ./gcc-linaro -o sample sample.c
 
     3) Bootlin Kurumu Tarafından Oluşturulmuş Araç Zincirini İndirip Kurmak: Bootlin gömülü Linux sistemleri alanında faaliyet 
     gösteren bir kurumdur. Bootlin tarafından oluşturulmuş olan çapraz araç zincirleri sık kullanılmaktadır. İlgili araç zinciri
@@ -1207,21 +1208,22 @@
 
     https://gnutoolchains.com/
 
-    Örneğin BBB için bu siteden "Beaglenone" seçilerek "beaglebone-gcc8.3.0.exe" dosyası indirilip kurulabilir. Bu site Windows'ta 
+    Örneğin BBB için bu siteden "Beaglebone" seçilerek "beaglebone-gcc8.3.0.exe" dosyası indirilip kurulabilir. Bu site Windows'ta 
     doğrudan install edilebilen çalıştırılabilir programlar barındırmaktadır. Kurulum yapılırken bize araçların bulunduğu "bin"
     dizininin PATH çevre değişkenine eklenip eklenmeyeceği de sorulmaktadır. Eğer bu eklemeyi yaparsanız komut satırından 
     daha rahat çalışabilirsiniz.
 
-    5) Bazı dağırımların sunduğu araç zincirleri de bulunmaktadır. Örneğin Debian dağıtımı için ARM çapraz araç zinciri şöyle 
+    5) Bazı dağıtımların sunduğu araç zincirleri de bulunmaktadır. Örneğin Debian dağıtımı için ARM çapraz araç zinciri şöyle 
     kurulabilir:
 
-    sudo apt-get install crossbuild-essential-armhf
+    $ sudo apt-get install crossbuild-essential-armhf
 
     Bu araç zincirinin de glibc kütüphanesi bakımından BBB ile uyumsuz olduğuna dikkatinizi çekmek istiyoruz. Eğer ARM işlemcisinin
     bulunduğu Debian türevi bir Linux sisteminde çalışıyorsanız Intel kodu üretmek için de aşağıdaki gibi araç zincirini 
     kurabilirsiniz:
 
-    sudo apt-get install crossbuild-essential-amd64
+    $ sudo apt-get install crossbuild-essential-amd64
+
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -1231,11 +1233,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------
     Gömülü Linux sistemleri için host makine olarak Windows kullanılmasının çok uygun olmadığını belirtmiştik. Windows'ta geleneksel
     çalışma modeli GUI çalışma modelidir. Windows'ta komut satırından komutlar yoluyla çalışma yaygın bir kullanım biçimi değildir. 
-    Halbuki daha önceden de söylediğimiz gibi UNIX/Linux sistemlerinin geleneksel çalışma biçimi console çalımasıdır. Pekiyi 
+    Halbuki daha önceden de söylediğimiz gibi UNIX/Linux sistemlerinin geleneksel çalışma biçimi "console" çalışmasıdır. Pekiyi 
     macOS sistemlerini host makine olarak kullanmak uygun olur mu?
 
     Aslında Apple firması GUI çalışma modelini ilk kullanan firmalardandır. Microsoft'un DOS işletim sistemi zamanlarında 
-    Aplle firmasının Machintosh sistemleri grafik arayüz kullanıyordu. Sonra 90'lı yılların sonlarına doğru Mac OS X (10) 
+    Apple firmasının Machintosh sistemleri grafik arayüz kullanıyordu. Sonra 90'lı yılların sonlarına doğru Mac OS X (10) 
     ile birlikte Apple işletim sistemlerinin çekirdeğini değiştirerek UNIX türevi bir çekirdek kullanmaya başladı. Bugünkü 
     macOS sistemleri UNIX türevi bir sistem gibi değerlendirilebilir. Ancak durum böyle olsa da macOS sistemlerinde ağırlıklı 
     çalışma yine grafik arayüz yoluyla yapılmaktadır. Maalesef macOS sistemleri için hazır Linux araç zincirleri bulunmamaktadır. 
@@ -1248,14 +1250,14 @@
 /*-----------------------------------------------------------------------------------------------------------------------------
     Eclipse ilk kez bir Java IDE'si olarak tasarlanmıştır. Daha sonra plugin'ler yoluyla genel bir IDE haline getirilmiştir. 
     Eclips IDE'sinin C/C++ plugin'ine CDT denilmektedir. Elimizde Java için zaten kurmuş olduğumuz bir Eclipse varsa biz bu CDT
-    plugin'ini IDE'ye ekleyerek C/C++ çalışması da yapabiliriz. Ancaj kolaylık olsun diye Eclipse'in çeşitli diller için plugin'leri
-    yüklenmiş halleri kendi sitesinde bulunudurlmaktadır. Biz burada Eclipse IDE'si ile çağraz araç zincirlerinin nasıl kullanılacağını 
+    plugin'ini IDE'ye ekleyerek C/C++ çalışması da yapabiliriz. Ancak kolaylık olsun diye Eclipse'in çeşitli diller için plugin'leri
+    yüklenmiş halleri kendi sitesinde bulundurulmaktadır. Biz burada Eclipse IDE'si ile çapraz araç zincirlerinin nasıl kullanılacağını 
     göreceğiz.
 
-    Eclipse IDE'si ile çapraz araç znicirini kullanmak için sırasıyla şunlar yapılmalıdır:
+    Eclipse IDE'si ile çapraz araç zincirini kullanmak için sırasıyla şunlar yapılmalıdır:
 
     1) Eclipse IDE for C++ Developers (Eclipse - CDT) indirilerek kurulur. İndirmeyi aşağıdaki bağlantıdan yapabilirsiniz:
-"
+
     https://www.eclipse.org/downloads/packages/
 
     2) File/New/C/C++ seçeneğinden "C++ Project" ya da "C Project" seçilir. ("C/C++ Project" seçeneğini seçmeyiniz.)
@@ -1264,23 +1266,23 @@
     seçilir.
 
     4) Daha sonra Project/Properties menüsünden "Tool Setting" seçilir. Çıkan diyalog penceresinden "Cross Settings" seçilir. 
-    Yan taraftaki Prefix edit alanına alet zincirinin ön ekleri girilir. Öneklerin sonunda "-" karakterininde bulundurulması 
+    Yan taraftaki Prefix edit alanına alet zincirinin ön ekleri girilir. Öneklerin sonunda "-" karakterinin de bulundurulması 
     gerekmektedir. Örneğin "arm-linux-gnueabihf-" gibi. Path edit alanına ise çapraz alet zincirindeki programların bulunduğu
     "bin" dizininin yol ifadesi girilmelidir. (Örneğin "C:\SysGCC\beaglebone\bin" gibi.)
 
-    5) Daha sonra Proje üzerinde gelinerek bağlam menüsünden "Build Project" seçilip build işlemi yapılır.
+    5) Daha sonra Proje üzerine gelinerek bağlam menüsünden "Build Project" seçilip build işlemi yapılır.
 
     Eclipse üzerinden uzak bağlantı kurmak için de şunları yapılabilir:
 
-    1) Help/Install New Software seçilir. Buradan aşağıdaki iki plugin kurulur:
+    1) "Help/Install New Software" seçilir. Buradan aşağıdaki iki plugin kurulur:
 
     - Remote System Explorer User Actions
     - Remote System Explorer End-User Runtime
     - Remote Cammand Shell Console
 
-    2) Window/Show View/Remote Systems seçilir. Linux seçilerek yeni bir bağlantı olşturulur. Bağlantıya bir isim verilerek Next 
-    düğmesine basılır. Configuration penceresinden SSH files seçilir. Next düğmesine basılır. Bu kez Configuration sekmesinden 
-    "processes.shell.linux" seçilir ve Next seçilir. Oradan da "ssh.shells" seçilir ve Finish düğmesine basılır.
+    2) "Window/Show View/Remote Systems" seçilir. "Linux" seçilerek yeni bir bağlantı olşturulur. Bağlantıya bir isim verilerek "Next" 
+    düğmesine basılır. "Configuration" penceresinden "SSH files" seçilir. "Next" düğmesine basılır. Bu kez "Configuration" sekmesinden 
+    "processes.shell.linux" seçilir ve "Next" seçilir. Oradan da "ssh.shells" seçilir ve "Finish" düğmesine basılır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -1298,9 +1300,9 @@
 
     Visual Studio uzun süredir ARM tabanlı mobil aygıtlar için kod üreten çapraz derleyicileri bünyesinde barındırmaktadır.
 
-    Windows'ta Visual Studio IDe'sinde ARM tabanlı Linux sistemleri için proje (ve çözüm) şöyle yaratılmaktadır:
+    Windows'ta Visual Studio IDE'sinde ARM tabanlı Linux sistemleri için proje (ve çözüm) şöyle yaratılmaktadır:
 
-    1) Yeni bir proje oluşturulurken Paltform olarak "Linux" ve "Empty Console Application" ya da "Empty Project" seçilir.
+    1) Yeni bir proje oluşturulurken Platform olarak "Linux" ve "Empty Console Application" ya da "Empty Project" seçilir.
     2) Üretilecek kod türü ARM seçilir. Bu seçim IDE'nin ana ekranında yukarıdaki combobox'tan yapılabilmektedir.
     3) Daha sonra uzak makineye bağlantı yapılır. Bağlantı sırasında bizden uzak makinenin IP adresi (ya da ismi), oradaki 
     kullanıcının ismi ve parolası istenecektir. Bağlantı "Tools/Options/Multi Platform/Connection Manager" menüsünden yapılabilmektedir.
@@ -1311,16 +1313,16 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Microsoft değişik sistemlerde platform bağımsız geliştirme yapabilmek için "Visual Studio Code" isimli IDE ile Editör arası
-    bir araç da gelişmiştir. Son yıllarda bu araç çok kullanılır olmuştur. Visual Stduio Code yüksek seviyeli bir çalışma biçimine 
+    bir araç da gelişmiştir. Son yıllarda bu araç çok kullanılır olmuştur. Visual Studio Code yüksek seviyeli bir çalışma biçimine 
     sahip değildir. Çalışma düşük seviyede çeşitli ayar dosyaların edit edilmesiyle yapılmaktadır. Ancak editör tasarım olarak 
     genişletilebilir bir biçimde oluşturulmuştur. Yüksek seviyeli çalışma çeşitli plugin'lerle sağlanabilmektedir. Microsoft 
     bu plugin'lere "uzantı (extension)" demektedir. C/C++ programcısı olarak en azından Microsoft'un "C/C++ Extension Pack" 
     isimli eklentisini yüklemenizi öneririz. Ayrıca tek tuşa basarak programı derleyip çalıştırmak için "Code Runner" isimli 
-    eklentiden de faydalanabilirsiniz. Örneğin bu eklentiş sayesinde "Ctrl+Alt+N" tuşlarına basılarak editördeki program doğrudan 
+    eklentiden de faydalanabilirsiniz. Örneğin bu eklenti sayesinde "Ctrl+Alt+N" tuşlarına basılarak editördeki program doğrudan 
     derlenip çalıştırılabilmektedir.
 
     Biz kursumuzdaki kodlama örneklerinde ağırlıklı olarak Visual Studio Code editörünü kullanacağız. Ancak bu aracı bir IDE 
-    gibi değil bir text editör gibi kullanacağız. İşlemleri genellikle manuel bir biçimde komut satırından yapacağız.
+    gibi değil, bir text editör gibi kullanacağız. İşlemleri genellikle manuel bir biçimde komut satırından yapacağız.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -1363,10 +1365,10 @@
 
     Burada "type" programın nasıl çalıştırılacağını belirtmektedir. Eğer buraya "shell" girilirse çalıştırma kabuğa yaptırılır.
     Eğer burada "process" girilirse doğrudan çalıştırma uygulanmaktadır. "command" çalıştırılacak programı belirtmektedir. 
-    Tabii bu program ya doğrudan derleyici olur ya da make gibi, bir shell script gibi bir program olabilir. "args" ise "command" 
+    Tabii bu program ya doğrudan derleyici olur ya da "make" gibi bir shell script gibi bir program olabilir. "args" ise "command" 
     ile belirtilen programın komut satırı argümanlarını belirtmektedir.
 
-    Bu dosya oluşturultan sonra derlenecek dosya editörde aktif hale getirilir. Shift+Ctrl+P tuşlarına basılarak "Run Build Task" 
+    Bu dosya oluşturulduktan sonra derlenecek dosya editörde aktif hale getirilir. Shift+Ctrl+P tuşlarına basılarak "Run Build Task" 
     seçilir.
 
     Tabii aslında yukarıdaki "tasks.json" dosyasında birden fazla "label" olabilir. Burada doğrudan derleyici çalıştırmak yerine 
@@ -1419,15 +1421,15 @@
     Bu dosyada "code" isimli bir program bulunmaktadır. Bu programı Linux sistemlerinde "/usr/bin" dizinine kopyalayabilirsiniz. 
     Bu işlem Linux sistemlerinde aşağıdaki gibi yapılabilir:
 
-    tar xf <indirilen CLI dosyası>
-    sudo cp code /user/bin
+    $ tar xf <indirilen CLI dosyası>
+    $ sudo cp code /user/bin
 
     2) Hedef makinede code programı aşağıdaki gibi çalıştırılır:
 
     $ code tunnel
 
     Bu program server'ın çalıştırılmasını sağlayacaktır. Bu çalıştırmayı ilk kez yaptığınızda github için bir onaylama istenmektedir.
-    Bundan sonra size bir URL verilir bu URL yerel makinenizin tarayıcısında yazılırsa VSCode editörü grafik atayüzle açılacaktır.
+    Bundan sonra size bir URL verilir. Bu URL yerel makinenizin tarayıcısında yazılırsa VSCode editörü grafik arayüzle açılacaktır.
     Tabii siz aslında uzak makinede VSCode editörü ile çalışıyor durumda olacaksanız.
 
     3) Bu işlemden sonra uzak makinedeki server program bir URL verir. Bu URL yerel makinede girilirse karşımıza tarayıcıda 
@@ -1456,13 +1458,13 @@
     Biz daha önce araç zincirlerinin manuel bir biçimde oluşturulmasının zorluklarından bahsetmiştik. İşte araç zincirlerinin
     içinde çok çeşitli programlar vardır. Bunların tek tek konfigüre edilip derlenmesi hem zahmetlidir hem de özel bilgiler 
     gerektirmektedir. İşte bu nedenden dolayı araç zincirlerini otomatik olarak üreten yazılımlar oluşturulmuştur. Biz kursumuzda 
-    "buildroot" ve "yocto" projelerini ayrı bölümlerde ele alacağız. Bu projelerle araç zincirileri de oluşturulabilmektedir.
-    Araç zincirlerinin oluşturulmasında son zamanlarda "corsstool-NG" isimli yazılım yaygın biçimde kullanılır olmuştur Biz de 
-    bu bölümde bu crosttol-NG yazılımının kullanılması üzerinde duracağız.
+    "buildroot" ve "yocto" projelerini ayrı bölümlerde ele alacağız. Bu projelerle araç zincirleri de oluşturulabilmektedir.
+    Araç zincirlerinin oluşturulmasında son zamanlarda "crosstool-NG" isimli yazılım yaygın biçimde kullanılır olmuştur. Biz de 
+    bu bölümde bu crosstool-NG yazılımının kullanılması üzerinde duracağız.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    crosstool-NG araç zinciri ouşturan bir yazılımdır. Zaman içerisinde çeşitli böcekler giderilmiş olsa da hala birtakım böcekler 
+    crosstool-NG araç zinciri oluşturan bir yazılımdır. Zaman içerisinde çeşitli böcekler giderilmiş olsa da hala birtakım böcekler 
     bulunmaktadır. Ancak yazılım iş görür bir durumdadır.
 
     crosstool-NG aracını kullanmak için önce onun kaynak kodlarını indirip host makinede derlemek gerekir. Maalesef projenin 
@@ -1478,7 +1480,7 @@
     1) Öncelikle crosstool-NG'nin derlenmesi ve araç zincirinin oluşturulması sırasında gerekli olan başka paketler kurulmalıdır.
     Gerekli bütün paketler aşağıda listelenmiştir. Bunu copy-paste yaparak bunların kurulumlarını sağlayabilirsiniz:
 
-    sudo apt-get install autoconf automake bison bzip2 cmake flex g++ gawk gcc gettext git gperf help2man libncurses5-dev \
+    $ sudo apt-get install autoconf automake bison bzip2 cmake flex g++ gawk gcc gettext git gperf help2man libncurses5-dev \
     libstdc++6 libtool libtool-bin make patch python3-dev rsync texinfo unzip wget xz-utils
 
     2) Projenin kaynak kodları kendi sitesinden indirilip proje derlenmelidir. Projenin resmi sitesi şöyledir:
@@ -1487,7 +1489,7 @@
 
     İndirme işlemi doğrudan git'ten yapılabilir. Örneğin:
 
-    git clone https://github.com/crosstool-ng/crosstool-ng
+    $ git clone https://github.com/crosstool-ng/crosstool-ng
 
     Eğer siteden indirme yapılmışsa indirilen dosya sıkıştırılmış bir dosyadır. Bu dosyanın açılması gerekir. Dosya açılınca bir 
     dizin oluşacaktır.
@@ -1916,6 +1918,7 @@
         Elf64_Half e_shnum;                 /* Number of section header entries */
         Elf64_Half e_shstrndx;              /* Section name string table index */
     } Elf64_Ehdr;
+
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -2250,7 +2253,7 @@
     Sembolün Değeri: C'de global bir değişkene ilkdeğer verdiğimizi düşünelim. Bu ilkdeğerin de derleyici tarafından amaç 
     dosyaya bağlayıcı tarafından da çalıştırılabilen dosyaya yazılması gerekir. Böylece ilgili bölüm belleğe yüklenirken bu 
     global değişken ilkdeğeri ile birlikte belleğe yüklenecektir. İşte eğer bir modül içerisinde bir nense tanımlanmışsa o nesne 
-    bir bölümün belli bir yerindedir. Sembolün değeri ilgili nesnenin kendi bölümünün kaçıncı offset'indne başladığını belirtmektedir. 
+    bir bölümün belli bir yerindedir. Sembolün değeri ilgili nesnenin kendi bölümünün kaçıncı offset'inden başladığını belirtmektedir. 
     Global nesnelere verilen ilkdeğerler ilgili bölümün burada belirtilen offset'inde saklanmaktadır.
 
     Sembolün Uzunluğu: Burada ilgili nesnenin bölüm içerisinde kaç byte yer kapladığı bilgisi bulundurulmaktadır. Eğer ilgili 
@@ -2539,59 +2542,394 @@
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-
+												16. Ders 07/05/2024 - Salı
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+    ELF formatının diğer önemli bir bölümü de "Program Başlık Tablosu (Program Header Table)" denilen bölümüdür. Program Başlık 
+    Tablosu eşit uzunlukta Program Başlıklarından (Program Header Table Entry) oluşmaktadır. Program Başlık Tablosunun ELF 
+    dosyasında nereden başladığı ve hangi uzunlukta olduğu ELF Başlığında belirtilmektedir. Program Başlık Tablosu amaç dosyalarda 
+    değil "çalıştırılabilen dosyalarda ve dinamik kütüphane dosyalarında" bulunmaktadır. İşletim sistemi çalıştırılabilen dosyayı
+    ya da dinamki kütüphane dosyasını bölüm bölüm değil segment segment yüklemektedir. Bir segment aynı özelliğe sahip peşi sıra
+    giden bölümlerden oluşmaktadır. Program Başlık Tabosundaki ger Program Başlığı bir segment hakkında bilgi vermektedir. 
+    Şimdi aklınıza bölümler varken nedne segment'lere gereksinim duyulmuştur sorusu gelebilir? Bölümler daha çok linker için 
+    segment'ler ise yükleyici için düşünülmüştür. Dosyada benzer özelliklere sahip bölümler segment ismiyle bir araya getirilmektedir. 
+    Böylece işletim sistemi (exec fonksiyonları) bu segment'leri yüklemektedir.
 
+    Program Başlık Tablosundaki Program Başlıklarının 32 bit ELF formatındaki yapısal biçimi şöyledir:
+
+    typedef struct {
+        Elf32_Word p_type;          /* Type of segment */
+        Elf32_Off p_offset;         /* Offset in file */
+        Elf32_Addr p_vaddr;          /* Virtual address in memory */
+        Elf32_Addr p_paddr;         /* Reserved */
+        Elf32_Word p_filesz;        /* Size of segment in file */
+        Elf32_Word p_memsz;         /* Size of segment in memory */
+        Elf32_Word p_flags;         /* Segment attributes */
+        Elf32_Word p_align;         /* Alignment of segment */
+    } Elf32_Phdr;
+
+    typedef struct {
+        Elf64_Word p_type;          /* Type of segment */
+        Elf64_Word p_flags;         /* Segment attributes */
+        Elf64_Off p_offset;         /* Offset in file */
+        Elf64_Addr p_vaddr;         /* Virtual address in memory */
+        Elf64_Addr p_paddr;         /* Reserved */
+        Elf64_Xword p_filesz;       /* Size of segment in file */
+        Elf64_Xword p_memsz;        /* Size of segment in memory */
+        Elf64_Xword p_align;        /* Alignment of segment */
+    } Elf64_Phdr;
+
+    Program Başlığında şu bilgiler yer almaktadır:
+
+    - Başlığn Türü: Burada PT_LOAD ilgili segment'in belleğe yüklenmesi gerektiği anlamına gelmektedir. Her ne kadar yukarıda 
+    Program Başlık Tablosunun belle yüklenecek segment'leri belirttiğini söylemiş olsak da belleğe yüklenmeyen ancak ilgili 
+    dosyanın yüklenmesinde kullanılacak bazı bilgiler de Program Başlık Tablosunda birer segment olarak bulunmaktadır. 
+    Yüklenecek olan segment'lerin türü PT_LOAD biçiminde belirtilmektedir.
+
+    - Segment'in Koruma Bayrakları: İleride ele alınacağı gibi Sayfalama (paging) mekanizmasına sahip olan işlemcilerde RAM 
+    sayfalardan (pages) oluşmaktadır. Sayfalara koruma bayrakları iliştirilebilmektedir. Örneğin bir ayfanın koruma bayrağı 
+    "Read Only" ise işlemci bu sayfaya yazma yapamaz. Eğer işlemci böyle bir sayfaya yazma yapmaya çalışırse içsel bir kesme 
+    oluşur (page fault) ve program çöker. Bir sayfada bir kodun çalıştırılabilmesi için sayfa koruma bayraklarının "Executable"
+    olması gerekir. Aksi takdirde o sayfadaki bir fonksiyonu CALL makine komutlarıyla çağıramayız. Pek çok işlemcide sayfanın 
+    "Write" özelliğine sahip olması aynı zamanda "Read" özelliğine de sahip olması anlamına gelmektedir. Ancak linker programları
+    bunları ayrı ayrı belirtmektedir.
+
+    - Segment'in ELF Dosyasındaki Başlangıç Offset'i ve Uzunluğu: Yükleyicinin segment'i belleğe yükleyebilmesi için dosyanın 
+    nereseinden başladığını ve hangi uzunlukta olduğunu bilmesi gerekir.
+
+    - Segment'in Bellekteki Uzunluğu: İlkdeğer verilmemiş global değişkenler ELF dosyalarının içerisinde yer kaplamamaktadır. 
+    Ancak bunlar için de bellekte yer ayrılmalıdır. O halde bir segment belleğe yüklenirken bellekte ne kadar yer tahsis edileceği
+    de bilinmelidir. Tabii linker ilkdeğer verilmemiş global değişkenlerin bulunduğu bölümleri (tipik olarak .bss) segment'in 
+    sonuna almaktadır. Böylece yükleyici dosyada belirtilen uzunluktaki kısmı bellekte tahsis ettiği alanın başından itibaren y
+    ükleyebilir.
+
+    Segment'in Sanal Belleğe Yükleme Adresi: Linker programın belli bir adresten itibaren yükleneceği varsayımyla kodu düzeltmektedir.
+    İşte her segment'in sanal belleğin neresindne itibaren yükleneceği Program Başlığında belirtilmektedir. Ancak segment yükleyici 
+    tarafından bu adrese yüklenmeyebilir. Bu durumda yükleyici "relocation" işlemi uygulayacaktır. Yani linker modüllerdeki kodu
+    belli bir adresten itibaren yüklenecekmiş gibi oluşturmaktadır. Ancak yükleyici eğer onu başka bir yere ykleyecekse "relocation"
+    işlemi uygulamak zorundadır.
+
+    Çalışmakta olan programın sanal bellek alanına map edilen segment'ler proc dosya sisteminden /proc/<proses_is>/maps 
+    dosyasının içerisinden görülebilir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-
+    Pekiyi biz basit bir yükleyici program yazmak istesek bunu nasıl yazabiliriz? Aslında yükleyiciler burada henüz ele almadığımız
+    bazı ayrıntılı işlemleri de yapmaktadır. Ancak kabaca bunu gerçekleştirebilmek için ELF dosya formatını parse edip Program 
+    Başlık Tablosundaki PT_LOAD ile belirtilen segment'leri belirtilen sanal bellek adresine mmap fonksiyonu yüklenmesi gerekir.
+    Tabii yükleme işlemi bittikten sonra programın ELF dosyasının başlık kısmında belirtilen "entry point"den başlatılması gerekir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-
+    ELF formatının diğer önemli bir bölümü de ".dynamic" isimli bölümüdür Bu bölüm ".dynsym" bölümüyle birlikte kullanılmaktadır. 
+    Bu bölümün işlevini anlayabilmek için dinamik kütüphanelerin nasıl yüklendiğinin bilinmesi gerekir. Biz önce statik ve 
+    dinamik kütüphaneleri ele alıp ondan sonra ELF formatının bu bölümlerini açıklayacağız.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+    Kütüphane "hazır kodların bulunduğu topluluklar" için kullanılan bir terimdir. Ancak aşağı seviyeli dünyada kütüphane 
+    kavramı daha farklı bir biçimde kullanılmaktadır. Aşağı seviyeli dünyada "içerisinde derlenmiş bir biçimde fonksiyonların 
+    bulunduğu dosyalara kütüphane (library)" denilmektedir. Aslında kütüphaneler yalnızca fonksiyon değil, global nesneler 
+    de içerebilmektedir.
 
+    Kütüphaneler "statik" ve "dinamik" olmak üzere ikiye ayrılmaktadır. Statik kütüphane dosyalarının uzantıları UNIX/Linux 
+    sistemlerinde ".a (archive)" biçiminde, Windows sistemlerinde ".lib (library)" biçimindedir. Dinamik kütüphane dosyalarının 
+    uzantıları ise UNIX/Linux sistemlerinde ".so (shared object), Windows sistemlerinde ".dll (dynamic link library)" biçimindedir. 
+    UNIX/Linux dünyasında kütüphane dosyaları geleneksel olarak başında "lib" öneki olacak biçimde isimlendirilmektedir. (Örneğin 
+    "x" isimli bir statik kütüphane dosyası UNIX/Linux sistemlerinde genellikle "libx.a" biçiminde, "x" isimli bir dinamik kütüphane 
+    dosyası ise UNIX/Linux sistemlerinde genellikle "libx.so" biçiminde isimlendirilmektedir.)
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+    Statik kütüphaneler aslında "object modülleri (yani .o dosyalarını)" tutan birer kap gibidir. Yani statik kütüphaneler object
+    modüllerden oluşmaktadır. Statik kütüphanelere link aşamasında linker tarafından bakılır. Bir program statik kütüphane dosyasından 
+    bir çağırma yaptıysa (ya da o kütüphaneden bir global değişkeni kullandıysa) linker o statik kütüphane içerisinde ilgili 
+    fonksiyonun bulunduğu object modülü link aşamasında statik kütüphane dosyasından çekerek çalıştırılabilir dosyaya yazar. 
+    (Yani statik kütüphaneden bir tek fonksiyon çağırsak bile aslında o fonksiyonun bulunduğu object modülün tamamı çalıştırılabilen 
+    dosyaya yazılmaktadır.) Statik kütüphaneleri kullanan programlar artık o statik kütüphaneler olmadan çalıştırılabilirler.
 
+    Statik kütüphane kullanımının şu dezavantajları vardır:
+
+    1) Kütüphaneyi kullanan farklı programlar aynı fonksiyonun (onun bulunduğu object modülün) bir kopyasını çalıştırılabilir dosya 
+    içerisinde bulundururlar. Yani örneğin printf fonksiyonu statik kütüphanede ise her printf kullanan C programı aslında printf 
+    fonksiyonunun bir kopyasını da barındırıyor durumda olur. Bu da programların diskte fazla yer kaplamasına yol açacaktır.
+
+    2) Aynı statik kütüphaneyi kullanan programlar belleğe yüklenirken işletim sistemi aynı kütüphane kodlarınını yeniden fiziksel 
+    belleğe yükleyecektir. İşletim sistemi bu kodların ortak olarak kullanıldığını anlayamamaktadır.
+
+    3) Statik kütüphanede bir değişiklik yapıldığında onu kullanan programların yeniden link edilmesi gerekir.
+
+    Statik kütüphane kullanımının şu avantajları vardır:
+
+    1) Kolay konuşlandırılabilirler. Statik kütüphane kullanan bir programın yüklenmesi için başka dosyalara gereksinim 
+    duyulmamaktadır.
+
+    2) Statik kütüphanelerin kullanımları kolaydır, statik kütüphane kullanan programlar için daha kolay build ya da make işlemi 
+    yapılabilmektedir.
+
+    3) Statik kütüphane kullanan programların yüklenmesi dinamik kütüphane kullanan programların yüklenmesinden çoğu kez daha hızlı
+    yapılmaktadır. Ancak bu durum çeşitli koşullara göre tam ters bir hale de gelebilmektedir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+    UNIX/Linux sistemlerinde statik kütüphane dosyaları üzerinde işlemler "ar" isimli utility program yoluyla yapılmaktadır. 
+    ar programına önce bir seçenek, sonra statik kütüphane dosyasının ismi, sonra da bir ya da birden fazla object modül ismi komut
+    satırı argümanı olarak verilir. Örneğin:
 
+    $ ar r libmyutil.a x.o y.o
+
+    Burada r seçeneği belirtmektedir. ar eski bir komut olduğu için burada seçenekler '-' ile başlatılarak verilmemektedir. Komuttaki
+    "libmyutil.a" işlemden etkilenecek statik kütüphane dosyasını "x.o" ve "y.o" argümanları ise object modülleri belirtmektedir. 
+    Tipik ar seçenekleri ve yaptıkları işler şunlardır:
+
+    r (replace) seçeneği (yanında "-" olmadığına dikkat ediniz) ilgili object modüllerin kütüphaneye yerleştirilmesini sağlar. 
+    Eğer kütüphane dosyası yoksa komut aynı zamanda onu yaratmaktadır. Örneğin:
+
+    ar r libmyutil.a x.o y.o
+
+    Burada "libmyutil.a" statik kütüphane dosyasına "x.o" ve "y.o" object modülleri yerleştirilmiştir. Eğer "libmyutil.a" dosyası
+    yoksa aynı zamanda bu dosya yaratılacaktır.
+
+    t seçeneği kütüphane içerisindeki object modüllerin listesini almakta kullanılır. Örneğin:
+
+    $ ar t libsample.a
+
+    d (delete) seçeneği kütüphaneden bir object modülü silmekte kullanılır. Örneğin:
+
+    ar d libmyutil.a x.o
+
+    x (extract) seçeneği kütüphane içerisindeki object modülü bir dosya biçiminde diske save etmekte kullanılır. Ancak bu object 
+    modül kütüphane dosyasından silinmeyecektir. Örneğin:
+
+    $ ar x libmyutil.a x.o
+
+    m (modify) seçeneği de bir object modülün yeni versiyonunu eski versiyonla değiştirmekte kullanılır.
+
+    O halde "x.c" ve "y.c" dosyalarının içerisindeki fonksiyonları statik kütüphane dosyasına eklemek için sırasıyla şunlar
+    yapılmalıdır:
+
+    $ gcc -c x.c
+    $ gcc -c y.c
+    $ ar r libmyutil.a x.o y.o
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+    Statik kütüphane kullanan programları derlerken statik kütüphane dosyaları komut satırında belirtilebilir. Bu durumda gcc 
+    ve clang derleyicileri o dosyayı link işleminde kullanmaktadır. Örneğin:
 
+    $ gcc -o app app.c libmyutil.a
+
+    Burada "libmyutil.a" dosyasına C derleyicisi bakmamaktadır. gcc aslında bu dosyayı linker'a iletmektedir. Biz bu işlemi 
+    iki adımda da yapabilirdik:
+
+    gcc -c app.c
+    gcc -o app app.o libmyutil.a
+
+    Her ne kadar GNU'nun linker programı aslında "ld" isimli programsa da genellikle programcılar bu ld linker'ını doğrudan 
+    değil yukarıdaki gibi "gcc" yoluyla kullanırlar. Çünkü ld linker'ı kullanılırken "libc" kütüphanesi gibi start-up object
+    modüller gibi modüllerin de programcı tarafından ld linker'ına verilmesi gerekmektedir. Bu da oldukça sıkıcı bir işlemdir. 
+    Halbuki biz ld linker'ını gcc yoluyla çalıştırdığımızda ld linker'ına bu dosyalar zaten default kütüphaneler ve object modüller
+    gcc tarafından verilmektedir.
+
+    Komut satırında kütüphane dosyalarının komut satırı argümanlarının sonunda belirtilmesi uygundur. Çünkü gcc programı kütüphane 
+    dosyalarının solundaki dosyalar link edilirken ilgili kütüphane dosyasını bu işleme dahil ederler. Örneğin:
+
+    gcc -o app app1.o libmyutil.a app2.o
+
+    Böylesi bir kullanımda "libmyutil.a" komut satırı argümanının solunda yalnızca "app1.o" dosyası vardır. Dolayısıyla yalnızca 
+    bu modül için bu kütüphaneye bakılacaktır, "app2.o" bu kütüphaneye bakılmayacaktır.
+
+    Şüphesiz statik kütüphane kullanmak yerine aslında object modülleri de doğrudan link işlemine sokabiliriz. Örneğin:
+
+    gcc -o sample sample.c x.o y.o
+
+    Ancak çok sayıda object modül söz konusu olduğunda bu işlemin zorlaşacağına dikkat ediniz. Yani "object modüller dosyalara 
+    benzetilirse statik kütüphane dosyaları dizinler gibi" düşünülebilir.
+
+    Derleme işlemi sırasında kütüphane dosyası -l<isim> biçiminde de belirtilebilir. Bu durumda arama sırasında "lib" öneki 
+    ve ".a" uzantısı aramaya dahil edilmektedir. Yani örneğin:
+
+    gcc -o sample sample.c -lmyutil
+
+    İşleminde aslında libmyutil.a (ya da libmyutil.so) dosyaları aranmaktadır. Arama işlemi sırasıyla bazı dizinlerde yapılmaktadır. 
+    Örneğin /lib dizini, /usr/lib dizini, /usr/local/lib dizini gibi dizinlere bakılmaktadır. Ancak "bulunulan dizine" bakılmamaktadır. 
+    -l seçeneği ile "belli bir dizine de bakılması isteniyorsa" -L seçeneği ile ilgili dizin belirtilebilir. Örneğin:
+
+    gcc -o sample sample.c -lmyutil -L.
+
+    Buradaki '.' çalışma dizinini temsil etmektedir. Artık "libmyutil.a" kütüphanesi için bulunulan dizine de (current working 
+    directory) bakılacaktır. Birden fazla dizin için -L seçeneğinin yinelenmesi gerekmektedir. Örneğin:
+
+    gcc -o sample sample.c -lmyutil -L. -L/home/csd
+
+    Geleneksel olarak -l ve -L seçeneklerinden sonra boşluk bırakılmamaktadır. Ancak boşluk bırakılmasında bir sakınca yoktur.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+    Bir statik kütüphane başka bir statik kütüphaneye bağımlı olabilir. Örneğin biz "liby.a" kütüphanesindeki kodda "libx.a" 
+    kütüphanesindeki fonksiyonları kullanmış olabiliriz. Bu durumda "liby.a" kütüphanesini kullanan program "libx.a" kütüphanesini
+    de komut satırında belirtmek zorundadır. Örneğin:
 
+    gcc -o sample sample.c libx.a liby.a
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-
+												17. Ders 09/05/2024 - Perşembe
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+    Dinamik kütüphane dosyalarının UNIX/Linux sistemlerinde uzantıları ".so" (shared object'ten kısaltma), Windows sistemlerinde 
+    ise ".dll" (Dynamic Link Library) biçimindedir.
 
+    Bir dinamik kütüphaneden bir fonksiyon çağrıldığında linker statik kütüphanede olduğu gibi gidip fonksiyonun kodunu 
+    (fonksiyonun bulunduğu object modülü) çalıştırılabilen dosyaya yazmaz. Bunun yerine çalıştırılabilen dosyaya çağrılan fonksiyonun 
+    hangi dinamik kütüphanede olduğu bilgisini yazar. Çalıştırılabilen dosyayı yükleyen işletim sistemi o dosyanın çalışması için 
+    gerekli olan dinamik kütüphaneleri çalıştırılabilen dosyayla birlikte bütünsel olarak sanal bellek alanına yüklemektedir. Böylece 
+    birtakım ayarlamalar yapıldıktan sonra artık çağrılan fonksiyon için gerçekten o anda sanal belleğe yüklü olan dinamik kütüphane 
+    kodlarına gidilmektedir. Örneğin biz app programımızda "libmyutil.so" dinamik kütüphanesinden foo isimli fonksiyonu çağırmış olalım. 
+    Bu foo fonksiyonunun kodları dinamik kütüphaneden alınıp app dosyasına yazılmayacaktır. Bu app dosyası çalıştırıldığında 
+    işletim sistemi bu app dosyası ile birlikte "libmyutil.so" dosyasını da sanal belleğe yükleyecektir. Programın akışı foo çağrısına
+    geldiğinde akış "libmyutil.so" dosyası içerisindeki foo fonksiyonunun kodlarına aktarılacaktır. Dinamik kütüphane dosyalarının 
+    bir kısmının değil, hepsinin prosesin adres alanına yüklendiğine dikkat ediniz. Tabii işletim sisteminin sanal bellek mekanizması
+    aslında yalnızca bazı sayfaları fiziksel belleğe yükleyebilecektir.
+
+    Dinamik kütüphane kullanımının avantajları şunlardır:
+
+    1) Çalıştırılabilen dosyalar fonksiyon kodlarını içermezler. Dolayısıyla önemli bir disk hacmi kazanılmış olur. Oysa statik 
+    kütüphanelerde statik kütüphanelerden çağrılan fonksiyonlar çalıştırılabilen dosyalara yazılmaktadır.
+
+    2) Dinamik kütüphaneler birden fazla proses tarafından fiziksel belleğe tekrar tekrar yüklenmeden kullanılabilmektedir.
+    Yani işletim sistemi arka planda aslında aynı dinamik kütüphaneyi kullanan programlarda bu kütüphaneyi tekrar tekrar fiziksel 
+    belleğe yüklememektedir. Bu da statik kütüphanelere göre önemli bir bellek kullanım avantaj oluşturmaktadır. Bu durumda eğer 
+    dinamik kütüphanenin ilgili kısmı daha önce fiziksel belleğe yüklenmişse bu durum dinamik kütüphane kullanan programın daha hızlı 
+    yüklemesine de yol açabilmektedir. Porg1 ve Prog2 biçiminde iki programın çalıştığını düşünelim. Bunlar aynı dinamik 
+    kütüphaneyi kullanıyor olsun. İşletim sistemi bu dinamik kütüphaneyi bu proseslerin sanal bellek alanlarının farklı yerlerine 
+    yükleyebilir. Ancak aslında işletim sistemi sayfa tablolarını kullanarak mümkün olduğunca aslında bu iki dinamik kütüphaneyi 
+    aynı fiziksel sayfaya eşlemeye çalışacaktır. Tabii bu durumda proseslerden biri dinamik kütüphane içerisindeki bir statik 
+    nesneyi değiştirdiğinde artık "copy on write" mekanizması devreye girecek ve dinamik kütüphanenin o sayfasının yeni bir kopyası 
+    oluşturulacaktır. Aslında bu durum fork fonksiyonu ile yeni bir prosesin yaratılması durumuna çok benzemektedir. Burada anlatılan 
+    unsurların ayrıntıları "sayfalama ve sanal bellek" kullanımın açıklandığı paragraflarda ele alınacaktırç
+
+    3) Dinamik kütüphaneleri kullanan programlar bu dinamik kütüphanelerdeki değişikliklerden etkilenmezler. Yani biz dinamik 
+    kütüphanenin yeni bir versiyonunu oluşturduğumuzda bunu kullanan programları derlemek ya da link etmek zorunda kalmayız. 
+    Örneğin bir dinamik kütüphaneden foo fonksiyonunu çağırmış olalım. Bu foo fonksiyonunun kodları bizim çalıştırılabilir dosyamızın
+    içerisinde değil de dinamik kütüphanede olduğuna göre dinamik kütüphanedeki foo fonksiyonu değiştirildiğinde bizim programımız 
+    artık değişmiş olan foo fonksiyonunu çağıracaktır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+    Dinamik kütüphanelerin gerçekleştiriminde ve kullanımında önemli bir sorun vardır. Dinamik kütüphanelerin tam olarak sanal 
+    belleğin neresine yükleneceği baştan belli değildir. Halbuki çalıştırılabilen dosyanın sanal belleğin neresine yükleneceği 
+    baştan bilinebilmektedir. Yani çalıştırılabilen dosyanın tüm kodları aslında derleyici ve bağlayıcı tarafından zaten "onun 
+    sanal bellekte yükleneceği yere göre" oluşturulmaktadır. Fakat dinamik kütüphanelerin birden fazlası prosesin sanal adres 
+    alanına yüklenebildiğinden bunlar için yükleme adresinin önceden tespit edilmesi mümkün değildir. İşte bu sorunu giderebilmek 
+    için işletim sistemlerinde değişik teknikler kullanılmaktadır. Windows sistemlerinde "import-export tablosu ve "load time 
+    relocation" yöntemleri tercih edilmiştir. Bu sistemlerde dinamik kütüphane belli bir adrese yüklendiğinde işletim sistemi 
+    o dinamik kütüphanenin "relocation" tablosuna bakarak gerekli makine komutlarını düzeltmektedir. Dinamik kütüphane fonksiyonlarının
+    çağrımı için de import tablosu ve export tablosu denilen tablolar kullanılmaktadır. UNIX/Linux dünyasında dinamik kütüphanelerin 
+    herhangi bir yere yüklenebilmesi ve minimal düzeyde relocation uygulanabilmesi için "Konumdan Bağımsız Kod (Position Independent 
+    Code)" denilen teknik kullanılmaktadır. Konumdan bağımsız kod "nereye yüklenirse yüklenilsin çalışabilen kod" anlamına gelmektedir. 
+    Konumdan bağımsız kod oluşturabilmek derleyicinin yapabileceği bir işlemdir. Konumdan bağımsız kod oluşturabilmek için gcc 
+    ve clang derleyicilerinde derleme sırasında "-fPIC" seçeneğinin bulundurulması gerekmektedir. Biz kursumuzda konumdan bağımsız 
+    kodun ayrıntıları üzerinde durmayacağız.
 
+    Pekiyi Windows sistemlerinin kullandığı "relocation" tekniği ile UNIX/Linux sistemlerinde kullanılan "konumdan bağımsız
+    kod tekniği" arasında performans bakımından ne farklılıklar vardır? İşte bu tekniklerin kendi aralarında bazı avantaj 
+    ve dezavantajları bulunmaktadır. Windows'taki teknikte "relocation" işlemi bir zaman kaybı oluşturabilmektedir. Ancak 
+    bir "relocation" işlemi yapıldığında kodlar daha hızlı çalışma eğilimindedir. Konumdan bağımsız kod tekniğinde ise
+    "relocation" işlemine minimal düzeyde gereksinim duyulmaktadır. Ancak dinamik kütüphanelerdeki fonksiyonlar çağrılırken göreli 
+    biçimde daha fazla zaman kaybedilmektedir. Aynı zamanda bu teknikte kodlar biraz daha fazla yer kaplamaktadır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+    Pekiyi neden dinamik kütüphane dosyaları linker tarafından tıpkı çalıştırılabilir dosyalarda olduğu gibi sanal bellekte belli 
+    bir yere yüklenenince sorunsuz çalışacak biçimde oluşturulmuyor? Çalıştırılabilir dosyalar bellek boşken yüklendiğinden onların
+    belli bir yere yüklenmesinde bir sorun yoktur. Ancak bir program çok fazla dinamik kütüphane kullanabileceğine göre bu 
+    dinamik kütüphanelerin baştan yerinin belirlenmesi olanaksızdır.
 
+    Pekiyi dinamik kütüphaneler içerisindeki global değişkenlerin ve fonksiyonların yükleme yerinden bağımsız bir biçimde 
+    dinamik kütüphane içerisinden kullanılması nasıl sağlanabilir? Dinamik kütüphane içerisinde aşağıdaki, gibi bir kod parçası 
+    bulunuyor olsun:
+
+    int g_a;
+    ...
+
+    g_a = 10;
+
+    Burada derleyicinin yukarıdaki ifadeye ilişkin makine kodlarını üretebilmesi için g_a değişkenin tüm bellekteki adresini 
+    (yani tepeden itibaren adresini) bilmesi gerekir. Bir nesnenin belleğin tepesinden itibarenki adresine "mutlak adres (absolute
+    address) de denilmektedir. Örneğin Intel işlemcilerinde yukarıdaki ifade aşağıdaki gibi makine komutlarına dönüştürülmektedir:
+
+    MOV  EAX, 10
+    MOV  [g_a'nın mutlak adresi], EAX
+
+    İşte sorun buradaki g_a değişkeninin mutlak adresinin program yüklenene kadar bilinmemesidir. Bu sorunu çözmenin de iki yolu 
+    vardır:
+
+    1) Derleyici ve linker g_a'nın mutlak adresinin bulunduğu yeri boş bırakır. Yükleyicinin bu yeri yükleme adresine göre 
+    doldurmasını ister. İşte bu işlem yükleyicinin yaptığı "relocation" işlemidir. Bu tür relocation işlemlerine "load time 
+    relocation" da denilmektedir. Windows sistemleri bu yöntemi kullanmaktadır.
+
+    2) Derleyici makine komutunu o anda komutun yütürüldüğü yerin adresini barındıran ve ismine "Instruction Pointer" denilen 
+    yazmaca dayalı olarak oluşturabilir. Çünkü linker komutun bulunduu yerden g_a'ya kadar kaç byte'lık bir açıklık olduğunu 
+    bilmektedir. İşte buna "konumdan bağımsız kod (position independent code)" denilmektedir.
+
+    Yukarıda da belirttiğimiz gibi birinci teknik (Windows sistemlerinin kullandığı teknik) relocation yapıldıktan sonra kodun
+    hızlı çalışmasını sağlamaktadır. Ancak bu teknikte relocation zamanı yüklemeyi uzatabilmektedir. İkinci teknikte ise relocation
+    minimal düzeyde tutulmaktadır. Ancak bu global değişkenlere erişim birkaç makine komutu ile daha yavaş yapılmaktadır. 
+    UNIX/Linux sistemleri genel olarak bu tekniği kullanmaktadır. Ayrıca birinci teknikte kod üzerinde relocation uygulandığı 
+    için mecburen "copy on write" mekanizaması devreye sokulmaktadır. Bu da fiziksel belleğin kullanım verimini düşürebilmektedir.
+
+    Bu noktada ek olarak işlemcilerde bazı makine komutlarının (MOV, LOAD, STORE gibi) mutlak adres kullandığını ancak CALL ve 
+    JMP gibi bazı makine komutlarının hem mutlak hem de göreli adres kullanabildiğini belirtelim. Aslında işlemcileri tasarlayanlar 
+    relocation işlemi gerekmesin diye CALL ve JMP komutlarının göreli (relative) versiyonlarını da oluşturmuşlardır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+     UNIX/Linux sistemlerinde bir dinamik kütüphane oluşturma işlemi şöyle yapılır:
 
+    1) Önce dinamik kütüphaneye yerleştirilecek object modüllerin -fPIC seçeneği ile "Konumdan Bağımsız Kod (Position Independent 
+    Code)" tekniği kullanılarak derlenmesi gerekir. (-fPIC seçeneğinde -f'ten sonra boşluk bırakılmamalıdır.)
+
+    2) Link işleminde "çalıştırılabilir (executable)" değil de "dinamik kütüphane" dosyasının oluşturulması için -shared seçeneğinin 
+    kullanılması gerekir. "-shared" seçeneği kullanılmazsa linker dinamik kütüphane değil, normal çalıştırılabilir dosya oluşturmaya
+    çalışmaktadır. Zaten bu durumda main fonksiyonu olmadığı için linker error mesajı verecektir. Örneğin:
+
+    $ gcc -fPIC a.c b.c c.c
+    $ gcc -shared -o libmyutil.so  a.o b.o c.o
+
+    Dinamik kütüphanelere daha sonra dosya eklenip çıkartılamaz. Onların her defasında yeniden bütünsel biçimde oluşturulmaları 
+    gerekmektedir. Yukarıdaki işlem aslında tek hamlede de aşağıdaki gibi yapılabilmektedir:
+
+    $ gcc -shared -o libmyutil.so -fPIC a.c b.c c.c
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Pekiyi biz -fPIC seçeneğini kullanmadan yani "konumdan bağımsız kod" üretmeden dinamik kütüphane oluşturmaya çalışırsak
+    ne olur? MEvcut GNU linker programları -shared seçeneği kullanıldığında global değişkenler için relocation işlemi söz konusu
+    ise bir mesaj vererek link işlemini yapmamaktadır. Yani bu durumda mevcut GNU linker programları kodun -fPIC seçeneği ile
+    derlenmesini zorunlu tutmaktadır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Biz yukarıda dinamik kütüphanelerin nasıl oluşturulduğunu gördük. Pekiyi dinamik kütüphaneler nasıl kullanılmaktadır?
+
+    Dinamik kütüphane kullanan bir program link edilirken kullanılan dinamik kütüphanenin komut satırında belirtilmesi gerekir. 
+    Örneğin:
+
+    gcc -o app app.c libmyutil.so
+
+    Tabii bu işlem yine -l seçeneği ile de yapılabilirdi:
+
+    gcc -o app app.c -lmyutil -L.
+
+    Bu biçimde çalıştırılabilir dosya oluşturulduğunda linker bu çalıştırılabilir dosyanın çalıştırılabilmesi için hangi 
+    dinamik kütüphanelerin yüklenmesi gerektiğini ELF formatının ".dynamic" isimli bölümüne yazmaktadır. Böylece yükleyici 
+    bu programı yüklerken onun kullandığı dinamik kütüphaneleri de yükleyecektir. Ancak linker bu ".dynamic" bölümüne çalıştırılabilir
+    dosyanın kullandığı dinamik kütüphanelerin yol ifadesini (yani tam olarak nerede olduğunu) yazmaz. Yalnızca isimlerini 
+    yazmaktadır. İşte yükleyici bu nedenle dinamik kütüphaneleri önceden belirlenen bazı yerlerde aramaktadır. Bu yere çalıştırılabilir
+    dosyanın yüklendiği dizin (current working directory) dahil değildir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
