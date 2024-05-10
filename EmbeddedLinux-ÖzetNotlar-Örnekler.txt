@@ -1260,14 +1260,14 @@
 
     https://www.eclipse.org/downloads/packages/
 
-    2) File/New/C/C++ seçeneğinden "C++ Project" ya da "C Project" seçilir. ("C/C++ Project" seçeneğini seçmeyiniz.)
+    2) "File/New/C/C++" seçeneğinden "C++ Project" ya da "C Project" seçilir. ("C/C++ Project" seçeneğini seçmeyiniz.)
 
     3) Karşımıza çıkan diyalog penceresinde projeye bir isim verilir. Sağ taraftaki "Toolchains" panelinden de "Cross GCC" 
     seçilir.
 
-    4) Daha sonra Project/Properties menüsünden "Tool Setting" seçilir. Çıkan diyalog penceresinden "Cross Settings" seçilir. 
-    Yan taraftaki Prefix edit alanına alet zincirinin ön ekleri girilir. Öneklerin sonunda "-" karakterinin de bulundurulması 
-    gerekmektedir. Örneğin "arm-linux-gnueabihf-" gibi. Path edit alanına ise çapraz alet zincirindeki programların bulunduğu
+    4) Daha sonra "Project/Properties" menüsünden "Tool Setting" seçilir. Çıkan diyalog penceresinden "Cross Settings" seçilir. 
+    Yan taraftaki "Prefix" edit alanına alet zincirinin ön ekleri girilir. Öneklerin sonunda "-" karakterinin de bulundurulması 
+    gerekmektedir. Örneğin "arm-linux-gnueabihf-" gibi. "Path edit" alanına ise çapraz alet zincirindeki programların bulunduğu
     "bin" dizininin yol ifadesi girilmelidir. (Örneğin "C:\SysGCC\beaglebone\bin" gibi.)
 
     5) Daha sonra Proje üzerine gelinerek bağlam menüsünden "Build Project" seçilip build işlemi yapılır.
@@ -1278,11 +1278,12 @@
 
     - Remote System Explorer User Actions
     - Remote System Explorer End-User Runtime
-    - Remote Cammand Shell Console
+    - Remote Command Shell Console
 
     2) "Window/Show View/Remote Systems" seçilir. "Linux" seçilerek yeni bir bağlantı olşturulur. Bağlantıya bir isim verilerek "Next" 
     düğmesine basılır. "Configuration" penceresinden "SSH files" seçilir. "Next" düğmesine basılır. Bu kez "Configuration" sekmesinden 
     "processes.shell.linux" seçilir ve "Next" seçilir. Oradan da "ssh.shells" seçilir ve "Finish" düğmesine basılır.
+
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -1303,12 +1304,16 @@
     Windows'ta Visual Studio IDE'sinde ARM tabanlı Linux sistemleri için proje (ve çözüm) şöyle yaratılmaktadır:
 
     1) Yeni bir proje oluşturulurken Platform olarak "Linux" ve "Empty Console Application" ya da "Empty Project" seçilir.
+
     2) Üretilecek kod türü ARM seçilir. Bu seçim IDE'nin ana ekranında yukarıdaki combobox'tan yapılabilmektedir.
+
     3) Daha sonra uzak makineye bağlantı yapılır. Bağlantı sırasında bizden uzak makinenin IP adresi (ya da ismi), oradaki 
     kullanıcının ismi ve parolası istenecektir. Bağlantı "Tools/Options/Multi Platform/Connection Manager" menüsünden yapılabilmektedir.
+
     4) Projeye kaynak kod eklenip "build" işlemi yapıldığında hedef makine için kod üretilir. Derleme menüsünden "Çözümü Dağıt"
     seçeneği seçildiğinde otomatik olarak tüm proje uzak makineye aktarılmaktadır. Debug işlemleri için de aslında programcının 
     özel bir hazırlık yapmasına gerek kalmamaktadır. Debug işlemi yerel makinede olduğu gibi yapılmaktadır.
+
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
