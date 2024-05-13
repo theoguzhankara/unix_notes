@@ -1370,7 +1370,7 @@
 
     Burada "type" programın nasıl çalıştırılacağını belirtmektedir. Eğer buraya "shell" girilirse çalıştırma kabuğa yaptırılır.
     Eğer burada "process" girilirse doğrudan çalıştırma uygulanmaktadır. "command" çalıştırılacak programı belirtmektedir. 
-    Tabii bu program ya doğrudan derleyici olur ya da "make" gibi bir shell script gibi bir program olabilir. "args" ise "command" 
+    Tabii bu program ya doğrudan derleyici olur ya da "make" gibi, bir shell script gibi bir program olabilir. "args" ise "command" 
     ile belirtilen programın komut satırı argümanlarını belirtmektedir.
 
     Bu dosya oluşturulduktan sonra derlenecek dosya editörde aktif hale getirilir. Shift+Ctrl+P tuşlarına basılarak "Run Build Task" 
@@ -1403,7 +1403,7 @@
     }
 
     Burada biz "Shift+Ctlr+P" yapıp "Run Build Task" seçeneğini seçtiğimizde "make" programı çalıştırılacak ve make işlemi 
-    yapılacaktır. Make dosyalarının naısl oluşturulacağını ayrı bir bölümde ele alacağız. Ancak en basit bir make dosyası 
+    yapılacaktır. Make dosyalarının nasıl oluşturulacağını ayrı bir bölümde ele alacağız. Ancak en basit bir make dosyası 
     şöyle oluşturulabilir:
 
     SDK_PATH=/home/kaan/Study/EmbeddedLinux/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf/bin
@@ -1464,7 +1464,7 @@
     içinde çok çeşitli programlar vardır. Bunların tek tek konfigüre edilip derlenmesi hem zahmetlidir hem de özel bilgiler 
     gerektirmektedir. İşte bu nedenden dolayı araç zincirlerini otomatik olarak üreten yazılımlar oluşturulmuştur. Biz kursumuzda 
     "buildroot" ve "yocto" projelerini ayrı bölümlerde ele alacağız. Bu projelerle araç zincirleri de oluşturulabilmektedir.
-    Araç zincirlerinin oluşturulmasında son zamanlarda "crosstool-NG" isimli yazılım yaygın biçimde kullanılır olmuştur. Biz de 
+    Araç zincirlerinin oluşturulmasında son zamanlarda "crosstool-NG" isimli yazılım yaygın biçimde kullanılmaya başlanmıştır. Biz de 
     bu bölümde bu crosstool-NG yazılımının kullanılması üzerinde duracağız.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -1526,7 +1526,7 @@
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Crosstool-NG'de çapraz araç zincirleri için üç makine söz konusudur:
+    crosstool-NG'de çapraz araç zincirleri için üç makine söz konusudur:
 
     1) Build Makinesi (Build Machine): Çapraz derleme araçlarının oluşturulduğu makinedir. Örneğin biz Intel tabanlı masaüstü 
     bilgisayarımızda alet zinciri oluşturmak amacıyla build işlemi yapıyorsak build makinesi bu makinedir.
@@ -1540,7 +1540,7 @@
     Genellikle "build makinesi" ile "host makinesi" aynı makine olmaktadır. Yani biz genellikle araç zincirini build ettiğimiz 
     makinede aynı zamanda çapraz derleme işlemlerini de yaparız.
 
-    Crosstool-NG'nin dokümantasyonunda build makinesi, host makinesi ve hedef makine kombinasyonları için dört terim kullanılmaktadır:
+    crosstool-NG'nin dokümantasyonunda build makinesi, host makinesi ve hedef makine kombinasyonları için dört terim kullanılmaktadır:
 
     1) Eğer "build makinesi == host makinesi == hedef makine" ise bu tür araç zincirlerine "doğal araç zincirleri (native toolchains) 
     denilmektedir.
@@ -1708,7 +1708,7 @@
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Derleyicilerin ürettiği amaç dosyaların (object files) ve bağlaıcıların ürettiği çalıştırılabilir dosyaların (executable files)
+    Derleyicilerin ürettiği amaç dosyaların (object files) ve bağlayıcıların ürettiği çalıştırılabilir dosyaların (executable files)
     önceden belirlenmiş belli bir formatı vardır. Microsoft DOS zamanlarında amaç dosya formatı olarak "OMF (Object Module Format)" 
     denilen bir formatı, çalıştırılabilir dosya formatı olarak da "MZ (Mark Zibikovski) " denilen bir formatı kullanıyordu. Sonra 
     16 bit Windows sistemleriyle amaç dosya formatı olarak OMF formatını kullanmaya devam etti ancak çalıştırılabilir dosya formatı 
