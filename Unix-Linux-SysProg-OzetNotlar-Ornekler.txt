@@ -18642,60 +18642,62 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Thread işlemleri işletim sistemlerinde aslında birtakım sistem fonksiyonlarıyla gerçekleştirilmektedir. Örneğin Linux sistemlerinde
-    thread yaratan sys_clone isimli bir sistem fonksiyonu bulunmaktadır. Ancak daha önce de ifade ettiğimiz gibi sistem fonksiyonları 
-    taşınabilir değildir ve sistem fonksiyonları genellikle düşük seviyeli fonksiyonlardır. Yani bunların kullanılmaları zordur. 
-    Eskiden thread'ler UNIX/Linux sistemlerine ilk sokulduğunda farklı thread kütüphaneleri oluşturulmuştu. Programcılar bu 
-    kütüphanelerden birini kullanıyorlardı. Ancak 90'lı yılların ortalarında thread kütüphanesi "Realtime Extensions" başlığı 
-    altında POSIX standartlarına sokulmuştur. POSIX tarafından desteklenen bu thread kütüphanesine "POSIX Thread kütüphanesi" 
-    ya da kısaca "pthread" kütüphanesi denilmektedir. POSIX thread kütüphanesinin içerisindeki bütün fonksiyonlar pthread_xxx 
-    biçiminde "pthread_" öneki ile başlatılmış durumdadır. POSIX thread kütüphanesi "libpthread" isimli bir kütüphane biçiminde 
-    oluşturulmuştur. Bu kütüphaneyi kullanırken derleme sırasında "-lpthread" seçeneğinin bulundurulması gerekmektedir. Bu seçenek 
-    link aşamasında POSIX thread kütüphanesinin linker tarafından işleme sokulacağını belirtmektedir. Diğer programlama dillerindeki 
-    thread kütüphaneleri de UNIX/Linux sistemlerinde pthread kütüphanesi kullanılarak gerçekleştirilmiştir. Yani bu anlamda pthread 
-    kütüphanesi "taban (base)" bir kütüphanedir. (Örneğin C++11 ile birlikte C++'a bir thread kütüphanesi eklenmiştir. Bu kütüphanenin 
-    UNIX/Linux sistemlerindeki gerçekleştirimi pthread kütüphanesi kullanılarak yapılmıştır. Tabii C++'ın thread kütüphanesi C++'ın 
-    standart kütüphanesinin bir parçasıdır. Dolayısıyla "cross platform" özelliği vardır. Yani örneğin aynı kütüphane Windows 
-    sistemlerinde Windows API fonksiyonları kullanılarak gerçekleştirilmiş durumdadır.)
+    Thread işlemleri işletim sistemlerinde aslında birtakım sistem fonksiyonlarıyla gerçekleştirilmektedir. Örneğin Linux 
+    sistemlerinde thread yaratan sys_clone isimli bir sistem fonksiyonu bulunmaktadır. Ancak daha önce de ifade ettiğimiz gibi 
+    sistem fonksiyonları taşınabilir değildir ve sistem fonksiyonları genellikle düşük seviyeli fonksiyonlardır. Yani bunların 
+    kullanılmaları zordur. Thread'ler UNIX/Linux sistemlerine ilk sokulduğunda farklı thread kütüphaneleri oluşturulmuştu. 
+    Programcılar bu kütüphanelerden birini kullanıyorlardı. Ancak 90'lı yılların ortalarında thread kütüphanesi "Realtime Extensions" 
+    başlığı altında POSIX standartlarına eklenmiştir. POSIX tarafından desteklenen bu thread kütüphanesine "POSIX Thread Kütüphanesi" 
+    ya da kısaca "pthread" kütüphanesi denilmektedir. POSIX thread kütüphanesinin içerisindeki bütün fonksiyonların isimleri 
+    pthread_xxx biçiminde "pthread_" öneki ile başlatılmış durumdadır. POSIX thread kütüphanesi "libpthread.so" ve "libpthread.a" 
+    isimli kütüphaneler biçiminde oluşturulmuştur. Bu kütüphaneleri kullanırken derleme sırasında "-lpthread" seçeneğinin bulundurulması 
+    gerekmektedir. Bu seçenek link aşamasında POSIX thread kütüphanesinin linker tarafından işleme sokulacağını belirtmektedir.
+    Diğer programlama dillerindeki thread kütüphaneleri de UNIX/Linux sistemlerinde pthread kütüphanesi kullanılarak gerçekleştirilmiştir. 
+    Yani bu anlamda pthread kütüphanesi "taban (base)" bir kütüphanedir. (Örneğin C++11 ile birlikte C++'a bir thread kütüphanesi 
+    eklenmiştir. Bu kütüphanenin UNIX/Linux sistemlerindeki gerçekleştirimi pthread kütüphanesi kullanılarak yapılmıştır. Tabii 
+    C++'ın thread kütüphanesi C++'ın standart kütüphanesinin bir parçasıdır. Dolayısıyla "cross platform" özelliği vardır. Yani 
+    örneğin aynı kütüphane Windows sistemlerinde Windows API fonksiyonları kullanılarak gerçekleştirilmiş durumdadır.) Benzer 
+    biçimde C11 ile birlikte C'ye da isteğe bağlı (optional) minimalist bir thread kütüphanesi eklenmiştir. Mevcut C derleyicileri
+    artık yavaş yavaş bu thread kütüphanesini de desteklemeye başlamıştır.
 ---------------------------------------------------------------------------------------------------------------------------*/
-<BURADA KALDIK>
+
 /*--------------------------------------------------------------------------------------------------------------------------
-    Thread'ler aynı prosesin bağımsız çizelgelenen farklı akışlarıdır. Bir işi iki thread'e yaptırmakla iki prosese yaptırmak arasında 
-    şu önemli farklılıklar vardır:
+    Thread'ler aynı prosesin bağımsız çizelgelenen farklı akışlarıdır. Bir işi iki thread'e yaptırmakla iki prosese yaptırmak 
+    arasında şu önemli farklılıklar vardır:
 
     - Prosesin thread'leri aynı bellek alanını kullanmaktadır. Yani örneğin bir thread bir global değişkene bir şey yazsa 
-    diğer thread bunu görmektedir. Oysa proseslerin bellek alanları tamamen izole edilmiştir. Prosesler arasındaki haberleşme maliyeti 
-    yüksetir ve proseslerarası haberleşme kodu daha karmaşık hale getirmektedir. Halbuki thread'ler global değişkenler yoluyla 
-    ya da heap yoluyla daha az maliyetle haberleşebilmektedir.
+    diğer thread bunu görmektedir. Oysa proseslerin bellek alanları tamamen izole edilmiştir. Prosesler arasındaki haberleşme 
+    maliyeti yüksektir ve proseslerarası haberleşme kodu daha karmaşık hale getirmektedir. Halbuki thread'ler global değişkenler 
+    yoluyla ya da heap yoluyla çok daha az maliyetle haberleşebilmektedir.
 
-    - Thread'lerin yaratılması ve yok edilmesi proseslere göre daha hızlıdır. Çünkü bir proses yaratılırken arka planda prosese özgü 
-    pek çok yaratım işlemleri de yapılmaktadır.
+    - Thread'lerin yaratılması ve yok edilmesi proseslere göre daha hızlıdır. Çünkü bir proses yaratılırken arka planda prosese 
+    özgü pek çok yaratım işlemleri de yapılmaktadır.
 
-    - Thread'ler proseslere göre daha az sistem kaynağı harcama eğilimindedir. Yani bir prosesin yaratılması sırasında harcanan sistem 
-    kaynağı bir thread'in yaratılması sırasında harcanan sistem kaynağından daha yüksektir.
+    - Thread'ler proseslere göre daha az sistem kaynağı harcama eğilimindedir. Yani bir prosesin yaratılması sırasında harcanan 
+    sistem kaynağı bir thread'in yaratılması sırasında harcanan sistem kaynağından daha yüksektir.
 
     Proses kavramı çalışmakta olan programın tüm bilgilerini belirtmektedir. Thread ise yalnızca bir akış belirtmektedir. Örneğin:
 
     - Thread'lerin gerçek ve etkin kullanıcı id'leri ve grup id'leri yoktur. Proseslerin vardır. Yani bir prosesin tüm thread'leri aynı
-    kullancı ve grup id'sine sahiptir. 
+    kullancı ve grup id'sine sahiptir.
 
-    - Thread'lerin çalışma dizinleri, çevre değişkenleri yoktur. Proseslerin vardır. Örneğin biz bir proseste chdir POSIX fonksiyonu ile 
-    çalışma dizinini (current working directory) değiştirdiğimizde tüm thread'ler için bu durum geçerlidir. 
+    - Thread'lerin çalışma dizinleri, çevre değişkenleri yoktur. Proseslerin vardır. Örneğin biz bir proseste chdir POSIX fonksiyonu 
+    ile çalışma dizinini (current working directory) değiştirdiğimizde tüm thread'ler bunu değiştirmiş oluruz.
 
     - Dosya betimleyici tablosu prosese özgüdür. Dolayısıyla tüm thread'ler aynı dosya betimleyici tablosunu kullanmaktadır. 
 
     - Prosesin thread'lerinin proses id'leri aynıdır. 
 
     Ancak UNIX/Linux dünyasında threadler arasında bir altlık-üstlük (parent-child) ilişkisi yoktur. Yani bir thread'in hangi 
-    thread tarafından yaratıldığının (istisna bazı durumlar dışında) bir önemi yoktur. Dolayısıyla UNIX/Linux dünyasında "üst thread (parent thread)"
-    ve "alt thread (child thread)" biçiminde kavramlar yoktur.
+    thread tarafından yaratıldığının (istisna bazı durumlar dışında) bir önemi yoktur. Dolayısıyla UNIX/Linux dünyasında 
+    "üst thread (parent thread)" ve "alt thread (child thread)" biçiminde kavramlar yoktur.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Proses çalışmaya tek bir thread ile başlamaktadır. Diğer thread'ler programcı tarafından yaratılmaktadır. Bir thread yaratılırken 
-    thread akışının başlatılacağı bir fonksiyon da belirtilmektedir. Nasıl programın ana thread'i yani akışı main fonksiyonundan başlıyorsa 
-    bizim yarattığımız thread'in akışı da bizim belirttiğimiz bir fonksiyondan başlatılmaktadır. Örneğin biz bir thread yaratmış olalım 
-    ve thread'imizin akışı da foo fonksiyonundan başlatılmış olsun:
+    Proses çalışmaya tek bir thread ile başlamaktadır. Diğer thread'ler programcı tarafından yaratılmaktadır. Bir thread 
+    yaratılırken thread akışının başlatılacağı bir fonksiyon da belirtilmektedir. Nasıl programın ana thread'i yani akışı main 
+    fonksiyonundan başlıyorsa bizim yarattığımız thread'in akışı da bizim belirttiğimiz bir fonksiyondan başlatılmaktadır. 
+    Örneğin biz bir thread yaratmış olalım ve thread'imizin akışı da foo fonksiyonundan başlatılmış olsun:
 
     int main(void)
     {
@@ -18731,16 +18733,16 @@ void exit_sys(const char *msg)
     Bu prosesin bilgileri üst prosesten alınmaktadır. Ayrıca yarattığımız alt proses ayrı bir bellek alanına sahiptir. Dolayısıyla
     örneğin aynı global değişkenleri kendi aralarında paylaşmamaktadır. Örneğin biz alt proseste dosya açsak üst proses bunu görmeyecektir. 
     Halbuki thread'ler aynı prosesin akışlarıdır. Prosesin bir thread'i bir dosya açsa diğer thread'i onu açık olarak görmektedir. 
-    Proseslerle thread'ler akış bakımından benzemektedir. Her iki durumda da farklı akış oluşturulmaktadır. Thread'lere ilk zamanlar 
-    bu benzerlikten hareketle "lightweight (hafif siklet) proses" de denilmektedir. 
+    Proseslerle thread'ler akış bakımından benzemektedir. Her iki durumda da farklı akış oluşturulmaktadır. Thread'lere ilk 
+    zamanlar bu benzerlikten hareketle "lightweight (hafif siklet) proses" de denilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Her ne kadar prosesin thread'leri aynı bellek alanını kullanıyorsa da "stack" konusunda bu durum geçerli değildir. Thread'lerin 
     stack'leri birbirinden ayrılmıştır. Başka bir deyişle bir thread yaratıldığında o thread için ayrı bir stack yaratılmaktadır. 
-    Yerel değişkenlerin ve parametre değişkenlerinin stack'te yaratıldığını anımsayınız. Thread'lerin stack'leri birbirinden ayrıldığı için 
-    farklı thread akışları aynı fonksiyon üzerinde ilerlese bile aynı yerel değişkenleri görmemektedir. Yerel değişkenlerin her thread 
-    için ayrı bir kopyası oluşturulmaktadır. Örneğin:
+    Yerel değişkenlerin ve parametre değişkenlerinin stack'te yaratıldığını anımsayınız. Thread'lerin stack'leri birbirinden 
+    ayrıldığı için farklı thread akışları aynı fonksiyon üzerinde ilerlese bile aynı yerel değişkenleri görmemektedir. Yerel 
+    değişkenlerin her thread için ayrı bir kopyası oluşturulmaktadır. Örneğin:
 
     int g_x;
 
@@ -18773,31 +18775,35 @@ void exit_sys(const char *msg)
         ...
     }
 
-    Burada iki thread foo üzerinde ilerlerken aslında yerel değişken olan a'nın kendi kopyaları üzerinde işlem yapmaktadır. Yani bir thread 
-    buradaki yerel "a" değişkenini değiştirdiğinde diğer thread bu değişikliği görmez. Başka bir deyişle her thread'in kendine 
-    özgü farklı bir "a" değişkeni vardır. Bu durumun teknik açıklaması şöyledir: Yerel değişkenler stack'te yaratılmaktadır. Thread'lerin de 
-    stack'leri birbirinden ayrıldığı için bu "a" değişkeni hangi thread akışı o fonksiyonu çağırmışsa onun stack'inde yaratılmaktadır. 
+    Burada iki thread foo üzerinde ilerlerken aslında yerel değişken olan a'nın kendi kopyaları üzerinde işlem yapmaktadır. Yani 
+    bir thread buradaki yerel "a" değişkenini değiştirdiğinde diğer thread bu değişikliği görmez. Başka bir deyişle her thread'in 
+    kendine özgü farklı bir "a" değişkeni vardır. Bu durumun teknik açıklaması şöyledir: Yerel değişkenler stack'te yaratılmaktadır. 
+    Thread'lerin de stack'leri birbirinden ayrıldığı için bu "a" değişkeni hangi thread akışı o fonksiyonu çağırmışsa onun 
+    stack'inde yaratılmaktadır.
 
-    Ancak prosesin bütün thread'leri aynı ".data" ve ".bss" ve "heap" alanını ortak kullanmaktadır. Bu nedenle thread'lerden biri yukarıdaki 
-    örnekte "++g_x" global değişkenini artırdığında diğeri onu artırılmış olarak görecektir. Fonksiyonların static yerel değişkenleri stack'te
-    yaratılmamaktadır. Eğer ilk değer verilmişse bunlar ".data" alanında, ilk değer verilmemişse ".bss" alanında yaratılmaktadır. Dolayısıyla 
-    örneğin bir thread static bir yerel değişkeni değiştirirse diğer thread onu değişmiş olarak görmektedir. 
+    Ancak prosesin bütün thread'leri aynı ".data" ve ".bss" ve "heap" alanını kullanmaktadır. Bu nedenle thread'lerden biri 
+    yukarıdaki örnekte "++g_x" global değişkenini artırdığında diğeri onu artırılmış olarak görecektir. Anımsanacağı gibi 
+    fonksiyonların static yerel değişkenleri stack'te yaratılmamaktadır. Static yerel değişkenlere eğer ilk değer verilmişse 
+    bunlar ".data" alanında, ilk değer verilmemişse ".bss" alanında yaratılmaktadır. Dolayısıyla örneğin bir thread static 
+    yerel yerel değişkeni değiştirirse diğer thread onu değişmiş olarak görmektedir.
 
-    İşletim sistemlerinde yaratılan bir thread'in default stack büyüklüğü sistemden sisteme değişebilmektedir. Linux sistemlerinde thread'ler default olarak 
-    8MB stack ile yaratılmaktadır. Ancak thread'ler yaratılırken programcı isterse stack büyüklüğünü kendisi de belirleyebilmektedir. 
+    İşletim sistemlerinde yaratılan bir thread'in default stack büyüklüğü sistemden sisteme değişebilmektedir. Örneğin Linux 
+    sistemlerinde thread'ler default olarak  8MB stack ile yaratılmaktadır. Ancak thread'ler yaratılırken programcı isterse 
+    stack büyüklüğünü kendisi de belirleyebilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Thread'lerin errno değişkenleri birbirinden farklıdır. Yani her thread'in ayrı bir errno değişkeni vardır. Örneğin biz bir thread'te 
-    bir POSIX fonksiyonu çağırsak o POSIX fonksiyonu başarısız olsa o thread'in errno değişkeni set edilir. Diğer thread'leri errno değişkenleri 
-    bundan etkilenmez. perror fonksiyonu da kendi thread'inin errno değişkenini kullanmaktadır. Yani biz perror fonksiyonu ile 
-    hata mesajını stderr dosyasına yazdırmak istersek perror o thread'in errno değişkeninin değerine başvurarak yazıyı oluşturacaktır.
+    Thread'lerin errno değişkenleri birbirinden farklıdır. Yani her thread'in ayrı bir errno değişkeni vardır. Örneğin biz 
+    bir thread'te bir POSIX fonksiyonu çağırsak o POSIX fonksiyonu başarısız olsa o thread'in errno değişkeni set edilir. 
+    Diğer thread'lerin errno değişkenleri bundan etkilenmez. perror fonksiyonu da kendi thread'inin errno değişkenini kullanmaktadır. 
+    Yani biz perror fonksiyonu ile hata mesajını stderr dosyasına yazdırmak istersek perror o thread'in errno değişkeninin 
+    değerine başvurarak yazıyı oluşturacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    POSIX thread kütüphanesini incelemeden önce kütüphanedeki bazı ortak özellikleri belirtelim:
+    POSIX thread kütüphanesini incelemeden önce kütüphanedeki bazı ortak özelliklerin üzerinde durmak istiyoruz:
 
-    - Kütüphandeki bütün fonksiyonların isimleri "pthread_" ile başlatılmıştır. 
+    - Yukarıda da belirttiğimiz gibi kütüphandeki bütün fonksiyonların isimleri "pthread_" öneki ile başlatılmıştır.
 
     - Kütüphanedeki fonksiyonların büyük bölümünün geri dönüş değeri int türdendir. Bu fonksiyonlar başarı durumunda 0 değerine,
     başarısızlık durumunda bizzat errno değerinin kendisine geri dönmektedir. Bu fonksiyonlar errno değişkenini set etmemektedir. 
@@ -18812,8 +18818,8 @@ void exit_sys(const char *msg)
     }
 
     Görüldüğü gibi burada perror fonksiyonu kullanılmamıştır. Çünkü perror fonksiyonu errno değerinin yazısını yazdırmaktadır. Halbuki
-    pthread fonksiyonları errno değerini set etmemekte, bizzat errno değerinin kendisiyle geri dönmektedir. strerror fonksiyonunun bir errno
-    numarası için hata yazısını verdiğini anımsayınız. Tabii biz yine bir sarma fonksiyon kullanabiliriz:
+    pthread fonksiyonları errno değerini set etmemekte, bizzat errno değerinin kendisiyle geri dönmektedir. strerror fonksiyonunun 
+    bir errno numarası için hata yazısını verdiğini anımsayınız. Tabii biz yine bir sarma fonksiyon kullanabiliriz:
 
     void exit_sys_errno(const char *msg, int eno)
     {
@@ -18836,6 +18842,10 @@ void exit_sys(const char *msg)
 
     #include <pthread.h>
 
+    - Thread kullanan programları derlerken link aşaması için "-lpthread" komut satırı argümanını kullanmayı unutmayınız. Örneğin:
+
+    gcc -o sample sample.c -lpthread
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -18843,41 +18853,41 @@ void exit_sys(const char *msg)
 
     #include <pthread.h>
 
-    int pthread_create(pthread_t *thread, const pthread_attr_t *attr, 
-            void *(*start_routine)(void *), void *arg);
+    int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg);
 
     Fonksiyonun birinci parametresi thread'in id değerinin yerleştirileceği nesnenin adresini almaktadır. Nasıl proseslerin 
     id değerleri varsa thread'lerin de id değerleri vardır. Proseslerin id değerleri o anda sistem genelinde tektir (unique). 
-    Ancak thread'lerin id değerleri sistem genelinde tek olmak zorunda değildir. Fakat proses içerisinde tektir. Yani farklı proseslerin 
-    yarattığı thread'lerin id değerleri aynı olabilir, ancak aynı prosesin thread'lerinin id değerleri farklı olmak zorundadır. 
-    (Linux sistemlerinde thread'lerin id değerleri onlar için ayrılan task_struct yapısına ilişkin bir değer olduğu için sistem genelinde
-    tektir. Ancak POSIX standartlarında bunun bir garantisi yoktur.)
+    Ancak thread'lerin id değerleri sistem genelinde tek olmak zorunda değildir. Fakat proses içerisinde tektir. Yani farklı 
+    proseslerin yarattığı thread'lerin id değerleri aynı olabilir, ancak aynı prosesin thread'lerinin id değerleri farklı olmak 
+    zorundadır. (Linux sistemlerinde thread'lerin id değerleri onlar için ayrılan task_struct yapısına ilişkin bir değer olduğu 
+    için sistem genelinde tektir. Ancak POSIX standartlarında bunun bir garantisi yoktur.)
 
     pthread_t türü <thread.h> ve <sys/types.h> dosyaları içerisinde typedef edilmiştir. POSIX standartlarına göre pthread_t türü 
     "aritmetik bir tür (yani tamsayı türü ya da gerçek sayı türü)" olmak zorunda değildir. Yani bir yapı türünden de olabilir. 
-    Dolayısıyla pthread_t türünden iki nesneyi kendi aralarında karşılaştırmaya çalışmayınız. Linux'ta pthread_t türü "unsigned long int" olarak 
-    typedef edilmiştir. 
+    Dolayısıyla pthread_t türünden iki nesneyi kendi aralarında karşılaştırmaya çalışmayınız. Linux'ta pthread_t türü 
+    "unsigned long int" olarak typedef edilmiştir.
 
     Fonksiyonun ikinci parametresi yaratılacak thread'in bazı özelliklerini belirten pthread_attr_t türünden bir nesnenin adresini 
     almaktadır. Thread özellikleri konusu ileride ele alınacaktır. Ancak bu parametre NULL adres geçilirse bu durumda thread default
     özelliklerle yaratılmaktadır. Fonksiyonun üçüncü parametresi thread akışının başlatılacağı fonksiyonun adresini belirtmektedir. 
-    Thread fonksiyonlarının geri dönüş değerleri ve parametresi void * olmak zorundadır. Fonksiyonun son parametresi thread fonksiyonuna 
-    geçirilecek parametreyi belirtmektedir. Böylece aynı thread fonksiyonu farklı bilgilerle başlatılabilmektedir. Thread'e geçirilecek parametrenin 
-    void * türünden olduğuna dikkat ediniz. Çünkü adres bilgisi en genel parametrik bilgi durumundadır. Tabii programcı bu parametreye
-    bir adres geçirmeyip bir değer de geçirmek isteyebilir. Bu durumda değeri void * türüne dönüştürmelidir. Fonksiyonun üçüncü parametresiyle
-    belirtilen thread fonksiyonunun geri dönüş değerinin de void * türünden olduğuna dikkat ediniz. Thread'ler de sonlandığında tıpkı prosesler gibi
-    bir exit kodu oluşturmaktadır. Ancak bu exit kodu int türden değil void * türündendir. Bu exit kodunun nasıl elde edileceği izleyen 
-    paragraflarda ele alınmaktadır. 
+    Thread fonksiyonlarının geri dönüş değerleri ve parametresi void * olmak zorundadır. Fonksiyonun son parametresi thread 
+    fonksiyonuna geçirilecek parametreyi belirtmektedir. Böylece aynı thread fonksiyonu farklı bilgilerle başlatılabilmektedir. 
+    Thread'e geçirilecek parametrenin void * türünden olduğuna dikkat ediniz. Çünkü adres bilgisi en genel parametrik bilgi 
+    durumundadır. Tabii programcı bu parametreye bir adres geçirmeyip bir değer de geçirmek isteyebilir. Bu durumda değeri void * 
+    türüne dönüştürmelidir. Fonksiyonun üçüncü parametresiyle   belirtilen thread fonksiyonunun geri dönüş değerinin de void * 
+    türünden olduğuna dikkat ediniz. Thread'ler de sonlandığında tıpkı prosesler gibi bir exit kodu oluşturmaktadır. Ancak bu exit 
+    kodu int türden değil void * türündendir. Bu exit kodunun nasıl elde edileceği izleyen paragraflarda ele alınmaktadır.
 
     pthread_create fonksiyonu başarı durumunda 0 değerine, başarısızlık durumunda errno değerine geri dönmektedir. 
 
     Bir thread yaratıldığında hemen çalışmaya başlamaktadır. (Örneğin bazı thread kütüphanelerinde önce thread yaratılmakta, sonra 
     "start" gibi bir fonksiyonla thread çalıştırılmaktadır. Halbuki POSIX kütüphanesinde thread'ler zaten yaratıldığında çalıştırılırlar.)
-    Tabii pthread_create fonksiyonu ile thread yaratıldığında yaratan thread'in mi yoksa yeni yaratılan thread'in mi ilk olarak CPU'ya atanacağı
-    işletim sisteminin çizelgeleme algoritmasına bağlı olarak değişebilmektedir. POSIX bu konuda herhangi bir garanti vermemektedir. 
+    Tabii pthread_create fonksiyonu ile thread yaratıldığında yaratan thread'in mi yoksa yeni yaratılan thread'in mi ilk olarak 
+    CPU'ya atanacağı işletim sisteminin çizelgeleme algoritmasına bağlı olarak değişebilmektedir. POSIX bu konuda herhangi bir 
+    garanti vermemektedir.
 
-    Aşağıda thread yaratımına bir örnek verilmiştir. Bir thread'te sleep fonksiyonu kullanıldığında sleep fonksiyonu kendisini çağıran 
-    thread'i belirtilen saniye kadar bloke etmektedir. 
+    Aşağıda thread yaratımına bir örnek verilmiştir. Bir thread'te sleep fonksiyonu kullanıldığında sleep fonksiyonu kendisini 
+    çağıran thread'i belirtilen saniye kadar bloke etmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -18923,8 +18933,8 @@ void exit_sys_errno(const char *msg, int eno)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Thread fonksiyonuna parametre geçebiliriz. Bunun için genellikle programcılar heap'te tahsisat yaparlar. Tahsis edilen bu alanlar
-    thread fonksiyonunun sonunda free hale getirilebilmektedir.
+    Thread fonksiyonuna parametre geçebiliriz. Bunun için genellikle programcılar heap'te tahsisat yaparlar. Tahsis edilen 
+    bu alanlar  thread fonksiyonunun sonunda free hale getirilebilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -18985,9 +18995,9 @@ void exit_sys_errno(const char *msg, int eno)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Thread fonksiyonuna getirilecek parametre birden fazla ise tipik olarak programcı bu parametreleri bir yapı biçiminde oluşturur. 
-    İlgili yapı türünden bir dinammik bir nesne tahsis eder ve o nesnenin adresini thread fonksiyonuna geçirir. Aşağıda buna ilişkin 
-    bir örnek verilmiştir. 
+    Thread fonksiyonuna getirilecek parametre birden fazla ise tipik olarak programcı bu parametreleri bir yapı biçiminde 
+    oluşturur. İlgili yapı türünden bir dinammik bir nesne tahsis eder ve o nesnenin adresini thread fonksiyonuna geçirir. 
+    Bu dinamik alan thread fonksiyonu tarafından free hale getirilebilir. Aşağıda buna ilişkin bir örnek verilmiştir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -19055,7 +19065,7 @@ void exit_sys_errno(const char *msg, int eno)
 
     1) Thread fonksiyonu bittiğinde thread'ler otomatik olarak sonlanırlar. Bu en çok karşılaşılan doğal sonlanma biçimidir. 
 
-    2) Thread'ler pthread_exit fonksiyonuyla thread fonksiyonunun sonuna gelinmeden sonlandırılabilmektedir. pthread_exit 
+    2) Thread'ler pthread_exit fonksiyonuyla thread fonksiyonunun sonuna gelinmeden de sonlandırılabilmektedir. pthread_exit 
     fonksiyonu "kendi thread'ini" sonlandırmaktadır. Başka bir thread'i sonlandırmamaktadır. Yani hangi thread akışı pthread_exit 
     fonksiyonunu görürse o thread sonlandırılmaktadır. pthread_exit fonksiyonunun prototipi şöyledir:
 
@@ -19064,15 +19074,15 @@ void exit_sys_errno(const char *msg, int eno)
     void pthread_exit(void *value_ptr);
 
     Nasıl exit fonksiyonu prosesi sonlandırırken bir exit kodunu alıyorsa pthread_exit fonksiyonu da thread'i sonlandırırken 
-    void * türünden bir exit kodu almaktadır. (main fonksiyonunun geri dönüş değeri int türdendir. exit fonksiyonunun parametresi de 
-    int türdendir. İşte thread fonksiyonunun geri dönüş değeri void * türünden olduğu için pthread_exit fonksiyonunun parametresi de 
-    void * türündendir.)
+    void * türünden bir exit kodu almaktadır. (main fonksiyonunun geri dönüş değeri int türdendir. exit fonksiyonunun parametresi 
+    de int türdendir. İşte thread fonksiyonunun geri dönüş değeri void * türünden olduğu için pthread_exit fonksiyonunun parametresi 
+    de void * türündendir.)
 
-    3) Bir programda exit standart C fonksiyonu ya da _exit POSIX fonksiyonu çağrılırsa proses sonlandırılır. Thread kavramı proses kavramının 
-    içerisindedir. Dolayısıyla proses sonlandığında prosesin tüm thread'leri de otomatik olarak sonlandırılmaktadır. Tabii exit ya da _exit
-    fonksiyonu herhangi bir thread tarafından çağrılabilmektedir. Burada önemli bir nokta main fonksiyonu bittiğinde exit işleminin yapılmasıdır. 
-    Dolayısıyla main fonksiyonu biterse proses sonlanır; proses sonlanırsa da tüm thread'ler sonlanacaktır. Örneğin aşağıdaki gibi 
-    hataları POSIX thread kütüphanesini yeni kullananlar sıkça yapmaktadır:
+    3) Bir programda exit standart C fonksiyonu ya da _exit POSIX fonksiyonu çağrılırsa proses sonlandırılır. Thread kavramı 
+    proses kavramının içerisindedir. Dolayısıyla proses sonlandığında prosesin tüm thread'leri de otomatik olarak sonlandırılmaktadır. 
+    Tabii exit ya da _exit fonksiyonu herhangi bir thread tarafından da çağrılabilir. Burada önemli bir nokta main fonksiyonu 
+    bittiğinde exit işleminin yapılmasıdır. Dolayısıyla main fonksiyonu biterse proses sonlanır; proses sonlanırsa da tüm thread'ler 
+    sonlanacaktır. Örneğin aşağıdaki gibi hataları POSIX thread kütüphanesini yeni kullananlar sıkça yapmaktadır:
 
     int main(void)
     {
@@ -19089,13 +19099,14 @@ void exit_sys_errno(const char *msg, int eno)
 
     Burada thread yaratılmıştır ancak proses sonlandığı için yaratılan thread de hemen sonlanacaktır. 
 
-    Aslında prosesin ana thread'inin diğer thread'lerden bir farkı yoktur. Yani prosesin ana thread'i diğer thread'lerden önce sonlanabilir. 
-    Pekiyi o zaman proses nasıl sonlanacaktır? Çünkü akış main fonksiyonunu bitirmeyecektir. İşte bir prosesin son thread'i sonlandığında 
-    programın akışı exit ya da _exit fonksiyonunu görmese bile proses işletim sistemi tarafından sonlandırılmaktadır. 
+    Aslında prosesin ana thread'inin diğer thread'lerden bir farkı yoktur. Yani prosesin ana thread'i diğer thread'lerden önce 
+    sonlanabilir. Pekiyi o zaman proses nasıl sonlanacaktır? Çünkü akış main fonksiyonunu bitirmeyecektir. Dolayısıyla akış 
+    exit fonksiyonunu görmeyecektir. İşte bir prosesin son thread'i sonlandığında programın akışı exit ya da _exit fonksiyonunu 
+    görmese bile proses işletim sistemi tarafından sonlandırılmaktadır.
 
     4) Prosesler sinyal yoluyla sonlandırılabilmektedir. Bu durumda prosese bir sinyal gönderilirse ve proses de bu sinyali 
-    ele almamışsa (handle etmemişse) bazı sinyaller prosesin sonlanmasına yol açabilmektedir. Dolayısıyla bu tür durumlarda da prosesin 
-    tüm thread'leri sinyal yüzünden sonlandırılacaktır.
+    ele almamışsa (handle etmemişse) bazı sinyaller prosesin sonlanmasına yol açabilmektedir. Dolayısıyla bu tür durumlarda 
+    da prosesin tüm thread'leri sinyal yüzünden sonlandırılacaktır.
 
     5) Bir thread başka bir thread'i pthread_cancel fonksiyonu ile sonlandırabilmektedir. Fonksiyonun prototipi şöyledir:
 
@@ -19103,10 +19114,10 @@ void exit_sys_errno(const char *msg, int eno)
 
     int pthread_cancel(pthread_t thread);
 
-    Fonksiyon parametre olarak sonlandırılacak thread'in id değerini alır. Başarı durumunda 0 değerine, başarısızlık durumunda errno 
-    değerine geri döner. pthread_cancel fonksiyonu geri döndüğünde thread'in sonlanmış olması gerekmemektedir. Yani sonlanma işlemi asenkron
-    biçimde yapılmaktadır. pthread_cancel fonksiyonu ile thread'leri sonlandırmanın bazı ayrıntıları vardır. Bu ayrıntılar izleyen paragraflarda
-    ele alınmaktadır. 
+    Fonksiyon parametre olarak sonlandırılacak thread'in id değerini alır. Başarı durumunda 0 değerine, başarısızlık durumunda 
+    errno değerine geri döner. pthread_cancel fonksiyonu geri döndüğünde thread'in sonlanmış olması gerekmemektedir. Yani 
+    sonlanma işlemi asenkron biçimde yapılmaktadır. pthread_cancel fonksiyonu ile thread'leri sonlandırmanın bazı ayrıntıları 
+    vardır. Bu ayrıntılar izleyen paragraflarda ele alınmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -19165,8 +19176,8 @@ void exit_sys_errno(const char *msg, int eno)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Aşağıdaki örnekte proses exit fonksiyonuyla sonlandırılmıştır. Dolayısıyla prosesin tüm thread'leri de exit işlemiyle sonlandırılmış
-    olmaktadır.
+    Aşağıdaki örnekte proses exit fonksiyonuyla sonlandırılmıştır. Dolayısıyla prosesin tüm thread'leri de exit işlemiyle 
+    sonlandırılmış olmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -19318,10 +19329,10 @@ void exit_sys_errno(const char *msg, int eno)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir thread'in exit kodu pthread_join fonksiyonu ile elde edilmektedir. pthread_join fonksiyonunun davranışı alt prosesin exit kodunu elde 
-    eden wait fonksiyonlarına benzemektedir. Ancak pthread_join fonksiyonu herhangi bir thread akışı tarafından çağrılabilmektedir. 
-    pthread_join fonksiyonu exit kodu alınacak thread henüz sonlanmamışsa onun sonlanmasını bekler. Eğer söz konusu thread 
-    sonlanmışsa herhangi bir bloke oluşmaz. Fonksiyonun prototipi şöyledir:
+    Bir thread'in exit kodu pthread_join fonksiyonu ile elde edilmektedir. pthread_join fonksiyonunun davranışı alt prosesin 
+    exit kodunu elde eden wait fonksiyonlarına benzemektedir. Ancak pthread_join fonksiyonu herhangi bir thread akışı tarafından 
+    çağrılabilmektedir. pthread_join fonksiyonu exit kodu alınacak thread henüz sonlanmamışsa onun sonlanmasını bekler. Eğer 
+    söz konusu thread sonlanmışsa herhangi bir bloke oluşmaz. Fonksiyonun prototipi şöyledir:
 
     #include <pthread.h>
 
@@ -19383,42 +19394,45 @@ void exit_sys_errno(const char *msg, int eno)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi bir thread'i yaratıp onu pthread_join fonksiyonu ile beklemezsek "zombie proses" benzeri bir durum oluşur mu? 
-    Gerçekten de tıpkı zombie proseslerde olduğu gibi işletim sistemleri sonlanan thread'e ilişkin bazı kaynakları "onların exit 
-    kodları her an programcı tarafından alınabilir" diye bekletmektedir. Bu durum da zombie proses gibi olumsuzluklara yol açabilmektedir. 
-    Gerçi zombie thread'ler zombie prosesler kadar sorunlara yol açmıyorsa da programcıların yarattıkları thread'i 
-    pthread_join fonksiyonu ile beklemesi gerekir. Ancak bazen programcılar çok sayıda thread yaratıp bunları bekleyecekleri noktaları 
-    oluşturamayabilirler. Bu durumda threadler'in "detached" modda yaratılmaları ya da yaratıldıktan sonra "detached" moda sokulmaları gerekir. 
-    "Detached" thread'ler sonlandığında kaynaklarını otomatik boşaltan dolayısıyla join yapılamayan thread'lerdir. Thread'lerin nasıl 
-    detached moda sokulacağı izleyen paragraflarda ele alınmaktadır. 
+    Gerçekten de tıpkı zombie proseslerde olduğu gibi işletim sistemleri sonlanan thread'e ilişkin bazı kaynakları "onların 
+    exit kodları her an programcı tarafından alınabilir" diye bekletmektedir. Bu durum da zombie proses gibi olumsuzluklara 
+    yol açabilmektedir. Gerçi zombie thread'ler zombie prosesler kadar sorunlara yol açmıyorsa da programcıların yarattıkları 
+    thread'i pthread_join fonksiyonu ile beklemesi gerekir. Ancak bazen programcılar çok sayıda thread yaratıp bunları bekleyecekleri 
+    noktaları oluşturamayabilirler. Bu durumda threadler'in "detached" modda yaratılmaları ya da yaratıldıktan sonra "detached" 
+    moda sokulmaları gerekir. "Detached" thread'ler sonlandığında kaynaklarını otomatik boşaltan dolayısıyla join yapılamayan 
+    thread'lerdir. Thread'lerin nasıl detached moda sokulacağı izleyen paragraflarda ele alınmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Linux çekirdeğinde (diğer sistemlerde böyle olmak zorunda değil) thread'ler için yine bir task_struct nesnesi tahsis edilmektedir. 
-    Yani Linux çekirdeği prosesin thread'lerini adeta sanki aynı bellek alanını kullanan porosesler gibi oluşturmaktadır. 
-    Tabii prosesin kendisi için de prosesin thread'leri için de aynı task_struct veri yapısının oluşturulması biraz verimsiz bir
-    bellek kullanımına yol açmaktadır. Çünkü aslında thread'ler bu task_struct yapısının önemli bir kısmını zaten kullanmamaktadır. 
+    Linux çekirdeğinde (diğer sistemlerde böyle olmak zorunda değil) thread'ler için yine bir task_struct nesnesi tahsis 
+    edilmektedir. Yani Linux çekirdeği prosesin thread'lerini adeta sanki aynı bellek alanını kullanan porosesler gibi oluşturmaktadır. 
+    Tabii prosesin kendisi için de prosesin thread'leri için de aynı task_struct veri yapısının oluşturulması biraz verimsiz 
+    bir bellek kullanımına yol açmaktadır. Çünkü aslında thread'ler bu task_struct yapısının önemli bir kısmını zaten kullanmamaktadır. 
     Ancak bu biçimdeki yaklaşım çekirdeğin kodlanmasını oldukça kolaylaştırmıştır. Bir task_struct yapısında onun bir thread'e 
-    ilişkin mi yoksa prosese ilişkin mi olduğu bilgisi tutulmaktadır. Benzer biçimde prosese ilişkin task_struct yapısının içerisinde
-    o prosesin thread'lerine ilişkin task_struct nesneleri de bir biçimde tutulmaktadır. Zaten Linux çekirdeğinde aslında proses yaratmak 
-    için de thread yaratmak için de sys_clone isimli aynı sistem fonksiyonu kullanılabilmektedir. Proses yaratmakta kullanılan sys_fork 
-    isimli sistem fonksiyonu ve sys_clone sistem fonksiyonu aslında çekirdek içerisindeki do_fork isimli ortak bir fonksiyonu çağırmaktadır.
-    Başka bir deyişle Linux çekirdeğinde aslında sys_fork sistem fonksiyonu sys_clone sistem fonksiyonunun özel bir biçimidir. 
+    ilişkin mi yoksa prosese ilişkin mi olduğu bilgisi tutulmaktadır. Benzer biçimde prosese ilişkin task_struct yapısının 
+    içerisinde o prosesin thread'lerine ilişkin task_struct nesneleri de bir biçimde tutulmaktadır. Zaten Linux çekirdeğinde 
+    aslında proses yaratmak için de thread yaratmak için de sys_clone isimli aynı sistem fonksiyonu kullanılabilmektedir. 
+    Proses yaratmakta kullanılan sys_fork isimli sistem fonksiyonu ve sys_clone sistem fonksiyonu aslında çekirdek içerisindeki 
+    do_fork isimli ortak bir fonksiyonu çağırmaktadır. Başka bir deyişle Linux çekirdeğinde aslında sys_fork sistem fonksiyonu 
+    sys_clone sistem fonksiyonunun özel bir biçimidir.
 
     Özetle Linux çekirdeği aslında thread'leri "aynı bellek alanını kullanan prosesler" gibi organize etmektedir. Zaten Linux'ta 
     thread'ler için kullanılan "lightweight process" terimi bu tasarımdan dolayı uydurulmuştur. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Yukarıda da belirttiğimiz gibi bir thread prosesin herhangi bir thread'i tarafından sonlandırılmak istenebilir. Buna POSIX terminolojisinde 
-    "thread'in cancel edilmesi" denilmektedir. Bu işlem yukarıda da açıkladığımız üzere pthread_cancel POSIX fonksiyonuyla yapılmaktadır. 
+    Yukarıda da belirttiğimiz gibi bir thread prosesin herhangi bir thread'i tarafından sonlandırılmak istenebilir. Buna POSIX 
+    terminolojisinde "thread'in cancel edilmesi" denilmektedir. Bu işlem yukarıda da açıkladığımız üzere pthread_cancel POSIX 
+    fonksiyonuyla yapılmaktadır.
 
     #include <pthread.h>
 
     int pthread_cancel(pthread_t thread);
 
-    Tabii biz başka bir prosesin thread'ini pthread_cancel ile sonlandıramayız. Çünkü UNIX/Linux sistemlerinde thread'lerin id değerleri
-    proses özgüdür. Yani o proses için anlamlıdır. Bir thread, pthread_cancel fonksiyonu ile sonlandırıldığında pthread_join fonksiyonundan 
-    thread'in exit kodu olarak PTHREAD_CANCELED özel değeri elde edilmektedir. Bu değer pek çok sistemde aşağıdaki gibi define edilmiştir:
+    Tabii biz başka bir prosesin thread'ini pthread_cancel ile sonlandıramayız. Çünkü UNIX/Linux sistemlerinde thread'lerin 
+    id değerleri proses özgüdür. Yani o proses için anlamlıdır. Bir thread, pthread_cancel fonksiyonu ile sonlandırıldığında 
+    pthread_join fonksiyonundan thread'in exit kodu olarak PTHREAD_CANCELED özel değeri elde edilmektedir. Bu değer pek çok 
+    sistemde aşağıdaki gibi define edilmiştir:
 
     #define PTHREAD_CANCELED	((void *)-1)
 
@@ -19805,12 +19819,13 @@ void exit_sys_errno(const char *msg, int eno)
     typedef edilmiştir. Tipik olarak bu pthread_attr_t türü bir yapı biçiminde typedef edilmektedir. Ancak POSIX standartları 
     bu yapının elemanlarını açıklamamıştır. Yani bu yapının elemanları sistemden sisteme o sistemin özelliklerine göre değişebilmektedir. 
     Thread'in özellik bilgileri bu yapının içerisine pthread_attr_setxxx fonksiyonlarıyla set edilmekte ve pthread_attr_getxxx 
-    fonksiyonlarıyla da get edilebilmektedir. (Bu durumu nesne yönelimli programlamadaki sınıflara benzetebilirsiniz. Nasıl sınıfın veri elemanları 
-    sınıfın "private" bölümünde tutulup onlara getter/setter fonksiyonlarla erişiliyorsa burada da aynı mantık izlenmiştir.)
+    fonksiyonlarıyla da get edilebilmektedir. (Bu durumu nesne yönelimli programlamadaki sınıflara benzetebilirsiniz. Nasıl 
+    sınıfın veri elemanları sınıfın "private" bölümünde tutulup onlara getter/setter fonksiyonlarla erişiliyorsa burada da aynı 
+    mantık izlenmiştir.)
 
     Bir thread yaratılırken ona özellik girmek için şu adımlardan geçilmelidir:
 
-    1) Önce pthread_attr_t türünden bir nesne yaratılır. 
+    1) Önce pthread_attr_t türünden bir nesne yaratılır.
 
     2) Yaratılan bu nesneye pthread_attr_init fonksiyonuyla ilk değer verilir. Fonksiyonun prototipi şöyledir:
 
@@ -19819,30 +19834,30 @@ void exit_sys_errno(const char *msg, int eno)
     int pthread_attr_init(pthread_attr_t *attr);
 
     Fonksiyon pthread_attr_t türünden nesnenin adresini alarak nesneye ilk değer vermektedir. Fonksiyon başarı durumunda 0, 
-    başarısızlık durumunda errno değeri ile geri dönmektedir. Fonksiyon, Linux'ta her zaman başarılı olmaktadır. Ancak bazı sistemlerde 
-    bu pthread_attr_t yapısı içerisinde bazı göstericiler için alan tahsis ediliyor olabilir ve bu tahsisat başarısızlıkla sonuçlanabilir. 
-    Bu durumda pthread_attr_init fonksiyonu ENOMEM değeri ile geri döner. ENOMEM errno değeri malloc, calloc, realloc gibi fonksiyonlarda da
-    kullanılan "not enough memory" durumunu anlatmaktadır. 
+    başarısızlık durumunda errno değeri ile geri dönmektedir. Fonksiyon, Linux'ta her zaman başarılı olmaktadır. Ancak bazı 
+    sistemlerde bu pthread_attr_t yapısı içerisinde bazı göstericiler için alan tahsis ediliyor olabilir ve bu tahsisat 
+    başarısızlıkla sonuçlanabilir. Bu durumda pthread_attr_init fonksiyonu ENOMEM değeri ile geri döner. ENOMEM errno değeri 
+    malloc, calloc, realloc gibi fonksiyonlarda da kullanılan "not enough memory" durumunu anlatmaktadır.
 
-    3) pthread_attr_t nesnesine ilk değer verildikten sonra artık thread özellikleri pthread_attr_setxxx fonksiyonlarıyla set edilebilir, 
-    pthread_attr_getxxx fonksiyonlarıyla da get edilebilir. Bazı thread özellikleri bazı özel konulara ilişkindir. Dolayısıyla biz 
-    o özellikleri o konunun anlatıldığı yerde ele alacağız. Örneğin pthread_attr_setstacksize fonksiyonu ile biz özellik nesnesine
-    yaratılacak thread'in stack uzunluğunu set edebiliriz. 
+    3) pthread_attr_t nesnesine ilk değer verildikten sonra artık thread özellikleri pthread_attr_setxxx fonksiyonlarıyla 
+    set edilebilir, pthread_attr_getxxx fonksiyonlarıyla da get edilebilir. Bazı thread özellikleri bazı özel konulara ilişkindir. 
+    Dolayısıyla biz o özellikleri o konunun anlatıldığı yerde ele alacağız. Örneğin pthread_attr_setstacksize fonksiyonu ile 
+    biz özellik nesnesine yaratılacak thread'in stack uzunluğunu set edebiliriz.
 
     4) Artık set işlemleri de yapıldıktan sonra pthread_create fonksiyonu ile thread bu pthread_attr_t türünden nesnenin adresi 
-    verilerek yaratılabilir. 
+    verilerek yaratılabilir.
 
-    5) Thread yaratıldıktan sonra pthread_attr_init fonksiyonuyla yapılan işlemler pthread_attr_destroy fonksiyonu ile geri alınabilir. Bu fonksiyon
-    thread yaratıldıktan sonra hemen çağrılabilir. Yani pthread_create fonksiyonu bizim verdiğimiz pthread_attr_t nesnesinin 
-    adresini saklayıp kullanmak yerine onun içerisindekileri ilgili yere kopyalamaktadır. pthread_attr_destroy fonksiyonun 
-    prototipi şöyledir:
+    5) Thread yaratıldıktan sonra pthread_attr_init fonksiyonuyla yapılan işlemler pthread_attr_destroy fonksiyonu ile geri 
+    alınabilir. Bu fonksiyon thread yaratıldıktan sonra hemen çağrılabilir. Yani pthread_create fonksiyonu bizim verdiğimiz 
+    pthread_attr_t nesnesinin adresini saklayıp kullanmak yerine onun içerisindekileri ilgili yere kopyalamaktadır. pthread_attr_destroy 
+    fonksiyonun prototipi şöyledir:
 
     #include <pthread.h>
 
     int pthread_attr_destroy(pthread_attr_t *attr);
 
     Her ne kadar fonksiyonun geri dönüş değeri benzer biçimde başarı-başarısızlık belirtiyorsa da fonksiyonun başarısız olması için 
-    bir neden yoktur. Linux sistemlerinde fonksiyon her zaman başarılı olmaktadır. 
+    bir neden yoktur. Linux sistemlerinde fonksiyon her zaman başarılı olmaktadır.
 
     O halde thread özelliklerini oluşturup thread'in bu özelliklerle yaratılması aşağıdaki gibi yapılabilmektedir:
 
@@ -19871,19 +19886,19 @@ void exit_sys_errno(const char *msg, int eno)
 
     int pthread_attr_setstacksize(pthread_attr_t *attr, size_t stacksize);
 
-    Fonksiyonun birinci parametresi thread özelliklerine ilişkin pthread_attr_t türünden nesnenin adresini almaktadır. İkinci parametresi 
-    ise stack uzunluğunu belirtmektedir. Eğer bu set işlemi yapılmazsa Linux sistemlerinde glibc kütüphanesi default stack uzunluğunu X86 32 bit
-    sistemlerinde 2MB, X86 64 bit sistemlerde 8MB almaktadır.
+    Fonksiyonun birinci parametresi thread özelliklerine ilişkin pthread_attr_t türünden nesnenin adresini almaktadır. İkinci 
+    parametresi ise stack uzunluğunu belirtmektedir. Eğer bu set işlemi yapılmazsa Linux sistemlerinde glibc kütüphanesi default 
+    stack uzunluğunu X86 32 bit sistemlerinde 2MB, X86 64 bit sistemlerde 8MB almaktadır.
 
-    pthread_attr_init fonksiyonundan sonra biz bu özellik nesnesinden default stack uzunluğunu pthread_attr_getstacksize fonksiyonu ile
-    elde edebiliriz:
+    pthread_attr_init fonksiyonundan sonra biz bu özellik nesnesinden default stack uzunluğunu pthread_attr_getstacksize fonksiyonu 
+    ile elde edebiliriz:
 
     #include <pthread.h>
 
     int pthread_attr_getstacksize(const pthread_attr_t *attr, size_t *stacksize);
 
-    Fonksiyonun birinci parametresi özellik nesnesini, ikinci parametresi stack uzunluğunun yerleştirileceği size_t türünden nesnenin
-    adresini belirtmektedir. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda errno değerine geri dönmektedir. 
+    Fonksiyonun birinci parametresi özellik nesnesini, ikinci parametresi stack uzunluğunun yerleştirileceği size_t türünden 
+    nesnenin adresini belirtmektedir. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda errno değerine geri dönmektedir.
 
     Aşağıdaki programda önce default stack uzunluğu yazdırılmış, sonra yeni yaratılan thread'in 64K stack kullanması sağlanmıştır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -19945,15 +19960,16 @@ void exit_sys_errno(const char *msg, int eno)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Anımsanacağı gibi bir thread sonlandığında onun exit kodu pthread_join fonksiyonu ile elde edilip thread zombie olmaktan kurtarılıyordu.
-    pthread_join fonksiyonu thread sonlanana kadar akışı bloke ediyordu. İşte biz bir thread'i "detached" moda sokarsak artık thread sonlandığında
-    otomatik olarak thread nesnesinin tuttuğu kaynaklar boşaltılır. Dolayısıyla zombie thread durumu ortadan kaldırılmış olur. 
-    Eğer biz çok sayıda thread yaratıp bunları pthread_join ile beklemek istemiyorsak thread'leri "detached" moda sokmalıyız.
-    Thread'ler yaratıldığında default olarak detached durumda değildir. Bu default duruma "joinable" durum da denilmektedir. 
+    Anımsanacağı gibi bir thread sonlandığında onun exit kodu pthread_join fonksiyonu ile elde edilip thread zombie olmaktan 
+    kurtarılıyordu. pthread_join fonksiyonu thread sonlanana kadar akışı bloke ediyordu. İşte biz bir thread'i "detached" 
+    moda sokarsak artık thread sonlandığında otomatik olarak thread nesnesinin tuttuğu kaynaklar boşaltılır. Dolayısıyla zombie 
+    thread durumu ortadan kaldırılmış olur. Eğer biz çok sayıda thread yaratıp bunları pthread_join ile beklemek istemiyorsak 
+    thread'leri "detached" moda sokmalıyız. Thread'ler yaratıldığında default olarak detached durumda değildir. Bu default 
+    duruma "joinable" durum da denilmektedir.
 
-    Detached durumda bir thread pthread_join fonksiyonu ile beklenemez. POSIX standartları bu durumu "tanımsız davranış (undefined behavior)"
-    olarak nitelendirmiştir. Linux sistemlerinde detached bir thread pthread_join ile beklenmeye çalışılırsa pthread_join fonksiyonu 
-    EINVAL errno değeri ile başarısız olmaktadır. 
+    Detached durumda bir thread pthread_join fonksiyonu ile beklenemez. POSIX standartları bu durumu "tanımsız davranış (undefined 
+    behavior)" olarak nitelendirmiştir. Linux sistemlerinde detached bir thread pthread_join ile beklenmeye çalışılırsa 
+    pthread_join fonksiyonu EINVAL errno değeri ile başarısız olmaktadır.
 
     Bir thread'i detached moda sokmanın iki yolu vardır. Birincisi thread yaratılırken thread özellikleri ile bu sağlanabilir. 
     Bunun için int pthread_attr_setdetachstate fonksiyonu kullanılmaktadır:
@@ -19968,8 +19984,8 @@ void exit_sys_errno(const char *msg, int eno)
     PTHREAD_CREATE_JOINABLE
 
     pthread_attr_init fonksiyonu default olarak zaten bu detached durumunu PTHREAD_CREATE_JOINABLE olarak set etmektedir. 
-    Thread özellik parametresi NULL geçilerek yaratıldığında da default olarak "joinable" durumda olur. Fonksiyon başarı durumunda
-    0 değerine, başarısızlık durumunda errno değerine geri dönmektedir. 
+    Thread özellik parametresi NULL geçilerek yaratıldığında da default olarak "joinable" durumda olur. Fonksiyon başarı 
+    durumunda 0 değerine, başarısızlık durumunda errno değerine geri dönmektedir.
 
     Aşağıdaki örnekte thread özellik bilgisi ile detached moda sokulmuştur.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -20032,10 +20048,11 @@ void exit_sys_errno(const char *msg, int eno)
 
     int pthread_detach(pthread_t thread);
 
-    Fonksiyon detached duruma sokulacak thread'in id değerini parametre olarak almaktadır. Başarı durumunda 0 değerine, başarısızlık durumunda
-    errno değerine geri dönmektedir. Zaten detached durumda olan bir thread için bu çağrının yapılması POSIX standartlarına göre "tanımsız davranışa"
-    yol açmaktadır. Linux sistemlerinde "joinable" olmayan thread'lerde bu fonksiyon başarısız olmakta ve EINVAL errno değeri ile geri dönmektedir. 
-    Thread fonksiyon çağrıldığında zaten sonlanmışsa thread'in kaynakları yine otomatik olarak yok edilmektedir. 
+    Fonksiyon detached duruma sokulacak thread'in id değerini parametre olarak almaktadır. Başarı durumunda 0 değerine, 
+    başarısızlık durumunda  errno değerine geri dönmektedir. Zaten detached durumda olan bir thread için bu çağrının yapılması 
+    POSIX standartlarına göre "tanımsız davranışa" yol açmaktadır. Linux sistemlerinde "joinable" olmayan thread'lerde bu 
+    fonksiyon başarısız olmakta ve EINVAL errno değeri ile geri dönmektedir. Thread fonksiyon çağrıldığında zaten sonlanmışsa 
+    thread'in kaynakları yine otomatik olarak yok edilmektedir.
 
     Aşağıdaki örnekte thread pthread_detach donksiyonu ile detached duruma sokulmuştur. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -20084,6 +20101,7 @@ void exit_sys_errno(const char *msg, int eno)
 	exit(EXIT_FAILURE);
 }
 
+<BURADA KALDIK>
 /*--------------------------------------------------------------------------------------------------------------------------
     Thread'ler konusunun önemli bir bölümünü "thread senkronizasyonu" oluşturmaktadır. Thread'lerin birlikte belli bir amacı 
     ortak bir biçimde gerçekleştirirken uyum içinde çalışması gerekebilmektedir. Özellikle ortak kaynaklara erişen thread'lerin
@@ -26389,7 +26407,7 @@ void *thread_proc4(void *param)
     gcc'de bazı built-in fonksiyonlar atomik işlemler için bulundurulmuştur. Ancak gcc'de önceleri bu atomic built-in fonksiyonlar
     __sync_xxx biçiminde isimlendirilmişti. Sonra C++'a <atomic> kütüphanesi eklenince C++ kütüphanesi de kullanabilsin diye
     bu eski __sync_xxx isimli fonksiyonlar yerine bunların "memory model" parametresi alan __atomic_xxx versiyonları oluşturuldu. 
-    Artık yeni programların bu __atomic_xxx biçimindeki bu yeni fonksiyonları kullanması tavsiye edilmektedir. Her iki fonksiyon grubunun 
+    Artık yeni programların __atomic_xxx biçimindeki bu yeni fonksiyonları kullanması tavsiye edilmektedir. Her iki fonksiyon grubunun 
     dokümanlarına ilişkin bağlantıları aşağıda veriyoruz:
 
     https://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/_005f_005fatomic-Builtins.html
@@ -56472,6 +56490,13 @@ void exit_sys(const char *msg)
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    User moddaki senkronizasyon nesnelerinin benzerlerinin çekirdek içerisinde de bulunduğunu görüyorsunuz. Ancak user moddaki
+    her senkronizasyon nesnesinin bir kernel mod karşılığı yoktur. Örneğin user moddaki "koşul değişkenlerinin (condition 
+    variables)" bir kernel mod karşılığı bulunmamaktadır. Ayrıca burada ele almadığımız (belki ileride ele alacağımız) yalnızca
+    çekirdek içerisinde kullanılan birkaç senkronizasyon nesnesi daha bulunmaktadır.
+----------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Tıpkı user modda olduğu gibi aygıt sürücülerde de basit atama, artırma, eksiltme gibi işlemlerin atomic yapılmasını sağlayan
     özel fonksiyonlar vardır. Aslında bu işlemler thread'ler konusunda görmüş olduğumuz gcc'nin built-in atomic fonksiyonlarıyla
     yapılabilir. Ancak çekirdek içerisindeki fonksiyonların kullanılması uyum bakımından daha uygundur. Bu fonksiyonların hepsi 
@@ -56487,8 +56512,8 @@ void exit_sys(const char *msg)
     atomic_dec
     ...
 
-    Bu fonksiyonların hepsinin birinci parametreleri atomic_t türünden nesnenin adresini almaktadır. atomic_set fonksiyonunun
-    ikinci parametresi set edilecek değeri almaktadır.
+    Bu fonksiyonların hepsinin atomic_t türünden nesnenin adresini alan bir parametresi vardır. atomic_set fonksiyonunun ikinci 
+    parametresi set edilecek değeri almaktadır.
 
     Yukarıda da belirttiğimiz gibi atomic_t türü aslında int bir elemana sahip bir yapı biçimindedir. atomic_t türünden 
     bir değişkene ilkdeğer vermek için ATOMIC_INIT makrosu da kullanılabilir. Örneğin:
@@ -56540,6 +56565,10 @@ void exit_sys(const char *msg)
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												140. Ders 10/05/2024 - Cuma
+----------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Yukarıda da belirttiğimiz gibi her aygıt sürücü kendi bloke olayları için kendinin kullanacağı bekleme kuyrukları yaratabilmektedir.
     Çekirdek içerisinde bekleme kuyruklarını yaratan ve yok eden çekirdek fonksiyonları bulunmaktadır. Yine çekirdek içerisinde
     bir thread'i çalışma kuyruğundan çıkartıp bekleme kuyruğuna yerleştiren, bekleme kuyruğundan çıkartıp çalışma kuyruğuna 
@@ -56570,33 +56599,77 @@ void exit_sys(const char *msg)
     wait_event_interruptible_timeout(wq_head, condition, timeout);
     wait_event_interruptible_exclusive(wq_head, condition);
 
-    "wait_event" fonksiyonu thread'i "uninterruptible" biçimde bekleme kuyruğuna yerleştirir. Bu biçimde bloke olmuş thread'lerin
+    "wait_event" makrosu thread'i "uninterruptible" biçimde bekleme kuyruğuna yerleştirir. Bu biçimde bloke olmuş thread'lerin
     blokeleri sinyal dolayısıyla çözülememektedir. "wait_event_interruptible" makrosu ise aynı işlemi "interruptible" olarak yapmaktadır. 
     Yani sinyal geldiğinde thread bekleme kuyruğundan uyandırılır. "wait_event_killable" makrosu yalnızca SIGKILL sinyali için thread'i 
     uyandırmaktadır. Yani bu biçimde bekleme kuyruğuna yerleştirilmiş bir thread'in blokesi sinyal geldiğinde çözülmez, ancak SIGKILL
-    sinyali ile yok edilebilir. "wait_event_timeout" ve "wait_event_interruptible_timeout" makrolarının "wait_event" makrolarından farkı
-    thread'i en kötü olasılıkla belli bir jiffy zaman aşımı ile uyandırabilmesidir.
+    sinyali ile thread yok edilebilir. "wait_event_timeout" ve "wait_event_interruptible_timeout" makrolarının "wait_event" makrolarından 
+    farkı thread'i en kötü olasılıkla belli bir jiffy zaman aşımı ile uyandırabilmesidir. Jiffy kavramı izleyen bölümlerde ele 
+    alınacaktır.
 
-    Makrolardaki "condition (koşul)" parametresi bool bir ifade biçiminde oluşturulmalıdır. Bu ifade ya sıfır olur ya da sıfır dışı bir 
-    değer olur. Bu koşul ifadesi "uyanık kalmak için bir koşul" belirtmektedir. Bu koşul uyandırma koşulu değildir. Uyanık kalma koşuludur. 
-    Çünkü bu makrolarda koşula bakılması uyandırılma işleminden sonra yapılmaktadır. Yani thread uyandırılır, uyanmış olan thread 
-    koşula bakar. Koşul sağlanmamışsa yeniden uyutulur. Tabii aslında thread henüz uyutulmadan da bu koşula bakılmaktadır. Bu koşul 
-    zaten sağlanıyorsa thread hiç uyutulmamaktadır.
+    Makrolardaki "condition (koşul)" parametresi bool bir ifade biçiminde oluşturulmalıdır. Bu ifade ya sıfır olur ya da sıfır 
+    dışı bir değer olur. Bu koşul ifadesi "uyanık kalmak için bir koşul" belirtmektedir. Yani bu koşul uyandırma koşulu değildir, uyanık 
+    kalma koşuludur. Çünkü bu makrolarda koşula bakılması uyumadan önce ve uyandırılma işleminden sonra yapılmaktadır. Yani önce 
+    koşula bakılır. Koşul sağlanmıyorsa thread uyutulur. Thread uyandırıldığında yeniden koşula bakılır. Koşul sağlanmıyorsa yeniden 
+    uyutulur. Dolayısıyla uyanma işlemi çekirdek kodlarında tıpkı koşul değişkenlerinde (condition variable) olduğu gibi döngü 
+    içerisinde yapılmaktadır. Örneğin:
 
-    <BURADA KALDIK>
+    DECLARE_WAIT_QUEUE_HEAD(g_wq);
+    int g_flag = 0;
+    ...
 
-    wait_event_interruptible_exclusive (bunun interrutible olmayan biçimi yoktur) fonksiyonu Linux çekirdeklerine 2.6'ının belli sürümünden sonra sokulmuştur.
-    Yine bu fonksiyonla birlikte aşağıda ele alınan wake_up_xxx_nr fonksiyonları da eklenmiştir. Bir prosesin exclusive olarak wait kuyruğuna yerleştirilmesi
-    onlardan belli sayıda olanların uyandırılabilmesini sağlamaktadır.
+    wait_event(g_wq, g_flag != 0);
 
-    O halde wait_event makroları o andaki thread'i çizelgeden (yani run kuyruğundan) çıkartıp wait kuyruğuna yerleştirdikten sonra "task switch" işlemini
-    yapar. Task switch işlemi sonrasında artık run kuyruğundaki yeni bir thread çalışır.
+    Burada koşul g_flag != 0 biçimindedir. wait_event makroları fonksiyon değil makrı biçiminde yazıldığı için bu koşul bu halliyle 
+    makronun içinde kullanılmaktadır. (Yani ifadenin sonucu değil kendisi makroda kullanılmaktadır.) Makronun içerisinde önce koşula 
+    bakılmakta, bu koşul sağlanıyorsa thread zaten uyutulmamaktadır. Eğer koşul sağlanmıyorsa thread uyutulmaktadır. Thread uykudan 
+    uyandırıldığında tıpkı koşul değişkenlerinde olduğu gibi yeniden koşula bakılmakta eğer koşul sağlanmıyorsa thread yeniden 
+    uyutulmaktadır.
 
-    Wait kuyruğundaki thread (yani task_struct nesnesi) yeniden run kuyruğuna wake_up makrolarıyla sokulmaktadır. wait_event makrolarındaki koşula
-    wake_up makroları bakmaz. wake_up makroları yalnızca thread'i wait kuyruklarından run kuyruğuna taşımaktadır. Koşula uyandırımış thread'in kendisi 
-    bakmaktadır. Eğer koşul sağlanmıyorsa yeniden uyutulmaktadır. (Zaten belli bir koşula bakarak uyandırma gerçekleştirim olarak mümkün değildir.)
-    Durum böyle olsa da aslında sonuçta koşulu sağlamayan thread'ler yeniden uyutulduklarına göre gerçek anlamda uyandırılmış olmamaktadır. Kullanılan
-    wake_up makroları şunlardır:
+    wait_event_interruptible makrosunun wait_event makrosundan farkı eğer thread uyutulmuşsa, uykudan bir sinyalle uyandırılabilmesidir. 
+    Halbuki wait_event ile uykuya dalmış olan thread sinyal oluşsa bile uykudan uyandırılmamaktadır. wait_event_killable ile thread 
+    uykuya dalındığında ise yalnızca SIGKILL sinyali ile thread uykudan uyandırılabilmektedir. Tabii programcı wait_event_interruptible
+    makrosunun geri dönüş değerine bakmalı, eğer thread sinyal dolayısıyla uykudan uyandırılmışsa -ERESTARTSYS değeriyle kendi fonksiyonundan 
+    geri dönmelidir. wait_event_interruptible fonksiyonu eğer sinyal dolayısıyla uyanmışsa -ERESTARTSYS değeri ile, koşul sağlandığından 
+    dolayı uyanmışsa 0 değeri ile geri dönmektedir. Örneğin:
+
+    DECLARE_WAIT_QUEUE_HEAD(g_wq);
+    int g_flag = 0;
+    ...
+
+    if (wait_event(g_wq, g_flag != 0) != 0)
+        return -RESTARTSYS;
+
+    Bu tür durumlarda böylesi flag değişkenlerini atomic almak iyi bir tekniktir. Örneğin:
+
+    DECLARE_WAIT_QUEUE_HEAD(g_wq);
+    atomic_t g_flag = ATOMIC_INIT(0)
+    ...
+
+    if (wait_event(g_wq, atomic_read(&g_flag) != 0) != 0)
+        return -RESTARTSYS;
+
+    wait_event_interruptible_exclusive (bunun interrutible olmayan biçimi yoktur) makrosu Linux çekirdeklerine 2.6'ının belli 
+    sürümünden sonra sokulmuştur. Yine bu fonksiyonla birlikte aşağıda ele alınan wake_up_xxx_nr makroları da eklenmiştir. Bir 
+    prosesin exclusive olarak wait kuyruğuna yerleştirilmesi onlardan belli sayıda olanların uyandırılabilmesini sağlamaktadır.
+
+    Tabii wait_event makroları o andaki thread'i çizelgeden (yani run kuyruğundan) çıkartıp wait kuyruğuna yerleştirdikten sonra 
+    "context switch" işlemini de yapmaktadır. Context switch işlemi sonrasında artık run kuyruğundaki yeni bir thread çalışır.
+
+    wait_event nakrolarının temsili kodunu şöyle düşünebilirsiniz:
+
+    while (koşul_sağlanmadığı_sürece) {
+        <thread'i bekleme kuyruğuna ekle>
+        <thread_uyandırıldı>
+    }
+
+    Bekleme kuyruğunda blokede bekletilen thread wake_up makrolarıyla uyandırılmaktadır. Uyandırılmaktan kastedilen şey thread'in 
+    bekleme kuyruğundan çıkartılıp yeniden çalışma kuyruğuna (run queue) yerleştirilmesidir. wait_event makrolarındaki koşula wake_up 
+    bakamaktadır. wake_up makroları yalnızca thread'i bekleme kuyruklarından çalışma kuyruğuna taşımaktadır. Koşula uyandırımış 
+    thread'in kendisi bakmaktadır. Eğer koşul sağlanmıyorsa yeniden uyutulmaktadır. Yani biz koşulu sağlanır duruma getirmeden 
+    wake_up işlemi yaparsak thread yeniden uykuya dalacaktır. (Zaten "koşulu sağlayan thread'i uyandırma" işlemi mümkün değildir.)
+
+    En çok kullanılan wake_up makroları şunlardır:
 
     wake_up(wq_head);
     wake_up_nr(wq_head, nr);
@@ -56605,32 +56678,119 @@ void exit_sys(const char *msg)
     wake_up_interruptible_nr(wq_head, nr);
     wake_up_interruptible_all(wq_head);
 
-    Buradaki sonu xxx_interruptible ile biten isimdeki makrolar "sinyalle kesilebilir" olanları uyandırma işini yapar. Sonu xxx_nr ile biten makrolar ise
-    wait kuyruğundaki belli sayıda exclusive bekleyen (yani wait_event_interruptible_exclusive ile bekleyen) thread'i uyandırmaktadır. wake_up_all makrosu 
-    wait kuyruğundaki tüm thread'leri uyandırır. wake_up ve wake_up_interruptible makroları kuyruktaki tek bir exclusive thread'i uyandırmaktadır. 
-    wake_up makrolarının "interruptible" olanları yalnızca "interruptible" olarak wait kuyruğunda bekleyenleri (yani wait_event_interruptible ile bekleyenleri) uyandırmaktadır. 
-    Eskiden prosesi uyandıran wake_up fonksiyonlarının yalnızca wait kuyruğundaki tüm prosesleri uyandıran biçimleri vardı. Sonra belli sayıda exclusive bekleyen prosesi uyandıran
-    wake_up fonksiyonları da çekirdeğe eklenmiştir. Belli sayıda exclusive prosesi uayndıramn makrolar exclusive olmayan prosesleri de uyandırmaktadır.
-    Programcı wake_up makrolarına wait_queue_head_t nesnelerinin adreslerini geçirmelidir. (Halbuki wait_event makrolarına
-    programcı nesnelerin kendisini geçirmektedir. Adresi makrolar almaktadır.)
+    Bu makroların çalışmasının anlaşılması için bekleme kuyrukları hakkında biraz ayrıntıya girmek gerekir. Bekleme kuyruğunu
+    temsil eden wait_queue_head_t yapısı şöyle bildirilmiştir:
+
+    struct __wait_queue_head {
+        spinlock_t lock;
+	    struct list_head task_list;
+    };
+
+    Görüldüğü gibi bu bir bağlı listedir. Bağlı liste spinlock ile korunmaktadır. Bu bağlı liste aşağıdaki yapılardan 
+    oluşmaktadır:
+
+    struct __wait_queue {
+        unsigned int flags;
+        void *private;
+        wait_queue_func_t func;
+        struct list_head task_list;
+    };
+
+    Bu yapının ayrıntısına girmeyeceğiz. Ancak yapıdaki flags elemanına dikkat ediniz. Bekleme kuyruğuna yerleştirilen bir 
+    thread'in exclusive bekleme yapıp yapmadığı (yani wait_event_intrerruptible_exclusive ile bekleme yapıp yapmadığı)
+    bu flags elemanında saklanmaktadır. Bu wait kuyruğunun bekleyen thread'leri (onların task_struct adreslerini) tutan
+    bir bağlı liste olduğunu varsayabilirsiniz. Yani bekleme kuyrukları aşağıdaki gibi düşünülebilir:
+
+    T1 ---> T2 ---> T3 ---> T4 ---> T5 ---> T6 ---> T7 ---> T8 ---> NULL
+
+    Bu thread'lerden bazıları exclusive bekleme yapmış olabilir. Bunları (E) ile belirtelim:
+
+    T1 ---> T2 ---> T3 ---> T4(E) ---> T5 ---> T6(E) ---> T7 ---> T8(E) ---> NULL
+
+    wake_up makrosu kuyruğun başından itibaren ilk exclusive bekleme yapan thread'e kadar bu thread de dahil olmak üzere
+    tüm thread'leri uyandırmaktadır. Tabii bu thread'lerin hepsi uyandırıldıktan sonra ayrıca koşula da bakmaktadır. 
+    Örneğimizde wake_up fonksiyonu çağrıldığında T1, T2, T3 ve T4 therad'leri uyandırılacaktır. Görüldüğü gibi wake_up 
+    makrosu aslında 1 tane exclusive thread uyandırmaya çalışmaktadır. Ancak onu uyandırırken kuyruğun önündeki exclusive
+    olmayanları da uyandırmaktadır.
+
+    wake_up_nr makrosu wake_up makrosu gibi davranır ancak 1 tane değil en fazla nr parametresiyle belirtilen sayıda exclusive 
+    thread'i uyandırmaya çalışır. Başjka bir deyişle wake_up(g_wq) çağrısı ile wake_up_nr(g_qw, 1) çağrısı aynı anlamdadır.
+    Eğer yukarıdaki örnekte wake_up_nr(g_wq, 2) çağrısını yapmış olsaydık T1, T2, T2, T4, T5, T6 thread'leri uyandırılırdı. 
+    Tabii bu thread'lerin uyandırılmış olması wait_event makrolarından çıkılacağı anlamına gelmemektedir. Uyandırma işleminden 
+    sonra koşula yeniden bakılmaktadır.
+
+    wake_up_all makrosu bekleme kuyruğundaki tüm exclusive thread'leri ve exclusive olmayan thread'leri yani kısaca tüm
+    thread'leri uyandırmaktadır. Tabii yine uyanan thread'ler koşula bakmaktadır.
+
+    wake_up_interruptible, wake_up_interruptible_nr ve wake_up_interruptible_all, makroları interruptible olmayan makrolar 
+    gibi çalışmaktadır. Ancak bu makrolar bekleme kuyruğunda yalnızca "interruptible" wait_event fonksiyonlarıyla bekletilmiş 
+    thread'lerle ilgilenmektedir. Diğer thread'ler kuyrukta yokmuş gibi davranmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Aşağıdaki örnekte aygıt sürücünün read fonksiyonunda proses wait_event_interruptible fonksiyonu ile bloke edilerek yaratılmış olan wait 
-    kuyruğuna aktarılmıştır. write fonksiyonu ise prosesi wait kuyruğundan yeniden wake_up fonksiyonuyla run kuyruğuna aktarmaktadır.
+    Aygıt sürücümüzün read ve write fonksiyonları aşağıdaki gibi olsun:
+
+    wait_queue_head_t g_wq;
+    atomic_t g_flag;
+    ...
+
+    static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
+    {
+        printk(KERN_INFO "wait-driver read...\n");
+
+        atomic_set(&g_flag, 0);
+        if (wait_event_interruptible(g_wq, atomic_read(&g_flag) != 0) != 0) {
+            printk(KERN_INFO "Signal occured...");
+            return -ERESTARTSYS;
+        }
+
+        return 0;
+    }
+
+    static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
+    {
+        printk(KERN_INFO "wait-driver write...\n");
+
+        atomic_set(&g_flag, 1);
+        wake_up_interruptible(&g_wq);
+
+        return 0;
+    }
+
+    Burada eğer birden fazla thread read yaparsa exclusive olmayan bir biçimde bekleme kuyruğunda bekleyecektir. write işleminde
+    wake_up_interruptible makrosu ile uyandırma yapıldığına dikkat ediniz. Bekleme kuyruğunda exclusive bekleyen thread 
+    olmadığına göre burada tüm read yapan thread'ler uyandırılacaktır. Onların koşulları sağlandıüı için hepsi read fonksiyonundan
+    çıkacaktır. Şimdi bu read fonksiyonunda exclusive bekleme yapmış olalım:
+
+    static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
+    {
+        printk(KERN_INFO "wait-driver read...\n");
+
+        atomic_set(&g_flag, 0);
+        if (wait_event_interruptible_exclusive(g_wq, atomic_read(&g_flag) != 0) != 0) {
+            printk(KERN_INFO "Signal occured...");
+            return -ERESTARTSYS;
+        }
+
+        return 0;
+    }
+
+    Artık write fonkişyonunda wake_up makrosu çağrıldığında yalnızca bir tane exclusive bekleme yapan thread uyandırılacağı 
+    için read fonksiyonundan yalnızca bir thread çıkacaktır. Test için aşağıdaki kodları kullanabilirsiniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-/* generic-char-driver.c */
+/* wait-driver.c */
 
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/fs.h>
 #include <linux/cdev.h>
+ #include <asm/atomic.h>
 #include <linux/wait.h>
 
 MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("General Character Device Driver");
 MODULE_AUTHOR("Kaan Aslan");
+MODULE_DESCRIPTION("Wait-Driver");
 
 static int generic_open(struct inode *inodep, struct file *filp);
 static int generic_release(struct inode *inodep, struct file *filp);
@@ -56639,21 +56799,24 @@ static ssize_t generic_write(struct file *filp, const char *buf, size_t size, lo
 
 static dev_t g_dev;
 static struct cdev *g_cdev;
-static struct file_operations g_file_ops = {
+static struct file_operations g_fops = {
 	.owner = THIS_MODULE,
 	.open = generic_open,
-	.release = generic_release,
 	.read = generic_read,
 	.write = generic_write,
+	.release = generic_release
 };
-static DECLARE_WAIT_QUEUE_HEAD(g_wq);
-static int g_cond;
+
+static wait_queue_head_t g_wq;
+static atomic_t g_flag;
 
 static int __init generic_init(void)
 {
 	int result;
 
-	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "generic-char-driver")) < 0) {
+	printk(KERN_INFO "wait-driver module initialization...\n");
+
+	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "wait-driver")) < 0) {
 		printk(KERN_INFO "Cannot alloc char driver!...\n");
 		return result;
 	}
@@ -56664,15 +56827,15 @@ static int __init generic_init(void)
 	}
 
 	g_cdev->owner = THIS_MODULE;
-	g_cdev->ops = &g_file_ops;
+	g_cdev->ops = &g_fops;
 
-	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
+	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add character device driver!...\n");
+		printk(KERN_ERR "Cannot add device!...\n");
 		return result;
 	}
 
-	printk(KERN_INFO "Module initialized with %d:%d device number...\n", MAJOR(g_dev), MINOR(g_dev));
+	init_waitqueue_head(&g_wq);
 
 	return 0;
 }
@@ -56682,46 +56845,45 @@ static void __exit generic_exit(void)
 	cdev_del(g_cdev);
 	unregister_chrdev_region(g_dev, 1);
 
-	printk(KERN_INFO "Goodbye...\n");
+	printk(KERN_INFO "wait-driver module exit...\n");
 }
 
 static int generic_open(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device opened!...\n");
+	printk(KERN_INFO "wait-driver opened...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device released!...\n");
+	printk(KERN_INFO "wait-driver closed...\n");
 
 	return 0;
 }
 
 static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
 {
-	printk(KERN_INFO "Process sleeping!...\n");
+	printk(KERN_INFO "wait-driver read...\n");
 
-	g_cond = 0;
-	if (wait_event_interruptible(g_wq, g_cond != 0))
+	atomic_set(&g_flag, 0);
+	if (wait_event_interruptible_exclusive(g_wq, atomic_read(&g_flag) != 0) != 0) {
+		printk(KERN_INFO "Signal occured...");
 		return -ERESTARTSYS;
-
-	printk(KERN_INFO "Process waking up!...\n");
+	}
 
 	return 0;
 }
 
 static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
 {
-	g_cond = 1;
-	wake_up_all(&g_wq);
+	printk(KERN_INFO "wait-driver write...\n");
+
+	atomic_set(&g_flag, 1);
+	wake_up_interruptible(&g_wq);
 
 	return 0;
 }
-
-module_init(generic_init);
-module_exit(generic_exit);
 
 module_init(generic_init);
 module_exit(generic_exit);
@@ -56735,75 +56897,7 @@ all:
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
-/* ddproc.1 */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-
-void exit_sys(const char *msg);
-
-int main(void)
-{
-	int fd;
-	char ch;
-
-	if ((fd = open("generic-char-driver", O_RDONLY)) == -1)
-		exit_sys("open");
-
-	printf("read call begins...\n");
-
-	if (read(fd, &ch, 1) == -1)
-		exit_sys("read");
-
-	printf("read call ends...\n");
-
-	close(fd);
-
-	return 0;
-}
-
-void exit_sys(const char *msg)
-{
-	perror(msg);
-
-	exit(EXIT_FAILURE);
-}
-
-/* ddproc2.c */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-
-void exit_sys(const char *msg);
-
-int main(void)
-{
-	int fd;
-
-	if ((fd = open("generic-char-driver", O_WRONLY)) == -1)
-		exit_sys("open");
-
-	printf("Press ENTER to write!...\n");
-	getchar();
-
-	if (write(fd, "a", 1) == -1)
-		exit_sys("read");
-
-	close(fd);
-
-	return 0;
-}
-
-void exit_sys(const char *msg)
-{
-	perror(msg);
-
-	exit(EXIT_FAILURE);
-}
+/* load (bu satırı dosyaya kopyalamayınız) */
 
 #!/bin/bash
 
@@ -56816,136 +56910,177 @@ rm -f $module
 mknod $module c $major 0
 chmod $mode $module
 
+/* unload (bu satırı dosyaya kopyalamayınız) */
+
+#!/bin/bash
+
+module=$1
+mode=666
+
+/sbin/rmmod ./$module.ko || exit 1
+rm -f $module
+
+/* wait-test-read.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int fd;
+	char buf[32];
+	ssize_t result;
+
+	if ((fd = open("wait-driver", O_RDONLY)) == -1)
+		exit_sys("open");
+
+	printf("reading begins...\n");
+	if ((result = read(fd, buf, 32)) == -1)
+		exit_sys("result");
+
+	printf("Ok\n");
+
+	close(fd);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/* wait-test-write.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int fd;
+	char buf[32] = {0};
+
+	if ((fd = open("wait-driver", O_WRONLY)) == -1)
+		exit_sys("open");
+
+	if (write(fd, buf, 32) == -1)
+		exit_sys("write");
+
+	printf("Ok\n");
+
+	close(fd);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
 /*--------------------------------------------------------------------------------------------------------------------------
-    Aşağıdaki kodda wait kuyruğunda bekleyen proseslerden yalnızca 1 tanesini wake_up makrosuyla çıkartan kod verilmiştir.
+												141. Ders 12/05/2024 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-/* generic-char-driver.c */
-
-#include <linux/module.h>
-#include <linux/kernel.h>
-#include <linux/fs.h>
-#include <linux/cdev.h>
-#include <linux/wait.h>
-
-MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("General Character Device Driver");
-MODULE_AUTHOR("Kaan Aslan");
-
-static int generic_open(struct inode *inodep, struct file *filp);
-static int generic_release(struct inode *inodep, struct file *filp);
-static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off);
-static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off);
-
-static dev_t g_dev;
-static struct cdev *g_cdev;
-static struct file_operations g_file_ops = {
-	.owner = THIS_MODULE,
-	.open = generic_open,
-	.release = generic_release,
-	.read = generic_read,
-	.write = generic_write,
-};
-static DECLARE_WAIT_QUEUE_HEAD(g_wq);
-static int g_cond;
-
-static int __init generic_init(void)
-{
-	int result;
-
-	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "generic-char-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
-		return result;
-	}
-
-	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!...\n");
-		return -ENOMEM;
-	}
-
-	g_cdev->owner = THIS_MODULE;
-	g_cdev->ops = &g_file_ops;
-
-	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
-		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add character device driver!...\n");
-		return result;
-	}
-
-	printk(KERN_INFO "Module initialized with %d:%d device number...\n", MAJOR(g_dev), MINOR(g_dev));
-
-	return 0;
-}
-
-static void __exit generic_exit(void)
-{
-	cdev_del(g_cdev);
-	unregister_chrdev_region(g_dev, 1);
-
-	printk(KERN_INFO "Goodbye...\n");
-}
-
-static int generic_open(struct inode *inodep, struct file *filp)
-{
-	printk(KERN_INFO "Generic device opened!...\n");
-
-	return 0;
-}
-
-static int generic_release(struct inode *inodep, struct file *filp)
-{
-	printk(KERN_INFO "Generic device released!...\n");
-
-	return 0;
-}
-
-static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
-{
-	printk(KERN_INFO "Process sleeping!...\n");
-
-	g_cond = 0;
-	if (wait_event_interruptible_exclusive(g_wq, g_cond != 0))
-		return -ERESTARTSYS;
-
-	printk(KERN_INFO "Process waking up!...\n");
-
-	return 0;
-}
-
-static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
-{
-	g_cond = 1;
-	wake_up(&g_wq);
-
-	return 0;
-}
-
-module_init(generic_init);
-module_exit(generic_exit);
+/*--------------------------------------------------------------------------------------------------------------------------
+    Burada bir noktaya dikkatinizi çekmek istiyoruz. Daha önce görmüş olduğumuz mutex, semaphore, read/write kilitleri gibi 
+    senkronizasyon nesnelerinin kendilerinin oluşturduğu bekleme kuyrukları vardır. Bu senkronizasyon nesneleri bloke oluşturmak
+    için kendi bekleme kuyruklarını kullanmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Şimdi de boru örneğimizi gerçek bir pipe haline getirelim. Yani özellikleri katalım:
+    Şimdi de daha önce yapmış boru örneğimizi gerçek bir bor haline getirelim. Yani eğer boruda en az 1 byte boş alan kalmadıysa
+    read fonksiyonu blokede en az 1 byte okuyana kadar beklesin. Eğer boruda tüm bilgileri yazacak kadar boş yer kalmadıysa 
+    bu kez de yazan taraf blokede beklesin. Burada izlenecek temel yöntem aslında kursumuzda "koşul değişklenleri (condityion 
+    variable)" denilen senkronizasyon nesnelerindeki yöntemin aynısı olmalıdır. Okuyan thread kuyruktaki byte sayısını belirten 
+    g_count == 0 olduğu sürece bekleme kuyruğunda beklemelidir. Tabii bizim kuyruk üzerinde işlem yaptığımız kısımları senkronize
+    etmemiz gerekir. Bunu da bir binary semaphore nesnesi ya da mutex nesnesi yapabiliriz. Semaphore nesnesini ve bekleme kuyruğunu
+    aşağdaki gibi yaratabiliriz:
 
-    1) Okuma yapan prosesler eğer boruda okunacak hiçbir byte yoksa blokede beklemelidir. (Tabii birden fazla proses bloke olmuşsa boruya
-    bilgi geldiğinde hangisinin bu bilgiyi alacağının garantisi yoktur.)
+    static wait_queue_head_t g_wq;
+    DEFINE_SEMAPHORE(g_sem);
 
-    2) Yazma işlemi sırasında eğer boruda yazılanların hepsini alacak kadar boş yer yoksa yazan proses bloke olmalıdır.
+    Okuyan taraf önce semaphore kilidini eline almalı ancak eğer uykuya dalacaksa onu serbest bırakıp uykuya dalmalıdır. Kuyruk 
+    üzerinde aynı anda işlemler yapılabiceği için tüm işlemlerin kritik kod içerisinde yapılması uygun olur. O halde read işleminin 
+    tipik çatısı şöyle olmalıdır:
 
-    Aşağıdaki örnekte blokenin çözülmesi sırasında while dönüsüne dikkat ediniz:
+    ...
+	if (down_interruptible(&g_sem))
+		return -ERESTARTSYS;
+	while (g_count == 0) {
+		up(&g_sem);
+		if (wait_event_interruptible(g_wqread, g_count > 0))
+			return -ERESTARTSYS;
+		if (down_interruptible(&g_sem))
+			return -ERESTARTSYS;
+	}
 
-    while (g_count == 0) {
-        up(&g_sem);
-        if (wait_event_interruptible(g_wqread, g_count > 0))
-            return -ERESTARTSYS;
-        if (down_interruptible(&g_sem))
-            return -ERESTARTSYS;
-    }
+    /* kuyruktan okuma işlemleri */
 
-    Burada birden fazla proses uykudan uyandırılabilir. Ancak bunlardna biri semaphore'dan geçecektir. Bu durumda semaphore'dan 
-    geçen proses her şeyi okuyabileceği için uyanmış olup semaphore'da kalan prosesin semaphore'dan çıktığında yeniden koşula 
-    bakması gerekir. Bu nedenle yukarıdaki kodda mecburen if deyimi yerine while deyimi kullanılmıştır. Aynı durum write işleminde 
-    de söz konusudur. Ayrıca bu örnekte uyandırma işlemi tüm kuyruktaki prosslerin wake_up_all ile uyandırılması biçiminde 
-    gerçekleştirilmektedir. Çünkü birden fazla proses boruda kalanları okuyabilmelidir.
+	up(&g_sem);
+
+    Burada önce down_interruptible fonksiyonu ile semaphore kilitlenmeye çalışılmıştır. Eğer semaphore zaten kilitliyse 
+    semaphore'un kendi bekleme kuyruğunda thread uykuya dalacaktır. Daha sonra g_count değerine bakılmıştır. Eğer g_count 
+    değeri 0 ise önce semaphore serbest bırakılıp sonra thread bekleme kuyruğunda uyutulmuştur. Thread bekleme kuyruğundan 
+    uyandırılıdğında yenidne semaphore kontrolünü ele almaktadır. Tabii eğer birden fazla thread bekleme kuyruğundan uyandırılırsa
+    yalnızca bunlardan biri samaphore kontrolünü ele alacaktır. Tabii bundan sonra kuyruktan bilgiler okunacak ve semaphore 
+    kilidi serbest bırakılacaktır. Eğer birden fazla thread beklme kuyruğundan uyanmışsa bu kez diğer bir thread semaphore 
+    kontrolünü ele alacak ve g_count değerine bakacaktır. Yukarıda da belirttiğimiz gibi aslında bu bir "koşul değişkeni"
+    kodu gibidir. Çekirdek içerisinde böyle bir nesne olmadığı için manuel uygulanmıştır.
+
+    Benzer biçimde write işleminin de çatısı aşağıdaki gibidir:
+
+    if (down_interruptible(&g_sem))
+		return -ERESTARTSYS;
+
+	while (PIPE_BUFSIZE - g_count < size) {
+		up(&g_sem);
+		if (wait_event_interruptible(g_wqwrite, PIPE_BUFSIZE - g_count >= size))
+			return -ERESTARTSYS;
+
+		if (down_interruptible(&g_sem))
+			return -ERESTARTSYS;
+	}
+
+    /* kuyruğa yazma işlemleri */
+
+	up(&g_sem);
+
+    Burada benzer işlemler uygulanmıştır. Eğer kuyrukta yazma yapılmak istenen kadar boş alan varsa akış while döngüsünün
+    içerisine girmeyecektir. (Buradaki whiel koşulunun "PIPE_BUFSIZE - g_count < size" biçiminde olduğuna dikkat ediniz.)
+    Dolayısıyla yazma işlemi kritik kod içerisinde yapılabilecektir. Ancak kuyrukta yeteri kadar yer yoksa semahore kilidi 
+    serbest bırakılıp thread bekleme kuyruğunda bekletilecetir. Çıkışta benzer işlemler yapılmaktadır.
+
+    Aslında burada spinlock nesneleri de kullanılabilir. Ancak zaten mutex, semaphore ve read/write ock nesneleri kendi 
+    içerisinde bir miktar spin yapmaktadır.
+
+    Bu örnekte semaphore yerine spinlock kullanabilirmiyiz? Spinlock için şu durumları gözden geçirmeisiniz:
+
+    - Spinlock nesnesinde bekleme CPU zamanı harcanarak meşgul bir döngü içerisinde yapılmaktadır. Dolayısıyla spinlock 
+    nesneleri kilidin kısa süreli bırakılacağından emin olunabiliyorsa kullanılmalıdır.
+
+    - Spinlock içerisinde sinyal işlemleri bekletilmektedir. Yani spinlock beklemelerinin "interruptible" bir biçimi yoktur.
+
+    Aslında bu uygulama spinlock nesneleri de kullanılabilir. Ancak yine de kilitli kalınan kod miktarı dikkate alındığında
+    semahore nesnesi daha uygun bir seçenektir.
+
+    Burada yazma işlemleri için "yazma bekleme kuyruğu" ve okuma işlemleri için "okuma bekleme kuyruğu" biçiminde iki bekleme
+    kuyruğu olduğuna dikkat ediniz. Çünkü yazan taraf okuma bekleme kuyruğundaki thread'leri okuyan taraf ise yazma bekleme 
+    kuyruğundaki thread'leri uyandırmak isteyecektir.
+
+    <BURADA KALDIK>
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* pipe-driver.c */
@@ -56955,15 +57090,16 @@ module_exit(generic_exit);
 #include <linux/fs.h>
 #include <linux/cdev.h>
 #include <linux/uaccess.h>
-#include <linux/semaphore.h>
-
-MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("General Character Device Driver");
-MODULE_AUTHOR("Kaan Aslan");
+#include <linux/spinlock.h>
+#include <linux/wait.h>
 
 #define MIN(a, b)		((a) < (b) ? (a) : (b))
 
-#define PIPE_SIZE		10
+#define PIPE_BUFSIZE		10
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Kaan Aslan");
+MODULE_DESCRIPTION("Pipe Driver");
 
 static int generic_open(struct inode *inodep, struct file *filp);
 static int generic_release(struct inode *inodep, struct file *filp);
@@ -56972,24 +57108,28 @@ static ssize_t generic_write(struct file *filp, const char *buf, size_t size, lo
 
 static dev_t g_dev;
 static struct cdev *g_cdev;
-static struct file_operations g_file_ops = {
+static struct file_operations g_fops = {
 	.owner = THIS_MODULE,
 	.open = generic_open,
-	.release = generic_release,
 	.read = generic_read,
 	.write = generic_write,
+	.release = generic_release
 };
 
-static char g_pipebuf[PIPE_SIZE];
-static size_t g_head = 0, g_tail = 0;
-static size_t g_count = 0;
-static DEFINE_SEMAPHORE(g_sem);
-static DECLARE_WAIT_QUEUE_HEAD(g_wqread);
-static DECLARE_WAIT_QUEUE_HEAD(g_wqwrite);
+static wait_queue_head_t g_wqread;
+static wait_queue_head_t g_wqwrite;
+DEFINE_SEMAPHORE(g_sem);
+
+static unsigned char g_pipebuf[PIPE_BUFSIZE];
+static size_t g_head;
+static size_t g_tail;
+static size_t g_count;
 
 static int __init generic_init(void)
 {
 	int result;
+
+	printk(KERN_INFO "pipe-driver module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "pipe-driver")) < 0) {
 		printk(KERN_INFO "Cannot alloc char driver!...\n");
@@ -57002,15 +57142,16 @@ static int __init generic_init(void)
 	}
 
 	g_cdev->owner = THIS_MODULE;
-	g_cdev->ops = &g_file_ops;
+	g_cdev->ops = &g_fops;
 
-	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
+	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add character device driver!...\n");
+		printk(KERN_ERR "Cannot add device!...\n");
 		return result;
 	}
 
-	printk(KERN_INFO "Pipe driver initialized with %d:%d device number...\n", MAJOR(g_dev), MINOR(g_dev));
+	init_waitqueue_head(&g_wqread);
+	init_waitqueue_head(&g_wqwrite);
 
 	return 0;
 }
@@ -57020,27 +57161,29 @@ static void __exit generic_exit(void)
 	cdev_del(g_cdev);
 	unregister_chrdev_region(g_dev, 1);
 
-	printk(KERN_INFO "Goodbye...\n");
+	printk(KERN_INFO "pipe-driver module exit...\n");
 }
 
 static int generic_open(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device opened!...\n");
+	printk(KERN_INFO "pipe-driver opened...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "Pipe device released!...\n");
+	printk(KERN_INFO "pipe-driver-closed...\n");
 
 	return 0;
 }
 
 static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
 {
-	size_t len;
-	ssize_t result;
+	size_t esize, size1, size2;
+
+	if (size == 0)
+		return 0;
 
 	if (down_interruptible(&g_sem))
 		return -ERESTARTSYS;
@@ -57053,80 +57196,72 @@ static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *o
 			return -ERESTARTSYS;
 	}
 
-	size = MIN(size, g_count);
+	esize = MIN(g_count, size);
 
-	if (g_head >= g_tail)
-		len = MIN(size, PIPE_SIZE - g_head);
+	if (g_tail < g_head)
+		size1 = MIN(PIPE_BUFSIZE - g_head, esize);
 	else
-		len = size;
+		size1 = esize;
 
-	if (copy_to_user(buf, g_pipebuf + g_head, len) != 0) {
-		result = -EFAULT;
-		goto EXIT;
-	}
+	size2 = esize - size1;
 
-	if (size > len)
-		if (copy_to_user(buf + len, g_pipebuf, size - len) != 0) {
-			result = -EFAULT;
-			goto EXIT;
-		}
+	if (copy_to_user(buf, g_pipebuf + g_head, size1) != 0)
+		return -EFAULT;
 
-	g_head = (g_head + size ) % PIPE_SIZE;
-	g_count -= size;
+	if (size2 != 0)
+		if (copy_to_user(buf + size1, g_pipebuf, size2) != 0)
+			return -EFAULT;
 
-	result = size;
+	g_head = (g_head + esize) % PIPE_BUFSIZE;
+	g_count -= esize;
 
-	wake_up_all(&g_wqwrite);
-EXIT:
 	up(&g_sem);
 
-	return result;
+	wake_up_interruptible_all(&g_wqwrite);
+
+	return esize;
 }
 
 static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
 {
-	size_t len;
-	ssize_t result;
+	size_t esize, size1, size2;
 
 	if (down_interruptible(&g_sem))
 		return -ERESTARTSYS;
 
-	while (PIPE_SIZE - g_count < size) {
+	while (PIPE_BUFSIZE - g_count < size) {
 		up(&g_sem);
-		if (wait_event_interruptible(g_wqwrite, PIPE_SIZE - g_count >= size))
+		if (wait_event_interruptible(g_wqwrite, PIPE_BUFSIZE - g_count >= size))
 			return -ERESTARTSYS;
 
 		if (down_interruptible(&g_sem))
 			return -ERESTARTSYS;
 	}
 
-	if (g_tail >= g_head)
-		len = MIN(size, PIPE_SIZE - g_tail);
+	esize = MIN(PIPE_BUFSIZE - g_count, size);
+
+	if (g_tail > g_head)
+		size1 = MIN(PIPE_BUFSIZE - g_tail, esize);
 	else
-		len = size;
+		size1 = esize;
 
-	if (copy_from_user(g_pipebuf + g_tail, buf, len) != 0) {
-		result = -EFAULT;
-		goto EXIT;
-	}
+	size2 = esize - size1;
 
-	if (size > len)
-		if (copy_from_user(g_pipebuf, buf + len, size - len) != 0) {
-			result = -EFAULT;
-			goto EXIT;
-		}
+	if (copy_from_user(g_pipebuf + g_tail, buf, size1) != 0)
+		return -EFAULT;
 
-	g_tail = (g_tail + size ) % PIPE_SIZE;
-	g_count += size;
+	if (size2 != 0)
+		if (copy_from_user(g_pipebuf, buf + size1, size2) != 0)
+			return -EFAULT;
 
-	result = size;
+	g_tail = (g_tail + esize) % PIPE_BUFSIZE;
+	g_count += esize;
 
-	wake_up_all(&g_wqread);
-
-EXIT:
 	up(&g_sem);
 
-	return result;
+	wake_up_interruptible_all(&g_wqread);
+
+	return esize;
 }
 
 module_init(generic_init);
@@ -61063,7 +61198,7 @@ chmod $mode $module
         return PTR_ERR(ts);
     }
 
-    Kernel threda bu fonksiyonla yaratıldıktan sonra hemen çalışmaz. Onu çalıştırmak için wake_process fonksiyonun çağrılması gerekir:
+    Kernel thread bu fonksiyonla yaratıldıktan sonra hemen çalışmaz. Onu çalıştırmak için wake_process fonksiyonun çağrılması gerekir:
 
     int wake_up_process(struct task_struct *tsk);
 
@@ -61085,7 +61220,7 @@ chmod $mode $module
 
     bool kthread_should_stop(void);
 
-    Fonksiyon eğer flag set edilmişse sıfrı dışı bir değere ser edilmediyse 0 değerine geri dönmektedir. Tipik olarak kernel threda fonksiyonu 
+    Fonksiyon eğer flag set edilmişse sıfrı dışı bir değere ser edilmediyse 0 değerine geri dönmektedir. Tipik olarak kernel thread fonksiyonu 
     aşağıdaki gibi bir döngüde yaşamını geçirir:
 
     while (!kthread_should_stop()) {
