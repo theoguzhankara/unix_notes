@@ -1569,10 +1569,10 @@
 
     Maalesef crosstool-NG aracında halen bazı böcekler bulunmaktadır. Örneğin eğer Linux sisteminizdeki "sistem dili" Türkçe ise
     crosstool-NG derlenirken bu sistem dilini referans aldığı için ürettiği script'lerde Türkçe karakterleri kullanmaktadır.
-    Bu da bu script'lerin çalıştırılmasdında sorunlara yol açmaktadır. Bu böceğin "arkasından dolaşmak (workaround)" için sistem 
+    Bu da bu script'lerin çalıştırılmasında sorunlara yol açmaktadır. Bu böceğin "arkasından dolaşmak (workaround)" için sistem 
     dili Türkçe yerine İngilizce yapılabilir. (Mint dağıtımında bu işlem ana menüden "Tercihler/Diller" seçeneği kullanılarak 
     yapılabilir. Burada yalnızca arayüz dilini değiştirebilirsiniz.) Tabii bu değişiklik yapıldıktan sonra crosstool-NG'yi yeniden 
-    drlenmelidir. (Aslında muhtemelen derleme sırasında kodlar "LANG" ve "LANGUAGE" gibi bazı çevre değişkenlerine bakmaktadır. 
+    derlenmelidir. (Aslında muhtemelen derleme sırasında kodlar "LANG" ve "LANGUAGE" gibi bazı çevre değişkenlerine bakmaktadır. 
     Sistem ayarlarını değiştirmeden yalnızca birkaç çevre değişkeni geçici olarak da değiştirilebilir. Ancak sistem dilinin 
     değiştirilmesi daha sorunsuz bir çözüm oluşturacaktır.) crosstool-NG derlendikten sonra sistem dilini eski haline getirebilirsiniz. 
     Sistem dilini değiştirdikten sonra makinenizi reboot etmelisiniz.
@@ -1615,10 +1615,10 @@
 
     $ bin/ct-ng arm-cortex_a8-linux-gnueabi
 
-   Bir konfigürasyonun belirlemeleri konfigürasyon isminin başına "show-" getirilerek görüntülenebilmektedir. Örneğin:
+    Bir konfigürasyonun belirlemeleri konfigürasyon isminin başına "show-" getirilerek görüntülenebilmektedir. Örneğin:
 
-   $ bin/ct-ng show-arm-cortex_a8-linux-gnueabi
-   [G...]   arm-cortex_a8-linux-gnueabi
+    $ bin/ct-ng show-arm-cortex_a8-linux-gnueabi
+    [G...]   arm-cortex_a8-linux-gnueabi
         Languages       : C,C++
         OS              : linux-6.6.1
         Binutils        : binutils-2.42
@@ -1651,13 +1651,13 @@
     $ bin/ct-ng build
 
     3) crosstool-NG ürettiği araç zincirini default olarak "home" dizininin altında "x-tools" isimli bir dizine yerleştirmektedir. 
-    Örneğin yukarıda ürettiğimiz araç zinciri bu dizinde şöyle gözükmeltedir:
+    Örneğin yukarıda ürettiğimiz araç zinciri bu dizinde şöyle gözükmektedir:
 
     $ ls -l x-tools
     total 4
     drwxrwxr-x 8 kaan kaan 4096 Nis 16 23:14 arm-cortex_a8-linux-gnueabihf
 
-    Buradaki dizin hazır araç zincirlerinde olduğu bir yapıya sahiptir. Derleyiciler ve diğer binary araçlar bin dizinin içerisinde
+    Buradaki dizin hazır araç zincirlerinde olduğu bir yapıya sahiptir. Derleyiciler ve diğer binary araçlar "bin" dizininin içerisinde
     bulunmaktadır. Örneğin:
 
     -rwxr-xr-x 1 kaan kaan  1123904 Nis 16 23:14 arm-cortex_a8-linux-gnueabihf-addr2line
@@ -1682,7 +1682,7 @@
 
     Artık bundan sonra "menuconfig" yaparsak eski konfigürasyon dosyasını yüklemiş oluruz.
 
-    Daha önce yapılan build işleminde kalan birtakım dosyaların kaldırılması için ise "distclean" argümanıyla yapılabilmektedir. 
+    Daha önce yapılan build işleminden kalan birtakım dosyaların kaldırılması için ise "distclean" argümanıyla yapılabilmektedir. 
     Örneğin:
 
     # bin/ct-ng distclean
@@ -1711,11 +1711,11 @@
     Derleyicilerin ürettiği amaç dosyaların (object files) ve bağlayıcıların ürettiği çalıştırılabilir dosyaların (executable files)
     önceden belirlenmiş belli bir formatı vardır. Microsoft DOS zamanlarında amaç dosya formatı olarak "OMF (Object Module Format)" 
     denilen bir formatı, çalıştırılabilir dosya formatı olarak da "MZ (Mark Zibikovski) " denilen bir formatı kullanıyordu. Sonra 
-    16 bit Windows sistemleriyle amaç dosya formatı olarak OMF formatını kullanmaya devam etti ancak çalıştırılabilir dosya formatı 
+    16 bit Windows sistemleriyle amaç dosya formatı olarak OMF formatını kullanmaya devam etti, ancak çalıştırılabilir dosya formatı 
     olarak "NE (New Executable)" isimli bir formatı kullanmaya başladı. Sonra nihayet 32 bit ve 64 bit Windows sistemlerinde amaç 
-    dosya formatı olarak COFF (Common Object File Format)", çalıştırılabilir dosya formatı olarak "PE (Portable Executable) " denilen 
+    dosya formatı olarak COFF (Common Object File Format)", çalıştırılabilir dosya formatı olarak "PE (Portable Executable)" denilen 
     formatı kullanmaya başladı. Bugün Microsoft COFF ve PE formatlarını kullanmaktadır. COFF formatı ile PE formatı hemen hemen aynı 
-    formatlardır. COFF formatı PE formatının anaç dosya için özelleştirilmiş biçimi gibidir.
+    formatlardır. COFF formatı, PE formatının amaç dosya için özelleştirilmiş biçimi gibidir.
 
     Apple firması macOS sistemlerinde amaç dosya ve çalıştırılabilir dosya formatı olarak "Mach-O" formatı denilen bir dosya formatını
     kullanmaktadır.
@@ -1736,9 +1736,9 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Sistem programcısı olarak bir dosyanın içeriğini byte-byte hex sistemde görmek isteyebiliriz. Windows sistemlerinde bunu 
-    yapan pek çok GUI uygulaması vardır. HxD denilen program oldukça yeteneklidir ve ücretsiz olarak kullanılabilmektedir. 
-    Linux ve macOS sistemlerinde "hex editör" olarak çok güzel GUI programlarla karşılaşmak zordur. GHex isimli GUI hex editör 
-    oldukça basittir ve GNOME sistemlerinde kullanılmaktadır. ghex programı aşağıdaki gibi install edilebilir:
+    yapan pek çok GUI uygulaması vardır. "HxD" denilen program oldukça yeteneklidir ve ücretsiz olarak kullanılabilmektedir. 
+    Linux ve macOS sistemlerinde "hex editör" olarak çok güzel GUI programlarla karşılaşmak zordur. "GHex" isimli GUI hex editör 
+    oldukça basittir ve GNOME sistemlerinde kullanılmaktadır. "ghex" programı aşağıdaki gibi install edilebilir:
 
     $ sudo apt-get install ghex
 
@@ -1753,19 +1753,20 @@
     komut satırından hex sistemde görüntülemesi gerekebilmektedir. Linux için konsol ekranında çalışan bazı hex gösterim yapan
     programlar şunlardır:
 
-    - od programı. Tipik kullanımı şöyledir:
+    - "od" programı. Tipik kullanımı şöyledir:
 
     od -t x1 <yol ifadesi>
 
     od default olarak dağıtımlarda bulunmaktadır.
 
-    - hexer isimli program eski DOS sistemine benzer bir biçimde görüntüleme yapmaktadır. Şöyle kurulabilir:
+    - "hexer" isimli program eski DOS sistemine benzer bir biçimde görüntüleme yapmaktadır. Şöyle kurulabilir:
 
     $ sudo ept-get install hexer
 
-    - hexcurse isimli program. Hexcurse şöyle kurulabilir:
+    - "hexcurse" isimli program. Hexcurse şöyle kurulabilir:
 
     $ sudo apt-get install hexcurse
+
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -1804,7 +1805,8 @@
     Elf64_Xword     8           8               Unsigned long integer
     Elf64_Sxword    8           8               Signed long integer
     unsigned char   1           1               Unsigned small integer
-    -----------------------------------------------------------------------------------------------------------------------------*/
+
+-----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     ELF Başlığında dosyadaki meta-data alanları hakkında önemli bilgiler yer almaktadır. ELF başlığığının ilk 16 byte'tı "kimlik 
@@ -1855,7 +1857,7 @@
     ELF Başlığının 18'inci offset'indeki 2 byte'lık işaretsiz tmsayı dosyanın çalıştırılacağı hedef işlemcinin türünü belirtmektedir. 
     Buradaki 2 byte'lık çeşitli işaretsiz tamsayı değerler çeşitli işlemci türlerini belirtmektedir. Örneğin 0x28 "32 Bit ARM 
     İşlemcilerini", 0x3E "AMD'nin 64 bit Intel Tabanlı İşlemcilerini" belirtmektedir. Bunların tam listesini Internet'teki 
-    dokümanlardan  elde edebilirsiniz. (Örneğin Wikipedia'da "Executable and Linkable Format" sayfasında ayrıntılı bir liste 
+    dokümanlardan elde edebilirsiniz. (Örneğin Wikipedia'da "Executable and Linkable Format" sayfasında ayrıntılı bir liste 
     verilmiştir.)
 
     ELF Başlığının 20'inci offset'teki 4 byte'lık işaretssiz tamsayı yine ELF dosyasının versiyon numarasını belirtmektedir. Burada 
@@ -1886,7 +1888,7 @@
 
     32 bit ELF formatında ELF Başlığının yapısal içeriği şöyledir:
 
-    #define EI_NIDENT           16
+    #define EI_NIDENT		16
 
     typedef struct {
         unsigned char e_ident[EI_NIDENT];   /* ELF identification */
@@ -2892,7 +2894,7 @@
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-     UNIX/Linux sistemlerinde bir dinamik kütüphane oluşturma işlemi şöyle yapılır:
+    UNIX/Linux sistemlerinde bir dinamik kütüphane oluşturma işlemi şöyle yapılır:
 
     1) Önce dinamik kütüphaneye yerleştirilecek object modüllerin -fPIC seçeneği ile "Konumdan Bağımsız Kod (Position Independent 
     Code)" tekniği kullanılarak derlenmesi gerekir. (-fPIC seçeneğinde -f'ten sonra boşluk bırakılmamalıdır.)
@@ -2902,7 +2904,7 @@
     çalışmaktadır. Zaten bu durumda main fonksiyonu olmadığı için linker error mesajı verecektir. Örneğin:
 
     $ gcc -fPIC a.c b.c c.c
-    $ gcc -shared -o libmyutil.so  a.o b.o c.o
+    $ gcc -shared -o libmyutil.so a.o b.o c.o
 
     Dinamik kütüphanelere daha sonra dosya eklenip çıkartılamaz. Onların her defasında yeniden bütünsel biçimde oluşturulmaları 
     gerekmektedir. Yukarıdaki işlem aslında tek hamlede de aşağıdaki gibi yapılabilmektedir:
