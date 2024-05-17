@@ -20101,7 +20101,6 @@ void exit_sys_errno(const char *msg, int eno)
 	exit(EXIT_FAILURE);
 }
 
-<BURADA KALDIK>
 /*--------------------------------------------------------------------------------------------------------------------------
     Thread'ler konusunun önemli bir bölümünü "thread senkronizasyonu" oluşturmaktadır. Thread'lerin birlikte belli bir amacı 
     ortak bir biçimde gerçekleştirirken uyum içinde çalışması gerekebilmektedir. Özellikle ortak kaynaklara erişen thread'lerin
@@ -20252,8 +20251,8 @@ void exit_sys_errno(const char *msg, int eno)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Kritik kod oluşturmak için yaygın kullanılan senkronizasyon nesnelerinden biri "mutex" denilen nesnedir. Mutex sözcüğü 
-    "mutual exclusion" sözcüklerinden kısaltma yapılarak uydurulmuştur. Mutex nesneleri pek çok farklı işletim sisteminde benzer biçimlerde 
-    bulunmaktadır. 
+    "mutual exclusion" sözcüklerinden kısaltma yapılarak uydurulmuştur. Mutex nesneleri pek çok farklı işletim sisteminde benzer 
+    biçimlerde bulunmaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -20263,13 +20262,14 @@ void exit_sys_errno(const char *msg, int eno)
 /*--------------------------------------------------------------------------------------------------------------------------
     UNIX/Linux sistemlerinde mutex nesneleri tipik olarak şu aşamalardan geçilerek kullanılmaktadır:
 
-    1) Mutex nesneleri pthread_mutex_t türü ile temsil edilmiştir. Bu tür ismi <thread.h> ve <sys/types> dosyaları içerisinde typedef
-    edilmiş durumdadır. POSIX standartlarına göre pthread_mutex_t türü herhangi bir tür olarak typedef edilmiş olabilir. Örneğin Linux'ta bu tür bir yapı 
-    (birliğin içerisinde bir yapı) biçiminde typedef edilmiştir. Programcı pthread_mutex_t türünden global bir nesne tanımlamalıdır. Örneğin:
+    1) Mutex nesneleri pthread_mutex_t türü ile temsil edilmiştir. Bu tür ismi <pthread.h> ve <sys/types> dosyaları içerisinde 
+    typedef edilmiş durumdadır. POSIX standartlarına göre pthread_mutex_t türü herhangi bir tür olarak typedef edilmiş olabilir. 
+    Örneğin Linux'ta bu tür bir yapı (birliğin içerisinde bir yapı) biçiminde typedef edilmiştir. Programcı pthread_mutex_t 
+    türünden global bir nesne tanımlamalıdır. Örneğin:
 
     pthread_mutex_t g_mutex;
 
-    Bu nesneye ilk değer vermenin iki yolu vardır. İlkdeğer doğrudan PTHREAD_MUTEX_INITIALIZER isimli makro kullanılarak verilebilir. 
+    Bu nesneye ilk değer vermenin iki yolu vardır. İlk değer doğrudan PTHREAD_MUTEX_INITIALIZER isimli makro kullanılarak verilebilir. 
     Bu makro tipik olarak küme parantezleri içerisinde yapıya ilk değer verme biçiminde açılmaktadır. Örneğin:
 
     pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -20282,14 +20282,14 @@ void exit_sys_errno(const char *msg, int eno)
 
     Fonksiyonun birinci parametresi ilk değer verilecek mutex nesnesinin adresini almaktadır. İkinci parametresi mutex nesnesinin 
     bazı özelliklerini belirten "özellik nesnesinin" adresini almaktadır. Mutex özellikleri daha sonra ele alınacaktır. Bu ikinci 
-    parametreye NULL adres geçilirse mutex default özelliklerle yaratılır. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda errno 
-    değerine geri dönmektedir. Örneğin:
+    parametreye NULL adres geçilirse mutex default özelliklerle yaratılır. Fonksiyon başarı durumunda 0 değerine, başarısızlık 
+    durumunda errno değerine geri dönmektedir. Örneğin:
 
     if ((result = pthread_mutex_init(&g_mutex, NULL)) != 0)
         exit_sys_errno("pthread_mutex_init", result);
 
-    Mutex nesnesi PTHREAD_MUTEX_INITIALIZER makrosuyla yaratıldığında mutex nesnesinin özellik bilgisi de default değerlerle oluşturulmaktadır. 
-    Yani aşağıdaki iki ilk değer verme biçimi eşdeğerdir:
+    Mutex nesnesi PTHREAD_MUTEX_INITIALIZER makrosuyla yaratıldığında mutex nesnesinin özellik bilgisi de default değerlerle 
+    oluşturulmaktadır. Yani aşağıdaki iki ilk değer verme biçimi eşdeğerdir:
 
     pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_init(&g_mutex, NULL);
@@ -20310,21 +20310,22 @@ void exit_sys_errno(const char *msg, int eno)
     Fonksiyon, mutex nesnesinin adresini parametre olarak alır. Başarı durumunda 0 değerine, başarısızlık durumunda errno değerine 
     geri döner. Linux'ta bu fonksiyon bir şey yapmamaktadır. Ancak POSIX standartlarına göre bu fonksiyonun çağrılması gerekir. 
     Çünkü yukarıda da belirttiğimiz gibi pthread_mutex_init fonksiyonu içerisinde dinamik tahsisatlar yapılmış olabilir ve 
-    bu tahsisatların geri alınması gerekebilir. Tabii aslında bu fonksiyonun başarısız olması da genel olarak mümkün değildir. Örneğin:
+    bu tahsisatların geri alınması gerekebilir. Tabii aslında bu fonksiyonun başarısız olması da genel olarak mümkün değildir.
+    Örneğin:
 
     if ((result = pthread_mutex_destroy(&g_mutex)) != 0)
         exit_sys_errno("pthread_mutex_destory", result);
 
     Burada bir noktayı yeniden vurgulamak istiyoruz: Eğer mutex nesnesine PTHREAD_MUTEX_INITIALIZER makrosuyla ilk değer verilmişse
-    mutex nesnesinin destroy edilmesi pek çok sistemde gerekmemektedir. Ancak POSIX standartlarında bu durum belirtilmemiştir, bu da mutex nesnesi 
-    makroyla initialize edilse bile destroy işlemini yapılması gerektiği anlamına gelmektedir. Ancak pek çok programcı bu tür durumlarda
-    destroy işlemini yapmamaktadır. 
+    mutex nesnesinin destroy edilmesi pek çok sistemde gerekmemektedir. Ancak POSIX standartlarında bu durum belirtilmemiştir, 
+    bu da mutex nesnesi makroyla initialize edilse bile destroy işlemini yapılması gerektiği anlamına gelmektedir. Ancak pek çok 
+    programcı bu tür durumlarda destroy işlemini yapmamaktadır.
 
     Pekiyi mademki PTHREAD_MUTEX_INITIALIZER makrosu daha pratik bir kullanım sunmaktadır o halde neden pthread_mutex_init fonksiyonuna 
-    gereksinim duyulmuştur? İşte bazen mutex nesneleri dinamik bir biçimde de tahsis edilebilmektedir. Örneğin bir yapı nesnesini senkronize 
-    etmek için bir mutex kullanılacaksa, mutex o yapının içerisinde yapı elemanı olarak bildirilebilir. Bu durumda ona statik biçimde makroyla
-    ilk değer vermek mümkün olmaz. Çünkü C'de bir yapı nesnesine küme parantezleri ile atama yapamayız. (C99 ile birlikte ismine "compound literals" 
-    denilen bir sentaks ile bu durum mümkün hale getirilmiştir.)
+    gereksinim duyulmuştur? İşte bazen mutex nesneleri dinamik bir biçimde de tahsis edilebilmektedir. Örneğin bir yapı nesnesini 
+    senkronize etmek için bir mutex kullanılacaksa, mutex o yapının içerisinde yapı elemanı olarak bildirilebilir. Bu durumda ona 
+    statik biçimde makroyla ilk değer vermek mümkün olmaz. Çünkü C'de bir yapı nesnesine küme parantezleri ile atama yapamayız. 
+    (C99 ile birlikte ismine "compound literals" denilen bir sentaks ile bu durum mümkün hale getirilmiştir.)
 
     Örneğin (kontroller ihmal edilmiştir):
 
@@ -20358,22 +20359,24 @@ void exit_sys_errno(const char *msg, int eno)
     fonksiyonuna girdiğinde mutex nesnesinin sahipliğinin başka bir thread tarafından alınıp alınmadığı fonksiyonda kontrol edilmektedir. 
     Eğer mutex nesnesinin sahipliği başka bir thread tarafından alınmışsa yani mutex nesnesi zaten "kilitlenmişse (locked edilmişse)"
     bu durumda pthread_mutex_lock fonksiyonu thread'i bloke eder, ta ki mutex'in sahipliğini alan thread pthread_mutex_unlock ile 
-    mutex'in sahipliğini bırakana kadar. Eğer mutex'in sahipliği herhangi bir thread tarafından alınmamışsa yani mutex kilitli değilse, bu durumda 
-    pthread_mutex_lock fonksiyonu mutex'in sahipliğini alır (yani onu kilitler) ve akış kritik koda girer. Mutex kilitliyken 
-    diğer thread akışları pthread_mutex_lock fonksiyonunda bloke edilerek bekletilecektir. Mutex nesnesinin kilidi onu kilitleyen 
-    thread tarafından açıldığında pthread_mutex_lock fonksiyonunda bloke olmuş olan thread'lerden biri mutex'in sahipliğini 
-    alarak (yani onu kilitleyerek) kritik koda girecektir. Böylece kritik kod içerisinde başından sonuna kadar tek bir thread akışı bulunuyor 
-    olacaktır. Ancak pthread_mutex_lock fonksiyonunda birden fazla thread'in bloke olması durumunda mutex'in kilidi açıldığı zaman 
-    hangi thread'in mutex'in sahipliğini alacağı konusunda işletim sistemleri bir garanti vermemektedir. Yani burada bir FIFO sisteminin
-    uygulanmasının bir garantisi yoktur. Ancak işletim sistemleri çeşitli koşullar sağlanıyorsa mümkün olduğunca adil bir 
-    durum oluşturmaya çalışırlar. pthread_mutex_lock ve pthread_mutex_unlock fonksiyonlarının prototipleri şöyledir:
+    mutex'in sahipliğini bırakana kadar. Eğer mutex'in sahipliği herhangi bir thread tarafından alınmamışsa yani mutex kilitli 
+    değilse, bu durumda pthread_mutex_lock fonksiyonu mutex'in sahipliğini alır (yani onu kilitler) ve akış kritik koda girer. 
+    Mutex kilitliyken diğer thread akışları pthread_mutex_lock fonksiyonunda bloke edilerek bekletilecektir. Mutex nesnesinin 
+    kilidi onu kilitleyen thread tarafından açıldığında pthread_mutex_lock fonksiyonunda bloke olmuş olan thread'lerden biri 
+    mutex'in sahipliğini alarak (yani onu kilitleyerek) kritik koda girecektir. Böylece kritik kod içerisinde başından sonuna kadar 
+    tek bir thread akışı bulunuyor olacaktır. Ancak pthread_mutex_lock fonksiyonunda birden fazla thread'in bloke olması durumunda 
+    mutex'in kilidi açıldığı zaman hangi thread'in mutex'in sahipliğini alacağı konusunda işletim sistemleri bir garanti vermemektedir. 
+    Yani burada bir FIFO sisteminin uygulanmasının bir garantisi yoktur. Ancak işletim sistemleri çeşitli koşullar sağlanıyorsa 
+    mümkün olduğunca adil bir durum oluşturmaya çalışırlar. pthread_mutex_lock ve pthread_mutex_unlock fonksiyonlarının prototipleri 
+    şöyledir:
 
     #include <pthread.h>
 
     int pthread_mutex_lock(pthread_mutex_t *mutex);
     int pthread_mutex_unlock(pthread_mutex_t *mutex);
 
-    Fonksiyonlar parametre olarak mutex nesnesinin adresini alırlar. Başarı durumunda 0 değerine, başarısızlık durumunda errno değerine geri dönerler. 
+    Fonksiyonlar parametre olarak mutex nesnesinin adresini alırlar. Başarı durumunda 0 değerine, başarısızlık durumunda errno 
+    değerine geri dönerler.
 
     Tabii kritik kodun tek bir yerde olması gerekmemektedir. Önemli olan aynı mutex nesnesinin kullanılıyor olmasıdır. Örneğin 
     thread'lerden biri aşağıdaki gibi bir kritk kodla bir fonksiyonda karşılaşmış olabilir:
@@ -20400,11 +20403,12 @@ void exit_sys_errno(const char *msg, int eno)
     if ((result = pthread_mutex_unlock(&g_mutex)) != 0)
         exit_sys_errno("pthread_mutex_unlock", result);
 
-    Burada kullanılan mutex nesneleri aynı nesnedir. Dolayısıyla iki thread de aynı mutex nesnesini kilitlemeye çalışmaktadır. O halde
-    thread'lerden biri o fonksiyonda kritik koda girerse, diğer bir thread başka bir fonksiyonda diğer kritik koda giremez. 
+    Burada kullanılan mutex nesneleri aynı nesnedir. Dolayısıyla iki thread de aynı mutex nesnesini kilitlemeye çalışmaktadır. 
+    O halde thread'lerden biri o fonksiyonda kritik koda girerse, diğer bir thread başka bir fonksiyonda diğer kritik koda giremez.
 
-    Normal olarak programcının her paylaşılan kaynak için ayrı bir mutex nesnesini bulundurması gerekir. Örneğin global bir bağlı liste 
-    söz konusu olsun. Bu bağlı liste üzerinde eleman ekleme, eleman silme ve arama işlemlerini yapan üç fonksiyon bulunuyor olsun:
+    Normal olarak programcının her paylaşılan kaynak için ayrı bir mutex nesnesini bulundurması gerekir. Örneğin global bir bağlı 
+    liste söz konusu olsun. Bu bağlı liste üzerinde eleman ekleme, eleman silme ve arama işlemlerini yapan üç fonksiyon bulunuyor 
+    olsun:
 
     add_item(...)
     {
@@ -20452,8 +20456,9 @@ void exit_sys_errno(const char *msg, int eno)
     ile alındığında ancak alan thread nesnenin sahipliğini pthread_mutex_unlock fonksiyonuyla bırakabilir. Özetle biz başka bir 
     thread'in kilitlediği mutex nesnesinin kilidini açamayız. POSIX standartlarına göre sahipliği alınmamış olan bir mutex 
     nesnesini unlock etmeye çalışmak mutex özelliklerine bağlı olarak "tanımsız davranışa" yol açabileceği gibi pthread_mutex_unlock 
-    fonksiyonunun başarısız olmasına da yol açabilmektedir. Normal mutex'ler (yani default özellikle yaratılmış mutex'ler) için POSIX standartları 
-    sahipliğini almayan thread'in mutex nesnesinin kilidini açmaya çalışmasının "tanımsız davranışa" yol açacağını belirtmektedir. 
+    fonksiyonunun başarısız olmasına da yol açabilmektedir. Normal mutex'ler (yani default özellikle yaratılmış mutex'ler) için 
+    POSIX standartları sahipliğini almayan thread'in mutex nesnesinin kilidini açmaya çalışmasının "tanımsız davranışa" yol açacağını 
+    belirtmektedir.
 
     3) Mutex nesneleri için bazı yardımcı fonksiyonlar da bulunmaktadır. Örneğin; biz bir mutex nesnesi kilitliyken bloke olmayı 
     istemeyip "madem nesne kilitli o zaman ben de başka şeyler yapayım" diyebiliriz. Bu işlem pthread_mutex_trylock fonksiyonuyla 
@@ -20478,8 +20483,8 @@ void exit_sys_errno(const char *msg, int eno)
 
     Bu örnekte pthread_mutex_trylock fonksiyonu başarısız olduğunda errno değeri EBUSY ise başka birtakım işlemler yapılmaktadır.
 
-    pthread_mutex_timedlock isimli fonksiyon, pthread_mutex_lock fonksiyonunun "zaman aşımlı (timeout)" biçimidir. Fonksiyonun prototipi 
-    şöyledir:
+    pthread_mutex_timedlock isimli fonksiyon, pthread_mutex_lock fonksiyonunun "zaman aşımlı (timeout)" biçimidir. Fonksiyonun 
+    prototipi şöyledir:
 
     #include <pthread.h>
 
@@ -20509,8 +20514,8 @@ void exit_sys_errno(const char *msg, int eno)
 
     Bazı algoritmalarda "kilitlenme (deadlock)" problemlerinin çözümü zor olabilmektedir. Bu tür durumlarda son çare olarak 
     bu fonksiyon kullanılabilmektedir. Bazen makul bir süre aşıldığında arka plan belirli işlemlerin yapılması da gerekebilmektedir. 
-    Bu tür seyrek durumlarda da pthread_mutex_timedlock fonksiyonu kullanılabilmektedir. Ancak bu fonksiyona toplamda çok seyrek gereksinim 
-    duyulmaktadır. 
+    Bu tür seyrek durumlarda da pthread_mutex_timedlock fonksiyonu kullanılabilmektedir. Ancak bu fonksiyona toplamda çok seyrek 
+    gereksinim duyulmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -20595,7 +20600,7 @@ void *thread_proc2(void *param)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -20686,7 +20691,7 @@ void do_something(const char *name)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -20982,26 +20987,26 @@ void exit_sys(const char *msg)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Mutex nesnesine pthread_mutex_init fonksiyonu ile ilk değer verilirken mutex özellikleri de bu fonksiyonun ikinci parametresinde
-    belirtilebilir. Eğer mutex nesnesine PTHREAD_MUTEX_INITIALIZER makrosuyla ilk değer verilmişse bu durumda mutex default özelliklerle
-    yaratılmaktadır. Daha önceden de belirttiğimiz gibi aşağıdaki iki ilk değer verme tamamen eşdeğerdir:
+    belirtilebilir. Eğer mutex nesnesine PTHREAD_MUTEX_INITIALIZER makrosuyla ilk değer verilmişse bu durumda mutex default 
+    özelliklerle yaratılmaktadır. Daha önceden de belirttiğimiz gibi aşağıdaki iki ilk değer verme tamamen eşdeğerdir:
 
     pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_init(&g_mutex, NULL);
 
-    Mutex özelliklerinin set edilmesi tamamen thread özelliklerinin set edilmesinde olduğu gibi yapılmaktadır. Yani işlemler şu adımlardan 
-    geçilerek gerçekleştirilir:
+    Mutex özelliklerinin set edilmesi tamamen thread özelliklerinin set edilmesinde olduğu gibi yapılmaktadır. Yani işlemler şu 
+    adımlardan geçilerek gerçekleştirilir:
 
     1) Önce pthread_mutexattr_t türünden bir özellik nesnesi tanımlanır. 
 
-    2) Bu özellik nesnesine pthread_mutexattr_init fonksiyonu ile ilk değerleri verilir. Bu nesneye ilk değer vermek için bir makro yoktur.
-    Fonksiyonun prototipi şöyledir:
+    2) Bu özellik nesnesine pthread_mutexattr_init fonksiyonu ile ilk değerleri verilir. Bu nesneye ilk değer vermek için bir 
+    makro yoktur. Fonksiyonun prototipi şöyledir:
 
     #include <pthread.h>
 
@@ -21202,7 +21207,7 @@ void *thread_proc2(void *param)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -21330,21 +21335,21 @@ void *thread_proc2(void *param)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi bir thread bir mutex nesnesinin sahipliğini aldıktan sonra sonlanırsa ne olur? (Sahipliği bir thread tarafından alınmış
-    ancak o thread'in sonlanmış olması durumunda bu tür mutex'lere "abandoned mutex" ler de denilmektedir.) Bu tür durumlarda iki olası 
-    durum söz konusudur:
+    ancak o thread'in sonlanmış olması durumunda bu tür mutex'lere "abandoned mutex"ler de denilmektedir.) Bu tür durumlarda 
+    iki olası durum söz konusudur:
 
     1) Thread sonlanmış olsa da mutex'in sahipliği sonlanan thread'te kalır. Dolayısıyla başka bir thread mutex'i kilitlemek 
-    isterse ya da zaten pthread_mutex_lock ile bloke bekliyorsa "deadlock" oluşur. 
+    isterse ya da zaten pthread_mutex_lock ile blokede bekliyorsa "deadlock" oluşur.
 
-    2) Sahipsiz kalmış mutex bir daha kilitlenemez. Eğer bir thread, bu mutex'i kilitlemeye çalışırsa ya da daha önce kilitlemeye çalışıp 
-    bloke olmuşsa pthread_mutex_lock başarısız olur. 
+    2) Sahipsiz kalmış mutex bir daha kilitlenemez. Eğer bir thread, bu mutex'i kilitlemeye çalışırsa ya da daha önce kilitlemeye 
+    çalışıp bloke olmuşsa pthread_mutex_lock başarısız olur.
 
     İşte bu iki durumun hangisinin uygulanacağı mutex özellikleri ile belirlenebilmektedir. Bunun için pthread_mutexattr_setrobust
     fonksiyonu kullanılmaktadır:
@@ -21355,7 +21360,7 @@ void exit_sys_errno(const char *msg, int eno)
 
     PTHREAD_MUTEX_STALLED: Bu durumda mutex kilitli kalır ve başka bir thread mutex'i kilitlemeye çalışırsa "deadlock" oluşur.
 
-    PTHREAD_MUTEX_ROBUST: Bu durumda başka bir thread "abandoned mutex" i kilitlemeye çalışırsa pthread_mutex_lock başarısız olur
+    PTHREAD_MUTEX_ROBUST: Bu durumda başka bir thread "abandoned mutex"i kilitlemeye çalışırsa pthread_mutex_lock başarısız olur
     ve fonksiyon EOWNERDEAD errno değeri ile geri döner. Ancak POSIX standartlarına göre bu kilitlemeyi ilk yapmaya çalışan thread'de
     bu hata elde edilir. Diğer thread'lerin yeniden bu mutex'i kilitlemeye çalışması durumunda yeniden EOWNERDEAD hatasının elde edilip
     edilmeyeceği işletim sistemini yazanların isteğine bırakılmıştır. Sahibi sonlanmış bir mutex kilitlenmeye çalışılırken EOWNERDEAD 
@@ -21464,7 +21469,7 @@ void *thread_proc2(void *param)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -21561,7 +21566,7 @@ void *thread_proc2(void *param)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -21635,15 +21640,15 @@ namespace CSD
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Biz şimdiye kadar mutex nesnelerini aynı prosesin thread'lerini senkronize etmek amacıyla kullandık. Mutex nesneleri 
-    farklı proseslerin thread'lerini senkronize etmek için de kullanılabilmektedir. Aynı prosesin thread'leri, mutex nesnesi ile 
-    senkronize edilirken mutex nesnesi global bir değişken olarak tanımlanıyordu. Her iki thread de aynı mutex nesnesini kullanabiliyordu.
-    Pekiyi mutex nesneleri farklı prosesin thread'leri arasında senkronizasyon amacıyla kullanılmak istendiğinde iki proses de 
-    aynı mutex nesnesini nasıl görecektir? Eğer Windows sistemlerinde olduğu gibi mutex nesnelerinin UNIX/Linux sistemlerinde isimleri olsaydı
-    bu kullanım kolaylıkla sağlanabilirdi. Ancak UNIX/Linux sistemlerinde mutex nesnelerinin isimleri yoktur. O halde tek yol 
-    mutex nesnesini paylaşılan bir bellek alanında yaratmaktır. Ancak POSIX standartlarına göre mutex nesnelerinin paylaşılan bellek alanlarında 
-    yaratılması proseslerarası kullanım için yeterli değildir. Aynı zamanda mutex nesnesinin proseslerarası paylaşılabilirliğini 
-    set etmek gerekir. Bu da mutex özellikleriyle yapılmaktadır. pthread_mutexattr_setpshared fonksiyonu ile mutex paylaşımlı moda 
-    sokulabilmektedir:
+    farklı proseslerin thread'lerini senkronize etmek için de kullanılabilmektedir. Aynı prosesin thread'leri, mutex nesnesi 
+    ile senkronize edilirken mutex nesnesi global bir değişken olarak tanımlanıyordu. Her iki thread de aynı mutex nesnesini 
+    kullanabiliyordu. Pekiyi mutex nesneleri farklı prosesin thread'leri arasında senkronizasyon amacıyla kullanılmak istendiğinde 
+    iki proses de aynı mutex nesnesini nasıl görecektir? Eğer Windows sistemlerinde olduğu gibi mutex nesnelerinin UNIX/Linux 
+    sistemlerinde isimleri olsaydı bu kullanım kolaylıkla sağlanabilirdi. Ancak UNIX/Linux sistemlerinde mutex nesnelerinin isimleri 
+    yoktur. O halde tek yol mutex nesnesini paylaşılan bir bellek alanında yaratmaktır. Ancak POSIX standartlarına göre mutex 
+    nesnelerinin paylaşılan bellek alanlarında yaratılması proseslerarası kullanım için yeterli değildir. Aynı zamanda mutex 
+    nesnesinin proseslerarası paylaşılabilirliğini set etmek gerekir. Bu da mutex özellikleriyle yapılmaktadır. pthread_mutexattr_setpshared 
+    fonksiyonu ile mutex paylaşımlı moda sokulabilmektedir:
 
     #include <pthread.h>
 
@@ -21799,7 +21804,7 @@ void exit_sys(const char *msg)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -21865,7 +21870,7 @@ void exit_sys(const char *msg)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -21902,7 +21907,7 @@ void exit_sys_errno(const char *msg, int eno)
     Aynı zamanda programcıların kafası bu senkronizasyon nesnelerinin neden gerektiği konusunda da kafası karışabilmektedir. Biz önce 
     koşul değişkenlerinin tipik olarak nasıl kullanılması gerektiği üzerinde duracağız. Sonra konunun ayrıntılarına gireceğiz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
-
+<BURADA KALDIK>
 /*--------------------------------------------------------------------------------------------------------------------------
     Koşul değişkenleri tipik olarak şu adımlardan geçilerek kullanılmaktadır:
 
@@ -21991,7 +21996,7 @@ void exit_sys_errno(const char *msg, int eno)
 
     pthread_mutex_lock(&g_mutex);				/* mutex'in sahipliği alındı */
 
-    while (<koşul sağlanmadığı sürece>)
+    while (<koşul_sağlanmadığı_sürece>)
         pthread_cond_wait(&cond, &g_mutex);		/* mutex'in sahipliği bırakılıyor */
 
     /* kritik kod işlemleri */
@@ -22179,7 +22184,7 @@ void *thread_proc2(void *param)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -22432,7 +22437,7 @@ void *thread_consumer(void *param)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -22639,7 +22644,7 @@ void *thread_consumer(void *param)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -22810,7 +22815,7 @@ void *thread_consumer(void *param)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -23032,7 +23037,7 @@ void exit_sys(const char *msg)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -23117,7 +23122,7 @@ void exit_sys(const char *msg)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -23334,7 +23339,7 @@ void exit_sys(const char *msg)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -23493,7 +23498,7 @@ void exit_sys(const char *msg)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -23658,7 +23663,7 @@ void exit_sys(const char *msg)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -23892,7 +23897,7 @@ void exit_sys(const char *msg)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -24017,7 +24022,7 @@ void exit_sys(const char *msg)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -24089,7 +24094,7 @@ void exit_sys(const char *msg)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -24297,7 +24302,7 @@ void exit_sys(const char *msg)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -24383,7 +24388,7 @@ void exit_sys(const char *msg)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -25490,7 +25495,7 @@ void *thread_proc3(void *param)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -25936,7 +25941,7 @@ void *thread_proc2(void *param)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -26585,7 +26590,7 @@ void *thread_proc2(void *param)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -29256,7 +29261,7 @@ void *thread_proc2(void *param)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -29591,7 +29596,7 @@ void key_delete_proc(void *ptr)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -29687,7 +29692,7 @@ void init_proc(void)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -29786,7 +29791,7 @@ void init_proc(void)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -29911,7 +29916,7 @@ static TSD_RAND *rand_init(void)
 
 static void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -29998,7 +30003,7 @@ void *thread_proc2(void *param)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -30151,7 +30156,7 @@ void *thread_proc2(void *param)
 
 void exit_sys_errno(const char *msg, int eno)
 {
-	fprintf(stderr, "%s:%s\n", msg, strerror(eno));
+	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -50649,40 +50654,39 @@ void exit_sys(const char *msg)
     Dinamik kütüphane dosyalarının UNIX/Linux sistemlerinde uzantıları ".so" (shared object'ten kısaltma), Windows sistemlerinde 
     ise ".dll" (Dynamic Link Library) biçimindedir.
 
-    Bir dinamik kütüphaneden bir fonksiyon çağrıldığında linker statik kütüphanede olduğu gibi gidip fonksiyonun kodunu 
-    (fonksiyonun bulunduğu object modülü) çalıştırılabilen dosyaya yazmaz. Bunun yerine çalıştırılabilen dosyaya çağrılan fonksiyonun 
-    hangi dinamik kütüphanede olduğu bilgisini yazar. Çalıştırılabilen dosyayı yükleyen işletim sistemi o dosyanın çalışması için 
-    gerekli olan dinamik kütüphaneleri çalıştırılabilen dosyayla birlikte bütünsel olarak sanal bellek alanına yüklemektedir. Böylece 
-    birtakım ayarlamalar yapıldıktan sonra artık çağrılan fonksiyon için gerçekten o anda sanal belleğe yüklü olan dinamik kütüphane 
-    kodlarına gidilmektedir. Örneğin biz app programımızda "libmyutil.so" dinamik kütüphanesinden foo isimli fonksiyonu çağırmış olalım. 
-    Bu foo fonksiyonunun kodları dinamik kütüphaneden alınıp app dosyasına yazılmayacaktır. Bu app dosyası çalıştırıldığında 
-    işletim sistemi bu app dosyası ile birlikte "libmyutil.so" dosyasını da sanal belleğe yükleyecektir. Programın akışı foo çağrısına
-    geldiğinde akış "libmyutil.so" dosyası içerisindeki foo fonksiyonunun kodlarına aktarılacaktır. Dinamik kütüphane dosyalarının 
-    bir kısmının değil, hepsinin prosesin adres alanına yüklendiğine dikkat ediniz. Tabii işletim sisteminin sanal bellek mekanizması
-    aslında yalnızca bazı sayfaları fiziksel belleğe yükleyebilecektir.
+    Bir dinamik kütüphaneden bir fonksiyon çağrıldığında linker statik kütüphanede olduğu gibi gidip fonksiyonun kodunu (fonksiyonun 
+    bulunduğu amaç dosyayı) çalıştırılabilen dosyaya yazmaz. Bunun yerine çalıştırılabilen dosyaya çağrılan fonksiyonun hangi 
+    dinamik kütüphanede olduğu bilgisini yazar. Çalıştırılabilen dosyayı yükleyen işletim sistemi o dosyanın çalışması için 
+    gerekli olan dinamik kütüphaneleri çalıştırılabilen dosyayla birlikte bütünsel olarak prosesin sanal bellek alanına yüklemektedir. 
+    Böylece birtakım ayarlamalar yapıldıktan sonra artık çağrılan fonksiyon için gerçekten o anda sanal belleğe yüklü olan dinamik 
+    kütüphane kodlarına gidilmektedir. Örneğin biz "app" programımızda "libmyutil.so" dinamik kütüphanesinden foo isimli fonksiyonu 
+    çağırmış olalım. Bu foo fonksiyonunun kodları dinamik kütüphaneden alınıp "app" dosyasına yazılmayacaktır. Bu "app" dosyası 
+    çalıştırıldığında işletim sistemi bu "app" dosyası ile birlikte "libmyutil.so" dosyasını da sanal belleğe yükleyecektir. 
+    Programın akışı foo çağrısına geldiğinde akış "libmyutil.so" dosyası içerisindeki foo fonksiyonunun kodlarına aktarılacaktır. 
+    Dinamik kütüphane dosyalarının bir kısmının değil hepsinin prosesin adres alanına yüklendiğine dikkat ediniz. (Tabii işletim 
+    sisteminin sanal bellek mekanizması aslında yalnızca bazı sayfaları fiziksel belleğe yükleyebilecektir.)
 
     Dinamik kütüphane kullanımının avantajları şunlardır:
 
-    1) Çalıştırılabilen dosyalar fonksiyon kodlarını içermezler. Dolayısıyla önemli bir disk hacmi kazanılmış olur. Oysa statik 
+    1) Çalıştırılabilen dosyalar fonksiyon kodlarını içermezler. Dolayısıyla önemli bir disk alanı kazanılmış olur. Oysa statik 
     kütüphanelerde statik kütüphanelerden çağrılan fonksiyonlar çalıştırılabilen dosyalara yazılmaktadır.
 
     2) Dinamik kütüphaneler birden fazla proses tarafından fiziksel belleğe tekrar tekrar yüklenmeden kullanılabilmektedir.
     Yani işletim sistemi arka planda aslında aynı dinamik kütüphaneyi kullanan programlarda bu kütüphaneyi tekrar tekrar fiziksel 
     belleğe yüklememektedir. Bu da statik kütüphanelere göre önemli bir bellek kullanım avantaj oluşturmaktadır. Bu durumda eğer 
     dinamik kütüphanenin ilgili kısmı daha önce fiziksel belleğe yüklenmişse bu durum dinamik kütüphane kullanan programın daha hızlı 
-    yüklemesine de yol açabilmektedir. Prog1 ve Prog2 biçiminde iki programın çalıştığını düşünelim. Bunlar aynı dinamik 
-    kütüphaneyi kullanıyor olsun. İşletim sistemi bu dinamik kütüphaneyi bu proseslerin sanal bellek alanlarının farklı yerlerine 
-    yükleyebilir. Ancak aslında işletim sistemi sayfa tablolarını kullanarak mümkün olduğunca aslında bu iki dinamik kütüphaneyi 
-    aynı fiziksel sayfaya eşlemeye çalışacaktır. Tabii bu durumda proseslerden biri dinamik kütüphane içerisindeki bir statik 
-    nesneyi değiştirdiğinde artık "copy on write" mekanizması devreye girecek ve dinamik kütüphanenin o sayfasının yeni bir kopyası 
-    oluşturulacaktır. Aslında bu durum fork fonksiyonu ile yeni bir prosesin yaratılması durumuna çok benzemektedir. Burada anlatılan 
-    unsurların ayrıntıları "sayfalama ve sanal bellek" kullanımın açıklandığı paragraflarda ele alınacaktır/
+    yüklemesine de yol açabilmektedir. Prog1 ve Prog2 biçiminde iki programın çalıştığını düşünelim. Bunlar aynı dinamik kütüphaneyi 
+    kullanıyor olsun. İşletim sistemi bu dinamik kütüphaneyi bu proseslerin sanal bellek alanlarının farklı yerlerine yükleyebilir. 
+    Ancak aslında işletim sistemi sayfa tablolarını kullanarak mümkün olduğunca  bu iki dinamik kütüphaneyi aynı fiziksel sayfaya 
+    eşlemeye çalışacaktır. Tabii bu durumda proseslerden biri dinamik kütüphane içerisindeki bir statik nesneyi değiştirdiğinde 
+    artık "copy on write" mekanizması devreye girecek ve dinamik kütüphanenin o sayfasının yeni bir kopyası oluşturulacaktır. 
+    Aslında bu durum fork fonksiyonu ile yeni bir prosesin yaratılması durumuna çok benzemektedir.
 
     3) Dinamik kütüphaneleri kullanan programlar bu dinamik kütüphanelerdeki değişikliklerden etkilenmezler. Yani biz dinamik 
-    kütüphanenin yeni bir versiyonunu oluşturduğumuzda bunu kullanan programları derlemek ya da link etmek zorunda kalmayız. 
-    Örneğin bir dinamik kütüphaneden foo fonksiyonunu çağırmış olalım. Bu foo fonksiyonunun kodları bizim çalıştırılabilir dosyamızın
-    içerisinde değil de dinamik kütüphanede olduğuna göre dinamik kütüphanedeki foo fonksiyonu değiştirildiğinde bizim programımız 
-    artık değişmiş olan foo fonksiyonunu çağıracaktır.
+    kütüphanenin yeni bir versiyonunu oluşturduğumuzda bunu kullanan programları yeniden erlemek ya da bağlamak zorunda kalmayız. 
+    Örneğin bir dinamik kütüphaneden foo fonksiyonunu çağırmış olalım. Bu foo fonksiyonunun kodları bizim çalıştırılabilir 
+    dosyamızın içerisinde değil de dinamik kütüphanede olduğuna göre dinamik kütüphanedeki foo fonksiyonu değiştirildiğinde 
+    bizim programımız artık değişmiş olan foo fonksiyonunu çağıracaktır.
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -50692,22 +50696,22 @@ void exit_sys(const char *msg)
     baştan bilinebilmektedir. Yani çalıştırılabilen dosyanın tüm kodları aslında derleyici ve bağlayıcı tarafından zaten "onun 
     sanal bellekte yükleneceği yere göre" oluşturulmaktadır. Fakat dinamik kütüphanelerin birden fazlası prosesin sanal adres 
     alanına yüklenebildiğinden bunlar için yükleme adresinin önceden tespit edilmesi mümkün değildir. İşte bu sorunu giderebilmek 
-    için işletim sistemlerinde değişik teknikler kullanılmaktadır. Windows sistemlerinde "import-export tablosu ve relocation 
-    tablosu" denilen yöntem tercih edilmiştir. Bu sistemlerde dinamik kütüphane belli bir adrese yüklendiğinde işletim sistemi 
+    için işletim sistemlerinde değişik teknikler kullanılmaktadır. Windows sistemlerinde "import-export tablosu ve "load time 
+    relocation" yöntemleri tercih edilmiştir. Bu sistemlerde dinamik kütüphane belli bir adrese yüklendiğinde işletim sistemi 
     o dinamik kütüphanenin "relocation" tablosuna bakarak gerekli makine komutlarını düzeltmektedir. Dinamik kütüphane fonksiyonlarının
-    çağrımı için de import tablosu ve export tablosu denilen tablolar kullanılmaktadır. UNIX/Linux dünyasında dinamik kütüphanelerin 
-    herhangi bir yere yüklenebilmesi için ise "Konumdan Bağımsız Kod (Position Independent Code)" denilen teknik kullanılmaktadır. 
-    Konumdan bağımsız kod "nereye yüklenirse yüklenilsin çalışabilen kod" anlamına gelmektedir. Konumdan bağımsız kod oluşturabilmek
-    derleyicinin yapabileceği bir işlemdir. Konumdan bağımsız kod oluşturabilmek için gcc ve clang derleyicilerinde derleme 
-    sırasında -fPIC seçeneğinin bulundurulması gerekmektedir. Biz kursumuzda konumdan bağımsız kodun nasıl oluşturulabildiği 
-    üzerinde durmayacağız. Bu konuyu anlayabilmek için sembolik makine dilleri ve ELF formatı hakkında bilgi sahibi olmak gerekir.
+    çağrımı için de "import tablosu" ve "export tablosu" denilen tablolar kullanılmaktadır. UNIX/Linux dünyasında dinamik kütüphanelerin 
+    herhangi bir yere yüklenebilmesi ve minimal düzeyde relocation uygulanabilmesi için "Konumdan Bağımsız Kod (Position Independent 
+    Code)" denilen teknik kullanılmaktadır. Konumdan bağımsız kod "nereye yüklenirse yüklenilsin çalışabilen kod" anlamına gelmektedir. 
+    Konumdan bağımsız kod oluşturabilmek derleyicinin yapabileceği bir işlemdir. Konumdan bağımsız kod oluşturabilmek için gcc 
+    ve clang derleyicilerinde derleme sırasında "-fPIC" seçeneğinin bulundurulması gerekmektedir. Biz kursumuzda konumdan bağımsız 
+    kodun ayrıntıları üzerinde durmayacağız.
 
     Pekiyi Windows sistemlerinin kullandığı "relocation" tekniği ile UNIX/Linux sistemlerinde kullanılan "konumdan bağımsız
     kod tekniği" arasında performans bakımından ne farklılıklar vardır? İşte bu tekniklerin kendi aralarında bazı avantaj 
     ve dezavantajları bulunmaktadır. Windows'taki teknikte "relocation" işlemi bir zaman kaybı oluşturabilmektedir. Ancak 
     bir "relocation" işlemi yapıldığında kodlar daha hızlı çalışma eğilimindedir. Konumdan bağımsız kod tekniğinde ise
-    "relocation" işlemine gerek kalmaz. Ancak dinamik kütüphanelerdeki fonksiyonlar çağrılırken göreli biçimde daha fazla
-    zaman kaybedilmektedir. Aynı zamanda bu teknikte kodlar biraz daha fazla yer kaplamaktadır.
+    "relocation" işlemine minimal düzeyde gereksinim duyulmaktadır. Ancak dinamik kütüphanelerdeki fonksiyonlar çağrılırken 
+    göreli biçimde daha fazla zaman kaybedilmektedir. Aynı zamanda bu teknikte kodlar biraz daha fazla yer kaplamaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -50723,23 +50727,74 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    UNIX/Linux sistemlerinde bir dinamik kütüphane oluşturma işlemi şöyle yapılır:
+    Pekiyi neden dinamik kütüphane dosyaları linker tarafından tıpkı çalıştırılabilir dosyalarda olduğu gibi sanal bellekte belli 
+    bir yere yüklenince sorunsuz çalışacak biçimde oluşturulmuyor? Çalıştırılabilir dosyalar sanal bellek boşken yüklendiğinden 
+    onların belli bir yere yüklenmesinde bir sorun oluşmamaktadır. Ancak bir program çok fazla dinamik kütüphane kullanabileceğine 
+    göre bu dinamik kütüphanelerin baştan yerinin belirlenmesi olanaksızdır.
 
-    1) Önce dinamik kütüphaneye yerleştirilecek object modüllerin -fPIC seçeneği ile "Konumdan Bağımsız Kod (Position Independent Code)" 
-    tekniği kullanılarak derlenmesi gerekir. (-fPIC seçeneğinde -f'ten sonra boşluk bırakılmamalıdır.)
+    Pekiyi dinamik kütüphaneler içerisindeki global değişkenlerin ve fonksiyonların yükleme yerinden bağımsız bir biçimde dinamik 
+    kütüphane içerisinden kullanılması nasıl sağlanabilir? Dinamik kütüphane içerisinde aşağıdaki gibi bir kod parçası bulunuyor 
+    olsun:
 
-    2) Link işleminde "çalıştırılabilir (executable)" değil de "dinamik kütüphane" dosyasının oluşturulması için -shared seçeneğinin 
-    kullanılması gerekir. "-shared" seçeneği kullanılmazsa linker dinamik kütüphane değil, normal çalıştırılabilir dosya oluşturmaya
-    çalışmaktadır. Zaten bu durumda main fonksiyonu olmadığı için linker error mesajı verecektir.
+    int g_a;
+    ...
 
-    gcc -fPIC a.c b.c c.c
-    gcc -o libmyutil.so -shared a.o b.o c.o
+    g_a = 10;
+
+    Burada derleyicinin yukarıdaki ifadeye ilişkin makine kodlarını üretebilmesi için g_a değişkenin tüm bellekteki adresini 
+    (yani tepeden itibaren adresini) bilmesi gerekir. Bir nesnenin belleğin tepesinden itibaren ki adresine "mutlak adres (absolute
+    address) de denilmektedir. Örneğin Intel işlemcilerinde yukarıdaki ifade aşağıdaki gibi makine komutlarına dönüştürülmektedir:
+
+    MOV  EAX, 10
+    MOV  [g_a'nın mutlak adresi], EAX
+
+    İşte sorun buradaki g_a değişkeninin mutlak adresinin program yüklenene kadar bilinmemesidir. Bu sorunu çözmenin de iki 
+    yolu vardır:
+
+    1) Derleyici ve linker g_a'nın mutlak adresinin bulunduğu yeri boş bırakır. Yükleyicinin bu yeri yükleme adresine göre 
+    doldurmasını ister. İşte bu işlem yükleyicinin yaptığı "relocation" işlemidir. Bu tür relocation işlemlerine "load time 
+    relocation" da denilmektedir. Windows sistemleri bu yöntemi kullanmaktadır.
+
+    2) Derleyici makine komutunu o anda komutun yürütüldüğü yerin adresini barındıran ve ismine "Instruction Pointer" denilen 
+    yazmaca dayalı olarak oluşturabilir. Çünkü linker komutun bulunduğu yerden g_a'ya kadar kaç byte'lık bir açıklık olduğunu 
+    bilmektedir. İşte buna "konumdan bağımsız kod (position independent code)" denilmektedir.
+
+    Yukarıda da belirttiğimiz gibi birinci teknik (Windows sistemlerinin kullandığı teknik) relocation yapıldıktan sonra kodun
+    hızlı çalışmasını sağlamaktadır. Ancak bu teknikte relocation zamanı yüklemeyi uzatabilmektedir. İkinci teknikte ise relocation
+    minimal düzeyde tutulmaktadır. Ancak bu global değişkenlere erişim birkaç makine komutu ile daha yavaş yapılmaktadır. 
+    UNIX/Linux sistemleri genel olarak bu tekniği kullanmaktadır. Ayrıca birinci teknikte kod üzerinde relocation uygulandığı 
+    için mecburen "copy on write" mekanizması devreye sokulmaktadır. Bu da fiziksel belleğin kullanım verimini düşürebilmektedir.
+
+    Bu noktada ek olarak işlemcilerde bazı makine komutlarının (MOV, LOAD, STORE gibi) mutlak adres kullandığını ancak CALL ve 
+    JMP gibi bazı makine komutlarının hem mutlak hem de göreli adres kullanabildiğini belirtelim. Aslında işlemcileri tasarlayanlar 
+    relocation işlemi gerekmesin diye CALL ve JMP komutlarının göreli (relative) versiyonlarını da oluşturmuşlardır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    UNIX/Linux sistemlerinde bir dinamik kütüphaneler şöyle oluşturulmaktadır:
+
+    1) Önce dinamik kütüphaneye yerleştirilecek amaç dosyaların (object files) -fPIC seçeneği ile "Konumdan Bağımsız Kod (Position 
+    Independent Code)" tekniği kullanılarak derlenmesi gerekir. (-fPIC seçeneğinde -f'ten sonra boşluk bırakılmamalıdır.)
+
+    2) Bağlama işleminde "çalıştırılabilir (executable)" değil de "dinamik kütüphane" dosyasının oluşturulması için -shared seçeneğinin 
+    kullanılması gerekir. "-shared" seçeneği kullanılmazsa bağlayıcı dinamik kütüphane değil, normal çalıştırılabilir dosya oluşturmaya
+    çalışmaktadır. (Zaten bu durumda main fonksiyonu olmadığı için linker hata mesajı verecektir.) Örneğin:
+
+    $ gcc -fPIC a.c b.c c.c
+    $ gcc -shared -o libmyutil.so a.o b.o c.o
 
     Dinamik kütüphanelere daha sonra dosya eklenip çıkartılamaz. Onların her defasında yeniden bütünsel biçimde oluşturulmaları 
     gerekmektedir. Yukarıdaki işlem aslında tek hamlede de aşağıdaki gibi yapılabilmektedir:
 
-    gcc -o libmyutil.so -shared -fPIC a.c b.c c.c
+    $ gcc -shared -o libmyutil.so -fPIC a.c b.c c.c
 
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Pekiyi biz -fPIC seçeneğini kullanmadan yani "konumdan bağımsız kod" üretmeden dinamik kütüphane oluşturmaya çalışırsak
+    ne olur? Mevcut GNU linker programları "-shared" seçeneği kullanıldığında global değişkenler için relocation işlemi söz konusu
+    ise bir mesaj vererek link işlemini yapmamaktadır. Yani bu durumda mevcut GNU linker programları kodun "-fPIC" seçeneği ile
+    derlenmesini zorunlu tutmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -50749,7 +50804,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Biz yukarıda dinamik kütüphanelerin nasıl oluşturulduğunu gördük. Pekiyi dinamik kütüphaneler nasıl kullanılmaktadır?
 
-    Dinamik kütüphane kullanan bir program link edilirken kullanılan dinamik kütüphanenin komut satırında belirtilmesi gerekir. 
+    Dinamik kütüphane kullanan bir program bağlanırken kullanılan dinamik kütüphanenin komut satırında belirtilmesi gerekir. 
     Örneğin:
 
     gcc -o app app.c libmyutil.so
@@ -50758,50 +50813,102 @@ void exit_sys(const char *msg)
 
     gcc -o app app.c -lmyutil -L.
 
+    Bu biçimde çalıştırılabilir dosya oluşturulduğunda linker bu çalıştırılabilir dosyanın çalıştırılabilmesi için hangi 
+    dinamik kütüphanelerin yüklenmesi gerektiğini ELF formatının ".dynamic" isimli bölümüne yazmaktadır. Böylece yükleyici 
+    bu programı yüklerken onun kullandığı dinamik kütüphaneleri de yükleyecektir. Ancak linker bu ".dynamic" bölümüne çalıştırılabilir
+    dosyanın kullandığı dinamik kütüphanelerin yol ifadesini (yani tam olarak nerede olduğunu) yazmaz. Yalnızca isimlerini 
+    yazmaktadır. İşte yükleyici (dinamik linler) bu nedenle dinamik kütüphaneleri önceden belirlenen bazı yerlerde aramaktadır. 
+    Bu yere çalıştırılabilir dosyanın yüklendiği dizin (current working directory) dahil değildir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Standart C fonksiyonlarının ve POSIX fonksiyonlarının bulunduğu "glibc" kütüphanesi link aşamasında otomatik olarak 
-    devreye sokulmaktadır. Yani biz standart fonksiyonları ve POSIX fonksiyonları için link aşamasında kütüphane belirtmek 
-    zorunda değiliz. Default durumda gcc (ve tabii clang) derleyicileri standart C fonksiyonlarını ve POSIX fonksiyonlarını 
-    (glibc kütüphanesi) dinamik kütüphaneden alarak kullanır. Ancak programcı isterse -static seçeneği ile statik link işlemi 
-    de yapabilir. Bu durumda bu fonksiyonlar statik kütüphanelerden alınarak çalıştırılabilen dosyalara yazılacaktır. Örneğin:
+    İster statik kütüphane isterse dinamik kütüphane yazacak olalım yazdığımız kütüphaneler için bir başlık dosyası oluşturmak 
+    iyi bir tekniktir. Örneğin içerisinde çeşitli fonksiyonların bulunduğu "libmyutil.so" dinamik kütüphanesini "libmyutil.c" 
+    dosyasından hareketle oluşturmak isteyelim. İşte "libmyutil.c" dosyasındaki fonksiyonların prototipleri, gerekli olan sembolik 
+    sabitler, makrolar, inline fonksiyonlar, yapı bildirimleri gibi "nesne yaratmayan bildirimler"  bir başlık dosyasına yerleştirilmelidir. 
+    Böylece bu kütüphaneyi kullanacak kişiler bu dosyayı include ederek gerekli bildirimlerin kodlarını oluşturmuş olurlar. 
+    Başlık dosyaları oluşturulurken iki önemli noktaya dikkat edilmelidir:
+
+    1) Başlık dosyalarına yalnızca "nesne yaratmayan bildirimler (declarations)" yerleştirilmelidir.
+    2) Başlık dosyalarının başına "include koruması (include guard)" yerleştirilmelidir. Include koruması aşağıdaki gibi yapılabilir:
+
+    #ifndef SOME_NAME
+    #define SOME_NAME
+
+    <dosyanın içeriği>
+
+    #endif
+
+    Buradaki SOME_NAME dosya isminden hareketle uydurulmuş olan herhangi bir isim olabilir. Örneğin:
+
+    #ifndef MYUTIL_H_
+    #define MYUTIL_H_
+
+    <dosyanın içeriği>
+
+    #endif
+
+    Örneğin "myutil.so" dinamik kütüphanesinde foo ve bar isimli iki fonksiyon bulunuyor olsun. Bunun için "myutil.h" isimli
+    başlık dosyası aşağıdaki gibi oluşturulabilir:
+
+    #ifndef MYUTIL_H_
+    #define MYUTIL_H_
+
+    void foo(void);
+    void bar(void);
+
+    #endif
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Standart C fonksiyonlarının ve POSIX fonksiyonlarının bulunduğu "libc" kütüphanesi gcc ve clang programlarıyla derleme 
+    yapıldığında otomatik olarak bağlama aşamasında devreye sokulmaktadır. Yani biz standart fonksiyonları ve POSIX fonksiyonları 
+    için bağlama aşamasında kütüphane belirtmek zorunda değiliz. Default durumda gcc ve clang programları standart C fonksiyonlarını 
+    ve POSIX fonksiyonlarını dinamik kütüphaneden alarak kullanır. Ancak programcı isterse "-static" seçeneği ile statik bağlama 
+    işlemi de yapabilir. Bu durumda bu fonksiyonlar statik kütüphanelerden alınarak çalıştırılabilen dosyalara yazılacaktır. 
+    Örneğin:
 
     gcc -o app -static app.c
 
-    Tabii bu biçimde statik link işlemi yapıldığında çalıştırılabilen dosyanın boyutu çok büyüyecektir. Eğer glibc kütüphanesinin
-    default olarak devreye sokulması istenmiyorsa "nodefaultlibs" seçeneğinin kullanılması gerekmektedir. Örneğin:
+    "-static" seçeneği ile bağlama işlemi yapıldığında artık üretilen çalıştırılabilir dosyanın dinamik kütüphanelerle hiçbir ilgisi 
+    kalmamaktadır. Zaten "-static" seçeneği belirtildiğinde artık dinamik kütüphaneler bağlama aşamasına programcı tarafından da 
+    dahil edilememektedir. Tabii bu biçimde statik bağlama işlemi yapıldığında çalıştırılabilen dosyanın boyutu çok büyüyecektir.
+
+    Eğer "libc" kütüphanesinin default olarak bağlama aşamasında devreye sokulması istenmiyorsa "-nodefaultlibs" seçeneğinin 
+    kullanılması gerekir. Örneğin:
 
     gcc -nodefaultlibs -o app app.c
 
-    Burada glibc kütüphanesi devreye sokulmadığı için link aşamasında hata oluşacaktır. Bu durumda kütüphanenin açıkça belirtilmesi
-    gerekir. Örneğin:
+    Burada glibc kütüphanesi devreye sokulmadığı için bağlama aşamasında hata oluşacaktır. Tabii bu durumda da kütüphane açıkça 
+    belirtilebilir:
 
     gcc -nodefaultlibs -o app app.c -lc
 
-    Bir kütüphanenin statik ve dinamik biçimi aynı anda bulunuyorsa ve biz bu kütüphaneyi -l seçeneği ile belirtiyorsak bu 
-    durumda default olarak kütüphanenin dinamik versiyonu devreye sokulmaktadır. Eğer kütüphanelerin statik versiyonlarının 
-    devreye sokulması isteniyorsa -static komut satırı argümanının kullanılması gerekmektedir. Örneğin:
+    Bir kütüphanenin statik ve dinamik biçimi aynı anda bulunuyorsa ve biz bu kütüphaneyi "-l" seçeneği ile belirtiyorsak bu 
+    durumda default olarak kütüphanenin dinamik versiyonu devreye sokulmaktadır. Eğer bu durumda kütüphanelerin statik versiyonlarının 
+    devreye sokulması isteniyorsa "-static" seçeneğinin kullanılması ya da komut satırında açıkça statik kütüphaneye referans 
+    edilmesi gerekir. Örneğin:
 
     gcc -o app app.c -lmyutil -L.
 
-    Burada eğer "libmyutil.so" ve "libmyutil.a" dosyaları varsa "libmyutil.so" dosyası kullanılacaktır. Yani dinamik link 
-    yapılacaktır. Tabii biz açıkça statik kütüphanenin ya da dinamik kütüphanenin kullanılmasını isteyebiliriz:
+    Burada eğer hem "libmyutil.so" hem de "libmyutil.a" dosyaları varsa "libmyutil.so" dosyası kullanılacaktır. Yani dinamik 
+    bağlama yapılacaktır. Tabii biz açıkça statik kütüphanenin ya da dinamik kütüphanenin kullanılmasını sağlayabiliriz:
 
     gcc -o app app.c libmyutil.a
 
-    ya da
+    Aynı etkiyi şöyle de sağlayabilirdik:
 
     gcc -static -o app app.c -lmyutil -L.
 
-    Burada glibc kütüphanesinin dinamik biçimi devreye sokulacaktır. Ancak libmyutil kütüphanesi statik biçimde link edilmiştir.
-    Eğer -static komut satırı argümanı kullanılırsa bu durumda tüm kütüphanelerin statik versiyonları devreye sokulmaktadır. 
-    Tabii bu durumda biz açıkça dinamik kütüphanelerin link işlemine sokulmasını isteyemeyiz. Örneğin:
+    Burada "libc" kütüphanesinin dinamik biçimi devreye sokulacaktır. Ancak "libmyutil" kütüphanesi statik biçimde bağlanmıştır.
+    Eğer "-static" seçeneği kullanılırsa bu durumda tüm kütüphanelerin statik versiyonları devreye sokulmaktadır. Tabii bu 
+    durumda biz açıkça dinamik kütüphanelerin bağlama işlemine sokulmasını isteyemeyiz. Örneğin:
 
     gcc -static -o app app.c libmyutil.so
 
-    Bu işlem başarısız olacaktır. Çünkü -static argümanı zaten "tüm kütüphanelerin statik olarak link edileceği" anlamına 
-    gelmektedir.
+    Bu işlem başarısız olacaktır. Çünkü "-static" seçeneği zaten "tüm kütüphanelerin statik olarak bağlanacağı edileceği" 
+    anlamına gelmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -50812,8 +50919,8 @@ void exit_sys(const char *msg)
 	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f7ec0b5c000)
 	/lib64/ld-linux-x86-64.so.2 (0x00007f7ec114f000
 
-    ldd programı dinamik kütüphanelerin kullandığı dinamik kütüphaneleri de görüntülemektedir. Programın doğrudan kullandığı dinamik
-    kütüphanelerin listesi readelf komutuyla aşağıdaki gibi de elde edilebilir:
+    ldd programı dinamik kütüphanelerin kullandığı dinamik kütüphaneleri de görüntülemektedir. Programın doğrudan kullandığı 
+    dinamik kütüphanelerin listesi readelf komutuyla aşağıdaki gibi de elde edilebilir:
 
     $ readelf -d sample | grep "NEEDED"
     0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
@@ -56581,7 +56688,7 @@ void exit_sys(const char *msg)
 
     DECLARE_WAIT_QUEUE_HEAD(g_wq);
 
-    Ya da nesne tanımlanıp init_waitqueueu_head fonksiyonuyla da ilk değerlenebilir:
+    Ya da nesne tanımlanıp init_waitqueue_head fonksiyonuyla da ilk değerlenebilir:
 
     #include <linux/wait.h>
 
@@ -56599,11 +56706,11 @@ void exit_sys(const char *msg)
     wait_event_interruptible_timeout(wq_head, condition, timeout);
     wait_event_interruptible_exclusive(wq_head, condition);
 
-    "wait_event" makrosu thread'i "uninterruptible" biçimde bekleme kuyruğuna yerleştirir. Bu biçimde bloke olmuş thread'lerin
-    blokeleri sinyal dolayısıyla çözülememektedir. "wait_event_interruptible" makrosu ise aynı işlemi "interruptible" olarak yapmaktadır. 
-    Yani sinyal geldiğinde thread bekleme kuyruğundan uyandırılır. "wait_event_killable" makrosu yalnızca SIGKILL sinyali için thread'i 
+    wait_event makrosu thread'i "uninterruptible" biçimde bekleme kuyruğuna yerleştirir. Bu biçimde bloke olmuş thread'lerin
+    blokeleri sinyal dolayısıyla çözülememektedir. wait_event_interruptible makrosu ise aynı işlemi "interruptible" olarak yapmaktadır. 
+    Yani sinyal geldiğinde thread bekleme kuyruğundan uyandırılır. wait_event_killable makrosu yalnızca SIGKILL sinyali için thread'i 
     uyandırmaktadır. Yani bu biçimde bekleme kuyruğuna yerleştirilmiş bir thread'in blokesi sinyal geldiğinde çözülmez, ancak SIGKILL
-    sinyali ile thread yok edilebilir. "wait_event_timeout" ve "wait_event_interruptible_timeout" makrolarının "wait_event" makrolarından 
+    sinyali ile thread yok edilebilir. wait_event_timeout ve wait_event_interruptible_timeout makrolarının wait_event makrolarından 
     farkı thread'i en kötü olasılıkla belli bir jiffy zaman aşımı ile uyandırabilmesidir. Jiffy kavramı izleyen bölümlerde ele 
     alınacaktır.
 
@@ -56620,8 +56727,8 @@ void exit_sys(const char *msg)
 
     wait_event(g_wq, g_flag != 0);
 
-    Burada koşul g_flag != 0 biçimindedir. wait_event makroları fonksiyon değil makrı biçiminde yazıldığı için bu koşul bu halliyle 
-    makronun içinde kullanılmaktadır. (Yani ifadenin sonucu değil kendisi makroda kullanılmaktadır.) Makronun içerisinde önce koşula 
+    Burada koşul g_flag != 0 biçimindedir. wait_event makroları fonksiyon değil makro biçiminde yazıldığı için bu koşul bu haliyle 
+    makronun içinde kullanılmaktadır. (Yani ifadenin sonucu değil, kendisi makroda kullanılmaktadır.) Makronun içerisinde önce koşula 
     bakılmakta, bu koşul sağlanıyorsa thread zaten uyutulmamaktadır. Eğer koşul sağlanmıyorsa thread uyutulmaktadır. Thread uykudan 
     uyandırıldığında tıpkı koşul değişkenlerinde olduğu gibi yeniden koşula bakılmakta eğer koşul sağlanmıyorsa thread yeniden 
     uyutulmaktadır.
@@ -56630,33 +56737,33 @@ void exit_sys(const char *msg)
     Halbuki wait_event ile uykuya dalmış olan thread sinyal oluşsa bile uykudan uyandırılmamaktadır. wait_event_killable ile thread 
     uykuya dalındığında ise yalnızca SIGKILL sinyali ile thread uykudan uyandırılabilmektedir. Tabii programcı wait_event_interruptible
     makrosunun geri dönüş değerine bakmalı, eğer thread sinyal dolayısıyla uykudan uyandırılmışsa -ERESTARTSYS değeriyle kendi fonksiyonundan 
-    geri dönmelidir. wait_event_interruptible fonksiyonu eğer sinyal dolayısıyla uyanmışsa -ERESTARTSYS değeri ile, koşul sağlandığından 
+    geri dönmelidir. wait_event_interruptible makrosu eğer sinyal dolayısıyla uyanmışsa -ERESTARTSYS değeri ile, koşul sağlandığından 
     dolayı uyanmışsa 0 değeri ile geri dönmektedir. Örneğin:
 
     DECLARE_WAIT_QUEUE_HEAD(g_wq);
     int g_flag = 0;
     ...
 
-    if (wait_event(g_wq, g_flag != 0) != 0)
-        return -RESTARTSYS;
+    if (wait_event_interruptible(g_wq, g_flag != 0) != 0)
+        return -ERESTARTSYS;
 
     Bu tür durumlarda böylesi flag değişkenlerini atomic almak iyi bir tekniktir. Örneğin:
 
     DECLARE_WAIT_QUEUE_HEAD(g_wq);
-    atomic_t g_flag = ATOMIC_INIT(0)
+    atomic_t g_flag = ATOMIC_INIT(0);
     ...
 
-    if (wait_event(g_wq, atomic_read(&g_flag) != 0) != 0)
-        return -RESTARTSYS;
+    if (wait_event_interruptible(g_wq, atomic_read(&g_flag) != 0) != 0)
+        return -ERESTARTSYS;
 
     wait_event_interruptible_exclusive (bunun interrutible olmayan biçimi yoktur) makrosu Linux çekirdeklerine 2.6'ının belli 
-    sürümünden sonra sokulmuştur. Yine bu fonksiyonla birlikte aşağıda ele alınan wake_up_xxx_nr makroları da eklenmiştir. Bir 
+    sürümünden sonra sokulmuştur. Yine bu makroyla birlikte aşağıda ele alınan wake_up_xxx_nr makroları da eklenmiştir. Bir 
     prosesin exclusive olarak wait kuyruğuna yerleştirilmesi onlardan belli sayıda olanların uyandırılabilmesini sağlamaktadır.
 
     Tabii wait_event makroları o andaki thread'i çizelgeden (yani run kuyruğundan) çıkartıp wait kuyruğuna yerleştirdikten sonra 
     "context switch" işlemini de yapmaktadır. Context switch işlemi sonrasında artık run kuyruğundaki yeni bir thread çalışır.
 
-    wait_event nakrolarının temsili kodunu şöyle düşünebilirsiniz:
+    wait_event makrolarının temsili kodunu şöyle düşünebilirsiniz:
 
     while (koşul_sağlanmadığı_sürece) {
         <thread'i bekleme kuyruğuna ekle>
@@ -56665,7 +56772,7 @@ void exit_sys(const char *msg)
 
     Bekleme kuyruğunda blokede bekletilen thread wake_up makrolarıyla uyandırılmaktadır. Uyandırılmaktan kastedilen şey thread'in 
     bekleme kuyruğundan çıkartılıp yeniden çalışma kuyruğuna (run queue) yerleştirilmesidir. wait_event makrolarındaki koşula wake_up 
-    bakamaktadır. wake_up makroları yalnızca thread'i bekleme kuyruklarından çalışma kuyruğuna taşımaktadır. Koşula uyandırımış 
+    bakmamaktadır. wake_up makroları yalnızca thread'i bekleme kuyruklarından çalışma kuyruğuna taşımaktadır. Koşula uyandırılmış 
     thread'in kendisi bakmaktadır. Eğer koşul sağlanmıyorsa yeniden uyutulmaktadır. Yani biz koşulu sağlanır duruma getirmeden 
     wake_up işlemi yaparsak thread yeniden uykuya dalacaktır. (Zaten "koşulu sağlayan thread'i uyandırma" işlemi mümkün değildir.)
 
@@ -56683,11 +56790,10 @@ void exit_sys(const char *msg)
 
     struct __wait_queue_head {
         spinlock_t lock;
-	    struct list_head task_list;
+        struct list_head task_list;
     };
 
-    Görüldüğü gibi bu bir bağlı listedir. Bağlı liste spinlock ile korunmaktadır. Bu bağlı liste aşağıdaki yapılardan 
-    oluşmaktadır:
+    Görüldüğü gibi bu bir bağlı listedir. Bağlı liste spinlock ile korunmaktadır. Bu bağlı liste aşağıdaki yapılardan oluşmaktadır:
 
     struct __wait_queue {
         unsigned int flags;
@@ -56709,12 +56815,12 @@ void exit_sys(const char *msg)
 
     wake_up makrosu kuyruğun başından itibaren ilk exclusive bekleme yapan thread'e kadar bu thread de dahil olmak üzere
     tüm thread'leri uyandırmaktadır. Tabii bu thread'lerin hepsi uyandırıldıktan sonra ayrıca koşula da bakmaktadır. 
-    Örneğimizde wake_up fonksiyonu çağrıldığında T1, T2, T3 ve T4 therad'leri uyandırılacaktır. Görüldüğü gibi wake_up 
+    Örneğimizde wake_up makrosu çağrıldığında T1, T2, T3 ve T4 thread'leri uyandırılacaktır. Görüldüğü gibi wake_up 
     makrosu aslında 1 tane exclusive thread uyandırmaya çalışmaktadır. Ancak onu uyandırırken kuyruğun önündeki exclusive
     olmayanları da uyandırmaktadır.
 
-    wake_up_nr makrosu wake_up makrosu gibi davranır ancak 1 tane değil en fazla nr parametresiyle belirtilen sayıda exclusive 
-    thread'i uyandırmaya çalışır. Başjka bir deyişle wake_up(g_wq) çağrısı ile wake_up_nr(g_qw, 1) çağrısı aynı anlamdadır.
+    wake_up_nr makrosu, wake_up makrosu gibi davranır ancak 1 tane değil en fazla nr parametresiyle belirtilen sayıda exclusive 
+    thread'i uyandırmaya çalışır. Başka bir deyişle wake_up(g_wq) çağrısı ile wake_up_nr(g_qw, 1) çağrısı aynı anlamdadır.
     Eğer yukarıdaki örnekte wake_up_nr(g_wq, 2) çağrısını yapmış olsaydık T1, T2, T2, T4, T5, T6 thread'leri uyandırılırdı. 
     Tabii bu thread'lerin uyandırılmış olması wait_event makrolarından çıkılacağı anlamına gelmemektedir. Uyandırma işleminden 
     sonra koşula yeniden bakılmaktadır.
@@ -56722,7 +56828,7 @@ void exit_sys(const char *msg)
     wake_up_all makrosu bekleme kuyruğundaki tüm exclusive thread'leri ve exclusive olmayan thread'leri yani kısaca tüm
     thread'leri uyandırmaktadır. Tabii yine uyanan thread'ler koşula bakmaktadır.
 
-    wake_up_interruptible, wake_up_interruptible_nr ve wake_up_interruptible_all, makroları interruptible olmayan makrolar 
+    wake_up_interruptible, wake_up_interruptible_nr ve wake_up_interruptible_all makroları interruptible olmayan makrolar 
     gibi çalışmaktadır. Ancak bu makrolar bekleme kuyruğunda yalnızca "interruptible" wait_event fonksiyonlarıyla bekletilmiş 
     thread'lerle ilgilenmektedir. Diğer thread'ler kuyrukta yokmuş gibi davranmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -56759,7 +56865,7 @@ void exit_sys(const char *msg)
 
     Burada eğer birden fazla thread read yaparsa exclusive olmayan bir biçimde bekleme kuyruğunda bekleyecektir. write işleminde
     wake_up_interruptible makrosu ile uyandırma yapıldığına dikkat ediniz. Bekleme kuyruğunda exclusive bekleyen thread 
-    olmadığına göre burada tüm read yapan thread'ler uyandırılacaktır. Onların koşulları sağlandıüı için hepsi read fonksiyonundan
+    olmadığına göre burada tüm read yapan thread'ler uyandırılacaktır. Onların koşulları sağlandığı için hepsi read fonksiyonundan
     çıkacaktır. Şimdi bu read fonksiyonunda exclusive bekleme yapmış olalım:
 
     static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
@@ -56775,7 +56881,7 @@ void exit_sys(const char *msg)
         return 0;
     }
 
-    Artık write fonkişyonunda wake_up makrosu çağrıldığında yalnızca bir tane exclusive bekleme yapan thread uyandırılacağı 
+    Artık write fonksiyonunda wake_up makrosu çağrıldığında yalnızca bir tane exclusive bekleme yapan thread uyandırılacağı 
     için read fonksiyonundan yalnızca bir thread çıkacaktır. Test için aşağıdaki kodları kullanabilirsiniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -57001,9 +57107,9 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Şimdi de daha önce yapmış boru örneğimizi gerçek bir bor haline getirelim. Yani eğer boruda en az 1 byte boş alan kalmadıysa
-    read fonksiyonu blokede en az 1 byte okuyana kadar beklesin. Eğer boruda tüm bilgileri yazacak kadar boş yer kalmadıysa 
-    bu kez de yazan taraf blokede beklesin. Burada izlenecek temel yöntem aslında kursumuzda "koşul değişklenleri (condityion 
+    Şimdi de daha önce yapmış olduğumuz boru örneğimizi gerçek bir boru haline getirelim. Yani eğer boruda en az 1 byte boş alan 
+    kalmadıysa read fonksiyonu blokede en az 1 byte okuyana kadar beklesin. Eğer boruda tüm bilgileri yazacak kadar boş yer kalmadıysa 
+    bu kez de yazan taraf blokede beklesin. Burada izlenecek temel yöntem aslında kursumuzda "koşul değişkenleri (condition 
     variable)" denilen senkronizasyon nesnelerindeki yöntemin aynısı olmalıdır. Okuyan thread kuyruktaki byte sayısını belirten 
     g_count == 0 olduğu sürece bekleme kuyruğunda beklemelidir. Tabii bizim kuyruk üzerinde işlem yaptığımız kısımları senkronize
     etmemiz gerekir. Bunu da bir binary semaphore nesnesi ya da mutex nesnesi yapabiliriz. Semaphore nesnesini ve bekleme kuyruğunu
@@ -57027,15 +57133,15 @@ void exit_sys(const char *msg)
 			return -ERESTARTSYS;
 	}
 
-    /* kuyruktan okuma işlemleri */
+    // kuyruktan okuma işlemleri
 
 	up(&g_sem);
 
     Burada önce down_interruptible fonksiyonu ile semaphore kilitlenmeye çalışılmıştır. Eğer semaphore zaten kilitliyse 
     semaphore'un kendi bekleme kuyruğunda thread uykuya dalacaktır. Daha sonra g_count değerine bakılmıştır. Eğer g_count 
     değeri 0 ise önce semaphore serbest bırakılıp sonra thread bekleme kuyruğunda uyutulmuştur. Thread bekleme kuyruğundan 
-    uyandırılıdğında yenidne semaphore kontrolünü ele almaktadır. Tabii eğer birden fazla thread bekleme kuyruğundan uyandırılırsa
-    yalnızca bunlardan biri samaphore kontrolünü ele alacaktır. Tabii bundan sonra kuyruktan bilgiler okunacak ve semaphore 
+    uyandırıldığında yeniden semaphore kontrolünü ele almaktadır. Tabii eğer birden fazla thread bekleme kuyruğundan uyandırılırsa
+    yalnızca bunlardan biri semaphore kontrolünü ele alacaktır. Tabii bundan sonra kuyruktan bilgiler okunacak ve semaphore 
     kilidi serbest bırakılacaktır. Eğer birden fazla thread beklme kuyruğundan uyanmışsa bu kez diğer bir thread semaphore 
     kontrolünü ele alacak ve g_count değerine bakacaktır. Yukarıda da belirttiğimiz gibi aslında bu bir "koşul değişkeni"
     kodu gibidir. Çekirdek içerisinde böyle bir nesne olmadığı için manuel uygulanmıştır.
@@ -57054,27 +57160,27 @@ void exit_sys(const char *msg)
 			return -ERESTARTSYS;
 	}
 
-    /* kuyruğa yazma işlemleri */
+    // kuyruğa yazma işlemleri
 
 	up(&g_sem);
 
     Burada benzer işlemler uygulanmıştır. Eğer kuyrukta yazma yapılmak istenen kadar boş alan varsa akış while döngüsünün
-    içerisine girmeyecektir. (Buradaki whiel koşulunun "PIPE_BUFSIZE - g_count < size" biçiminde olduğuna dikkat ediniz.)
-    Dolayısıyla yazma işlemi kritik kod içerisinde yapılabilecektir. Ancak kuyrukta yeteri kadar yer yoksa semahore kilidi 
+    içerisine girmeyecektir. (Buradaki while koşulunun "PIPE_BUFSIZE - g_count < size" biçiminde olduğuna dikkat ediniz.)
+    Dolayısıyla yazma işlemi kritik kod içerisinde yapılabilecektir. Ancak kuyrukta yeteri kadar yer yoksa semaphore kilidi 
     serbest bırakılıp thread bekleme kuyruğunda bekletilecetir. Çıkışta benzer işlemler yapılmaktadır.
 
-    Aslında burada spinlock nesneleri de kullanılabilir. Ancak zaten mutex, semaphore ve read/write ock nesneleri kendi 
+    Aslında burada spinlock nesneleri de kullanılabilir. Ancak zaten mutex, semaphore ve read/write lock nesneleri kendi 
     içerisinde bir miktar spin yapmaktadır.
 
-    Bu örnekte semaphore yerine spinlock kullanabilirmiyiz? Spinlock için şu durumları gözden geçirmeisiniz:
+    Bu örnekte semaphore yerine spinlock kullanabilirmiyiz? Spinlock için şu durumları gözden geçirmelisiniz:
 
     - Spinlock nesnesinde bekleme CPU zamanı harcanarak meşgul bir döngü içerisinde yapılmaktadır. Dolayısıyla spinlock 
     nesneleri kilidin kısa süreli bırakılacağından emin olunabiliyorsa kullanılmalıdır.
 
     - Spinlock içerisinde sinyal işlemleri bekletilmektedir. Yani spinlock beklemelerinin "interruptible" bir biçimi yoktur.
 
-    Aslında bu uygulama spinlock nesneleri de kullanılabilir. Ancak yine de kilitli kalınan kod miktarı dikkate alındığında
-    semahore nesnesi daha uygun bir seçenektir.
+    Aslında bu uygulamada spinlock nesneleri de kullanılabilir. Ancak yine de kilitli kalınan kod miktarı dikkate alındığında
+    semaphore nesnesi daha uygun bir seçenektir.
 
     Burada yazma işlemleri için "yazma bekleme kuyruğu" ve okuma işlemleri için "okuma bekleme kuyruğu" biçiminde iki bekleme
     kuyruğu olduğuna dikkat ediniz. Çünkü yazan taraf okuma bekleme kuyruğundaki thread'leri okuyan taraf ise yazma bekleme 
