@@ -1643,8 +1643,8 @@
     - "Paths and misc options" menüsünden "Render the toolchain read-only" unchecked yapılır.
     - "Target/Floating Point" menüsünden "hardware (FPU)" seçilir.
     - "Target/Use specific FPU" menüsünde "neon" girilir.
-    - "C-Library" menüsünden "Versions of glibc" alt menüsüne gelinip glibc kütüphanesinin versiyon numarası 2.31 yapılır.
-    (BBB'deki debian sürümü glibc 2.34'i kullanmaktadır.)
+    - "C-Library" menüsünden "Versions of glibc" alt menüsüne gelinip glibc kütüphanesinin versiyon numarası 2.34 yapılır.
+    (BBB'deki Debian sürümü glibc 2.34'i kullanmaktadır.)
 
     2) Araç zinciri menuconfig ile konfigüre edildikten sonra artık "build" işlemi aşağıdaki gibi yapılabilir:
 
@@ -1776,10 +1776,15 @@
 /*-----------------------------------------------------------------------------------------------------------------------------
     ELF dosyasının genel yapısı şöyledir:
 
-    |ELF Başlığı (ELF Header)|
-    |Program Başlık Tablosu (Program Header Table) (İsteğe Bağlı)|
-    |Bölümler (Sections)|
-    |Bölüm Başlık Tablosu (Section Header Table)|
+    +----------------------------------------------------------------+
+    |                    ELF Başlığı (ELF Header)                    |
+    +----------------------------------------------------------------+
+    |  Program Başlık Tablosu (Program Header Table) (İsteğe Bağlı)  |
+    +----------------------------------------------------------------+
+    |                     Bölümler (Sections)                        |
+    +----------------------------------------------------------------+
+    |           Bölüm Başlık Tablosu (Section Header Table)          |
+    +----------------------------------------------------------------+
 
     ELF dosyasının hemen başında bir başlık kısmı (ELF Header) bulunmaktadır. Bu başlık kısmında dosya hakkında en önemli bilgiler
     tutulmaktadır.
@@ -1809,7 +1814,7 @@
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    ELF Başlığında dosyadaki meta-data alanları hakkında önemli bilgiler yer almaktadır. ELF başlığığının ilk 16 byte'tı "kimlik 
+    ELF Başlığı'nda dosyadaki meta-data alanları hakkında önemli bilgiler yer almaktadır. ELF Başlığı'nın ilk 16 byte'ı "kimlik 
     bilgileri (identification)" denilen dosyanın en kritik bilgilerini tutan kısmıdır. ELF dosyasının ilk dört byte'ında bir 
     "sihirli sayı (magic number)" bulundurulmuştur. Bu ilk 4 byte'ın ilk byte'ı 0x7F sonraki üç byte'ı da 'E', 'L', 'F' karakterlerinin 
     ASCII kodlarından oluşmaktadır. Yani ELF dosyasının ilk 4 byte'ı hex olarak şöyledir:
@@ -1817,17 +1822,17 @@
     7F 45 4C 46
 
     Kimlik bilgilerinin 4'üncü offset'teki byte'ı ELF dosyasının 32 bit mi 64 bit mi olduğunu belirtmektedir. Eğer ELF dosyası 
-    32 bit ise (yani 32 bitlik bir işletim sistemi için oluşturulmuşsa) burada 1 değeri 64 bit ise (yani 64 bit bir işletim 
+    32 bit ise (yani 32 bitlik bir işletim sistemi için oluşturulmuşsa) burada 1 değeri, 64 bit ise (yani 64 bit bir işletim 
     sistemi için oluşturulmuşsa) burada 2 değeri olmalıdır.
 
-    Kimlik bilgilerininin 5'inci offset'teki byte'ı ELF dosyasının "little endian" olarak mı yoksa "big endian" olarak mı 
+    Kimlik bilgilerinin 5'inci offset'teki byte'ı ELF dosyasının "little endian" olarak mı yoksa "big endian" olarak mı 
     oluşturulduğunu belirtmektedir. Buradaki değer 1 ise dosya "little endian", 2 ise dosya "big endian" biçiminde oluşturulmuştur. 
     Intel işlemcilerinin yalnızca "little endian" kullandığını, ARM işlemcilerinin hem "little endian" hem de "big endian" 
     olarak kullanılabildiğini ancak default kullanımın "little endian" olduğunu anımsayınız. O halde burada tipik olarak 1 
     değeri bulunacaktır.
 
     Kimlik bilgilerinin 6'ıncı offset'indeki byte'ı ELF dosyasının majör versiyon numarasını belirtmektedir. Şu anda ELF dosyasının 
-    majör olarak 1'li versiyonları kullanıdlığı için burada 1 değeri bulunacaktır.
+    majör olarak 1'li versiyonları kullanıldığı için burada 1 değeri bulunacaktır.
 
     Kimlik bilgilerinin 7'inci offset'teki byte'ı kullanılan ABI türünü belirtmektedir. Buradaki 0 değeri klasik "System 5 ABI"
     anlamına gelmektedir. Burada genellikle 0 değeri bulunmaktadır.
@@ -1845,48 +1850,50 @@
 
     7f 45 4c 46 01 01 01 00  00 00 00 00 00 00 00 00  .ELF............
 
-    ELF Başlığında kimlik bilgilerinden (ilk 16 byte) sonra yine dosya hakkında önemli bilgiler yer almaktadır. ELF başlığının 
+    ELF Başlığı'nda kimlik bilgilerinden (ilk 16 byte) sonra yine dosya hakkında önemli bilgiler yer almaktadır. ELF Başlığı'nın 
     16'ıncı offset'indeki 2 byte'lık işaretsiz tamsayı dosyanın türünü belirtmektedir. Tipik tür değerleri şunlardır:
 
-     0 ---> Geçersiz
-     1 ---> Amaç Dosya (Relocatable Object File)
-     2 ---> Çalıştırılabilir Dosya (Executable File)
-     3 ---> Dinamik Kütüphane Dosyası (Shared Object)
-     4 ---> Çekirdek Dosyası (Core File)
+    0 ---> Geçersiz
+    1 ---> Amaç Dosya (Relocatable Object File)
+    2 ---> Çalıştırılabilir Dosya (Executable File)
+    3 ---> Dinamik Kütüphane Dosyası (Shared Object)
+    4 ---> Çekirdek Dosyası (Core File)
 
-    ELF Başlığının 18'inci offset'indeki 2 byte'lık işaretsiz tmsayı dosyanın çalıştırılacağı hedef işlemcinin türünü belirtmektedir. 
+    ELF Başlığı'nın 18'inci offset'indeki 2 byte'lık işaretsiz tamsayı dosyanın çalıştırılacağı hedef işlemcinin türünü belirtmektedir. 
     Buradaki 2 byte'lık çeşitli işaretsiz tamsayı değerler çeşitli işlemci türlerini belirtmektedir. Örneğin 0x28 "32 Bit ARM 
-    İşlemcilerini", 0x3E "AMD'nin 64 bit Intel Tabanlı İşlemcilerini" belirtmektedir. Bunların tam listesini Internet'teki 
+    İşlemcilerini", 0x3E "AMD'nin 64 bit Intel Tabanlı İşlemcilerini" belirtmektedir. Bunların tam listesini internetteki 
     dokümanlardan elde edebilirsiniz. (Örneğin Wikipedia'da "Executable and Linkable Format" sayfasında ayrıntılı bir liste 
     verilmiştir.)
 
-    ELF Başlığının 20'inci offset'teki 4 byte'lık işaretssiz tamsayı yine ELF dosyasının versiyon numarasını belirtmektedir. Burada 
+    https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
+
+    ELF Başlığı'nın 20'inci offset'teki 4 byte'lık işaretsiz tamsayı yine ELF dosyasının versiyon numarasını belirtmektedir. Burada 
     tipik olarak 1 değeri bulunacaktır.
 
-    ELF Başlığının 24'üncü offset'inde "çalıştırılabilir dosyalar için" programın çalışmaya başlayacağı sanal adresi (virtual address) 
+    ELF Başlığı'nın 24'üncü offset'inde "çalıştırılabilir dosyalar için" programın çalışmaya başlayacağı sanal adresi (virtual address) 
     belirtilmektedir. Çalıştırılabilir bir dosyanın çalıştırılmaya başlanacağı adrese aşağı seviyeli terminoloji de "entry point" 
     denilmektedir. Tabii adres bilgileri 32 bit ELF dosyalarında 4 byte, 64 bit ELF dosyalarında 8 byte uzunluktadır.
 
-    ELF Başlığının sonraki elemanlarının offset'leri artık 32 bit ve 64 bit ELF dosyalarına göre değişmektedir. 32 bit ELF 
+    ELF Başlığı'nın sonraki elemanlarının offset'leri artık 32 bit ve 64 bit ELF dosyalarına göre değişmektedir. 32 bit ELF 
     dosyalarında adres bilgileri ve dosya offset bilgileri 4 byte uzunluğunda, 64 bit ELF dosyalarında ise 8 byte uzunluğundadır.
 
-    ELF başlığında bulunan diğer bilgiler şunlardır:
+    ELF Başlığı'nda bulunan diğer bilgiler şunlardır:
 
-    - ELF Başlığının (ELF Header) byte uzunluğu.
+    - ELF Başlığı'nın (ELF Header) byte uzunluğu.
 
-    - Program Başlık Tablosunun (Program Header Table)" dosyada hangi offset'ten başladığı bilgisi. Program başlık tablosu
-    tipik olarak ELF başlığından hemen sonra gelmektedir.
+    - Program Başlık Tablosu'nun (Program Header Table) dosyada hangi offset'ten başladığı bilgisi. Program Başlık Tablosu
+    tipik olarak ELF Başlığı'ndan hemen sonra gelmektedir.
 
-    - Program Başlık Tablosundaki Program Başlıklarının sayısı
+    - Program Başlık Tablosu'ndaki Program Başlıkları'nın sayısı
 
-    - Bölüm Başlık Tablosunun (Section Header Table) dosyada hangi offset'ten başladığı bilgisi. Bölüm Başlık Tablosu genellikle 
+    - Bölüm Başlık Tablosu'nun (Section Header Table) dosyada hangi offset'ten başladığı bilgisi. Bölüm Başlık Tablosu genellikle 
     ELF formatının sonunda bulunmaktadır.
 
-    - Bölüm Başlık Tablosundaki bölüm başlıklarının sayısı ve bir Bölüm Başlığının byte uzunluğu.
+    - Bölüm Başlık Tablosu'ndaki Bölüm Başlıkları'nın sayısı ve bir Bölüm Başlığı'nın byte uzunluğu.
 
-    - Bölüm Başlık isimlerinin bulunduğu String Tablosunun Bölüm Başlık Tablosundaki indeksi.
+    - Bölüm Başlık İsimleri'nin bulunduğu String Tablosu'nun Bölüm Başlık Tablosu'ndaki indeksi.
 
-    32 bit ELF formatında ELF Başlığının yapısal içeriği şöyledir:
+    32 bit ELF formatında ELF Başlığı'nın yapısal içeriği şöyledir:
 
     #define EI_NIDENT		16
 
@@ -1907,7 +1914,7 @@
         Elf32_Half e_shstrndx;              /* Section name string table index */
     } Elf32_Ehdr;
 
-    64 bit ELF formatında ise ELF Başlığının yapısal içeriği şöyledir:
+    64 bit ELF formatında ise ELF Başlığı'nın yapısal içeriği şöyledir:
 
     typedef struct {
         unsigned char e_ident[16];          /* ELF identification */
@@ -1935,10 +1942,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------
     ELF formatını parse edip insanların anlayabileceği biçimde görüntüleyen çeşitli utility programlar bulunmaktadır. Bunların 
     en yaygın kullanılan ikisi "readelf" ve "objdump" programlarıdır. Bu programların ayrıntılı dokümantasyonu "man" sayfalarında 
-    bulunmaktadır. "objdump" programı daha genel, readelf programı daha özel programlardır. Ancak "objdump" programı işlevsel 
+    bulunmaktadır. "objdump" programı daha genel, "readelf" programı daha özel programlardır. Ancak "objdump" programı işlevsel 
     olarak "readelf" programını tam olmasa da kapsar niteliktedir. "readelf" programının kullanımı daha kolaydır.
 
-    readelf programında "-h" ya da "--file-header" seçeneği ELF başlığını görüntülemek için kullanılmaktadır. Örneğin:
+    "readelf" programında "-h" ya da "--file-header" seçeneği ELF Başlığı'nı görüntülemek için kullanılmaktadır. Örneğin:
 
     $ readelf -h sample
     ELF Başlığı:
@@ -1962,7 +1969,7 @@
     Number of section headers:          31
     Section header string table index:  30
 
-    objdump programı ile ELF formatının başlıkları "-x" ya da "--all-headers" seçeneği ile görüntülenebilir.
+    "objdump" programı ile ELF formatının başlıkları "-x" ya da "--all-headers" seçeneği ile görüntülenebilir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -1976,21 +1983,21 @@
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Daha önceden de belirtitğimiz gibi ELF formatı "bölümlerden (sections)" oluşmaktadır. Her bölümde belli bir konuya ilişkin
+    Daha önceden de belirttiğimiz gibi ELF formatı "bölümlerden (sections)" oluşmaktadır. Her bölümde belli bir konuya ilişkin
     bilgiler bulunmaktadır. ELF formatının derleyiciler tarafından kullanılan standart bazı bölümleri vardır. Ancak çeşitli 
-    derleyiciler ve hatta sistem programcıları standrat olmayan bölümler de oluşturabilmektedir. Bölümlerin birer ismi vardır.
+    derleyiciler ve hatta sistem programcıları standart olmayan bölümler de oluşturabilmektedir. Bölümlerin birer ismi vardır.
     Bölüm isimleri genellikle "." karakteri ile başlatılır. ELF dosyası içerisindeki bütün bölümlerin dosyanın neresinden 
-    başladığıi, hangi uzunlukta olduğu ve o bölümde hangi tarzda bilgiler bulunduğu "Bölüm Başlık Tablosu (Section Header Table)
-    denilen bir tabloda belirtilmiştir. Bölüm Başlık Tablosunun dosya içerisindeki yeri ve Bölüm Başlıklarının Sayısı ELF 
-    Başlığında bulunmaktadır. Bu durumda ELF dosyasının bölüm bilgilerini elde etmek için önce ELF Başlığı okunmalı oradan Bölüm 
-    Başlık Tablosunun yeri elde edilmelidir. Bölüm Başlık Tablosu "Bölüm Başlığı (Section Header)" denilen alanlardan oluşmaktadır. 
-    Başka bir deyişle Bölüm Başlık Tablosu "Bölüm Başlığı Dizilerinden" oluşmaktadır. Bir Bölüm Başlığında aşağıdaki bilgiler 
+    başladığı, hangi uzunlukta olduğu ve o bölümde hangi tarzda bilgiler bulunduğu "Bölüm Başlık Tablosu (Section Header Table)"
+    denilen bir tabloda belirtilmiştir. Bölüm Başlık Tablosu'nun dosya içerisindeki yeri ve Bölüm Başlıkları'nın Sayısı ELF 
+    Başlığı'nda bulunmaktadır. Bu durumda ELF dosyasının bölüm bilgilerini elde etmek için önce ELF Başlığı okunmalı oradan Bölüm 
+    Başlık Tablosu'nun yeri elde edilmelidir. Bölüm Başlık Tablosu, "Bölüm Başlığı (Section Header)" denilen alanlardan oluşmaktadır. 
+    Başka bir deyişle Bölüm Başlık Tablosu, "Bölüm Başlığı Dizilerinden" oluşmaktadır. Bir Bölüm Başlığı'nda aşağıdaki bilgiler 
     bulunmaktadır:
 
     - Bölümün isminin bölüm isimlerinin bulunduğu string tablosundaki offset numarası
 
     - Bölümün türü. Her bölüm belli bir konuya ilişkin bilgi tutmaktadır. İşte bölümün hangi konuya ilişkin bilgiyi tuttuğuna
-    bölümün türü ddenilmektedir. Bölüm türleri aslında birer sayıyla belirtiliyorsa da okunabilirliği artırmak için sembolik
+    bölümün türü denilmektedir. Bölüm türleri aslında birer sayıyla belirtiliyorsa da okunabilirliği artırmak için sembolik
     isimlerle de belirtilmektedir. Örneğin SHT_STRTAB türü ilgili bölümün içerisinde "string tablosu olduğunu", SHT_RELA ilgili
     bölümün içerisinde "relocation" bilgilerinin bulunduğunu belirtmektedir.
 
@@ -2001,7 +2008,7 @@
     - Bölüm eğer yükleyici tarafından belleğe yüklenecekse sanal belleğin neresine yükleneceğine ilişkin adres bilgisi. Tabii 
     bölüm belleğe yüklenmeyecekse bu adres bilgisi kullanılmaz. Burada 0 değeri bulunur.
 
-    - Bölümün dosyanın hangi offsetin'den başladığı bilgisi.
+    - Bölümün dosyanın hangi offset'inden başladığı bilgisi.
 
     - Bölümün kaç byte uzunlukta olduğu bilgisi.
 
@@ -2009,7 +2016,7 @@
 
     - Diğer bazı bilgiler.
 
-    32 bit ELF formatında Bölüm Başlığının yapısal içeriği şöyledir:
+    32 bit ELF formatında Bölüm Başlığı'nın yapısal içeriği şöyledir:
 
     typedef struct {
         Elf32_Word sh_name;         /* Section name */
@@ -2024,7 +2031,7 @@
         Elf32_Word sh_entsize;      /* Size of entries, if section has table */
     } Elf32_Shdr;
 
-    64 bit ELF formatında ise Bölüm Başlığının yapısal içeriği şöyledir:
+    64 bit ELF formatında ise Bölüm Başlığı'nın yapısal içeriği şöyledir:
 
     typedef struct
     {
@@ -2040,7 +2047,7 @@
         Elf64_Xword sh_entsize;     /* Size of entries, if section has table */
     } Elf64_Shdr;
 
-    Bölüm Başlık Tablosundaki Bölüm Başlıkları "readelf" programında "-S" veya "--section-headers" veya "--sections" seçenekleri 
+    Bölüm Başlık Tablosu'ndaki Bölüm Başlıkları "readelf" programında "-S" veya "--section-headers" veya "--sections" seçenekleri 
     kullanılmaktadır. Örneğin:
 
     $ readelf -S sample
@@ -2068,7 +2075,7 @@
     C (compressed), x (unknown), o (OS specific), E (exclude),
     l (large), p (processor specific)
 
-    Bölüm Başlık Tablosundaki Bölüm Başlıkları "objdump" programı ile "-h" veya "--section-headers" veya "--headers" seçenekleriyle 
+    Bölüm Başlık Tablosu'ndaki Bölüm Başlıkları "objdump" programı ile "-h" veya "--section-headers" veya "--headers" seçenekleriyle 
     görüntülenebilmektedir. Örneğin:
 
     kaan@kaan-virtual-machine:~/Study/EmbeddedLinux$ objdump -h sample
@@ -2093,10 +2100,10 @@
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    ELF Formatının en önemli kısımlarından biri "sembol tablosu (symbol table)" denilen kısmıdır. Sembol (symbol) derleyici ve 
+    ELF formatının en önemli kısımlarından biri "sembol tablosu (symbol table)" denilen kısmıdır. Sembol (symbol) derleyici ve 
     bağlayıcı dünyasında "değişken (identifier)" anlamına gelen bir terimdir. Yani programlamada "değişken (variable/identifier)" 
     kavramı derleyici ve bağlayıcı dünyasında "sembol (symbol)" biçiminde ifade edilmektedir. Semboller fonksiyon isimleri biçiminde, 
-    global değişken isimleri biçiminde olabileceği gibi başka varlıklar (entity) biçiminde de karşımıza çıkabilmektedir. Semboler 
+    global değişken isimleri biçiminde olabileceği gibi başka varlıklar (entity) biçiminde de karşımıza çıkabilmektedir. Semboller 
     yalnızca isimlerden oluşmazlar bir sembole ilişkin başka özellikler de vardır. İşte sembol tablolarında sembollerin isimleri 
     ve onlara ilişkin özellikler tutulmaktadır.
 
@@ -2619,6 +2626,9 @@
 
     Çalışmakta olan programın sanal bellek alanına map edilen segment'ler proc dosya sisteminden /proc/<proses_is>/maps 
     dosyasının içerisinden görülebilir.
+
+    readelf programında ELF dosyasının Program Başlık Tablosu "-l" seçeneği ile objdump programı ile de "-p" ya da "--program-headers" 
+    seçeneği ile görüntülenebilmektedir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -2723,45 +2733,50 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Statik kütüphane kullanan programları derlerken statik kütüphane dosyaları komut satırında belirtilebilir. Bu durumda gcc 
-    ve clang derleyicileri o dosyayı link işleminde kullanmaktadır. Örneğin:
+    ve clang derleyicileri o dosyayı bağlama (link) işleminde kullanmaktadır. Örneğin:
 
     $ gcc -o app app.c libmyutil.a
 
-    Burada "libmyutil.a" dosyasına C derleyicisi bakmamaktadır. gcc aslında bu dosyayı linker'a iletmektedir. Biz bu işlemi 
-    iki adımda da yapabilirdik:
+    Burada "libmyutil.a" dosyasına C derleyicisi bakmamaktadır. gcc aslında bu dosyayı bağlayıcıya (linker) iletmektedir. Biz bu 
+    işlemi iki adımda da yapabilirdik:
 
     gcc -c app.c
     gcc -o app app.o libmyutil.a
 
-    Her ne kadar GNU'nun linker programı aslında "ld" isimli programsa da genellikle programcılar bu ld linker'ını doğrudan 
-    değil yukarıdaki gibi "gcc" yoluyla kullanırlar. Çünkü ld linker'ı kullanılırken "libc" kütüphanesi gibi start-up object
-    modüller gibi modüllerin de programcı tarafından ld linker'ına verilmesi gerekmektedir. Bu da oldukça sıkıcı bir işlemdir. 
-    Halbuki biz ld linker'ını gcc yoluyla çalıştırdığımızda ld linker'ına bu dosyalar zaten default kütüphaneler ve object modüller
-    gcc tarafından verilmektedir.
+    Her ne kadar GNU'nun bağlayıcı programı aslında "ld" isimli programsa da genellikle programcılar bu ld bağlayıcısını doğrudan 
+    değil yukarıdaki gibi gcc yoluyla kullanırlar. Çünkü ld bağlayıcısını kullanılırken "libc" kütüphanesinin start-up amaç dosyaların
+    (start-up object modules) programcı tarafından ld bağlayıcısına verilmesi gerekmektedir. Bu da oldukça sıkıcı bir işlemdir. 
+    Halbuki biz ld bağlayıcısını gcc yoluyla çalıştırdığımızda libc kütüphanesi ve bu start-up amaç dosyalar ld bağlayıcısına gcc 
+    tarafından verilmektedir.
+
+    gcc eskiden C derleyicisi anlamına geliyordu (GNU C Compiler). Ancak zamanla derleyicileri çalıştıran bir önyüz (frontend) 
+    program haline getirildi ve ismi de "GNU Compiler Collection" biçiminde değiştirildi. Yani aslında uzunca bir süredir gcc 
+    programı ile yalnızca C programlarını değil diğer programlama dillerinde yazılmıl olan programları da derleyebilmekteyiz.
 
     Komut satırında kütüphane dosyalarının komut satırı argümanlarının sonunda belirtilmesi uygundur. Çünkü gcc programı kütüphane 
-    dosyalarının solundaki dosyalar link edilirken ilgili kütüphane dosyasını bu işleme dahil ederler. Örneğin:
+    dosyalarını yalnızca onların solunda belirtilen dosyaların bağlanmasında kullanmaktadır. Örneğin:
 
     gcc -o app app1.o libmyutil.a app2.o
 
-    Böylesi bir kullanımda "libmyutil.a" komut satırı argümanının solunda yalnızca "app1.o" dosyası vardır. Dolayısıyla yalnızca 
-    bu modül için bu kütüphaneye bakılacaktır, "app2.o" bu kütüphaneye bakılmayacaktır.
+    Böylesi bir kullanımda "libmyutil.a" kütüphanesinin solunda yalnızca "app1.o" dosyası vardır. Dolayısıyla bağlayıcı yalnızca 
+    bu modül için bu kütüphaneye bakacaktır, "app2.o" için bu kütüphaneye bakılmayacaktır.
 
-    Şüphesiz statik kütüphane kullanmak yerine aslında object modülleri de doğrudan link işlemine sokabiliriz. Örneğin:
+    Şüphesiz statik kütüphane kullanmak yerine aslında amaç dosyaları da doğrudan bağlama işlemine sokabiliriz. Örneğin:
 
     gcc -o sample sample.c x.o y.o
 
-    Ancak çok sayıda object modül söz konusu olduğunda bu işlemin zorlaşacağına dikkat ediniz. Yani "object modüller dosyalara 
-    benzetilirse statik kütüphane dosyaları dizinler gibi" düşünülebilir.
+    Ancak çok sayıda object modül söz konusu olduğunda bu işlemin zorlaşacağına dikkat ediniz. Yani amaç dosyalar (object modules) 
+    dosyalara benzetilirse statik kütüphane dosyaları dizinler gibi düşünülebilir.
 
     Derleme işlemi sırasında kütüphane dosyası -l<isim> biçiminde de belirtilebilir. Bu durumda arama sırasında "lib" öneki 
     ve ".a" uzantısı aramaya dahil edilmektedir. Yani örneğin:
 
     gcc -o sample sample.c -lmyutil
 
-    İşleminde aslında libmyutil.a (ya da libmyutil.so) dosyaları aranmaktadır. Arama işlemi sırasıyla bazı dizinlerde yapılmaktadır. 
-    Örneğin /lib dizini, /usr/lib dizini, /usr/local/lib dizini gibi dizinlere bakılmaktadır. Ancak "bulunulan dizine" bakılmamaktadır. 
-    -l seçeneği ile "belli bir dizine de bakılması isteniyorsa" -L seçeneği ile ilgili dizin belirtilebilir. Örneğin:
+    İşleminde aslında "libmyutil.a" (ya da "libmyutil.so") dosyaları aranmaktadır. Arama işlemi sırasıyla bazı dizinlerde yapılmaktadır. 
+    Örneğin "/lib" dizini, "/usr/lib dizini", "/usr/local/lib" dizini gibi dizinlere bakılmaktadır. Ancak "bulunulan dizine (current 
+    working directory)" bakılmamaktadır. -l seçeneği ile belli bir dizine de bakılması isteniyorsa "-L" seçeneği ile ilgili dizin 
+    belirtilebilir. Örneğin:
 
     gcc -o sample sample.c -lmyutil -L.
 
@@ -2770,7 +2785,7 @@
 
     gcc -o sample sample.c -lmyutil -L. -L/home/csd
 
-    Geleneksel olarak -l ve -L seçeneklerinden sonra boşluk bırakılmamaktadır. Ancak boşluk bırakılmasında bir sakınca yoktur.
+    Geleneksel olarak "-l" ve "-L" seçeneklerinden sonra boşluk bırakılmamaktadır. Ancak boşluk bırakılmasında bir sakınca yoktur.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -2789,37 +2804,37 @@
     Dinamik kütüphane dosyalarının UNIX/Linux sistemlerinde uzantıları ".so" (shared object'ten kısaltma), Windows sistemlerinde 
     ise ".dll" (Dynamic Link Library) biçimindedir.
 
-    Bir dinamik kütüphaneden bir fonksiyon çağrıldığında linker statik kütüphanede olduğu gibi gidip fonksiyonun kodunu 
-    (fonksiyonun bulunduğu object modülü) çalıştırılabilen dosyaya yazmaz. Bunun yerine çalıştırılabilen dosyaya çağrılan fonksiyonun 
-    hangi dinamik kütüphanede olduğu bilgisini yazar. Çalıştırılabilen dosyayı yükleyen işletim sistemi o dosyanın çalışması için 
-    gerekli olan dinamik kütüphaneleri çalıştırılabilen dosyayla birlikte bütünsel olarak sanal bellek alanına yüklemektedir. Böylece 
-    birtakım ayarlamalar yapıldıktan sonra artık çağrılan fonksiyon için gerçekten o anda sanal belleğe yüklü olan dinamik kütüphane 
-    kodlarına gidilmektedir. Örneğin biz app programımızda "libmyutil.so" dinamik kütüphanesinden foo isimli fonksiyonu çağırmış olalım. 
-    Bu foo fonksiyonunun kodları dinamik kütüphaneden alınıp app dosyasına yazılmayacaktır. Bu app dosyası çalıştırıldığında 
-    işletim sistemi bu app dosyası ile birlikte "libmyutil.so" dosyasını da sanal belleğe yükleyecektir. Programın akışı foo çağrısına
-    geldiğinde akış "libmyutil.so" dosyası içerisindeki foo fonksiyonunun kodlarına aktarılacaktır. Dinamik kütüphane dosyalarının 
-    bir kısmının değil, hepsinin prosesin adres alanına yüklendiğine dikkat ediniz. Tabii işletim sisteminin sanal bellek mekanizması
-    aslında yalnızca bazı sayfaları fiziksel belleğe yükleyebilecektir.
+    Bir dinamik kütüphaneden bir fonksiyon çağrıldığında linker statik kütüphanede olduğu gibi gidip fonksiyonun kodunu (fonksiyonun 
+    bulunduğu amaç dosyayı) çalıştırılabilen dosyaya yazmaz. Bunun yerine çalıştırılabilen dosyaya çağrılan fonksiyonun hangi 
+    dinamik kütüphanede olduğu bilgisini yazar. Çalıştırılabilen dosyayı yükleyen işletim sistemi o dosyanın çalışması için 
+    gerekli olan dinamik kütüphaneleri çalıştırılabilen dosyayla birlikte bütünsel olarak prosesin sanal bellek alanına yüklemektedir. 
+    Böylece birtakım ayarlamalar yapıldıktan sonra artık çağrılan fonksiyon için gerçekten o anda sanal belleğe yüklü olan dinamik 
+    kütüphane kodlarına gidilmektedir. Örneğin biz "app" programımızda "libmyutil.so" dinamik kütüphanesinden foo isimli fonksiyonu 
+    çağırmış olalım. Bu foo fonksiyonunun kodları dinamik kütüphaneden alınıp "app" dosyasına yazılmayacaktır. Bu "app" dosyası 
+    çalıştırıldığında işletim sistemi bu "app" dosyası ile birlikte "libmyutil.so" dosyasını da sanal belleğe yükleyecektir. Programın 
+    akışı foo çağrısına geldiğinde akış "libmyutil.so" dosyası içerisindeki foo fonksiyonunun kodlarına aktarılacaktır. Dinamik kütüphane 
+    dosyalarının bir kısmının değil hepsinin prosesin adres alanına yüklendiğine dikkat ediniz. (Tabii işletim sisteminin sanal bellek 
+    mekanizması aslında yalnızca bazı sayfaları fiziksel belleğe yükleyebilecektir.)
 
     Dinamik kütüphane kullanımının avantajları şunlardır:
 
-    1) Çalıştırılabilen dosyalar fonksiyon kodlarını içermezler. Dolayısıyla önemli bir disk hacmi kazanılmış olur. Oysa statik 
+    1) Çalıştırılabilen dosyalar fonksiyon kodlarını içermezler. Dolayısıyla önemli bir disk alanı kazanılmış olur. Oysa statik 
     kütüphanelerde statik kütüphanelerden çağrılan fonksiyonlar çalıştırılabilen dosyalara yazılmaktadır.
 
     2) Dinamik kütüphaneler birden fazla proses tarafından fiziksel belleğe tekrar tekrar yüklenmeden kullanılabilmektedir.
     Yani işletim sistemi arka planda aslında aynı dinamik kütüphaneyi kullanan programlarda bu kütüphaneyi tekrar tekrar fiziksel 
     belleğe yüklememektedir. Bu da statik kütüphanelere göre önemli bir bellek kullanım avantaj oluşturmaktadır. Bu durumda eğer 
     dinamik kütüphanenin ilgili kısmı daha önce fiziksel belleğe yüklenmişse bu durum dinamik kütüphane kullanan programın daha hızlı 
-    yüklemesine de yol açabilmektedir. Porg1 ve Prog2 biçiminde iki programın çalıştığını düşünelim. Bunlar aynı dinamik 
+    yüklemesine de yol açabilmektedir. Prog1 ve Prog2 biçiminde iki programın çalıştığını düşünelim. Bunlar aynı dinamik 
     kütüphaneyi kullanıyor olsun. İşletim sistemi bu dinamik kütüphaneyi bu proseslerin sanal bellek alanlarının farklı yerlerine 
-    yükleyebilir. Ancak aslında işletim sistemi sayfa tablolarını kullanarak mümkün olduğunca aslında bu iki dinamik kütüphaneyi 
-    aynı fiziksel sayfaya eşlemeye çalışacaktır. Tabii bu durumda proseslerden biri dinamik kütüphane içerisindeki bir statik 
+    yükleyebilir. Ancak aslında işletim sistemi sayfa tablolarını kullanarak mümkün olduğunca bu iki dinamik kütüphaneyi aynı 
+    fiziksel sayfaya eşlemeye çalışacaktır. Tabii bu durumda proseslerden biri dinamik kütüphane içerisindeki bir statik 
     nesneyi değiştirdiğinde artık "copy on write" mekanizması devreye girecek ve dinamik kütüphanenin o sayfasının yeni bir kopyası 
     oluşturulacaktır. Aslında bu durum fork fonksiyonu ile yeni bir prosesin yaratılması durumuna çok benzemektedir. Burada anlatılan 
-    unsurların ayrıntıları "sayfalama ve sanal bellek" kullanımın açıklandığı paragraflarda ele alınacaktırç
+    unsurların ayrıntıları "sayfalama ve sanal bellek" kullanımın açıklandığı paragraflarda ele alınacaktır.
 
     3) Dinamik kütüphaneleri kullanan programlar bu dinamik kütüphanelerdeki değişikliklerden etkilenmezler. Yani biz dinamik 
-    kütüphanenin yeni bir versiyonunu oluşturduğumuzda bunu kullanan programları derlemek ya da link etmek zorunda kalmayız. 
+    kütüphanenin yeni bir versiyonunu oluşturduğumuzda bunu kullanan programları yeniden derlemek ya da bağlamak zorunda kalmayız. 
     Örneğin bir dinamik kütüphaneden foo fonksiyonunu çağırmış olalım. Bu foo fonksiyonunun kodları bizim çalıştırılabilir dosyamızın
     içerisinde değil de dinamik kütüphanede olduğuna göre dinamik kütüphanedeki foo fonksiyonu değiştirildiğinde bizim programımız 
     artık değişmiş olan foo fonksiyonunu çağıracaktır.
@@ -2834,7 +2849,7 @@
     için işletim sistemlerinde değişik teknikler kullanılmaktadır. Windows sistemlerinde "import-export tablosu ve "load time 
     relocation" yöntemleri tercih edilmiştir. Bu sistemlerde dinamik kütüphane belli bir adrese yüklendiğinde işletim sistemi 
     o dinamik kütüphanenin "relocation" tablosuna bakarak gerekli makine komutlarını düzeltmektedir. Dinamik kütüphane fonksiyonlarının
-    çağrımı için de import tablosu ve export tablosu denilen tablolar kullanılmaktadır. UNIX/Linux dünyasında dinamik kütüphanelerin 
+    çağrımı için de "import tablosu" ve "export tablosu" denilen tablolar kullanılmaktadır. UNIX/Linux dünyasında dinamik kütüphanelerin 
     herhangi bir yere yüklenebilmesi ve minimal düzeyde relocation uygulanabilmesi için "Konumdan Bağımsız Kod (Position Independent 
     Code)" denilen teknik kullanılmaktadır. Konumdan bağımsız kod "nereye yüklenirse yüklenilsin çalışabilen kod" anlamına gelmektedir. 
     Konumdan bağımsız kod oluşturabilmek derleyicinin yapabileceği bir işlemdir. Konumdan bağımsız kod oluşturabilmek için gcc 
@@ -2851,13 +2866,13 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Pekiyi neden dinamik kütüphane dosyaları linker tarafından tıpkı çalıştırılabilir dosyalarda olduğu gibi sanal bellekte belli 
-    bir yere yüklenenince sorunsuz çalışacak biçimde oluşturulmuyor? Çalıştırılabilir dosyalar bellek boşken yüklendiğinden onların
-    belli bir yere yüklenmesinde bir sorun yoktur. Ancak bir program çok fazla dinamik kütüphane kullanabileceğine göre bu 
-    dinamik kütüphanelerin baştan yerinin belirlenmesi olanaksızdır.
+    bir yere yüklenenince sorunsuz çalışacak biçimde oluşturulmuyor? Çalıştırılabilir dosyalar sanal bellek boşken yüklendiğinden 
+    onların belli bir yere yüklenmesinde bir sorun oluşmamaktadır. Ancak bir program çok fazla dinamik kütüphane kullanabileceğine 
+    göre bu dinamik kütüphanelerin baştan yerinin belirlenmesi olanaksızdır.
 
-    Pekiyi dinamik kütüphaneler içerisindeki global değişkenlerin ve fonksiyonların yükleme yerinden bağımsız bir biçimde 
-    dinamik kütüphane içerisinden kullanılması nasıl sağlanabilir? Dinamik kütüphane içerisinde aşağıdaki, gibi bir kod parçası 
-    bulunuyor olsun:
+    Pekiyi dinamik kütüphaneler içerisindeki global değişkenlerin ve fonksiyonların yükleme yerinden bağımsız bir biçimde dinamik 
+    kütüphane içerisinden kullanılması nasıl sağlanabilir? Dinamik kütüphane içerisinde aşağıdaki gibi bir kod parçası bulunuyor 
+    olsun:
 
     int g_a;
     ...
@@ -2868,8 +2883,8 @@
     (yani tepeden itibaren adresini) bilmesi gerekir. Bir nesnenin belleğin tepesinden itibarenki adresine "mutlak adres (absolute
     address) de denilmektedir. Örneğin Intel işlemcilerinde yukarıdaki ifade aşağıdaki gibi makine komutlarına dönüştürülmektedir:
 
-    MOV  EAX, 10
-    MOV  [g_a'nın mutlak adresi], EAX
+    MOV EAX, 10
+    MOV [g_a'nın mutlak adresi], EAX
 
     İşte sorun buradaki g_a değişkeninin mutlak adresinin program yüklenene kadar bilinmemesidir. Bu sorunu çözmenin de iki yolu 
     vardır:
@@ -2894,14 +2909,14 @@
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    UNIX/Linux sistemlerinde bir dinamik kütüphane oluşturma işlemi şöyle yapılır:
+    UNIX/Linux sistemlerinde bir dinamik kütüphaneler şöyle oluşturulmaktadır:
 
-    1) Önce dinamik kütüphaneye yerleştirilecek object modüllerin -fPIC seçeneği ile "Konumdan Bağımsız Kod (Position Independent 
-    Code)" tekniği kullanılarak derlenmesi gerekir. (-fPIC seçeneğinde -f'ten sonra boşluk bırakılmamalıdır.)
+    1) Önce dinamik kütüphaneye yerleştirilecek amaç dosyaların (object files) -fPIC seçeneği ile "Konumdan Bağımsız Kod (Position 
+    Independent Code)" tekniği kullanılarak derlenmesi gerekir. (-fPIC seçeneğinde -f'ten sonra boşluk bırakılmamalıdır.)
 
-    2) Link işleminde "çalıştırılabilir (executable)" değil de "dinamik kütüphane" dosyasının oluşturulması için -shared seçeneğinin 
-    kullanılması gerekir. "-shared" seçeneği kullanılmazsa linker dinamik kütüphane değil, normal çalıştırılabilir dosya oluşturmaya
-    çalışmaktadır. Zaten bu durumda main fonksiyonu olmadığı için linker error mesajı verecektir. Örneğin:
+    2) Bağlama işleminde "çalıştırılabilir (executable)" değil de "dinamik kütüphane" dosyasının oluşturulması için -shared seçeneğinin 
+    kullanılması gerekir. "-shared" seçeneği kullanılmazsa bağlayıcı dinamik kütüphane değil, normal çalıştırılabilir dosya oluşturmaya
+    çalışmaktadır. (Zaten bu durumda main fonksiyonu olmadığı için linker hata mesajı verecektir.) Örneğin:
 
     $ gcc -fPIC a.c b.c c.c
     $ gcc -shared -o libmyutil.so a.o b.o c.o
@@ -2914,15 +2929,15 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Pekiyi biz -fPIC seçeneğini kullanmadan yani "konumdan bağımsız kod" üretmeden dinamik kütüphane oluşturmaya çalışırsak
-    ne olur? MEvcut GNU linker programları -shared seçeneği kullanıldığında global değişkenler için relocation işlemi söz konusu
-    ise bir mesaj vererek link işlemini yapmamaktadır. Yani bu durumda mevcut GNU linker programları kodun -fPIC seçeneği ile
+    ne olur? Mevcut GNU linker programları "-shared" seçeneği kullanıldığında global değişkenler için relocation işlemi söz konusu
+    ise bir mesaj vererek link işlemini yapmamaktadır. Yani bu durumda mevcut GNU linker programları kodun "-fPIC" seçeneği ile
     derlenmesini zorunlu tutmaktadır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Biz yukarıda dinamik kütüphanelerin nasıl oluşturulduğunu gördük. Pekiyi dinamik kütüphaneler nasıl kullanılmaktadır?
 
-    Dinamik kütüphane kullanan bir program link edilirken kullanılan dinamik kütüphanenin komut satırında belirtilmesi gerekir. 
+    Dinamik kütüphane kullanan bir program bağlanırken kullanılan dinamik kütüphanenin komut satırında belirtilmesi gerekir. 
     Örneğin:
 
     gcc -o app app.c libmyutil.so
@@ -2935,8 +2950,231 @@
     dinamik kütüphanelerin yüklenmesi gerektiğini ELF formatının ".dynamic" isimli bölümüne yazmaktadır. Böylece yükleyici 
     bu programı yüklerken onun kullandığı dinamik kütüphaneleri de yükleyecektir. Ancak linker bu ".dynamic" bölümüne çalıştırılabilir
     dosyanın kullandığı dinamik kütüphanelerin yol ifadesini (yani tam olarak nerede olduğunu) yazmaz. Yalnızca isimlerini 
-    yazmaktadır. İşte yükleyici bu nedenle dinamik kütüphaneleri önceden belirlenen bazı yerlerde aramaktadır. Bu yere çalıştırılabilir
-    dosyanın yüklendiği dizin (current working directory) dahil değildir.
+    yazmaktadır. İşte yükleyici (dinamik linkler) bu nedenle dinamik kütüphaneleri önceden belirlenen bazı yerlerde aramaktadır. 
+    Bu yere çalıştırılabilir dosyanın yüklendiği dizin (current working directory) dahil değildir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    İster statik kütüphane isterse dinamik kütüphane yazacak olalım yazdığımız kütüphaneler için bir başlık dosyası oluşturmak 
+    iyi bir tekniktir. Örneğin içerisinde çeşitli fonksiyonların bulunduğu "libmyutil.so" dinamik kütüphanersini "libmyutil.c" 
+    dosyasından hareketle oluşturmak isteyelim. İşte "libmyutil.c" dosyasındaki fonksiyonların prototipleri, gerekli olan sembolik 
+    sabitler, makrolar, inline fonksiyonlar, yapı bildirimleri gibi "nesne yaratmayan bildirimler"  bir başlık dosyasına yerleştirilmelidir. 
+    Böylece bu kütüphaneyi kullanacak kişiler bu dosyayı include ederek gerekli bildirimlerin kodlarını oluşturmuş olurlar. Başlık 
+    dosyaları oluşturulurken iki önemli noktaya dikkat edilmelidir:
+
+    1) Başlık dosyalarına yalnızca "nesne yaratmayan bildirimler (declarations)" yerleştirilmelidir.
+    2) Başlık dosyalarının başına "include koruması (include guard)" yerleştirilmelidir. Include koruması aşağıdaki gibi yapılabilir:
+
+    #ifndef SOME_NAME
+    #define SOME_NAME
+
+    <dosyanın içeriği>
+
+    #endif
+
+    Buradaki SOME_NAME dosya isminden hareketle uydurulmuş olan herhangi bir isim olabilir. Örneğin:
+
+    #ifndef MYUTIL_H_
+    #define MYUTIL_H_
+
+    <dosyanın içeriği>
+
+    #endif
+
+    Örneğin "myutil.so" dinamik kütüphanesinde foo ve bar isimli iki fonksiyon bulunuyor olsun. Bunun için "myutil.h" isimli
+    başlık dosyası aşağıdaki gibi oluşturulabilir:
+
+    #ifndef MYUTIL_H_
+    #define MYUTIL_H_
+
+    void foo(void);
+    void bar(void);
+
+    #endif
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Standart C fonksiyonlarının ve POSIX fonksiyonlarının bulunduğu "libc" kütüphanesi gcc ve clang programlarıyla derleme yapıldığında 
+    otomatik olarak bağlama aşamasında devreye sokulmaktadır. Yani biz standart fonksiyonları ve POSIX fonksiyonları için bağlama 
+    aşamasında kütüphane belirtmek zorunda değiliz. Default durumda gcc ve clang programları standart C fonksiyonlarını ve POSIX 
+    fonksiyonlarını dinamik kütüphaneden alarak kullanır. Ancak programcı isterse "-static" seçeneği ile statik bağlama işlemi 
+    de yapabilir. Bu durumda bu fonksiyonlar statik kütüphanelerden alınarak çalıştırılabilen dosyalara yazılacaktır. Örneğin:
+
+    gcc -o app -static app.c
+
+    "-static" seçeneği ile bağlama işlemi yapıldığında artık üretilen çalıştırılabilir dosyanın dinamik kütüphanelerle hiçbir ilgisi 
+    kalmamaktadır. Zaten "-static" seçeneği belirtildiğinde artık dinamik kütüphaneler bağlama aşamasına programcı tarafından da 
+    dahil edilememektedir. Tabii bu biçimde statik bağlama işlemi yapıldığında çalıştırılabilen dosyanın boyutu çok büyüyecektir.
+
+    Eğer "libc" kütüphanesinin default olarak bağlama aşamasında devreye sokulması istenmiyorsa "-nodefaultlibs" seçeneğinin kullanılması 
+    gerekir. Örneğin:
+
+    gcc -nodefaultlibs -o app app.c
+
+    Burada glibc kütüphanesi devreye sokulmadığı için bağlama aşamasında hata oluşacaktır. Tabii bu durumda da kütüphane açıkça 
+    belirtilebilir:
+
+    gcc -nodefaultlibs -o app app.c -lc
+
+    Bir kütüphanenin statik ve dinamik biçimi aynı anda bulunuyorsa ve biz bu kütüphaneyi "-l" seçeneği ile belirtiyorsak bu 
+    durumda default olarak kütüphanenin dinamik versiyonu devreye sokulmaktadır. Eğer bu durumda kütüphanelerin statik versiyonlarının 
+    devreye sokulması isteniyorsa "-static" seçeneğinin kullanılması ya da komut satırında açıkça statik kütüphaneye referans 
+    edilmesi gerekir. Örneğin:
+
+    gcc -o app app.c -lmyutil -L.
+
+    Burada eğer hem "libmyutil.so" hem de "libmyutil.a" dosyaları varsa "libmyutil.so" dosyası kullanılacaktır. Yani dinamik bağlama 
+    yapılacaktır. Tabii biz açıkça statik kütüphanenin ya da dinamik kütüphanenin kullanılmasını sağlayabiliriz:
+
+    gcc -o app app.c libmyutil.a
+
+    Aynı etkiyi şöyle de sağlayabilirdik:
+
+    gcc -static -o app app.c -lmyutil -L.
+
+    Burada "libc" kütüphanesinin dinamik biçimi devreye sokulacaktır. Ancak "libmyutil" kütüphanesi statik biçimde bağlanmıştır.
+    Eğer "-static" seçeneği kullanılırsa bu durumda tüm kütüphanelerin statik versiyonları devreye sokulmaktadır. Tabii bu durumda 
+    biz açıkça dinamik kütüphanelerin bağlama işlemine sokulmasını isteyemeyiz. Örneğin:
+
+    gcc -static -o app app.c libmyutil.so
+
+    Bu işlem başarısız olacaktır. Çünkü "-static" seçeneği zaten "tüm kütüphanelerin statik olarak bağlanacağı edileceği" anlamına 
+    gelmektedir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+   Dinamik kütüphane kullanan programlarda bağlayıcı tarafından ELF formatında iki önemli bölüm oluşturulmaktadır. Bu bölümler 
+   ".dynamic" ve ".dynsym" isimli bölümlerdir. ".dynmaic" bölümü çalıştırılabilir dosyanın kullandığı dinamik kütüphaneler hakkında 
+   bilgileri içermektedir. ".dynsym" bölümü ise dinamki kütüphanelerden kullanılan sembollerin tutulduğu sembol tablosudur. Programın 
+   normal sembollerinin ".symtab" isimli bölümdeki sembol tablosunda tutulduğunu anımsayınız.
+
+   32 bit ELF formatının ".dynamic" bölümünün yapısal içeriği şöyledir:
+
+    typedef struct {
+        Elf32_Sword d_tag;
+        union {
+            Elf32_Word d_val;
+            Elf32_Addr d_ptr;
+        } d_un;
+    } Elf32_Dyn;
+
+    64 bit ELF formatının ".dynamic" bölümünün yapısal içeriği ise şöyledir:
+
+    typedef struct {
+        Elf64_Sxword d_tag;
+        union {
+            Elf64_Xword d_val;
+            Elf64_Addr d_ptr;
+        } d_un;
+    } Elf64_Dyn;
+
+    ELF formatının ".dynamic" bölümü yukarıdaki yapılardan oluşan bir dizi gibidir. Bu bölümün içeriğini aşağıdaki gibi temsil
+    edebiliriz:
+
+    d_tag d_un
+    d_tag d_un
+    d_tag d_un
+    d_tag d_un
+    d_tag d_un
+    ....
+
+    Burada d_un ya d_val olabilir ya da d_ptr olabilir, ancak ikisi birden olamaz. d_val bir değer, d_ptr ise bir sanal adres 
+    belirtmektedir.
+
+    Yapıların d_tag elemanı ilgili girişin türünü belirtmektedir. Yapının d_un elemanının d_val ya da d_ptr elemanını mı içereceği
+    bu d_tag elemanına bağlıdır. Önemli bazı d_tag değerleri şunlardır:
+
+    DT_NEEDED: Bu tag'ı d_val elemanı izlemektedir. Bu tag'daki d_val elemanı modülün yüklenmesi için gerekli olan dinamik kütüphanenin
+    isminin (yol ifadesinin değil) string tablosundaki (".strtab") indeks numarası belirtilmektedir.
+
+    DT_SONAME: Bu tag'ı d_val elemanı izlemektedir. Bu tag dinamik kütüphanelerde bulunmaktadır. Burada dinamik kütüphanenin "so 
+    ismininin" bulunduğu string tablosundaki (".strtab" bölümündeki) indeks belirtilmektedir.
+
+    Buradaki pek çok tag önemli bilgiler içermektedir. Bu tag'lar hakkında bilgileri ELF formatına başvurarak edinebilirsiniz.
+    İzleyen paragraflarda bazı bilgiler için bu tag'lara referans edeceğiz.
+
+    Aşağıda readelf programı ile ".dynamic" bölümünün görüntülenme biçimi gösterilmektedir:
+
+    Dynamic section at offset 0xd78 contains 28 entries:
+    Tag        Type                         Name/Value
+    0x0000000000000001 (NEEDED)             Shared library: [libmyutil.so]
+    0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+    0x000000000000000c (INIT)               0x610
+    0x000000000000000d (FINI)               0x85c
+    0x0000000000000019 (INIT_ARRAY)         0x10d68
+    0x000000000000001b (INIT_ARRAYSZ)       8 (bytes)
+    0x000000000000001a (FINI_ARRAY)         0x10d70
+    0x000000000000001c (FINI_ARRAYSZ)       8 (bytes)
+    0x000000006ffffef5 (GNU_HASH)           0x298
+    0x0000000000000005 (STRTAB)             0x3c0
+    0x0000000000000006 (SYMTAB)             0x2b8
+    0x000000000000000a (STRSZ)              151 (bytes)
+    0x000000000000000b (SYMENT)             24 (bytes)
+    0x0000000000000015 (DEBUG)              0x0
+    0x0000000000000003 (PLTGOT)             0x10f78
+    ......
+
+    O halde çalıştırılabilir dosyanın ya da dinamik kütüphane dosyasının hangi dinamik kütüphaneleri kullandığını komut satırından
+    aşağıdaki gibi elde edebiliriz:
+
+    $ readelf -d app | grep "NEEDED"
+    0x0000000000000001 (NEEDED)             Shared library: [libmyutil.so]
+    0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+
+    Tabii biz bu biçimde yalnızca çalıştırılabilen dosyanın doğrudan kullandığı dinamik kütüphaneleri görüntülemiş oluruz. 
+    Oysa dinamik kütüphaneler de başka dinamik kütüphaneleri kullanıyor olabilir. Bu tür durumlarda özyinelemeli (recursive) 
+    biçimde yükleme yapılmaktadır. Bir çalıştırılabilir dosyanın yüklenebilmesi için özyinelemeli biçimde bütün gereken
+    dinamik kütüphaneler "ldd" komutuyla elde edilebilmektedir. Örneğin:
+
+    $ ldd app
+	linux-vdso.so.1 (0x0000ffffaf206000)
+	libmyutil.so => not found
+	libc.so.6 => /lib/aarch64-linux-gnu/libc.so.6 (0x0000ffffaf03f000)
+	/lib/ld-linux-aarch64.so.1 (0x0000ffffaf1d6000)
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Dinamik kütüphanelerden kullanılan semboller genellikle ELF formatının ".dynsym" isimli sembol tablosunda bulunmaktadır. 
+    Aslında dinamik kütüphanedeki sembollerin hangi sembol tablosunda bulunacağı da ".dynamic" bölümündeki DT_SYMTAB tag'ında
+    belirtilmektedir. ".dynsym" bölümü daha önce incelediğimiz sembol tablosu formatına sahiptir. Aşağıda örnek bir ".dynsym"
+    sembol tablosunun readelf programı ile elde edilen görüntüsü verilmiştir:
+
+    Symbol table '.dynsym' contains 11 entries:
+    Num:    Value          Size Type    Bind   Vis      Ndx Name
+        0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND
+        1: 0000000000000610     0 SECTION LOCAL  DEFAULT   11
+        2: 0000000000011000     0 SECTION LOCAL  DEFAULT   22
+        3: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_deregisterTMCloneTab
+        4: 0000000000000000     0 FUNC    WEAK   DEFAULT  UND __cxa_finalize@GLIBC_2.17 (2)
+        5: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND bar
+        6: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __libc_start_main@GLIBC_2.17 (2)
+        7: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__
+        8: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND abort@GLIBC_2.17 (2)
+        9: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND foo
+        10: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMCloneTable
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Linux sistemlerinde dinamik kütüphane kullanan programların yüklenmesi süreci biraz ilginçtir. Anımsanacağı gibi aslında
+    her türlü program exec fonksiyonları tarafındnan yüklenip çalıştırılmaktadır. Bu exec fonksiyonlarının taban olanı "execve"
+    isimli fonksiyondur. (Yani diğer exec fonksiyonları bunu çağırmaktadır.) execve fonksiyonu da bir sistem fonksiyonu olarak 
+    yazılmıştır.
+
+    Dinamik kütüphane kullanan programların kullandığı dinamik kütüphaneler ismine "dinamik linker (dynamic linker)" denilen
+    özel bir program tarafındna yüklenmektedir. exec fonksiyonları aslında sıra dinamik kütüphanelerin yüklenmesine geldiğinde 
+    dinamik linker denilen bu programı çalıştırmaktadır. Dinamik linker "ld.so" ismiyle temsil edilmektedir. Programın kullandığı 
+    dinamik kütüphanelerin başka bir program tarafından yüklenmesi esneklik sağlamaktadır. Bu sayede sistem programcısı isterse 
+    (genellikle istemez) bu dinamik linker programını değiştirerek yükleme sürecinde özel işlemler yapabilir. Dinamik linker 
+    tamamen user modda çalışmaktadır.
+
+    Programın dinamik kütüphanelerinin yüklenmesinde kullanılacak olan dinamik linker'ın yol ifadesi ELF formatında Program Başlık 
+    Tablosunda INTERP türüyle belirtilmektedir. INTERP türüne ilişkin Program Başlığında dinamik bağlayıcının yol ifadsininin 
+    bulunduğu dosya offset'i belirtilmektedir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    <BURADA KALDIK>
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -2944,38 +3182,433 @@
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+     Bir programın kullandığı dinamik kütüphaneler ldd isimli utility program ile basit bir biçimde görüntülenebilir. Örneğin:
+
+    $ ldd sample
+	linux-vdso.so.1 (0x00007fff38162000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f7ec0b5c000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007f7ec114f000
+
+    ldd programı dinamik kütüphanelerin kullandığı dinamik kütüphaneleri de görüntülemektedir. Programın doğrudan kullandığı dinamik
+    kütüphanelerin listesi readelf komutuyla aşağıdaki gibi de elde edilebilir:
+
+    $ readelf -d sample | grep "NEEDED"
+    0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
 
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+    Pekiyi bizim programımız örneğin "libmyutil.so" isimli bir dinamik kütüphaneden çağrı yapıyor olsun. Bu "libmyutil.so" 
+    dosyasının program çalıştırılırken nerede bulundurulması gerekir? İşte program çalıştırılırken ilgili dinamik kütüphane 
+    dosyasının özel bazı dizinlerde bulunuyor olması gerekmektedir. Yükleme sırasında hangi dizinlere bakıldığı "man ld.so" 
+    sayfasından elde edilebilir. Bu dokümanda dinamik kütüphanenin bulunabilmesi için sırasıyla tek tek hangi dizinlere bakıldığı 
+    belirtilmiştir. Dinamik linker'ın dinamik kütüphaneleri nerede ve nasıl aradığının bazı ayrıntıları vardır. Ancak konuyu 
+    basitleştirirsek dinamik linker LD_LIBRARY_PATH isimli çevre değişkeni ile belirtilen dizinlerde dinamik kütüphane dosyalarını
+    aramaktadır. LD_LIBRARY_PATH çevre değişkeni normal olarak çevre değişken listesinde bulunmaz. Programcının bunu eklemesi 
+    gerekebilmektedir. Bu çevre değişkeninin değeri ':' karakterleriyle ayrılmış olan dizinlerden oluşmalıdır. İşte dinamik linker 
+    tek tek bu dizinlere bakmaktadır. Örneğin:
+
+    export LD_LIBRARY_PATH=/home/kaan:/home/kaan/Study/Unix-Linux-SysProg
+
+    Burada artık dinamik kütüphaneler "/home/kaan" dizininde ve "/home/kaan/Unix-Linux-SysProg" dizininde aranacaktır. Eğer biz
+    LD_LIBRARY_PATH çevre değişkenine "." biçiminde dizin eklersek buradaki "." o anda bulunulan dizin anlamına gelmektedir. Örneğin:
+
+    export LD_LIBRARY_PATH=/home/kaan:/home/kaan/Study/Unix-Linux-SysProg:.
+
+    Dinamik linker eğer dinamik kütüphaneyi LD_LIBRARY_PATH ile belirtilen dizinde bulamazsa bu durumda /lib, /usr/lib, /lib64 ve
+    /usr/lib64 dizinlerine de bakmaktadır. (Bu 64'lü dizinlere 32 bit sistemlerde ve bazı 64 bit sistemlerde bakılmamaktadır.) O halde
+    dinamik kütüphanemizin dinamik linker tarafından bulunmasını istiyorsak onu doğrudan /lib ya da /usr/lib dizinlerinin içerisine de
+    yerleştirebiliriz. /lib dizini sistemin yüklenmesi için de gereken aşağı seviyeli kütüphanelerin bulunduğu dizindir. Programcının 
+    bu tür durumlarda /usr/lib dizinini tercih etmesi uygundur.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Dinamik kütüphanelerin aranacağı yer aslında doğrudan çalıştırılabilen dosyanın içerisine (.dynamic isimli bölüme (section)) 
+    de yazılabilir. Bunun için "-rpath <yol ifadesi>" linker seçeneği kullanılmalıdır. Buradaki yol ifadesinin mutlak olması gerekir. 
+    Ancak eskiden bunun ELF formatında için DT_RPATH isimli tag kullanılırken daha sonra bu tag "deprecated" yapılmış ve DT_RUNPATH 
+    tag'ı kullanılmaya başlanmıştır. "-rpath" seçeneğini linker'a geçirebilmek için gcc'de "-Wl" seçeneğini kullanmak gerekir. "-Wl" 
+    seçeneği bitişik yazılan virgüllü alanlardan oluşmaktadır. gcc bunu ld linker'ına virgüller yerine boşluklar koyarak geçirmektedir. 
+    Örneğin:
+
+    gcc -o app app.c -Wl,-rpath,/home/csd/Study/Unix-Linux-SysProg libmyutil.so
+
+    Burada ELF formatının DT_RUNPATH tag'ına yerleştirme yapılmaktadır. Çalıştırılabilir dosyaya iliştirilen rpath bilgisi readelf 
+    programı ile aşağıdaki gibi görüntülenebilir:
+
+    $ readelf -d app | grep "RUNPATH"
+    0x000000000000001d (RUNPATH)            Library runpath: [/home/csd/Study/Unix-Linux-SysPro
+
+    Biz bu tag'a birden fazla dizin de yerleştirebiliriz. Bu durumda yine dizinleri ':' ile ayırmamız gerekir. Örneğin:
+
+    gcc -o app app.c -Wl,-rpath,/home/csd/Study/Unix-Linux-SysProg:/home/kaan libmyutil.so
+
+    Birden fazla kez -rpath seçeneği kullanıldığında bu seçenekler tek bir DT_RUNPATH tag'ına aralarına ':' karakteri getirilerek 
+    yerleştirilmektedir. Yani aşağıdaki işlem yukarıdaki ile eşdeğerdir:
+
+    gcc -o app app.c -Wl,-rpath,/home/csd/Study/Unix-Linux-SysProg,-rpath,/home/kaan libmyutil.so
+
+    Eğer DT_RPATH tag'ına yerleştirme yapılmak isteniyorsa linker seçeneklerine ayrıca --disable-new-dtags seçeneğinin de girilmesi 
+    gerekmektedir. Örneğin:
+
+    gcc -o app app.c -Wl,-rpath,/home/csd/Study/Unix-Linux-SysProg,--disable-new-dtags libmyutil.so
+
+    DT_RPATH tag'ını da aşağıdaki gibi görüntüleyebiliriz:
+
+    $ readelf -d app | grep "RPATH"
+    0x000000000000000f (RPATH)              Library rpath: [/home/csd/Study/Unix-Linux-SysProg]
+
+    Yukarıda da belirttiğimiz gibi DT_RPATH tag'ı bir süredir "deprecated" yapılmıştır.
+
+    Çalıştırılabilir dosyaya DT_RUNPATH tag'ının mutlak yol ifadesi biçiminde girilmesi kullanım sorunlarına yol açabilmektedir. 
+    Çünkü bu durumda dinamik kütüphaneler uygulamanın kurulduğu dizine göreli biçimde konuşlandırılacağı zaman kurulum yeri 
+    değiştirildiğinde sorunlar oluşabilmektedir. Örneğin biz çalıştırılabilir dosyanın DT_RUNPATH tag'ına home/kaan/test isimli 
+    yol ifadesini yazmış olalım. Programımızı ve dinamik kütüphanemizi bu dizine yerleştirirsek bir sorun oluşmayacaktır. Ancak 
+    başka bir dizine yerleştirirsek dinamik kütüphanemiz bulunamayacaktır. İşte bunu engellemek için -rpath seçeneğinde '$ORIGIN' 
+    argümanı kullanılmaktadır. Buradaki '$ORIGIN' argümanı o anda uygulamanın bulunduğu dizini temsil etmektedir. Örneğin: 
+
+    gcc -o app app.c -Wl,-rpath,'$ORIGIN'/. libmyutil.so
+
+    Burada artık çalıştırılabilen dosya nereye yerleştirilirse yerleştirilsin dinamik kütüphaneler onun yerleştirildiği dizinde 
+    aranacaktır.
+
+    Aslında arama sırası bakımından DT_RPATH tag'ının en yukarıda olması (daha doğrusu LD_LIBRARY_PATH'in yukarısında olması) yanlış 
+    bir tasarımdır. Geriye doğru uyumu koruyarak bu yanlış tasarım DT_RUNPATH tag'ı ile telafi edilmiştir. DT_RUNPATH tag'ına 
+    LD_LIBRARY_PATH çevre değişkeninden sonra başvurulmaktadır. (Bunun için "man ld.so" sayfasındaki sıralamayı gözden geçiriniz.)
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Dinamik kütüphanelerin aranması sırasında "/lib" ve "/usr/lib" dizinlerine bakılmadan önce özel bir dosyaya da bakılmaktadır. 
+    Bu dosya "/etc/ld.so.cache" isimli dosyadır. "/etc/ld.so.cache" dosyası aslında binary bir dosyadır. Bu dosya hızlı aramanın 
+    yapılabilmesi için "sözlük (dictionary)" tarzı yani algoritmik aramaya izin verecek biçimde bir içeriğe sahiptir. Bu dosya
+    ilgili dinamik kütüphane dosyalarının hangi dizinler içerisinde olduğunu gösteren bir yapıdadır. (Yani bu dosya .so dosyalarının 
+    hangi dizinlerde olduğunu belirten binary bir dosyadır.) Başka bir deyişle bu dosyanın içerisinde "falanca .so dosyası filanca 
+    dizinde" biçiminde bilgiler vardır. İlgili .so dosyasının yerinin bu dosyada aranması dizinlerde aranmasından çok daha hızlı 
+    yapılabilmektedir.
+
+    Pekiyi bu "/etc/ld.so.cache" dosyasının içerisinde hangi ".so" dosyaları vardır? Aslında bu dosyanın içerisinde "/lib" ve 
+    "/usr/lib" dizinindeki ".so" dosyalarının hepsi bulunmaktadır. Ama programcı isterse kendi dosyalarını da bu cache dosyasının 
+    içerisine yerleştirebilir. Pekiyi neden böyle bir cache dosyasına gereksinim duyulmuştur? İşte dinamik kütüphaneler yüklenirken 
+    "/lib" ve "/usr/lib" dizinlerinin taranması göreli olarak uzun zaman almaktadır. Bu da programın yüklenme süresini uzatabilmektedir. 
+    Halbuki bu dizinlere bakılmadan önce bu cache dosyasına bakılırsa ilgili dosyanın olup olmadığı varsa nerede olduğu çok daha 
+    hızlı bir biçimde elde edilebilmektedir. Burada dikkat edilmesi gereken nokta bu cache dosyasına "/lib" ve "/usr/lib" dizinlerinden 
+    daha önce bakıldığı ve bu dizinlerin içeriğinin de zaten bu cache dosyasının içerisinde olduğudur. O halde aslında "/lib" ve "/usr/lib"
+    dizinlerinde arama çok nadir olarak yapılmaktadır. Bu cache dosyasına LD_LIBRARY_PATH dizininden daha sonra bakılmaktadır. O halde 
+    programcının kendi ".so" dosyalarını da eğer uzun süreliğine konuşlandıracaksa bu cache dosyasının içerisine yazması tavsiye 
+    edilmektedir.
+
+    Pekiyi "/etc/ld.so.cache" dosyasına biz nasıl bir dosya ekleriz? Aslında programcı bunu dolaylı olarak yapmaktadır. Şöyle ki: 
+    "/sbin/ldconfig" isimli bir program vardır. Bu program "/etc/ld.so.conf" isimli bir text dosyasına bakar. Bu dosya dizinlerden 
+    oluşmaktadır. Bu ldconfig programı bu dizinlerin içerisindeki "so" dosyalarını "/etc/ld.so.cache" dosyasına eklemektedir. 
+    Şimdilerde "/etc/ld.so.conf" dosyasının içeriği şöyledir:
+
+    include /etc/ld.so.conf.d/*.conf
+
+    Bu satır "/etc/ld.so.conf.d" dizinindeki tüm ".conf" uzantılı dosyaların bu işleme dahil edileceğini belirtmektedir.
+
+    Biz ldconfig programını çalıştırdığımızda bu program "/lib", "/usr/lib" ve "/etc/ld.so.conf" (dolayısıyla "/etc/ld.so.conf.d" 
+    dizinindeki ".conf" dosyalarına) bakarak "/etc/ld.so.cache" dosyasını yeniden oluşturmaktadır. O halde bizim bu cache'e ekleme yapmak 
+    için tek yapacağımız şey "/etc/ld.so.conf.d" dizinindeki bir ".conf" dosyasına yeni bir satır olarak bir dizinin yol ifadesini girmektir. 
+    (".conf" dosyaları her satırda bir dizinin yol ifadesinden oluşmaktadır.) Tabii programcı isterse bu dizine yeni bir ".conf" dosyası 
+    da ekleyebilir. İşte programcı bu işlemi yaptıktan sonra "/sbin/ldconfig" programını çalıştırınca artık onun eklediği dizinin 
+    içerisindeki ".so" dosyaları da "/etc/ld.so.cache" dosyasının içerisine eklenmiş olacaktır. Daha açık bir anlatımla programcı 
+    bu cache dosyasına ekleme işini adım adım şöyle yapar:
+
+    1) Önce ".so" dosyasını bir dizine yerleştirir.
+    2) Bu dizinin ismini "/etc/ld.so.conf.d" dizinindeki bir dosyanın sonuna ekler. Ya da bu dizinde yeni conf dosyası oluşturarak
+    dizini bu dosyanın içerisine yazar.
+    3) "/sbin/ldconfig" programını çalıştırır.
+
+    ldconfig programının "sudo" ile çalıştırılması gerektiğine dikkat ediniz. Zaten "/sbin" dizinindeki tüm programlar "super user"
+    için bulundurulmuştur.
+
+    Programcı "/etc/ld.so.conf.d" dizinindeki herhangi bir dosyaya değil de -f seçeneği ile kendi belirlediği bir dosyaya da ilgili 
+    dizini yazabilmektedir. Başka bir deyişle "-f" seçeneği "şu config dosyasına da bak" anlamına gelmektedir. ldconfig her 
+    çalıştırıldığında sıfırdan yeniden cache dosyasını oluşturmaktadır.
+
+    Programcı "/lib" ya da "/usr/lib" dizinine bir "so" dosyası eklediğinde ldconfig programını çalıştırması zorunlu olmasa da 
+    iyi bir tekniktir. Çünkü o dosya da cache dosyasına yazılacak ve daha hızlı bulunacaktır.
+
+    ldconfig programında "-p" seçeneği ile cache dosyası içerisindeki tüm dosyalar görüntülenebilmektedir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Kütüphane dosyalarının "so" isimleri denilen bir isimleri de bulunabilmektedir. Kütüphane dosyalarının "so" isimleri linker 
+    tarafından kullanılan isimleridir. Kütüphane dosyası oluşturulurken "so" isimleri verilmeyebilir. Yani bir kütüphane dosyasının 
+    "so" ismi olmak zorunda değildir. Kütüphane dosyalarına "so" isimlerini vermek için "-soname <isim>" linker seçeneği 
+    kullanılmaktadır. Kütüphanelere verilen "so" isimleri ELF formatının dinamik bölümündeki (dynamic section) SONAME isimli 
+    bir tag'ına yerleştirilmektedir. "-soname" komut satırı argümanı linker'a ilişkin olduğu için "-Wl" seçeneği ile kullanılmalıdır. 
+    Örneğin biz libx.so isimli bir dinamik kütüphaneyi "so" ismi vererek oluşturmak isteyelim. Bu işlemi şöyle yapabiliriz:
+
+    gcc -o libx.so -fPIC -shared -Wl,-soname,liby.so libx.c
+
+    Burada "libx.so" kütüphane dosyasına "liby.so" "so" ismi verilmiştir. Kütüphane dosyalarına iliştirilen "so" isimleri 
+    readelf ile aşağıdaki gibi görüntülenebilir:
+
+    $ readelf -d libx.so | grep "SONAME"
+    0x000000000000000e (SONAME)             Kitaplık so_adı: [liby.so]
+
+    Aynı işlem objdump programıyla da şöyle yapılabilir:
+
+    objdump -x libx.so | grep "SONAME"
+    SONAME               liby.so
+
+    Tabii yukarıda da belirttiğimiz gibi biz dinamik kütüphanelere "so" ismi vermek zorunda değiliz.
+
+    "so" ismi içeren bir kütüphaneyi kullanan bir program link edilirken linker çalıştırılabilen dosyaya "so" ismini içeren 
+    kütüphanenin ismini değil "so" ismini yazmaktadır. Yukarıdaki örneğimizde "libx.so" kütüphanesi "so" ismi olarak "liby.so"
+    ismini içermektedir. Şimdi libx.so dosyasını kullanan "app.c" dosyasını derleyip link edelim:
+
+    gcc -o app app.c libx.so
+
+    Burada link işleminde "libx.so" dosya ismi kullanılmıştır. Ancak oluşturulan "app" dosyasının içerisine linker bu ismi 
+    değil, "so" ismi olan "liby.so" ismini yazacaktır. Örneğin:
+
+    $ readelf -d app | grep "NEEDED"
+    0x0000000000000001 (NEEDED)             Paylaşımlı kitaplık: [liby.so]
+    0x0000000000000001 (NEEDED)             Paylaşımlı kitaplık: [libc.so.6]
+
+    O halde biz buradaki "app" dosyasını çalıştırmak istediğimizde yükleyici (yani dinamik linker) artık "libx.so" dosyasını 
+    değil, "liby.so" dosyasını yüklemeye çalışacaktır. Örneğin.
+
+    $ export LD_LIBRARY_PATH=.
+    $ ./app
+    ./app: error while loading shared libraries: liby.so: cannot open shared object file: No such file or directory
+
+    Tabii yukarıda belirttiğimiz gibi eğer kütüphaneyi oluştururken ona "so" ismi vermeseydik bu durumda linker "app" dosyasına
+    "libx.so" dosyasını yazacaktı ve yükleyici de (dynamic linker) bu dosyası yükleyecekti.
+
+    Pekiyi yukarıdaki örnekte "app" programı artık "liby.so" dosyasını kullanıyor gibi olduğuna göre ve böyle de bir dosya 
+    olmadığına göre bu işlemlerin ne anlamı vardır? İşte biz bu örnekte "so" ismine ilişkin dosyayı bir sembolik link dosyası 
+    haline getirirsek ve bu sembolik link dosyası da "libx.so" dosyasını gösterir hale gelirse sorunu ortadan kaldırabiliriz. 
+    Örneğin:
+
+    $ ln -s libx.so liby.so
+    $ ls -l liby.so
+    lrwxrwxrwx 1 kaan study 7 Şub 25 16:44 liby.so -> libx.so
+
+    Şimdi artık "app" dosyasını çalıştırmak istediğimizde yükleyici "liby.so" dosyasını yüklemek isteyecektir. Ancak "liby.so" 
+    dosyası da zaten "libx.so" dosyasını belirttiği için yine "libx.so" dosyası yüklenecektir. Yani artık "app" dosyasını 
+    çalıştırabiliriz. Tabii burada tüm bunları neden yapmış olduğumuza bir anlam verememiş olabilirsiniz. İşte bunun anlamını 
+    izleyen paragraflarda dinamik kütüphanelerin versiyonlanması konusunda açıklayacağız.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    UNIX/Linux sistemlerinde dinamik kütüphane dosyalarına isteğe bağlı olarak birer versiyon numarası verilebilmektedir. Bu 
+    versiyon numarası dosya isminin bir parçası durumundadır. Linux sistemlerinde izlenen tipik numaralandırma (convention) 
+    şöyledir:
+
+    <dosya_ismi>.so.<majör_numara>.<minör_yüksek_numara>.<minör_alçak_numara>
+
+    Örneğin:
+
+    libmyutil.so.2.4.6
+
+    Majör numaralar büyük değişiklikleri, minör numaralar ise küçük değişiklikleri anlatmaktadır. Majör numara değişirse yeni 
+    dinamik kütüphane eskisiyle uyumlu olmaz. Burada "uyumlu değildir" lafı eski dinamik kütüphaneyi kullanan programların 
+    yenisini kullanamayacağı anlamına gelmektedir. Çünkü muhtemelen bu yeni versiyonda fonksiyonların isimlerinde, parametrik 
+    yapılarında değişiklikler söz konusu olmuş olabilir ya da bazı fonksiyonlar silinmiş olabilir. Fakat majör numarası aynı 
+    ancak minör numaraları farklı olan kütüphaneler birbirleriyle uyumludur. Yani alçak minör numarayı kullanan program yüksek 
+    minör numarayı kullanırsa sorun olmayacaktır. Bu durumda tabii yüksek minör numaralı kütüphanede hiçbir fonksiyonun ismi, 
+    parametrik yapısı değişmemiş ve hiçbir fonksiyon silinmemiş olmalıdır. Örneğin yüksek minör numaralarda fonksiyonlarda 
+    daha hızlı çalışacak biçimde optimizasyonlar yapılmış olabilir. Ya da örneğin yüksek minör numaralarda yeni birtakım 
+    fonksiyonlar da eklenmiş olabilir. Çünkü yeni birtakım fonksiyonlar eklendiğinde eski fonksiyonlar varlığını devam ettirmektedir. 
+    Tabii yine de bu durum dinamik kütüphanenin eski versiyonunu kullanan programların düzgün çalışacağı anlamına gelmemektedir. 
+    Çünkü programcılar kodlarına yeni birtakım şeyler eklerken istemeden eski kodların çalışmasını da bozabilmektedir. (Bu tür 
+    problemler Windows sistemlerinde eskiden ciddi sıkıntılara yol açmaktaydı. Bu probleme Windows sistemlerinde "DLL cehennemi 
+    (DLL Hell)" deniyordu.)
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Linux sistemlerinde versiyonlama bakımından bir dinamik kütüphanenin üç ismi bulunmaktadır:
+
+    1) Gerçek ismi (real name)
+    2) so ismi (so name)
+    3) Linker ismi (linker name)
+
+    Kütüphanenin majör ve çift minör versiyonlu ismine gerçek ismi denilmektedir. Örneğin:
+
+    libmyutil.so.2.4.6
+
+    "so" ismi ise yalnızca majör numara içeren ismidir. Örneğin yukarıdaki gerçek ismin "so" ismi şöyledir:
+
+    libmyutil.so.2
+
+    Linker ismi ise hiç versiyon numarası içermeyen ismidir. Örneğin yukarıdaki kütüphanelerin linker ismi ise şöyledir:
+
+    libmyutil.so
+
+    İşte tipik olarak "so" ismi gerçek isme sembolik link, linker ismi de en yüksek numaralı "so" ismine sembolik link yapılır.
+
+    linker ismi ---> so ismi ---> gerçek ismi
+
+    Örneğin:
+
+    gcc -o libmyutil.so.1.0.0 -shared -fPIC libmyutil.c     (gerçek isimli kütüphane dosyası oluşturuldu)
+    ln -s libmyutil.so.1.0.0 libmyutil.so.1                 (so ismi oluşturuldu)
+    ln -s libmyutil.so.1 libmyutil.so                       (linker ismi oluşturuldu)
+
+    Burada oluşturulan üç dosyayı "ls -l" komutu ile görüntüleyelim:
+
+    lrwxrwxrwx 1 kaan study    14 Şub 25 15:45 libmyutil.so -> libmyutil.so.1
+    lrwxrwxrwx 1 kaan study    18 Şub 25 15:45 libmyutil.so.1 -> libmyutil.so.1.0.0
+    -rwxr-xr-x 1 kaan study 15736 Şub 25 15:45 libmyutil.so.1.0.0
 
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+    Linux sistemlerinde versiyonlama bakımından bir dinamik kütüphanenin üç ismi bulunmaktadır:
 
+    1) Gerçek ismi (real name)
+    2) so ismi (so name)
+    3) Linker ismi (linker name)
+
+    Kütüphanenin majör ve çift minör versiyonlu ismine gerçek ismi denilmektedir. Örneğin:
+
+    libmyutil.so.2.4.6
+
+    "so" ismi ise yalnızca majör numara içeren ismidir. Örneğin yukarıdaki gerçek ismin "so" ismi şöyledir:
+
+    libmyutil.so.2
+
+    Linker ismi ise hiç versiyon numarası içermeyen ismidir. Örneğin yukarıdaki kütüphanelerin linker ismi ise şöyledir:
+
+    libmyutil.so
+
+    İşte tipik olarak "so" ismi gerçek isme sembolik link, linker ismi de en yüksek numaralı "so" ismine sembolik link yapılır.
+
+    linker ismi ---> so ismi ---> gerçek ismi
+
+    Örneğin:
+
+    gcc -o libmyutil.so.1.0.0 -shared -fPIC libmyutil.c     (gerçek isimli kütüphane dosyası oluşturuldu)
+    ln -s libmyutil.so.1.0.0 libmyutil.so.1                 (so ismi oluşturuldu)
+    ln -s libmyutil.so.1 libmyutil.so                       (linker ismi oluşturuldu)
+
+    Burada oluşturulan üç dosyayı "ls -l" komutu ile görüntüleyelim:
+
+    lrwxrwxrwx 1 kaan study    14 Şub 25 15:45 libmyutil.so -> libmyutil.so.1
+    lrwxrwxrwx 1 kaan study    18 Şub 25 15:45 libmyutil.so.1 -> libmyutil.so.1.0.0
+    -rwxr-xr-x 1 kaan study 15736 Şub 25 15:45 libmyutil.so.1.0.0
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												123. Ders 25/02/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Dinamik kütüphanelerin linker isimleri o kütüphaneyi kullanan programlar link edilirlen link aşamasında (link ederken) 
+    kullanılan isimlerdir. Bu sayede link işlemini yapan programcıların daha az tuşa basarak genel bir isim kullanması sağlanmıştır. 
+    Bu durumda örneğin biz libmyutil isimli kütüphaneyi kullanan programı link etmek istersek şöyle yapabiliriz:
+
+    gcc -o app app.c libmyutil.so
+
+    Ya da şöyle yapabiliriz:
+
+    gcc -o app app.c -lmyutil -L.
+
+    Burada aslında "libmyutil.so" dosyası "so ismine" "so" ismi de "gerçek isme link yapılmış" durumdadır. Yani bu komutun 
+    aslında eşdeğeri şöyledir:
+
+    gcc -o app app.c libmyutil.so.1.0.0
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+    Yukarıda anlattıklarımızı özetlersek geldiğimiz noktayı daha iyi kavrayabiliriz:
 
------------------------------------------------------------------------------------------------------------------------------*/
+    1) Bir dinamik kütüphane oluştururken ona bir versiyon numarası da atanabilmektedir. Örneğin biz oluşturduğumuz "myutil" 
+    dinamik kütüphanesine "1.0.0" versiyon numarası atamış olalım. Bu durumda kütüphanemizin gerçek ismi "libmyutil.so.1.0.0" 
+    olacaktır. Kütüphanemizi aşağıdaki gibi derlemiş olalım:
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+    $ gcc -fPIC -shared -o libmyutil.so.1.0.0 -Wl,-soname,libmyutil.so.1 libmyutil.c
 
------------------------------------------------------------------------------------------------------------------------------*/
+    2) Dinamik kütüphanelerin "so ismi" kütüphanelerin içerisine yazılan ismidir. Yukarıdaki gibi bir derlemede biz "libmyutil.so.1.0.0"
+    kütüphanesinin içerisine "so ismi" olarak "libmyutil.so" ismini yerleştirdik. "so isimleri" genel olarak yalnızca majör 
+    numara içeren isimlerdir. Bizim bu aşamada tipik olarak bir sembolik link oluşturarak "so" ismine ilişkin dosyanın gerçek 
+    kütüphane dosyasını göstermesini sağlamamız gerekir. Bunu şöyle yapabiliriz:
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+    $ ln -s libmyutil.so.1.0.0 libmyutil.so.1
 
------------------------------------------------------------------------------------------------------------------------------*/
+    Şimdi her iki dosyayı da görüntüleyelim:
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+    lrwxrwxrwx 1 kaan study    18 Mar  1 20:02 libmyutil.so.1 -> libmyutil.so.1.0.0
+    -rwxr-xr-x 1 kaan study 15736 Mar  1 19:57 libmyutil.so.1.0.0
 
------------------------------------------------------------------------------------------------------------------------------*/
+    3) Dinamik kütüphanenin link aşamasında kullanılmasını kolaylaştırmak için sonunda versiyon uzuntısı olmayan bir "linker ismi"
+    oluşturabiliriz. Tabii bu linker ismi aslında gerçek kütüphaneye referans edecektir. Ancak bu referansın doğrudan değil de "so ismi"
+    üzerinden yapılması daha esnek bir kullanıma yol açacaktır. Örneğin:
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+    $ ln -s libmyutil.so.1 libmyutil.so
 
------------------------------------------------------------------------------------------------------------------------------*/
+    Artık kütüphanenin "linker ismi" "so ismine", "so ismi" de gerçek ismine sembolik link yapılmış durumdadır. Bu üç dosyayı 
+    aşağıda yeniden görüntüleyelim:
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+    lrwxrwxrwx 1 kaan study    14 Mar  1 20:07 libmyutil.so -> libmyutil.so.1
+    lrwxrwxrwx 1 kaan study    18 Mar  1 20:02 libmyutil.so.1 -> libmyutil.so.1.0.0
+    -rwxr-xr-x 1 kaan study 15736 Mar  1 19:57 libmyutil.so.1.0.0
+
+    Aşağıdaki gibi bir durum elde ettiğimize dikkat ediniz:
+
+    Linker ismi ---> so ismi ---> gerçek isim
+
+    4) Şimdi kütüphaneyi kullanan bir "app" programını derleyip link edelim:
+
+    $ gcc -o app app.c libmyutil.so
+
+    Şimdi LD_LIBRARY_PATH çevre değişkenini belirleyip programı çalıştıralım:
+
+    $ LD_LIBRARY_PATH=. ./app
+    30.000000
+    -10.000000
+    200.000000
+    0.500000
+
+    Burada app programının kullandığı kütüphane ismi app dosyasının içerisinde kütüphanenin "so ismi" olarak set edilecektir. 
+    Yani burada "app" dosyası sanki "libmyutil.so.1" dosyasını kullanıyor gibi olacaktır. Örneğin:
+
+    $ readelf -d app | grep "NEEDED"
+    0x0000000000000001 (NEEDED)             Paylaşımlı kitaplık: [libmyutil.so.1]
+    0x0000000000000001 (NEEDED)             Paylaşımlı kitaplık: [libc.so.6]
+
+    İşte "app" programını yükleyecek olan dinamik linker aslında "libmyutil.so.1" dosyasını yüklemeye çalışacaktır. Bu dosyann 
+    kütüphanenin gerçek ismine sembolik link yapıldığını anımsayınız. Bu durumda gerçekte yüklenecek olan dosya "libmyutil.so.1" 
+    dosyası değil, "libmyutil.so.1.0.0" dosyası olacaktır. Yani çalışmada bir sorun ortaya çıkmayacaktır. Pekiyi tüm bunların 
+    amacı nedir? Bunu şöyle açıklayabiliriz:
+
+    1) Örneğin kütüphanemizin libmyutil.so.1.1.0 biçiminde majör numarası aynı, minör numarası farklı öncekiyle uyumlu yeni bir 
+    versiyonunun daha oluşturulduğunu düşünelim. Şimdi biz uygulamamızı çektiğimiz dizin içerisindeki "libmyutil.so" dosyasını 
+    bu yeni versiyonu referans edecek biçimde değiştirebiliriz. Bu durumda dinamik linker "app" programını yüklemeye çalışırken 
+    aslında artık "libmyutil.so.1.1.0" kütüphanesini yükleyecektir. Burada biz hiç "app" dosyasının içini değiştirmeden artık "app"
+    dosyasının kütüphanenin yeni minör versiyonunu kullamasını sağlamış olduk.
+
+    2) Şimdi de kütüphanemizin "libmyutil.so.2.0.0" biçiminde yeni bir majör versiyonunun oluşturulduğunu varsayalım. 1 numaralı 
+    majör versiyonla 2 numaralı majör versiyon birbirleriyle uyumlu değildir. Biz bu "libmyutil.so.2.0.0" yeni versiyonu derlerken ona
+    "so ismi" olarak artık "libmyutil.so.2" ismini vermeliyiz. Tabii bu durumda biz yine "libmyutil.so.2" sembolik bağlantı dosyasının 
+    "libmyutil.so.2.0.0" dosyasını göstermesini sağlamalıyız. Artık kütüphanenin 2'inci versiyonunu kullanan programlarda yüklenecek 
+    kütüphane "libmyutil.so.2" kütüphanesi olacaktır. Bu kütüphanede 2'inci versiyonunun gerçek kütüphane ismine sembolik link yapılmış 
+    durumdadır.
+
+    "so ismine" ilişkin sembol ik link çıkartma ve "/etc/ld.so.cache" dosyasının güncellenmesi işlemi ldconfig tarafından otomatik 
+    yapılabilmektedir. Yani aslında örneğin biz kütüphanenin gerçek isimli dosyasını "/lib" ya da "/usr/lib" içerisine yerleştirip 
+    "ldconfig" programını çalıştırdığımızda bu program zaten "so ismine" ilişkin sembolik linki de oluşturmaktadır. Örneğin biz 
+    "libmyutil.so.1.0.0" dosyasını "/usr/lib" dizinine kopyalayalım ve "ldconfig" programını çalıştıralım. "ldconfig" programı 
+    "libmyutil.so.1" sembolik link dosyasını oluşturup bu sembolik link dosyasının "libmyutil.so.1.0.0" dosyasına referans etmesini 
+    sağlayacaktır. Tabii cache'e de "libmyutil.so.1" dosyasını yerleştirecektir. Örneğin:
+
+    $ ldconfig -p | grep "libmyutil"
+    libmyutil.so.1 (libc6,x86-64) => /lib/libmyutil.so.1
+    $ ls -l /usr/lib | grep "libmyutil"
+    lrwxrwxrwx  1 root root       18 Mar  1 21:02 libmyutil.so.1 -> libmyutil.so.1.0.0
+    -rwxr-xr-x  1 root root    15736 Mar  1 21:01 libmyutil.so.1.0.
+
+    Özetle Dinamik kütüphane kullanırken şu konvansiyona uymak iyi bir tekniktir:
+
+    - Kütüphane ismini "lib" ile başlatarak vermek
+    - Kütüphane ismine majör ve minör numara vermek
+    - Gerçek isimli kütüphane dosyasını oluştururken "so ismi" olarak "-Wl,-soname" seçeneği ile kütüphanenin "so ismini" yazmak
+    - Kütüphane için "linker ismi" ve "so ismini" sembolik link biçiminde oluşturmak
+    - Kütüphane paylaşılacaksa onu "/lib" ya da tercihen "/usr/lib" dizinine yerleştirmek ve ldconfig programı çalıştırarak 
+    /etc/ld.so.cache dosyasının güncellenmesini sağlamak
 
 -----------------------------------------------------------------------------------------------------------------------------*/
 
