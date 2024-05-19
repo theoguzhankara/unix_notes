@@ -1991,7 +1991,7 @@
     denilen bir tabloda belirtilmiştir. Bölüm Başlık Tablosu'nun dosya içerisindeki yeri ve Bölüm Başlıkları'nın Sayısı ELF 
     Başlığı'nda bulunmaktadır. Bu durumda ELF dosyasının bölüm bilgilerini elde etmek için önce ELF Başlığı okunmalı oradan Bölüm 
     Başlık Tablosu'nun yeri elde edilmelidir. Bölüm Başlık Tablosu, "Bölüm Başlığı (Section Header)" denilen alanlardan oluşmaktadır. 
-    Başka bir deyişle Bölüm Başlık Tablosu, "Bölüm Başlığı Dizilerinden" oluşmaktadır. Bir Bölüm Başlığı'nda aşağıdaki bilgiler 
+    Başka bir deyişle Bölüm Başlık Tablosu, "Bölüm Başlığı Dizileri"nden oluşmaktadır. Bir Bölüm Başlığı'nda aşağıdaki bilgiler 
     bulunmaktadır:
 
     - Bölümün isminin bölüm isimlerinin bulunduğu string tablosundaki offset numarası
@@ -2470,7 +2470,7 @@
     (yani azaltır):
 
     Yeni SP'nin gösterdiği yer  ----->
-    ....
+    ...
     Eski SP'in gösterdiği yer   ----->
 
     Sonra yerel nesneleri SP'nin bulunduğu yere göreli bir biçimde konumlandırır:
@@ -2703,7 +2703,7 @@
     r (replace) seçeneği (yanında "-" olmadığına dikkat ediniz) ilgili object modüllerin kütüphaneye yerleştirilmesini sağlar. 
     Eğer kütüphane dosyası yoksa komut aynı zamanda onu yaratmaktadır. Örneğin:
 
-    ar r libmyutil.a x.o y.o
+    $ ar r libmyutil.a x.o y.o
 
     Burada "libmyutil.a" statik kütüphane dosyasına "x.o" ve "y.o" object modülleri yerleştirilmiştir. Eğer "libmyutil.a" dosyası
     yoksa aynı zamanda bu dosya yaratılacaktır.
@@ -2714,7 +2714,7 @@
 
     d (delete) seçeneği kütüphaneden bir object modülü silmekte kullanılır. Örneğin:
 
-    ar d libmyutil.a x.o
+    $ ar d libmyutil.a x.o
 
     x (extract) seçeneği kütüphane içerisindeki object modülü bir dosya biçiminde diske save etmekte kullanılır. Ancak bu object 
     modül kütüphane dosyasından silinmeyecektir. Örneğin:
@@ -2729,6 +2729,7 @@
     $ gcc -c x.c
     $ gcc -c y.c
     $ ar r libmyutil.a x.o y.o
+
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -2740,8 +2741,8 @@
     Burada "libmyutil.a" dosyasına C derleyicisi bakmamaktadır. gcc aslında bu dosyayı bağlayıcıya (linker) iletmektedir. Biz bu 
     işlemi iki adımda da yapabilirdik:
 
-    gcc -c app.c
-    gcc -o app app.o libmyutil.a
+    $ gcc -c app.c
+    $ gcc -o app app.o libmyutil.a
 
     Her ne kadar GNU'nun bağlayıcı programı aslında "ld" isimli programsa da genellikle programcılar bu ld bağlayıcısını doğrudan 
     değil yukarıdaki gibi gcc yoluyla kullanırlar. Çünkü ld bağlayıcısını kullanılırken "libc" kütüphanesinin start-up amaç dosyaların
@@ -2756,14 +2757,14 @@
     Komut satırında kütüphane dosyalarının komut satırı argümanlarının sonunda belirtilmesi uygundur. Çünkü gcc programı kütüphane 
     dosyalarını yalnızca onların solunda belirtilen dosyaların bağlanmasında kullanmaktadır. Örneğin:
 
-    gcc -o app app1.o libmyutil.a app2.o
+    $ gcc -o app app1.o libmyutil.a app2.o
 
     Böylesi bir kullanımda "libmyutil.a" kütüphanesinin solunda yalnızca "app1.o" dosyası vardır. Dolayısıyla bağlayıcı yalnızca 
     bu modül için bu kütüphaneye bakacaktır, "app2.o" için bu kütüphaneye bakılmayacaktır.
 
     Şüphesiz statik kütüphane kullanmak yerine aslında amaç dosyaları da doğrudan bağlama işlemine sokabiliriz. Örneğin:
 
-    gcc -o sample sample.c x.o y.o
+    $ gcc -o sample sample.c x.o y.o
 
     Ancak çok sayıda object modül söz konusu olduğunda bu işlemin zorlaşacağına dikkat ediniz. Yani amaç dosyalar (object modules) 
     dosyalara benzetilirse statik kütüphane dosyaları dizinler gibi düşünülebilir.
@@ -2771,19 +2772,19 @@
     Derleme işlemi sırasında kütüphane dosyası -l<isim> biçiminde de belirtilebilir. Bu durumda arama sırasında "lib" öneki 
     ve ".a" uzantısı aramaya dahil edilmektedir. Yani örneğin:
 
-    gcc -o sample sample.c -lmyutil
+    $ gcc -o sample sample.c -lmyutil
 
     İşleminde aslında "libmyutil.a" (ya da "libmyutil.so") dosyaları aranmaktadır. Arama işlemi sırasıyla bazı dizinlerde yapılmaktadır. 
     Örneğin "/lib" dizini, "/usr/lib dizini", "/usr/local/lib" dizini gibi dizinlere bakılmaktadır. Ancak "bulunulan dizine (current 
     working directory)" bakılmamaktadır. -l seçeneği ile belli bir dizine de bakılması isteniyorsa "-L" seçeneği ile ilgili dizin 
     belirtilebilir. Örneğin:
 
-    gcc -o sample sample.c -lmyutil -L.
+    $ gcc -o sample sample.c -lmyutil -L.
 
     Buradaki '.' çalışma dizinini temsil etmektedir. Artık "libmyutil.a" kütüphanesi için bulunulan dizine de (current working 
     directory) bakılacaktır. Birden fazla dizin için -L seçeneğinin yinelenmesi gerekmektedir. Örneğin:
 
-    gcc -o sample sample.c -lmyutil -L. -L/home/csd
+    $ gcc -o sample sample.c -lmyutil -L. -L/home/csd
 
     Geleneksel olarak "-l" ve "-L" seçeneklerinden sonra boşluk bırakılmamaktadır. Ancak boşluk bırakılmasında bir sakınca yoktur.
 -----------------------------------------------------------------------------------------------------------------------------*/
@@ -2793,7 +2794,8 @@
     kütüphanesindeki fonksiyonları kullanmış olabiliriz. Bu durumda "liby.a" kütüphanesini kullanan program "libx.a" kütüphanesini
     de komut satırında belirtmek zorundadır. Örneğin:
 
-    gcc -o sample sample.c libx.a liby.a
+    $ gcc -o sample sample.c libx.a liby.a
+
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -2940,11 +2942,11 @@
     Dinamik kütüphane kullanan bir program bağlanırken kullanılan dinamik kütüphanenin komut satırında belirtilmesi gerekir. 
     Örneğin:
 
-    gcc -o app app.c libmyutil.so
+    $ gcc -o app app.c libmyutil.so
 
     Tabii bu işlem yine -l seçeneği ile de yapılabilirdi:
 
-    gcc -o app app.c -lmyutil -L.
+    $ gcc -o app app.c -lmyutil -L.
 
     Bu biçimde çalıştırılabilir dosya oluşturulduğunda linker bu çalıştırılabilir dosyanın çalıştırılabilmesi için hangi 
     dinamik kütüphanelerin yüklenmesi gerektiğini ELF formatının ".dynamic" isimli bölümüne yazmaktadır. Böylece yükleyici 
@@ -2958,7 +2960,7 @@
     İster statik kütüphane isterse dinamik kütüphane yazacak olalım yazdığımız kütüphaneler için bir başlık dosyası oluşturmak 
     iyi bir tekniktir. Örneğin içerisinde çeşitli fonksiyonların bulunduğu "libmyutil.so" dinamik kütüphanersini "libmyutil.c" 
     dosyasından hareketle oluşturmak isteyelim. İşte "libmyutil.c" dosyasındaki fonksiyonların prototipleri, gerekli olan sembolik 
-    sabitler, makrolar, inline fonksiyonlar, yapı bildirimleri gibi "nesne yaratmayan bildirimler"  bir başlık dosyasına yerleştirilmelidir. 
+    sabitler, makrolar, inline fonksiyonlar, yapı bildirimleri gibi "nesne yaratmayan bildirimler" bir başlık dosyasına yerleştirilmelidir. 
     Böylece bu kütüphaneyi kullanacak kişiler bu dosyayı include ederek gerekli bildirimlerin kodlarını oluşturmuş olurlar. Başlık 
     dosyaları oluşturulurken iki önemli noktaya dikkat edilmelidir:
 
@@ -3001,7 +3003,7 @@
     fonksiyonlarını dinamik kütüphaneden alarak kullanır. Ancak programcı isterse "-static" seçeneği ile statik bağlama işlemi 
     de yapabilir. Bu durumda bu fonksiyonlar statik kütüphanelerden alınarak çalıştırılabilen dosyalara yazılacaktır. Örneğin:
 
-    gcc -o app -static app.c
+    $ gcc -o app -static app.c
 
     "-static" seçeneği ile bağlama işlemi yapıldığında artık üretilen çalıştırılabilir dosyanın dinamik kütüphanelerle hiçbir ilgisi 
     kalmamaktadır. Zaten "-static" seçeneği belirtildiğinde artık dinamik kütüphaneler bağlama aşamasına programcı tarafından da 
@@ -3010,46 +3012,46 @@
     Eğer "libc" kütüphanesinin default olarak bağlama aşamasında devreye sokulması istenmiyorsa "-nodefaultlibs" seçeneğinin kullanılması 
     gerekir. Örneğin:
 
-    gcc -nodefaultlibs -o app app.c
+    $ gcc -nodefaultlibs -o app app.c
 
     Burada glibc kütüphanesi devreye sokulmadığı için bağlama aşamasında hata oluşacaktır. Tabii bu durumda da kütüphane açıkça 
     belirtilebilir:
 
-    gcc -nodefaultlibs -o app app.c -lc
+    $ gcc -nodefaultlibs -o app app.c -lc
 
     Bir kütüphanenin statik ve dinamik biçimi aynı anda bulunuyorsa ve biz bu kütüphaneyi "-l" seçeneği ile belirtiyorsak bu 
     durumda default olarak kütüphanenin dinamik versiyonu devreye sokulmaktadır. Eğer bu durumda kütüphanelerin statik versiyonlarının 
     devreye sokulması isteniyorsa "-static" seçeneğinin kullanılması ya da komut satırında açıkça statik kütüphaneye referans 
     edilmesi gerekir. Örneğin:
 
-    gcc -o app app.c -lmyutil -L.
+    $ gcc -o app app.c -lmyutil -L.
 
     Burada eğer hem "libmyutil.so" hem de "libmyutil.a" dosyaları varsa "libmyutil.so" dosyası kullanılacaktır. Yani dinamik bağlama 
     yapılacaktır. Tabii biz açıkça statik kütüphanenin ya da dinamik kütüphanenin kullanılmasını sağlayabiliriz:
 
-    gcc -o app app.c libmyutil.a
+    $ gcc -o app app.c libmyutil.a
 
     Aynı etkiyi şöyle de sağlayabilirdik:
 
-    gcc -static -o app app.c -lmyutil -L.
+    $ gcc -static -o app app.c -lmyutil -L.
 
     Burada "libc" kütüphanesinin dinamik biçimi devreye sokulacaktır. Ancak "libmyutil" kütüphanesi statik biçimde bağlanmıştır.
     Eğer "-static" seçeneği kullanılırsa bu durumda tüm kütüphanelerin statik versiyonları devreye sokulmaktadır. Tabii bu durumda 
     biz açıkça dinamik kütüphanelerin bağlama işlemine sokulmasını isteyemeyiz. Örneğin:
 
-    gcc -static -o app app.c libmyutil.so
+    $ gcc -static -o app app.c libmyutil.so
 
     Bu işlem başarısız olacaktır. Çünkü "-static" seçeneği zaten "tüm kütüphanelerin statik olarak bağlanacağı edileceği" anlamına 
     gelmektedir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-   Dinamik kütüphane kullanan programlarda bağlayıcı tarafından ELF formatında iki önemli bölüm oluşturulmaktadır. Bu bölümler 
-   ".dynamic" ve ".dynsym" isimli bölümlerdir. ".dynmaic" bölümü çalıştırılabilir dosyanın kullandığı dinamik kütüphaneler hakkında 
-   bilgileri içermektedir. ".dynsym" bölümü ise dinamki kütüphanelerden kullanılan sembollerin tutulduğu sembol tablosudur. Programın 
-   normal sembollerinin ".symtab" isimli bölümdeki sembol tablosunda tutulduğunu anımsayınız.
+    Dinamik kütüphane kullanan programlarda bağlayıcı tarafından ELF formatında iki önemli bölüm oluşturulmaktadır. Bu bölümler 
+    ".dynamic" ve ".dynsym" isimli bölümlerdir. ".dynmaic" bölümü çalıştırılabilir dosyanın kullandığı dinamik kütüphaneler hakkında 
+    bilgileri içermektedir. ".dynsym" bölümü ise dinamki kütüphanelerden kullanılan sembollerin tutulduğu sembol tablosudur. Programın 
+    normal sembollerinin ".symtab" isimli bölümdeki sembol tablosunda tutulduğunu anımsayınız.
 
-   32 bit ELF formatının ".dynamic" bölümünün yapısal içeriği şöyledir:
+    32 bit ELF formatının ".dynamic" bölümünün yapısal içeriği şöyledir:
 
     typedef struct {
         Elf32_Sword d_tag;
@@ -3077,7 +3079,7 @@
     d_tag d_un
     d_tag d_un
     d_tag d_un
-    ....
+    ...
 
     Burada d_un ya d_val olabilir ya da d_ptr olabilir, ancak ikisi birden olamaz. d_val bir değer, d_ptr ise bir sanal adres 
     belirtmektedir.
@@ -3113,7 +3115,7 @@
     0x000000000000000b (SYMENT)             24 (bytes)
     0x0000000000000015 (DEBUG)              0x0
     0x0000000000000003 (PLTGOT)             0x10f78
-    ......
+    ...
 
     O halde çalıştırılabilir dosyanın ya da dinamik kütüphane dosyasının hangi dinamik kütüphaneleri kullandığını komut satırından
     aşağıdaki gibi elde edebiliriz:
@@ -3128,10 +3130,11 @@
     dinamik kütüphaneler "ldd" komutuyla elde edilebilmektedir. Örneğin:
 
     $ ldd app
-	linux-vdso.so.1 (0x0000ffffaf206000)
-	libmyutil.so => not found
-	libc.so.6 => /lib/aarch64-linux-gnu/libc.so.6 (0x0000ffffaf03f000)
-	/lib/ld-linux-aarch64.so.1 (0x0000ffffaf1d6000)
+    linux-vdso.so.1 (0x0000ffffaf206000)
+    libmyutil.so => not found
+    libc.so.6 => /lib/aarch64-linux-gnu/libc.so.6 (0x0000ffffaf03f000)
+    /lib/ld-linux-aarch64.so.1 (0x0000ffffaf1d6000)
+
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -3153,6 +3156,7 @@
         8: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND abort@GLIBC_2.17 (2)
         9: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND foo
         10: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMCloneTable
+
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------

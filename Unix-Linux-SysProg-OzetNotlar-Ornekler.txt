@@ -22494,7 +22494,6 @@ void exit_sys_errno(const char *msg, int eno)
         pthread_cond_signal(&g_cond_producer);
 
         pthread_mutex_unlock(&g_mutex);
-
     }
 
     Burada kodu dikkatlice inceleyiniz. g_flag değişkeninin başlangıçtaki değeri 0'dır. Bu durumda başlangıçta tüketici thread 
@@ -57142,7 +57141,7 @@ void exit_sys(const char *msg)
     değeri 0 ise önce semaphore serbest bırakılıp sonra thread bekleme kuyruğunda uyutulmuştur. Thread bekleme kuyruğundan 
     uyandırıldığında yeniden semaphore kontrolünü ele almaktadır. Tabii eğer birden fazla thread bekleme kuyruğundan uyandırılırsa
     yalnızca bunlardan biri semaphore kontrolünü ele alacaktır. Tabii bundan sonra kuyruktan bilgiler okunacak ve semaphore 
-    kilidi serbest bırakılacaktır. Eğer birden fazla thread beklme kuyruğundan uyanmışsa bu kez diğer bir thread semaphore 
+    kilidi serbest bırakılacaktır. Eğer birden fazla thread bekleme kuyruğundan uyanmışsa bu kez diğer bir thread semaphore 
     kontrolünü ele alacak ve g_count değerine bakacaktır. Yukarıda da belirttiğimiz gibi aslında bu bir "koşul değişkeni"
     kodu gibidir. Çekirdek içerisinde böyle bir nesne olmadığı için manuel uygulanmıştır.
 
@@ -57167,12 +57166,12 @@ void exit_sys(const char *msg)
     Burada benzer işlemler uygulanmıştır. Eğer kuyrukta yazma yapılmak istenen kadar boş alan varsa akış while döngüsünün
     içerisine girmeyecektir. (Buradaki while koşulunun "PIPE_BUFSIZE - g_count < size" biçiminde olduğuna dikkat ediniz.)
     Dolayısıyla yazma işlemi kritik kod içerisinde yapılabilecektir. Ancak kuyrukta yeteri kadar yer yoksa semaphore kilidi 
-    serbest bırakılıp thread bekleme kuyruğunda bekletilecetir. Çıkışta benzer işlemler yapılmaktadır.
+    serbest bırakılıp thread bekleme kuyruğunda bekletilecektir. Çıkışta benzer işlemler yapılmaktadır.
 
     Aslında burada spinlock nesneleri de kullanılabilir. Ancak zaten mutex, semaphore ve read/write lock nesneleri kendi 
     içerisinde bir miktar spin yapmaktadır.
 
-    Bu örnekte semaphore yerine spinlock kullanabilirmiyiz? Spinlock için şu durumları gözden geçirmelisiniz:
+    Bu örnekte semaphore yerine spinlock kullanabilir miyiz? Spinlock için şu durumları gözden geçirmelisiniz:
 
     - Spinlock nesnesinde bekleme CPU zamanı harcanarak meşgul bir döngü içerisinde yapılmaktadır. Dolayısıyla spinlock 
     nesneleri kilidin kısa süreli bırakılacağından emin olunabiliyorsa kullanılmalıdır.
