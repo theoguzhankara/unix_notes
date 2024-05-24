@@ -21907,7 +21907,7 @@ void exit_sys_errno(const char *msg, int eno)
     Aynı zamanda programcıların kafası bu senkronizasyon nesnelerinin neden gerektiği konusunda da kafası karışabilmektedir. Biz önce 
     koşul değişkenlerinin tipik olarak nasıl kullanılması gerektiği üzerinde duracağız. Sonra konunun ayrıntılarına gireceğiz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
-<BURADA KALDIK>
+
 /*--------------------------------------------------------------------------------------------------------------------------
     Koşul değişkenleri tipik olarak şu adımlardan geçilerek kullanılmaktadır:
 
@@ -23143,9 +23143,9 @@ void exit_sys_errno(const char *msg, int eno)
     üçten daha fazla thread'in aynı anda kritik koda girmemesinin bloke yoluyla sağlanmasıdır. Kritik koda birden fazla thread'in
     girmesi kişilere anlamsız gelebilmektedir. Çünkü iki thread bile ortak kaynağı bozabilir. O halde kritik koda n tane thread'in 
     girmesinin ne anlamı olabilir? İşte bunun en önemli kullanım gerekçesi "kaynak paylaşımının" sağlanmasıdır. Örneğin elimizde 
-    üç tane makine olsun. Ancak 10 tane thread bu makineleri kullanmak istesin. Bizim bu üç makineyi yalnızca üç thread'e 
-    tahsis etmemiz gerekir. Makineyi kullanmak isteyen diğer thread'ler bu makinelerden biri boşaltılana kadar CPU zamanı 
-    harcamadan blokede bekletilmelidir. İşte burada tipik bir semaphore kullanımı söz konusudur. Örneğin:
+    üç tane makine olsun. Ancak 10 tane thread bu makineleri kullanmak istesin. Bizim bu üç makineyi yalnızca üç thread'e tahsis 
+    etmemiz gerekir. Makineyi kullanmak isteyen diğer thread'ler bu makinelerden biri boşaltılana kadar CPU zamanı harcamadan blokede 
+    bekletilmelidir. İşte burada tipik bir semaphore kullanımı söz konusudur. Örneğin:
 
     <kritik kodun başı>
     ...
@@ -23169,25 +23169,26 @@ void exit_sys_errno(const char *msg, int eno)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     POSIX semaphore nesneleri isimli ve isimsiz olarak yaratılabilmektedir. İsimli semaphore nesneleri proseslerarası kullanım
-    için daha uygundur. İsimsiz semaphore nesneleri -her ne kadar proseslerarasında da kullanılabiliyorsa da- özellikle prosesin thread'leri 
-    arasındaki senkronizasyonda tercih edilmektedir. 
+    için daha uygundur. İsimsiz semaphore nesneleri -her ne kadar proseslerarasında da kullanılabiliyorsa da- özellikle prosesin 
+    thread'leri arasındaki senkronizasyonda tercih edilmektedir.
 
     İsimsiz POSIX semaphore nesnelerinin kullanımı şöyledir:
 
-    1) Semaphore nesneleri sem_t türü ile temsil edilmiştir. POSIX standartlarına göre sem_t herhangi bir tür olarak typedef edilebilmektedir. 
-    UNIX türevi sistemlerde tipik olarak sem_t bir yapı biçiminde typedef edilmektedir. Programcı bu türden global bir nesne tanımlar ve
-    ona sem_init fonksiyonuyla ilk değer verir. sem_init fonksiyonunun prototipi şöyledir:
+    1) Semaphore nesneleri sem_t türü ile temsil edilmiştir. POSIX standartlarına göre sem_t herhangi bir tür olarak typedef 
+    edilebilmektedir. UNIX türevi sistemlerde tipik olarak sem_t bir yapı biçiminde typedef edilmektedir. Programcı bu türden global 
+    bir nesne tanımlar ve ona sem_init fonksiyonuyla ilk değer verir. sem_init fonksiyonunun prototipi şöyledir:
 
     #include <semaphore.h>
 
     int sem_init(sem_t *sem, int pshared, unsigned value);
 
-    Fonksiyonun birinci parametresi sem_t türünden nesnesinin adresini alır. İkinci parametre semaphore nesnesinin prosesler arasında paylaşılıp 
-    paylaşılmayacağını belirtir. Burada 0 değeri nesnenin prosesler arasında paylaşılmayacağını, sıfır dışı değer ise nesnenin prosesler arasında
-    paylaşılacağını belirtmektedir. Üçüncü parametre başlangıçtaki semaphore sayacının değerini belirtir. Yani bu değer kritik koda en fazlası
-    kaç akışın girebileceğini belirtmektedir. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri döner ve errno 
-    değişkeni uygun biçimde set edilir. (Thread fonksiyonlarının bizzat başarısızlık durumunda errno değeriyle geri döndüğünü anımsayınız. 
-    Halbuki POSIX semaphore fonksiyonları doğrudan errno değişkenini set etmektedir.)
+    Fonksiyonun birinci parametresi sem_t türünden nesnesinin adresini alır. İkinci parametre semaphore nesnesinin prosesler arasında 
+    paylaşılıp paylaşılmayacağını belirtir. Burada 0 değeri nesnenin prosesler arasında paylaşılmayacağını, sıfır dışı değer ise 
+    nesnenin prosesler arasında paylaşılacağını belirtmektedir. Üçüncü parametre başlangıçtaki semaphore sayacının değerini belirtir. 
+    Yani bu değer kritik koda en fazlası kaç akışın girebileceğini belirtmektedir. Fonksiyon başarı durumunda 0 değerine, başarısızlık 
+    durumunda -1 değerine geri döner ve errno değişkeni uygun biçimde set edilir. (Thread fonksiyonlarının bizzat başarısızlık 
+    durumunda errno değeriyle geri döndüğünü anımsayınız. Halbuki POSIX semaphore fonksiyonları doğrudan errno değişkenini set 
+    etmektedir.)
 
     Örneğin:
 
@@ -23205,22 +23206,23 @@ void exit_sys_errno(const char *msg, int eno)
     ...
     sem_post(&g_sem);
 
-    sem_wait fonksiyonu semaphore sayacına bakar. Semaphore sayacı 0'dan büyükse bloke oluşturmaz. Böylece thread kritik koda girer. 
-    Ancak sem_wait fonksiyonu semaphore sayacı 0'dan büyükse atomik bir biçimde semaphore sayacını 1 eksiltmektedir. Örneğin 
+    sem_wait fonksiyonu semaphore sayacına bakar. Semaphore sayacı 0'dan büyükse bloke oluşturmaz. Böylece thread kritik koda 
+    girer. Ancak sem_wait fonksiyonu semaphore sayacı 0'dan büyükse atomik bir biçimde semaphore sayacını 1 eksiltmektedir. Örneğin 
     başlangıçtaki semaphore sayacı 3 olsun. Bu durumda thread'lerden biri sem_wait fonksiyonundan geçtiğinde semaphore sayacı 2 olur. 
     Diğer bir thread de geçtiğinde semaphore sayacı 1 olacaktır. Nihayet bir thread daha sem_wait fonksiyonundan geçtiğinde semaphore
     sayacı 0 olur. Artık kritik kodda 3 tane thread vardır. Başka thread'ler sem_wait fonksiyonuna geldiğinde semaphore sayacı 0 olduğu 
     için bloke olurlar ve kritik koda giremezler. İşte sem_post fonksiyonu da semaphore sayacını 1 artırmaktadır. Böylece kritik koddan 
     çıkıldığında semaphore sayacı 1 artırılmış olur. sem_wait fonksiyonunda bekleyen thread'lerden biri artık semaphore sayacı 0'dan 
     büyük olduğu için kritik koda girer. Görüldüğü gibi kritik kodda belli bir anda en fazla 3 thread bulunabilmektedir. Yukarıda da
-    belirttiğimiz gibi aslında semaphore'lar belli sayıda kaynağın thread'lere paylaştırılması için kullanılmaktadır. Örneğin elimizde 
-    3 tane makine olabilir. Biz bu üç makineyi 10 thread'in kullanmasını isteyebiliriz. Ancak makine atamadığımız thread'lerin CPU 
-    zamanı harcamadan bloke durumda bekletilmesi gerekmektedir. O halde biz her kritik koda giren thread'e bir makine atarız. 
+    belirttiğimiz gibi aslında semaphore'lar belli sayıda kaynağın thread'lere paylaştırılması için kullanılmaktadır. Örneğin 
+    elimizde 3 tane makine olabilir. Biz bu üç makineyi 10 thread'in kullanmasını isteyebiliriz. Ancak makine atamadığımız thread'lerin 
+    CPU zamanı harcamadan bloke durumda bekletilmesi gerekmektedir. O halde biz her kritik koda giren thread'e bir makine atarız. 
     Tıpkı mutex nesnelerinde olduğu gibi sem_wait fonksiyonunda birden fazla thread'in beklemesi durumunda bu thread'lerin hangisinin 
-    kritik koda gireceği konusunda bir garanti verilmemektedir. İşletim sistemleri belirli koşullarda adil bir sistem uygulamaya çalışsa da 
-    bunun bir garantisini vermemektedir. 
+    kritik koda gireceği konusunda bir garanti verilmemektedir. İşletim sistemleri belirli koşullarda adil bir sistem uygulamaya 
+    çalışsa da bunun bir garantisini vermemektedir.
 
-    Böylece üç makineyi, 10 thread'in etkin bir biçimde kullanmasını sağlarız. sem_wait ve sem_post fonksiyonlarının prototipleri şöyledir:
+    Böylece üç makineyi, 10 thread'in etkin bir biçimde kullanmasını sağlarız. sem_wait ve sem_post fonksiyonlarının prototipleri 
+    şöyledir:
 
     #include <semaphore.h>
 
@@ -23455,8 +23457,6 @@ void assign_resource(THREAD_INFO *ti)
 
 	do_with_resource(ti, i + 1);
 
-	usleep(rand_r(&ti->seed) % 500000);
-
 	if ((result = pthread_mutex_lock(&g_resources.mutex)) != 0)
 		exit_sys_errno("pthread_mutex_lock", result);
 
@@ -23476,6 +23476,8 @@ void assign_resource(THREAD_INFO *ti)
 void do_with_resource(THREAD_INFO *ti, int nresource)
 {
 	printf("%s doing something with resource \"%d\"\n", ti->name, nresource);
+
+	usleep(rand_r(&ti->seed) % 500000);
 }
 
 void *thread_proc(void *param)
@@ -23506,8 +23508,8 @@ void exit_sys_errno(const char *msg, int eno)
     Biz daha önce üretici-tüketici problemini koşul değişkenleri ile çözmüştük. Aynı problemi semaphore nesneleriyle da daha 
     kolay bir biçimde çözebiliriz. Yine tahterevalli sistemi burada geçerlidir. Semaphore sayaçlarının başka bir thread tarafından
     sem_post fonksiyonu ile artırılabildiğini anımsayınız. Yani sem_post uygulayabilmek için sem_wait yapmış olmak gerekmemektedir. 
-    Tipik çözüm şöyledir: Yine üretici ve tüketici için iki semaphore alınır. Semaphore sayaçları paylaşılan alanın uzunluğuna ayarlanır. 
-    Biz ortadaki paylaşılan alanın 1 elemanlık olduğunu varsayalım (kontroller yapılmamıştır):
+    Tipik çözüm şöyledir: Yine üretici ve tüketici için iki semaphore alınır. Semaphore sayaçları paylaşılan alanın uzunluğuna 
+    ayarlanır. Biz ortadaki paylaşılan alanın 1 elemanlık olduğunu varsayalım (kontroller yapılmamıştır):
 
     sem_t g_sem_producer;
     sem_t g_sem_consumer;
@@ -23544,8 +23546,8 @@ void exit_sys_errno(const char *msg, int eno)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Aşağıda üretici-tüketici probleminin kuyruksuz versiyonu semaphore nesneleri ile çözülmüştür. Burada üretici semaphore'unun
-    başlangıçta 1'e tüketici semaphore'unun da 0'a kurulduğuna dikkat ediniz. Üretici tüketiciyi, tüketici de üreticiyi tahterevalli
-    misali blokeden kurtarmaktadır. 
+    başlangıçta 1'e tüketici semaphore'unun da 0'a kurulduğuna dikkat ediniz. Üretici tüketiciyi, tüketici de üreticiyi 
+    tahterevalli misali blokeden kurtarmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -23668,10 +23670,10 @@ void exit_sys_errno(const char *msg, int eno)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Üretici tüketici probleminin kuyruklu versiyonu da tamamen benzer biçimde semaphore nesneleriyle çözülebilmektedir. 
-    Ancak bu durumda üretici semaphore'unun başlangıçta kuyruk uzunluğuna kurulması gerekmektedir. Böylece tüketici hiç çalışmadığında,
-    üretici kuyruğu doldurur ve bekler. Benzer biçimde üretici çalışmadığı durumda tüketici kuyruktaki tüm elemanları alır ve bekler. 
-    Örneğin:
+    Üretici tüketici probleminin kuyruklu versiyonu da tamamen benzer biçimde semaphore nesneleriyle çözülebilmektedir. Ancak 
+    bu durumda üretici semaphore'unun başlangıçta kuyruk uzunluğuna kurulması gerekmektedir. Böylece tüketici hiç çalışmadığında,
+    üretici kuyruğu doldurur ve bekler. Benzer biçimde üretici çalışmadığı durumda tüketici kuyruktaki tüm elemanları alır ve 
+    bekler. Örneğin:
 
     sem_t g_sem_producer;
     sem_t g_sem_consumer;
@@ -23903,8 +23905,8 @@ void exit_sys_errno(const char *msg, int eno)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     İsimsiz semaphore nesneleri de yine istenirse sem_init fonksiyonunda pshared parametresi sıfır dışı yapılarak ve paylaşılan 
-    bellek alanında oluşturularak prosesler arasında kullanılabilir. Ancak prosesler arasında kullanım için isimli semaphore nesneleri 
-    genellikle daha uygundur. 
+    bellek alanında oluşturularak prosesler arasında kullanılabilir. Ancak prosesler arasında kullanım için isimli semaphore 
+    nesneleri genellikle daha uygundur.
 
     Aşağıda iki proses arasında isimsiz semaphore nesneleri ile üretici tüketici problemi uygulanmıştır. Burada önce "producer"
     programını çalıştırınız. Derleme işlemlerini aşağıdaki gibi yapabilirsiniz:
@@ -24111,22 +24113,23 @@ void exit_sys_errno(const char *msg, int eno)
 
     sem_t *sem_open(const char *name, int oflag, ...);
 
-    Fonksiyonun birinci parametresi prosesler arasında kullanım için gereken ismi belirtmektedir. Bu isim yine diğer POSIX IPC nesnelerinde
-    olduğu gibi kök dizinde bir isim olmalıdır. İkinci parametre açış modunu belirtir. Burada eğer O_CREAT kullanılırsa nesne yoksa yaratılır, 
-    varsa olan açılır. O_CREAT ile O_EXCL birlikte kullanılabilir. Bu durumda nesne zaten varsa fonksiyon başarısız olmaktadır. 
-    Burada açış modunda O_RDONLY, O_WRONLY ya da O_RDWR gibi bayraklar kullanılmaz. Başka bir deyişle isimli semaphore nesnelerinde 
-    okuma yapmak ya da onlara yazma yapmak biçiminde işlemler tanımlı değildir. Eğer zaten var olan bir semaphore nesnesi açılacaksa 
-    bu ikinci parametre 0 geçilebilir. Eğer semaphore nesnesinin yaratılması söz konusu ise sem_open fonksiyonuna iki argüman 
-    daha girilmelidir. Bu durumda üçüncü parametre nesnenin erişim haklarını, dördüncü parametre ise semaphore sayacının başlangıçtaki 
-    değerini belirtmektedir. Yani bu durumda adeta fonksiyonun prototipi aşağıdaki gibi olmaktadır:
+    Fonksiyonun birinci parametresi prosesler arasında kullanım için gereken ismi belirtmektedir. Bu isim yine diğer POSIX IPC 
+    nesnelerinde olduğu gibi kök dizinde bir dosya ismi gibi verilmelidir. İkinci parametre açış modunu belirtir. Burada eğer 
+    O_CREAT kullanılırsa nesne yoksa yaratılır, varsa olan açılır. O_CREAT ile O_EXCL birlikte kullanılabilir. Bu durumda nesne 
+    zaten varsa fonksiyon başarısız olmaktadır. Burada açış modunda O_RDONLY, O_WRONLY ya da O_RDWR gibi bayraklar kullanılmaz. 
+    Başka bir deyişle isimli semaphore nesnelerinde okuma yapmak ya da onlara yazma yapmak biçiminde işlemler tanımlı değildir. 
+    Eğer zaten var olan bir semaphore nesnesi açılacaksa bu ikinci parametre 0 geçilebilir. Eğer semaphore nesnesinin yaratılması 
+    söz konusu ise sem_open fonksiyonuna iki argüman daha girilmelidir. Bu durumda üçüncü parametre nesnenin erişim haklarını, 
+    dördüncü parametre ise semaphore sayacının başlangıçtaki değerini belirtmektedir. Yani bu durumda adeta fonksiyonun prototipi 
+    aşağıdaki gibi olmaktadır:
 
     sem_t *sem_open(const char *name, int oflag, mode_t mode, unsigned int value);
 
     Semaphore nesneleri için "okuma ve yazma" eylemlerinin tanımsız olduğunu belirtmiştik. Bu nedenle POSIX standartları da nesnenin 
     erişim haklarının hangi durumda erişime izin vereceği yönünde bir açıklama yapmamıştır. Linux sistemlerinde isimli semaphore nesnesi 
-    yaratılırken bir prosesin bu nesneye erişmesi isteniyorsa, erişim haklarında hem read hem de write bulunuyor olmalıdır. Yani erişim işlemi sanki 
-    "read/write" düzeyde (O_RDWR) yapılan bir işlem gibi kontrole girmektedir. Ancak buradaki erişim hakkı diğer dosya yaratan fonksiyonlarda 
-    olduğu gibi prosesin umask değerinden etkilenmektedir. 
+    yaratılırken bir prosesin bu nesneye erişmesi isteniyorsa, erişim haklarında hem read hem de write bulunuyor olmalıdır. Yani erişim 
+    işlemi sanki "read/write" düzeyde (O_RDWR) yapılan bir işlem gibi kontrole girmektedir. Ancak buradaki erişim hakkı diğer dosya 
+    yaratan fonksiyonlarda olduğu gibi prosesin umask değerinden etkilenmektedir.
 
     Fonksiyon başarı durumunda kendi yarattığı semaphore nesnesinin adresine, başarısızlık durumunda SEM_FAILED özel değerine geri 
     döner. errno değişkeni uygun biçimde set edilmektedir. Örneğin:
@@ -24185,25 +24188,24 @@ void exit_sys_errno(const char *msg, int eno)
     Test işleminde önce "producer" programının çalıştırılması gerekmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-/* sharing.h */
+/* shared.h */
 
-#ifndef SHARING_H_
-#define SHARING_H_
+#ifndef SHARED_H_
+#define SHARED_H_
 
-#include <semaphore.h>
-#include <sys/types.h>
+#include <stddef.h>
 
-#define SHM_NAME					"/producer-consumer-shared-memory"
-#define SEM_PRODUCER_NAME			"/producer-semaphore"
-#define SEM_CONSUMER_NAME			"/consumer-semaphore"
+#define SHM_PATH	        "/sample_shared_memory"
+#define SEM_PATH_PRODUCER   "/sample_producer_semaphore"
+#define SEM_PATH_CONSUMER   "/sample_consumer_semaphore"
 
 #define QUEUE_SIZE		10
 
-typedef struct tagSHARED_INFO {
-	int head;
-	int tail;
-	int queue[QUEUE_SIZE];
-} SHARED_INFO;
+struct QUEUE {
+	int qarray[QUEUE_SIZE];
+	size_t head;
+	size_t tail;
+};
 
 #endif
 
@@ -24213,43 +24215,41 @@ typedef struct tagSHARED_INFO {
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-#include <sys/mman.h>
 #include <unistd.h>
-#include "sharing.h"
+#include <sys/mman.h>
+#include <semaphore.h>
+#include "shared.h"
 
 void exit_sys(const char *msg);
-void exit_sys_errno(const char *msg, int eno);
 
 int main(void)
 {
 	int fdshm;
-	SHARED_INFO *shminfo;
+	struct QUEUE *queue;
 	sem_t *sem_producer;
 	sem_t *sem_consumer;
 	int val;
 
 	srand(time(NULL));
 
-	if ((fdshm = shm_open(SHM_NAME, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)) == -1)
+	if ((fdshm = shm_open(SHM_PATH, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)) == -1)
 		exit_sys("shm_open");
 
-	if (ftruncate(fdshm, sizeof(SHARED_INFO)) == -1)
+	if (ftruncate(fdshm, 4096) == -1)
 		exit_sys("ftruncate");
 
-	if ((sem_producer = sem_open(SEM_PRODUCER_NAME, O_CREAT, S_IRUSR|S_IWUSR, QUEUE_SIZE)) == SEM_FAILED)
-		exit_sys("sem_open");
-
-	if ((sem_consumer = sem_open(SEM_CONSUMER_NAME, O_CREAT, S_IRUSR|S_IWUSR, 0)) == SEM_FAILED)
-		exit_sys("sem_open");
-
-	shminfo = (SHARED_INFO *)mmap(NULL, sizeof(SHARED_INFO), PROT_WRITE, MAP_SHARED, fdshm, 0);
-	if (shminfo == MAP_FAILED)
+	if ((queue = (struct QUEUE *)mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_SHARED, fdshm, 0)) == MAP_FAILED)
 		exit_sys("mmap");
 
-	shminfo->head = 0;
-	shminfo->tail = 0;
+	memset(queue, 0, sizeof(struct QUEUE));
+
+	if ((sem_producer = sem_open(SEM_PATH_PRODUCER, O_CREAT, S_IRUSR|S_IWUSR, QUEUE_SIZE)) == SEM_FAILED)
+		exit_sys("sem_open");
+	if ((sem_consumer = sem_open(SEM_PATH_CONSUMER, O_CREAT, S_IRUSR|S_IWUSR, 0)) == SEM_FAILED)
+		exit_sys("sem_open");
 
 	val = 0;
 	for (;;) {
@@ -24258,8 +24258,8 @@ int main(void)
 		if (sem_wait(sem_producer) == -1)
 			exit_sys("sem_wait");
 
-		shminfo->queue[shminfo->tail++] = val;
-		shminfo->tail %= QUEUE_SIZE;
+		queue->qarray[queue->tail] = val;
+		queue->tail = (queue->tail + 1) % QUEUE_SIZE;
 
 		if (sem_post(sem_consumer) == -1)
 			exit_sys("sem_post");
@@ -24269,24 +24269,21 @@ int main(void)
 		++val;
 	}
 
-	if (sem_close(sem_producer) == -1)
-		exit_sys("sem_close");
+	sem_destroy(sem_consumer);
+	sem_destroy(sem_producer);
 
-	if (sem_close(sem_consumer) == -1)
-		exit_sys("sem_close");
-
-	if (sem_unlink(SEM_PRODUCER_NAME) == -1)
+	if (sem_unlink(SEM_PATH_CONSUMER) == -1 && errno != ENOENT)
 		exit_sys("sem_unlink");
 
-	if (sem_unlink(SEM_CONSUMER_NAME) == -1)
+	if (sem_unlink(SEM_PATH_PRODUCER) == -1 && errno != ENOENT)
 		exit_sys("sem_unlink");
 
-	if (munmap(shminfo, sizeof(SHARED_INFO)) == -1)
+	if (munmap(queue, 4096) == -1)
 		exit_sys("munmap");
 
 	close(fdshm);
 
-	if (shm_unlink(SHM_NAME) == -1)
+	if (shm_unlink(SHM_PATH) == -1 && errno != ENOENT)
 		exit_sys("shm_unlink");
 
 	return 0;
@@ -24299,81 +24296,85 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
-void exit_sys_errno(const char *msg, int eno)
-{
-	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
-
-	exit(EXIT_FAILURE);
-}
-
 /* consumer.c */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-#include <sys/mman.h>
 #include <unistd.h>
-#include "sharing.h"
+#include <sys/mman.h>
+#include <semaphore.h>
+#include "shared.h"
 
 void exit_sys(const char *msg);
-void exit_sys_errno(const char *msg, int eno);
 
 int main(void)
 {
 	int fdshm;
-	SHARED_INFO *shminfo;
+	struct QUEUE *queue;
 	sem_t *sem_producer;
 	sem_t *sem_consumer;
 	int val;
 
 	srand(time(NULL));
 
-	if ((fdshm = shm_open(SHM_NAME, O_RDWR, 0)) == -1)
+	if ((fdshm = shm_open(SHM_PATH, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)) == -1)
 		exit_sys("shm_open");
 
-	shminfo = (SHARED_INFO *)mmap(NULL, sizeof(SHARED_INFO), PROT_WRITE, MAP_SHARED, fdshm, 0);
-	if (shminfo == MAP_FAILED)
+	if (ftruncate(fdshm, 4096) == -1)
+		exit_sys("ftruncate");
+
+	if ((queue = (struct QUEUE *)mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_SHARED, fdshm, 0)) == MAP_FAILED)
 		exit_sys("mmap");
 
-	if ((sem_producer = sem_open(SEM_PRODUCER_NAME, 0)) == SEM_FAILED)
+	if ((sem_producer = sem_open(SEM_PATH_PRODUCER, O_CREAT, S_IRUSR|S_IWUSR, QUEUE_SIZE)) == SEM_FAILED)
 		exit_sys("sem_open");
 
-	if ((sem_consumer = sem_open(SEM_CONSUMER_NAME, 0)) == SEM_FAILED)
+	if ((sem_consumer = sem_open(SEM_PATH_CONSUMER, O_CREAT, S_IRUSR|S_IWUSR, 0)) == SEM_FAILED)
 		exit_sys("sem_open");
 
 	for (;;) {
 		if (sem_wait(sem_consumer) == -1)
 			exit_sys("sem_wait");
 
-		val = shminfo->queue[shminfo->head++];
-		shminfo->head %= QUEUE_SIZE;
+		val = queue->qarray[queue->head];
+		queue->head = (queue->head + 1) % QUEUE_SIZE;
 
 		if (sem_post(sem_producer) == -1)
 			exit_sys("sem_post");
 
-		printf("%d ", val);
-		fflush(stdout);
-
 		usleep(rand() % 300000);
+
+		printf("%d ", val);
+
+		fflush(stdout);
 
 		if (val == 99)
 			break;
 	}
-	printf("\n");
 
-	if (sem_close(sem_producer) == -1)
-		exit_sys("sem_close");
+	putchar('\n');
 
-	if (sem_close(sem_consumer) == -1)
-		exit_sys("sem_close");
+	sem_destroy(sem_consumer);
+	sem_destroy(sem_producer);
 
-	if (munmap(shminfo, sizeof(SHARED_INFO)) == -1)
+	if (sem_unlink(SEM_PATH_CONSUMER) == -1 && errno != ENOENT)
+		exit_sys("sem_unlink");
+
+	if (sem_unlink(SEM_PATH_PRODUCER) == -1 && errno != ENOENT)
+		exit_sys("sem_unlink");
+
+	if (munmap(queue, 4096) == -1)
 		exit_sys("munmap");
 
 	close(fdshm);
+
+	if (shm_unlink(SHM_PATH) == -1 && errno != ENOENT)
+		exit_sys("shm_unlink");
 
 	return 0;
 }
@@ -24381,13 +24382,6 @@ int main(void)
 void exit_sys(const char *msg)
 {
 	perror(msg);
-
-	exit(EXIT_FAILURE);
-}
-
-void exit_sys_errno(const char *msg, int eno)
-{
-	fprintf(stderr, "%s: %s\n", msg, strerror(eno));
 
 	exit(EXIT_FAILURE);
 }
@@ -24408,8 +24402,8 @@ void exit_sys_errno(const char *msg, int eno)
     benzemektedir. Sistem 5 semaphore arayüzünü karışık yapan unsurlardan biri tek hamlede birden fazla semaphore üzerinde (buna
     semaphore set de denilmektedir) işlem yapılmasıdır. Ayrıca sayaç mekanizması da biraz karışık ve çok işlevli tasarlanmıştır. 
 
-    Biz kursumuzda Sistem 5 semaphore nesneleri için çok ayrıntıya girmeyeceğiz. Yukarıda da belirttiğimiz gibi karmaşık tasarımlarından
-    dolayı bunlar gittikçe POSIX semaphore nesneleri lehine daha az kullanılır hale gelmiştir. 
+    Biz kursumuzda Sistem 5 semaphore nesneleri için çok ayrıntıya girmeyeceğiz. Yukarıda da belirttiğimiz gibi karmaşık 
+    tasarımlarından dolayı bunlar gittikçe POSIX semaphore nesneleri lehine daha az kullanılır hale gelmiştir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -25500,10 +25494,11 @@ void exit_sys_errno(const char *msg, int eno)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Aşağıda bir barrier kullanım örneği verilmiştir. 50000000 (elli milyon) tane rastgele değerlerden oluşan int türden bir dizi 10 parçaya 
-    bölünmüş ve her parça bir thread tarafından qsort fonksiyonu ile sort edilmiştir. Sonra da bu kendi aralarında sıralı olan bu 10 dizi
-    birleştirilmiştir. Sonra aynı dizi tek bir thread tarafından sıraya dizilmiştir. 3 çekirdekli bir Linux sisteminde (kullandığımız sanal makine) 
-    thread'li biçim 6 saniye civarında thread'siz biçim 12 saniye civarında zaman almaktadır. 
+    Aşağıda bir barrier kullanım örneği verilmiştir. 50000000 (elli milyon) tane rastgele değerlerden oluşan int türden bir 
+    dizi 10 parçaya bölünmüş ve her parça bir thread tarafından qsort fonksiyonu ile sort edilmiştir. Sonra da bu kendi 
+    aralarında sıralı olan bu 10 dizi birleştirilmiştir. Sonra aynı dizi tek bir thread tarafından sıraya dizilmiştir. 3 
+    çekirdekli bir Linux sisteminde (kullandığımız sanal makine) thread'li biçim 6 saniye civarında thread'siz biçim 12 saniye 
+    civarında zaman almaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 #include <stdio.h>
 #include <stdlib.h>
@@ -25642,15 +25637,17 @@ int check(const int *nums)
 	return 1;
 }
 
+<BURADA KALDIK>
+
 /*--------------------------------------------------------------------------------------------------------------------------
     Senkronizasyon dünyasında karşımıza çıkan diğer bir senkronizasyon nesnesi de "spinlock" denilen nesnedir. Spinlock nesneleri 
     tıpkı mutex'ler ya da binary semaphore'lar gibi bir kritik kodun başından sonuna kadar yalnızca tek bir thread tarafından 
     çalıştırılmasını sağlamak için kullanılmaktadır. Bu nesnelerin mutex ve binary semaphore nesnelerinden farkı eğer nesne 
     kilitliyse beklemenin bloke yoluyla değil, meşgul bir döngü yoluyla blokesiz yapılmasıdır. Yani spinlock nesnelerinin içerisinde
-    sonsuz bir döngü vardır. Bu döngünün içerisinde sürekli "kilit açılmış mı" diye kontrol yapılmaktadır. Şüphesiz bu biçimdeki
-    çalışma eğer nesne kilitliyse gereksiz CPU zamanının harcanmasına yol açacaktır. Ancak bazı durumlarda spinlock'lar 
-    hızlandırma sağlayabilmektedir. Çünkü senkronizasyon nesnelerinin kilitli olması durumunda thread'in uykuya yatırılması ve 
-    uyandırılması göreli olarak önemli bir zaman kaybı da oluşturmaktadır. 
+    bir döngü vardır. Bu döngünün içerisinde sürekli "kilit açılmış mı" diye kontrol yapılmaktadır. Şüphesiz bu biçimdeki çalışma 
+    eğer nesne kilitliyse gereksiz CPU zamanının harcanmasına yol açacaktır. Ancak bazı durumlarda spinlock'lar hızlandırma 
+    sağlayabilmektedir. Çünkü senkronizasyon nesnelerinin kilitli olması durumunda thread'in uykuya yatırılması ve uyandırılması 
+    göreli olarak önemli bir zaman kaybı da oluşturmaktadır.
 
     Spinlock nesneleri yalnızca bazı özel koşullar sağlanıyorsa kullanılmalıdır. Örneğin tek işlemcili ya da tek çekirdekli 
     sistemlerde spinlock kullanımının genellikle zararından başka bir faydası yoktur. Çünkü tek işlemcili ya da tek çekirdekli 
@@ -50927,135 +50924,168 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Pekiyi bizim programımız örneğin "libmyutil.so" isimli bir dinamik kütüphaneden çağrı yapıyor olsun. Bu "libmyutil.so" 
-    dosyasının program çalıştırılırken nerede bulundurulması gerekir? İşte program çalıştırılırken ilgili dinamik kütüphane 
-    dosyasının özel bazı dizinlerde bulunuyor olması gerekmektedir. Yükleme sırasında hangi dizinlere bakıldığı "man ld.so" 
-    sayfasından elde edilebilir. Bu dokümanda dinamik kütüphanenin bulunabilmesi için sırasıyla tek tek hangi dizinlere bakıldığı 
-    belirtilmiştir. Dinamik linker'ın dinamik kütüphaneleri nerede ve nasıl aradığının bazı ayrıntıları vardır. Ancak konuyu 
-    basitleştirirsek dinamik linker LD_LIBRARY_PATH isimli çevre değişkeni ile belirtilen dizinlerde dinamik kütüphane dosyalarını
-    aramaktadır. LD_LIBRARY_PATH çevre değişkeni normal olarak çevre değişken listesinde bulunmaz. Programcının bunu eklemesi 
-    gerekebilmektedir. Bu çevre değişkeninin değeri ':' karakterleriyle ayrılmış olan dizinlerden oluşmalıdır. İşte dinamik linker 
-    tek tek bu dizinlere bakmaktadır. Örneğin:
+    Linux sistemlerinde dinamik kütüphane kullanan programların yüklenmesi süreci biraz ilginçtir. Anımsanacağı gibi aslında
+    her türlü program exec fonksiyonları tarafından yüklenip çalıştırılmaktadır. Bu exec fonksiyonlarının taban olanı "execve"
+    isimli fonksiyondur. (Yani diğer exec fonksiyonları bunu çağırmaktadır.) execve fonksiyonu da bir sistem fonksiyonu olarak 
+    yazılmıştır.
 
-    export LD_LIBRARY_PATH=/home/kaan:/home/kaan/Study/Unix-Linux-SysProg
+    Dinamik kütüphane kullanan programların kullandığı dinamik kütüphaneler ismine "dinamik linker (dynamic linker)" denilen
+    özel bir program tarafından yüklenmektedir. exec fonksiyonları aslında sıra dinamik kütüphanelerin yüklenmesine geldiğinde 
+    dinamik linker denilen bu programı çalıştırmaktadır. Dinamik linker "ld.so" ismiyle temsil edilmektedir. Programın kullandığı 
+    dinamik kütüphanelerin başka bir program tarafından yüklenmesi esneklik sağlamaktadır. Bu sayede sistem programcısı isterse 
+    (genellikle istemez) bu dinamik linker programını değiştirerek yükleme sürecinde özel işlemler yapabilir. Dinamik linker 
+    tamamen user modda çalışmaktadır.
 
-    Burada artık dinamik kütüphaneler "/home/kaan" dizininde ve "/home/kaan/Unix-Linux-SysProg" dizininde aranacaktır. Eğer biz
-    LD_LIBRARY_PATH çevre değişkenine "." biçiminde dizin eklersek buradaki "." o anda bulunulan dizin anlamına gelmektedir. Örneğin:
-
-    export LD_LIBRARY_PATH=/home/kaan:/home/kaan/Study/Unix-Linux-SysProg:.
-
-    Dinamik linker eğer dinamik kütüphaneyi LD_LIBRARY_PATH ile belirtilen dizinde bulamazsa bu durumda /lib, /usr/lib, /lib64 ve
-    /usr/lib64 dizinlerine de bakmaktadır. (Bu 64'lü dizinlere 32 bit sistemlerde ve bazı 64 bit sistemlerde bakılmamaktadır.) O halde
-    dinamik kütüphanemizin dinamik linker tarafından bulunmasını istiyorsak onu doğrudan /lib ya da /usr/lib dizinlerinin içerisine de
-    yerleştirebiliriz. /lib dizini sistemin yüklenmesi için de gereken aşağı seviyeli kütüphanelerin bulunduğu dizindir. Programcının 
-    bu tür durumlarda /usr/lib dizinini tercih etmesi uygundur.
+    Programın dinamik kütüphanelerinin yüklenmesinde kullanılacak olan dinamik linker'ın yol ifadesi ELF formatında "Program Başlık 
+    Tablosu'nda" INTERP türüyle belirtilmektedir. INTERP türüne ilişkin Program Başlığı'nda dinamik bağlayıcının yol ifadesinin 
+    bulunduğu dosya offset'i belirtilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Dinamik kütüphanelerin aranacağı yer aslında doğrudan çalıştırılabilen dosyanın içerisine (.dynamic isimli bölüme (section)) 
-    de yazılabilir. Bunun için "-rpath <yol ifadesi>" linker seçeneği kullanılmalıdır. Buradaki yol ifadesinin mutlak olması gerekir. 
-    Ancak eskiden bunun ELF formatında için DT_RPATH isimli tag kullanılırken daha sonra bu tag "deprecated" yapılmış ve DT_RUNPATH 
-    tag'ı kullanılmaya başlanmıştır. "-rpath" seçeneğini linker'a geçirebilmek için gcc'de "-Wl" seçeneğini kullanmak gerekir. "-Wl" 
-    seçeneği bitişik yazılan virgüllü alanlardan oluşmaktadır. gcc bunu ld linker'ına virgüller yerine boşluklar koyarak geçirmektedir. 
-    Örneğin:
+    Pekiyi bizim programımız örneğin "libmyutil.so" isimli bir dinamik kütüphaneden çağrı yapıyor olsun. Bu "libmyutil.so" 
+    dosyasının program çalıştırılırken nerede bulundurulması gerekir? İşte program çalıştırılırken ilgili dinamik kütüphane 
+    dosyasının özel bazı dizinlerde bulunuyor olması gerekmektedir. Dinamik kütüphanelerin dinamik bağlayıcı tarafından yüklendiğini
+    ve dinamik bağlayıcının da "ld.so" ismiyle temsil edildiğini anımsayınız. "ld.so" ismiyle temsil edilen dinamik bağlayıcı 
+    akkında "man ld.so" komutuyla bilgi alabilirsiniz.
 
-    gcc -o app app.c -Wl,-rpath,/home/csd/Study/Unix-Linux-SysProg libmyutil.so
+    "ld.so" için hazırlanan man sayfasında dinamik kütüphaneleri dinamik bağlayıcının nasıl ve nerelerde aradığı maddeler halinde 
+    açıklanmıştır. Bu maddeleri tek tek ele almak istiyoruz:
 
-    Burada ELF formatının DT_RUNPATH tag'ına yerleştirme yapılmaktadır. Çalıştırılabilir dosyaya iliştirilen rpath bilgisi readelf 
-    programı ile aşağıdaki gibi görüntülenebilir:
+    1) Dinamik bağlayıcı önce çalıştırılabilen dosyanın ".dynamic" bölümündeki DT_RPATH tag'ına bakar. Bu tag'ın değeri tek bir 
+    dizin ya da ':' karakterleriyle ayrılmış olan birden fazla dizin belirten bir yazı olabilir. Bu durumda dinamik bağlayıcı 
+    bu dizinlere sırasıyla bakmaktadır. Ancak birinci aşamada bu tag'a bakılmasının bir tasarım kusuru olduğu anlaşılmıştır. 
+    Bu nedenle ".dynamic" bölümüne DT_RPATH tag'ının yerleştirilmesi "deprecated" yapılmıştır.
+
+    2) Dinamik bağlayıcı yüklenmekte olan program dosyasına ilişkin prosesin LD_LIBRARY_PATH çevre değişkenine bakar. Eğer böyle 
+    bir çevre değişkeni varsa dinamik kütüphaneleri bu çevre değişkeninde belirtilen dizinlerde sırasıyla arar. Bu çevre değişkeni 
+    ':' karakterleriyle ayrılmış yol ifadelerinden oluşmaktadır. Biz programı genellikle kabuk üzerinden çalıştırdığımıza göre 
+    kabukta bu çevre değişkenini aşağıdaki örnekte olduğu gibi set edebiliriz:
+
+    $ export LD_LIBRARY_PATH=/home/kaan:/home/kaan/Study/UnixLinux-SysProg:.
+
+    Burada artık dinamik kütüphaneler sırasıyla "/home/kaan" dizininde, "/home/kaan/Study/UnixLinux-SysProg" dizininde ve prosesin 
+    çalışma dizininde (current working directory) aranacaktır. Çevre değişkeninin sonundaki "." karakterinin exec uygulayan 
+    prosesin o andaki çalışma dizinini temsil ettiğine dikkat ediniz. Tabii biz kabuk programının değil çalıştırılacak programın 
+    çevre değişken listesine ekleme yaparak da programı aşağıdaki gibi çalıştırabiliriz:
+
+    $ LD_LIBRARY_PATH=:. ./app
+
+    3) Dinamik bağlayıcı çalıştırılabilen dosyanın ".dynamic" bölümündeki DT_RUNPATH tag'ına bakar. Birinci aşamada biz DT_RPATH
+    tag'ının "deprecated" yapıldığını belirtmiştik. İşte bu tag yerine artık DT_RUNPATH tag'ı kullanılmalıdır. Bu tag'ın değeri 
+    de yine ':' karakterleriyle ayrılmış olan dizin listesinden oluşmaktadır. Dinamik bağlayıcı bu dizinlerde sırasıyla arama 
+    yapmaktadır. DT_RPATH ile DT_RUNPATH arasındaki tek fark DT_RUNPATH tag'ına LD_LIBRARY_PATH çevre değişkeninden daha sonra 
+    bakılmasıdır.
+
+    4) Dinamik bağlayıcı daha sonra "/etc/ld.so.cache" isimli cache dosyasına bakar. Bu cache dosyası her bir dinamik kütüphanenin
+    hangi dizinlerde olduğunu belirtmektedir. Bu konu izleyen paragraflarda ele alınacaktır.
+
+    5) Nihayet dinamik bağlayıcı dinamik kütüphaneleri sırasıyla "/lib", /usr/lib" dizinlerinde de aramaktadır. 64 bit Linux 
+    sistemlerininin bir bölümünde 64 bit dinamik kütüphaneler için "/lib64" ve "/usr/lib64" dizinlerine de bakılabilmektedir.
+
+--------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Yukarıdaki üçüncü maddede aranacak yol ifadesini çalıştırılabilir dosyanın DT_RUNPATH tag'ına yerleştirmek için ld 
+    bağlayıcısında "-rpath <yol ifadeleri>" bağlayıcı seçeneği kullanılmalıdır. Buradaki yol ifadelerinin mutlak olması zorunlu 
+    değilse de şiddetle tavsiye edilmektedir. gcc ve clang derleyicilerinde "-rpath" seçeneğini bağlayıcıya geçirebilmek için 
+    "-Wl" seçeneği kullanılabilir. "-Wl"  seçeneği bitişik yazılan virgüllü alanlardan oluşmalıdır. gcc ve clang bu komut satırı 
+    argümanını "ld" bağlayıcısına virgüller yerine boşluklar (SPACE) koyarak geçirmektedir. Örneğin:
+
+    $ gcc -o app app.c -Wl,-rpath,/home/kaan/Study/UnixLinux-SysProg libmyutil.so
+
+    Burada ELF formatının DT_RUNPATH tag'ına yerleştirme yapılmaktadır. Çalıştırılabilir dosyaya iliştirilen DT_RUNPATH bilgisi 
+    "readelf" programı ile aşağıdaki gibi görüntülenebilir:
 
     $ readelf -d app | grep "RUNPATH"
-    0x000000000000001d (RUNPATH)            Library runpath: [/home/csd/Study/Unix-Linux-SysPro
+    0x000000000000001d (RUNPATH)            Library runpath: [/home/csd/Study/UnixLinux-SysProg
 
     Biz bu tag'a birden fazla dizin de yerleştirebiliriz. Bu durumda yine dizinleri ':' ile ayırmamız gerekir. Örneğin:
 
-    gcc -o app app.c -Wl,-rpath,/home/csd/Study/Unix-Linux-SysProg:/home/kaan libmyutil.so
+    $ gcc -o app app.c -Wl,-rpath,/home/csd/Study/UnixLinux-SysProg:/home/kaan libmyutil.so
 
-    Birden fazla kez -rpath seçeneği kullanıldığında bu seçenekler tek bir DT_RUNPATH tag'ına aralarına ':' karakteri getirilerek 
+    Birden fazla kez "-rpath" seçeneği kullanıldığında bu seçenekler tek bir DT_RUNPATH tag'ına aralarına ':' karakteri getirilerek 
     yerleştirilmektedir. Yani aşağıdaki işlem yukarıdaki ile eşdeğerdir:
 
-    gcc -o app app.c -Wl,-rpath,/home/csd/Study/Unix-Linux-SysProg,-rpath,/home/kaan libmyutil.so
+    gcc -o app app.c -Wl,-rpath,/home/csd/Study/UnixLinux-SysProg,-rpath,/home/kaan libmyutil.so
 
-    Eğer DT_RPATH tag'ına yerleştirme yapılmak isteniyorsa linker seçeneklerine ayrıca --disable-new-dtags seçeneğinin de girilmesi 
-    gerekmektedir. Örneğin:
+    "-rpath" bağlayıcı seçeneğinde default durumda DT_RUNPATH tag'ına yerleştirme yapıldığına dikkat ediniz. Eğer DT_RPATH tag'ına 
+    yerleştirme yapılmak isteniyorsa bağlayıcı seçeneklerine ayrıca "--disable-new-dtags" seçeneğinin de girilmesi gerekmektedir. 
+    Örneğin:
 
-    gcc -o app app.c -Wl,-rpath,/home/csd/Study/Unix-Linux-SysProg,--disable-new-dtags libmyutil.so
+    gcc -o app app.c -Wl,-rpath,/home/csd/Study/UnixLinux-SysProg,--disable-new-dtags libmyutil.so
 
-    DT_RPATH tag'ını da aşağıdaki gibi görüntüleyebiliriz:
+    DT_RUNPATH tag'ını da aşağıdaki gibi görüntüleyebiliriz:
 
-    $ readelf -d app | grep "RPATH"
-    0x000000000000000f (RPATH)              Library rpath: [/home/csd/Study/Unix-Linux-SysProg]
+    $ readelf -d app | grep "RUNPATH"
+    0x000000000000001d (RUNPATH)            Library runpath: [/home/kaan/Study/UnixLinux-SysProg]
 
-    Yukarıda da belirttiğimiz gibi DT_RPATH tag'ı bir süredir "deprecated" yapılmıştır.
-
-    Çalıştırılabilir dosyaya DT_RUNPATH tag'ının mutlak yol ifadesi biçiminde girilmesi kullanım sorunlarına yol açabilmektedir. 
-    Çünkü bu durumda dinamik kütüphaneler uygulamanın kurulduğu dizine göreli biçimde konuşlandırılacağı zaman kurulum yeri 
-    değiştirildiğinde sorunlar oluşabilmektedir. Örneğin biz çalıştırılabilir dosyanın DT_RUNPATH tag'ına home/kaan/test isimli 
-    yol ifadesini yazmış olalım. Programımızı ve dinamik kütüphanemizi bu dizine yerleştirirsek bir sorun oluşmayacaktır. Ancak 
-    başka bir dizine yerleştirirsek dinamik kütüphanemiz bulunamayacaktır. İşte bunu engellemek için -rpath seçeneğinde '$ORIGIN' 
-    argümanı kullanılmaktadır. Buradaki '$ORIGIN' argümanı o anda uygulamanın bulunduğu dizini temsil etmektedir. Örneğin: 
+    Çalıştırılabilir dosyaya DT_RUNPATH tag'ının mutlak ya da göreli yol ifadesi biçiminde girilmesi bazı kullanım sorunlarına 
+    yol açabilmektedir. Çünkü bu durumda dinamik kütüphaneler uygulamanın kurulduğu dizine göreli biçimde konuşlandırılacağı 
+    zaman uygulamanın kurulum yeri değiştirildiğinde sorunlar oluşabilmektedir. Örneğin biz çalıştırılabilir dosyanın DT_RUNPATH 
+    tag'ına "home/kaan/test" isimli yol ifadesini yazmış olalım. Programımızı ve dinamik kütüphanemizi bu dizine yerleştirirsek 
+    bir sorun oluşmayacaktır. Ancak başka bir dizine yerleştirirsek dinamik kütüphanemiz bulunamayacaktır. İşte bunu engellemek 
+    için "-rpath" seçeneğinde '$ORIGIN' argümanı kullanılmaktadır. Buradaki '$ORIGIN' argümanı "o anda çalıştırılabilen dosyanın 
+    bulunduğu dizini" temsil etmektedir. Örneğin:
 
     gcc -o app app.c -Wl,-rpath,'$ORIGIN'/. libmyutil.so
 
-    Burada artık çalıştırılabilen dosya nereye yerleştirilirse yerleştirilsin dinamik kütüphaneler onun yerleştirildiği dizinde 
-    aranacaktır.
+    Burada artık çalıştırılabilen dosya nereye yerleştirilirse yerleştirilsin ve nereden çalıştırılırsa çalıştırılsın dinamik 
+    kütüphaneler çalıştırılabilen dosyanın yerleştirildiği dizinde aranacaktır.
 
-    Aslında arama sırası bakımından DT_RPATH tag'ının en yukarıda olması (daha doğrusu LD_LIBRARY_PATH'in yukarısında olması) yanlış 
-    bir tasarımdır. Geriye doğru uyumu koruyarak bu yanlış tasarım DT_RUNPATH tag'ı ile telafi edilmiştir. DT_RUNPATH tag'ına 
-    LD_LIBRARY_PATH çevre değişkeninden sonra başvurulmaktadır. (Bunun için "man ld.so" sayfasındaki sıralamayı gözden geçiriniz.)
+    Yukarıda da belirttiğimiz gibi aslında arama sırası bakımından DT_RPATH tag'ının en yukarıda olması (LD_LIBRARY_PATH'in 
+    yukarısında olması) yanlış bir tasarımdır. Geriye doğru uyumu koruyarak bu yanlış tasarım DT_RUNPATH tag'ı ile telafi 
+    edilmiştir. DT_RUNPATH tag'ına LD_LIBRARY_PATH çevre değişkeninden sonra başvurulmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Dinamik kütüphanelerin aranması sırasında "/lib" ve "/usr/lib" dizinlerine bakılmadan önce özel bir dosyaya da bakılmaktadır. 
+   Dinamik kütüphanelerin aranması sırasında "/lib" ve "/usr/lib" dizinlerine bakılmadan önce özel bir dosyaya da bakılmaktadır. 
     Bu dosya "/etc/ld.so.cache" isimli dosyadır. "/etc/ld.so.cache" dosyası aslında binary bir dosyadır. Bu dosya hızlı aramanın 
     yapılabilmesi için "sözlük (dictionary)" tarzı yani algoritmik aramaya izin verecek biçimde bir içeriğe sahiptir. Bu dosya
-    ilgili dinamik kütüphane dosyalarının hangi dizinler içerisinde olduğunu gösteren bir yapıdadır. (Yani bu dosya .so dosyalarının 
+    ilgili dinamik kütüphane dosyalarının hangi dizinler içerisinde olduğunu gösteren bir yapıdadır. (Yani bu dosya ".so" dosyalarının 
     hangi dizinlerde olduğunu belirten binary bir dosyadır.) Başka bir deyişle bu dosyanın içerisinde "falanca .so dosyası filanca 
-    dizinde" biçiminde bilgiler vardır. İlgili .so dosyasının yerinin bu dosyada aranması dizinlerde aranmasından çok daha hızlı 
-    yapılabilmektedir.
+    dizinde" biçiminde bilgiler vardır. İlgili ".so" dosyasının yerinin bu dosyada aranması dizinlerde aranmasından çok daha hızlı 
+    yapılabilmektedir. Ayrıca dinamik kütüphaneler değişik dizinlerde bulunabilmektedir. Bunların LD_LIBRARY_PATH çevre değişkeninde
+    belirtilen dizinlerde tek tek aranması bir yavaşlık oluşturabilmektedir.
 
     Pekiyi bu "/etc/ld.so.cache" dosyasının içerisinde hangi ".so" dosyaları vardır? Aslında bu dosyanın içerisinde "/lib" ve 
     "/usr/lib" dizinindeki ".so" dosyalarının hepsi bulunmaktadır. Ama programcı isterse kendi dosyalarını da bu cache dosyasının 
-    içerisine yerleştirebilir. Pekiyi neden böyle bir cache dosyasına gereksinim duyulmuştur? İşte dinamik kütüphaneler yüklenirken 
-    "/lib" ve "/usr/lib" dizinlerinin taranması göreli olarak uzun zaman almaktadır. Bu da programın yüklenme süresini uzatabilmektedir. 
-    Halbuki bu dizinlere bakılmadan önce bu cache dosyasına bakılırsa ilgili dosyanın olup olmadığı varsa nerede olduğu çok daha 
-    hızlı bir biçimde elde edilebilmektedir. Burada dikkat edilmesi gereken nokta bu cache dosyasına "/lib" ve "/usr/lib" dizinlerinden 
-    daha önce bakıldığı ve bu dizinlerin içeriğinin de zaten bu cache dosyasının içerisinde olduğudur. O halde aslında "/lib" ve "/usr/lib"
-    dizinlerinde arama çok nadir olarak yapılmaktadır. Bu cache dosyasına LD_LIBRARY_PATH dizininden daha sonra bakılmaktadır. O halde 
-    programcının kendi ".so" dosyalarını da eğer uzun süreliğine konuşlandıracaksa bu cache dosyasının içerisine yazması tavsiye 
-    edilmektedir.
+    içerisine yerleştirebilir. Burada dikkat edilmesi gereken nokta bu cache dosyasına "/lib" ve "/usr/lib" dizinlerinden 
+    daha önce bakıldığı ve bu dizinlerin içeriğinin de zaten bu cache dosyasının içerisinde olduğudur. O halde aslında "/lib" ve 
+    "/usr/lib" dizinlerinde arama çok nadir olarak yapılmaktadır. Ayrıca bu cache dosyasına LD_LIBRARY_PATH çevre değişkeninden 
+    daha sonra bakıldığına dikkat ediniz. O halde programcının kendi ".so" dosyalarını da -eğer uzun süreliğine konuşlandıracaksa- 
+    bu cache dosyasının içerisine yerleştirmesi tavsiye edilmektedir.
 
     Pekiyi "/etc/ld.so.cache" dosyasına biz nasıl bir dosya ekleriz? Aslında programcı bunu dolaylı olarak yapmaktadır. Şöyle ki: 
     "/sbin/ldconfig" isimli bir program vardır. Bu program "/etc/ld.so.conf" isimli bir text dosyasına bakar. Bu dosya dizinlerden 
-    oluşmaktadır. Bu ldconfig programı bu dizinlerin içerisindeki "so" dosyalarını "/etc/ld.so.cache" dosyasına eklemektedir. 
+    oluşmaktadır. Bu "ldconfig" programı bu dizinlerin içerisindeki "so" dosyalarını "/etc/ld.so.cache" dosyasına eklemektedir. 
     Şimdilerde "/etc/ld.so.conf" dosyasının içeriği şöyledir:
 
     include /etc/ld.so.conf.d/*.conf
 
     Bu satır "/etc/ld.so.conf.d" dizinindeki tüm ".conf" uzantılı dosyaların bu işleme dahil edileceğini belirtmektedir.
 
-    Biz ldconfig programını çalıştırdığımızda bu program "/lib", "/usr/lib" ve "/etc/ld.so.conf" (dolayısıyla "/etc/ld.so.conf.d" 
-    dizinindeki ".conf" dosyalarına) bakarak "/etc/ld.so.cache" dosyasını yeniden oluşturmaktadır. O halde bizim bu cache'e ekleme yapmak 
-    için tek yapacağımız şey "/etc/ld.so.conf.d" dizinindeki bir ".conf" dosyasına yeni bir satır olarak bir dizinin yol ifadesini girmektir. 
-    (".conf" dosyaları her satırda bir dizinin yol ifadesinden oluşmaktadır.) Tabii programcı isterse bu dizine yeni bir ".conf" dosyası 
-    da ekleyebilir. İşte programcı bu işlemi yaptıktan sonra "/sbin/ldconfig" programını çalıştırınca artık onun eklediği dizinin 
-    içerisindeki ".so" dosyaları da "/etc/ld.so.cache" dosyasının içerisine eklenmiş olacaktır. Daha açık bir anlatımla programcı 
-    bu cache dosyasına ekleme işini adım adım şöyle yapar:
+    Biz "ldconfig" programını çalıştırdığımızda bu program "/lib", "/usr/lib" ve "/etc/ld.so.conf" (dolayısıyla "/etc/ld.so.conf.d" 
+    dizinindeki ".conf" dosyalarına) bakarak "/etc/ld.so.cache" dosyasını yeniden oluşturmaktadır. O halde bizim bu cache'e ekleme 
+    yapmak için tek yapacağımız şey "/etc/ld.so.conf.d" dizinindeki bir ".conf" dosyasına yeni bir satır olarak bir dizinin yol 
+    ifadesini girmektir. (".conf" dosyaları her satırda bir dizinin yol ifadesinden oluşmaktadır.) Tabii programcı isterse bu 
+    dizine yeni bir ".conf" dosyası da ekleyebilir. İşte programcı bu işlemi yaptıktan sonra "/sbin/ldconfig" programını çalıştırınca 
+    artık onun eklediği dizinin içerisindeki ".so" dosyaları da "/etc/ld.so.cache" dosyasının içerisine eklenmiş olacaktır. Daha 
+    açık bir anlatımla programcı bu cache dosyasına ekleme işini adım adım şöyle yapar:
 
     1) Önce ".so" dosyasını bir dizine yerleştirir.
-    2) Bu dizinin ismini "/etc/ld.so.conf.d" dizinindeki bir dosyanın sonuna ekler. Ya da bu dizinde yeni conf dosyası oluşturarak
+    2) Bu dizinin ismini "/etc/ld.so.conf.d" dizinindeki bir dosyanın sonuna ekler. Ya da bu dizinde yeni ".conf" dosyası oluşturarak
     dizini bu dosyanın içerisine yazar.
     3) "/sbin/ldconfig" programını çalıştırır.
 
-    ldconfig programının "sudo" ile çalıştırılması gerektiğine dikkat ediniz. Zaten "/sbin" dizinindeki tüm programlar "super user"
+    "ldconfig" programının "sudo" ile çalıştırılması gerektiğine dikkat ediniz. Zaten "/sbin" dizinindeki tüm programlar "super user"
     için bulundurulmuştur.
 
-    Programcı "/etc/ld.so.conf.d" dizinindeki herhangi bir dosyaya değil de -f seçeneği ile kendi belirlediği bir dosyaya da ilgili 
-    dizini yazabilmektedir. Başka bir deyişle "-f" seçeneği "şu config dosyasına da bak" anlamına gelmektedir. ldconfig her 
-    çalıştırıldığında sıfırdan yeniden cache dosyasını oluşturmaktadır.
+    Programcı "/etc/ld.so.conf.d" dizinindeki herhangi bir dosyaya değil de "-f" seçeneği sayesinde kendi belirlediği bir dosyaya 
+    da ilgili dizinleri yazabilmektedir. Başka bir deyişle "-f" seçeneği "şu config dosyasına da bak" anlamına gelmektedir. 
+    "ldconfig" her çalıştırıldığında sıfırdan yeniden cache dosyasını oluşturmaktadır.
 
-    Programcı "/lib" ya da "/usr/lib" dizinine bir "so" dosyası eklediğinde ldconfig programını çalıştırması zorunlu olmasa da 
-    iyi bir tekniktir. Çünkü o dosya da cache dosyasına yazılacak ve daha hızlı bulunacaktır.
+    Programcı "/lib" ya da "/usr/lib" dizinine bir ".so" dosyası eklediğinde "ldconfig" programını çalıştırması -zorunlu olmasa 
+    da- iyi bir tekniktir. Çünkü o dosya da cache dosyasına yazılacak ve daha hızlı bulunacaktır.
 
     ldconfig programında "-p" seçeneği ile cache dosyası içerisindeki tüm dosyalar görüntülenebilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
