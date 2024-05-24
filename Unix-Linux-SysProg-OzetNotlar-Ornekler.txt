@@ -25637,8 +25637,6 @@ int check(const int *nums)
 	return 1;
 }
 
-<BURADA KALDIK>
-
 /*--------------------------------------------------------------------------------------------------------------------------
     Senkronizasyon dünyasında karşımıza çıkan diğer bir senkronizasyon nesnesi de "spinlock" denilen nesnedir. Spinlock nesneleri 
     tıpkı mutex'ler ya da binary semaphore'lar gibi bir kritik kodun başından sonuna kadar yalnızca tek bir thread tarafından 
@@ -25651,21 +25649,22 @@ int check(const int *nums)
 
     Spinlock nesneleri yalnızca bazı özel koşullar sağlanıyorsa kullanılmalıdır. Örneğin tek işlemcili ya da tek çekirdekli 
     sistemlerde spinlock kullanımının genellikle zararından başka bir faydası yoktur. Çünkü tek işlemcili ya da tek çekirdekli 
-    sistemlerde, bir thread nesneyi kilitlemiş ve thread'ler arası geçiş oluşmuşsa artık o nesnenin kilidinin açılması ancak o thread'in
-    yeniden CPU'ya atanmasıyla gerçekleşeceği için diğer bir thread spinlock içerisinde meşgul bir döngüde CPU zamanı harcayarak 
-    bekleyecektir. Halbuki çok işlemcili ya da çekirdekli sistemlerde nesneyi kilitleyen thread bir işlemcide ya da çekirdekte, 
-    spinlock'ta bekleyen thread ise başka bir işlemcide ya da çekirdekte çalışıyor olabilir. Bu durumda spinlock çok fazla dönmeden 
-    nesneyi kilitleyebilir. Tabii işletim sistemleri, çok işlemcili ya da çekirdekli sistem söz konusu olsa bile bu thread'leri aynı 
-    işlemci ya da çekirdeğin kuyruğuna atayabilmektedir. Öte yandan bazı aşağı seviyeli uygulamalarda sistemde tek bir işlemci ya da 
-    çekirdek olsa bile bir donanım kesmesi ile kilidin açılmasını mümkün hale getiren bir mekanizma da oluşturulabilmektedir. 
-    Mademki işletim sistemleri spinlock'ı kullanan thread'leri aynı işlemci ya da çekirdeğin kuyruğuna atayabilmektedir bu durumda 
-    spinlock'ı kilitleyen thread'lerin daha yüksek öncelikli olması, bu tür durumlardaki gereksiz beklemeleri bir ölçüde engelleyebilmektedir. 
-    Özetle spinlock kullanılırken dikkat edilmesi gerekir. Uygunsuz yerde spinlock kullanımı performansı tam tersine olumsuz etkileyebilmektedir. 
-    Ancak bu nesnenin gerektiği yerde kullanılması da performans üzerinde olumlu etkiler sağlayabilmektedir. 
+    sistemlerde, bir thread nesneyi kilitlemiş ve thread'ler arası geçiş oluşmuşsa artık o nesnenin kilidinin açılması ancak o 
+    thread'in yeniden CPU'ya atanmasıyla gerçekleşeceği için diğer bir thread spinlock içerisinde meşgul bir döngüde CPU zamanı 
+    harcayarak bekleyecektir. Halbuki çok işlemcili ya da çekirdekli sistemlerde nesneyi kilitleyen thread bir işlemcide ya da 
+    çekirdekte, spinlock'ta bekleyen thread ise başka bir işlemcide ya da çekirdekte çalışıyor olabilir. Bu durumda spinlock çok 
+    fazla dönmeden nesneyi kilitleyebilir. Tabii işletim sistemleri, çok işlemcili ya da çekirdekli sistem söz konusu olsa bile bu 
+    thread'leri aynı işlemci ya da çekirdeğin kuyruğuna atayabilmektedir. Öte yandan bazı aşağı seviyeli uygulamalarda sistemde 
+    tek bir işlemci ya da çekirdek olsa bile bir donanım kesmesi ile kilidin açılmasını mümkün hale getiren bir mekanizma da 
+    oluşturulabilmektedir. Mademki işletim sistemleri spinlock'ı kullanan thread'leri aynı işlemci ya da çekirdeğin kuyruğuna 
+    atayabilmektedir bu durumda spinlock'ı kilitleyen thread'lerin daha yüksek öncelikli olması, bu tür durumlardaki gereksiz 
+    beklemeleri bir ölçüde engelleyebilmektedir. Özetle spinlock kullanılırken dikkat edilmesi gerekir. Uygunsuz yerde spinlock 
+    kullanımı performansı tam tersine olumsuz etkileyebilmektedir. Ancak bu nesnenin gerektiği yerde kullanılması da performans 
+    üzerinde olumlu etkiler sağlayabilmektedir.
 
-    Spinlock kilidini almak için iki thread'in farklı işlemci ya da çekirdeklerde çalıştığı durumda bunlardan birinin spinlock kilidini
-    aldığında kısa süre içerisinde bırakması en uygun durumdur. Çünkü, diğer işlemci ya da çekirdekteki thread meşgul bir döngüde 
-    bekliyor olabilir. Spinlock ile oluşturulan kritik kodun kısa ve çabuk geçilen bir kod olması anlamlıdır. 
+    Spinlock kilidini almak için iki thread'in farklı işlemci ya da çekirdeklerde çalıştığı durumda bunlardan birinin spinlock 
+    kilidini aldığında kısa süre içerisinde bırakması en uygun durumdur. Çünkü, diğer işlemci ya da çekirdekteki thread meşgul 
+    bir döngüde bekliyor olabilir. Spinlock ile oluşturulan kritik kodun kısa ve çabuk geçilen bir kod olması anlamlıdır.
 
     Daha önceden de belirttiğimiz gibi aynı prosesin thread'leri arasındaki senkronizasyon için ilk akla gelmesi gereken 
     senkronizasyon nesneleri mutex nesneleridir. Spinlock nesneleri bazı özel durumlarda performansı artırmak için dikkatlice
@@ -25958,7 +25957,8 @@ void exit_sys_errno(const char *msg, int eno)
     - Bir thread kaynak üzerinde write işlemi yaparken diğer thread'ler bu işlem bitene kadar aynı kaynak üzerinde read ya da 
     write işlemi yapmamalıdır. 
 
-    - Bir thread kaynak üzerinde read işlemi yaparken diğer thread'ler bu işlem bitene kadar aynı kaynak üzerinde write işlemi yapmamalıdır. 
+    - Bir thread kaynak üzerinde read işlemi yaparken diğer thread'ler bu işlem bitene kadar aynı kaynak üzerinde write işlemi 
+    yapmamalıdır. 
 
     - Bir thread kaynak üzerinde read işlemi yaparken diğer thread'ler kaynak üzerinde read işlemi yapabilmelidir.
 
@@ -25995,8 +25995,8 @@ void exit_sys_errno(const char *msg, int eno)
 
     pthread_rwlock_t g_rwlock;
 
-    2) pthread_rwlock_t nesnesine, PTHREAD_RWLOCK_INITIALIZER makrosuyla ya da pthread_rwlock_init fonksiyonuyla ilk değer verilebilir. 
-    pthread_rwlock_init fonksiyonunun prototipi şöyledir:
+    2) pthread_rwlock_t nesnesine, PTHREAD_RWLOCK_INITIALIZER makrosuyla ya da pthread_rwlock_init fonksiyonuyla ilk değer 
+    verilebilir. pthread_rwlock_init fonksiyonunun prototipi şöyledir:
 
     #include <pthread.h>
 
@@ -26388,9 +26388,9 @@ void *thread_proc4(void *param)
     Bazı C derleyicilerinde "built-in" ya da "intrinsic" fonksiyon denilen bir kavram vardır. Derleyiciler tarafından prototipe
     gereksinim duyulmadan tanınan ve ne yaptığı bilinen özel fonksiyonlara "built-in" ya da "intrinsic" fonksiyonlar denilmektedir. 
     Tabii bu kavramlar C standartlarında yoktur. Eklenti (extension) biçiminde C derleyicilerinde bulunmaktadır. Bazı built-in 
-    ya da intrinsic fonksiyonlar makro gibi derleyici tarafından özel makine komutları ile açılmaktadır. Bazı built-in ya da intrinsic 
-    fonksiyonlar ise makro gibi açılmamalarına karşın derleyici bunların ne yaptığını bildiği için o işlemlerde optimizasyon
-    uygulayabilmektedir. Örneğin:
+    ya da intrinsic fonksiyonlar makro gibi derleyici tarafından özel makine komutları ile açılmaktadır. Bazı built-in ya da 
+    intrinsic  fonksiyonlar ise makro gibi açılmamalarına karşın derleyici bunların ne yaptığını bildiği için o işlemlerde 
+    optimizasyon uygulayabilmektedir. Örneğin:
 
     for (int i = 0; i < strlen(s); ++i) {
         ...
@@ -27291,12 +27291,12 @@ void exit_sys_errno(const char *msg, int err)
     yöntemi kullanılmaktadır. 
 
     Linux sistemlerinde çizelgeleme algoritması temel olarak "döngüsel çizelgeleme" esasına dayanmaktadır. Ancak bu algoritma 
-    Linux tarihi boyunca üç kez değiştirilmiştir. Linux'un ilk versiyonları uzunca bir süre özel bir isim verilmeyen bir döngüsel çizelgeleme
-    algoritması kullanıyordu. Sonra çekirdeğin 2.6 versiyonlarıyla (2003) birlikte "O(1) çizelgelemesi" denilen yeni bir algoritma 
-    kullanılmaya başlandı. Daha sonra çekirdeğin 2.6.23 versiyonu ile birlikte (2007) şu anda kullanılmakta olan "CFS (Completely Fair Scheduling)" 
-    algoritmasına geçilmiştir. Tabii izleyen paragraflarda da ele alınacağı gibi UNIX türevi sistemlerde proseslerin "çizelgeleme
-    politikaları (process scheduling policy)" vardır. Buradaki algoritmalar SCHED_NORMAL ya da SCHED_OTHER denilen politikalar
-    için özellikle etkili olmaktadır.
+    Linux tarihi boyunca üç kez değiştirilmiştir. Linux'un ilk versiyonları uzunca bir süre özel bir isim verilmeyen bir döngüsel 
+    çizelgeleme algoritması kullanıyordu. Sonra çekirdeğin 2.6 versiyonlarıyla (2003) birlikte "O(1) çizelgelemesi" denilen yeni 
+    bir algoritma kullanılmaya başlandı. Daha sonra çekirdeğin 2.6.23 versiyonu ile birlikte (2007) şu anda kullanılmakta olan 
+    "CFS (Completely Fair Scheduling)" algoritmasına geçilmiştir. Tabii izleyen paragraflarda da ele alınacağı gibi UNIX türevi 
+    sistemlerde proseslerin "çizelgeleme politikaları (process scheduling policy)" vardır. Buradaki algoritmalar SCHED_NORMAL 
+    ya da SCHED_OTHER denilen politikalar için özellikle etkili olmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -27312,7 +27312,9 @@ void exit_sys_errno(const char *msg, int err)
     SCHED_FIFO ve SCHED_RR çizelgelemelerine "gerçek zamanlı (realtime) çizelgeleme politikaları" denilmektedir. Prosesin 
     çizelgeleme politikası fork işlemi sırasında üst prosesten alınmaktadır. Linux'ta default çizelgeleme politikası SCHED_OTHER
     biçimindedir. Linux dünyasında bu çizelgeleme politikasına SCHED_NORMAL da denilmektedir. (Ancak SCHED_NORMAL POSIX standartlarında)
-    bulunmamaktadır. Linux'ta ayrıca POSIX standartlarında olmayan SCHED_BATCH ve SCHED_IDLE çizelgeleme politikalrı da vardır. 
+    bulunmamaktadır. Linux'ta ayrıca POSIX standartlarında olmayan SCHED_BATCH ve SCHED_IDLE çizelgeleme politikaları da vardır. 
+    POSIX standartlarında prosesin default çizelgeleme politikasının ne olacağı konusunda bir belirlemede bulunulmamıştır. Ancak 
+    sistemlerin hemen hepsinde default çizelgeleme politikası SCHED_OTHER biçimindedir.
 
     POSIX standartlarına göre bir prosesin çizelgeleme politikası onun bütün thread'lerinin çizelgeleme politikasını belirlemektedir. 
     Yani örneğin POSIX standartlarına göre biz prosesin çizelgeleme politikasını değiştirirsek onun bütün thread'lerinin çizelgeleme
@@ -27324,9 +27326,10 @@ void exit_sys_errno(const char *msg, int err)
     politikaları SCHED_OTHER biçimindedir. Bu SCHED_OTHER çizelgeleme politikası da işletim sistemlerini yazanların isteğine 
     bırakılmıştır. (Ayrıca POSIX standartları SCHED_OTHER politikasının SCHED_FIFO ve SCHED_RR ile aynı olabileceğini de belirtmiştir.)
     O halde mademki UNIX türevi sistemlerde proseslerin default çizelgeleme algoritmaları SCHED_OTHER biçimindedir ve bu SCHED_OTHER 
-    sistemden sisteme değişebilmektedir. O halde aslında UNIX türevi sistemlerde çizelgeleme algoritması sistemden sisteme değişebilir 
-    niteliktedir. Zaten yukarıda da bahsettiğimiz Linux'ta tarihsel olarak kullanılan üç çizelgeleme algoritması aslında SCHED_OTHER 
-    çizelgeleme politikasına ilişkindir. Çünkü SCHED_FIFO ve SCHED_RR çizelgelemeleri zaten POSIX standartlarında açıkça tanımlanmıştır. 
+    sistemden sisteme değişebilmektedir. O halde aslında UNIX türevi sistemlerde çizelgeleme algoritması sistemden sisteme 
+    değişebilir niteliktedir. Zaten yukarıda da bahsettiğimiz Linux'ta tarihsel olarak kullanılan üç çizelgeleme algoritması 
+    aslında SCHED_OTHER çizelgeleme politikasına ilişkindir. Çünkü SCHED_FIFO ve SCHED_RR çizelgelemeleri zaten POSIX 
+    standartlarında açıkça tanımlanmıştır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -27357,31 +27360,31 @@ void exit_sys_errno(const char *msg, int err)
     Şimdi varsayalım ki T3 thread'inin quanta sayacı 0'a düşmüş olsun ve thread'ler arası geçiş yapılsın. Burada T1 thread'i 
     CPU'ya atanacaktır. 
 
-    5) Pekiyi quanta sayacı 0'a düşmüş olan thread'lerin yeni sayaçları ne zaman doldurulmaktadır? İşte genellikle işletim 
-    sistemleri çalışma kuyruğundaki tüm thread'lerin quanta sayaçları 0'a düştüğünde hepsini birden doldurmaktadır. Yani çalışma
-    kuyruğundaki bir thread'in quanta sayacı 0'a düştüğünde onun quanta sayacı hemen doldurulmamakta, çalışma kuyruğundaki tüm 
-    thread'lerin quanta sayaçları 0'a düştüğünde doldurulmaktadır. Bu durumda quanta sayacı 0'a düşen thread, diğerlerinin hepsinin
-    quanta sayacı 0'a düşene kadar CPU'ya atanmamaktadır. 
+    5) Pekiyi çalışma kuyruğunda quanta sayacı 0'a düşmüş olan thread'lerin yeni sayaçları ne zaman doldurulmaktadır? İşte genellikle 
+    işletim sistemleri çalışma kuyruğundaki tüm thread'lerin quanta sayaçları 0'a düştüğünde hepsini birden doldurmaktadır. Yani 
+    çalışma kuyruğundaki bir thread'in quanta sayacı 0'a düştüğünde onun quanta sayacı hemen doldurulmamakta, çalışma kuyruğundaki 
+    tüm thread'lerin quanta sayaçları 0'a düştüğünde doldurulmaktadır. Bu durumda quanta sayacı 0'a düşen thread, çalışma kuyruğundaki 
+    diğer thread'lerin hepsinin quanta sayacı 0'a düşene kadar CPU'ya atanmamaktadır.
 
     6) İşletim sistemi yalnızca çalışma kuyruğundaki thread'leri çizelgelemektedir. Bir thread çalışırken bloke olduğunda çalışma
-    kuyruğundan çıkartılıp bekleme kuyruklarına alınır. Artık işletim sistemi o thread'i CPU'ya atamaya çalışmaz. Peki bir thread'in 
+    kuyruğundan çıkartılıp bekleme kuyruklarına alınır. Artık işletim sistemi o thread'i CPU'ya atamaya çalışmaz. Pekiyi bir thread'in 
     quanta sayacı 100'e geldiğinde bloke olduğunu düşünelim. İşletim sistemi de çalışma kuyruğundaki en yüksek sayaçlı thread'i
     CPU'ya atamış olsun ve bu biçimde çalışma kuyruğundaki tüm thread'lerin sayaçları 0'a düşmüş olsun. Pekiyi doldurma işleminde,
     bekleme kuyruklarındaki thread'lere doldurma yapılacak mıdır? İşletim sistemleri genellikle onlara da doldurma yapar. Ancak 
     bir üst sınır da belirlemektedir. Yani bizim bekleme kuyruğundaki thread'imizin quanta sayacı 100 olsun. Şimdi çalışma kuyruğundaki
     her thread'e doldurma yapılacak olsun. Bu quanta sayacı 100 olan thread'e de doldurma yapılacaktır. Yani bu thread uyandığında 
-    daha fazla CPU zamanı kullanacaktır. Böylesi bir sistemin daha adil olduğu düşünülmektedir. 
+    daha fazla CPU zamanı kullanacaktır. Böylesi bir sistemin daha adil olduğu düşünülmektedir.
 
     Pekiyi çalışma kuyruğundaki tüm thread'lerin quanta sayaçları 0'a düşmüş olsun. İşletim sistemi de onların quanta sayaçlarını 
     yeniden dolduracak olsun. Hepsini aynı değerle mi dolduracaktır? İşte SCHED_OTHER çizelgeleme politikasına sahip olan thread'ler 
     için bu doldurma değeri onların "nice" değeri ya da "dinamik öncelikleri" denilen bir değerle orantılı bir biçimde yapılmaktadır. 
     POSIX standartları bu nice değerinin bu konuda etkili olacağını söylemiş olsa da hiçbir ayrıntı vermemiştir. nice değerinin etkisi
     SCHED_OTHER politikasına özgüdür ve sistemden sisteme değişebilir. Örneğin Linux'ta CFS algoritmasında nice değerinin etkisi 
-    önceki klasik çizelgeleme ve O(1) çizelgelemesine göre artırılmıştır. 
+    önceki klasik çizelgeleme ve O(1) çizelgelemesine göre artırılmıştır.
 
     Biz yukarıda tipik olarak bir UNIX türevi sistemin SCHED_OTHER politikasında nasıl döngüsel çizelgeleme yaptığını kabaca açıkladık.
     Ancak işletim sistemlerinin çizelgeleyici altsistemlerinin pek çok ayrıntıları vardır. Linux'un CFS algoritmasının ayrıntıları 
-    ilgili dokümanlardan incelenebilir. 
+    ilgili dokümanlardan incelenebilir.
 
     Biz yukarıda sanki tek bir CPU ya da çekirdek varmış gibi durumu ele aldık. Günümüz bilgisayarlarında genellikle birden fazla
     CPU ya da çekirdek bulunmaktadır. İşletim sistemlerinin çoğu her CPU ya da çekirdek için ayrı bir çalışma kuyruğu (run queue) 
@@ -27393,14 +27396,15 @@ void exit_sys_errno(const char *msg, int err)
     Ancak Linux'ta CFS algoritmasıyla her CPU ya da çekirdek için ayrı çalışma kuyrukları oluşturulmuş ve kuyruktan kuyruğa gerektiğinde 
     transfer imkanı sağlanmıştır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
-
+<BURADA KALDIK>
 /*--------------------------------------------------------------------------------------------------------------------------
     SCHED_OTHER çizelgeleme politikasına sahip olan proseslerin (yani onun bütün thread'lerinin) "dinamik önceliği" ya da "nice"
     değeri denilen onların diğerlerine göre CPU kullanım miktarını ayarlamakta etkili olan değerleri vardır. İşletim sistemleri 
     tipik olarak çalışma kuyruğundaki tüm thread'lerin quanta sayaçları 0'a düştüğünde, onların yeni sayaç değerlerini bu 
     dinamik önceliğe ya da nice değerine göre doldurmaktadır. Ancak bu dinamik öncelik ya da nice değerinin tam olarak bu quanta 
-    sayaçları üzerinde nasıl bir etkiye sahip olacağı hakkında POSIX standartlarında bir şey söylenmemiştir. Örneğin Linux'ta SCHED_OTHER
-    prosesler için CFS algoritmasına geçildiğinde bu nice değerinin etkisi her bir nice değeri için %10 civarında olmaktadır.
+    sayaçları üzerinde nasıl bir etkiye sahip olacağı hakkında POSIX standartlarında bir şey söylenmemiştir. Örneğin Linux'ta 
+    SCHED_OTHER prosesler için CFS algoritmasına geçildiğinde bu nice değerinin etkisi her bir nice değeri için %10 civarında 
+    olmaktadır.
 
     Linux sistemlerinde, SCHED_OTHER proseslerin nice değerinin sınır değerleri [0, 39] arasındadır. POSIX standartları bunun orta 
     noktasına NZERO değeri demektedir. POSIX standartlarına göre SCHED_OTHER proseslerin dinamik önceliğinin [0, 2*NZERO-1] aralığında 
@@ -27414,7 +27418,7 @@ void exit_sys_errno(const char *msg, int err)
     İşletim sistemi tarafından çizelgelenen öğelerin prosesler olmadığına thread'ler olduğuna dikkat ediniz. POSIX standartları 
     "prosesin dinamik önceliği ya da nice değeri" demekle onun bütün thread'lerinin dinamik önceliğini kastetmektedir. Yani 
     dinamik öncelik proses temelinde değiştirilse de aslında Linux işletim sistemi bu dinamik öncelikleri thread temelinde 
-    ele almaktadır. Ayrıca spesifik bir thread'in dinamik önceliği de değiştirilebilmektedir. 
+    ele almaktadır. Ayrıca spesifik bir thread'in dinamik önceliği de değiştirilebilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
