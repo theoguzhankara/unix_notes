@@ -59,7 +59,6 @@
     - USB Uzatma Kablosu Gerekebilir.
 
     - Ethernet RJ45 Kablosu: Eğer SBC'nin wireless özelliği varsa buna gerek duymayabilirsiniz.
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -150,7 +149,6 @@
     1) Mikrodenetleyiciler
     2) Mikroişlemcileri
     3) DSP'ler
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -179,7 +177,6 @@
     - ARM Mikrodenetleyici Ailesi (Tasarımcısı ARM Holding, ancak çok çeşitli firmalar tarafından üretiliyor)
     - AVR Mikrodenetleyici Ailesi (Atmel, ancak Atmel firması 2016'da Microchip tarafından satın alındı)
     - MSP Mikrodenetleyici Ailesi (Texas Instruments)
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -544,7 +541,6 @@
     2) Monitörünüzü Raspberry Pi'ınızın micro HDMI soketine takınız.
     3) Klavye ve farenizi Raspberry Pi'ınızın USB soketlerine takınız.
     4) USB Type-C soketi ile Raspberry Pi'ınıza güç veriniz.
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -804,7 +800,6 @@
 
     $ sudo apt install man-db manpages-posix
     $ sudo apt install manpages-dev manpages-posix-dev
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -1223,7 +1218,6 @@
     kurabilirsiniz:
 
     $ sudo apt-get install crossbuild-essential-amd64
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -1283,7 +1277,6 @@
     2) "Window/Show View/Remote Systems" seçilir. "Linux" seçilerek yeni bir bağlantı olşturulur. Bağlantıya bir isim verilerek "Next" 
     düğmesine basılır. "Configuration" penceresinden "SSH files" seçilir. "Next" düğmesine basılır. Bu kez "Configuration" sekmesinden 
     "processes.shell.linux" seçilir ve "Next" seçilir. Oradan da "ssh.shells" seçilir ve "Finish" düğmesine basılır.
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -1313,7 +1306,6 @@
     4) Projeye kaynak kod eklenip "build" işlemi yapıldığında hedef makine için kod üretilir. Derleme menüsünden "Çözümü Dağıt"
     seçeneği seçildiğinde otomatik olarak tüm proje uzak makineye aktarılmaktadır. Debug işlemleri için de aslında programcının 
     özel bir hazırlık yapmasına gerek kalmamaktadır. Debug işlemi yerel makinede olduğu gibi yapılmaktadır.
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -1693,7 +1685,6 @@
     ct-ng programının diğer komut satırı argümanları için aşağıdaki bağlantıdan faydalanabilirsiniz:
 
     https://man.archlinux.org/man/extra/crosstool-ng/ct-ng.1.en
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -1766,7 +1757,6 @@
     - "hexcurse" isimli program. Hexcurse şöyle kurulabilir:
 
     $ sudo apt-get install hexcurse
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -1810,7 +1800,6 @@
     Elf64_Xword     8           8               Unsigned long integer
     Elf64_Sxword    8           8               Signed long integer
     unsigned char   1           1               Unsigned small integer
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -1932,7 +1921,6 @@
         Elf64_Half e_shnum;                 /* Number of section header entries */
         Elf64_Half e_shstrndx;              /* Section name string table index */
     } Elf64_Ehdr;
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -1978,7 +1966,7 @@
     bulundurulmuştur. String tabloları sonu '\0' ile biten yazılardan oluşmaktadır. ELF formatı içerisinde ne zaman bir isim
     belirtilecek olsa isim yerine o ismin bulunduğu string tablosundaki offset belirtilmektedir. ELF formatında string tabloları 
     da aslında "bölümler (sections)" biçimindedir. ELF dosyasında tek bir string tablosu bulunmak zorunda değildir. Genellikle 
-    derleyiciler normal sembolleri ".strtab" isimli bölümde "bölüm başlıklarının isimlerini" ".shstrtab" isimli bölümde, dinamik
+    derleyiciler normal sembolleri ".strtab" isimli bölümde, "bölüm başlıklarının isimlerini" ".shstrtab" isimli bölümde, dinamik
     kütüphanelerdeki sembollerin isimlerini de ".dynstr" isimli bölümde string tabloları biçiminde tutmaktadır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -2078,7 +2066,7 @@
     Bölüm Başlık Tablosu'ndaki Bölüm Başlıkları "objdump" programı ile "-h" veya "--section-headers" veya "--headers" seçenekleriyle 
     görüntülenebilmektedir. Örneğin:
 
-    kaan@kaan-virtual-machine:~/Study/EmbeddedLinux$ objdump -h sample
+    $ objdump -h sample
 
     sample:     elf64-x86-64 dosya biçemi
 
@@ -2096,7 +2084,6 @@
                     ALLOC
     26 .comment      0000002b  0000000000000000  0000000000000000  00003010  2**0
                     CONTENTS, READONLY
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -2104,7 +2091,7 @@
     bağlayıcı dünyasında "değişken (identifier)" anlamına gelen bir terimdir. Yani programlamada "değişken (variable/identifier)" 
     kavramı derleyici ve bağlayıcı dünyasında "sembol (symbol)" biçiminde ifade edilmektedir. Semboller fonksiyon isimleri biçiminde, 
     global değişken isimleri biçiminde olabileceği gibi başka varlıklar (entity) biçiminde de karşımıza çıkabilmektedir. Semboller 
-    yalnızca isimlerden oluşmazlar bir sembole ilişkin başka özellikler de vardır. İşte sembol tablolarında sembollerin isimleri 
+    yalnızca isimlerden oluşmazlar, bir sembole ilişkin başka özellikler de vardır. İşte sembol tablolarında sembollerin isimleri 
     ve onlara ilişkin özellikler tutulmaktadır.
 
     Sembol tabloları bölümlerin içerisinde bulunur. ELF dosyasında tek bir sembol tablosu bulunmak zorunda değildir. Tipik olarak 
@@ -2114,7 +2101,6 @@
 
     .symtab         ---> Program içerisindeki sembollerin bulunduğu sembol tablosu
     .dynsym         ---> Dinamik kütüphanelerden kullanılan sembolleri bulunduğu sembol tablosu
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -2163,8 +2149,6 @@
         printf("foo\n");
     }
 
-    void bar(void);
-
     int main(void)
     {
         foo();
@@ -2173,16 +2157,16 @@
         return 0;
     }
 
-    Bu programı "-c" seçneği ile link etmeden yanızca derleyelim:
+    Bu programı "-c" seçeneği ile link etmeden yalnızca derleyelim:
 
     $ gcc -c sample.c
 
     readelf programı bize sembol tablosunu her satırda bir sembol bilgisi olacak biçimde de görüntüleyebilmektedir. readelf programı
-    ile yalnızca sembol tablosu görünülenmek isteniyorsa "-s" ya da "--syms" ya da "--symbols" seçenekleri kullanılabilir. Örneğin:
+    ile yalnızca sembol tablosu görüntülenmek isteniyorsa "-s" ya da "--syms" ya da "--symbols" seçenekleri kullanılabilir. Örneğin:
 
     $ readelf -s sample.o
 
-    Aynı işlem "objdump" programı ile "--syms" seçeneği kullanılaarak da yapılabilir:
+    Aynı işlem "objdump" programı ile "--syms" seçeneği kullanılarak da yapılabilir:
 
     $ objdump --syms sample.o
 
@@ -2249,26 +2233,26 @@
 
     Sembol tablosundaki bir sembolde şu bilgiler bulunmaktadır:
 
-    - Sembolün ismi: Bu isim ".strtab" isimli string tablosunda bir index belirtmektedir.
+    - Sembolün İsmi: Bu isim ".strtab" isimli string tablosunda bir index belirtmektedir.
 
     - Sembolün Türü ve Bağlama Bilgisi: Sembolün türü onun bir "data" sembolü mü yoksa bir "fonksiyon" sembolü mü olduğunu 
     belirten bilgidir. Diğer sembol türleri ELF dokümanlarında belirtilmiştir. Sembolün bağlama bilgisi o sembolün diğer 
     modüller tarafından görünebilirliğine ilişkindir. Örneğin bir sembolün "global" olması demek başka bir modülden kullanılabilir
-    olması demektir. Sembolün "local" olması demek sadece o modülde tanınabilmesi demektir. C'deki global değişkenler global 
+    olması demektir. Sembolün "local" olması demek sadece o modülde tanınabilmesi demektir. C'deki global değişkenler "global" 
     bağlama biçimine, static global değişkenler ise "local" bağlama biçimine sahiptir. Diğer bağlama biçimleri ELF dokümanlarında
     belirtilmiştir.
 
-    - Sembolün Hangi Bölüm İçerisinde Olduğu Bilgisi: Eğer sembol ilgili modülde bir yer kaplıyorsa o bir bölümün içerisindedir. 
+    - Sembolün Hangi Bölüm İçerisinde Olduğu Bilgisi: Eğer sembol ilgili modülde bir yer kaplıyorsa o sembol bir bölümün içerisindedir. 
     İşte sembol tablosunda sembolün hangi bölüm içerisinde tanımlandığı (yer kapladığı) ilgili bölümün indeksiyle belirtilmektedir. 
-    Fonksiyonlar ".txt" isimli bölümde, "ilkdeğer verilmiş global nesneler ".data" isimli bölümde, ilkdeğer verilmemiş global 
+    Fonksiyonlar ".txt" isimli bölümde, ilkdeğer verilmiş global nesneler ".data" isimli bölümde, ilkdeğer verilmemiş global 
     değişkenler ise ".bss" isimli bölümde bulunurlar. Eğer bir sembol o modülde tanımlanmamışsa ona ilişkin bölüm bilgisi de 
     yoktur. Bu tür semboller sembol tablosunda "Undefined" olarak belirtilirler. Örneğin biz C'de başka bir modülde tanımlanmış 
-    olan bir prototipini belirterek çağırmış olalım. Bu fonksiyon bizim dosyasımızda yer kaplamamaktadır. Sembol tablosunda bu 
-    fonksiyonun ismi bulunur ancak bölüm olarak "Undefined" biçimde belirtilir. (readelf bunu "UND" olarak göstermektedir.)
+    olan bir fonksiyonu prototipini belirterek çağırmış olalım. Bu fonksiyon bizim dosyamızda yer kaplamamaktadır. Sembol tablosunda 
+    bu fonksiyonun ismi bulunur ancak bölüm olarak "Undefined" biçimde belirtilir. (readelf bunu "UND" olarak göstermektedir.)
 
     Sembolün Değeri: C'de global bir değişkene ilkdeğer verdiğimizi düşünelim. Bu ilkdeğerin de derleyici tarafından amaç 
     dosyaya bağlayıcı tarafından da çalıştırılabilen dosyaya yazılması gerekir. Böylece ilgili bölüm belleğe yüklenirken bu 
-    global değişken ilkdeğeri ile birlikte belleğe yüklenecektir. İşte eğer bir modül içerisinde bir nense tanımlanmışsa o nesne 
+    global değişken ilkdeğeri ile birlikte belleğe yüklenecektir. İşte eğer bir modül içerisinde bir nesne tanımlanmışsa o nesne 
     bir bölümün belli bir yerindedir. Sembolün değeri ilgili nesnenin kendi bölümünün kaçıncı offset'inden başladığını belirtmektedir. 
     Global nesnelere verilen ilkdeğerler ilgili bölümün burada belirtilen offset'inde saklanmaktadır.
 
@@ -2285,7 +2269,7 @@
     7: 0000000000000004     4 OBJECT  GLOBAL DEFAULT    3 g_c
 
     Buradan şu anlam çıkmaktadır: Sembol bir "data" sembolüdür. Amaç dosyanın 3 numaralı indeksteki bölümünde (".data" bölümü) yer
-    kaplamaktadır. Sembol bu bölümün 4'üncü offset'inden itibaren 4 byte uzunluktadır. Sembol global bir değişkendir başka bir 
+    kaplamaktadır. Sembol bu bölümün 4'üncü offset'inden itibaren 4 byte uzunluktadır. Sembol global bir değişkendir ve başka bir 
     modülden extern yapılırsa kullanılabilir. g_c sembolünün C programında aşağıdaki gibi bir tanımlamayla yaratılmış olduğuna 
     dikkat ediniz:
 
@@ -2299,7 +2283,7 @@
     Buradan şu sonuç çıkmaktadır: Burada bir "data" sembolü söz konusudur. Yine sembol amaç dosyanın ".data" bölümünde ve ".data" 
     bölümünün 8'inci offset'inden itibaren 4 byte yer kaplamaktadır. Ancak bu sembol "local" bir semboldür. Yani yalnızca
     bu modülden kullanılabilir. Başka bir modülden extern bildirimi yapılsa bile linker bu sembolün kullanılmasını engelleyecektir. 
-    Bu sembolün aşağıdaki bir tanımlamayşa oluşturulduğuna dikkat ediniz:
+    Bu sembolün aşağıdaki bir tanımlamayla oluşturulduğuna dikkat ediniz:
 
     static int g_d = 40;
 
@@ -2315,7 +2299,7 @@
 
     C'de ilkdeğer verilmemiş global değişkenlerin içerisinde 0 olduğunu biliyoruz. Pekiyi bu sembol için amaç dosyanın ".bss" 
     bölümünde yer fiziksel olarak ayrılmış mıdır? Buradaki 1000000 byte'ın hepsi 0 olduğuna göre bunun amaç dosyada ve çalıştırılabilen 
-    dosyada yer ayrılması gereksizdir. ".bss" bölümünün Bölüm Başlık Tablosundaki bilgilerine dikkat ediniz:
+    dosyada yer ayrılması gereksizdir. ".bss" bölümünün Bölüm Başlık Tablosu'ndaki bilgilerine dikkat ediniz:
 
     [ 4] .bss              NOBITS           0000000000000000  00000080
         00000000000f4240  0000000000000000  WA       0     0     32
@@ -2731,7 +2715,6 @@
     $ gcc -c x.c
     $ gcc -c y.c
     $ ar r libmyutil.a x.o y.o
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -2797,7 +2780,6 @@
     de komut satırında belirtmek zorundadır. Örneğin:
 
     $ gcc -o sample sample.c libx.a liby.a
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -2999,7 +2981,6 @@
     void bar(void);
 
     #endif
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -3054,7 +3035,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------
     Dinamik kütüphane kullanan programlarda bağlayıcı tarafından ELF formatında iki önemli bölüm oluşturulmaktadır. Bu bölümler 
     ".dynamic" ve ".dynsym" isimli bölümlerdir. ".dynmaic" bölümü çalıştırılabilir dosyanın kullandığı dinamik kütüphaneler hakkında 
-    bilgileri içermektedir. ".dynsym" bölümü ise dinamki kütüphanelerden kullanılan sembollerin tutulduğu sembol tablosudur. Programın 
+    bilgileri içermektedir. ".dynsym" bölümü ise dinamik kütüphanelerden kullanılan sembollerin tutulduğu sembol tablosudur. Programın 
     normal sembollerinin ".symtab" isimli bölümdeki sembol tablosunda tutulduğunu anımsayınız.
 
     32 bit ELF formatının ".dynamic" bölümünün yapısal içeriği şöyledir:
@@ -3140,7 +3121,6 @@
     libmyutil.so => not found
     libc.so.6 => /lib/aarch64-linux-gnu/libc.so.6 (0x0000ffffaf03f000)
     /lib/ld-linux-aarch64.so.1 (0x0000ffffaf1d6000)
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -3162,7 +3142,6 @@
         8: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND abort@GLIBC_2.17 (2)
         9: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND foo
         10: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMCloneTable
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -3227,7 +3206,6 @@
 
     5) Nihayet dinamik bağlayıcı dinamik kütüphaneleri sırasıyla "/lib", /usr/lib" dizinlerinde de aramaktadır. 64 bit Linux 
     sistemlerininin bir bölümünde 64 bit dinamik kütüphaneler için "/lib64" ve "/usr/lib64" dizinlerine de bakılabilmektedir.
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -3479,7 +3457,6 @@
     lrwxrwxrwx 1 kaan study    14 Şub 25 15:45 libmyutil.so -> libmyutil.so.1
     lrwxrwxrwx 1 kaan study    18 Şub 25 15:45 libmyutil.so.1 -> libmyutil.so.1.0.0
     -rwxr-xr-x 1 kaan study 15736 Şub 25 15:45 libmyutil.so.1.0.0
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -3604,7 +3581,6 @@
     - Kütüphane için "linker ismi" ve "so ismini" sembolik link biçiminde oluşturmak
     - Kütüphane paylaşılacaksa onu "/lib" ya da tercihen "/usr/lib" dizinine yerleştirmek ve ldconfig programı çalıştırarak 
     /etc/ld.so.cache dosyasının güncellenmesini sağlamak
-
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
