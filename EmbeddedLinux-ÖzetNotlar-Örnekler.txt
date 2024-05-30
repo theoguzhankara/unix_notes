@@ -12,7 +12,7 @@
 
                     (Notları okurken editörünüzün "Line Wrapping" özelliğini pasif hale getiriniz.)
 
-                                                Son Güncelleme: 30/04/2024
+                                                Son Güncelleme: 30/05/2024
 
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -3030,7 +3030,7 @@
 
     $ gcc -static -o app app.c libmyutil.so
 
-    Bu işlem başarısız olacaktır. Çünkü "-static" seçeneği zaten "tüm kütüphanelerin statik olarak bağlanacağı edileceği" anlamına 
+    Bu işlem başarısız olacaktır. Çünkü "-static" seçeneği zaten "tüm kütüphanelerin statik olarak bağlanacağı" anlamına 
     gelmektedir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -3317,7 +3317,7 @@
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-                                            20. Ders 23/05/2024 - Perşembe
+												20. Ders 23/05/2024 - Perşembe
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -3559,15 +3559,17 @@
 
     Burada aslında "libmyutil.so" dosyası "so ismine" "so" ismi de "gerçek isme link yapılmış" durumdadır.
 -----------------------------------------------------------------------------------------------------------------------------*/
-<BURADA KALDIK>
 /*-----------------------------------------------------------------------------------------------------------------------------
+												21. Ders 28/05/2024 - Salı
+-----------------------------------------------------------------------------------------------------------------------------*/
 
-    "so ismine" ilişkin sembol ik link çıkartma ve "/etc/ld.so.cache" dosyasının güncellenmesi işlemi ldconfig tarafından otomatik 
-    yapılabilmektedir. Yani aslında örneğin biz kütüphanenin gerçek isimli dosyasını "/lib" ya da "/usr/lib" içerisine yerleştirip 
-    "ldconfig" programını çalıştırdığımızda bu program zaten "so ismine" ilişkin sembolik linki de oluşturmaktadır. Örneğin biz 
-    "libmyutil.so.1.0.0" dosyasını "/usr/lib" dizinine kopyalayalım ve "ldconfig" programını çalıştıralım. "ldconfig" programı 
-    "libmyutil.so.1" sembolik link dosyasını oluşturup bu sembolik link dosyasının "libmyutil.so.1.0.0" dosyasına referans etmesini 
-    sağlayacaktır. Tabii cache'e de "libmyutil.so.1" dosyasını yerleştirecektir. Örneğin:
+/*-----------------------------------------------------------------------------------------------------------------------------
+    "so ismine" ilişkin sembol ik link çıkartma ve "/etc/ld.so.cache" dosyasının güncellenmesi işlemi "ldconfig" programı tarafından 
+    otomatik olarak da yapılabilmektedir. Yani aslında örneğin biz kütüphanenin gerçek isimli dosyasını "/lib" ya da "/usr/lib" 
+    içerisine yerleştirip "ldconfig" programını çalıştırdığımızda bu program zaten "so ismine" ilişkin sembolik linki de oluşturmaktadır. 
+    Örneğin biz "libmyutil.so.1.0.0" dosyasını "/usr/lib" dizinine kopyalayalım ve "ldconfig" programını çalıştıralım. "ldconfig" 
+    programı "libmyutil.so.1" sembolik link dosyasını oluşturup bu sembolik link dosyasının "libmyutil.so.1.0.0" dosyasına referans 
+    etmesini sağlayacaktır. Tabii cache'e de "libmyutil.so.1" dosyasını yerleştirecektir. Örneğin:
 
     $ ldconfig -p | grep "libmyutil"
     libmyutil.so.1 (libc6,x86-64) => /lib/libmyutil.so.1
@@ -3580,24 +3582,368 @@
     - Kütüphane ismini "lib" ile başlatarak vermek
     - Kütüphane ismine majör ve minör numara vermek
     - Gerçek isimli kütüphane dosyasını oluştururken "so ismi" olarak "-Wl,-soname" seçeneği ile kütüphanenin "so ismini" yazmak
-    - Kütüphane için "linker ismi" ve "so ismini" sembolik link biçiminde oluşturmak
-    - Kütüphane paylaşılacaksa onu "/lib" ya da tercihen "/usr/lib" dizinine yerleştirmek ve ldconfig programı çalıştırarak 
+    - Kütüphane için "bağlayıcı ismi" ve "so ismini" sembolik link biçiminde oluşturmak
+    - Kütüphane paylaşılacaksa onu "/lib" ya da tercihen "/usr/lib" dizinine yerleştirmek ve "ldconfig" programı çalıştırarak 
     /etc/ld.so.cache dosyasının güncellenmesini sağlamak
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+    Bazen bir dinamik kütüphane içerisindeki sembollerin o dinamik kütüphaneyi kullanan kodlar tarafından kullanılması istenmeyebilir. 
+    Örneğin dinamik kütüphanede "bar" isimli bir fonksiyon vardır. Bu fonksiyon bu dinamik kütüphanenin kendi içerisinden başka 
+    fonksiyonlar tarafından kullanılıyor olabilir. Ancak bu fonksiyonun dinamik kütüphanenin dışından kullanılması istenmeyebilir.
+    (Bunun çeşitli nedenleri olabilir. Örneğin kapsülleme sağlamak için, dışarıdaki sembol çakışmalarını ortadan kaldırmak için vs.) 
+    İşte bunu sağlamak için dışarıdan kuıllanılmasını istemediğiniz kütüphane fonksiyonlarını static olarak tanımlamalısınız. Böylece
+    bu fonksiyonlar dışarıdan kullanılmak istendiğinde bağlama aşamasında error oluşacaktır. Aynı işlem gcc ve clang derleyicilerine 
+    özgü "__attribute__((...))" eklentisiyle de yaılabilmektedir. "__attribute__((...))" eklentisi pek çok seçeneğe sahip platform 
+    spesifik bazı işlemlere yol açmaktadır. Bu eklentinin seçeneklerini gcc dokümanlarından elde edebilirsiniz. Bizim bu amaçla 
+    kullanacağımız "__attribute__((...))" seçeneği "visibility" isimli seçenektir.
 
+    Aşağıdaki örnekte bar fonksiyonu foo fonksiyonu tarafından kullanılmaktadır. Ancak kütüphanenin dışından bu fonksiyonun 
+    kullanılması istenmemiştir. Eğer fonksiyon isminin soluna "__attribute__((visibility("hidden")))" yazılırsa bu durumda 
+    bu fonksiyon dinamik kütüphanenin dışından herhangi bir biçimde kullanılamaz. Örneğin:
+
+    void __attribute__((visibility("hidden"))) bar(void)
+    {
+        // ...
+    }
+
+    Burada fonksiyon özelliğinin (yani __attribute__ sentaksının) fonksiyon isminin hemen soluna getirildiğine ve çift parantez 
+    kullanıldığına dikkat ediniz. Burada kullanılan özellik "visibility" isimli özelliktir ve bu özelliğin değeri "hidden" 
+    biçiminde verilmiştir.
+
+    Aşağıdaki örnekte "libmyutil.so.1.0.0" kütüphanesindeki foo fonksiyonu dışarıdan çağrılabildiği halde bar fonksiyonu 
+    dışarıdan çağrılamayacaktır. Tabii kütüphane içerisindeki foo fonksiyonu bar fonksiyonunu çağırabilmektedir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-
+    Dinamik kütüphanelerde son olarak "sembol versiyonlaması (symbol versioning)" konusu üzerinde duracağız. Sembol versiyonlaması 
+    nispeten yeni bir özelliktir. Bu özelliği uygulayabilmek için ELF formatına üç ayrı bölüm (section) eklenmiştir. Biz bu problemle
+    daha önce karşılaşmıştık. Host makinede çapraz derleme yapıp çalıştırılabilen dosyayı BBB'ye taşıdığımızda sembol versiyonlamasına
+    ilişkin bir hata ortaya çıkmıştı.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+    Sembol versiyonlamasının ana amacı bir fonksiyonun değişik versiyonlarının aynı dinamik kütüphane içerisinde bulundurulmasıdır.
+    Böylece eski programlar fonksiyonun eski versiyonunu kullanırken yeni programlar fonksiyonun yeni versiyonunu kullanabilecektir.
+    Aslında bu işlemlerin için biz dinamik kütüphanelerin versiyonlanması yoluyla yapıldığını yukarıda görmğştük. Örneğin foo
+    fonksiyonunun eskisiyle uyumlu olmayan yeni bir versiyonu oluşturulacaksa majör numarala artırılıp yeni bir dinamik kütüphane
+    yaratılabiliyodu. İşte sembol versiyonlaması dinamki kütüphane versiyonlamasına bir alternatif oluşturmaktadır. Belki ileride
+    sembol versiyonlaması dinamik kütüphane versiyonlamasının yerine geçebilecektir. Çok sayıda fonksiyondan oluşan bir dinamik
+    kütüpahe oluşturduğumuzu varsayalım. Ancak bu kütüphanedeki foo fonksiyonunun geçmişle uyumu olmayan yeni bir versiyonunu
+    yazmak istediğimizi düşünelim. Tek bir fonksiyon için yeni bir kütüphane oluşturup majör numarayı artırmak yerine sembol 
+    versiyonlamasını kullanabiliriz.
 
+    Sembol versiyonlaması aynı isimli bir fonksiyonun değişik versiyonlarının aynı dinamik kütüphane içerisinde bulundurulmasının
+    sağlanmasına yönelik mekanizmayı belirtmektedir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+    Sembol versiyonlamasının nasıl yapıldığını adım adım bir örnekle açıklayalım:
+
+    1) Oluşturduğumuz kütüphanede foo, bar ve tar isimli üç fonksiyon bulunuyor olsun. Biz bu fonksiyonlara MYUTIL-1.0 versiyon
+    numarasını atamak isteyelim. Bunun için bir bağlıyıcı script'i oluşturup onun içerisindeki fonksiyonlara bu script ile
+    version yazısı atamak gerekmektedir. Örneğin:
+
+    /* myutil.h */
+
+    #ifndef MYUTIL_H_
+    #define MYUTIL_H_
+
+    void foo(void);
+    void bar(void);
+    void tar(void);
+
+    #endif
+
+    /* libmyutil.c */
+
+    #include <stdio.h>
+    #include "myutil.h"
+
+    void foo(void)
+    {
+        printf("foo: VERSION-1.0\n");
+    }
+
+    void bar(void)
+    {
+        printf("bar: VERSION-1.0\n");
+    }
+
+    void tar(void)
+    {
+        printf("tar: VERSION-1.0\n");
+    }
+
+    /* libmyutil.map */
+
+    MYUTIL_VERSION_1.0 {
+        global: foo; bar;
+        local: *;
+    };
+
+    Bu scriptteki cümlecik foo ve bar fonksiyonuna VERSION_1.0 versiyon yazısının atanacapnı belirtmektedir. Bağlayıcı script'lerinin
+    ayrıntıları için aşağıdaki dokümana başvurabilirsiniz:
+
+    https://ftp.gnu.org/old-gnu/Manuals/ld-2.9.1/html_chapter/ld_toc.html#TOC6
+
+    Bağlayıcı script'indeki "local: *" satırı "geri kana bütün fonkisyonlar dışarıdan kullanılmasın" anlamına gelmektedir. 
+    Eğer scriptimizi böyle bırakırsak "tar fonksiyonunu dışarıdan kullanamyız. Tabii aynı işlem anımsanacağı gibi "static"
+    belirleyicisi ile ya da __attribute__ belirleyicisi ile de yapılabiliyordu. Biz tar fonksiyonun da dışarıdan kullanılmasını
+    sağlamak için bu local satırını kaldıralım:
+
+    /* libmyutil.map */
+
+    MYUTIL_VERSION_1.0 {
+        global: foo; bar;
+    };
+
+    Kütüphaneyi aşağıdaki gibi derleyelim:
+
+    $ gcc -fPIC -shared -Wl,--version-script,libmyutil.map -o libmyutil.so libmyutil.c
+
+    2) Şimdi bu versiyonu kullana app1.c programını yazalım:
+
+    #include <stdio.h>
+    #include "myutil.h"
+
+    int main(void)
+    {
+        foo();
+        bar();
+        tar();
+
+        return 0;
+    }
+
+    Programı şöyle derleyebiliriz:
+
+    $ gcc -o app1 app1.c libmyutil.so
+
+    Programı aşağıdaki gibi çalıştırabiliriz:
+
+    $ LD_LIBRARY_PATH=. ./app1
+    foo: VERSION-1.0
+    bar: VERSION-1.0
+    tar: VERSION-1.0
+
+    3) ELF formatındaki sembol versiyonlamasına ilişkin bölümler readelf programında "-V" seçeneği ile objdump programında da 
+    "-T" seçeneği ile görüntülenebilir. Örneğin:
+
+    $ readelf -V libmyutil.so
+
+    Version symbols section '.gnu.version' contains 12 entries:
+    Addr: 0x00000000000003e4  Offset: 0x0003e4  Link: 3 (.dynsym)
+    000:   0 (*local*)       0 (*local*)       0 (*local*)       0 (*local*)
+    004:   3 (GLIBC_2.17)    0 (*local*)       3 (GLIBC_2.17)    0 (*local*)
+    008:   2 (MYUTIL_VERSION_1.0)        2 (MYUTIL_VERSION_1.0)        1 (*global*)      2 (MYUTIL_VERSION_1.0)
+
+    Version definition section '.gnu.version_d' contains 2 entries:
+    Addr: 0x0000000000000400  Offset: 0x000400  Link: 4 (.dynstr)
+    000000: Rev: 1  Flags: BASE  Index: 1  Cnt: 1  Name: libmyutil.so
+    0x001c: Rev: 1  Flags: none  Index: 2  Cnt: 1  Name: MYUTIL_VERSION_1.0
+
+    Version needs section '.gnu.version_r' contains 1 entry:
+    Addr: 0x0000000000000438  Offset: 0x000438  Link: 4 (.dynstr)
+    000000: Version: 1  File: libc.so.6  Cnt: 1
+    0x0010:   Name: GLIBC_2.17  Flags: none  Version: 3
+
+    $ readelf -V app1
+
+    Version symbols section '.gnu.version' contains 12 entries:
+    Addr: 0x0000000000000486  Offset: 0x000486  Link: 5 (.dynsym)
+    000:   0 (*local*)       0 (*local*)       0 (*local*)       0 (*local*)
+    004:   2 (GLIBC_2.17)    3 (MYUTIL_VERSION_1.0)        2 (GLIBC_2.17)    3 (MYUTIL_VERSION_1.0)
+    008:   0 (*local*)       2 (GLIBC_2.17)    0 (*local*)       0 (*local*)
+
+    Version needs section '.gnu.version_r' contains 2 entries:
+    Addr: 0x00000000000004a0  Offset: 0x0004a0  Link: 6 (.dynstr)
+    000000: Version: 1  File: libmyutil.so  Cnt: 1
+    0x0010:   Name: MYUTIL_VERSION_1.0  Flags: none  Version: 3
+    0x0020: Version: 1  File: libc.so.6  Cnt: 1
+    0x0030:   Name: GLIBC_2.17  Flags: none  Version: 2
+
+    Görüldüğü gibi sembol versiyonlamasına ilişkin farklı amaçlarla oluşturulmuş üç farklı bölüm bulunmaktadır.
+
+    4) Şimdi de fonksiyonunun eskisiyle uyumlu olmayan yeni bir versiyonunu kütüphaneye ekleyecek olalım. Bunun üç şey yapmamız
+    gerekir:
+
+        - Birincisi "libmyutil.c" dosyasında foo fonksiyonun yeni bir versiyonun başka bir isim altına oluturulması gerkir.
+        - İkincisi gcc'ye clang derleyicilerine özgü olan __asm__ direktifi ile foo fonksiyonun eski versiyonunun ismi ile 
+        yeni versiyonun isminin belirlenmesi gerekir. Bu belirleme şöyle yapılmaktadır:
+
+        __asm__(".symver foo,foo@MYUTIL_VERSION_1.0");
+        __asm__(".symver foo_v2,foo@MYUTIL_VERSION_2.0");
+
+        Buradaki birinci __asm__ direktifi foo fonksiyonunun eski "MYUTIL_VERSION_1.0" sahip olduğunu belirtmektedir. İkinci 
+        __asm__ direktifi ise "artık dışarıdan foo ismiyle kullanılacak olan fonksiyonun" foo_v2 anlamına geleceğini belirtmektedir. 
+        Bu direktiflerdeki @ sembolü isim ile versiyon numarasını ayırmaktadır. @@ sembolü ise "default versiyon" anlamına gelmektedir.
+        Yani artık dışarıdan yapılacak foo çağrısının kütüphanedeki foo_v2 fonksiyonuna referans edeceği belirtilmektedir. 
+        Böylece yeni programlar foo fonksiyonunu çağırdığında bu yeni foo_v2 fonksiyonunu çağırırken eski programlar foo fonksiyonunu
+        çağıracaktır.
+        - Üçüncüsü bağlayıcı scriptinde foo ile foo_v2 fonksiyonlarının farklı versiyonlara ilişkin olduğu belirtilmelidir. 
+        Bu belirtme aşağıdaki gibi yapılmaktadır:
+
+        MYUTIL_VERSION_1.0 {
+            global: foo; bar;
+        };
+
+        MYUTIL_VERSION_2.0 {
+            global: foo_v2;
+        } MYUTIL_VERSION_1.0;
+
+    Artık kütüphaneyi yeniden aşağıdaki gibi yazabiliriz:
+
+    /* libmyutil.c */
+
+    #include <stdio.h>
+    #include "myutil.h"
+
+    __asm__(".symver foo,foo@MYUTIL_VERSION_1.0");
+    __asm__(".symver foo_v2,foo@MYUTIL_VERSION_2.0");
+
+    void foo(void)
+    {
+        printf("foo: VERSION-1.0\n");
+    }
+
+    void bar(void)
+    {
+        printf("bar: VERSION-1.0\n");
+    }
+
+    void tar(void)
+    {
+        printf("tar: VERSION-1.0\n");
+    }
+
+    void foo_v2(void)
+    {
+        printf("foo: VERSION-2.0\n");
+    }
+
+    Derleme işlemini şöyle yapabiliriz:
+
+    gcc -fPIC -shared -Wl,--version-script,libmyutil.map -o libmyutil.so libmyutil.c
+
+    Şimdi de kütüphanenin yeni versiyonunu kullanan "app2.c" programını yazalım:
+
+    /* app2.c */
+
+    #include <stdio.h>
+    #include "myutil.h"
+
+    int main(void)
+    {
+        foo();
+        bar();
+        tar();
+
+        return 0;
+    }
+
+    Artık app1 programı foo fonksiyonun eski versiyonunu kullanırken app2 programı yeni versiyonunu kullanmaktadır. Ancak ortada
+    tek bir kütüphane dosyası vardır.
+
+    $ LD_LIBRARY_PATH=. ./app1
+    foo: VERSION-1.0
+    bar: VERSION-1.0
+    tar: VERSION-1.0
+
+    $ LD_LIBRARY_PATH=. ./app2
+    foo: VERSION-2.0
+    bar: VERSION-1.0
+    tar: VERSION-1.0
+
+    Pekiyi foo fonksiyonun üçüncü bir versiyonunu nasıl oluşturabiliriz? Tabii yukarıda yaptığımız işlemlerin benzerlerini yaparak:
+
+    /* libmyutil.c */
+
+    #include <stdio.h>
+    #include "myutil.h"
+
+    __asm__(".symver foo,foo@MYUTIL_VERSION_1.0");
+    __asm__(".symver foo_v2,foo@MYUTIL_VERSION_2.0");
+    __asm__(".symver foo_v3,foo@@MYUTIL_VERSION_3.0");
+
+    void foo(void)
+    {
+        printf("foo: VERSION-1.0\n");
+    }
+
+    void bar(void)
+    {
+        printf("bar: VERSION-1.0\n");
+    }
+
+    void tar(void)
+    {
+        printf("tar: VERSION-1.0\n");
+    }
+
+    void foo_v2(void)
+    {
+        printf("foo: VERSION-2.0\n");
+    }
+
+    void foo_v3(void)
+    {
+        printf("foo: VERSION-3.0\n");
+    }
+
+    Bağlayıcı script'i de şöyle olmalıdır:
+
+    /* libmyutil.map */
+
+    MYUTIL_VERSION_1.0 {
+        global: foo; bar;
+    };
+
+    MYUTIL_VERSION_2.0 {
+        global: foo_v2;
+    } MYUTIL_VERSION_1.0;
+
+    MYUTIL_VERSION_3.0 {
+        global: foo_v3;
+    } MYUTIL_VERSION_2.0;
+
+    Derlemeyi yine şöyle yapabiliriz:
+
+    gcc -fPIC -shared -Wl,--version-script,libmyutil.map -o libmyutil.so libmyutil.c
+
+    Şimdi de foo fonksiyonunun üçüncü versiyonunu kullanan app3 programını yazıp derleyelim:
+
+    /* app3.c */
+
+    #include <stdio.h>
+    #include "myutil.h"
+
+    int main(void)
+    {
+        foo();
+        bar();
+        tar();
+
+        return 0;
+    }
+
+    Artık üç ayrı program foo fonksiyonunun üç ayrı versiyonunu kullanmaktadır. Ancak toplamda tek bir kütüphane dosyası vardır:
+
+    $ LD_LIBRARY_PATH=. ./app1
+    foo: VERSION-1.0
+    bar: VERSION-1.0
+    tar: VERSION-1.0
+
+    $ LD_LIBRARY_PATH=. ./app2
+    foo: VERSION-2.0
+    bar: VERSION-1.0
+    tar: VERSION-1.0
+
+    $ LD_LIBRARY_PATH=. ./app3
+    foo: VERSION-3.0
+    bar: VERSION-1.0
+    tar: VERSION-1.0
+
 
 -----------------------------------------------------------------------------------------------------------------------------*/
 
