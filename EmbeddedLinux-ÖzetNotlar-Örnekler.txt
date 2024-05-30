@@ -2306,9 +2306,9 @@
 
     Burada bu bölümün 1000000 byte yer kapladığı belirtilmiştir. Ancak bölüm türü olarak SHT_NOBITS kullanılmıştır. Bu bölüm 
     türü bu bölümün amaç dosyada (ya da çalıştırılabilir dosyada) yer kaplamayacağı anlamına gelmektedir. O halde biz g_a 
-    sembolünden şunu anlamlıyız: Bu sembol 1000000 byte'lık bir alan bleirtiyorsa da içi 0 olduğu için gereksiz bir biçimde 
+    sembolünden şunu anlamalıyız: Bu sembol 1000000 byte'lık bir alan belirtiyorsa da içi 0 olduğu için gereksiz bir biçimde 
     amaç dosyada bunun için yer ayrılmamıştır. O halde C'de ilkdeğer verilmemiş global nesnelerin sıfırlanması amaç dosya ya da 
-    çalıştırılabilir dosya içerisinde derleyici ya da bağlayıcı tarafından değil onu belleğe yükleyen yükleyici tarafından 
+    çalıştırılabilir dosya içerisinde derleyici ya da bağlayıcı tarafından değil, onu belleğe yükleyen yükleyici tarafından 
     yapılmaktadır.
 
     Pekiyi aşağıdaki gibi bir tanımlama yapılsaydı derleyici bu sembolü amaç dosyanın ".bss" bölümüne mi ".data" bölümüne mi
@@ -2317,7 +2317,7 @@
     char g_a[100000] = {1};
 
     Burada C kurallarına göre bu dizinin ilk elemanı 1 diğer tüm elemanları 0 olmalıdır. Eğer derleyici bu sembolü ".bss" 
-    bölümüne yerleştirse bu bölüm yükleyici tarafından sıfırlanacağı için 1 değeri kaybolacaktır. Eğer derleyici bu sembolü 
+    bölümüne yerleştirirse bu bölüm yükleyici tarafından sıfırlanacağı için 1 değeri kaybolacaktır. Eğer derleyici bu sembolü 
     ".data" bölümüne yerleştirse amaç dosyada 999999 tane 0 olan byte bulunacaktır. Aslında burada ne olacağını dosyaysı derleyip 
     amaç dosyanın uzunluğuna bakarak hemen anlayabilirsiniz. UNIX/Linux sistemlerinde derleyiciler tipik olarak böylesi bir 
     durumda ellerinden bir şey gelmediği için sembolü ".data" bölümüne yerleştirip amaç dosyayı mecburen büyütmektedir.
@@ -2376,9 +2376,9 @@
     işlemcilerin kullanıldığı sistemlerde ileride de açıklanacağı gibi program belli bir adresten itibaren sanal belleğe yüklenecekmiş 
     gibi kod üretilmektedir. Yani link aşamasından geçmiş olan bir program eğer öngörülen adresten itibaren yüklenirse (bu konuda 
     ayrıntılar vardır) sorunsuz çalışabilmektedir. (Tabii şimdi programın belli bir adresten itibaren yükleneceğinin garantisinin nasıl 
-    verilebildiğini merak edebilirsiniz. Bu budurm bazı konular ele alındıktan sonra anlaşılacaktır.) Ancak şimdilik biz çalıştırılabilen 
+    verilebildiğini merak edebilirsiniz. Bu durum bazı konular ele alındıktan sonra anlaşılacaktır.) Ancak şimdilik biz çalıştırılabilen 
     programların belli bir adresten itibaren yüklenecek biçimde oluşturulduğunu varsayalım. Derleyici programın hangi adresten itibaren 
-    belleğe yükleneceğini bilse bile yukarıdaki CALL komutunun adres operandın'ı derleme aşamasında oluşturamaz. Çünkü linker başka 
+    belleğe yükleneceğini bilse bile yukarıdaki CALL komutunun adres operand'ını derleme aşamasında oluşturamaz. Çünkü linker başka 
     modüllerdeki kod ve verileri de çalıştırılabilen dosyaya yazmaktadır. Bu yüzden derleyici yukarıdaki foo çağrısında CALL makine 
     komutundaki adresi boş bırakmaktadır.
 
@@ -2389,12 +2389,12 @@
     olduğuna göre linker artık foo fonksiyonunun program çalışırkenki gerçek bellek adresini hesaplayabilecektir. Yani eğer linker 
     programın sanal belleğe hangi adresten itibaren yükleneceğini biliyorsa CALL komutundaki adresi doğru bir biçimde düzeltebilecektir.
     Burada ELF formatında "Program Başlık Tablosu (Program Header Table)" denilen tablo ile ilgili bazı ayrıntılar vardır. Ancak biz 
-    burada kabaca linker'ın foo çağrısı için oluşturulan CALL makine komutundaki adresi nasıl düzelettiğini aşama aşama anlatalım:
+    burada kabaca linker'ın foo çağrısı için oluşturulan CALL makine komutundaki adresi nasıl düzelttiğini aşama aşama anlatalım:
 
     1) ELF formatında amaç dosyada nerelerin düzeltileceğini belirten "relocation tablosu" denilen bir tablo bulunmaktadır. Linker 
     "a.o" dosyasının "relocation tablosunu" incelediğinde orada "foo" isimli bir fonksiyonun yerinin tespit edilmesi gerektiğini 
-    ve bu tespit yapıldıktan sonra da "a.o" içerisinde nerenin değiştirilmesi gerektiğini anlamaktadır. (Başka bir deyişle linker "
-    a.o" dosyasındaki relocation tablosundan "hangi sembolün nihai adresinin nereye yazılması gerektiğini" anlamaktadır.) Yani adeta 
+    ve bu tespit yapıldıktan sonra da "a.o" içerisinde nerenin değiştirilmesi gerektiğini anlamaktadır. (Başka bir deyişle linker 
+    "a.o" dosyasındaki relocation tablosundan "hangi sembolün nihai adresinin nereye yazılması gerektiğini" anlamaktadır.) Yani adeta 
     "a.o" dosyasının relocation tablosu foo çağrımı için linker'a şunları söylemektedir: "Git diğer modüllerde "foo" isimli fonksiyonu 
     bul, birleştirme sonucunda onun nihai adresini tespit et ve kodun şu kısmını düzelt".
 
@@ -2421,7 +2421,7 @@
 
     Pekiyi yerel nesnelerin adresleri de relocatable adresler midir? Hayır yerel nesnelerin yerleri o fonksiyonda stack göstericisine 
     (stack pointer) göreli uzaklıkla tespit edilebilmektedir. Yani yerel nesnelerin adresleri derleme sırasında derleyici tarafından 
-    gçreli bir biçimde tespit edilebilmektedir.
+    göreli bir biçimde tespit edilebilmektedir.
 
     Pekiyi çalıştırılabilir bir dosya bellekte eğer yüklenmesi gereken yere yüklenemezse, başka yere yüklenirse ne olur? Linker
     nihai adresleri çalıştırılabilir dosyanın belli bir adresten itibaren yükleneceği fikriyle oluşturmaktadır. Eğer dosya bellekte 
@@ -2439,7 +2439,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------
     Yukarıda da belirtildiği gibi yerel nesnelerin (yani fonksiyonlar içerisinde tanımlanmış nesnelerin) relocation işlemi ile 
     bir ilgisi yoktur. Yerel nesnelerin yerleri ismine "Stack Pointer (SP)" denilen bir yazmaca göreli bir biçimde tespit 
-    edilmektedir. Stack oldukça zekice düşünülmüş çok pratik bir kullanıma sahip bir kavramdır. Aşağıdaki gibi bir C fonksiyonu 
+    edilmektedir. "Stack" oldukça zekice düşünülmüş çok pratik bir kullanıma sahip bir kavramdır. Aşağıdaki gibi bir C fonksiyonu 
     olsun:
 
     void foo(void)
@@ -2457,7 +2457,7 @@
 
     Yeni SP'nin gösterdiği yer  ----->
     ...
-    Eski SP'in gösterdiği yer   ----->
+    Eski SP'nin gösterdiği yer  ----->
 
     Sonra yerel nesneleri SP'nin bulunduğu yere göreli bir biçimde konumlandırır:
 
@@ -2465,12 +2465,12 @@
                                             a
                                             b
                                             c
-    Eski SP'in gösterdiği yer   ----->
+    Eski SP'nin gösterdiği yer  ----->
 
     Artık makine kodlarını SP'nin bulunduğu yere göreli bir biçimde oluşturmaktadır. Örneğin 32 bit Intel işlemcileri için aşağıda
     sembolik bir kod örneği verilmiştir:
 
-    SUB     ESP, 12
+    SUB     ESP, 12                 ; SP yazmacı fonksiyonun yerel değişkenlerinin toplam uzunluğu kadar yukarı çekilir (yani azaltılır)
     MOV     [ESP + 0], 10           ; a = 10
     MOV     [ESP + 4], 20           ; b = 20
     MOV     EAX, [ESP + 0]          ; a değeri EAX yazmacına yükledi
@@ -2484,12 +2484,12 @@
     mutlak olarak belirlendiği için onlar her fonksiyondan kullanılabilmektedir.
 
     Ayrıca buradan yerel nesnelerin içerisinde neden çöp değer olduğu da anlaşılmaktadır. SP yazmacı sürekli yukarı aşağı gittiği için 
-    Stack'teki değerler de çöp değerler haline gelmektedir. Yerel nesneler SP yazmacının yukarı çekilmesiyle bir hamlede yaratılmaktadır. 
+    stack'teki değerler de çöp değerler haline gelmektedir. Yerel nesneler SP yazmacının yukarı çekilmesiyle bir hamlede yaratılmaktadır. 
     Oradaki değerler de daha önceki rastgele stack değerlerinden oluşmaktadır. Derleyicinin yerel nesneleri sıfırlaması da uygun 
     değildir. Çünkü bu sıfırlama işlemi ancak makine komutlarıyla yapılabilir. Bu da programı yavaşlatacaktır. Oysa global nesnelerin 
     sıfırlanması program çalışırken değil yüklenirken yalnızca bir kez yapılmaktadır.
 
-    Yerel nesnelerin çok hızlı yaratrılıp (tek bir makine komutuyla), çok hızlı yok edildiğine (tek bir makine komutuyla) de dikkat
+    Yerel nesnelerin çok hızlı yaratılıp (tek bir makine komutuyla), çok hızlı yok edildiğine (tek bir makine komutuyla) de dikkat
     ediniz. C'de yerel değişkenlere "otomatik değişkenler" de denilmektedir.
 
     Pekiyi iç içe çok fazla fonksiyon çağrılırsa ne olur? İşte bu durumda her fonksiyon SP yazmacını bir miktar yukarı çekeceğine 
@@ -2547,27 +2547,29 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     ELF formatının diğer önemli bir bölümü de "Program Başlık Tablosu (Program Header Table)" denilen bölümüdür. Program Başlık 
-    Tablosu eşit uzunlukta Program Başlıklarından (Program Header Table Entry) oluşmaktadır. Program Başlık Tablosunun ELF 
-    dosyasında nereden başladığı ve hangi uzunlukta olduğu ELF Başlığında belirtilmektedir. Program Başlık Tablosu amaç dosyalarda 
-    değil "çalıştırılabilen dosyalarda ve dinamik kütüphane dosyalarında" bulunmaktadır. İşletim sistemi çalıştırılabilen dosyayı
-    ya da dinamki kütüphane dosyasını bölüm bölüm değil segment segment yüklemektedir. Bir segment aynı özelliğe sahip peşi sıra
-    giden bölümlerden oluşmaktadır. Program Başlık Tabosundaki ger Program Başlığı bir segment hakkında bilgi vermektedir. 
-    Şimdi aklınıza bölümler varken nedne segment'lere gereksinim duyulmuştur sorusu gelebilir? Bölümler daha çok linker için 
+    Tablosu eşit uzunlukta Program Başlıkları'ndan (Program Header Table Entry) oluşmaktadır. Program Başlık Tablosu'nun ELF 
+    dosyasında nereden başladığı ve hangi uzunlukta olduğu ELF Başlığı'nda belirtilmektedir. Program Başlık Tablosu amaç dosyalarda 
+    değil, "çalıştırılabilen dosyalarda ve dinamik kütüphane dosyalarında" bulunmaktadır. İşletim sistemi çalıştırılabilen dosyayı
+    ya da dinamik kütüphane dosyasını bölüm bölüm değil, segment segment yüklemektedir. Bir segment aynı özelliğe sahip peşi sıra
+    giden bölümlerden oluşmaktadır. Program Başlık Tablosu'ndaki her Program Başlığı bir segment hakkında bilgi vermektedir. 
+    Şimdi aklınıza bölümler varken neden segment'lere gereksinim duyulmuştur sorusu gelebilir? Bölümler daha çok linker için, 
     segment'ler ise yükleyici için düşünülmüştür. Dosyada benzer özelliklere sahip bölümler segment ismiyle bir araya getirilmektedir. 
     Böylece işletim sistemi (exec fonksiyonları) bu segment'leri yüklemektedir.
 
-    Program Başlık Tablosundaki Program Başlıklarının 32 bit ELF formatındaki yapısal biçimi şöyledir:
+    Program Başlık Tablosu'ndaki Program Başlıkları'nın 32 bit ELF formatındaki yapısal biçimi şöyledir:
 
     typedef struct {
         Elf32_Word p_type;          /* Type of segment */
         Elf32_Off p_offset;         /* Offset in file */
-        Elf32_Addr p_vaddr;          /* Virtual address in memory */
+        Elf32_Addr p_vaddr;         /* Virtual address in memory */
         Elf32_Addr p_paddr;         /* Reserved */
         Elf32_Word p_filesz;        /* Size of segment in file */
         Elf32_Word p_memsz;         /* Size of segment in memory */
         Elf32_Word p_flags;         /* Segment attributes */
         Elf32_Word p_align;         /* Alignment of segment */
     } Elf32_Phdr;
+
+    Program Başlık Tablosu'ndaki Program Başlıkları'nın 64 bit ELF formatındaki yapısal biçimi şöyledir:
 
     typedef struct {
         Elf64_Word p_type;          /* Type of segment */
@@ -2580,37 +2582,37 @@
         Elf64_Xword p_align;        /* Alignment of segment */
     } Elf64_Phdr;
 
-    Program Başlığında şu bilgiler yer almaktadır:
+    Program Başlığı'nda şu bilgiler yer almaktadır:
 
-    - Başlığn Türü: Burada PT_LOAD ilgili segment'in belleğe yüklenmesi gerektiği anlamına gelmektedir. Her ne kadar yukarıda 
-    Program Başlık Tablosunun belle yüklenecek segment'leri belirttiğini söylemiş olsak da belleğe yüklenmeyen ancak ilgili 
-    dosyanın yüklenmesinde kullanılacak bazı bilgiler de Program Başlık Tablosunda birer segment olarak bulunmaktadır. 
+    - Başlığın Türü: Burada PT_LOAD ilgili segment'in belleğe yüklenmesi gerektiği anlamına gelmektedir. Her ne kadar yukarıda 
+    Program Başlık Tablosu'nun bellek yüklenecek segment'leri belirttiğini söylemiş olsak da belleğe yüklenmeyen ancak ilgili 
+    dosyanın yüklenmesinde kullanılacak bazı bilgiler de Program Başlık Tablosu'nda birer segment olarak bulunmaktadır. 
     Yüklenecek olan segment'lerin türü PT_LOAD biçiminde belirtilmektedir.
 
     - Segment'in Koruma Bayrakları: İleride ele alınacağı gibi Sayfalama (paging) mekanizmasına sahip olan işlemcilerde RAM 
-    sayfalardan (pages) oluşmaktadır. Sayfalara koruma bayrakları iliştirilebilmektedir. Örneğin bir ayfanın koruma bayrağı 
-    "Read Only" ise işlemci bu sayfaya yazma yapamaz. Eğer işlemci böyle bir sayfaya yazma yapmaya çalışırse içsel bir kesme 
+    sayfalardan (pages) oluşmaktadır. Sayfalara koruma bayrakları iliştirilebilmektedir. Örneğin bir sayfanın koruma bayrağı 
+    "Read Only" ise işlemci bu sayfaya yazma yapamaz. Eğer işlemci böyle bir sayfaya yazma yapmaya çalışırsa içsel bir kesme 
     oluşur (page fault) ve program çöker. Bir sayfada bir kodun çalıştırılabilmesi için sayfa koruma bayraklarının "Executable"
     olması gerekir. Aksi takdirde o sayfadaki bir fonksiyonu CALL makine komutlarıyla çağıramayız. Pek çok işlemcide sayfanın 
     "Write" özelliğine sahip olması aynı zamanda "Read" özelliğine de sahip olması anlamına gelmektedir. Ancak linker programları
     bunları ayrı ayrı belirtmektedir.
 
     - Segment'in ELF Dosyasındaki Başlangıç Offset'i ve Uzunluğu: Yükleyicinin segment'i belleğe yükleyebilmesi için dosyanın 
-    nereseinden başladığını ve hangi uzunlukta olduğunu bilmesi gerekir.
+    neresinden başladığını ve hangi uzunlukta olduğunu bilmesi gerekir.
 
     - Segment'in Bellekteki Uzunluğu: İlkdeğer verilmemiş global değişkenler ELF dosyalarının içerisinde yer kaplamamaktadır. 
     Ancak bunlar için de bellekte yer ayrılmalıdır. O halde bir segment belleğe yüklenirken bellekte ne kadar yer tahsis edileceği
     de bilinmelidir. Tabii linker ilkdeğer verilmemiş global değişkenlerin bulunduğu bölümleri (tipik olarak .bss) segment'in 
-    sonuna almaktadır. Böylece yükleyici dosyada belirtilen uzunluktaki kısmı bellekte tahsis ettiği alanın başından itibaren y
-    ükleyebilir.
+    sonuna almaktadır. Böylece yükleyici dosyada belirtilen uzunluktaki kısmı bellekte tahsis ettiği alanın başından itibaren 
+    yükleyebilir.
 
-    Segment'in Sanal Belleğe Yükleme Adresi: Linker programın belli bir adresten itibaren yükleneceği varsayımyla kodu düzeltmektedir.
-    İşte her segment'in sanal belleğin neresindne itibaren yükleneceği Program Başlığında belirtilmektedir. Ancak segment yükleyici 
+    Segment'in Sanal Belleğe Yüklenme Adresi: Linker programın belli bir adresten itibaren yükleneceği varsayımıyla kodu düzeltmektedir.
+    İşte her segment'in sanal belleğin neresinden itibaren yükleneceği Program Başlığı'nda belirtilmektedir. Ancak segment yükleyici 
     tarafından bu adrese yüklenmeyebilir. Bu durumda yükleyici "relocation" işlemi uygulayacaktır. Yani linker modüllerdeki kodu
-    belli bir adresten itibaren yüklenecekmiş gibi oluşturmaktadır. Ancak yükleyici eğer onu başka bir yere ykleyecekse "relocation"
+    belli bir adresten itibaren yüklenecekmiş gibi oluşturmaktadır. Ancak yükleyici eğer onu başka bir yere yükleyecekse "relocation"
     işlemi uygulamak zorundadır.
 
-    Çalışmakta olan programın sanal bellek alanına map edilen segment'ler proc dosya sisteminden /proc/<proses_is>/maps 
+    Çalışmakta olan programın sanal bellek alanına map edilen segment'ler proc dosya sisteminden /proc/<proses_id>/maps 
     dosyasının içerisinden görülebilir.
 
     readelf programında ELF dosyasının Program Başlık Tablosu "-l" seçeneği ile objdump programı ile de "-p" ya da "--program-headers" 
@@ -2620,12 +2622,12 @@
 /*-----------------------------------------------------------------------------------------------------------------------------
     Pekiyi biz basit bir yükleyici program yazmak istesek bunu nasıl yazabiliriz? Aslında yükleyiciler burada henüz ele almadığımız
     bazı ayrıntılı işlemleri de yapmaktadır. Ancak kabaca bunu gerçekleştirebilmek için ELF dosya formatını parse edip Program 
-    Başlık Tablosundaki PT_LOAD ile belirtilen segment'leri belirtilen sanal bellek adresine mmap fonksiyonu yüklenmesi gerekir.
+    Başlık Tablosu'ndaki PT_LOAD ile belirtilen segment'leri belirtilen sanal bellek adresine mmap fonksiyonu ile yüklenmesi gerekir.
     Tabii yükleme işlemi bittikten sonra programın ELF dosyasının başlık kısmında belirtilen "entry point"den başlatılması gerekir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    ELF formatının diğer önemli bir bölümü de ".dynamic" isimli bölümüdür Bu bölüm ".dynsym" bölümüyle birlikte kullanılmaktadır. 
+    ELF formatının diğer önemli bir bölümü de ".dynamic" isimli bölümüdür. Bu bölüm ".dynsym" bölümüyle birlikte kullanılmaktadır. 
     Bu bölümün işlevini anlayabilmek için dinamik kütüphanelerin nasıl yüklendiğinin bilinmesi gerekir. Biz önce statik ve 
     dinamik kütüphaneleri ele alıp ondan sonra ELF formatının bu bölümlerini açıklayacağız.
 -----------------------------------------------------------------------------------------------------------------------------*/
