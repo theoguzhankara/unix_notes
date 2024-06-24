@@ -12,7 +12,7 @@
 
                     (Notları okurken editörünüzün "Line Wrapping" özelliğini pasif hale getiriniz.)
 
-                                                Son Güncelleme: 30/05/2024
+                                                Son Güncelleme: 25/06/2024
 
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -28,10 +28,10 @@
 
     - Raspberry Pi 5 alınacaksa soğutucu ya da soğutuculu kılıf da alınmalı. Raspberry Pi 3 ve 4 için soğutucu alınmayabilir.
 
-    - Raspberry Pi için Micso SD Kart: 64GB Yüksek Hızlı (SanDisk Extreme serisi olabilir). Micro SD kart 32 GB de olabilir.
-    Ancak 32GB'den düşüğü tavsiye etmiyoruz.
+    - Raspberry Pi için Micso SD Kart: 64 GB yüksek hızlı micro SD kart tavsiye ediyoruz. 32 GB de olabilir. Ancak 32 GB'den 
+    düşüğü tavsiye etmiyoruz.
 
-    - Raspberry Pi 4 ve Raspberry Pi 5 için "Mikro HDMI -> HDMI kablosu", Raspberry Pi 3 için "HDMI -> HDMI" Kablosu.
+    - Raspberry Pi 4 ve Raspberry Pi 5 için "Micro HDMI -> HDMI Kablosu", Raspberry Pi 3 için "HDMI -> HDMI" Kablosu.
 
     - USB Kombo Klavye + Mouse
 
@@ -40,11 +40,11 @@
     - Raspberry Pi için Güç Kaynağı Adaptörü: Raspberry Pi 3 ve 4 için 5V/3A, Raspberry Pi 5 için 5V/5A (27W). Raspberry Pi 4 
     ve 5 USB Type C kullanıyor. Raspberry Pi 3 Micro USB kablosu kullanıyor.
 
-    - BeagleBone Black SBC (Single Board Computer): BeagleBone Black 4G ya da BeagleBone Black Industrial ya da BeagleBone 
-    Black Wireless yeni satın alacak olanlar "BeagleBone Black 4G" ya da BeagleBone Black Wireless" alabilirler. Stokları 
-    kontrol etmek gerekiyor.
+    - BeagleBone Black SBC (Single Board Computer): Yeni satın alacak olanlar "BeagleBone Black 4G" ya da BeagleBone Black Wireless" 
+    alabilirler. Stokları kontrol etmek gerekiyor.
 
-    - BeagleBone Black için Güç Kaynağı: Mini USB ile 5V/500mA güç adaptörü ya da yuvarlak girişli (DC Jack) 5V/1A güç adaptörü.
+    - BeagleBone Black için Güç Kaynağı: Mini USB ile 5V/500mA güç adaptörü ya da yuvarlak girişli (DC Jack) 5V/1A güç adaptörü. Ancak 
+    BeagleBone Black USB kablo ile PC’den de güç alabilmektedir.
 
     - BeagleBone Black için Micro SD Kart (16GB olabilir).
 
@@ -54,7 +54,7 @@
 
     - Jumper Kablo seti
 
-    - "USB -> UART" Dönüştürücü (CP2102 olabilir)
+    - "USB -> UART" Dönüştürücü (CP2102 çevirici modül olabilir)
 
     - USB Uzatma Kablosu Gerekebilir.
 
@@ -70,7 +70,7 @@
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Asıl amacı bilgisayar olmayan fakat bilgisayar sistemi içeren sistemlere genel olarak gömülü sistemler (embedded systems) 
+    Asıl amacı bilgisayar olmayan fakat bilgisayar devresi içeren sistemlere genel olarak gömülü sistemler (embedded systems) 
     denilmektedir. Yani gömülü sistemler başka amaçları gerçekleştirmek için tasarlanmış olan aygıtların içerisindeki bilgisayar
     sistemleridir. Örneğin elektronik tartılar, biyomedikal aygıtlar, GPS cihazları, turnike geçiş sistemleri (validatörler), 
     müzik kutuları, kapı güvenlik aygıtları, otomobiller içerisindeki kontrol panelleri birer gömülü sistemdir. Gömülü 
@@ -79,8 +79,8 @@
 
     Gömülü sistemler gömüldüğü aygıtta belli işlevleri sağlamak için kullanılmaktadır. Örneğin buzdolaplarının, çamaşır 
     makinelerinin içerisine yerleştirilen bilgisayar devreleri ve yazılımlar onların önemli etkinlerini yönetmekte, kullanıcı 
-    ile arayüz oluşturabilmektedir. Günümüzde bilgisayar sistemi içeren aygıtlar artık her yeri sarmıştır. Bu nedenle üzerinde 
-    geliştirme faaliyetleri de önemli bir iş alanı haline gelmiştir.
+    ile arayüz oluşturabilmektedir. Günümüzde bilgisayar sistemi içeren aygıtlar artık her yeri sarmıştır. Bu nedenle gömülü 
+    sistemler üzerinde geliştirme faaliyetleri de önemli bir iş alanı haline gelmiştir.
 
     Gömülü sistemlerin tipik özellikleri şunlardır:
 
@@ -91,7 +91,7 @@
     - Gömülü sistemler genellikle daha düşük bir bilgi işlem kapasitesine sahip bilgisayar devreleridir. Örneğin bu sistemlerde 
     kullanılan işlemciler genel amaçlı masaüstü işlemcilerden genellikle daha yavaş olma eğilimindedir. Bu sistemlerdeki bellek
     miktarları (birincil ve ikinci bellekler) genel amaçlı bilgisayar sistemlerine göre daha düşük olma eğilimindedir. Dolayısıyla 
-    gömülü sistemlerin maliyetleri de genel amaçlı bilgisayar sistemlerine göre çok düşüktür.
+    gömülü sistemlerin maliyetleri de genel amaçlı bilgisayar sistemlerine göre oldukça düşüktür.
 
     - Gömülü sistemler genellikle (fakat her zaman değil) daha düşük güç harcamaktadır. Bu durum onların bataryalarla beslenebilmesini 
     dolayısıyla fiziksel taşınabilirliğini de artırmaktadır. Tabii genel olarak gömülü sistemler düşük güç harcama eğiliminde olan 
@@ -102,8 +102,8 @@
     - Gömülü sistemlerin önemli bir bölümü "gerçek zamanlı (real time)" olaylarla ilişkilidir. Bu sistemlerin belli bir bölümü 
     dış dünyadaki değişimlere karşı bir yanıt oluşturmaya çalışmaktadır. Örneğin bir gömülü sistem otamdaki ısı belli bir kritik 
     düzeye geldiğinde bir işlemi başlatabilir. Ya da bir gömülü sistem kalp ritmi bozulduğunda kalbe uyarılar göndererek ritim 
-    bozukluğunu düzeltmeye çalışabilir. Hava araçlarındak gömülü sistemler o anki hava şartlarına göre bir otomatik kumanda sistemi 
-    işlevini görüyor olabilir. Tabii gömülü istemlerin bu gerçek zamanlı işlem doğası bazı uygulamalarda "çok katı (hard realtime)" 
+    bozukluğunu düzeltmeye çalışabilir. Hava araçlarındaki gömülü sistemler o anki hava şartlarına göre bir otomatik kumanda sistemi 
+    işlevini görüyor olabilir. Tabii gömülü sistemlerin bu gerçek zamanlı işlem doğası bazı uygulamalarda "çok katı (hard realtime)" 
     olurken bazı uygulamalarda "daha gevşek (soft realtime)" olabilmektedir.
 
     - Gömülü sistemlerin bazılarında hiç girdi/çıktı birimi olmayabilir. Bazılarında ise girdi/çıktı birimi olarak "düğmeler", 
@@ -114,19 +114,19 @@
     - Gömülü sistemlerdeki donanım birimleri nispeten ucuz olma eğilimindedir. Genel amaçlı bilgisayarlara göre bunlar çok daha ucuz
     olarak temin edilebilmektedir.
 
-    - Gömülü sistemler çeşitli kaynaklarda çeşitli ölçütlere göre de sınıflandırılabilmektedir.
+    Gömülü sistemler “işlevsel gereksinimlere göre” ve “performans gereksinimlerine” göre de sınıflandırılabilmektedir:
 
-    1) İşlevsel Gereksinime Göre Sınıflandırma:
+    1) İşlevsel Gereksinimlere Göre Sınıflandırma:
 
         a) Gerçek Zamanlı Olan ya da Gerçek Zamanlı Olmayan Gömülü Sistemler: Bunlar "hard" ya da "soft" real-time olabilmektedir.
-        b) Bağımsız (Stand-Alone) Olan ya da Bağımsız Olmayan Sistemler: Bunlar belli bir amaca yönelik hazırlanmış gömülü sistemlerdir.
+        b) Bağımsız (Stand-alone) Olan ya da Bağımsız Olmayan Sistemler
         Örneğin hesap makineleri, kapı güvenlik sistemleri, MP3 çalarlar gibi.
         c) Ağ (Network) Üzerinde İşlem Yapan Gömülü Sistemler: Bunlar ağ işlemleri yapmak için oluşturulmuş gömülü sistemlerdir.
-        ATM makineleri, ADSL Rouer cihazları gibi cihazları bunlara örnek verebiliriz.
-        d) Mobil Aygıtlarda Kullanılan Gömülü Sistemler: Bunlar küçük, taşınabilir aygıtlarda kullanılan gömülü sistemlerdir.
+        ATM makinelerini, ADSL Router gibi aygıtları bunlara örnek verebiliriz.
+        d) Mobil Aygıtlarda Kullanılan Gömülü Sistemler: Bunlar küçük, taşınabilir aygıtlarda kullanılan gömülü sistemlerdir. 
         Telefonlar, GPS cihazları, dijital kameralar bunlara örnek verilebilir.
 
-    2) Performans Gereksinimine Göre Sınıflandırma:
+    2) Performans Gereksinimlerine Göre Sınıflandırma:
 
         a) Küçük Ölçekli (Small Scale) Gömülü Sistemler
         b) Orta Ölçekli (Medium Scale) Gömülü Sistemler
@@ -147,25 +147,24 @@
     Gömülü sistemlerde genel olarak üç işlem birimi kullanılmaktadır:
 
     1) Mikrodenetleyiciler
-    2) Mikroişlemcileri
+    2) Mikroişlemciler
     3) DSP'ler
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Bir bilgisayar sisteminde aritmetik, mantıksal, bitsel işlemler ve karşılaştırma gibi bilgi işlem faaliyetleri işlemleri 
     "mikroişlemci (microprocessor)" denilen birim tarafından yapılmaktadır. Mikroişlemciler entegre devre biçiminde üretilmişlerdir. 
-    Mikroişlemcilere kavramsal olarak CPU (Centeral Processing Unit) de denilmektedir. Yani CPU mikroişlemcilerin kavramsal ismidir. 
-    Aslında genel amaçlı bir bilgisayar sisteminde komut çalıştıran pek çok işlemci bulunabilmektedir. CPU bu işlemcileri de 
-    programlayan "merkezi (central)" işlemcidir. Bilgisayar sisteminde yerel bazı işlemlerden sorumlu yardımcı işlemciler de vardır. 
-    Örneğin "kesme denetleyicisi (interrupt controller)", "disk denetleyicisi (disk controller)", "DMA denetleyicisi (DMA controller)" 
-    gibi.
+    Mikroişlemcilere kavramsal olarak CPU (Centeral Processing Unit) de denilmektedir. Aslında genel amaçlı bir bilgisayar sisteminde 
+    komut çalıştıran pek çok işlemci bulunabilmektedir. CPU bu işlemcileri de programlayan "merkezi (central)" işlemcidir. Bilgisayar 
+    sisteminde yerel bazı işlemlerden sorumlu yardımcı işlemciler de vardır. Örneğin "kesme denetleyicisi (interrupt controller)", 
+    "disk denetleyicisi (disk controller)", "DMA denetleyicisi (DMA controller)" gibi.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Mikrodenetleyiciler tek bir chip içerisine yerleştirilmiş bir bilgisayar sistemi gibi düşünülebilirler. Tipik olarak bir 
     mikrodenetleyicide bir "işlemci (processor)", kendi içerisinde "RAM ve Flash EPROM", dış dünya ile haberleşmek için kullanılan 
-    "IO birimi" ve bazı "çevre birimleri (peripherals)" bulunmaktadır. Mikrodenetleyicilere İngilizce "Microcontroller" ya da 
-    "Microcontroller Unit (MCU)" da denilmektedir.
+    "Giriş/Çıkış (IO) birimleri" ve bazı "çevre birimleri (peripherals)" bulunmaktadır. Mikrodenetleyicilere İngilizce "Microcontroller" 
+    ya da "Microcontroller Unit (MCU)" da denilmektedir.
 
     Mikrodenetleyicilerin işlem kapasiteleri ve içerdikleri bellek miktarları düşük olma eğilimindedir. Ancak bunlar çok kolay 
     programlanıp uygulamaya sokulabilmektedir. Mikrodenetleyicilere "tek çiplik bilgisayar (single chip computer)" da denilmektedir. 
@@ -200,24 +199,24 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Küçük bir kit (baskılı devre) üzerine monte edilmiş bilgisayarlara SBC (Single Board Computer) denilmektedir. Genellikle 
-    bu kitlerde SoC'lar, RAM'ler, başka çevre birimleri ve IO işlemleri için soketler bulunmaktadır. Örneğin Raspberry Pi, 
-    Beagleboard SBC'lere örnek verilebilir. SBC'ler klavye, fare ve monitör takılarak bir masaüstü bilgisayar gibi kullanılabilmektedir.
-    SBC'ler masaüstü bilgisayarlar gibi de kullanılabildiğinden bunlara Linux başta olmak üzere, Android ve Windows gibi işletim 
-    sistemleri yüklenebilmektedir.
+    bu kitlerde SoC'lar, RAM'ler, başka çevre birimleri ve IO işlemleri için uçlar bulunmaktadır. Örneğin Raspberry Pi’lar,
+    Beagleboard’lar SBC'lere örnek verilebilir. SBC'ler klavye, fare ve monitör takılarak bir masaüstü bilgisayar gibi 
+    kullanılabilmektedir. SBC'ler masaüstü bilgisayarlar gibi de kullanılabildiğinden bunlara Linux başta olmak üzere, Android 
+    ve Windows gibi işletim sistemleri yüklenebilmektedir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Mikroişlemcileri tasarım mimarilerine göre iki CISC (Complex Instruction Set Computers) ve RISC (Reduced Instruction Set 
-    Computers) olmak üzere iki kısma ayırabiliriz. CISC ailesi işlemcilere Intel firmasının x86 ailesi işlemcilerini örnek 
-    verebiliriz. ARM, MIPS, PowerPC, Itanium gibi işlemciler ise tipik RISC işlemcileridir. Her ne kadar CISC ve RISC isimleri 
-    komut kümesi ile ilgili biçimde uydurulmuşsa da CISC ve RISC tasarımları başka bakımlardan da farklılık göstermektedir.
+    Mikroişlemcileri tasarım mimarilerine göre CISC (Complex Instruction Set Computers) ve RISC (Reduced Instruction Set Computers) 
+    olmak üzere iki kısma ayırabiliriz. CISC ailesi işlemcilere Intel firmasının x86 ailesi işlemcilerini örnek verebiliriz. 
+    ARM, MIPS, PowerPC, Itanium gibi işlemciler ise tipik RISC işlemcileridir. Her ne kadar CISC ve RISC isimleri komut kümesi 
+    ile ilgili biçimde uydurulmuşsa da CISC ve RISC tasarımları başka bakımlardan da farklılık göstermektedir.
 
-    İşlemciler (makro ve mikro) ortaya çıktığında çok fazla makine komutunun bulunmasının bir avantaj olduğu düşünülüyordu. 
-    Ancak daha sonraları bunun avantajdan ziyade dezavantaj oluşturduğu görüldü. Belli bir süreden sonra artık RISC mimarisinin
-    CISC mimarisinden toplamda daha iyi bir tasarım olduğu kabul görmüştür. Bu nedenle son dönem mikroişlemci tasarımlarında hep 
-    RISC mimarisi kullanılmıştır.
+    Önceleri işlemcilerin (makro ve mikro) fazla sayıda makine komutuna sahip olması bir avantaj olarak görülüyordu. Ancak daha 
+    sonraları bunun avantajdan ziyade dezavantaj oluşturduğu anlaşıldı. Belli bir süreden sonra artık RISC mimarisinin CISC 
+    mimarisinden toplamda daha iyi bir tasarım olduğu kabul görmüştür. Bu nedenle son dönem mikroişlemci tasarımlarında hep RISC 
+    mimarisi kullanılmıştır.
 
-    CISC ve RISC mimarisi arasındaki temel farklılıklar şunlardır:
+    CISC ve RISC işlemci mimarisi arasındaki temel farklılıklar şunlardır:
 
     1) CISC işlemcilerinde fazla sayıda makine komutu bulunmaktadır. Bu işlemcilerde bazı komutlar temel işlemleri yaparken 
     bazıları karmaşık işlemler yapmaktadır. Halbuki RISC işlemcilerinde az sayıda temel makine komutları bulunmaktadır. Bu 
@@ -228,14 +227,14 @@
     2) CISC işlemcilerinde az sayıda yazmaç (register), RISC işlemcilerinde ise fazla sayıda yazmaç bulunma eğilimindedir. Yazmaç 
     sayıları az olunca yazmaçların tekrar tekrar aynı değerlerle yüklenmesi gerekebilmektedir. Bu da derleyicinin nesneleri 
     daha kısa sürede yazmaçlarda tutmasına yol açmaktadır. Yine CISC işlemcilerindeki bazı komutlar ancak bazı özel yazmaçlarla 
-    kullanılmaktadır. (Örneğin Intel x86 işlemcilerinde MUL ve DIV gibi komutların bir operandı EAX ya da RAX yazmacında bulunmak 
+    kullanılmaktadır. (Örneğin Intel x86 işlemcilerinde MUL ve DIV komutlarının bir operandı EAX ya da RAX yazmacında bulunmak 
     zorundadır.) Oysa RISC işlemcilerinde her işlem her yazmaçla yapılabilmektedir.
 
     3) CISC işlemcilerinde komutlar farklı uzunluklarda olabilmektedir. Örneğin Intel'in x86 ailesinde 1 byte olan makine komutları 
     da vardır, 5 byte olan makine komutları da vardır, 11 byte olan hatta 15 byte olan makine komutları da vardır. Halbuki RISC 
     işlemcilerinde genel olarak tüm makine komutları eşit uzunluktadır. Örneğin ARM işlemcilerinde her makine komutu 4 byte 
     uzunluktadır. Böylece işlemci komutları bellekten daha etkin bir biçimde çekip (fetch işlemi) onları daha çabuk anlamlandırmaktadır. 
-    "n" sonraki ya da önceki makine komutlarının yerini belirleyebilmektedir.
+    Belli bir sayı sonraki ya da önceki makine komutlarının yerini belirleyebilmektedir.
 
     4) RISC işlemcilerinde pipeline mekanizması CISC işlemcilerine göre daha iyi gerçekleştirilmektedir. Pipeline işlemcinin
     bir makine komutunu çalıştırırken sonraki komutlar üzerinde hazırlık işlemlerini yapması anlamına gelmektedir. RISC tasarımı
@@ -1090,38 +1089,38 @@
     Çünkü bütün çapraz araçlar bu dizin içerisinde bulunmaktadır. Bu dizini görüntülediğimizde içeriği şöyle listelenmektedir:
 
     arm-none-linux-gnueabihf-addr2line
-    2021 arm-none-linux-gnueabihf-ar
-    2021 arm-none-linux-gnueabihf-as
-    2021 arm-none-linux-gnueabihf-c++
-    2021 arm-none-linux-gnueabihf-c++filt
-    2021 arm-none-linux-gnueabihf-cpp
-    2021 arm-none-linux-gnueabihf-dwp
-    2021 arm-none-linux-gnueabihf-elfedit
-    2021 arm-none-linux-gnueabihf-g++
-    2021 arm-none-linux-gnueabihf-gcc
-    2021 arm-none-linux-gnueabihf-gcc-10.3.1
-    2021 arm-none-linux-gnueabihf-gcc-ar
-    2021 arm-none-linux-gnueabihf-gcc-nm
-    2021 arm-none-linux-gnueabihf-gcc-ranlib
-    2021 arm-none-linux-gnueabihf-gcov
-    2021 arm-none-linux-gnueabihf-gcov-dump
-    2021 arm-none-linux-gnueabihf-gcov-tool
-    2021 arm-none-linux-gnueabihf-gdb
-    2021 arm-none-linux-gnueabihf-gdb-add-index
-    2021 arm-none-linux-gnueabihf-gfortran
-    2021 arm-none-linux-gnueabihf-gprof
-    2021 arm-none-linux-gnueabihf-ld
-    2021 arm-none-linux-gnueabihf-ld.bfd
-    2021 arm-none-linux-gnueabihf-ld.gold
-    2021 arm-none-linux-gnueabihf-lto-dump
-    2021 arm-none-linux-gnueabihf-nm
-    2021 arm-none-linux-gnueabihf-objcopy
-    2021 arm-none-linux-gnueabihf-objdump
-    2021 arm-none-linux-gnueabihf-ranlib
-    2021 arm-none-linux-gnueabihf-readelf
-    2021 arm-none-linux-gnueabihf-size
-    2021 arm-none-linux-gnueabihf-strings
-    2021 arm-none-linux-gnueabihf-strip
+    arm-none-linux-gnueabihf-ar
+    arm-none-linux-gnueabihf-as
+    arm-none-linux-gnueabihf-c++
+    arm-none-linux-gnueabihf-c++filt
+    arm-none-linux-gnueabihf-cpp
+    arm-none-linux-gnueabihf-dwp
+    arm-none-linux-gnueabihf-elfedit
+    arm-none-linux-gnueabihf-g++
+    arm-none-linux-gnueabihf-gcc
+    arm-none-linux-gnueabihf-gcc-10.3.1
+    arm-none-linux-gnueabihf-gcc-ar
+    arm-none-linux-gnueabihf-gcc-nm
+    arm-none-linux-gnueabihf-gcc-ranlib
+    arm-none-linux-gnueabihf-gcov
+    arm-none-linux-gnueabihf-gcov-dump
+    arm-none-linux-gnueabihf-gcov-tool
+    arm-none-linux-gnueabihf-gdb
+    arm-none-linux-gnueabihf-gdb-add-index
+    arm-none-linux-gnueabihf-gfortran
+    arm-none-linux-gnueabihf-gprof
+    arm-none-linux-gnueabihf-ld
+    arm-none-linux-gnueabihf-ld.bfd
+    arm-none-linux-gnueabihf-ld.gold
+    arm-none-linux-gnueabihf-lto-dump
+    arm-none-linux-gnueabihf-nm
+    arm-none-linux-gnueabihf-objcopy
+    arm-none-linux-gnueabihf-objdump
+    arm-none-linux-gnueabihf-ranlib
+    arm-none-linux-gnueabihf-readelf
+    arm-none-linux-gnueabihf-size
+    arm-none-linux-gnueabihf-strings
+    arm-none-linux-gnueabihf-strip
 
     Burada gcc derleyicimiz "arm-none-linux-gnueabihf-gcc" ismiyle bulunmaktadır. Ancak derleyicimizi kullanmak için oldukça 
     fazla tuşa basmamız gerekir. Bunu engellemek için PATH çevre değişkenine bu "bin" dizini eklenebilir. Ya da aşağıdaki gibi 
@@ -2848,8 +2847,8 @@
     kod tekniği" arasında performans bakımından ne farklılıklar vardır? İşte bu tekniklerin kendi aralarında bazı avantaj 
     ve dezavantajları bulunmaktadır. Windows'taki teknikte "relocation" işlemi bir zaman kaybı oluşturabilmektedir. Ancak 
     bir "relocation" işlemi yapıldığında kodlar daha hızlı çalışma eğilimindedir. Konumdan bağımsız kod tekniğinde ise
-    "relocation" işlemine minimal düzeyde gereksinim duyulmaktadır. Ancak dinamik kütüphanelerdeki fonksiyonlar çağrılırken göreli 
-    biçimde daha fazla zaman kaybedilmektedir. Aynı zamanda bu teknikte kodlar biraz daha fazla yer kaplamaktadır.
+    "relocation" işlemine minimal düzeyde gereksinim duyulmaktadır. Ancak dinamik kütüphanelerdeki fonksiyonlar çağrılırken 
+    göreli biçimde daha fazla zaman kaybedilmektedir. Aynı zamanda bu teknikte kodlar biraz daha fazla yer kaplamaktadır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -2867,7 +2866,7 @@
 
     g_a = 10;
 
-    Burada derleyicinin yukarıdaki ifadeye ilişkin makine kodlarını üretebilmesi için g_a değişkenin tüm bellekteki adresini 
+    Burada derleyicinin yukarıdaki ifadeye ilişkin makine kodlarını üretebilmesi için g_a değişkeninin tüm bellekteki adresini 
     (yani tepeden itibaren adresini) bilmesi gerekir. Bir nesnenin belleğin tepesinden itibarenki adresine "mutlak adres (absolute
     address) de denilmektedir. Örneğin Intel işlemcilerinde yukarıdaki ifade aşağıdaki gibi makine komutlarına dönüştürülmektedir:
 
@@ -2889,7 +2888,7 @@
     hızlı çalışmasını sağlamaktadır. Ancak bu teknikte relocation zamanı yüklemeyi uzatabilmektedir. İkinci teknikte ise relocation
     minimal düzeyde tutulmaktadır. Ancak bu global değişkenlere erişim birkaç makine komutu ile daha yavaş yapılmaktadır. 
     UNIX/Linux sistemleri genel olarak bu tekniği kullanmaktadır. Ayrıca birinci teknikte kod üzerinde relocation uygulandığı 
-    için mecburen "copy on write" mekanizaması devreye sokulmaktadır. Bu da fiziksel belleğin kullanım verimini düşürebilmektedir.
+    için mecburen "copy on write" mekanizması devreye sokulmaktadır. Bu da fiziksel belleğin kullanım verimini düşürebilmektedir.
 
     Bu noktada ek olarak işlemcilerde bazı makine komutlarının (MOV, LOAD, STORE gibi) mutlak adres kullandığını ancak CALL ve 
     JMP gibi bazı makine komutlarının hem mutlak hem de göreli adres kullanabildiğini belirtelim. Aslında işlemcileri tasarlayanlar 
@@ -2948,13 +2947,14 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     İster statik kütüphane isterse dinamik kütüphane yazacak olalım yazdığımız kütüphaneler için bir başlık dosyası oluşturmak 
-    iyi bir tekniktir. Örneğin içerisinde çeşitli fonksiyonların bulunduğu "libmyutil.so" dinamik kütüphanersini "libmyutil.c" 
+    iyi bir tekniktir. Örneğin içerisinde çeşitli fonksiyonların bulunduğu "libmyutil.so" dinamik kütüphanesini "libmyutil.c" 
     dosyasından hareketle oluşturmak isteyelim. İşte "libmyutil.c" dosyasındaki fonksiyonların prototipleri, gerekli olan sembolik 
     sabitler, makrolar, inline fonksiyonlar, yapı bildirimleri gibi "nesne yaratmayan bildirimler" bir başlık dosyasına yerleştirilmelidir. 
     Böylece bu kütüphaneyi kullanacak kişiler bu dosyayı include ederek gerekli bildirimlerin kodlarını oluşturmuş olurlar. Başlık 
     dosyaları oluşturulurken iki önemli noktaya dikkat edilmelidir:
 
     1) Başlık dosyalarına yalnızca "nesne yaratmayan bildirimler (declarations)" yerleştirilmelidir.
+
     2) Başlık dosyalarının başına "include koruması (include guard)" yerleştirilmelidir. Include koruması aşağıdaki gibi yapılabilir:
 
     #ifndef SOME_NAME
@@ -3036,8 +3036,8 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Dinamik kütüphane kullanan programlarda bağlayıcı tarafından ELF formatında iki önemli bölüm oluşturulmaktadır. Bu bölümler 
-    ".dynamic" ve ".dynsym" isimli bölümlerdir. ".dynmaic" bölümü çalıştırılabilir dosyanın kullandığı dinamik kütüphaneler hakkında 
-    bilgileri içermektedir. ".dynsym" bölümü ise dinamik kütüphanelerden kullanılan sembollerin tutulduğu sembol tablosudur. Programın 
+    ".dynamic" ve ".dynsym" isimli bölümlerdir. ".dynamic" bölümü çalıştırılabilir dosyanın kullandığı dinamik kütüphaneler hakkında 
+    bilgiler içermektedir. ".dynsym" bölümü ise dinamik kütüphanelerden kullanılan sembollerin tutulduğu sembol tablosudur. Programın 
     normal sembollerinin ".symtab" isimli bölümdeki sembol tablosunda tutulduğunu anımsayınız.
 
     32 bit ELF formatının ".dynamic" bölümünün yapısal içeriği şöyledir:
@@ -3132,7 +3132,7 @@
     sembol tablosunun readelf programı ile elde edilen görüntüsü verilmiştir:
 
     Symbol table '.dynsym' contains 11 entries:
-    Num:    Value          Size Type    Bind   Vis      Ndx Name
+      Num:    Value          Size Type    Bind   Vis      Ndx Name
         0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND
         1: 0000000000000610     0 SECTION LOCAL  DEFAULT   11
         2: 0000000000011000     0 SECTION LOCAL  DEFAULT   22
@@ -3143,12 +3143,12 @@
         7: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__
         8: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND abort@GLIBC_2.17 (2)
         9: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND foo
-        10: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMCloneTable
+        10: 0000000000000000    0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMCloneTable
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Linux sistemlerinde dinamik kütüphane kullanan programların yüklenmesi süreci biraz ilginçtir. Anımsanacağı gibi aslında
-    her türlü program exec fonksiyonları tarafındnan yüklenip çalıştırılmaktadır. Bu exec fonksiyonlarının taban olanı "execve"
+    her türlü program exec fonksiyonları tarafından yüklenip çalıştırılmaktadır. Bu exec fonksiyonlarının taban olanı "execve"
     isimli fonksiyondur. (Yani diğer exec fonksiyonları bunu çağırmaktadır.) execve fonksiyonu da bir sistem fonksiyonu olarak 
     yazılmıştır.
 
@@ -3160,7 +3160,7 @@
     tamamen user modda çalışmaktadır.
 
     Programın dinamik kütüphanelerinin yüklenmesinde kullanılacak olan dinamik linker'ın yol ifadesi ELF formatında Program Başlık 
-    Tablosunda INTERP türüyle belirtilmektedir. INTERP türüne ilişkin Program Başlığında dinamik bağlayıcının yol ifadsininin 
+    Tablosu'nda INTERP türüyle belirtilmektedir. INTERP türüne ilişkin Program Başlığı'nda dinamik bağlayıcının yol ifadesinin 
     bulunduğu dosya offset'i belirtilmektedir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -3192,7 +3192,7 @@
 
     Burada artık dinamik kütüphaneler sırasıyla "/home/kaan" dizininde, "/home/kaan/Study/EmbeddedLinux" dizininde ve prosesin 
     çalışma dizininde (current working directory) aranacaktır. Çevre değişkeninin sonundaki "." karakterinin exec uygulayan prosesin 
-    o andaki çalışma dizinini temsil ettiğine dikkat ediniz. Tabii biz kabuk programının değil çalıştırılacak programın çevre 
+    o andaki çalışma dizinini temsil ettiğine dikkat ediniz. Tabii biz kabuk programının değil, çalıştırılacak programın çevre 
     değişken listesine ekleme yaparak da programı aşağıdaki gibi çalıştırabiliriz:
 
     $ LD_LIBRARY_PATH=:. ./app
@@ -3232,7 +3232,7 @@
     Birden fazla kez "-rpath" seçeneği kullanıldığında bu seçenekler tek bir DT_RUNPATH tag'ına aralarına ':' karakteri getirilerek 
     yerleştirilmektedir. Yani aşağıdaki işlem yukarıdaki ile eşdeğerdir:
 
-    gcc -o app app.c -Wl,-rpath,/home/csd/Study/EmbeddedLinux,-rpath,/home/kaan libmyutil.so
+    $ gcc -o app app.c -Wl,-rpath,/home/csd/Study/EmbeddedLinux,-rpath,/home/kaan libmyutil.so
 
     "-rpath" bağlayıcı seçeneğinde default durumda DT_RUNPATH tag'ına yerleştirme yapıldığına dikkat ediniz. Eğer DT_RPATH tag'ına 
     yerleştirme yapılmak isteniyorsa bağlayıcı seçeneklerine ayrıca "--disable-new-dtags" seçeneğinin de girilmesi gerekmektedir. 
@@ -3253,7 +3253,7 @@
     seçeneğinde '$ORIGIN' argümanı kullanılmaktadır. Buradaki '$ORIGIN' argümanı "o anda çalıştırılabilen dosyanın bulunduğu dizini" 
     temsil etmektedir. Örneğin:
 
-    gcc -o app app.c -Wl,-rpath,'$ORIGIN'/. libmyutil.so
+    $ gcc -o app app.c -Wl,-rpath,'$ORIGIN'/. libmyutil.so
 
     Burada artık çalıştırılabilen dosya nereye yerleştirilirse yerleştirilsin ve nereden çalıştırılırsa çalıştırılsın dinamik 
     kütüphaneler çalıştırılabilen dosyanın yerleştirildiği dizinde aranacaktır.
@@ -3323,7 +3323,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------
     Dinamik kütüphane dosyalarının "so" isimleri denilen bir isimleri de bulunabilmektedir. Dinamik kütüphane dosyalarının "so" 
     isimleri bağlayıcı tarafından kullanılan isimleridir. Dinamik kütüphane dosyası oluşturulurken "so" isimleri verilmeyebilir. 
-    Yani bir dinamik kütüphane dosyasının "so" ismi olmak zorunda değildir. Dinam,k kütüphane dosyalarına "so" isimlerini vermek 
+    Yani bir dinamik kütüphane dosyasının "so" ismi olmak zorunda değildir. Dinamik kütüphane dosyalarına "so" isimlerini vermek 
     için "-soname <isim>" bağlayıcı seçeneği kullanılmaktadır. Kütüphanelere verilen "so" isimleri ELF formatının ".dynamic" bölümündeki 
     DT_SONAME isimli bir tag'ına yerleştirilmektedir. "-soname" komut satırı argümanı bağlayıcıya ilişkin olduğu için "-Wl" seçeneği 
     ile kullanılmalıdır. Örneğin biz "libmyutil.so" isimli bir dinamik kütüphaneyi "so" ismi vererek oluşturmak isteyelim. Bu işlemi 
@@ -3344,13 +3344,13 @@
 
     Tabii yukarıda da belirttiğimiz gibi biz dinamik kütüphanelere "so" ismi vermek zorunda değiliz.
 
-    "so" ismi içeren bir kütüphaneyi kullanan bir program nağlanırken bağlayıcı çalıştırılabilen dosyaya "so" ismini içeren 
+    "so" ismi içeren bir kütüphaneyi kullanan bir program bağlanırken bağlayıcı çalıştırılabilen dosyaya "so" ismini içeren 
     kütüphanenin ismini değil "so" ismini yazmaktadır. Yukarıdaki örneğimizde "libmyutil.so" kütüphanesi "so" ismi olarak 
     "libmyutil.so.1" ismini içermektedir. Şimdi "libmyutil.so" dosyasını kullanan "app.c" programını derleyip bağlayalım:
 
-    gcc -o app app.c libmyutil.so
+    $ gcc -o app app.c libmyutil.so
 
-    Burada link işleminde "llibmyutil.so" dosya ismi kullanılmıştır. Ancak oluşturulan "app" dosyasının içerisine bağlayıcı bu 
+    Burada link işleminde "libmyutil.so" dosya ismi kullanılmıştır. Ancak oluşturulan "app" dosyasının içerisine bağlayıcı bu 
     ismi değil, "so" ismi olan "libmyutil.so.1" ismini yazacaktır. Örneğin:
 
     $ readelf -d app | grep "NEEDED"
@@ -3365,11 +3365,11 @@
     ./app: error while loading shared libraries: libmyutil.so.1 cannot open shared object file: No such file or directory
 
     Tabii yukarıda belirttiğimiz gibi eğer kütüphaneyi oluştururken ona "so" ismi vermeseydik bu durumda bağlayıcı "app" dosyasına
-    "libmyutil.so" dosyasını yazacaktı ve dinamik bağlayıcı da bu dosyası yükleyecekti.
+    "libmyutil.so" dosyasını yazacaktı ve dinamik bağlayıcı da bu dosyayı yükleyecekti.
 
     Pekiyi yukarıdaki örnekte "app" programı artık "libmyutil.so.1" dosyasını kullanıyor gibi olduğuna göre ve böyle de bir dosya 
     da olmadığına göre bu işlemlerin ne anlamı vardır? İşte biz bu örnekte "so" ismine ilişkin dosyayı bir sembolik bağlantı dosyası 
-    haline getirirsek ve bu sembolik link dosyası da "libmyutil.so" dosyasını gösterir hale getirilirse sorunu ortadan kaldırabiliriz. 
+    haline getirirsek ve bu sembolik link dosyası da "libmyutil.so" dosyasını gösterir hale getirirsek sorunu ortadan kaldırabiliriz. 
     Örneğin:
 
     $ ln -s libmyutil.so libmyutil.so.1
@@ -3417,7 +3417,7 @@
     problemler Windows sistemlerinde eskiden ciddi sıkıntılara yol açmaktaydı. Bu probleme Windows sistemlerinde "DLL cehennemi 
     (DLL Hell)" deniyordu.) Şöyle bir özet yapabiliriz:
 
-    - Kütüphanenin düşük majör numarasını kullanan programlar onların yüksek majör numarasını kullanmamlıdır. Yüksek majör 
+    - Kütüphanenin düşük majör numarasını kullanan programlar onların yüksek majör numarasını kullanmamalıdır. Yüksek majör 
     numarasını kullanan programlar da onların düşük majör numaralarını kullanmamalıdır.
 
     - Kütüphanenin aynı majör fakat düşük minör numarasını kullanan programlar aynı majör yüksek minör numaralarını da kullanabilir. 
@@ -3450,9 +3450,9 @@
 
     Örneğin:
 
-    gcc -fPIC -o libmyutil.so.1.0.0 -shared -Wl,-soname,libmyutil.so.1 libmyutil.c      (gerçek isimli kütüphane dosyası oluşturuldu)
-    ln -s libmyutil.so.1.0.0 libmyutil.so.1                                             (so ismi oluşturuldu)
-    ln -s libmyutil.so.1 libmyutil.so                                                   (bağlayıcı ismi oluşturuldu)
+    $ gcc -fPIC -o libmyutil.so.1.0.0 -shared -Wl,-soname,libmyutil.so.1 libmyutil.c      (gerçek isimli kütüphane dosyası oluşturuldu)
+    $ ln -s libmyutil.so.1.0.0 libmyutil.so.1                                             (so ismi oluşturuldu)
+    $ ln -s libmyutil.so.1 libmyutil.so                                                   (bağlayıcı ismi oluşturuldu)
 
     Burada oluşturulan üç dosyayı "ls -l" komutu ile görüntüleyelim:
 
@@ -3464,15 +3464,15 @@
 /*-----------------------------------------------------------------------------------------------------------------------------
     Dinamik kütüphanelerin verisyonlanmasının ve yukarıdaki işlemlerin yapılmasının nedenlerini şöyle özetleyebiliriz:
 
-    1) Bu sayede aynı kütüphanenin değişik versiyonları değişik isimlerle aynı dizinde birlikte bulunabilmektedir. 
+    1) Bu sayede aynı kütüphanenin değişik versiyonları değişik isimlerle aynı dizinde birlikte bulunabilmektedir.
     2) Çalıştırılabilen bir dosya kütüphanenin bir majör ve minör versiyonunu kullanırken yeniden bağlama işlemi yapılmadan 
-    sembolik bağlantı oluşturularak onun yüksek minör numaraya ilişkin kütüphaneyi kullanması sağlamabilmektedir. 
+    sembolik bağlantı oluşturularak onun yüksek minör numaraya ilişkin kütüphaneyi kullanması sağlanabilmektedir.
     3) Yeni programlar yazılırken en normal durum kütüphanelerin son versiyonlarının kullanılmasıdır. Böylece bağlama aşamasında
-    yaşlın bir isim ile bağlama yapılabilmektedir.
+    yanlış bir isim ile bağlama yapılabilmektedir.
 
     Şimdi bu işlemlerden amacı açıklayan bir örnek yapalım:
 
-    1) Yeni yazdırğımız kütüphanenin majör ve minör numaraları "1.0.0" olsun. Kütüphanetyi şöyle oluşturmuş olalım.
+    1) Yeni yazdığımız kütüphanenin majör ve minör numaraları "1.0.0" olsun. Kütüphaneyi şöyle oluşturmuş olalım.
 
     $ gcc -fPIC -o libmyutil.so.1.0.0 -shared -Wl,-soname,libmyutil.so.1 libmyutil.c
 
@@ -3488,9 +3488,9 @@
     lrwxrwxrwx 1 kaan kaan    18 May 23 21:40 libmyutil.so.1 -> libmyutil.so.1.0.0
     -rwxrwxr-x 1 kaan kaan 15600 May 23 21:36 libmyutil.so.1.0.0
 
-    3) Şimdi de kütüphanenin bağlayıcı ismini en yükske majör numaralı isme sembolik bağlantı yapalım:
+    3) Şimdi de kütüphanenin bağlayıcı ismini en yüksek majör numaralı isme sembolik bağlantı yapalım:
 
-    ln -s libmyutil.so.1 libmyutil.so
+    $ ln -s libmyutil.so.1 libmyutil.so
 
     Artık elimizde üç dosya vardır:
 
@@ -3501,10 +3501,11 @@
 
     4) Bu kütüphaneyi kullanan bir "app.c" isimli programı şöyle derleyebiliriz:
 
-    gcc -o app app.c libmyutil.so
+    $ gcc -o app app.c libmyutil.so
 
-    Burada aslında bağlama işleminde sembolik izleneceği için "libmyutil.so.1.0.0" dosyası kullanılmıştır. Bu dosyanın içerisindeki
-    so ismi "libmyutil.so.1" olduğuna göre artık app programı "libmyutil.so.1" dinamik kütüphanesini kullanıyor gibidir:
+    Burada aslında bağlama işleminde sembolik link izleneceği için "libmyutil.so.1.0.0" dosyası kullanılmıştır. Bu dosyanın 
+    içerisindeki so ismi "libmyutil.so.1" olduğuna göre artık app programı "libmyutil.so.1" dinamik kütüphanesini kullanıyor 
+    gibidir:
 
     $ readelf -d app | grep "NEEDED"
     0x0000000000000001 (NEEDED)             Shared library: [libmyutil.so.1]
@@ -3519,7 +3520,7 @@
 
     6) Şimdi "libmyutil.so.1.0.0" kütüphanesinin eskisi ile uyumlu yeni bir versiyonunun oluşturulması istensin. Bu versiyonda 
     foo ve bar iyileştirilmiş olsun ve kütüphaneye birkaç yeni fonksiyon eklenmiş olsun. Bunun versiyon numarasının da 
-    "libmyutil.so.1.0.5" olduğunu varsayalım. Şimdi bu yeni kütüphaneyi oluşturulalım:
+    "libmyutil.so.1.0.5" olduğunu varsayalım. Şimdi bu yeni kütüphaneyi oluşturalım:
 
     $ gcc -fPIC -o libmyutil.so.1.0.5 -shared -Wl,-soname,libmyutil.so.1 libmyutil.c
 
@@ -3527,8 +3528,8 @@
 
     Bu durumda biz "app" programını çalıştırırsak bu program kütüphanenin "libmyutil.so.1.0.0" versiyonunu kullanacaktır.
 
-    7) Şimdi "app" programına dokunmadan bu "app" programının aynı versiyonun yüksek versiyonlu olan kütüphaneyi kullanmasını 
-    sağlayalım:
+    7) Şimdi "app" programına dokunmadan bu "app" programının aynı majör versiyonun yüksek minör versiyonu olan kütüphaneyi 
+    kullanmasını sağlayalım:
 
     $ rm libmyutil.so.1 
     $ ln -s libmyutil.so.1.0.5 libmyutil.so.1
@@ -3536,7 +3537,7 @@
     daha optimize foo
     daha optimize bar
 
-    Artık "app" programı yeni minör versiyonu kullanmaktadır. Ancak eski minör versyionlu kütüphane de dizinde bulunmaktadır.
+    Artık "app" programı yeni minör versiyonu kullanmaktadır. Ancak eski minör versiyonlu kütüphane de dizinde bulunmaktadır.
 
     8) Şimdi de kütüphanemizin "libmyutil.so.2.0.0" biçiminde yeni bir majör versiyonunun oluşturulduğunu varsayalım. 1 numaralı 
     majör versiyonla 2 numaralı majör versiyon birbirleriyle uyumlu değildir. Biz bu "libmyutil.so.2.0.0" yeni versiyonu derlerken 
@@ -3551,14 +3552,15 @@
     kullanılan isimlerdir. Bu sayede bağlama işlemini yapan programcıların daha az tuşa basarak genel bir isim kullanması sağlanmıştır. 
     Bu durumda örneğin biz libmyutil.so isimli kütüphaneyi kullanan programı şöyle derleyip bağlayabiliriz:
 
-    gcc -o app app.c libmyutil.so
+    $ gcc -o app app.c libmyutil.so
 
     Ya da şöyle yapabiliriz:
 
-    gcc -o app app.c -lmyutil -L.
+    $ gcc -o app app.c -lmyutil -L.
 
-    Burada aslında "libmyutil.so" dosyası "so ismine" "so" ismi de "gerçek isme link yapılmış" durumdadır.
+    Burada aslında "libmyutil.so" dosyası "so" ismine, "so" ismi de "gerçek isme" link yapılmış durumdadır.
 -----------------------------------------------------------------------------------------------------------------------------*/
+
 /*-----------------------------------------------------------------------------------------------------------------------------
 												21. Ders 28/05/2024 - Salı
 -----------------------------------------------------------------------------------------------------------------------------*/
@@ -3824,7 +3826,7 @@
 
     Derleme işlemini şöyle yapabiliriz:
 
-    gcc -fPIC -shared -Wl,--version-script,libmyutil.map -o libmyutil.so libmyutil.c
+    $ gcc -fPIC -shared -Wl,--version-script,libmyutil.map -o libmyutil.so libmyutil.c
 
     Şimdi de kütüphanenin yeni versiyonunu kullanan "app2.c" programını yazalım:
 
@@ -3909,7 +3911,7 @@
 
     Derlemeyi yine şöyle yapabiliriz:
 
-    gcc -fPIC -shared -Wl,--version-script,libmyutil.map -o libmyutil.so libmyutil.c
+    $ gcc -fPIC -shared -Wl,--version-script,libmyutil.map -o libmyutil.so libmyutil.c
 
     Şimdi de foo fonksiyonunun üçüncü versiyonunu kullanan app3 programını yazıp derleyelim:
 
@@ -3943,16 +3945,1063 @@
     foo: VERSION-3.0
     bar: VERSION-1.0
     tar: VERSION-1.0
+-----------------------------------------------------------------------------------------------------------------------------*/
 
+/*-----------------------------------------------------------------------------------------------------------------------------
+												22. Ders 30/05/2024 - Perşembe
+-----------------------------------------------------------------------------------------------------------------------------*/
 
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Çok prosesli (multiprocessing) işletim sistemlerinin çalıştığı donanımlarda kullanılan mikroişlemcilerin "koruma mekanizması 
+    (protection mechanism)" denilen bir özelliği vardır. Çok prosesleri sistemlerde bütün programlar o anda RAM'de bir biçimde 
+    bulunmaktadır. Tabii işletim sisteminin kendisi de RAM'de bulunur. Bir programın göstericiler yoluyla kendi bellek alanının 
+    dışına çıkarak başka bir prosesin bellek alanına erişmesi mutlaka engellenmesi gereken bir durumdur. Çünkü eğer bu durum 
+    engellenmezse bir program başka bir programın bellek alanını bozabilir. Bu bozulma da o programın hatalı çalışmasına ya da 
+    çökmesine yol açabilir. Program başka bir programın bellek alanını bozmasa bile oradaki programlar üzerinde casusluk 
+    faaliyetleri yürütebilir. Buna ek olarak bazı makine komutları tamamen sistemin çökmesine de yol açabilmektedir. Bu makine 
+    komutlarını kullanan proramlar tüm sistemi çökertebileceği için bu durumun da önüne geçilmesi gerekir. İşte işlemcilerin
+    koruma mekanizması bu tür ihlallerin birinci elden işlemci tarafından tespit edilip engellenmesini sağlamaktadır.
+
+    İşlemcilerin koruma mekanizmasının iki yönü vardır:
+
+    1) Bellek Koruması
+    2) Komut Koruması
+
+    Bellek koruması bir prosesin kendi bellek alanının dışına erişimlerinin tespit edilmesine yönelik mekanizmadır. Komut koruması 
+    ise sistemi çökertme potansiyeline sahip makine komutlarının kullanımının engellenmesine yönelik mekanizmadır.
+
+    Tabii her türlü mikroişlemci böyle bir mekanizmaya sahip değildir. Ancak güçlü işlemcilerde bu mekanizma bulunmaktadır. 
+    Örneğin Intel'in 80386 ve sonrası işlemcileri ARM'nin Cortex A ve Cortex R serisi işlemcileri, Alpha işlemcileri, PowerPC 
+    işlemcileri, Itanium işlemcileri bu mekanizmalarsa sahiptir. Mikrodenetleyicilerde genel olarak küçük işlemciler bulunduğu için 
+    bunlar koruma mekanizmasına sahip değillerdir. Windows gibi Linux gibi macOS gibi işletim sistemleri bu mekanizmaya sahip 
+    olmayan işlemcilerin bulunduğu donanımlarda kullanılamazlar.
+
+    Bir prosesin bellek korumasını ve komut korumasını ihlal etmesi birinci elden mikroişlemci tarafından tespit edilmektedir. 
+    Mikroişlemci ihlali tespit eder ve işletim sistemine bildirir. İşletim sistemi de hemen her zaman programı sonlandırır.
+
+    Öte yandan çekirdek içerisindeki kodların ve aygıt sürücülerin kodlarının bu koruma engeline takılmaması gerekmektedir. Çekirdek 
+    belleğin her yerine erişebilmelidir. Çünkü programları bile belleğe yükleyen çekirdektir. Aynı zamanda çekirdek sistemi çökertme 
+    potansiyelinde olan pek çok makine komutunu uygun bir biçimde kullanmaktadır. Benzer biçimde aygıt sürücüler de mecburen 
+    bu tür makine komutlarını kullanmak zorundadırlar. İşte çekirdek kodlarının ve aygıt sürücü kodlarının bir biçimde bu koruma 
+    mekanizmasından muaf olması gerekmektedir.
+
+    İşlemcileri tasarlayanlar genellikle prosesler için iki çalışma modu tanımlamışlardır: "Kernel Mode" ve "User Mode".
+    Eğer bir kod "kernel mode'da" çalışıyorsa işlemci koruma mekanizmasını o kod için işletmez. Böylece o kod her şeyi yapabilir. 
+    Ancak eğer bir kod "user mode'da" çalışıyorsa işlemci o kod için koruma mekanizmasını işletmektedir. Normal programların hepsi 
+    user mode'da çalışmaktadır. Ancak kernel kodları ve aygıt sürücüler (kernel modülleri) kernel mode'da çalışırlar.
+
+    Bir programın "sudo" ile çalıştırılmasının (yani programın proses id'sinin 0 olmasının) bu konuyla hiçbir ilgisi yoktur. 
+    Proses id'nin 0 olması yalnızca dosya erişimleri için avantaj sağlayabilmektedir. Yoksa biz bir programı "sudo" ile çalıştırsak 
+    bile o program yine "user mode'da" çalıştırılmaktadır.
+
+    Pekiyi biz kendi programımızı kernel mode'da çalıştıramaz mıyız? Bu sorunun yanıtı genel olarak "hayır" biçimindedir. Bunun tek 
+    yolu "aygıt sürücü" ya da "kernel modül" denilen biçimde kod yazmaktır. Zaten aygıt sürücülerin en önemli özelliği onların 
+    kernel mode'da çalışmasıdır. Tabii aygıt sürücüler ancak sistem yöneticisi tarafından bir parola eşiliğinde (yani sudo ile) 
+    yüklenebilmektedir.
+
+    İşletim sistemlerinde sistemle ilgili önemli işler yapan bazı fonksiyonların "user mode'tan" çağrılmasına izin verilmiştir. 
+    Bu fonksiyonlara "sistem fonksiyonları (system calls)" denilmektedir. Bazı POSIX fonksiyonları işletim sisteminin sistem 
+    fonksiyonlarını çağırarak işlemlerini yapmaktadır. Tabii işletim sistelerinin sistem fonksiyonları sistemden sisteme 
+    değişebilmektedir. Oysa POSIX fonksiyonları her UNIX türevi sistemde aynı biçimde kullanılabilecek taşınabilir fonksiyonlardır.
+
+    Sistem fonksiyonları kernel'ın içerisindeki fonksiyonlardır. Dolayısıyla bu fonksiyonlar özel makine komutlarını kullanırlar ve 
+    bellekte her yere erişebilirler. Aksi takdirde bu fonksiyonların yazılabilmesi mümkün değildir. Pekiyi bizim programlarımız
+    user mode'da çalıştığına göre biz bir sistem fonksiyonunu çağırdığımızda ne olacaktır? İşte user mode bir proses bir sistem 
+    fonksiyonunu çağırdığında prosesin modu otomatik olarak kernel moda geçirilmektedir. Böylece sistem fonksiyonu yine kernel 
+    mode'da çalışmış olmaktadır. Sistem fonksiyonunun çalışması bittiğinde proses yine otomatik olarak user mode'a dönmektedir. 
+    Örneğin Intel işlemcilerinde bu geçişi sağlayan mekanizmaya "kapı (gate)" denilmektedir. Tabii kapı yerleştirmek kernel mode'da 
+    yapılabilecek bir işlemdir. Dolayısıyla user mod bir proses yalnızca zaten belirlenmiş olan kodları çalıştırmak üzere kernel moda 
+    geçebilmektedir.
+
+    Sistem fonksiyonlarını çağırmanın zamansal bir maliyeti vardır. Çünkü prosesin user mode'dan kernel moda geçmesi ve birtakım 
+    gerekli kontrollerin kernel mode'da yapılması zaman kaybına yol açmaktadır. Örneğin:
+
+    read(fd, (char *)0x123456, 10)
+
+    Linux'ta read POSIX fonksiyonu doğrudan sys_read isimli sistem fonksiyonunu çağırmaktadır. Eğer bu sistem fonksiyonu ikinci 
+    parametreyle verilen adresi hiç kontrol etmezse koruma mekanizmasından da muaf olduğu için tuzağa düşecektir. İşte bu tür 
+    sistem fonksiyonları kesinlikle adreslerin o prosesin alanı içerisinde olup olmadığını test ederler. Bunun gibi pek çok 
+    yapılması gereken irili ufaklı kontroller vardır.
+
+    O halde aslında bir proses yaşamının önemli bir kısmını user mode'da geçrirken bir kısmını da kernel mode'da geçirebilmektedir. 
+    Örneğin "time" isimli kabuk komutuyla biz prosesin ne kadar zamanı kernel mode'da ne kadar zamanı user mode'da geçirdiğini görebiliriz:
+
+    $ time ./sample
+
+    real	0m0,189s
+    user	0m0,185s
+    sys	0m0,005s
+
+    Burada "sys" kernel modu, "user" user modu ve "real" da toplam zamanı vermektedir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Modern kapasiteli mikroişlemcilerde "sayfalama (paging)" denilen önemli bir mekanizma vardır. Örneğin Intel işlemcileri 
+    bu sayfalama mekanizmasına 80386 modelleriyle birlikte sahip olmuştur. ARM Cortex A serisi ve Cortex M serisi işlemcilerin 
+    de bu mekanizmaları vardır. Itanium, PowerPC gibi işlemciler"de de sayfalama mekanizması bulunmaktadır. Genellikle koruma 
+    mekanizmasına sahip işlemciler sayfalama mekanizmasına da sahip olurlar. Ancak koruma mekanizmasına sahip olduğu halde 
+    sayfalama mekanizmasına sahip olmayan işlemciler de vardır. Sayfalama mekanizması güçlü işlemcilerde bulunan bir mekanizmadır. 
+    Genel olarak mikrodenetleyicilerde bu mekanizma yoktur. Örneğin ARM'ın Cortex M serisi mikrodenetleyicilerinde sayfalama 
+    mekanizması bulunmamaktadır. Ayrıca işlemcilerdeki bu sayfalama mekanizması aktif ve pasif duruma getirilebilmektedir. 
+    Yani işlemci sayfalama mekanizmasına sahip olduğu halde sistem programcısı bu mekanizmayı açmayabilir ve kullanmayabilir. 
+    İşlemciler reset edildiğinde sayfalama mekanizması pasif durumdadır. İşletim sistemleri bazı ön hazırlıkları yaptıktan sonra
+    bu mekanizmayı açmaktadır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Sayfalama mekanizmasında fiziksel RAM aynı zamanda "sayfa (page)" denilen ardışıl bloklara ayrılır. Sayfa uzunluğu sistemden
+    sisteme hatta aynı işlemcide işlemcinin modundan moduna değişebilir. Ancak en tipik kullanılan sayfa uzunluğu 4096 (4K) 
+    byte'tır. Gerçekten de bugün Linux, Windows ve macOS sistemleri 4K'lık sayfalar kullanmaktadır. Sayfalama mekanizması etkin 
+    hale getirildiğinde işlemci RAM'deki her sayfaya bir sayfa numarası karşılık getirir. Örneğin ilk 4096 byte 0'ıncı sayfaya, 
+    sonraki 4096 byte 1'inci sayfaya ilişkindir. Sayfalar bu biçimde ilk sayfa 0'dan başlatılarak ardışıl biçimde numaralandırılmaktadır. 
+    Yani her byte aslında bir sayfa içerisinde bulunur.
+
+    Bir program içerisinde kullanılan yani derleyicinin ürettiği adresler aslında gerçek fiziksel adresler değildir. Bu adreslere 
+    "sanal adresler (virtual addresses)" denilmektedir. Derleyiciler kodları sanki geniş bir RAM'de program tek başına çalışacakmış 
+    gibi üretmektedir. Örneğin 32 bit işlemcilerin kullanıldığı bir Linux sisteminde derleyici sanki program 4GB'lik RAM'de tek başına 
+    4MB'den itibaren yüklenecekmiş gibi kod üretmektedir. Yani örneğin 32 bit Linux sistemlerinde (Windows ve macOS'te de böyle) 
+    sanki derleyiciler program 4 GB bellekte 4 MB'den itibaren tek başlarına yüklenecekmiş gibi bir kod üretmektedir. Her program 
+    derlendiğinde aynı biçimde kod üretilmektedir. Çünkü derleyicinin ürettiği bu adresler sanal adreslerdir. Pekiyi her program 
+    aynı biçimde sanki RAM'in 4MB'sinden başlanarak ardışıl bir biçimde yüklenecekmiş gibi bir koda sahipse bu programlar nasıl 
+    çalışmaktadır?
+
+    İşte sayfalama mekanizmasına sahip olan CPU'lar aslında "sayfa tablosu (page table)" denilen bir taloya bakarak çalışırlar. 
+    Sayfa tablosu sanal sayfa numaralarını fiziksel sayfa numaralarına eşleyen bir tablodur. Sayfa tablosunun görünümü aşağıdaki 
+    gibidir:
+
+    Sanal Sayfa No              Fiziksel Sayfa No
+    ...                         ...
+    4562                        17456
+    4563                        18987
+    4564                        12976
+    ...                         ...
+
+    Şimdi Intel işlemcisinin aşağıdaki gibi bir makine kodunu çalıştırdığını düşünelim:
+
+    MOV EAX, [05C34782]
+
+    Burada makine komutu bellekte 05C34782 numaralı adresten başlayan 4 byte erişmek istemektedir. İşlemci önce bu adres değerinin 
+    kaçıncı sanal sayfaya karşılık geldiğini hesaplar. Bu hesap işlemci tarafından oldukça kolay bir biçimde yapılır. Sayı 12 kere 
+    sağa ötelenirse başka bir deyişle sayının sağındaki 3 hex digit atılırsa bu sanal adresin kaçıncı sanal sayfaya karşılık geldiği 
+    bulunabilir:
+
+    05C34782 >> 12 = 05C34 (sanal sayfa no, decimal 23604)
+
+    Artık işlemci sayfa tablosunda 0x5C34 yani desimal 23604 numaralı girişe bakar. Sayfa tablosunun ilgili kısmı şöyle olsun:
+
+    Sanal Sayfa No  (decimal/hex)   Fiziksel Sayfa No (desimal/hex)
+    ...                         ...
+    23603 (5C33)                      47324 (B8DC)
+    23604 (5C34)                      52689 (CDD1)
+    23605 (5C35)                      29671 (73E7)
+    ...                         ...
+
+    Burada 23604 (5C34) numaralı sanal sayfa 52689 (CDD1) fiziksel sayfasına yönlendirilmiştir. Pekiyi işlemci hangi fiziksel adrese 
+    erişecektir? İşte bizim sanal adresimiz 05C34782 idi. Bu adres iki kısma ayrıştırılabilir:
+
+    05C24   Sanal sayfa no (hex)
+    782     Sayfa offset'i (hex)
+
+    Bu durumda işlemci aslında fiziksel RAM'de 52689 (CDD1)'uncu fiziksel sayfanın 1922 (782) byte'ına erişecektir. O zaman gerçek
+    bellekteki erişim adresi 52689 (CDD1) * 4096 (1000) + 1922 (782) olacaktır.
+
+    Burada özetle anlatılmak istenen şey şudur: İşlemci her bellek erişiminde erişilecek sanal adresi iki kısma ayırır: "Sanal Sayfa 
+    No" ve "Sayfa Offset'i". Sonra sayfa tablosuna giderek sanal sayfa numarasına karşı gelen fiziksel sayfa numarasını elde eder. 
+    O fiziksel sayfanın sayfa offet'i ile belirtilen byte'ına erişir. Örneğin şöyle bir fonksiyon çağırmış olalım:
+
+    foo();
+
+    Derleyicimiz de şöyle bir kod üretmiş olsun:
+
+    CALL 06F14678  (hex)
+
+    Burada 06F14678 foo fonksiyonunun sanal bellek adresidir. Derleyici bu adresi üretmiştir. Ancak program çalışırken işlemci bu adresi 
+    ikiye ayırır (hex olarak konuşacağız):
+
+    06F146      Sanal Sayfa No (hex)
+    678         Sayfa Offseti (hex)
+
+    Sonra sayfa tablosuna gider ve 06F146 sayfasının hangi fiziksel sayfaya yönlendirildiğini tespit eder. Bu fiziksel sayfanın 
+    hex olarak 7C45 olduğuna düşünelim. O zaman işlemcinin erişeceği fiziksel adres 7C45000 + 678 hex adresi olacaktır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Buraya kadar şunları anladık:
+
+    - Derleyici 32 bit bir sistemde sanki program 4GB'lik bir RAM'de tek başına 4MB'ye yüklenerek çalıştırılacakmış gibi bir kod
+    üretmektedir.
+
+    - İşlemci kodu çalıştırırken her bellek erişiminde sayfa tablosuna bakıp aslında o sanal adresleri fiziksel adreslere dönüştürmektedir.
+
+    Pekiyi sayfa tablosunu kim oluşturmaktadır? Sayfa tablosu işletim sistemi tarafından proses belleğe yüklenirken (exec fonksiyonları 
+    tarafından) oluşturulmaktadır. İşletim sisteminin yükleyicisi (loader) programı 4K'lık parçalara ayırarak sanal sayfa numaraları 
+    ardışıl ancak fiziksel sayfa numaraları ardışıl olmayacak biçimde fiziksel RAM'e yüklemektedir. Yani işletim sistemi fiziksel 
+    RAM'deki boş sayfalara bakar. Programın 4K'lık kısımlarını bu fiziksel RAM'deki boş sayfalara yükler ve sayfa tablosunu buradan 
+    hareketle oluşturur.
+
+    Aslında sayfa tablosu bir tane değildir. İşletim sistemi her proses için ayrı bir sayfa tablosu oluşturmaktadır. CPU'lar sayfa 
+    tablolarını belli bir yazmacın gösterdiği yerde ararlar (Örneğin Intel işlemcilerinde sayfa tablosu CR3 yazmacının gösterdiği 
+    yerdedir.) İşletim sistemi thread'ler arası geçiş (context switch) yapıldığında çalışmasına ara verilen thread ile yeni 
+    geçilen thread'in aynı prosesin thread'leri olup olmadığına bakar. Eğer yeni geçilen thread ile çalışmasına ara verilen thread aynı 
+    prosese ilişkinse sayfa tablosu değiştirilmez. Çünkü aynı prosesin thread'leri aynı sanal bellek alanını kullanmaktadır. Ancak 
+    yeni geçilen thread kesilen thread'le farklı proseslere ilişkinse işletim sistemi CPU'nun gördüğü sayfa tablosunu da değiştirmektedir. 
+    Böylece aslında bir prosesin thread'i çalışırken CPU o prosesin sayfa tablosunu gösterir durumda olur.
+
+    Her prosesin sayfa tablosu birbirinden farklı olduğu için iki farklı prosesteki sanal adresler aynı olsa bile bu adreslerin 
+    fiziksel karşılıkları farklı olacaktır. Örneğin aynı programı iki kez çalıştıralım. Bu durumda bu iki proses için işletim 
+    sistemi iki farklı sayfa tablosu kullanıp aynı sanal adresleri farklı fiziksel sayafalara yönlendirecektir. Böylece aslında 
+    aynı sanal adreslere sahip olan programlar farklı fiziksel adreslere sahip olacaktır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Konu ile ilgili sorular ve kısa cevapları şöyledir:
+
+    Soru: Bir programı debugger ile inceliyorum. Orada bir nesnenin adresini görüyorum. Bu adres nasıl bir adresitir?
+    Yanıt: Bu adres sanal bir adrestir. İşlemci bu adrese erişmek istediğinde aslında sayfa tablosu yoluyla fiziksel olan başka 
+    bir adrese erişecektir.
+
+    Soru: İki farklı programda sanal 5FC120 adresi kullanılıyorsa bunlar fiziksel RAM'de aynı yeri mi gösteriyordur?
+    Yanıt: Hayır, çünkü işletim sistemi her proses için farklı bir sayfa tablosu oluşturmaktadır. Bir thread çalışırken işlemci 
+    o thread'e ilişkin prosesin sayfa tablosunu kullanıyor durumdadır. Dolayısıyla bu iki farklı proseste işletim sistemi sayfa 
+    tablolarının ilgili sayfalarını aslında farklı fiziksel sayfalara yönlendirmiş durumdadır.
+
+    Soru: 32 bit bir derleyicinin ürettiği kodun aslında sanki 4GB belleğe tek başına 4MB'den itibaren yüklenecekmiş gibi üretildiği 
+    söylendi. Sanal bellek alanındaki bu 4MB boşluğun anlamı nedir?
+    Yanıt: Bunun çok özel bir anlamı yoktur. Bir kere NULL adres için en az bir sayfa gerekmektedir. Pek çok işletim sistemi
+    güvenlik amacıyla ve bazı başka nedenlerden dolayı sanal bellek alanının belli bir bölümünü boş bırakmaktadır. Windows'ta da
+    bu alan 4MB'dir. Ancak programın minimal yüklenme adresi 64K'ya kadar düşürülebilmektedir.
+
+    Soru: CPU sayfa tablosunun yerini nereden bilmektedir?
+    Yanıt: CPU'lar sayfa tablosunu özel bir yazmacın gösterdiği yerde arayacak biçimde tasarlanmıştır. Dolayısıyla context switch 
+    sırasında aslında işletim sistemi yazmacın değerini değiştirmektedir. Yani işletim sistemi aslında tüm proseslerin sayfa 
+    tablolarını fiziksel RAM'da oluşturur. Context switch sırasında yalnızca sayfa tablosunun yerini belirten ilgili yazmacın 
+    değerini değiştirir.
+
+    Soru: Sayfalama mekanizması CPU'nun çalışmasını yavaşlatmaz mı?
+    Yanıt: Teorik olarak sayfalama mekanizması CPU'nun çalışmasını yavaşlatabilir. Ancak bugünkü CPU'ların çalışma hızları zaten 
+    bu sayfalama mekanizmasının aktif olduğu durumla belirlenmektedir. Dolayısıyla donanımsal olarak sayfalama mekanizması iyi 
+    bir biçimde oluşturulduğu için buradaki hız kaybı önemsenecek ölçüde değildir. Ayrıca işlemciler sayfa tablosuna erişimi 
+    azaltmak için zaten onun bazı bölümlerini kendi içlerindeki bir cache sisteminde tutabilmektedir. Ayrıca sayfa girişlerine 
+    hızlı erişim için işlemciler TLB (Translation Lookaside Buffer) denilen bir cache mekanizması da oluşturmaktadır.
+
+    Soru: Sayfalama mekanizmasına ne gerek vardır?
+    Yanı: Bu durum izleyen paragraflarda ele alınacaktır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    İşletim sistemi her proses için ayrı bir sayfa tablosu oluşturduğuna göre ve bu sayfa tablosunda aynı sanal sayfa numaralarını 
+    zaten farklı fiziksel sayfalara yönlendirdiğine göre aslında hiçbir proses diğerinin alanına erişemez. Yani proseslerin 
+    birbirlerinin alanlarına erişmesi zaten sayfalama mekanizmasıyla engellenmiş olmaktadır. Bu duruma "sayfalama mekanizması 
+    ile proseslerin fiziksel bellek alanlarının izole edilmesi" denilmektedir. Örneğin aşağıdaki gibi iki prosesin sayfa tablosu 
+    söz konusu olsun:
+
+    Proses-1
+
+    Sanal Sayfa No  (decimal/hex)   Fiziksel Sayfa No (desimal/hex)
+    ...                                   ...
+    23603 (5C33)                      47324 (B8DC)
+    23604 (5C34)                      52689 (CDD1)
+    23605 (5C35)                      29671 (73E7)
+    ...                               ...
+
+    Proses-2
+
+    Sanal Sayfa No  (decimal/hex)   Fiziksel Sayfa No (desimal/hex)
+    ...                               ...
+    23603 (5C33)                      84523 (14A2b)
+    23604 (5C34)                      62981 (F605)
+    23605 (5C35)                      42398 (A59E)
+    ...                               ...
+
+    İki prosesin sayfa tablosunda Fiziksel Sayfa Numaraları birbirinden ayrıldığında zaten bu iki proses asla birbirlerinin 
+    alanlarına erişemeyecektir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
 
+    Pekiyi 32 bit bir mimaride işletim sisteminin sayfa tablosu yukarıdaki şekillere göre ne kadar yer kaplar? 32 bit mimaride
+    fiziksel RAM en fazla 4GB olabilir. Proseslerin sanal bellek alanları da 4GB'dir. O halde toplam sayfa sayısı 
+    4GB/4K = 2^32/2^12 = 2^20 = 1 MB olur. Her sayfa tablosu girişi Intel mimarisinde 4 byte'tır. Dolayısıyla yukarıdaki 
+    şekillere göre bir prosesin sayfa tablosu 4MB yer kaplar. Bu alan sayfa tablosu için çok büyüktür. Bu nedenle işlemcileri 
+    tasarlayanlar sayfa tablolarının kapladığı alanı küçültmek için sanal adresleri iki parçaya değil, üç ya da dört parçaya 
+    ayırma yoluna gitmişlerdir. Gerçekten de örneğin Intel'in 32 bit mimarisinde bir sanal adres üç parçaya ayrılmaktadır. Bu 
+    ayrıntı kursumuzun konusu dışındadır ve Derneğimizde "80X86 ve ARM Sembolik Makine Dilleri" kursunda ele alınmaktadır. 
+    Biz bu kursumuzda çeşitli gösterimlerde sanal adresleri ikiye ayıracağız.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+    Biz yukarıda 32 bit sistemlere göre örnekler verdik. Pekiyi 64 bit sistemlerde durum nasıldır? 64 bit sistemlerde fiziksel 
+    RAM'in teorik büyüklüğü 2^64 = 16 exabyte olmaktadır. Dolayısıyla prosesin sanal bellek alanı da bu kadar olacaktır. Burada 
+    eğer sanal adres iki parçaya ayrılırsa sayfa tablolarının aşırı büyük yer kaplaması kaçınılmazdır. Bu nedenle 64 bit sistemlerde 
+    genellikle işlemcileri tasarlayanlar sanal adresleri dört parçaya ayırmaktadır. Bu konu yine kursumuzun kapsamı dışındadır. 
+    Ancak 64 bit sistemlerde değişen bir şey yoktur. Program yine çok geniş bir sanal belleğe sanki tek başına yüklenecekmiş 
+    gibi derlenir. Yine işletim sistemi proses için sayfa tablosu oluşturarak sanal sayfa numaralarını gerçek fiziksel sayfa 
+    numaralarına yönlendirir. Tabii pek çok işletim sistemi 16 exabyte sanal bellek alanı çok büyük olduğu için bunu kısıtlama 
+    yoluna gitmektedir. Örneğin Linux yalnızca 256 TB alanı kullanmaktadır. Windows ise yalnızca 16 TB alan kullanır. Bu alanlar 
+    bile bugün için çok büyüktür.
 
+    Sayfa tablolarının gerçek organizasyonu için kurs dokümanlarında /doc/ebooks klasöründe Intel'in AMD'nin ve ARM işlemcilerinin 
+    orijinal dokümanları bulundurulmuştur.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Pekiyi sayfalama (paging) mekanizmasının ne faydası vardır? İşte sayfalama mekanizmasının iki önemli işlevi vardır:
+
+    1) Sayfalama mekanizması programların fiziksel RAM'e ardışıl yüklenmesinin zorunluluğunu ortadan kaldırır. Böylece 
+    "bölünme (fragmentation)" denilen olgunun olumsuz etkisini azaltır.
+
+    2) Sayfalama mekanizması "sanal bellek (virtual memory)" denilen olgunun gerçekleştirimi için gerekmektedir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Bölünme (fragmentation) bellek yönetimi konusunda önemli bir problemdir. Bir nesnenin belleğe yüklenmesi ardışıl bir biçimde 
+    yapılırsa zamanla yükleme boşaltma işlemlerinin sonucunda bellekte çok sayıda küçük alan oluşmaktadır. Bu küçük alanlar ardışıl 
+    olmadığı için genellikle bir işe yaramamaktadır. Küçük alanların toplamı oldukça büyük miktarlara varabilmekte ve toplam 
+    belleğin önemli miktarını kaplayabilmektedir. Bu olguya "bölünme (fragmentation)" denilmektedir. Bölünmenin engellenmesi 
+    için ardışıl yükleme zorunluluğunun ortadan kaldırılması gerekir. Bu durumda bellek bloklara ayrılır. Yüklenecek nesne bloklara 
+    bölünerek ardışıl olmayacak biçimde boş bloklara atanır. Ancak nesnenin hangi parçasının hangi bloklarda olduğu da bir biçimde 
+    kaydedilir. Bu teknik hem RAM yönetiminde hem de disk yönetiminde benzer biçimde kullanılmaktadır. Ancak bloklama yöntemiyle 
+    bölünme ortadan kaldırılmaya çalışıldığında bu sefer başka bir problem ortaya çıkmaktadır. Nesnelerin son bloklarında 
+    kullanılmayan alanlar kalabilmektedir. Bu da bir çeşit bölünmedir. Bu bölünme durumuna "içsel bölünme (internal fragmentation)" 
+    denilmektedir. İçsel bölünmede yapılabilecek bir şey yoktur. Ancak içsel bölünmenin etkisi diğerine göre daha az olmaktadır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+												23. Ders 04/06/2024 - Salı
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Sanal bellek (virtual memory) bir programın tamamının değil belli kısmının belleğe yüklenerek disk ile RAM arasında yer 
+    değiştirmeli bir biçimde çalıştırılmasına yönelik bir mekanizmadır. Bu mekanizma sayesinde örneğin 100MB'lık bir programın 
+    başlangıçta yalnızca 64K'lık kısmı RAM'e yüklenebilir. Sonra program çalışmaya başlar. Çalışma sırasında programın bellekte 
+    olmayan bir kısmına erişildiğinde işletim sistemi programın bellekte olmayan kısmını o anda diskten belleğe yükler ve çalışma 
+    kesintisiz devam ettirilirir.
+
+    Sanal bellek kullanımında yine fiziksel RAM sayfalara ayrılır. Her sayfaya bir numara verilir. İşletim sistemi RAM'in hangi 
+    sayfasının hangi programın neresini tuttuğunu bir biçimde oluşturduğu veri yapılarıyla bilir duruma gelir. Bir programın RAM'de 
+    olmayan bir sayfasının diskten RAM'e yüklenmesine "swap in" denilmektedir. Ancak zamanla RAM'deki tüm fiziksel sayfalar dolu 
+    duruma gelebilir. Bu durumda işletim sistemi bir programın bir parçasını RAM'e çekebilmek için RAM'deki bir sayfayı da RAM'dan 
+    atmak durumunda kalır. Bu işleme ise "swap out" denilmektedir. Tabii işletim sistemi hangi programın RAM'deki hangi sayfasının 
+    boşaltılacağı konusunda iyi bir karar vermek durumundadır. İşletim sistemine göre "gelecekte kullanılma olasılığı en düşük olan 
+    sayfanın" RAM'den atılması en iyi stratejidir.
+
+    Bu durumda bir program çalışırken aslında sürekli bir biçimde disk ile RAM arasında yer değiştirmeler yapılmaktadır. Bu yer 
+    değiştirmelere genel olarak işletim sistemi dünyasında "swap" işlemi denilmektedir. Şüphesiz swap işlemi yavaş bir işlemdir 
+    ve toplam performans üzerinde en önemli zayıflatıcı etkilerden birini oluşturmaktadır. Swap işlemlerinin olumsuz etkisini 
+    azaltmak için ilk akla gelen şey fiziksel RAM'i büyütmektir. Ancak fiziksel RAM'in büyütülmesi maliyet oluşturmaktadır. 
+    Bugünkü SSD'ler hard disklere göre oldukça iyi performans göstermektedir. Dolayısıyla bilgisayarımızda hard disk yerine SSD 
+    varsa swap işlemleri daha hızlı yürütülecektir. Şüphesiz en önemli unsur aslında sayfaların yer değiştirilmesi konusunda 
+    uygulanan algoritmalardır. Bunlara "page replacement" algoritmaları denilmektedir. Tabii bugünkü işletim sistemleri 
+    bilinen en iyi algoritmaları zaten kullanmaktadır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Pekiyi işletim sistemi programın RAM'de olmayan bir sayfasını yüklemek istediğinde RAM'den sayfa boşaltacağı zaman ya 
+    boşaltılacak sayfa üzerinde daha önce yazma işlemleri (update) yapıldıysa ne olacaktır? İçeriği değiştirilmiş olan sayfanın 
+    RAM'den atılırken mecburen diskte saklanması gerekir. İşte işletim sistemleri bu işlemler için diskte ismine "swap file" ya 
+    da "page file" denilen dosyalar tutmaktadır. Değiştirilmiş olan sayfaları bu dosyalara yazmaktadır. Linux işletim sistemi 
+    swap alanı olarak genellikle ayrı bir disk bölümünü kullanmaktadır. Ancak herhangi bir dosya da swap dosyası olarak 
+    kullanılabilmektedir. Kullanılacak swap disk alanının ya da dosyalarının toplamı bazen önemli labilir. Çünkü sistemin toplam 
+    sanal bellek kapasitesi bu swap dosyalarıyla da ilgilidir. Linux sistemlerinde o andaki toplam swap alanları "/proc/swaps" 
+    dosyasından elde edilebilir. Buradaki değer Kilo Byte cinsindendir. Ya da "swapon -s" komutuyla aynı bilgi elde edilebilir.
+
+    Pekiyi sistemin kullandığı swap alanı dolarsa ne olur? İşte bu durumda sistemin sanal bellek limiti dolmuş kabul edilir. 
+    Yapılacak şey sisteme yeni swap alanları eklemektir. Bunun Linux'ta nasıl yapılacağını ilgili kaynaklardan öğrenebilirsiniz.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Pekiyi işletim sistemi programı belleğe yüklerken baştan kaç sayfayı yüklemektedir? İşte buna "minimum working set" 
+    denilmektedir. İşletim sistemleri genel olarak bir program için en az yüklenecebilecek sayfa sayısını belirlemiş durumdadır. 
+    Böylece yüklenmiş her programın en azından "minimum working set" kadar sayfası RAM'de bulunmak zorundadır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Pekiyi sanal bellek mekanizması nasıl gerçekleştirilmektedir? İşte işlemciler sanal bellek mekanizmasını oluşturabilmek için özel 
+    bir biçimde tasarlanmıştır. İşlemci ne zaman sanal adresi fiziksel adrese dönüştürmek için sayfa tablosuna başvursa, eğer sayfa tablosunda
+    o sanal adrese bir fiziksel sayfa karşılık getirilmemişse ismine "page fault" denilen bir içsel kesme (intterupt) oluşturmaktadır. Örneğin:
+
+    Sanal Sayfa No  (decimal/hex)   Fiziksel Sayfa No (desimal/hex)
+    ...                         ...
+    23603                       84523
+    23604                       -
+    23605                       42398
+    23606                       -
+    23607                       73245
+    ...                         ...
+
+    Burada Fiziksel Sayfa Numarasındaki "-" sembolleri o sanal sayfaya bir fiziksel sayfanın karşı getirilmediğini belirtmektedir. 
+    Dolayısıyla örneğin işlemci 23604 numaralı, 23606 numaralı sanal sayfalar için dönüştürme yapmak istediğinde "page fault" oluşturacaktır. 
+    İşte "page fault"" denilen kesme oluştuğunda işletim sisteminin kesme kodu devreye girer. Buna "page fault handler" denilmektedir. Bütün 
+    swap mekanizması bu işletim sisteminin kesme kodu tarafından yapılmaktadır. İşletim sisteminin bu kesme kodu (page fault handler) önce
+    hangi prosesin hangi sayfaya erişmek istediğini tespit eder. Sonra onun diskteki karşılığını bulur ve yer değiştirme işlemini yapar. 
+    Tabii bu kesme kodu yer değiştirme işlemini yaptıktan sonra artık sayfa tablosunu da güncellemektedir. İşletim sisteminin kesme kodu bittiğinde
+    kesmeye yol açan makine komutu yeniden çalıştırılarak akış devam ettirilmektedir. Bu komut yeniden çalıştırıldığında artık sayfa tablosu 
+    düzeltildiği için page fault oluşmayacaktır. Bu durumda bir program çalıştırılmak istendiğinde işletim sistemi aslında programın az sayıda 
+    sayfasını RAM'e yükleyip sayfa tablosunun o sayfalar dışındaki fiziksel sayfa numaralarını "-" haline getirir. Böylece yukarıda açıklanan mekanizma
+    eşliğinde kesiksiz çalışma sağlanacaktır.
+
+    Pekiyi ya erişilmek istenen sanal adres uydurma bir adresse ne olacaktır? İşte işletim sisteminin page fault kesme kodu (handler)
+    öncelikle erişilmek istenen adresin o proses için legal bir adres olup olmadığına bakmaktadır. Eğer erişilmek istenen adres 
+    legal bir adres değilse artık hiç swap işlemi yapılmadan proses cezalandırılır ve sonlandırılır. Yani her türlü sanal adresin 
+    diskte bir karşılığı yoktur. Biz bir göstericiye rastgele bir adres yerleştirip oraya erişmek istesek aslında proses bu page 
+    fault kesme kodu tarafından sonlandırılmaktadır.
+
+    O halde sanal bellek mekanizması tipik olarak işlemci ve işletim sistemi tarafından olarak şöyle gerçekleştirilmektedir:
+
+    1) Proses bir sanal adrese erişmeye çalışır.
+    2) İşlemci sanal adresi parçalarına ayırır ve sayfa tablosuna başvurur.
+    3) Sayfa tablosunda ilgili sayfaya bir fiziksel sayfa karşı getirilmişse sorun oluşmaz çalışma normal olarak devam eder. 
+    Ancak sanal sayfaya bir fiziksel adres karşı getirilmemişse (şekilde onu "-" ile gösterdik) bu durumda işlemci "page fault" 
+    denilen içsel kesmeyi oluşturur.
+    4) Page fault kesmesi için kesme kodunu işletim sistemini yazanlar bulundurmuştur. Bu kod önce erişilmek istenen adresin geçerli 
+    bir adres olup olmadığına bakar. Eğer erişilmek istenen adres geçerli bir adres değilse proses sonlandırılır. Eğer geçerli 
+    bir adresse page fault kesme kodu "swap mekanizması" ile programın o kısmını RAM'e yükler, sayfa tablosunu günceller ve 
+    kesme kodundan çıkar. Artık işlemci fault oluşturan makine komutuyla çalışmasına devam eder. Ancak sayfa tablosu düzeltildiği 
+    için bu kez fault oluşmayacaktır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Pekiyi işletim sisteminin "bellek yönetimi (memory management)" kısmını yazanlar hangi bilgileri tutmak zorundadır? İşte 
+    işletim sistemleri tipik olarak bu mekanizma için şu bilgileri kernel alanı içerisinde oluşturmak zorundadır:
+
+    1) Tüm fiziksel RAM'deki tüm sayfaların "free" olup olmadığına ilişkin tablo
+    2) Bir fiziksel sayfa free halde değilse onun hangi proses tarafından kullanıldığına ilişkin bilgi
+    3) Swap dosyalarının yerleri ve organizasyonu
+    4) Hani proseslerin hangi sayfalarının o anda fiziksel RAM'de hangi fiziksel sayfalarda bulunduğu bilgisi
+    5) Diğer başka bilgiler
+
+    Bellek yönetimi (memory management) bir işletim sisteminin en önemli ve en zor yazılan alt sistemlerden biridir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Pekiyi sanal bellek toplamda bize ne sağlamaktadır? Şüphesiz sanal bellek mekanizmasının en önemli faydası RAM yeterli olmasa 
+    bile çok sayıda büyük programın aynı anda çalışır durumda tutulabilmesidir. Bizim elimizde 8GB RAM olsa bile biz onlarca büyük 
+    programı çalışır durumda tutabiliriz. Ancak yukarıda da belirtildiği gibi işletim sistemi bir swap alanı bulundurmaktadır. 
+    Eğer bu swap alanı dolarsa başka bir limit nedeniyle "out of memory" durumu oluşabilmektedir. Bu nedenle eğer programlar çok 
+    fazla bellek kullanıyorsa bu swap alanlarının büyütülmesi de gerekebilir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Sayfalama ve sanal bellek mekanizmasında işletim sistemi de o anda sanal bellek alanı içerisinde bulunmak zorundadır. Pekiyi 
+    işletim sisteminin kodları sayfa tablosunda sanal belleğin neresindedir? İşte genellikle işletim sistemi tasarımcıları
+    sanal bellek alanını "user sapace" ve "kernel space" olarak ikiye ayırmaktadır. "user space" genellikle sanal bellek alanının düşük 
+    anlamlı kısmında, kernel space ise yüksek anlamlı kısmında bulundurulur. Örneğin 32 bit Linux sistemleri 4GB'lik sanal bellek alanını 
+    şöyle ayırmıştır:
+
+    32 Bit Linux Proses Sanal Bellek Alanı
+
+    3 GB        User Space
+    1 GB        Kernel Space
+
+    Bu durumda 32 bit Linux sistemlerinde bir programın kullanabileceği maksimum sanal bellek 3 GB'dir. (Windows ta 2GB user space için, 
+    2 GB kernel space için kullanılmıştır.) 64 bit Linux sistemlerinde ise prosesin sanal bellek alanı şöyle organize edilmiştir:
+
+    64 Bit Linux Proses Sanal Bellek Alanı
+
+    128 TB        User Space
+    128 TB        Kernel Space
+
+    Görüldüğü gibi aslında teorik sanal bellek 16 exabyte olduğu halde 64 bit Linux sistemleri yalnızca 256 TB sanal belleğe
+    izin vermektedir.
+
+    Proseslerin sayfa tablolarında kernel alanınının içeriği hep aynıdır. Yani context switch yapılsa bile kernel kodları hep aynı 
+    sanal adreslerde bulunmaktadır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Biz bir program içerisinde yüksek miktarda dinamik tahsisat yaptığımızda ne olur? Linux sistemlerinde malloc fonksiyonu
+    brk ya da sbrk denilen sistem fonksiyonunu çağırabilmektedir. Ancak arka planda sanal bellek bakımından şunlar gerçekleşir:
+
+    - İşletim sistemi malloc ile tahsis edilen alanı sayfa tablosunda oluşturur. Oluştururken de tahsis edilen alanın 
+    toplam swap alanından küçük olduğunu garanti etmeye çalışır. Çünkü malloc ile tahsis edilen alan eninde sonunda swap dosyası 
+    içerisinde bulundurulacaktır.
+
+    - İşletim sistemi swap dosyasının boyutu yeterliyse tahsisatı kabul etmektedir. Ancak sistemden sisteme değişebilecek biçimde
+    bu sırada swap dosyasında tahsisat yapılabilir ya da yapılmayabilir. Eğer swap dosyasında o anda tahsisat yapılırsa bu durumda 
+    swap alanı ciddi biçimde azalacak ve belki de başka proses artık aynı tahsisatı yapamayacaktır. Ancak işletim sistemi swap 
+    dosyasında tahsisatı henüz yapmayabilir. Bu işlemi dinamik alan kullanıldığında yapabilir. Genellikle Linux sistemleri bu 
+    yola başvurmaktadır. Literatürde dinamik alan için swap dosyasında baştan yer ayrılmasına "alanın commit edilmesi" denilmektedir.
+
+    Aşağıdaki 3GB RAM olan 2GB swap alanına sahip 64 bit Linux sisteminde 5GB alan dinamik olarak tahsis edilmek istenmiştir. 
+    Burada tahsisat başarılı gibi gözükse de tahsis edilen alan kullanılırken swap alanı yetersizliğinden dolayı sinyal oluşacak 
+    ve proses sonlandırılacaktır.
+
+    O halde 64 bit Linux sistemlerinde biz teorik olarak her biri 128 TB olan onlarca programı bir arada çalıştırabiliriz. Ancak 
+    bunun için swap alanımızın da yeterli büyüklükte diskte oluşturulmuş olması gerekir. Swap alanının yetersizliği durumunda 
+    bir sinyal ile proses sonlandırılmaktadır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void)
+{
+	char *pc;
+
+	pc = (char *)malloc(5000000000);
+	if (pc == NULL) {
+		fprintf(stderr, "cannot allocate memory!...\n");
+		exit(EXIT_FAILURE);
+	}
+
+	for (long i = 0; i < 5000000000; ++i)
+		pc[i] = 0;
+
+	printf("ok\n");
+
+	getchar();
+
+	free(pc);
+
+	return 0;
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Linux sistemlerinde free komutu (bu sistemlerde komutların çok büyük çoğunluğu aslında birer programdır) çalıştığımız sistemdeki
+    fiziksel RAM ve swap alanaı hakkında bilgi vermektedir. Örneğin çalıştığımız sanal makinede bu komutu uygulayalım:
+
+    $ free
+                total        used        free      shared  buff/cache   available
+    Mem:         3969588     3444604      251248       27680      273736      269272
+    Swap:        2097148     1077432     1019716
+
+    Buradan toplam 4GB civarında fiziksel RAM ve 2GB civarında da diskte swap alanı olduğunu görüyoruz. Komut "-h" seçeneği ile
+    kullanılıra daha okunaklı (human readable) bir görüntü elde edilebilir:
+
+    $ free -h
+                    total        used        free      shared  buff/cache   available
+    Mem:           3,8Gi       3,3Gi       229Mi        23Mi       270Mi       253Mi
+    Swap:          2,0Gi       1,0Gi       1,0Gi
+
+    Swap alalnlarının büyüklüğü ve swap dosyasının yeri "swapon" komutu ile de görüntülenebilir. Örneğin:
+
+    $ swapon
+    NAME      TYPE SIZE USED PRIO
+    /swapfile file   2G   1G   -2
+
+    Burada swap dosyasının kök dizindeki "swapfile" isimli bir dosya biçiminde olduğu görülmektedir.
+
+    Aynı bilgiler "/proc/swaps" dosyasının görüntülenmesiyle de elde edilebilir. Örneğin:
+
+    $ cat /proc/swaps
+    Filename				Type		Size		Used		Priority
+    /swapfile               file		2097148		668568		-2
+
+    Aslında swapon komutu da "/proc/swaps" dosyasına başvurmaktadır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Linux'ta swap alanları bir disk bölümü (partition) biçiminde de bir dosya biçiminde de oluşturulabilmektedir. Genellikle 
+    sistemi kurarken kurulum sırasında kurulum programı swap alanı için bir disk bölümünün ayrılıp ayrılmayacağını sormaktadır. 
+    Elinizdeki sistemde disk bölümlerine bakarak bir swap disk bölümünün sisteminiz için ayrılıp ayrılmadığını anlayabilirsiniz. 
+    Disk bölümlerini görüntülemek için "fdisk -l" komutunu kullanabilirsiniz. Ancak komutun root önceliğinde "sudo" ile çalıştırılması
+    gerekir. Örneğin:
+
+    $ sudo fdisk -l
+
+    Disk /dev/sda: 60 GiB, 64424509440 bytes, 125829120 sectors
+    Disk model: VMware Virtual S
+    Units: sectors of 1 * 512 = 512 bytes
+    Sector size (logical/physical): 512 bytes / 512 bytes
+    I/O size (minimum/optimal): 512 bytes / 512 bytes
+    Disklabel type: gpt
+    Disk identifier: 80ABF335-7C9E-4872-B886-A3281ECEFCBE
+
+    Device       Start       End   Sectors  Size Type
+    /dev/sda1     2048      4095      2048    1M BIOS boot
+    /dev/sda2     4096   1054719   1050624  513M EFI System
+    /dev/sda3  1054720 125827071 124772352 59,5G Linux filesystem
+
+    Burada bir swap disk alanının ayrılmadığı görülmektedir.
+
+    Pekiyi Linux sistemlerinde swap alanlarını nasıl artırabiliriz? Bunun için mevcut swap dosyası büyütülebilir. Ancak genellikle
+    izlenen yol yeni bir dosya oluşturup onun da swap amaçlı kullanılmasını sağlamaktır. Bu işlemler sırasıyla şöyle yapılabilir:
+
+    1) Önce bir swap dosyasının yaratılması gerekir. Bunun için yeterli disk alanının olduğundan emin olmalısınız. Diskteki 
+    boş alanları görüntülemek için "df" komutu kullanılabilir. "df -h" komutu daha anlaşılabilir (human readable)" görüntü vermektedir.
+    Örneğin:
+
+    $ df -h
+    Filesystem      Size  Used Avail Use% Mounted on
+    tmpfs           388M  1,5M  387M   1% /run
+    /dev/sda3        59G   31G   26G  55% /
+    tmpfs           1,9G   19M  1,9G   1% /dev/shm
+    tmpfs           5,0M  4,0K  5,0M   1% /run/lock
+    /dev/sda2       512M  6,1M  506M   2% /boot/efi
+    tmpfs           388M  124K  388M   1% /run/user/1000
+
+    İçi sıfırlarla dolu bir dosya yaratmak için dd komutu kullanılabilir. Örneğin:
+
+    $ sudo dd if=/dev/zero of=swapfile_ext bs=512 count=2097152
+
+    Burada 512 * 2097152 = 1GB kadar içi sıfırlarla dolu bir alan oluşturulmuştur. Aunı işlem fallocate komutu ile de yapılabilmektedir:
+
+    $ sudo fallocate -l 1073741824 swapfile_ext
+
+    2) Oluşturulan swap dosyasının başkaları tarafından okunabilmesinin engellenmesi için yalnızca owner'a read/write hakkı 
+    verebiliriz. Yarattığımız dosyanın owner'ının "root" olduğuna dikkat ediniz. Bu işlemi şöyel yapabiliriz:
+
+    $ sudo chmod 600 swapfile_ext
+    $ ls -l swapfile_ext
+    -rw------- 1 root root 1073741824 Haz  4 22:10 swapfile_ext
+
+    3) Oluşturulan bu dosyanın bir swap dosyası olarak kullanılabilmesi için içinin belli biçimde düzenlemesi gerekmektedir. Bu
+    işlem de "mkswap" komutuyla yapılmaktadır. Örneğin:
+
+    $ sudo mkswap swapfile_ext
+    Setting up swapspace version 1, size = 1024 MiB (1073737728 bytes)
+    no l    abel, UUID=5c960a31-8385-4eb0-a0f2-9f044b3d5483
+
+    4) Artık bu hazırlanan dosyanın işletim sistemine swap dosyası olarak tanıtılması gerekir. Bu işlem "swapon" komutu ile 
+    yapılmaktadır:
+
+    $ sudo swapon swapfile_ext
+
+    Artık swap dosyamız çekirdek tarafından kullanılmaya başlanmıştır. Örneğin:
+
+    $ free -h
+                   total        used        free      shared  buff/cache   available
+    Mem:           3,8Gi       904Mi       2,1Gi        32Mi       780Mi       2,6Gi
+    Swap:          3,0Gi       652Mi       2,4Gi
+
+    Görüldüğü gibi önceden swap alanı 2GB iken artık 3GB'dir. Benzer biçimde:
+
+    $ swapon
+    NAME          TYPE  SIZE   USED PRIO
+    /swapfile     file    2G 652,9M   -2
+    /swapfile_ext file 1024M     0B   -3
+
+    $ cat /proc/swaps
+    Filename				Type		Size		Used		Priority
+    /swapfile               file		2097148		668568		-2
+    /swapfile_ext           file		1048572		0		-3
+
+    5) Yukarıda yaptığımız swapon işlemi kalıcı değildir. Yani bizim sistem her açıldığında swapon yapmamız gerekir. Bunun otomatize
+    edilebilmesi için "/etc/fstab" dosyası kullanılabilir. Bunun için bu dosyaya aşağıdaki formata uygun bir satır girmelisiniz:
+
+    /swapfile_ext      none            swap    sw              0       0
+
+    6) Yaratılmış olan swap alanın yok edilmesi için yukarıda yapılan işlemlerin geri alınması gerekir. Yani swap dosyası 
+    ve "/etc/fstab" gitişi silinmelidir. Ancak bu işlemleri yapmadna önce swap dosyasının çekirdek tarafından kullanımının 
+    sonlandırılması gerekir. Bu da "swapoff" komutuyla yapılmaktadır. Örneğin:
+
+    $ sudo swapoff swapfile_ext
+
+    Tabii eğer sisteminiz zaten bir swap dosyası kullanıyorsa bu swap dosyasını da büyütebilirsiniz. Ancak swap dosyalarının 
+    başlık kısımlarında onların büyüklüğü yazdığı için onu büyütme işlemindne sonra yeninden mkswap işlemini yapmalısınız. Örneğin
+    elimizde zaten "/swapfile" isimli 2GB'lik bir swap dosyası bulunuyor olsun. Biz de onu 3GB'ye çıkartmak isteleim. Önce onu silip 
+    aynı isimli 3GB'lik yeni bir dosya oluşturabiliriz. Ya da aşağıdaki gibi doğrudan ekleme de yapabiliriz:
+
+    $ sudo swapoff /swapfile
+    $ sudo dd if=/dev/zero of=/swapfile bs=1G count=1 conv=notrunc oflag=append
+    1+0 kayıt girdi
+    1+0 kayıt çıktı
+    1073741824 bytes (1,1 GB, 1,0 GiB) copied, 0,907437 s, 1,2 GB/s
+    $ sudo mkswap /swapfile
+    mkswap: /swapfile: uyarı: eski imza swap temizleniyor.
+    swapspace sürüm 1 kuruluyor, boyut = 3 GiB (3221217280 bayt)
+    bir etiket yok, UUID=e733c9e9-4060-429b-8279-b8b023cd8103
+    $ sudo swapon /swapfile
+    $ free -h
+    total        used        free      shared  buff/cache   available
+    Bellek:        3,8Gi       1,4Gi       1,1Gi        34Mi       1,3Gi       2,1Gi
+    Takas:         3,0Gi          0B       3,0Gi
+
+    Tabii aslında sistemimiz için herhangi bir swap alanı oluşturmamız zorunlu değildir. Eğer oluşturulmuş bir swap alanı yoksa
+    işletim sistemi değişmiş (kirlenmiş) sayfalar içinswap-out yapmaz. Tabii eğer sayfa güncellenmemişse ve bu sayfanın diskte 
+    çalıştırılabilir dosyada ya da dinamik kütüphane dosyasında bir karşılığı varsa bu durumda işletim sistemi bu sayfalar swap 
+    out yapabilir. Fakat swap alanı olmadığı zaman yetersiz RAM'den dolayı bir tıkanma ortaya çıkabilir. Bu durumda da işletim 
+    sistemi çalışmakta olan programlara sinyal göndererek onları sonlandırabilir. Özetle swap alanı kullanılmayacaksa RAM'in 
+    miktarının artırılması uygun olmaktadır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+												24. Ders 06/06/2024 - Perşembe
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Gömülü sistemlerde disk yerine Flash EPROM'lar (gebellikle NAND tipi flash EPROM'lar) kullanılmaktadır. Bu belleklere belli
+    miktarda yazma yapılabilmektedir. Belli miktardan fazla yazma yapılması durumunda bellekte bozulma oluşabilmektedir. İşte bu 
+    nedenle gömülü Linux sistemlerinde swap işlemlerinde doğrudan bu medyaların kullanımı genellikle tercih edilmez. Bu konuda
+    ileride daha geniş açıklamalar yapacağız ve bazı alternatifler üzerinde duracağız.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Anımsanacağı gibi işletim sistemi sayfa tabloları yoluyla proseslerin bellek alanlarını tam olarak birbirinden izole
+    etmektedir. Dolayısıyla bir proses istese de başka bir prosesin bellek alanına erişememektedir. Ancak ismine "paylaşılan 
+    bellek alanları (shared memory)" denilen bir teknik ile işletim sistemi farklı proseslerin aynı fiziksel sayfaya erişimini 
+    sağlayabilmektedir. Şöyle ki: İşletim sistemi iki prosesin sayfa tablosunda farklı sanal sayfaları aynı fiziksel sayfaya 
+    eşlerse bu iki proses farklı sanal adreslerle aslında aynı fiziksel sayfayı görüyor durumda olur. Örneğin:
+
+    Proses-1 Sayfa Tablosu
+    ---------------------------------------------------------
+    Sanal Sayfa Numarası            Fiziksel Sayfa Numarası
+    ...                             ...
+    987                             1245
+    988                             1356
+    999                             1412
+    ...                             ...
+
+    Proses-2 Sayfa Tablosu
+    ----------------------------------------------------------
+    Sanal Sayfa Numarası            Fiziksel Sayfa Numarası
+    ...                             ...
+    356                             7645
+    357                             1356
+    358                             489
+    ...                             ...
+
+    Görüldüğü gibi birinci prosesin 988'inci sanal sayfa numarası ikinci prosesin 357'inci sanal sayfa numarasıyla aynı fiziksel 
+    adrese yönlendirilmiştir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Aslında sayfa tablolarında her bir sayfanın da ayrıca bir "özellik bilgisi (attribute)" vardır. Yani sayfa tablolarının formatı
+    daha gerçekçi bir biçimde şöyledir:
+
+    Sanal Sayfa No          Fiziksel Sayfa No       Sayfa özelliği
+    ...                     ...                     ...
+
+    Sayfa özelliği o fiziksel sayfanın "read only" mi, "read/write" mı "execute" özelliğine sahip mi olduğunu belirtmektedir. 
+    Ayrıca bir fiziksel sayfa "user mode" ya da "kernel mode" sayfa olarak belirlenebilmektedir. İşletim sistemi prosesin tüm 
+    fiziksel sayfalarını "user mode" olarak ancak kernel'ın tüm sayfalarını "kernel mode" olarak ayarlamaktadır. User mode bir 
+    proses yalnızca user mode sayfalara erişebilmektedir. Kernel mode sayfalara erişememektedir. Eğer user mode bir proses kernel 
+    mode sayfaya erişmek isterse işlemci bir "içsel kesme (fault)" oluşturmakta ve işletim sistemi devreye girerek prosesi 
+    sonlandırmaktadır. Ancak kernel mode bir proses hem kernel mode sayfalara hem de user mode sayfalara erişebilmektedir. 
+    Bizim prosesimiz user mode'da çalışmaktadır. User mode prosesler bir user mode sayfaya erişirken işlemci erişim biçimine bakar 
+    ve duruma göre yine içsel kesme oluşturur. User mode bir proses user mode ancak read-only bir sayfaya yazma yaparsa içsel 
+    kesme (page fault) oluşturulmaktadır. Bu durumda işletim sistemi prosesi cezalandırarak sonlandırma yoluna gitmektedir. Ayrıca 
+    pek çok işlemci ailesinde bir kodun bir fiziksel sayfada çalışabilmesi için o kodun "execute" özelliğine sahip bir fiziksel sayfada 
+    bulunması gerekmektedir. Bu mekanizma altında örneğin bir proses "execute" olmayan bir fiziksel sayfadaki bir fonksiyonu çağırmak 
+    isterse yine işlemci içsel kesme (page fault) oluşturmaktadır. Örneğin C derleyicileri string'leri ELF formatında özel bir 
+    bölüme (section) yerleştirirler ve işletim sisteminin yükleyicisi de (UNIX/Linux sistemlerindeki exec fonksiyonları) bu sayfaları 
+    sayfa tablosunda oluştururken bu sayfaların özelliklerini "read-only" yaparlar. Böylece biz bir string'i değiştirmek istediğimizde
+    koruma mekanizması yüzünden prosesimiz sonlandırılır. Zaten C'de string'lerin güncellenmesi "tanımsız davranış (undefined behavior)" 
+    olarak belirtilmektedir. Benzer biçimde derleyiciler genellikle global const nesneleri de yine "read-only" bölümlere 
+    (sections) yerleştirmektedir. (Ancak yerel const nesneler stack'te olduğu için read-only yerleştirilememektedir.)
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Aynı programın ikinci kez çalıştırıldığını düşünelim. Bu durumda her şeyi aynı olan iki program çalışıyor durumda olacaktır.
+    Ancak bu iki proses birbirinden bağımsız olduğuna göre bu iki prosesin farklı sayfa tabloları vardır ve aslında bu iki prosesin
+    bellek alanı tamamen izole edilmelidir. İşte işletim sistemleri bu tür durumlarda "copy on write" denilen bir mekanizma uygulamaktadır. 
+    Bu mekanizmada işletim sistemi bir program ikinci kez çalıştırıldığında sayfa tablosunda önceki çalıştırma ile aynı fiziksel 
+    sayfaları eşler. Ancak bu sayfaları "read-only" biçimde işaretler. Proseslerden biri bu sayfaya yazma yaptığında içsel kesme 
+    (page fault) oluşur, işletim sistemi devreye girer tam yazma yapıldığı sırada o sayfanın bir kopyasını oluşturup iki prosesin 
+    fiziksel sayfalarını birbirinden ayırır. Böylece iki proses baştan aynı fiziksel sayfaları paylaşırken daha sonra bu fiziksel 
+    sayfalar birbirinden ayrıştırılmaktadır. Bu mekanizma sayesinde aslında hiç yazma yapılmayan fiziksel sayfaların boşuna bir 
+    kopyası oluşturulmamış olur. Örneğin ikinci çalıştırılan programın makine kodlarının bulunduğu sayfalar aslında hiç güncellenmemektedir. 
+    Bu durumda iki kopyanın aynı fiziksel sayfayı görmesinde bir sakınca yoktur. İşletim sistemleri dinamik kütüphanelerde de 
+    benzer tekniği kullanmaktadır. Bir dinamik kütüphane iki farklı proses tarafından kullanıldığında mümkün olduğunca bu proseslerin 
+    sayfa tabloları aynı fiziksel sayfaları gösterir. Ancak proseslerden biri dinamik kütüphanedeki bir sayfada değişiklik 
+    yaparsa o noktada bu sayfanın kopyasından oluşturulmaktadır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------------
+    İşletim sisteminin nasıl devreye girip çalıştığını merak edebilirsiniz. Aslında işletim sistemini bir fonksiyon yığını olarak
+    düşünebiliriz. İşletim sisteminin içerisinde kodlar tipik olarak aşağıdaki durumlarla çalışma fırsatı bulmaktadır:
+
+    1) Boot sonrasında işletim sisteminin kendisini kullanıma hazır hale getirme (initialize) sürecinde ve shutdown işlemi sürecinde.
+
+    2) Sistem fonksiyonları çağrıldığında. Bizim programımız bir sistem fonksiyonunu çağırdığında aslında işletim sisteminin çekirdek
+    kodları çalıştırışmaktadır.
+
+    3) Kesme (interrupt) mekanizması yoluyla. Örneğin Ethernet karına bir ethernet paketi geldiğinde bu kart CPU'da kesme oluşturarak
+    işletim sisteminin kesme kodunun çalışmasına yol açmaktadır. Ya da örneğin periyodik kesme oluşturan "timer devreleri" yoluyla 
+    işletim sisteminin kesme kodları periyodik biçimde devreye girmektedir. Örneğin thread'lerarası geçiş (context switch) bu yolla
+    gerçekleştirilmektedir. Ya da örneğin sanal bellek mekanizması (yani swap out, swap in) işlemleri yine kesme mekazinması yolula
+    sağlanmaktadır.
+
+    4) İşletim sistemnin bir proses gibi çalışan thread'leri de vardır. Bunlara "kernel thread'ler" denilmektedir. Örneğin "page cache"
+    mekanizmasında işletim sistemi diske erişimi azaltmak için çok erişilen disk bloklarını RAM'da tutmaktadır. Yazma sırasında da
+    eğer bu bloklar RAM'de ise diske değil RAM'e yazmaktadır. Ancak bu bloklar çok bekletilmeden bir kernel thread yoluyla diske 
+    flush edilmektedir.
+-------------------------------------------------------------------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------------------------------------------------------------------------
+    Kursumuzun bu bölümünde Linux sistemlerinin boot edilmesi süreci ele alınacaktır. İşletim sisteminin otomatik olarak yüklenerek 
+    çalışır hale getirilmesi sürecine "boot" işlemi denilmektedir. (Boot terimi İngilizce "askeri bottan" gelmektedir.) Biz bilgisayar
+    sistemine güç verdiğimizde bir süre sonra işletim sisteminin otomatik yüklendiğini görmekteyiz. Aslında işletim sisteminin 
+    yüklenmesi biraz karmaşuk bir süreçle gerçekleşmektedir.
+-------------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------------
+    Mikroişlemciye güç uygulandığında belli bir adresten itibaren çalışacak biçimde tasarlanmıştır. Buna işlemcilerin "reset vektörü"
+    denilmektedir. İşlemcilerin reset vektörleri genellikle fiziksel belleğin başında ya da sonunda bulunmaktadır. Örneğin Intel
+    işlemcilerinde reset vektörü belleğin sonunda, ARM işlemcilerinde belleğin başında bulunmaktadır. İşlemci reset edildiğinde belli 
+    bir adresten çalışmaya başladığına göre orada çalışmaya hazır bir kodun bulunuyor olması gerekir. Tabii bu kod RAM (DRAM) bellekte
+    bulunamaz. Çünkü sisteme güç uygulandığında RAM belleğin de içeriği sıfırlanmaktadır. İşte bilgisayar sistemlerinde işlemcinin 
+    reset vektöründe tipik olarak ROM bellekler bulundurulur. Eskiden bu amaçla EPROM bellekler kullanılıyordu. Artık uzunca bir süredir
+    EEPROM (flash EPROM) bellekler kullanılmaktadır. Pekiyi reset vektöründeki kod ne yapmaktadır?
+
+    Bugün kullandığımız DRAM bellekler güç kaynağı verilir verilmez kullanıma hazır hale getirilememektedir. Onların da kullanıma 
+    hazır hale getirilmesi (initialize edilmesi) gerekmektedir. Benzer biçimde yine bazı donanım aygıtlarının kullanılmadan önce yine 
+    kullanıma hazır hale getirilmesi (initialize edilmesi) edilmesi gerekmektedir. İşte reset vektörüne yerleştirilmiş olan kodlar 
+    bilgisayar sistemini kullanıma hazır hale getirecek kodları barındırmaktadır. Tabii burada donanımdan donanıma değişen bazı 
+    ayrıntılar da söz konusu olabilmektedir. Biz kursumuzda önce konuyu genel olarak ele alıp sonra RaspberryPi gibi BeagleBone Black 
+    gibi donanımlardaki boot süreci üzerinde duracağız.
+
+    Reset vektöründeki kodlar çalıştırılınca artık sistem genel olarak çalışmaya hazır bir duruma getirilmiştir. Artık akışın bir 
+    biçimde sistem programcısına devredilmesi gerekir. Akışın devredilmesi tipik olarak ikincil bellekteki belli bir disk bloğunun
+    RAM'e yüklenmesi ve oradaki kodun çalıştırılması biçiminde yapılmaktadır. Tersten gidersek sistem programcısı programını ikincil 
+    belleğin bu bloğuna yerleştirir ve bu süreçler sonucunda bu program çalışır hale gelir. Pekiyi işletim sistemi nasıl yüklenmektedir?
+    ROM'daki kodun işletim sistemini yüklemesi genel olarak mümkün değildir. Bunun temel nedenleri şunlardır:
+
+    - İşletim sistemleri çok büyük olabilir. ROM'daki kod bunu yapabilecek yeterlilikte olmayabilir.
+    - İşletim sistemlerinin yüklenmesi sistemden sisteme değişebilen ve nispeten karmaşık bir süreçtir. ROM'daki küçük kodun bunu
+    yapması genellikle mümkün olamamaktadır.
+    - İkincil bellekte birden fazla işletim sistemi bulunyor olabilir. Bu durumda bunların hangisinin nasıl yükleneceğine karar verilmesi 
+    ve karar verilen işletim sisteminin yüklenmesi ROM'daki küçük program tarafından genellikle yapılamaz.
+
+    O halde tek çıkar yol ROM'daki programın diskteki ön bir yükleyiciyi yüklemesi ve işletim sisteminin yüklenmesinin bu program 
+    tarafından yapılmasıdır. İşletim sistemlerini yükleyen bu tür programlara "boot loader" denilmektedir. Bugün değişik platformlarda
+    kullanılan değişik "boot loader" programlar bulunmaktadır. Örneğin Microsoft kendi Windows sistemleri için kendi "boot loader" 
+    programını kullanmaktadır. Buna "Windows Boot Manager" denilmektedir. UNIX/Linux sistemlerinde değişik proje grupları tarafından 
+    yazılmış olan değişik "boot loader" programlar kullanılabilmektedir. Örneğin Linux sistemlerinde eskiden "LILO" isimli boot loader 
+    yoğun biçimde kullanılıyordu. Daha sonra "GRUB" isimli boot loader yaygın biçimde kullanılmaya başlandı. Son yıllarda SYSLINUX 
+    isimli boot loader paketi de belli bir ölçüde kullanım bulmuştur. Gömülü Linux sistemlerinde bugün en çok tercih edilen boot loader 
+    programı "Das U-Boot" ya da kısaca "U-Boot (Universial Boot Loader)" denilen boot loader programdır.
+
+    O halde işletim sisteminin yüklenmesi pek çok donanım ve platformda aşağıdaki aşamalardan geçilerek yapılmaktadır:
+
+    Mikroişlemci RESET Ediliyor ---> ROM'daki RESET Vektörde Bulunan Kodlar Çalışıyor ---> ROM'daki Kodlar İkincil Bellekteki Boot
+    Loader Programını RAM'e Yüklüyor ---> İşletim Sistemine Jump Ediliyor
+
+    Burada birkaç soru aklınıza gelebilir. Bunlardan biri ROM'daki RESET vektöründe bulunan kodların oraya kimin tarafından
+    yerleştirilmiş olduğudur. ROM'daki RESET vektöründe bulunan kodlar çok aşağı seviyeli kodlar olduğu için bunlar genellikle 
+    donanımı oluşturan kurumlar tarafından yazılıp oraya yerleştirilmektedir. Örneğin bugün kullanığımız PC sistemlerinde ROM'daki
+    bu kodlara BIOS (Basic Input Output System) denilmektedir. BIOS kodları eskiden Microsoft tarafından yazılmıştı. Ancak bugün 
+    BIOS üretici firmalar tarafından yazılmaktadır. Bu ROM bellekler bugün EEPROM teknolojisi ile üretildikleri için BIOS güncellemesi 
+    de yapılabilmektedir. Örneğin BBB kartlarındaki ROM programı Texas Instruments (TI) firması tarafından yazılmış durumdadır. Özetle 
+    ROM'da bulunan bu aşağı seviyeli kodlar ilgili donanımı tasarlayan kurumlardaki sistem programcıları tarafından yazılmıştır.
+
+    Pekiyi ROM'daki program boot loader programını ikincil bellekte nasıl arayıp bulmaktadır? Bunun için birkaç teknik kullanılabilmektedir. 
+    Birincisi ROM'daki programın doğrudan ikincil belleğin önceden belirlenmiş bloklarını yüklemesidir. Örneğin klasik PC sistemlerinde 
+    ROM'daki (BIOS'taki) program diskin 0'ıncı bloğunu (yani ilk 512 byte'ı içeren bloğu) yüklemektedir. (Ancak daha sonra PC sistemlerinde
+    "UEFI BIOS" ismi altında eski klasik BIOS kodları oldukça geliştirilmiştir. Artık bu UEFI BIOS kodları bazı dosya sistemlerini de 
+    tanımaktadır.) Örneğin Raspberry Pi'da ROM'daki kodlar FAT dosya sistemini tanıyabilmektedir. FAT dosya sistemi Microsoft'un DOS 
+    sistemlerinde kullandığı karmaşık olmayan sade bir dosya sistemidir. İşte ROM'daki kodlar FAT gibi bir dosya sistemini tanıyorsa 
+    oranın kök dizininde belli isimdeki dosyayı bulup RAM'e yükleyebilmektedir.
+
+    Sistem reset edildiğinde tüm boot işlemi bir bütününün parçaları gibi düşünülürse burada devreye giren programlara birer aşama
+    numarası verilebilir. Örneğin boot işleminin reset vektöründe bulunan kısmına "Birinci Aşama Boot Loader (Stage-1 / First Stage 
+    Boot Loader)", bu programın yüklediği programa "ikinci aşama boot loader (stage-2/second stage boot loader)" ve bunun da 
+    yüklediği (yani işletim sistemini yükleyen) programa da "üçüncü aşama boot loader (stage-3 / third stage boot loader)" diyebiliriz. 
+    Ancak bazı kaynaklar bu ROM'daki kodu boot sürecinin bir parçası olarak ele almamaktadır. Dolayısıyla bu kaynaklar ROM kodunun kendisine 
+    onun değil yüklediği programa "birinci aşama boot loader (stage-1 / first stage boot loader), işletim sistemini yükleyen programa 
+    ise "ikinci aşama boot loader (stage-2 / second stage boot loader)" demektedir. (Örneğin Wikipedia boot işleminde donanım 
+    bileşenlerini hazır hale getiren programı "birinci aşama boot loader", işletim sistemini yükleyen programı ise "ikinci aşama 
+    boot loader" olarak isimlendirmiştir. Biz kursumuzda izleyen paragraflarda bu terminolojiyi kullanacağız.
+-------------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------------
+												25. Ders 11/06/2024 - Salı
+-------------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------------
+    Bugün kullandığımız PC sistemlerinin temel donanımları 70'li yılların sonlarında ve 80'li yılların başlarında IBM tarafından 
+    tasarlanmıştır. (Burada PC demekle Intel tabanlı masaüstü bilgisayarları ve notebook bilgisayarları kastediyoruz.) Bu bilgisayarlar 
+    1980'in Aralık ayında IBM'in tasarladığı donanım ve Microsoft'un tasarladığı DOS işletim sistemiyle piyasa sürüldü. Zaman 
+    ilerledikçe bu PC donanımlarında bazı iyileştirmeler yapıldıysa da temel mimari büyük ölçüde aynı kalmıştır. (2000'lerin başında 
+    Apple Intel tabanlı PC mimarisine geçtiyse de kullandığı PC donanımında bazı farklılıklar da oluşturmuştur. Dolayısıyla burada 
+    PC demekle Intel ve ARM tabanlı macOS sistemlerini kastetmiyoruz.)
+
+    Bugünkü PC sistemlerini reset ettiğimizde çalışma BIOS denilen EEPROM bellekten başlamaktadır. Buradaki kod DRAM belleği ve
+    pek çok donanım birimini programladıktan sonra CMOS setup'ta belirtilen "boot sırasına (boot seqeunce) bakarak ilgili medyanın 
+    0'ıncı sektörünü belleğe yükleyip akışı oraya devretmektedir. (PC mimarisinde diskten okunabilecek ya da diske yazılabilecek en 
+    küçük birime "sektör" denilmektedir.) İkincil belleklerdeki ilk sektöre "MBR (Master Boot Record)" denilmektedir. MBR'de toplam 
+    512 byte'lık bir program bulunmaktadır. MBR'nin son 64 byte'ında (bir byte eksik) "Disk Bölümleme Tablosu (Disk Partition Table)" 
+    vardır. MBR'deki program duruma göre ya bir boot loader programını yüklemekte ya da default durumda aktif disk bölümünün 0'ıncı 
+    sektörünü RAM'e yükleyip akışı oraya devretmektedir. (PC sistemlerinde her disk bölümünün ilk sektörüne (0'ıncı sektörüne) "boot 
+    sektör" denilmektedir. Boot sektör ilgili işletim sisteminin yüklenmesinden sorumludur.) Tabii MBR'deki program daha büyük 
+    bir boot loader programı da yükleyebilir. Bu durumda hangi işletim sisteminin yükleneceği bir menü yoluyla kullanıcıya da 
+    sorulabilmektedir. PC sistemlerindeki boot sürecini aşağıdaki gibi özetleyebiliriz:
+
+    PC'ye güç veriliyor ---> EEPROM'daki BIOS kadları temel hazırlık işlemlerini yapıyor ---> EEPROM'daki BIOS kadları diskin ilk 
+    sektörünü (MBR) RAM'e yüklüyor ve akışı ona devrediyor ---> MBR'deki program boot loader'ı RAM'e yüklüyor ---> Boot Loader seçilen 
+    disk bölümünün boot sektörünü RAM'e yüklüyor ---> Seçilen disk bölümünün boot sektörü işletim sistemini yüklüyor ---> Akış işletim 
+    sistemi kodlarına devrediliyor.
+
+    Bugün Linux yüklü olan Intel X86 tabanlı PC sistemlerinde genellikle boot loader olarak GRUB tercih edilmektedir.
+-------------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------------
+    Şimdi Raspberry Pi donanımındaki boot süreci üzerinde duralım. Raspberry Pi donanımlarındaki boot süreci şu aşamalardan geçilerek 
+    yürütülmektedir:
+
+    1) Raspberry Pi'ye güç verildiğinde CPU reset vektöründen çalışmaya başlar.
+
+    2) CPU, SoC'un (System on Chip) ROM'unda bulunan programdan çalışmaya başlar. Bu kod GPU'yu başlatır. GPU SD karttaki FAT 
+    dosya sisteminin kök dizininde "bootcode.bin" dosyasını arar. Buradaki kod FAT dosya sistemini tanımaktadır. Bu dosya bulunursa 
+    onu SoC içerisindeki GPU'nın L2 cache belleğine (internal RAM) yükler ve akışı oraya devreder. (Uzantısı ".bin" olan dosyalara "pure 
+    binary" ya da "flat binary" dosyalar da denilmektedir. Bu dosyalar hiçbir başlık kısmı içermezler, doğrudan makine kodları 
+    içerirler.) "bootcode.bin" dosyası sırasıyla şu medyalarda aranmaktadır:
+
+    Birincil SD Kart (Primary SD Card)
+    İkinci SD Kart (Secondary SD Card)
+    NAND
+    SPI
+    USB
+
+    Bu aşamada henüz DRAM belleğin initialize edilmediğine dolayısıyla henüz onun kullanılamayacağına dikkat ediniz.
+
+    3) "bootcode.bin" dosyası GPU tarafından çalıştırılmaktadır. (Bunun nedeni üzerinde durmayacağız.) Bu dosyaya "birinci aşama boot 
+    loader (stage-1 / first stage boot loader)" da diyebiliriz. Bu kod DRAM belleği kullanıma hazır hale getirir (initialize eder), 
+    daha sonra SD kartın kök dizininden "start.elf" isimli dosyayı DRAM belleğe yükler ve akışı o programa devreder.
+
+    4) "start.elf dosyası" donanım birimlerini kullanıma hazır hale getirir, sonra işletim sisteminin çekirdeğini ve gerekli olan diğer 
+    öğeleri DRAM belleğe yükler ve akışı işletim sisteminin çekirdek dosyasının (kernel image) başındaki koda devreder. (Genellikle 
+    çekirdek kodları sıkıştırılmış biçimde DRAM'e yüklenmektedir. Çekirdek kodlarının açılması da yine bu sıkıştırılmış çekirdek 
+    dosyaının başındaki programdır.) Buradaki "start.elf" dosyası "ikinci aşama boot loader (stage-2 / second stage boot loader) 
+    görevindedir. Sürecin işleyişini şekille şöyle gösterebiliriz:
+
+    ROM'daki kod çalışıyor (CPU --> GPU) --> ROM'daki kod "bootcode.bin" dosyasını içsel SRAM'e yüklüyor (GPU) ---> 
+    "bootcode.bin" dosyası DRAM belleği kullanıma hazır hale getiriyor ve "start.elf" dosyasını DRAM belleğe yüklüyor (GPU)---> "start.elf" 
+    dosyası donanım bileşenlerini ayarlıyor, Linux çekirdeğini ve diğer bileşenleri DRAM beleğe yüklüyor (GPU) ---> Akış Çekirdek Dosyasının 
+    başına devrediliyor (CPU) ---> Çekirdek kodları kendi kendini açıyor ve çekirdeği kullanıma hazır hale getiriyor (CPU)
+
+    "start.elf" programı çeşitli firmware kodlarını içermektedir. Bu kod FAT dosya sistemindeki kök dizinde bulunan "config.txt" 
+    dosyasını okuyarak donanım bileşenlerini yapılandırmaktadır. "config.txt" dosyası pek çok donanım biriminin konfigürasyon ayarlarını 
+    barındırmaktadır. "start.elf" dosyası çekirdek dosyasını (kernel image) yüklemek için önce "config.txt" dosyasındaki şu satırı 
+    aramaktadır:
+
+    kernel=kernel_dosyasının_ismi
+
+    Bunu bulursa burada belirtilen çekirdek dosyasını yükler. Bulamazsa FAT dosya sisteminin kökünde "kernel.img", "kernel7.img" 
+    ve "kernel8.img" gibi önceden belirlenmiş çekirdek dosyalarını arar. Yukarıda da belirttiğimiz gibi aslında çekirdek dosyası 
+    diskte sıkıştırılmış bir biçimde bulunmaktadır ve sıkıştırılmış bu dosya boot loader tarafından DRAM'e yüklenmektedir.
+
+    FAT Microsoft tarafından tasarlanmış ve ilk kez DOS sistemlerinde kullanılmış bir dosya sistemidir. FAT dosya sisteminin kendi
+    içerisinde FAT12, FAT16 ve FAT32 isminde türleri vardır. Bu türler arasındaki farklılık dosya sisteminin "File Allocation Table"
+    denilen veri yapısıyla ilgilidir. Microsoft halen bu dosya sistemini desteklemeye devam etmektedir. Ancak birinci dosya sistemi
+    olarak Windows sistemlerinde uzunca bir süredir NTFS (Windows NT File System) dosya sistemi kullanılmaktadır.
+-------------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------------
+    İkinci aşama boot loader yalnızca çekirdek imajını RAM'e yüklememektedir. Çekirdeğin kullanacağı bazı bileşenleri de RAM'e 
+    yüklemektedir. Bu bileşenler tipik olarak şunlardır:
+
+    - Çekirdek Komut Satırı Parametreleri (Kernel Command Line Parameters)
+    - Geçici Kök Dosya Sistemi (Temporary Root File System)
+    - Aygıt Ağacı (Device Tree)
+
+    Raspberry Pi'da bu bileşenlerin FAT dosya sistemindeki dosya isimleri yukarıda sözünü ettiğimiz "config.txt" dosyası 
+    içerisinde belirtilebilmektedir. Ancak bu belirlemeler bu dosya içerisinde yapılmadıysa FAT dosya sistemindeki kök dizinde 
+    bulunan default bazı dosyalar kullanılmaktadır.
+-------------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------------
+												26. Ders 13/06/2024 - Perşembe
+-------------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------------
+    Yukarıda da belirttiğimiz gibi FAT dosya sistemi içerisindeki "config.txt" dosyası ikinci aşama boot loader görevinde olan 
+    "start.elf" programı tarafından okunmaktadır. Bu dosyanın konfigürasyon parametreleri aşağıdaki bağlantıdan erişebilirsiniz:
+
+    https://www.raspberrypi.com/documentation/computers/config_txt.html
+
+    Bu dosya kabaca "özellik=değer" biçiminde satırlardan oluşmaktadır. İstenirse bu özelliklerin Raspbery Pi'ın belli versiyonlarına
+    özgü olması da [model_ismi] başlığıyla sağlanabilmektedir. "config.txt" dosyasında yapılabilecek belirlemeler yukarıdaki 
+    bağlantıda açıklanmıştır. Bu belirlemelerin birkaçına şöyle örnek verebiliriz:
+
+    - kernel=dosya_adı satırı çekirdek dosyasının FAT dosya sistemindeki ismini belirtir. Yani biz yeni bir Linux çekirdeğini 
+    derlediğimizde eskisini muhafaza edip bu satırı yeni çekirdeğin ismi ile değiştirirsek sistem yeni derlediğimiz Linux çekirdeği 
+    ile açılacaktır.
+
+    - arm64_bit=1 satırı işlemcinin 64 bit modda çalıştırılacağı anlamına gelmektedir. Eğer işlemci 32 bit modda çalıştırılacaksa 
+    arm64_bit=0 yapılmalıdır. Tabii bu durumda çekirdek dosyasının da 32 bit olması gerekir.
+
+    - initramfs=dosya_ismi satırı geçici kök dosya sistemi için bulundurulan dosyanın isminin belirtilmesine olanak sağlamaktadır. 
+    Bu satır belirtilmezse kök dosya sistemine ilişkin dosya default isimle aranmaktadır.
+
+    - ramfsaddr=fiziksel_adres satırı initramfs dosyasının çekirdeğin kullanması için fiziksel belleğin neresine yükleneceğini 
+    belirtmektedir. Bu satır yazılmazsa dosya default bir yere yüklenip adresi çekirdeğe geçirilmektedir.
+
+    - cmdline=dosya_ismi satırı çekirdeğin komut satırı parametrelerinin elde edileceği dosya isminin belirlenmesini sağlamaktadır. Bu 
+    belirleme yapılmazsa çekirdek parametreleri "cmdline.txt" isimli dosyadan okunmaktadır.
+
+    - total_mem=megabyte_değeri satırı işletim sisteminin sanki burada belirtilen kadar RAM varmış gibi çalışmasını sağlamaktadır. 
+    Örneğin düşük RAM ile test işlemlerinde biz bu değeri küçülterek sistemi boot edebiliriz. Böylece Linux sanki kendisine bu kadar 
+    RAM bağlıymış gibi çalışacaktır.
+-------------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------------
+    Linux çekirdeğinin kodlarına dokunmadan onunla ilgili bazı davranış değrişikliklerinin yapılması üç biçimde sağlanabilmektedir:
+
+    1) Çekirdek derlenirken bazı konfigürasyon parametrelerine bakılmaktadır. O halde biz çekirdei derlemeden önce çekirdek konfigürasyon
+    parametreleri üzerinde değişiklik yapıp çekirdeği derlersek bir davranış değişikliği oluşturabiliriz.
+
+    2) Çekirdek derlendikten sonra kendini kullanıma hazır hale getirirken (initialize ederken) ismine "çekirdek komut satırı 
+    parametreleri (kernel command line paramters)" denilen parametreler yoluyla davranış değişikliği oluşturulabilmektedir. 
+    Çekirdek komut satırı parametreleri "boot loader tarafından" çekirdeğe iletilmektedir.
+
+    3) Nihayet çekirdek çalışırken de çekirdeğin davranışı bazı komutlarla (bu komutlar bazı mekanizmaları ve sistem fonksiyonlarını 
+    kullanmaktadır), konfigürasyon dosyalarıyla ve bazı mekanizmalarla da değiştirilebilmektedir.
+-------------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Linux'ta çekirdek komut satırı parametreleri birbirinden boşukla ayrılmış yazılardan oluşmaktadır. Bazı parametrelerin argümanları
+    yoktur, bazılarının vardır. Eğer parametrenin varsa "parametre=değer" biçiminde yoksa yalnızca "parametre" biçiminde belirtilmektedir. 
+    Çekirdek komut satırı parametreleri tek bir yazı biçiminde çekirdeğe aktarılmaktadır. Çekirdek bu komut satırı parametrelerini 
+    kendini kullanıma hazır hale getirmenin (kendini initialize etmenin) ön aşamalarında parse eder ve bu değerleri çekirdeğin 
+    yapılandırılması amacıyla kullanır. Tabii çekirdeğin komut satırı parametreleri boot loader tarafından çekirdeğe iletilmektedir. 
+    Örneğin çekirdek komut satırı parametreleri aşağıdaki gibi bir görünümde olabilir:
+
+    console=serial0,115200 console=tty1 root=PARTUUID=382d6f16-02 rootfstype=ext4 fsck.repair=yes rootwait quiet splash 
+    plymouth.ignore-serial-consoles cfg80211.ieee80211_regdom=TR
+
+    Linux çekirdeğinin onlarca farklı komut satırı parametresi vardır. Bunların çoğu spesifik konulara ilşkindir ve ancak çekirdeğin 
+    yapısını iyi bilen kişler tarafından anlamlandırılabilir. Tabii bazı parametrelerin anlamları herkes tarafından anlaşılacak kadar 
+    açıktır. Çekirdek parametrelerinin dokümantasyonuna aşağıdaki bağlantıdan erişebilirsiniz:
+
+    https://www.kernel.org/doc/html/v4.14/admin-guide/kernel-parameters.html
+
+    İşte Raspberry Pi'da FAT dosya sistemindeki "cmdline.txt" dosyasının içeriği "start.elf" boot loader programı tarafından Linux 
+    çekirdeğine komut satırı parametreleri olarak aktarılmaktadır. Örneğin kursumuzundaki Raspberry Pi sistemindeki "cmdline.txt"
+    dosyasının default içeriği şöyledir:
+
+    console=serial0,115200 console=tty1 root=PARTUUID=382d6f16-02 rootfstype=ext4 fsck.repair=yes rootwait quiet splash 
+    plymouth.ignore-serial-consoles cfg80211.ieee80211_regdom=TR
+
+    Örneğin biz bu satırın sonuna "maxcpus=2" parametresini ekleyip sistemi reboot edersek artık Linux çekirdeği yalnızca iki
+    CPU kullanacak biçimde açılacaktır. maxcpus parametresi çekirdeğin kaç CPU kullanacağını belirtmektedir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    RAM'in belli kısmının disk gibi kullanılmasına "ramdisk" denilmektedir. Ramdisk kullanımı çok eskiden beri işletim sistemlerinde 
+    bulunmaktadır. Linux'ta da bazı dosya sistemleri diskte değil tamamen RAM'de yani ramdisk üzerinde oluşturulmaktadır. 
+    Örneğin "proc dosya sistemi" işletim sistemi ve aygıt sürücüler tarafından dış dünyaya bilgi vermek için kullanılmaktadır. 
+    Bu dosya sisteminin disk ile hiçbir ilgisi yoktur. Tamamen RAM'de yaratılmış olan yani ramdisk üzerine kurulu olan bir dosya 
+    sistemidir.
+
+    Pekiyi disk yerine RAM'de dosya sistemi oluşturmanın tipik faydaları şunlardır:
+
+    1) Hızlı Erişim: Örneğin "proc" dosya sistemi RAM yerine diskte oluşturulsaydı sistem çok yavaş çalışırdı.
+
+    2) Geçici ve Gübemli Erişim: Bazen bizim bir dosya sistemini oluşturup bir süre kullanıp onu yok etmemiz gerekebilmektedir. Bu
+    tür durumlarda disk yerine ramdisk tercih edilebilir. Bazı geçici bilgilerin diskte yer alması onların çalınabilmesini 
+    kolaylaştırabilmektedir. Onların ramdisk içerisinde tutulması daha güvenli bir kullanım oluşturabilir.
+
+    3) Test işlemleri: Bazı test işlemlerinin kısıtlı alanlarda yapılması gerekebilir. Bunun için ramdiskler tercih edilebilmektedir.
+
+    Linux sistemlerinde "ramdisk" üzerinde kullanılabilecek birkaç dosya sistemi bulunmaktadır. Bunlardan biri "ramfs" isimli 
+    dosya sistemidir. ramfs dosya sistemi aşağıdaki gibi mount edilerek kullanılabilir:
+
+    sudo mount -t ramfs ramfs myramdisk
+
+    Burada "myramdisk" mount edilecek dizini belirtmektedir. ramfs dosya sistemine dosya yerleştirildikçe bu dosya sistemi 
+    fiziksel RAM'den alan almakta ve gittikçe genişlemektedir. Bunun için ayrılan fiziksel RAM swap işlemine sokulmamaktadır. 
+    Böylece her zaman hızlı bir erişim olanağı vermektedir. Ancak dikkatle kullanılması gerekir.
+
+    Ramdisk üzerinde oluşturulan diğer bir dosya sistemi de "tmpfs" biçiminde isimlendirilen dosya sistemidir. Bu dosya sisteminde 
+    yaratılan ramdisk için bir büyüklük koşulu oluşturulabilmektedir. Bu dosya sistemindeki RAM sayfaları aynı zamanda isteğe 
+    bağlı bir biçimde swap işlemine de sokulabilmektedir. Bu dosya sistemi de aşağıdaki gibi mount edilerek kullanılabilir:
+
+    sudo mount -t tmpfs -o size=10M tmpfs myramdisk
+
+    Burada 10 MB uzunluğunda bir ramdisk oluşturulmuştur. Tabii sistem reboot edildiğinde tüm mount noktaları otomatik unmount 
+    edileceği için bu ramdisk içerikleri de silinmiş olacaktır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
