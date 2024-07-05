@@ -8733,21 +8733,21 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    waitpid fonksiyonu, wait fonksiyonunun daha gelişmiş bir biçimidir. Fonksiyonun prototipi şöyledir:
+    waitpid fonksiyonu wait fonksiyonunun daha gelişmiş bir biçimidir. Fonksiyonun prototipi şöyledir:
 
     #include <sys/wait.h>
 
     pid_t waitpid(pid_t pid, int *status, int options);
 
-    Fonksiyonun birinci parametresi beklenecek alt prosesin proses id değerini belirtir. Bu sayede programcı belli bir alt prosesi bekleyebilmektedir. 
-    Bu birinci parametre aslında birkaç biçimde geçilebilmektedir. Eğer bu parametre negatif bir proses id değeri olarak geçilirse 
-    bu durumda fonksiyon proses grup id'si bu değerin pozitifi olan herhangi bir alt prosesi beklemektedir. Eğer bu parametre -1 
-    olarak geçilirse bu durumda fonksiyon tamamen wait fonksiyonundaki gibi davranmaktadır. Yani herhangi bir alt prosesi beklemektedir.
-    Eğer bu parametre 0 olarak geçilirse fonksiyon proses grup id'si waitpid fonksiyonunu çağıran prosesin id'si ile aynı olan 
-    herhangi bir alt prosesi beklemektedir. Tabii normal olarak bu parametreye programcı pozitif olan bir proses id geçer. Bu durumda
-    fonksiyon o alt prosesi bekleyecektir. (Tabii bu parametreye geçilen proses id, o prosesin bir alt prosesi değilse fonksiyon yine
-    başarısız olmaktadır.) Fonksiyonun ikinci parametresi exit bilgisinin yerleştirileceği int türden nesnenin adresini alır. Üçüncü 
-    parametre bazı özel değerlerin bit düzeyinde OR'lanmasıyla oluşturulabilmektedir:
+    Fonksiyonun birinci parametresi beklenecek alt prosesin proses id değerini belirtir. Bu sayede programcı belli bir alt prosesi 
+    bekleyebilmektedir. Bu birinci parametre aslında birkaç biçimde geçilebilmektedir. Eğer bu parametre negatif bir proses id 
+    değeri olarak geçilirse  bu durumda fonksiyon proses grup id'si bu değerin pozitifi olan herhangi bir alt prosesi beklemektedir. 
+    Eğer bu parametre -1 olarak geçilirse bu durumda fonksiyon tamamen wait fonksiyonundaki gibi davranmaktadır. Yani herhangi bir 
+    alt prosesi beklemektedir.Eğer bu parametre 0 olarak geçilirse fonksiyon proses grup id'si waitpid fonksiyonunu çağıran prosesin 
+    id'si ile aynı olan herhangi bir alt prosesi beklemektedir. Tabii normal olarak bu parametreye programcı pozitif olan bir proses 
+    id geçer. Bu durumda fonksiyon o alt prosesi bekleyecektir. (Tabii bu parametreye geçilen proses id, o prosesin bir alt prosesi 
+    değilse fonksiyon yine başarısız olmaktadır.) Fonksiyonun ikinci parametresi exit bilgisinin yerleştirileceği int türden nesnenin 
+    adresini alır. Üçüncü parametre bazı özel değerlerin bit düzeyinde OR'lanmasıyla oluşturulabilmektedir:
 
     WNOHANG: Bu durumda waitpid eğer alt proses henüz sonlanmamışsa bekleme yapmaz, başarısızlıkla sonuçlanır. 
     WUNTRACED, WCONTINUED: Prosesin durdurulması ve devam ettirilmesi ile ilgili bilginin elde edilmesinde kullanılmaktadır. 
@@ -10583,7 +10583,7 @@ void exit_sys(const char *msg)
     açmış olduğu dosyanın betimleyici numarasını bilmediği için "sample" programı komut satırı argümanıyla bu bilgiyi "mample"
     programına iletmiştir. 
 
-    Aşağıdaki programı daha sonra dosyanın close onexec bayrağı set set ederek yeniden deneyiniz:
+    Aşağıdaki programı daha sonra dosyanın close-on-exec bayrağı set set ederek yeniden deneyiniz:
 
     if ((fd = open("sample.c", O_RDONLY|O_CLOEXEC)) == -1)
 		exit_sys("open");
@@ -11242,10 +11242,11 @@ int main(void)
 
     Dosyanın set-grup-id bayrağının set edilmesi de chmod komutunda g+s ile yapılmaktadır. İşlem sonrasında yine grup bilgisinde "x"
     hakkı yerinde "s" ya da "S" görünür. chmod komutunda +s kullanılırsa bu durumda dosyanın hem set-user-id hem de set-group-id 
-    bayrakları set edilir. Dosyanın sticky bayrağını set etmek için chmod komutunda +t kullanılmaktadır. Bu işlem yapıldığında görüntü 
-    olarak grup hakkında "x" varsa x hakkının olduğu yerde "t", yoksa orada "T" görülmektedir. 
+    bayrakları set edilir. Dosyanın sticky bayrağını set etmek için chmod komutunda +t kullanılmaktadır. Bu işlem yapıldığında
+    görüntü olarak grup hakkında "x" varsa x hakkının olduğu yerde "t", yoksa orada "T" görülmektedir.
 
-    Benzer biçinde istersek yine chmod komutunda octal digit'lerle set-user-d, set-group-id ve sticky bitlerini set edebiliriz. Örneğin:
+    Benzer biçinde istersek yine chmod komutunda octal digit'lerle set-user-d, set-group-id ve sticky bitlerini set edebiliriz. 
+    Örneğin:
 
     $ chmod 4755 sample
 
@@ -11269,7 +11270,7 @@ int main(void)
 	if (stat("sample", &finfo) == -1)
 		exit_sys("stat");
 
-	if (chmod("sample", (finfo.st_mode & ~S_IFMT) | S_ISUID) == -1)     /* ~S_IMT maskelemesi yapılmasa da genel olarak bir sorun oluşmaz */
+	if (chmod("sample", (finfo.st_mode & ~S_IFMT) | S_ISUID) == -1)		/* ~S_IMT maskelemesi yapılmasa da genel olarak bir sorun oluşmaz */
 		exit_sys("chmod");
 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -11350,6 +11351,10 @@ void exit_sys(const char *msg)
     Real group id: study
     Effective group id: root
 
+    Biz bir programı sudo ile root önceliğinde (etkin proses id'si 0 olacak biçimde) çalıştırıyor olalım. Dosyanın set-user-id
+    bayrağı da set edilmiş olsun. Bu durumda program çalışırken prosesin etkin kullanıcı id'si root değil program dosyasının
+    kullanıcı id'si olacaktır. Yani set-user-id bayrağı set edilmiş olan programların sudo ile root önceliğinde çalıştırılmasının
+    bir anlamı kalmamaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* sample.c */
@@ -12285,7 +12290,7 @@ void exit_sys(const char *msg)
     gruplara dahil edilecek ekstra bir grubu belirtmektedir. Tipik olarak login prosesi prosesin etkin grup id'sini bu listeye 
     eklemek için fonksiyonun ikinci parametresini prosesin etkin grup id'si ile çağırmaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
-
+<BURADA KALDIK>
 /*--------------------------------------------------------------------------------------------------------------------------
     Bugünkü masaüstü işletim sistemleri "zaman paylaşımlı (time sharing)" bir çalışma ortamı oluşturmaktadır. Zaman paylaşımlı 
     çalışma fikri ilk kez 1957 yılında uygulanmış ve sonra aktif bir biçimde işletim sistemlerine sokulmuştur. Dolayısıyla bugün 
@@ -41285,7 +41290,7 @@ void exit_daemon(const char *msg)
     genel yapıldığı için böyle bir yola gidilmiştir.
 
     accept fonksiyonu başarı durumunda bağlanılan client'a ilişkin yeni bir soket betimleyicisine geri dönmektedir. Artık bağlanılan
-    client ile bu soket yoluyla konuşulacaktır. accept başarısızlık durumunda 0 değeri ile geri dönmektedir. Örneğin:
+    client ile bu soket yoluyla konuşulacaktır. accept başarısızlık durumunda -1 değeri ile geri dönmektedir. Örneğin:
 
     struct sockaddr_in sin_client;
     socklen_t sin_len;
@@ -41650,7 +41655,7 @@ void exit_sys(const char *msg)
 
     ssize_t recv(int socket, void *buffer, size_t length, int flags);
 
-    Fonksiyonun birinci parametresi aktif soketin betimleyicisini beelirtmektedir. İkinci parametre alınacak bilginin 
+    Fonksiyonun birinci parametresi aktif soketin betimleyicisini belirtmektedir. İkinci parametre alınacak bilginin 
     yerleştirileceği dizinin adresini almaktadır. Üçüncü parametre ise okunmak istenen byte sayısını belirtmektedir. 
     Fonksiyonun son parametresi aşağıdaki üç sembolik sabitin bit OR işlemine sokulmasıyla oluşturulabilir:
 
@@ -52594,15 +52599,16 @@ clean:
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    helloworld modülünde kullanmış olduğumuz printk fonksiyonu "kernel'ın printf fonksiyonu" gibi düşünülebilir. printk fonksiyonunun 
-    genel kullanımı printf fonksiyonu gibidir. Default durumda bu fonksiyon mesajların "/var/log/syslog" dosyasına yazdırılması 
-    sağlamaktadır. printk fonksiyonunun prototipi <linux/kernel.h> dosyası içerisindedir. printk fonksiyonunun örnek kullanımı şöyledir:
+    helloworld modülünde kullanmış olduğumuz printk fonksiyonu "kernel'ın printf fonksiyonu" gibi düşünülebilir. printk 
+    fonksiyonunun genel kullanımı printf fonksiyonu gibidir. Default durumda bu fonksiyon mesajların "/var/log/syslog" dosyasına 
+    yazdırılması sağlamaktadır. printk fonksiyonunun prototipi <linux/kernel.h> dosyası içerisindedir. printk fonksiyonunun 
+    örnek kullanımı şöyledir:
 
     printk(KERN_INFO "This is test\n");
 
-    Mesajın solundaki KERN_XXX biçimindeki makrolar aslında bir string açımı yapmaktadır. Dolayısıyla yan yana iki string birleştirildiği 
-    için mesaj yazısının başında küçük bir önek bulunur. Bu önek (yani bu makro) mesajın türünü ve aciliyetini belirtmektedir. Tipik 
-    KERN_XXX makroları şunlardır:
+    Mesajın solundaki KERN_XXX biçimindeki makrolar aslında bir string açımı yapmaktadır. Dolayısıyla yan yana iki string 
+    birleştirildiği için mesaj yazısının başında küçük bir önek bulunur. Bu önek (yani bu makro) mesajın türünü ve aciliyetini 
+    belirtmektedir. Tipik KERN_XXX makroları şunlardır:
 
     KERN_EMERG
     KERN ALERT
@@ -52615,16 +52621,29 @@ clean:
 
     Bu makroların tipik yazım biçimi şöyledir:
 
-    #define KERN_EMERG	 "<0>"
-    #define KERN_ALERT	 "<1>"
-    #define KERN_CRIT	 "<2>"
-    #define KERN_ERR	 "<3>"
-    #define KERN_WARNING "<4>"
-    #define KERN_NOTICE	 "<5>"
-    #define KERN_INFO	 "<6>"
-    #define KERN_DEBUG	 "<7>"
+    #define KERN_SOH	    "\001"		/* ASCII Start Of Header */
+    #define KERN_SOH_ASCII	'\001'
 
-    Ancak bu makrolarda çeşitli kernel versiyonlarında değişiklikler yapılabilmektedir.
+    #define KERN_EMERG	    KERN_SOH "0"	    /* system is unusable */
+    #define KERN_ALERT	    KERN_SOH "1"	    /* action must be taken immediately */
+    #define KERN_CRIT	    KERN_SOH "2"	    /* critical conditions */
+    #define KERN_ERR	    KERN_SOH "3"	    /* error conditions */
+    #define KERN_WARNING	KERN_SOH "4"	    /* warning conditions */
+    #define KERN_NOTICE	    KERN_SOH "5"	    /* normal but significant condition */
+    #define KERN_INFO	    KERN_SOH "6"	    /* informational */
+    #define KERN_DEBUG	    KERN_SOH "7"	    /* debug-level messages */
+
+    Ancak bu makrolarda çeşitli kernel versiyonlarında değişiklikler yapılabilmektedir. C'de aralarında hiçbir operatör bulunmayan
+    iki string'in derleyici tarafından birleştirildiğini anımsayınız.Bu durumda aslında örneğin:
+
+    printk(KERN_INFO "Hello World...\n");
+
+    ile aşağıdaki çağrı eşdeğerdir:
+
+    printk("\0017Hello World...\n");
+
+    Ancak yukarıda da belirttiğimiz gibi bu makrolar üzerinde değişiklikler yapılabilmektedir. Dolayısıyla makroların kendisinin 
+    kullanılması gerekir.
 
     Aslında KERN_XXX makroları ile printk fonksiyonunu kullanmak yerine pr_xxx makroları da kullanılabilir. Şöyle ki:
 
@@ -52833,7 +52852,6 @@ clean:
     -r--r--r-- 1 root root 4096 Mar 22 21:25 srcversion
     -r--r--r-- 1 root root 4096 Mar 22 21:25 taint
     --w------- 1 root root 4096 Mar 22 21:22 uevent
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -52940,7 +52958,7 @@ clean:
     module_param_array makrosuyla bir diziye değer aktarırken değerlerin virgüllerle ayrılmış bir biçimde girilmesi gerekmektedir.
     Örneğin:
 
-    sudo insmod helloworld.ko values=1,2,3,4,5
+    $ sudo insmod helloworld.ko values=1,2,3,4,5
 
     Burada eğer verilen değerler dizinin uzunluğundan fazla olursa zaten modül yüklenmemektedir. Bu örnekte biz girilen değerlerin 
     sayısını "size" nesnesinden alabiliriz.
@@ -52949,12 +52967,11 @@ clean:
     değişken isimlerinin aynı olması gerektiğine dikkat ediniz. Yazıların geçirilmesinde iki tırnaklar kullanılır. Dizi geçirirken 
     yanlışlıkla virgüllerin arasına boşluk karakterleri yerleştirmeyiniz. Programı şöyle make yapabilirsiniz:
 
-    make file=helloworld
+    $ make file=helloworld
 
     Yüklemeyi şöyle yapabilirsiniz:
 
-    sudo insmod helloworld.ko count=100 msg="\"this is a test\"" values=1,2,3,4,5
-
+    $ sudo insmod helloworld.ko count=100 msg="\"this is a test\"" values=1,2,3,4,5
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* helloworld.c */
@@ -53064,6 +53081,8 @@ clean:
     {
         return (long) ptr;
     }
+
+    Yani PTR_ERR makrosu bize aslında adres olarak kodlanmış olan negatif errno değerini geri döndürmektedir.
 
     Pekiyi bir adres değerinin içerisinde errno hata kodunun olduğunu nasıl anlarız? İşte negatif errno değerleri bir adres 
     gibi ele alındığında adeta adres alanının sonundaki adresler gibi bir görünümde olacaktır. errno değerleri için toplamda 
@@ -53481,16 +53500,16 @@ clean:
     için "slab allocator" denilen bir heap sistemi kullanılmaktadır.) Eğer bu yapı nesnesi programcı tarafından global bir biçimde 
     tanımlanacaksa yapının elemanlarına ilk değer vermek için cdev_init fonksiyonu çağrılmalıdır. Eğer cdev yapısı cdev_alloc fonksiyonuyla 
     dinamik bir biçimde tahsis edilecekse bu işlem cdev_init ile yapılmaz, çünkü zaten cdev_alloc bu işlemi de yapmaktadır. Fakat yine 
-    de programcının bu kez manuel olarak bu yapının bazı elemanlarına değer ataması gerekir. Bu iki yoldan biriyle oluşturulmuş olan 
-    cdev yapısının en sonunda cdev_add isimli fonksiyonla çekirdek veri yapılarına yerleştirilmeleri gerekir. Tabii aygıt sürücü 
-    boşaltılırken bu yerleştirme işlemi cdev_del fonksiyonuyla geri alınmalıdır. cdev_del fonksiyonu, struct cdev yapısı cdev_alloc
-    ile tahsis edilmişse aynı zamanda onu free hale de getirmektedir. Özetle çekirdek modülümüzün tam bir karakter aygıt sürücüsü haline 
-    getirilmesi için şunlar yapılmalıdır:
+    de programcının bu kez manuel olarak bu yapının bazı elemanlarına değer ataması gerekir. Bu iki yoldan biriyle oluşturulmuş 
+    olan cdev yapısının en sonunda cdev_add isimli fonksiyonla çekirdek veri yapılarına yerleştirilmeleri gerekir. Tabii aygıt 
+    sürücü boşaltılırken bu yerleştirme işlemi cdev_del fonksiyonuyla geri alınmalıdır. cdev_del fonksiyonu, struct cdev yapısı 
+    cdev_alloc ile tahsis edilmişse aynı zamanda onu free hale de getirmektedir. Özetle çekirdek modülümüzün tam bir karakter aygıt 
+    sürücüsü haline getirilmesi için şunlar yapılmalıdır:
 
     1) struct cdev isimli bir yapı türünden nesne global olarak (statik ömürlü olarak) tanımlanmalı ya da cdev_alloc fonksiyonu ile
     çekirdeğin heap sistemi içerisinde tahsis edilmelidir. Eğer bu nesne global olarak tanımlanacaksa nesneye cdev_init fonksiyonu 
-    ile ilk değerleri verilmelidir. Eğer nesne cdev_alloc fonksiyonu ile çekirdeğin heap alanında tahsis edilecekse bu durumda ilk değer
-    verme işlemi bu fonksiyon tarafından yapılmaktadır. Ancak programcının yine yapının bazı elemanlarını manuel olarak doldurması 
+    ile ilk değerleri verilmelidir. Eğer nesne cdev_alloc fonksiyonu ile çekirdeğin heap alanında tahsis edilecekse bu durumda ilk 
+    değer verme işlemi bu fonksiyon tarafından yapılmaktadır. Ancak programcının yine yapının bazı elemanlarını manuel olarak doldurması 
     gerekmektedir.
 
     2) Oluşturulan bu struct cdev nesnesi cdev_add çekirdek fonksiyonu ile çekirdeğe eklenmelidir.
@@ -53686,7 +53705,7 @@ static int generic_open(struct inode *inodep, struct file *filp)
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "generic-char-driver-closed...\n");
+	printk(KERN_INFO "generic-char-driver closed...\n");
 
 	return 0;
 }
@@ -59658,7 +59677,6 @@ module_exit(generic_exit);
     #!/bin/bash
 
     module=$2
-    mode=666
 
     /sbin/rmmod ./$module.ko || exit 1
     for ((i = 0; i < $1; ++i))
@@ -59669,7 +59687,7 @@ module_exit(generic_exit);
     Bu scrip'te biz modülü önce çekirdekten sonra da "loadmulti" ile yarattığımız aygıt dosyalarını dosya sisteminden sildik. 
     Script aşağıdaki örnekteki gibi kullanılmalıdır:
 
-    sudo ./unloadmulti 10 pipe-driver
+    $ sudo ./unloadmulti 10 pipe-driver
 
     Daha önce yapımış olduğumuz boru aygıt sürücücüsünün 10 farklı minör numarayı destekleyen biçimini aşağıda veriyoruz.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -59935,15 +59953,12 @@ done
 #!/bin/bash
 
 module=$2
-mode=666
 
 /sbin/rmmod ./$module.ko || exit 1
 for ((i = 0; i < $1; ++i))
 do
 	rm -f ${module}$i
 done
-
-/* prog1.c */
 
 /* prog1.c */
 
@@ -60713,7 +60728,6 @@ done
 #!/bin/bash
 
 module=$2
-mode=666
 
 /sbin/rmmod ./$module.ko || exit 1
 for ((i = 0; i < $1; ++i))
@@ -60861,40 +60875,100 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
-<BURADA KALDIK>
+/*--------------------------------------------------------------------------------------------------------------------------
+												150. Ders 28/06/2024 - Cuma
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Anımsanacağı gibi proc dosya sistemi disk tabanlı bir dosya sistemi değildir. Kernel çalışması sırasında dış dümyaya bilgi vermek
-    için bazen de davranışını dış dünyadan gelen verilerle değiştirebilmek için proc dosya sistemini kullanmaktadır. Daha sonra proc
-    gibi sys isimli dosya sistemi de Linuc sistemlerine eklenmiştir.
+    Anımsanacağı gibi proc dosya sistemi disk tabanlı bir dosya sistemi değildir. Çekirdek çalışması sırasında dış dünyaya 
+    bilgi vermek için bazen de davranışını dış dünyadan gelen verilerle değiştirebilmek için proc dosya sistemini kullanmaktadır. 
+    Daha sonra proc gibi sys isimli bir dosya sistemi de Linux'a eklenmiştir.
 
-    proc dosya sistemi aslında yalnızca kernel tarafından değil aygıt sürücüler tarafından da kullanılabilmektedir. Ancak bu dosya sisteminin
-    içerisinde user mode'dan dosyalar ya da dizinler yaratılamamaktadır.
+    proc dosya sistemi aslında yalnızca çekirdek tarafından değil aygıt sürücüler tarafından da kullanılabilmektedir. Ancak bu 
+    dosya sisteminin içerisinde user moddan dosyalar ya da dizinler yaratılamamaktadır. proc dosya sistemindeki tüm girişlerin 
+    dosya uzunluları 0 biçiminde rapor edilmektedir.
 
-    proc dosya sisteminin kernel ve aygıt sürücüler tarafından kullanılmasına ilişkin fonksiyonlar birkaç kere değişik kernel versiyonlarında değiştirilmiştir.
-    Dolayısıyla eski kernel'larda çalışan kodlar yeni kernel'larda derlenmeyecektir. Biz burada en yeni fonksiyonları ele alacağız.
+    proc dosya sisteminin kullanımına yönelik çekirdek fonksiyonları çekirdeğin versyionları ile zamanla birkaç değiştirilmiştir. 
+    Dolayısıyla eski çekirdeklere çalışan kodlar yeni çekirdeklerde derlenmeyecektir. Biz burada en yeni fonksiyonları ele 
+    alacağız.
 
-    proc dosya sisteminde bir dosya yaratabilmek için proc_create isimli fonksiyon kullanılmaktadır.
+    User moddan prog dosya sistemindeki bir dosya üzerinde open, read, write, lseek, close işlmeler yapıldığında aslında
+    aygıt sürücülerin belirlediği fonksiyonlar çağrılmaktadır. Yani örneğin biz user moddan proc dosya sistemi içerisindeki 
+    bir dosyadan okuma yapmak istediğimizde aslında onu oluşturan aygıt sürücünün içerisindeki bir fonksiyon çalışıtırılır.
+    Bu fonksiyon bize okuma sonucunda elde edilecek bilgileri verir. Benzer biçimde proc dosya sistemindeki bir dosyaya 
+    user moddan yazma yapılmak istendiğinde aslında o dosyaya ilişkin aygıt sürücünün bir fonksiyonu çağrılmaktadır. 
+    Yani proc dosya sistemi aslında aygıt sürücüden fonksiyon çağıran bir mekanizmaya sahiptir.
+---------------------------------------------------------------------------------------------------------------------------*/
 
-    struct proc_dir_entry *proc_create(const char *name, umode_t mode, struct proc_dir_entry *parent, const struct proc_ops *proc_ops);
+/*--------------------------------------------------------------------------------------------------------------------------
+    proc dosya sisteminde bir dosya yaratabilmek için proc_create isimli fonksiyon kullanılmaktadır. Fonksiyonun prototipi 
+    şöyledir:
 
-    Fonksiyonun birinci parametresi yaratılacak dosyanın ismini belirtir. İkinci parametresi erişim haklarını belrtmektedir. Bu parametre 0 geçilirse 
-    default erişim hakları kullanılır. Üçüncü parametre dosyanın hangi dizinde yaratılacağını belirtmektedir. Bu parametre NULL geçilirse dosya ana
-    /proc dizini içerisinde yaratılır. Son parametre proc dosya sistemindeki ilgi dosyaya yazma ve okuma yapldığında çalıştırılacak fonksiyonları belirtir. 
-    Aslında birkaç sene önceki kernel'larda bu fonksiyonun son parametresi struct proc_ops biçiminde değil, struct file_operations biçimindeydi. Dolayısıyla
-    kernelınızda hangi fonksiyonun bulunuyor olduğuna dikkat ediniz. Kursun yapıdlığı sistemde bu fonksiyonun son parametresi struct file_operations biçimindedir. 
-    Fonksiyon başarı durumunda yaratılan dosyanın bilgilerini içeren proc_dir_entry türünden bir yapı nesnesinin adresiyle, başarısızlık durumunda NULL adresle
-    geri dönmektedir. 
+    #include <linux/proc_fs.h>
 
-    proc dosya sisteminde yaratılan dosya remove_proc_entry fonksiyonuyla silinebilmektedir. 
+    struct proc_dir_entry *proc_create(const char *name, umode_t mode, 
+        struct proc_dir_entry *parent, const struct proc_ops *proc_ops);
+
+    Fonksiyonun birinci parametresi yaratılacak dosyanın ismini belirtir. İkinci parametresi erişim haklarını belirtmektedir. 
+    Bu parametre 0 geçilirse default erişim hakları kullanılır. Üçüncü parametre dosyanın hangi dizinde yaratılacağını 
+    belirtmektedir. Bu parametre NULL geçilirse dosya ana "/proc" dizini içerisinde yaratılır. proc dosya sistemi içerisinde 
+    dizinlerin nasıl yaratıldığını izleyen paragraflarda açıklayacağız. Son parametre proc dosya sistemindeki ilgi dosyaya yazma 
+    ve okuma yapldığında çalıştırılacak fonksiyonları belirtir. Aslında birkaç sene önceki çekirdeklerde (3.10 çekirdeklerine 
+    kadarki çekirdeklerde) bu fonksiyonun son parametresi proc_ops yapısını değil, file_operations yapısını kullanıyordu. Dolayısıyla 
+    çekirdeğinizdeki fonksiyonun son parametresinin ne olduğuna dikkat ediniz. Örneğin önceki kursun yapıldığı makinede bu son 
+    parametre file_operations yapısına ilişkinken bu kursun yapıldığı makinede proc_ops yapısına ilişkindir. proc_ops yapısı 
+    şöyle bildirilmiştir:
+
+    #include <linux/proc_fs.h>
+
+    struct proc_ops {
+        unsigned int proc_flags;
+        int	(*proc_open)(struct inode *, struct file *);
+        ssize_t	(*proc_read)(struct file *, char __user *, size_t, loff_t *);
+        ssize_t (*proc_read_iter)(struct kiocb *, struct iov_iter *);
+        ssize_t	(*proc_write)(struct file *, const char __user *, size_t, loff_t *);
+        /* mandatory unless nonseekable_open() or equivalent is used */
+        loff_t	(*proc_lseek)(struct file *, loff_t, int);
+        int	(*proc_release)(struct inode *, struct file *);
+        __poll_t (*proc_poll)(struct file *, struct poll_table_struct *);
+        long	(*proc_ioctl)(struct file *, unsigned int, unsigned long);
+    #ifdef CONFIG_COMPAT
+        long	(*proc_compat_ioctl)(struct file *, unsigned int, unsigned long);
+    #endif
+        int	(*proc_mmap)(struct file *, struct vm_area_struct *);
+        unsigned long (*proc_get_unmapped_area)(struct file *, unsigned long, unsigned long, unsigned long, unsigned long);
+    };
+
+    proc_ops yapısının elemanlarına ilişkin fonksiyon göstericilerinin türlerinin file_operations yapısındaki elemanlara ilişkin
+    fonksiyon gösterişcilerinin türleri ile aynı olduğuna dikkat ediniz.ç Bu fonksiyonların kullanımı tamamen aygıt sürücü 
+    için oluşturduğumuz file_operations yapısı ile aynı biçimdedir.
+
+    proc dosya sistemi genel olarak text tabanlı bir dosya sistemi biçiminde düşünülmüştür. Yani buradaki dosyalar genel olarak 
+    text içeriğe sahiptir. Siz de aygıt sürücünüz için proc dosya sisteminde dosya oluşturacaksınız onların içeriğini text 
+    olarak oluşturmalısınız.
+
+    Fonksiyon başarı durumunda yaratılan dosyanın bilgilerini içeren proc_dir_entry türünden bir yapı nesnesinin adresiyle, 
+    başarısızlık durumunda NULL adresle geri dönmektedir. Bu durumda çağıran fonksiyonun -NOMEM gibi bir hata değeriyle geri
+    döndürülmesi yaygındır.
+
+    proc dosya sisteminde yaratılan dosya remove_proc_entry fonksiyonuyla silinebilmektedir.
+
+    #include <linux/proc_fs.h>
 
     void remove_proc_entry(const char *name, struct proc_dir_entry *parent);
 
-    Aşağıdaki örnekte modülün init fonksiyonunda proc dosya sisteminin kökünde "generic-char-driver" isimli bir dosya yaratılmıştır. Modülün exit fonksiyonunda
-    bu dosya remove_proc_entry fonksiyonuyla silinmiştir.
+    Fonksiyonun birinci parametresi silinecek dosyanın ismini, ikinci parametresi dosyanın içinde bulunduğu dizine ilişkin 
+    proc_dir_entry nesnesinin adresini almaktadır. Yine bu parametre NULL adres girilirse dosyanın ana "/proc" dizininde
+    olduğu kabul edilmektedir.
+
+    Aşağıdaki örnekte proc sisteminde dosya yaratan iskelet bir aygıt sürücü programı verilmiştir. Bu aygıt sürücüde"/proc" 
+    dizininde "procfs-driver" isminde bir dosya yaratılmaktadır. Aygıt sürücüyü install ettikten sonra "/proc" dizininde
+    bu dosyanın yaratılıp yaratılmadığını kontrol ediniz. Bu dosyayı "cat" ile komut satırından okumak istediğinizde "cat" 
+    programı bu dosyayı açıp, read işlemi uygulayıp kapatacaktır. "cat" işleminden sonra "dmesg" komutu ile aygıt sürücümüzde
+    belirlediğimiz fonksiyonların çağrıldığını doğrulayınız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-/* generic-char-driver.c */
+/* procfs-driver.c */
 
 #include <linux/module.h>
 #include <linux/kernel.h>
@@ -60902,136 +60976,47 @@ void exit_sys(const char *msg)
 #include <linux/cdev.h>
 #include <linux/proc_fs.h>
 
-MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("General Character Device Driver");
-MODULE_AUTHOR("Kaan Aslan");
-
-static dev_t g_dev;
-static struct cdev *g_cdev;
-static struct file_operations g_file_ops = {
-	.owner = THIS_MODULE,
-};
-
-static ssize_t proc_read(struct file *filp, char *buf, size_t size, loff_t *off);
-
-static struct file_operations g_proc_ops = {
-	.owner = THIS_MODULE,
-	.read = proc_read,
-};
-
-static int __init generic_init(void)
-{
-	int result;
-
-	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "generic-char-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
-		return result;
-	}
-
-	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!...\n");
-		return -ENOMEM;
-	}
-
-	g_cdev->owner = THIS_MODULE;
-	g_cdev->ops = &g_file_ops;
-
-	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
-		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add character device driver!...\n");
-		return result;
-	}
-
-	if (proc_create("generic-char-driver", S_IRUSR|S_IRGRP|S_IROTH, NULL, &g_proc_ops) == NULL) {
-		unregister_chrdev_region(g_dev, 1);
-		cdev_del(g_cdev);
-		printk(KERN_INFO "Cannot create proc file!...\n");
-		return -ENOMEM;
-	}
-
-	printk(KERN_INFO "Module initialized with %d:%d device number...\n", MAJOR(g_dev), MINOR(g_dev));
-
-	return 0;
-}
-
-static void __exit generic_exit(void)
-{
-	cdev_del(g_cdev);
-	unregister_chrdev_region(g_dev, 1);
-	remove_proc_entry("generic-char-driver", NULL);
-
-	printk(KERN_INFO "Goodbye...\n");
-}
-
-static ssize_t proc_read(struct file *filp, char *buf, size_t size, loff_t *off)
-{
-	return 0;
-}
-
-module_init(generic_init);
-module_exit(generic_exit);
-
-obj-m += $(file).o
-
-all:
-	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
-clean:
-	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
-
-#!/bin/bash
-
-module=$1
-mode=666
-
-/sbin/insmod ./$module.ko ${@:2} || exit 1
-major=$(awk "\$2 == \"$module\" {print \$1}" /proc/devices)
-rm -f $module
-mknod $module c $major 0
-chmod $mode $module
-
-/*--------------------------------------------------------------------------------------------------------------------------
-    proc dosya sisteminde yaratılmış olan dosyadan okuma ve yazma yapılması
----------------------------------------------------------------------------------------------------------------------------*/
-
-/* generic-char-driver.c */
-
-#include <linux/module.h>
-#include <linux/kernel.h>
-#include <linux/fs.h>
-#include <linux/cdev.h>
-#include <linux/uaccess.h>
-#include <linux/proc_fs.h>
-
-#define BUF_SIZE		4096
+#define PIPE_BUFSIZE		4096
 
 MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("General Character Device Driver");
 MODULE_AUTHOR("Kaan Aslan");
+MODULE_DESCRIPTION("procfs driver");
 
-static dev_t g_dev;
-static struct cdev *g_cdev;
-static struct file_operations g_file_ops = {
-	.owner = THIS_MODULE,
-};
+static int generic_open(struct inode *inodep, struct file *filp);
+static int generic_release(struct inode *inodep, struct file *filp);
+static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off);
+static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off);
 
+static int proc_open(struct inode *inodep, struct file *filp);
+static int proc_release(struct inode *inodep, struct file *filp);
 static ssize_t proc_read(struct file *filp, char *buf, size_t size, loff_t *off);
 static ssize_t proc_write(struct file *filp, const char *buf, size_t size, loff_t *off);
-static loff_t proc_llseek(struct file *filp, loff_t off, int whence);
 
-static struct file_operations g_proc_ops = {
+static dev_t g_dev;
+static struct cdev *g_cdev;
+static struct file_operations g_fops = {
 	.owner = THIS_MODULE,
-	.read = proc_read,
-	.write = proc_write,
-	.llseek = proc_llseek,
+	.open = generic_open,
+	.read = generic_read,
+	.write = generic_write,
+	.release = generic_release
 };
 
-static char g_text[BUF_SIZE] = "this is a test\n";
+static struct proc_ops g_proc_ops = {
+	.proc_open = proc_open,
+	.proc_release = proc_release,
+	.proc_read = proc_read,
+	.proc_write = proc_write
+};
 
 static int __init generic_init(void)
 {
 	int result;
+	struct proc_dir_entry *pde;
 
-	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "generic-char-driver")) < 0) {
+	printk(KERN_INFO "procfs-driver module initialization...\n");
+
+	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "procfs-driver")) < 0) {
 		printk(KERN_INFO "Cannot alloc char driver!...\n");
 		return result;
 	}
@@ -61042,97 +61027,92 @@ static int __init generic_init(void)
 	}
 
 	g_cdev->owner = THIS_MODULE;
-	g_cdev->ops = &g_file_ops;
+	g_cdev->ops = &g_fops;
 
-	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
+	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add character device driver!...\n");
+		printk(KERN_ERR "Cannot add device!...\n");
 		return result;
 	}
 
-	if (proc_create("generic-char-driver", S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH, NULL, &g_proc_ops) == NULL) {
-		unregister_chrdev_region(g_dev, 1);
+	if ((pde = proc_create("procfs-driver", S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH, NULL, &g_proc_ops)) == NULL) {
 		cdev_del(g_cdev);
-		printk(KERN_INFO "Cannot create proc file!...\n");
+		unregister_chrdev_region(g_dev, 1);
 		return -ENOMEM;
 	}
-
-	printk(KERN_INFO "Module initialized with %d:%d device number...\n", MAJOR(g_dev), MINOR(g_dev));
 
 	return 0;
 }
 
 static void __exit generic_exit(void)
 {
+	remove_proc_entry("procfs-driver", NULL);
 	cdev_del(g_cdev);
 	unregister_chrdev_region(g_dev, 1);
-	remove_proc_entry("generic-char-driver", NULL);
 
-	printk(KERN_INFO "Goodbye...\n");
+	printk(KERN_INFO "procfs driver module exit...\n");
+}
+
+static int generic_open(struct inode *inodep, struct file *filp)
+{
+	printk(KERN_INFO "procfs-driver opened...\n");
+
+	return 0;
+}
+
+static int generic_release(struct inode *inodep, struct file *filp)
+{
+	printk(KERN_INFO "procfs-driver closed...\n");
+
+	return 0;
+}
+
+static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
+{
+	printk(KERN_INFO "procfs-driver read\n");
+
+	return 0;
+}
+
+static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
+{
+	printk(KERN_INFO "procfs-driver write...\n");
+
+	return 0;
+}
+
+static int proc_open(struct inode *inodep, struct file *filp)
+{
+	printk(KERN_INFO "procfs-driver proc file opened...\n");
+
+	return 0;
+}
+
+static int proc_release(struct inode *inodep, struct file *filp)
+{
+	printk(KERN_INFO "procfs-driver proc file closed...\n");
+
+	return 0;
 }
 
 static ssize_t proc_read(struct file *filp, char *buf, size_t size, loff_t *off)
 {
-	ssize_t left, n;
+	printk(KERN_INFO "procfs-driver proc file read...\n");
 
-	left = strlen(g_text) - *off;
-	n = left < size ? left : size;
-
-	if (n != 0) {
-		if (copy_to_user(buf, g_text, n) != 0)
-			return -EFAULT;
-		*off += n;
-	}
-
-	return n;
+	return 0;
 }
 
 static ssize_t proc_write(struct file *filp, const char *buf, size_t size, loff_t *off)
 {
-	ssize_t left, n;
+	printk(KERN_INFO "procfs-driver proc file write...\n");
 
-	if (filp->f_flags & O_APPEND)
-		*off = strlen(g_text);
-
-	left = BUF_SIZE - *off;
-	n = left < size ? left : size;
-	if (n != 0) {
-		if (copy_from_user(g_text + *off, buf, n) != 0)
-			return -EFAULT;
-		*off += n;
-	}
-
-	return n;
-}
-
-static loff_t proc_llseek(struct file *filp, loff_t off, int whence)
-{
-	loff_t toff;
-
-	switch (whence) {
-		case SEEK_SET:
-			toff = off;
-			break;
-		case SEEK_CUR:
-			toff = filp->f_pos + off;
-			break;
-		case SEEK_END:
-			toff = (loff_t)strlen(g_text) - off;
-			break;
-		default:
-			return -EINVAL;
-	}
-
-	if (toff > BUF_SIZE || toff < 0)
-		return -EINVAL;
-
-	filp->f_pos = toff;
-
-	return toff;
+	return 0;
 }
 
 module_init(generic_init);
 module_exit(generic_exit);
+
+# Makefile
 
 obj-m += $(file).o
 
@@ -61140,6 +61120,9 @@ all:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
+
+
+/* load (bu satırı dosyaya kopyalamayınız) */
 
 #!/bin/bash
 
@@ -61152,105 +61135,332 @@ rm -f $module
 mknod $module c $major 0
 chmod $mode $module
 
-/* sample.c */
+/* unload (bu satırı dosyaya kopyalamayınız) */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <unistd.h>
+#!/bin/bash
 
-void exit_sys(const char *msg);
+module=$1
+mode=666
 
-int main(void)
+/sbin/rmmod ./$module.ko || exit 1
+rm -f $module
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki örnekte aygıt sürücüsü içerisindeki count isimli global değişken proc dosya sistemindeki "profs-driver" isimli
+    bir dosya ile temsil edilmiştir. Bu dosyadan okuma yapıldığında bu count değişkeninin değeri elde edilmektedir. Dosyaya 
+    yazma yapıldığında bu count değişkeninin değeri güncellenmektedir. Yazma işleminde dosya göstericisi dikkate alınmamış ve
+    yazma işlemi her zaman sanki ilgili dosyanın başından itibaren yapılıyormuş gibi bir etki oluşturulmuştur.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* procfs-driver.c */
+
+#include <linux/module.h>
+#include <linux/kernel.h>
+#include <linux/fs.h>
+#include <linux/cdev.h>
+#include <linux/proc_fs.h>
+
+#define PIPE_BUFSIZE		4096
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Kaan Aslan");
+MODULE_DESCRIPTION("procfs driver");
+
+static int generic_open(struct inode *inodep, struct file *filp);
+static int generic_release(struct inode *inodep, struct file *filp);
+static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off);
+static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off);
+
+static int proc_open(struct inode *inodep, struct file *filp);
+static int proc_release(struct inode *inodep, struct file *filp);
+static ssize_t proc_read(struct file *filp, char *buf, size_t size, loff_t *off);
+static ssize_t proc_write(struct file *filp, const char *buf, size_t size, loff_t *off);
+
+static dev_t g_dev;
+static struct cdev *g_cdev;
+static struct file_operations g_fops = {
+	.owner = THIS_MODULE,
+	.open = generic_open,
+	.read = generic_read,
+	.write = generic_write,
+	.release = generic_release
+};
+
+static struct proc_ops g_proc_ops = {
+	.proc_open = proc_open,
+	.proc_release = proc_release,
+	.proc_read = proc_read,
+	.proc_write = proc_write
+};
+
+static int g_count = 123;
+static char g_count_str[32];
+
+static int __init generic_init(void)
 {
-	int fd;
-	ssize_t n;
+	int result;
+	struct proc_dir_entry *pde;
 
-	if ((fd = open("/proc/generic-char-driver", O_RDWR|O_APPEND)) == -1)
-		exit_sys("open");
+	printk(KERN_INFO "procfs-driver module initialization...\n");
 
-	n = write(fd, "xxx", 3);
-	if (n == -1)
-		exit_sys("write");
+	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "procfs-driver")) < 0) {
+		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		return result;
+	}
 
-	printf("%ld bytes written...\n", (long)n);
+	if ((g_cdev = cdev_alloc()) == NULL) {
+		printk(KERN_INFO "Cannot allocate cdev!...\n");
+		return -ENOMEM;
+	}
 
-	close(fd);
+	g_cdev->owner = THIS_MODULE;
+	g_cdev->ops = &g_fops;
+
+	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
+		unregister_chrdev_region(g_dev, 1);
+		printk(KERN_ERR "Cannot add device!...\n");
+		return result;
+	}
+
+	if ((pde = proc_create("procfs-driver", S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH, NULL, &g_proc_ops)) == NULL) {
+		cdev_del(g_cdev);
+		unregister_chrdev_region(g_dev, 1);
+		return -ENOMEM;
+	}
 
 	return 0;
 }
 
-void exit_sys(const char *msg)
+static void __exit generic_exit(void)
 {
-	perror(msg);
+	remove_proc_entry("procfs-driver", NULL);
+	cdev_del(g_cdev);
+	unregister_chrdev_region(g_dev, 1);
 
-	exit(EXIT_FAILURE);
+	printk(KERN_INFO "procfs driver module exit...\n");
 }
 
+static int generic_open(struct inode *inodep, struct file *filp)
+{
+	printk(KERN_INFO "procfs-driver opened...\n");
+
+	return 0;
+}
+
+static int generic_release(struct inode *inodep, struct file *filp)
+{
+	printk(KERN_INFO "procfs-driver closed...\n");
+
+	return 0;
+}
+
+static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
+{
+	printk(KERN_INFO "procfs-driver read\n");
+
+	return 0;
+}
+
+static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
+{
+	printk(KERN_INFO "procfs-driver write...\n");
+
+	return 0;
+}
+
+static int proc_open(struct inode *inodep, struct file *filp)
+{
+	printk(KERN_INFO "procfs-driver proc file opened...\n");
+
+	return 0;
+}
+
+static int proc_release(struct inode *inodep, struct file *filp)
+{
+	printk(KERN_INFO "procfs-driver proc file closed...\n");
+
+	return 0;
+}
+
+static ssize_t proc_read(struct file *filp, char *buf, size_t size, loff_t *off)
+{
+	size_t esize;
+	size_t left;
+
+	sprintf(g_count_str, "%d\n", g_count);
+
+	left = strlen(g_count_str) - *off;
+	esize = left < size ? left : size;
+
+	if (esize != 0) {
+		if (copy_to_user(buf, g_count_str, esize) != 0)
+			return -EFAULT;
+		*off += esize;
+	}
+
+	printk(KERN_INFO "procfs-driver proc file read...\n");
+
+	return esize;
+}
+
+static ssize_t proc_write(struct file *filp, const char *buf, size_t size, loff_t *off)
+{
+	size_t esize;
+	char count_str[31];
+	int count;
+
+	esize = size > 31 ? 31 : size;
+
+	if (esize != 0) {
+		if (copy_from_user(count_str, buf, esize) != 0)
+			return -EFAULT;
+	}
+
+	count_str[esize] = '\0';
+	if (kstrtoint(count_str, 10, &count) != 0)
+		return -EINVAL;
+
+	if (count < 0 || count > 1000)
+		return -EINVAL;
+
+	g_count = count;
+	strcpy(g_count_str, count_str);
+
+	printk(KERN_INFO "procfs-driver proc file write...\n");
+
+	return esize;
+}
+
+module_init(generic_init);
+module_exit(generic_exit);
+
+# Makefile
+
+obj-m += $(file).o
+
+all:
+	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
+clean:
+	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
+
+/* load (bu satırı dosyaya kopyalamayınız) */
+
+#!/bin/bash
+
+module=$1
+mode=666
+
+/sbin/insmod ./$module.ko ${@:2} || exit 1
+major=$(awk "\$2 == \"$module\" {print \$1}" /proc/devices)
+rm -f $module
+mknod $module c $major 0
+chmod $mode $module
+
+/* unload (bu satırı dosyaya kopyalamayınız) */
+
+#!/bin/bash
+
+module=$1
+mode=666
+
+/sbin/rmmod ./$module.ko || exit 1
+rm -f $module
+
 /*--------------------------------------------------------------------------------------------------------------------------
-    Biz yukarıdaki örneklerde dosyayı proc dizininin kökünde yarattık. İstersek proc dizininde bir dizin yaratıp dosyalarımızı 
-    o dizinin içerisinde de yaratbilirdik. Bunun için proc_mkdir fonksiyonu kullanılmaktadır:
+    Biz yukarıdaki örneklerde dosyayı proc dosya sisteminin kök diininde yarattık. İstersek proc dizininde bir dizin yaratıp 
+    dosyalarımızı o dizinin içerisinde de oluşturabilirdik. proc dosya sisteminde bir dizin yaratmak için proc_mkdir fonksiyonu 
+    kullanılmaktadır:
+
+    #include <linux/proc_fs.h>
 
     struct proc_dir_entry *proc_mkdir(const char *name, struct proc_dir_entry *parent);
 
-    Fonksiyonun birinci parametresi yaratılacak dizin'in simini, ikinci parametresi dizinin hanfi dizin içerisinde yaratılacağını belirtir. Bu parametre NULL
-    geçilirse dizin proc dizininin kökünde yaratılır. Buradan aldığımız geri dönüş değerini proc_create fonksiyonun parent parent parametresinde
-    kullanırsak ilgili dosyamızı bu dizinde yaratmış oluruz. Örneğin:
+    Fonksiyonun birinci parametresi yaratılacak dizin'in simini, ikinci parametresi dizinin hanfi dizin içerisinde yaratılacağını 
+    belirtir. Bu parametre NULL geçilirse dizin proc dosya sisteminin kök dizininde yaratılır. Buradan aldığımız geri dönüş değerini 
+    proc_create fonksiyonun parent parametresinde kullanırsak ilgili dosyamızı bu dizinde yaratmış oluruz. Tabii benzer biçimde 
+    dizin içerisinde dizin de yaratabiliriz. proc_mkdir fonksiyonu başarısızlık durumunda NULL adrese geri dönmektedir. Çağıran 
+    fonksiyonun yine -ENOMEM değeriyle geri döndürülmesi uygundur.
+
+    Örneğin:
 
     struct proc_dir_entry *pdir;
 
-    pdir = proc_mkdir("generic-char-driver", NULL);
+    pdir = proc_mkdir("procfs-driver", NULL);
     proc_create("info", 0, pdir, &g_proc_ops);
 
-    Dizinlerin silinmesi yine remove_proc_entry fonksiyonuyla yapılabilmektedir. Dizin içerisindeki dosyaları silerken remove_proc_entry fonksiyonund ayine
-    dosyanın hangi dizin içerisinde olduğu belirtilmelidir. Aslında bütün silme işlemleri proc_remove fonksiyonuyla da yapılabilmektedir. Bu fonksiyon
-    parametre olarak proc_create ya da proc_mkdir fonksiyonun verdiği geri dönüş değerini alır.
+    Dizinlerin silinmesi yine remove_proc_entry fonksiyonuyla yapılmaktadır. Tabii dizin içerisindeki dosyaları silerken 
+    remove_proc_entry fonksiyonda dosyanın hangi dizin içerisinde olduğu belirtilmelidir. Bu fonksiyon ile dizin silinirken 
+    dizin'in içi boş değilse bile o dizin ve onun içindeki girişlerin hepsi silinmektedir. Ayrıca kök dizindeki girişleri silmek 
+    için proc_remove fonksiyonu da bulundurulmuştur. Fonksiyonun prototipi şöyledir:
 
-    Aşağıda generic-char-driver isimli aygıt sürücü proc dizinin altında "generic-char-driver" isimli bir dizin yaratmıştır. Bu dizinin içerisinde de 
-    "info" isimli bir dosya yaratmıştır.
+    #include <linux/proc_fs.h>
+
+    void proc_remove(struct proc_dir_entry *de);
+
+    Bu fonksiyon DA İNE parametre olarak proc_create ya da proc_mkdir fonksiyonun verdiği geri dönüş değerini alır. proc 
+    dosya sisteminin kök dizininde silme yapılmak isteniyorsa aşağdaki her iki çağrım eşdeğerdir:
+
+    remove_proc_entry("file_name", NULL);
+    proc_remove("file_name");
+
+    Aşağıdaki örnekte proc dosya sisteminin kök dizininde "procfs-driver" isimli bir dizin yaratılmış, onun içerisinde de 
+    "count" bir dosya yaratılmıştır. Bu örneğin yukarıdaki örnekten tek farkı dosyanın proc dosya sisteminin kökünde değil 
+    bir dizinin içerisinde yaratılmış olmasıdır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-/* generic-char-driver.c */
+/* procfs-driver.c */
 
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/fs.h>
 #include <linux/cdev.h>
-#include <linux/uaccess.h>
 #include <linux/proc_fs.h>
 
-#define BUF_SIZE		4096
+#define PIPE_BUFSIZE		4096
 
 MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("General Character Device Driver");
 MODULE_AUTHOR("Kaan Aslan");
+MODULE_DESCRIPTION("procfs driver");
+
+static int generic_open(struct inode *inodep, struct file *filp);
+static int generic_release(struct inode *inodep, struct file *filp);
+static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off);
+static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off);
+
+static int proc_open(struct inode *inodep, struct file *filp);
+static int proc_release(struct inode *inodep, struct file *filp);
+static ssize_t proc_read(struct file *filp, char *buf, size_t size, loff_t *off);
+static ssize_t proc_write(struct file *filp, const char *buf, size_t size, loff_t *off);
 
 static dev_t g_dev;
 static struct cdev *g_cdev;
-static struct file_operations g_file_ops = {
+static struct file_operations g_fops = {
 	.owner = THIS_MODULE,
+	.open = generic_open,
+	.read = generic_read,
+	.write = generic_write,
+	.release = generic_release
 };
 
-static ssize_t proc_read(struct file *filp, char *buf, size_t size, loff_t *off);
-static ssize_t proc_write(struct file *filp, const char *buf, size_t size, loff_t *off);
-static loff_t proc_llseek(struct file *filp, loff_t off, int whence);
-
-static struct file_operations g_proc_ops = {
-	.owner = THIS_MODULE,
-	.read = proc_read,
-	.write = proc_write,
-	.llseek = proc_llseek,
+static struct proc_ops g_proc_ops = {
+	.proc_open = proc_open,
+	.proc_release = proc_release,
+	.proc_read = proc_read,
+	.proc_write = proc_write
 };
 
-static struct proc_dir_entry *g_pdir;
-static char g_text[BUF_SIZE] = "this is a test\n";
+static int g_count = 123;
+static char g_count_str[32];
 
 static int __init generic_init(void)
 {
 	int result;
+	struct proc_dir_entry *pde_dir;
+	struct proc_dir_entry *pde;
 
-	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "generic-char-driver")) < 0) {
+	printk(KERN_INFO "procfs-driver module initialization...\n");
+
+	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "procfs-driver")) < 0) {
 		printk(KERN_INFO "Cannot alloc char driver!...\n");
 		return result;
 	}
@@ -61261,104 +61471,134 @@ static int __init generic_init(void)
 	}
 
 	g_cdev->owner = THIS_MODULE;
-	g_cdev->ops = &g_file_ops;
+	g_cdev->ops = &g_fops;
 
-	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
+	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add character device driver!...\n");
+		printk(KERN_ERR "Cannot add device!...\n");
 		return result;
 	}
 
-	if ((g_pdir = proc_mkdir("generic-char-driver", NULL)) == NULL) {
-		unregister_chrdev_region(g_dev, 1);
+	if ((pde_dir = proc_mkdir("procfs-driver", NULL)) == NULL) {
 		cdev_del(g_cdev);
-		printk(KERN_INFO "Cannot create proc directory!...\n");
-		return -ENOMEM;
-	}
-	if (proc_create("info", S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH, g_pdir, &g_proc_ops) == NULL) {
-		remove_proc_entry("generic-char-driver", NULL);
 		unregister_chrdev_region(g_dev, 1);
-		cdev_del(g_cdev);
-		printk(KERN_INFO "Cannot create proc file!...\n");
 		return -ENOMEM;
 	}
 
-	printk(KERN_INFO "Module initialized with %d:%d device number...\n", MAJOR(g_dev), MINOR(g_dev));
+	if ((pde = proc_create("count", S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH, pde_dir, &g_proc_ops)) == NULL) {
+		remove_proc_entry("procfs-driver", NULL);
+		cdev_del(g_cdev);
+		unregister_chrdev_region(g_dev, 1);
+		return -ENOMEM;
+	}
 
 	return 0;
 }
 
 static void __exit generic_exit(void)
 {
+	remove_proc_entry("procfs-driver", NULL);
 	cdev_del(g_cdev);
 	unregister_chrdev_region(g_dev, 1);
-	remove_proc_entry("generic-char-driver", NULL);
-	remove_proc_entry("info", g_pdir);
-	printk(KERN_INFO "Goodbye...\n");
+
+	printk(KERN_INFO "procfs driver module exit...\n");
+}
+
+static int generic_open(struct inode *inodep, struct file *filp)
+{
+	printk(KERN_INFO "procfs-driver opened...\n");
+
+	return 0;
+}
+
+static int generic_release(struct inode *inodep, struct file *filp)
+{
+	printk(KERN_INFO "procfs-driver closed...\n");
+
+	return 0;
+}
+
+static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
+{
+	printk(KERN_INFO "procfs-driver read\n");
+
+	return 0;
+}
+
+static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
+{
+	printk(KERN_INFO "procfs-driver write...\n");
+
+	return 0;
+}
+
+static int proc_open(struct inode *inodep, struct file *filp)
+{
+	printk(KERN_INFO "procfs-driver proc file opened...\n");
+
+	return 0;
+}
+
+static int proc_release(struct inode *inodep, struct file *filp)
+{
+	printk(KERN_INFO "procfs-driver proc file closed...\n");
+
+	return 0;
 }
 
 static ssize_t proc_read(struct file *filp, char *buf, size_t size, loff_t *off)
 {
-	ssize_t left, n;
+	size_t esize;
+	size_t left;
 
-	left = strlen(g_text) - *off;
-	n = left < size ? left : size;
+	sprintf(g_count_str, "%d\n", g_count);
 
-	if (n != 0) {
-		if (copy_to_user(buf, g_text, n) != 0)
+	left = strlen(g_count_str) - *off;
+	esize = left < size ? left : size;
+
+	if (esize != 0) {
+		if (copy_to_user(buf, g_count_str, esize) != 0)
 			return -EFAULT;
-		*off += n;
+		*off += esize;
 	}
 
-	return n;
+	printk(KERN_INFO "procfs-driver proc file read...\n");
+
+	return esize;
 }
 
 static ssize_t proc_write(struct file *filp, const char *buf, size_t size, loff_t *off)
 {
-	ssize_t left, n;
+	size_t esize;
+	char count_str[31];
+	int count;
 
-	if (filp->f_flags & O_APPEND)
-		*off = strlen(g_text);
+	esize = size > 31 ? 31 : size;
 
-	left = BUF_SIZE - *off;
-	n = left < size ? left : size;
-	if (n != 0) {
-		if (copy_from_user(g_text + *off, buf, n) != 0)
+	if (esize != 0) {
+		if (copy_from_user(count_str, buf, esize) != 0)
 			return -EFAULT;
-		*off += n;
 	}
 
-	return n;
-}
-
-static loff_t proc_llseek(struct file *filp, loff_t off, int whence)
-{
-	loff_t toff;
-
-	switch (whence) {
-		case SEEK_SET:
-			toff = off;
-			break;
-		case SEEK_CUR:
-			toff = filp->f_pos + off;
-			break;
-		case SEEK_END:
-			toff = (loff_t)strlen(g_text) - off;
-			break;
-		default:
-			return -EINVAL;
-	}
-
-	if (toff > BUF_SIZE || toff < 0)
+	count_str[esize] = '\0';
+	if (kstrtoint(count_str, 10, &count) != 0)
 		return -EINVAL;
 
-	filp->f_pos = toff;
+	if (count < 0 || count > 1000)
+		return -EINVAL;
 
-	return toff;
+	g_count = count;
+	strcpy(g_count_str, count_str);
+
+	printk(KERN_INFO "procfs-driver proc file write...\n");
+
+	return esize;
 }
 
 module_init(generic_init);
 module_exit(generic_exit);
+
+# Makefile
 
 obj-m += $(file).o
 
@@ -61366,6 +61606,8 @@ all:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
+
+/* load (bu satırı dosyaya kopyalamayınız) */
 
 #!/bin/bash
 
@@ -61378,6 +61620,17 @@ rm -f $module
 mknod $module c $major 0
 chmod $mode $module
 
+/* unload (bu satırı dosyaya kopyalamayınız) */
+
+#!/bin/bash
+
+module=$1
+mode=666
+
+/sbin/rmmod ./$module.ko || exit 1
+rm -f $module
+
+<BURADA KALDIK>
 /*--------------------------------------------------------------------------------------------------------------------------
     Kesmeler (interrupts) konusunda bugün kullandığımız PC mimarisindeki kesme mekanizmasının donanımsal tarafını ele alacağız. 
     Eskiden tek CPU'lu makineler kullanıyordu. Bugün ağırlıklı olarak birden fazla çekirdeğe sahip işlemcileri kullanıyoruz. 
@@ -61387,7 +61640,7 @@ chmod $mode $module
     ilerletilmesi görevini yapmaktadır. Bugünki Linux sistemlerinde söz konusu olan bu timer'ların hepsi 1 milisaniye ya da 10 milisaniye 
     periyoda kurulmuş durumdadır. Yani böylece her 1 milisaniye ya da 10 milisaniyede araya timer kesmesi gelip sistem zamanını güncellemktedir. 
     İşte global timer'ın (IRQ0) her periyotta oluşturduğu kesmeler "jiffies" isimli kernel içerisindeki global bir değişkeni aryırmaktadır.
-    Dolayısıyla bu jiffies değişkeni iki farklı zamanda okunduğunda geçen gerçek zaman timer periyodu da biiniyorsa elde edilebilmektedir. 
+    Dolayısıyla bu jiffies değişkeni iki farklı zamanda okunduğunda geçen gerçek zaman timer periyodu da biiniyorsa elde edilebilmektedir.
 
     Timer periyodu Linux kernel içerisindeki HZ isimli sembolik sabitle bildirilmiştir. Ancak bu HZ sembolik sabiti bu timer değeri için nihai
     belirlemeyi içermez, default durumu belirtir. Timer periyodunun ne olacağı aslında boot işlemi sırasında kernel konfigürasyonlarına da bakılarak 
@@ -61395,7 +61648,7 @@ chmod $mode $module
 
     İşte Global timer her bir kesme oluşturduğunda işletim sisteminin kesme kodu (interrupt handler) devereye girip "jiffies" isimli global değişkeni
     1 artırmaktadır. Bu jiffies değişkeni unsigned long türdendir. Bildindiği gibi unsigned long türü 32 bit Linux sistemlerinde 32 bit 64 bit Linux sistemlerinde 
-    64 bittir. 32 bit Linux sistemlerinde ayrıca jiffies_64 isimli bir değişken daha vardır. bu değişken hem 32 bit sistemde hem de 64 bit sistemde 64 bitliktir. 
+    64 bittir. 32 bit Linux sistemlerinde ayrıca jiffies_64 isimli bir değişken daha vardır. bu değişken hem 32 bit sistemde hem de 64 bit sistemde 64 bitliktir.
 
     Aşağıdaki örnekte aygıt sürücü proc dosya sisteminde bir dosya yaratmış ve o andaki jiffies değerini bu dosyaya yazdırmıştır. Yani biz proc içerisindeki 
     generic-char-driver isimli dosyayı okuduğumuzda aslında aygıt sürücünün en son yazmış olduğu jiffies değerini görmüş oluruz.
