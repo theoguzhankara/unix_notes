@@ -1,8 +1,8 @@
 /*--------------------------------------------------------------------------------------------------------------------------
 
-                                            C ve Sistem Programcıları Derneği
+                                                C ve Sistem Programcıları Derneği
 
-                            UNIX/Linux Sistem Programlama Kursunda Yapılan Örnekler ve Özet Notlar
+                                UNIX/Linux Sistem Programlama Kursunda Yapılan Örnekler ve Özet Notlar
 
                                                 Eğitmen: Kaan ASLAN
 
@@ -10,7 +10,7 @@
 
                             (Notları okurken editörünüzün "Line Wrapping" özelliğini pasif hale getiriniz.)
 
-                                                    Son Güncelleme: 09/06/2024 - Pazar
+                                                    Son Güncelleme: 05/07/2024 - Cuma
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -6529,7 +6529,7 @@ void exit_sys(const char *msg)
     if (dup2(2, 1) == -1)
         exit_sys("dup2");
 
-    Aşağdaki örnekte bu işlem uygulanmıştır. Ancak burada bir fflush çağırması da yapılmıştır. Bunun nedeni izleyen konularda
+    Aşağıdaki örnekte bu işlem uygulanmıştır. Ancak burada bir fflush çağırması da yapılmıştır. Bunun nedeni izleyen konularda
     anlaşılabilecektir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -57263,13 +57263,13 @@ void exit_sys(const char *msg)
     variable)" denilen senkronizasyon nesnelerindeki yöntemin aynısı olmalıdır. Okuyan thread kuyruktaki byte sayısını belirten 
     g_count == 0 olduğu sürece bekleme kuyruğunda beklemelidir. Tabii bizim kuyruk üzerinde işlem yaptığımız kısımları senkronize
     etmemiz gerekir. Bunu da bir binary semaphore nesnesi ya da mutex nesnesi yapabiliriz. Semaphore nesnesini ve bekleme kuyruğunu
-    aşağdaki gibi yaratabiliriz:
+    aşağıdaki gibi yaratabiliriz:
 
     static wait_queue_head_t g_wq;
     DEFINE_SEMAPHORE(g_sem);
 
     Okuyan taraf önce semaphore kilidini eline almalı ancak eğer uykuya dalacaksa onu serbest bırakıp uykuya dalmalıdır. Kuyruk 
-    üzerinde aynı anda işlemler yapılabiceği için tüm işlemlerin kritik kod içerisinde yapılması uygun olur. O halde read işleminin 
+    üzerinde aynı anda işlemler yapılabileceği için tüm işlemlerin kritik kod içerisinde yapılması uygun olur. O halde read işleminin 
     tipik çatısı şöyle olmalıdır:
 
     ...
@@ -61398,7 +61398,7 @@ rm -f $module
     void proc_remove(struct proc_dir_entry *de);
 
     Bu fonksiyon DA İNE parametre olarak proc_create ya da proc_mkdir fonksiyonun verdiği geri dönüş değerini alır. proc 
-    dosya sisteminin kök dizininde silme yapılmak isteniyorsa aşağdaki her iki çağrım eşdeğerdir:
+    dosya sisteminin kök dizininde silme yapılmak isteniyorsa aşağıdaki her iki çağrım eşdeğerdir:
 
     remove_proc_entry("file_name", NULL);
     proc_remove("file_name");
@@ -61638,8 +61638,8 @@ rm -f $module
     kendi timer devresiyle "context switch" yapmakta ve proses istatistiklerini güncellemektedir. Fakat bunların dışında ayrıca bir de
     eski sistemlerde zaten var olan IRQ0 harttına bağlı global bir timer bulunmaktadır. Bu global timer "context switch" değil sistem zamanının 
     ilerletilmesi görevini yapmaktadır. Bugünki Linux sistemlerinde söz konusu olan bu timer'ların hepsi 1 milisaniye ya da 10 milisaniye 
-    periyoda kurulmuş durumdadır. Yani böylece her 1 milisaniye ya da 10 milisaniyede araya timer kesmesi gelip sistem zamanını güncellemktedir. 
-    İşte global timer'ın (IRQ0) her periyotta oluşturduğu kesmeler "jiffies" isimli kernel içerisindeki global bir değişkeni aryırmaktadır.
+    periyoda kurulmuş durumdadır. Yani böylece her 1 milisaniye ya da 10 milisaniyede araya timer kesmesi gelip sistem zamanını güncellemektedir. 
+    İşte global timer'ın (IRQ0) her periyotta oluşturduğu kesmeler "jiffies" isimli kernel içerisindeki global bir değişkeni artırmaktadır.
     Dolayısıyla bu jiffies değişkeni iki farklı zamanda okunduğunda geçen gerçek zaman timer periyodu da biiniyorsa elde edilebilmektedir.
 
     Timer periyodu Linux kernel içerisindeki HZ isimli sembolik sabitle bildirilmiştir. Ancak bu HZ sembolik sabiti bu timer değeri için nihai
@@ -61648,7 +61648,7 @@ rm -f $module
 
     İşte Global timer her bir kesme oluşturduğunda işletim sisteminin kesme kodu (interrupt handler) devereye girip "jiffies" isimli global değişkeni
     1 artırmaktadır. Bu jiffies değişkeni unsigned long türdendir. Bildindiği gibi unsigned long türü 32 bit Linux sistemlerinde 32 bit 64 bit Linux sistemlerinde 
-    64 bittir. 32 bit Linux sistemlerinde ayrıca jiffies_64 isimli bir değişken daha vardır. bu değişken hem 32 bit sistemde hem de 64 bit sistemde 64 bitliktir.
+    64 bittir. 32 bit Linux sistemlerinde ayrıca jiffies_64 isimli bir değişken daha vardır. Bu değişken hem 32 bit sistemde hem de 64 bit sistemde 64 bitliktir.
 
     Aşağıdaki örnekte aygıt sürücü proc dosya sisteminde bir dosya yaratmış ve o andaki jiffies değerini bu dosyaya yazdırmıştır. Yani biz proc içerisindeki 
     generic-char-driver isimli dosyayı okuduğumuzda aslında aygıt sürücünün en son yazmış olduğu jiffies değerini görmüş oluruz.
@@ -61773,8 +61773,8 @@ chmod $mode $module
     ...
     net_jiffies = (long) next_jiffies - (long) prev_jiffies;
 
-    Kernel içerisinde iki jiffies değeri alarak bool bir değere geri dönen dört makro bulunmaktadır. Bunlar 32 bit sistemlerde taşma (overflow) durumunu da
-    değerlerndirmektedir:
+    Kernel içerisinde iki jiffies değeri alarak bool bir değere geri dönen dört makro bulunmaktadır. Bunlar 32 bit sistemlerde 
+    taşma (overflow) durumunu da değerlerndirmektedir:
 
     time_after(jiffy1, jiffy2)
     time_before(jiffy1, jiffy2)
