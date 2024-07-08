@@ -47,60 +47,59 @@ int main(void)
     Argümansız seçenekler "-" karakterine yapışık tek bir harften oluşmaktadır. Harflerde büyük harf - küçük harf duyarlılığı 
     (case sensitivity) dikkate alınmaktadır. Örneğin:
 
-    ls -l -i /usr/include
+    $ ls -l -i /usr/include
 
     Burada -l ve -i argümansız seçeneklerdir. /usr/include argümanının bu seçeneklerle hiçbir ilgisi yoktur. Argümansız seçenekler 
     tek bir karakterden oluşturulduğu için birleştirilebilmektedir. Örneğin:
 
-    ls -li
+    $ ls -li
 
     Buradaki -li aslında -l -i ile tamamen aynı anlamdadır. Genel olarak GNU stilinde seçenekler arasındaki sıranın bir önemi yoktur. 
     Yani örneğin:
 
-    ls -l -i
+    $ ls -l -i
 
     ile
 
-    ls -i -l
+    $ ls -i -l
 
     arasında bir farklılık yoktur.
 
     Argümanlı seçeneklerde bir seçeneğin yanında o seçenekle ilişkili bir argüman da bulunur. Örneğin:
 
-    gcc -o sample sample.c
+    $ gcc -o sample sample.c
 
     Burada -o seçeneği seçeneği tek başına kullanılmaz. Hedef dosyanın ismi seçeneğin argümanını oluşturmaktadır. O halde buradaki 
     -o seçeneği tipik olarak argümanlı seçeneğe bir örnektir. Argüman seçeneklerin birleştirilmesi tavsiye edilmez. Ancak birleştirme 
     yapılabilmektedir. Örneğin:
 
-    gcc -co sample.o sample.c
+    $ gcc -co sample.o sample.c
 
     Bu yazım biçimini pek çok program kabul etse de biz tavsiye etmiyoruz. Buradaki argümanların aşağıdaki gibi belirtilmesi daha 
     uygundur:
 
-    gcc -c -o sample.o sample.c
+    $ gcc -c -o sample.o sample.c
 
     Programlar, argümanlı seçeneklerde seçeneğin argümanı hiç boşluk karakterleriyle ayrılmasa bile bunu kabul edebilmektedir. 
     Örneğin:
 
-    gcc -osample sample.c
+    $ gcc -osample sample.c
 
     Burada -o argümanlı seçenek olduğu için onu başka bir seçenek izleyemeyeceğinden dolayı "sample" -o seçeneğinin argümanı olarak 
     ele alınmaktadır.
 
     Seçeneklerle ilgisi olmayan argümanlara "seçeneksiz argüman" denilmektedir. Örneğin:
 
-    gcc -o sample sample.c
+    $ gcc -o sample sample.c
 
     Burada "sample.c" argümanı herhangi bir seçenekle ilgili değildir. Örneğin:
 
-    cp x.txt y.txt
+    $ cp x.txt y.txt
 
     Buradaki "x.txt" ve "y.txt" argümanları da seçeneklerle ilgili değildir. Seçeneksiz argümanların sonda bulunması gerekmez. 
     Örneğin:
 
-    gcc sample.c -o sample
-
+    $ gcc sample.c -o sample
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*---------------------------------------------------------------------------------------------------------------------------
@@ -3215,12 +3214,12 @@ char *get_ls(struct stat *finfo, const char *name)
     Bunlar gerçek anlamda birer dosya değildir. Adeta bir "pointer" dosyadır. İşletim sistemleri sembolik bağlantı dosyaları için diskte 
     yalnızca bir i-node elemanı tutmaktadır. Sembolik bağlantı dosyaları komut satırında ln -s komutuyla yaratılabilirler. Örneğin:
 
-    ln -s x.dat y.dat
+    $ ln -s x.dat y.dat
 
     Burada "x.dat" dosyanının "y.dat" isimli bir sembolik bağlantı dosyası oluşturulmuştur. ls -l komutunda sembolik bağlantı dosyaları ok işaretiyle 
     gösterilmektedir. Örneğin:
 
-    kaan@kaan-virtual-machine:~/Study/Unix-Linux-SysProg$ ls -l x.dat y.dat
+    $ ls -l x.dat y.dat
 
     -rwxr-xr-x 1 kaan study 0 Kas 27 13:07 x.dat
     lrwxrwxrwx 1 kaan study 5 Ara 10 10:11 y.dat -> x.dat
@@ -3228,7 +3227,7 @@ char *get_ls(struct stat *finfo, const char *name)
     Sembolik bağlantı dosyaları "l" dosya türü ile gösterilmektedir. Bir sembolik bağlantı dosyası başka bir sembolik bağlantı dosyasını gösterebilir. 
     Örneğin:
 
-    kaan@kaan-virtual-machine:~/Study/Unix-Linux-SysProg$ ls -l x.dat y.dat z.dat
+    $ ls -l x.dat y.dat z.dat
     -rwxr-xr-x 1 kaan study 0 Kas 27 13:07 x.dat
     lrwxrwxrwx 1 kaan study 5 Ara 10 10:11 y.dat -> x.dat
     lrwxrwxrwx 1 kaan study 5 Ara 10 10:48 z.dat -> y.dat
@@ -3259,7 +3258,7 @@ char *get_ls(struct stat *finfo, const char *name)
     stat fonksiyonun bu bağlantının gösterdiği dosyanın bilgisini alması ancak lstat fonksiyonun sembolik bağlantı dosyasının kendi bilgisini almasıdır. 
     Diğer dosyalar için bu fonksiyon arasında bir farklılık yoktur. Örneğin:
 
-    parallels@ubuntu-linux-20-04-desktop:~/Study/Unix-Linux-SysProg$ ls -l sample.c x
+    $ ls -l sample.c x
     -rw-rw-r-- 1 parallels parallels 1748 Dec  4 13:46 sample.c
     lrwxrwxrwx 1 parallels parallels    8 Dec  4 13:47 x -> sample.c
 
@@ -3341,7 +3340,7 @@ char *get_ls(struct stat *finfo, const char *name)
     Bir dosyanın stat bilgilerini görüntülemek için stat isimli kabuk komutu da bulundurulmuştur. Tabii bu komut aslında 
     stat ve lstat POSIX fonksiyonlarını çağırarak elde ettikleri bilgileri yazdırmaktadır. Örneğin:
 
-    kaan@kaan-virtual-machine:~/Study/Unix-Linux-SysProg$ stat sample.c
+    $ stat sample.c
     File: sample.c
     Size: 329       	Blocks: 8          IO Block: 4096   normal dosya
     Device: 805h/2053d	Inode: 1207667     Links: 2
@@ -3440,9 +3439,9 @@ int main(int argc, char *argv[])
 
     Bir dosyanın hard link'ini oluşturmak için ln kabuk komutu kullanılmaktadır. Örneğin:
 
-    ln sample.c mample.c
+    $ ln sample.c mample.c
 
-    kaan@kaan-virtual-machine:~/Study/Unix-Linux-SysProg$ ls -li sample.c mample.c
+    $ ls -li sample.c mample.c
     1207667 -rw-r--r-- 2 kaan study 329 Ara 10 10:59 mample.c
     1207667 -rw-r--r-- 2 kaan study 329 Ara 10 10:59 sample.c
 
@@ -3718,9 +3717,9 @@ void exit_sys(const char *msg)
     Dosyanın kullanıcı ve grup id'lerini değiştirebilmek için chown isimli bir kabuk komutu da bulundurulmuştur. Komut aşağıdaki biçimlerde 
     kullanılmaktadır:
 
-    sudo chwon kaan:study test.txt
-    sudo chown kaan test.txt
-    sudo chown :study test.txt
+    $ sudo chwon kaan:study test.txt
+    $ sudo chown kaan test.txt
+    $ sudo chown :study test.txt
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -6679,7 +6678,7 @@ void exit_sys(const char *msg)
     IO yönlendirmesi kabuk üzerinden de yapılabilmektedir. Kabukta ">" sembolü 1 numaralı betimleyicinin yönlendirileceği 
     anlamına gelmektedir. Örneğin:
 
-    ./sample > test.txt
+    $ ./sample > test.txt
 
     Bu durumda kabuk önce ">" sembolünün sağındaki dosyayı O_WRONLY|O_TRUNC modunda açar. Sonra ./sample programını çalıştırarak 
     bu prosesin 1 numaralı betimleyicisini dup2 fonksiyonu ile bu dosyaya yönlendirir. Böylece ./sample, sample programının 
@@ -6688,19 +6687,18 @@ void exit_sys(const char *msg)
     ls gibi, cat gibi kabuk komutlarının da aslında birer program olduğuna bunların da 1 numaralı betimleyiciyi kullanarak yazdırma 
     yaptığına dikkat ediniz. Örneğimn biz kabuk üzerinde şu komutu uygulayabiliriz:
 
-    ls -l > test.txt
+    $ ls -l > test.txt
 
     Eğer kabukta ">" yerine ">>" sembolü kullanılırsa bu durumda ">>" sembolünün sağındaki dosya O_CREAT|O_WRONLY|O_APPEND modunda 
     açılmaktadır. Yani dosya varsa bu durumda olan dosyanın sonuna ekleme yapılacaktır. Örneğin:
 
-    ls -l >> test.txt
-
+    $ ls -l >> test.txt
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Kabuk üzerinde "<" sembolü de 0 numaralı betimleyiciyi yönlendirmektedir. Örneğin:
 
-    ./sample < test.txt
+    $ ./sample < test.txt
 
     Burada kabuk "test.txt" dosyasını O_RDONLY modda açar. Sonra ./sample programını çalıştırır. Prosesin 0 numaralı betimleyicisini
     "test.txt" dosyasına dup2 fonksiyonuyla yönlendirir. Böylece program sanki klavyeden okuduğunu sanırken aslında dosyadan
@@ -6714,8 +6712,7 @@ void exit_sys(const char *msg)
 
     Programı kabuktan aşağıdaki gibi çalıştırıp sonucu inceleyiniz:
 
-    ./sample < test.txt
-
+    $ ./sample < test.txt
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -7078,7 +7075,7 @@ int main(void)
     O halde aslında bir proses yaşamının önemli bir kısmını user mode'da geçrirken bir kısmını da kernel mode'da geçirebilmektedir. 
     Örneğin "time" isimli kabuk komutuyla biz prosesin ne kadar zamanı kernel mode'da ne kadar zamanı user mode'da geçirdiğini görebiliriz:
 
-    kaan@kaan-virtual-machine:~/Study/Unix-Linux-SysProg$ time ./sample
+    $ time ./sample
 
     real	0m0,189s
     user	0m0,185s
@@ -8868,12 +8865,11 @@ void exit_sys(const char *msg)
     uygulamadan yoluna devam etmesini sağlamaktır. Zombie prosesler "ps -l" komutunda "defunct" olarak gösterilmektedir. Bunların 
     "proses durumları da (process state)" "Z" harfi ile belirtilmektedir. Örneğin:
 
-    kaan@kaan-virtual-machine:~/Study/Unix-Linux-SysProg$ ps -la
+    $ ps -la
     F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
     0 S  1000   10612    1868  0  80   0 -   622 hrtime pts/1    00:00:00 sample
     1 Z  1000   10613   10612  0  80   0 -     0 -      pts/1    00:00:00 sample <defunct>
     4 R  1000   10621    1618  0  80   0 -  3540 -      pts/0    00:00:00 ps
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -9796,7 +9792,7 @@ void exit_sys(const char *msg)
     Örneğin biz "sample" isimli bir program yazalım. Bu program da komut satırı argümanlarıyla aldığı programı çalıştırsın. 
     Yani "sample" programı şöyle çalıştırılsın:
 
-    ./sample /bin/ls -l
+    $ ./sample /bin/ls -l
 
     Eğer böyle bir programı execl ile yazamaya çalışırsak bunu pratik bir biçimde başaramayız. Çünkü çalıştıracağımız programın 
     kaç komut satırı argümanı ile çalıştırılacağını baştan bilmemekteyiz. Aşağıda böyle bir programa örnek verilmiştir. Programı 
@@ -9805,7 +9801,6 @@ void exit_sys(const char *msg)
     $ ./sample /bin/ls -l
     $ ./sample /bin/cp sample.c x.c
     $ ./sample mample ali veli selami
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* sample.c */
@@ -10967,7 +10962,7 @@ for i in range(10):
     kullanılması gerekir. O halde make için shebang oluşturulurken -f seçeneğinin shebang satırında isteğe bağlı argüman olarak 
     belirtilmesi gerekir. Örneğin:
 
-	#! /bin/make -f
+    #! /bin/make -f
 
     sample: sample.o
         gcc -o sample sample.o
@@ -11047,7 +11042,7 @@ for i in range(10):
     Pek çok sistemde kabuk programları "interaktif olmayan (noninteractive)" bir modda çalıştırılabilmektedir. Örneğin UNIX/Linux 
     kabuk programları "-c" seçeneği ile çalıştırılırsa yalnızca bir komutu çalıştırıp sonlanmaktadır. Örneğin:
 
-    bash -c "ls -l; cat sample.c"
+    $ bash -c "ls -l; cat sample.c"
 
     Benzer biçimde Windows sistemlerinde de "cmd.exe" kabuk programı /C seçeneği ile benzer biçimde çalıştırılabilmektedir. 
 
@@ -11058,7 +11053,7 @@ for i in range(10):
      fonksiyonuyla elde edilen değerine (status) geri dönmektedir. Tabii kabuk programları da interaktif olmayan modda çalıştırılan 
     komutun waitpid fonksiyonu ile elde edilen (status) değere geri dönerler. Örneğin:
 
-    system("ls -l");
+    $ system("ls -l");
 
     Burada system fork/exec ile "/bin/sh" programını -c seçeneği ile çalıştırmaktadır. Tabii kabuk programı da "ls" programını 
     fork/exec ile çalıştıracaktır. (Bazen kabuk programları interaktif modda eğer tek bir komut işletiliyorsa boşuna fork yapmayabilir).
@@ -11078,7 +11073,7 @@ for i in range(10):
     }
 
     Biz kabuk programını system fonksiyonu ile çalıştırırken komutlar arasına ";" koyarak birden fazla komutun çalıştırılmasını 
-    sağlayabiliriz.  Genel olarak kabuk bu durumda son komutun exit kodunu bize vermektedir. 
+    sağlayabiliriz. Genel olarak kabuk bu durumda son komutun exit kodunu bize vermektedir. 
 
     Aslında programcılar genellikle system fonksiyonu için yalnızca -1 kontrolünü yapmaktadır. Yani çalıştırdıkları komutun 
     başarısını kontrol etmemektedir. Örneğin:
@@ -11322,30 +11317,30 @@ void exit_sys(const char *msg)
     Bu mample programı prosesin gerçek ve etkin kullanıcı ve grup id'lerini ekrana isim olarak yazdırmaktadır. Bu deneyi önce
     mample programının set-user-id bayrağı set edilmeden ve set edildikten sonra yineleyiniz. Aşağıda yapılanlar özetlenmiştir:
 
-    gcc -o sample sample.c
-    gcc -o mample mample.c
-    ls -l mample
+    $ gcc -o sample sample.c
+    $ gcc -o mample mample.c
+    $ ls -l mample
     -rwxr-xr-x 1 kaan study 17088 Şub 19 13:42 mample
-    sudo chown root:root mample
-    ls -l mample
+    $ sudo chown root:root mample
+    $ ls -l mample
     -rwxr-xr-x 1 root root 17088 Şub 19 13:42 mample
-    ./sample
+    $ ./sample
     Real user id: kaan
     Effective user id: kaan
     Real group id: study
     Effective group id: study
-    sudo chmod u+s mample
-    ls -l mample
+    $ sudo chmod u+s mample
+    $ ls -l mample
     -rwsr-xr-x 1 root root 17088 Şub 19 13:42 mample
-    ./sample
+    $ ./sample
     Real user id: kaan
     Effective user id: root
     Real group id: study
     Effective group id: study
-    sudo chmod g+s mample
-    ls -l mample
+    $ sudo chmod g+s mample
+    $ ls -l mample
     -rwsr-sr-x 1 root root 17088 Şub 19 13:42 mample
-    ./sample
+    $ ./sample
     Real user id: kaan
     Effective user id: root
     Real group id: study
@@ -12150,18 +12145,18 @@ void exit_sys(const char *msg)
     ya da Linux sistemlerinde CAP_SETGID yeterliliğine sahip olması gerekir.)
 
     Aşağıdaki program set-user-id bayrağı set edilmiş sahibi root olan bir program dosyasına dönüştürülmüştür. Program aşağıdaki
-     gibi derlenmiştir:
+    gibi derlenmiştir:
 
-    gcc -o sample sample.c
+    $ gcc -o sample sample.c
 
     Sonra program dosyasının sahibi root olarak değiştirilmiştir. Ondan sonra da program dosyasının set-user-id bayrağı set 
     edilmiştir:
 
-    sudo chown root sample
-    ls -l sample
+    $ sudo chown root sample
+    $ ls -l sample
     -rwxr-xr-x 1 root study 17400 Şub 26 12:18 sample
-    sudo chmod u+s sample
-    ls -l sample
+    $ sudo chmod u+s sample
+    $ ls -l sample
     -rwsr-xr-x 1 root study 17400 Şub 26 12:18 sample
 
     Burada önce dosyanın modunun değiştirildiğine daha sonra set-user-id bayrağının set edildiğine dikkat ediniz. Çünkü
@@ -14730,13 +14725,13 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     mypipe bir isimli boru dosyası olsun. Aşağıdaki gibi bir işlem yapsak ne olur?
 
-    ls > mypipe
+    $ ls > mypipe
 
     Bu durumda kabuk programı IO yönlendirmesi yapmak için "mypipe" dosyasını "write" modda open fonksiyonu ile açmak isteyecektir. 
     Ancak "mypipe" isimli boru dosyası olduğu için açım sırasında bloke oluşacaktır. Pekiyi bu blokeden nasıl kurtulunabilir? 
     Tabii başka bir terminalden biz boruyu bu kez "read" modda açarak. Örneğin:
 
-    cat < mypipe
+    $ cat < mypipe
 
     Burada yine kabuk programı "mypipe" dosyasını yönlendirme için "read" modda açacaktır. Bu durumda diğer kabuk prosesi 
     blokeden kurtulacaktır. 
@@ -15194,7 +15189,7 @@ void exit_sys(const char *msg)
     default olarak tüm IPC nesnelerini görüntülemektedir. Ancak -q komut satırı argümanıyla yalnızca mesaj kuyrukları,
     -m komutuyla yalnızca paylaşılan bellek alanları ve -s komutuyla da yalnızca semaphore nesneleri görüntülenebilir. Örneğin:
 
-    kaan@kaan-virtual-machine:~$ ipcs -q
+    $ ipcs -q
 
     ----- İleti Kuyrukları -----
     anahtar    iltkiml    sahibi     izinler    kull-bayt    ileti-sayısı
@@ -16419,8 +16414,7 @@ void exit_sys(const char *msg)
     içerisinde değil librt kütüphanesinin içerisinde bulunmaktadır. Bu nedenle POSIX IPC nesnelerini kullanan programları derlerken -lrt seçeneğinin
     kullanılması gerekir. Örneğin:
 
-    gcc -o sample sample.c -lrt
-
+    $ gcc -o sample sample.c -lrt
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -16879,11 +16873,11 @@ void exit_sys(const char *msg)
     Linux dağıtımları genellikle açılış sırasında bu dosya sistemini otomatik mount etmektedir. Ancak sistem yöneticisi isterse 
     /dev/mqueue dizinini unmount edebilir. Örneğin:
 
-    sudo unmount /dev/mqueue
+    $ sudo unmount /dev/mqueue
 
     Ya da sistem yöneticisi isterse bu dosya sistemini başka bir yere de mount komutuyla mount edebilir. Örneğin:
 
-    sudo mount -t mqueue somename posix-mqueue
+    $ sudo mount -t mqueue somename posix-mqueue
 
     Burada "somename" mount noktalarını görüntülerken kullanılacak bir isimdir. Mesaj kuyrukları bu biçimde mount edilirken 
     dizinin "sticky" biti set edilmektedir. Böylece bu dizinin birisi sahibi olsa da ancak oradaki dosyaları silebilmek için 
@@ -16918,7 +16912,7 @@ void exit_sys(const char *msg)
     Uygun önceliğe sahip prosesler yukarıdaki limitlerden etkilenmezler. Ayrıca, buradaki değerler proc dosya sisteminden bu 
     dosyalara yazma yapılarak değiştirilebilmektedir. Örneğin:
 
-    sudo sh -c "echo 20 > /proc/sys/fs/mqueue/msg_max"
+    $ sudo sh -c "echo 20 > /proc/sys/fs/mqueue/msg_max"
 
     Buradaki değerlerin ayrı bir tavan limiti de vardır. Örneğin msg_max değerinin tavan limiti 3.5 ve sonrasındaki 
     çekirdeklerde 65536'dır. Yine örneğin msgsize_max değerinin de tavan limiti 3.5 ve sonrasındaki çekirdeklerde 16,777,216 b
@@ -17103,7 +17097,7 @@ void exit_sys(const char *msg)
     Yine sistemdeki o anda yaratılmış olan paylaşılan bellek alanları "ipcs" komutuyla ya da "ipcs -m" komutuyla görüntülenebilir. 
     Örneğin:
 
-    kaan@kaan-virtual-machine:~/Study/UnixLinux-SysProg$ ipcs -m
+    $ ipcs -m
 
     ----- Paylaşımlı Bellek Bölütleri -----
     anahtar    shmid      sahibi     izinler    bayt       ekSayısı durum
@@ -17121,7 +17115,7 @@ void exit_sys(const char *msg)
     Aslında daha önceden de belirttiğimiz gibi "ipcs" komutu bu bilgileri "/proc/sysvipc" dizinindeki üç dosyadan elde etmektedir. 
     Klasik Sistem 5 paylaşılan bellek alanları için "/proc/sysvipc/shm" dosyası kullanılmaktadır. Örneğin:
 
-    kaan@kaan-virtual-machine:~/Study/UnixLinux-SysProg$ cat /proc/sysvipc/shm
+    $ cat /proc/sysvipc/shm
 
     bu biçimde benzer bilgileri elde edebiliriz.
 
@@ -17282,7 +17276,7 @@ void exit_sys(const char *msg)
     Paylaşılan bellek alanları komut satırında "ipcrm" komutuyla da silinebilmektedir. Komutta -M seçeneği anahtar ile silmek için -m 
     seçeneği id ile silmek için kullanılmaktadır. Örneğin:
 
-    ipcrm -m 131135
+    $ ipcrm -m 131135
 
     Burada 131135 id'sine sahip paylaşılan bellek alanı silinmektedir. Tabii bize ait olmayan paylaşılan bellek alanlarını silmek için 
     sudo uygulamak gerekir. 
@@ -18849,8 +18843,7 @@ void exit_sys(const char *msg)
 
     - Thread kullanan programları derlerken link aşaması için "-lpthread" komut satırı argümanını kullanmayı unutmayınız. Örneğin:
 
-    gcc -o sample sample.c -lpthread
-
+    $ gcc -o sample sample.c -lpthread
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -21706,9 +21699,8 @@ namespace CSD
 
     Programları aşağıdaki gibi derleyip farklı terminallerden çalıştırabilirsiniz:
 
-    gcc -o prog1 prog1.c -lrt -lpthread
-    gcc -o prog2 prog2.c -lrt -lpthread
-
+    $ gcc -o prog1 prog1.c -lrt -lpthread
+    $ gcc -o prog2 prog2.c -lrt -lpthread
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* sharing.h */
@@ -22882,9 +22874,8 @@ void exit_sys_errno(const char *msg, int eno)
     değişkenleri, mutex nesnesi ve kuyruk bilgileri paylaşılan bellek alanında oluşturulmuştur. Önce "producer" programı
     çalıştırılmalıdır. Tüm bu nesneleri producer yaratıp kendisi silmektedir. Derleme işlemlerini şöyle yapabilirsiniz:
 
-    gcc -Wall -o producer producer.c -lpthread -lrt
-    gcc -Wall -o consumer consumer.c -lpthread -lrt
-
+    $ gcc -Wall -o producer producer.c -lpthread -lrt
+    $ gcc -Wall -o consumer consumer.c -lpthread -lrt
 ---------------------------------------------------------------------------------------------------------------------------*/
 /* sharing.h */
 
@@ -23696,8 +23687,7 @@ void exit_sys_errno(const char *msg, int eno)
 
     Programın testi için derlemeyi şöyle yapabilirsiniz:
 
-    gcc -o sample sample.c syncqueue.c -lpthread
-
+    $ gcc -o sample sample.c syncqueue.c -lpthread
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* syncqueue.h */
@@ -23916,9 +23906,8 @@ void exit_sys_errno(const char *msg, int eno)
     Aşağıda iki proses arasında isimsiz semaphore nesneleri ile üretici tüketici problemi uygulanmıştır. Burada önce "producer"
     programını çalıştırınız. Derleme işlemlerini aşağıdaki gibi yapabilirsiniz:
 
-    gcc -o producer producer.c
-    gcc -o consumer consumer.c
-
+    $ gcc -o producer producer.c
+    $ gcc -o consumer consumer.c
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* sharing.h */
@@ -24187,8 +24176,8 @@ void exit_sys_errno(const char *msg, int eno)
     Aşağıda prosesler arasında üretici-tüketici problemi isimli semaphore nesneleri ile çözülmüştür. Derleme işlemleri aşağıdaki 
     gibi yapılabilir:
 
-    gcc -o producer producer.c
-    gcc -o consumer consumer.c
+    $ gcc -o producer producer.c
+    $ gcc -o consumer consumer.c
 
     Test işleminde önce "producer" programının çalıştırılması gerekmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -26392,7 +26381,7 @@ void *thread_proc4(void *param)
     gereksinim duyulmadan tanınan ve ne yaptığı bilinen özel fonksiyonlara "built-in" ya da "intrinsic" fonksiyonlar denilmektedir. 
     Tabii bu kavramlar C standartlarında yoktur. Eklenti (extension) biçiminde C derleyicilerinde bulunmaktadır. Bazı built-in 
     ya da intrinsic fonksiyonlar makro gibi derleyici tarafından özel makine komutları ile açılmaktadır. Bazı built-in ya da 
-    intrinsic  fonksiyonlar ise makro gibi açılmamalarına karşın derleyici bunların ne yaptığını bildiği için o işlemlerde 
+    intrinsic fonksiyonlar ise makro gibi açılmamalarına karşın derleyici bunların ne yaptığını bildiği için o işlemlerde 
     optimizasyon uygulayabilmektedir. Örneğin:
 
     for (int i = 0; i < strlen(s); ++i) {
@@ -27541,16 +27530,16 @@ void exit_sys(const char *msg)
     Aşağıdaki örnekte komut satırından alınan proses id'ye ilişkin (argv[1]) prosesin nice değeri yine komut satırından alınan göreli 
     nice değeri (argv[2]) olarak değiştirilmektedir. Örneğin:
 
-    ./sample 0 -1
+    $ ./sample 0 -1
 
     Burada biz kendi prosesimizin değerini düşürerek önceliğini yükseltmeye çalıştık. Bu işlem başarısızlıkla sonuçlanacaktır. 
     Bunu yapabilmemiz için programı root önceliği ile çalıştırmamız gerekir. Örneğin:
 
-    sudo ./sample 0 -1
+    $ sudo ./sample 0 -1
 
     Tabii biz kendi prosesimizin nice değerini yükselterek önceliğini düşürebiliriz. Örneğin:
 
-    sudo ./sample 0 1
+    $ sudo ./sample 0 1
 
     Bu işlem başarıyla sonuçlanacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -27653,7 +27642,7 @@ void exit_sys(const char *msg)
     bir thread yarattık. Sonra da prosesin nice değerini değiştirdik. Prosesin nice değerini -1 yaptığımızda bundan yalnızca
     prosesin ana thread'inin etkilendiğini göreceksiniz. Programı bir terminalde aşağıdaki gibi çalıştırabilirsiniz:
 
-    $sudo ./sample 0 -1
+    $ sudo ./sample 0 -1
 
     Diğer bir terminalden prosesin thread'lerine aşağıdaki gibi bakabilirsiniz:
 
@@ -27760,11 +27749,11 @@ void exit_sys_errno(const char *msg, int eno)
     Aşağıdaki örnekte prosesin nice değeri, nice fonksiyonuyla iki kez üst üste değiştirilmiştir. Programı aşağıdaki gibi 
     çalıştırabilirsiniz:
 
-    $sudo ./sample
+    $ sudo ./sample
 
     Diğer bir terminalden prosesin durumuna baktığınızda aşağıdakine benzer bir rapor elde edeceksiniz:
 
-    $ps -t pts/1 -T -l
+    $ ps -t pts/1 -T -l
     F S   UID     PID    SPID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
     1 S     0    6516    6516    6515  0  80   0 -  4708 -      pts/1    00:00:00 sudo
     4 S     0    6517    6517    6516  0  76  -4 -  2742 -      pts/1    00:00:00 sample
@@ -27841,12 +27830,12 @@ void exit_sys_errno(const char *msg, int eno)
 
     Örneğin:
 
-    nice -1 ./sample
+    $ nice -1 ./sample
 
     Burada sample programı 1 nice değeri ile çalıştırılmaktadır. Burada "-" karakteri seçenek için kullanılan "-" karakteridir. 
     Örneğin aşağıdaki programı nice komutuyla şöyle çalıştıralım:
 
-    $nice -1 ./sample
+    $ nice -1 ./sample
 
     Burada başka bir terminale geçip duruma bakalım:
 
@@ -27862,11 +27851,11 @@ void exit_sys_errno(const char *msg, int eno)
 
     Şimdi de nice değerini düşürüp aynı denemeyi yapalım:
 
-    $sudo nice --1 ./sample
+    $ sudo nice --1 ./sample
 
     Diğer terminalden duruma bakalım:
 
-    $ps -t pts/1 -T -l
+    $ ps -t pts/1 -T -l
     F S   UID     PID    SPID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
     1 S     0    6777    6777    6776  0  80   0 -  4707 -      pts/1    00:00:00 sudo
     4 S     0    6778    6778    6777  0  79  -1 -  2742 -      pts/1    00:00:00 sample
@@ -27983,8 +27972,7 @@ void exit_sys_errno(const char *msg, int eno)
     tepesinde (<unistd.h> include işleminin yukarısına) _GNU_SOURCE makrosunu define etmelisiniz. Tabii bunun yerine gcc ve 
     clang derleyicilerinde -D seçeneğini de kullabilirsiniz. Örneğin:
 
-    gcc -D _GNU_SOURCE -o sample sample.c
-
+    $ gcc -D _GNU_SOURCE -o sample sample.c
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -28546,7 +28534,7 @@ void exit_sys(const char *msg)
     çalıştırmayı unutmayınız. Programı çalıştırdıktan sonra diğer bir terminalden durumu gözlediğimizde aşağıdaki gibi bir
     durum ortaya çıkmaktadır:
 
-    $ps -T --tty pts/2 -o pid,pri,policy,cmd,tid
+    $ ps -T --tty pts/2 -o pid,pri,policy,cmd,tid
     PID PRI POL CMD                             TID
     9251  19 TS  sudo ./sample                  9251
     9252  19 TS  ./sample                       9252
@@ -28632,12 +28620,11 @@ void exit_sys_errno(const char *msg, int eno)
     statik önceliği de 10 olacak biçimde pthread_setschedparam fonksiyonu ile değiştirilmiştir. Yine değişikliği başka bir 
     terminalden ps komutu ile görebilirsiniz:
 
-    $ps  -T --tty pts/2 -o pid,pri,policy,cmd,tid
+    $ ps  -T --tty pts/2 -o pid,pri,policy,cmd,tid
     PID PRI POL CMD                             TID
     9909  19 TS  sudo ./sample                  9909
     9910  19 TS  ./sample                       9910
     9910  50 FF  ./sample                       9911
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -29850,8 +29837,7 @@ void exit_sys_errno(const char *msg, int eno)
 
     Programın testi için derlemeyi şöyle yapabilirsiniz:
 
-    gcc -o sample sample.c rand.c -lpthread
-
+    $ gcc -o sample sample.c rand.c -lpthread
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* rand.h */
@@ -30275,8 +30261,7 @@ void exit_sys_errno(const char *msg, int eno)
     gcc ve clang derleyicilerinde C11 thread kütüphanesini kullanan programları derlerken -pthread seçeneğinin kullanılması
     gerekmektedir. (pthread kütüphanesi için -lpthread seçeneğini kullandığımızı anımsayınız.) Örneğin:
 
-    gcc -o sample sample.c -pthread
-
+    $ gcc -o sample sample.c -pthread
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -33484,7 +33469,7 @@ void exit_sys(const char *msg)
     "ulimit -c" ile yalnızca "core file size" bilgisi de görüntülenebilmektedir. Bu sınırın "unlimited" hale getirilmesi 
     şöyle yapılabilir:
 
-    ulimit -c unlimited
+    $ ulimit -c unlimited
 
     Core dosyasının üretildiği yer Linux sistemlerinde kullanılan bazı sistem paketlerine göre değişebilmektedir. Eskiden core 
     dosyaları prosesin çalışma dizininde yaratılıyordu. Daha sonra "systemd" paketi ile birlikte core dosyalarının yaratılması 
@@ -33509,19 +33494,19 @@ void exit_sys(const char *msg)
     Core dosyalarını kolay yüklemek için ayrıca "coredumpctl" isimli bir programdan da faydalanılabilir. Ancak bu program default olarak 
     kurulu durumda değildir. Bunun kurulabilmesi için aşağıdaki komut uygulanabilir:
 
-    sudo apt install systemd-coredump
+    $ sudo apt install systemd-coredump
 
     coredumpctl programı core dosyaları üzerinde işlem yapmayı kolaylaştıran bir programdır. Örneğin üretilmiş olan core dosyalarının listeleri
     şöyle alınabilir:
 
-    coredumpctl list
+    $ coredumpctl list
 
     Bu komutla tüm üretilmiş olan core dosyaları listelenecektir. En son üretilen dosya listenin sonunda olacaktır. Ancak ters sırada 
     görüntüleme için -r seçeneği kullanılabilmektedir. 
 
     Artık coredumptctl programı yüklendiğine göre ondan faydalanabiliriz. En son core dosyasını gdb ile yüklemek için şöyle yapılır:
 
-    coredumpctl gdb
+    $ coredumpctl gdb
 
     Bu komut ile her zaman son core dosyası yüklenmektedir. Spesifik bir core dosyasının yüklenmesi de sağlanabilir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -36201,7 +36186,7 @@ void exit_sys(const char *msg)
     ile değiştirilebilmektedir. Bunun için proc dosya sistemindeki /proc/sys/fs/nr_open dosyası kullanılmaktadır. Bu dosyadaki değeri 
     aşağıdaki gibi bir komutla değiştirebilirsiniz:
 
-    sudo sh -c "echo 20 > /proc/sys/fs/mqueue/msg_max"
+    $ sudo sh -c "echo 20 > /proc/sys/fs/mqueue/msg_max"
 
     Anımsanacağı gibi bu bilgi aynı zamanda sysconf fonksiyonundan da elde edilebilmektedir. 
 
@@ -36821,7 +36806,7 @@ void exit_sys(const char *msg)
     1) Dosyanın içinde bulunduğu dosya sisteminin -o mand ile mount edilmiş olması gerekir. Mevcut mount edilmiş olan bir dosya sisteminin 
     mount parametreleri aşağıdaki gibi değiştirilebilir:
 
-    sudo mount -o mand,remount <device> <mount point>
+    $ sudo mount -o mand,remount <device> <mount point>
 
     Hangi dosya sisteminin "mand" parametresi ile mount edileceğini tespit etmeniz gerekir. Bunun için df komutunu argümansız biçimde 
     kullanabilirsiniz. Örneğin:
@@ -36845,18 +36830,18 @@ void exit_sys(const char *msg)
 
     Aslında mount komutu bu bilgileri /proc/mounts dosyasından elde etmektedir. Örneğin:
 
-    sudo mount -o mand,remount /dev/sda5 /
+    $ sudo mount -o mand,remount /dev/sda5 /
 
     Sistem açıldığında ilgili dosya sisteminin "mand" parametresi ile mount edilebilmesi için bazı start-up dosyaları 
     kullanabilirsiniz. Örneğin /etc/fstab dosyası bu amaçla kullanılabilmektedir.
 
     2) İlgili dosyanın set-group-id bayrağı set edilip gruba x hakkı varsa reset edilmelidir. Bu işlem şöyle yapılmalıdır:
 
-    chmod g+s,g-x <dosya>
+    $ chmod g+s,g-x <dosya>
 
     Örneğin:
 
-    chmod g+s,g-x test.txt
+    $ chmod g+s,g-x test.txt
 
     Bir dosyanın bir proses tarafından zorunlu kilitlenmiş olması dosyanın silinmesini engellememektedir. Dosyanın truncate ve 
     ftruncate fonksiyonu ile genişletilmesi ya da budanması işleminde zorunlu kilitleme mekanizması devreye girmektedir. 
@@ -36879,11 +36864,11 @@ void exit_sys(const char *msg)
 
     Burada "r" okuma, "w" ise yazma yapma anlamına gelmektedir. Örneğin:
 
-    ./rw-test test.txt w 60 10
+    $ ./rw-test test.txt w 60 10
 
     Bu çalıştırmayla program write fonksiyonu ile "test.txt" dosyasına 60'ıncı offset'inden itibaren 10 byte yazacaktır. Örneğin:
 
-    ./rw-test test.txt r 0 64
+    $ ./rw-test test.txt r 0 64
 
     Burada da program "test.txt" dosyasının 0'ıncı offset'inden 64 byte okuyacaktır.
 
@@ -40608,7 +40593,7 @@ void exit_daemon(const char *msg)
 
     Sisteminizde hangi init paketinin kurulu olduğunu çeşitli biçimlerde anlayabilirsiniz. Örneğin:
 
-    sudo ls -l /proc/1/exe
+    $ sudo ls -l /proc/1/exe
 
     Buradan aşağıdakine benzer bir çıktı elde edilmiştir:
 
@@ -40616,11 +40601,11 @@ void exit_daemon(const char *msg)
 
     Hangi init paketinin kullanıldığının anlaşılması için diğer bir yöntem de şöyle olabilir:
 
-    cat /proc/1/status
+    $ cat /proc/1/status
 
     Bunun için ps komutundan da faydalanılabilir:
 
-    ps -p 1 (ya da "ps -p 1 -o comm=")
+    $ ps -p 1 (ya da "ps -p 1 -o comm=")
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -40750,28 +40735,28 @@ void exit_daemon(const char *msg)
 
     Buradaki <daemon_ismi> service unit dosyasının ismidir. Uzantı belirtilmeyebilir. Örneğin:
 
-    sudo systemctl enable mydaemon
+    $ sudo systemctl enable mydaemon
 
     Eğer daemon'ın o anda yüklenmesi isteniyorsa ayrıca komuta --now seçeneği de eklenmelidir. Örneğin:
 
-    sudo systemctl enable mydaemon --now
+    $ sudo systemctl enable mydaemon --now
 
     - Daemon'ımızın boot sırasında devreye sokulmasının kaldırılması için "systemctl disable" komutu kullanılmaktadır. 
     Komutun genel biçimi şöyledir:
 
-    sudo systemctl disable <daemon_ismi>
+    $ sudo systemctl disable <daemon_ismi>
 
     Örneğin:
 
-    sudo systemctl disable mydaemon
+    $ sudo systemctl disable mydaemon
 
     - Daemon'ı çalıştırmak için "systemctl start" komutu kullanılmaktadır. Komutun genel biçimi şöyledir:
 
-    sudo systemctl start <daemon_ismi>
+    $ sudo systemctl start <daemon_ismi>
 
     - Daemon'ı durdurmak için "systemctl stop" komutu kullanılmalıdır. Komutun genel biçimi şöyledir:
 
-    sudo systemctl stop <daemon_ismi>
+    $ sudo systemctl stop <daemon_ismi>
 
     Daemon durdurulurken ona default SIGTERM sinyali gönderilmektedir. systemd SIGTERM sinyalini gönderdikten sonra bir süre
     bekler, daemon hala sonlanmamışsa bu kez ona SIGKILL sinyalini gönderir. 
@@ -40782,7 +40767,7 @@ void exit_daemon(const char *msg)
 
     Örneğin:
 
-    systemctl status mydaemon
+    $ systemctl status mydaemon
 
     - Bazen daemon'ımızı "restart" etmek isteyebiliriz. restart önce durdurup sonra çalıştırmak anlamına gelmektedir. Komutun
     genel biçimi şöyledir:
@@ -40791,18 +40776,18 @@ void exit_daemon(const char *msg)
 
     Örneğin:
 
-    sudo systemctl restart mydaemon
+    $ sudo systemctl restart mydaemon
 
     - Daemon'ımızın boot zamanında devreye girip girmeyeceğini "systemctl status" komutunun yanı sıra "systemctl is-enabled"
     komutuyla da anlayabiliriz. Örneğin:
 
-    systemctl is-enabled mydaemon
+    $ systemctl is-enabled mydaemon
 
     - systemd tüm unit dosyalarını inceleyerek bir çalıştırma ağacı oluşturmaktadır. Biz bir unit dosyasını değiştirdiğimizde
     bu ağacın yeniden oluşturulması gerekmektedir. Bunun için "systemctl daemon-reload" komutu kullanılmaktadır. Komutun genel 
     biçimi şöyledir:
 
-    sudo systemctl daemon-reload
+    $ sudo systemctl daemon-reload
 
     Komutun parametresiz olduğuna dikkat ediniz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -49887,12 +49872,12 @@ void exit_sys(const char *msg)
     asıl işlevsellik bu kütüphanededir. Wireshark adeta libpcap kütüphanesinin bir önyüzü (frontend) gibidir. Bu kütüphanenin 
     Windows versiyonuna "npcap" denilmektedir. Linux Debian türevi sistemlerde kütüphane aşağıdaki gibi indirilebilir:
 
-    sudo apt-get install libpcap-dev
+    $ sudo apt-get install libpcap-dev
 
     Benzer biçimde Linux'ta wireshark programını da GUI arayüzü yazılım yöneticisinden yüklenebileceği gibi komut satırından 
     Debian türevi sistemlerde aşağıdaki gibi yüklenebilir:
 
-    sudo apt-get install wireshark
+    $ sudo apt-get install wireshark
 
     Wireshark programının kullanımına ilişkin pek çok "tutorial" bulunmaktadır. Kursumuzun EBooks klasöründe de birkaç kitap
     bulunmaktadır.
@@ -50886,11 +50871,11 @@ void exit_sys(const char *msg)
     Dinamik kütüphane kullanan bir program bağlanırken kullanılan dinamik kütüphanenin komut satırında belirtilmesi gerekir. 
     Örneğin:
 
-    gcc -o app app.c libmyutil.so
+    $ gcc -o app app.c libmyutil.so
 
     Tabii bu işlem yine -l seçeneği ile de yapılabilirdi:
 
-    gcc -o app app.c -lmyutil -L.
+    $ gcc -o app app.c -lmyutil -L.
 
     Bu biçimde çalıştırılabilir dosya oluşturulduğunda linker bu çalıştırılabilir dosyanın çalıştırılabilmesi için hangi 
     dinamik kütüphanelerin yüklenmesi gerektiğini ELF formatının ".dynamic" isimli bölümüne yazmaktadır. Böylece yükleyici 
@@ -50904,7 +50889,7 @@ void exit_sys(const char *msg)
     İster statik kütüphane isterse dinamik kütüphane yazacak olalım yazdığımız kütüphaneler için bir başlık dosyası oluşturmak 
     iyi bir tekniktir. Örneğin içerisinde çeşitli fonksiyonların bulunduğu "libmyutil.so" dinamik kütüphanesini "libmyutil.c" 
     dosyasından hareketle oluşturmak isteyelim. İşte "libmyutil.c" dosyasındaki fonksiyonların prototipleri, gerekli olan sembolik 
-    sabitler, makrolar, inline fonksiyonlar, yapı bildirimleri gibi "nesne yaratmayan bildirimler"  bir başlık dosyasına yerleştirilmelidir. 
+    sabitler, makrolar, inline fonksiyonlar, yapı bildirimleri gibi "nesne yaratmayan bildirimler" bir başlık dosyasına yerleştirilmelidir. 
     Böylece bu kütüphaneyi kullanacak kişiler bu dosyayı include ederek gerekli bildirimlerin kodlarını oluşturmuş olurlar. 
     Başlık dosyaları oluşturulurken iki önemli noktaya dikkat edilmelidir:
 
@@ -51180,7 +51165,7 @@ void exit_sys(const char *msg)
     bir tag'ına yerleştirilmektedir. "-soname" komut satırı argümanı linker'a ilişkin olduğu için "-Wl" seçeneği ile kullanılmalıdır. 
     Örneğin biz libx.so isimli bir dinamik kütüphaneyi "so" ismi vererek oluşturmak isteyelim. Bu işlemi şöyle yapabiliriz:
 
-    gcc -o libx.so -fPIC -shared -Wl,-soname,liby.so libx.c
+    $ gcc -o libx.so -fPIC -shared -Wl,-soname,liby.so libx.c
 
     Burada "libx.so" kütüphane dosyasına "liby.so" "so" ismi verilmiştir. Kütüphane dosyalarına iliştirilen "so" isimleri 
     readelf ile aşağıdaki gibi görüntülenebilir:
@@ -51199,7 +51184,7 @@ void exit_sys(const char *msg)
     kütüphanenin ismini değil "so" ismini yazmaktadır. Yukarıdaki örneğimizde "libx.so" kütüphanesi "so" ismi olarak "liby.so"
     ismini içermektedir. Şimdi libx.so dosyasını kullanan "app.c" dosyasını derleyip link edelim:
 
-    gcc -o app app.c libx.so
+    $ gcc -o app app.c libx.so
 
     Burada link işleminde "libx.so" dosya ismi kullanılmıştır. Ancak oluşturulan "app" dosyasının içerisine linker bu ismi 
     değil, "so" ismi olan "liby.so" ismini yazacaktır. Örneğin:
@@ -51284,16 +51269,15 @@ void exit_sys(const char *msg)
 
     Örneğin:
 
-    gcc -o libmyutil.so.1.0.0 -shared -fPIC libmyutil.c     (gerçek isimli kütüphane dosyası oluşturuldu)
-    ln -s libmyutil.so.1.0.0 libmyutil.so.1                 (so ismi oluşturuldu)
-    ln -s libmyutil.so.1 libmyutil.so                       (linker ismi oluşturuldu)
+    $ gcc -o libmyutil.so.1.0.0 -shared -fPIC libmyutil.c     (gerçek isimli kütüphane dosyası oluşturuldu)
+    $ ln -s libmyutil.so.1.0.0 libmyutil.so.1                 (so ismi oluşturuldu)
+    $ ln -s libmyutil.so.1 libmyutil.so                       (linker ismi oluşturuldu)
 
     Burada oluşturulan üç dosyayı "ls -l" komutu ile görüntüleyelim:
 
     lrwxrwxrwx 1 kaan study    14 Şub 25 15:45 libmyutil.so -> libmyutil.so.1
     lrwxrwxrwx 1 kaan study    18 Şub 25 15:45 libmyutil.so.1 -> libmyutil.so.1.0.0
     -rwxr-xr-x 1 kaan study 15736 Şub 25 15:45 libmyutil.so.1.0.0
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -51305,17 +51289,16 @@ void exit_sys(const char *msg)
     kullanılan isimlerdir. Bu sayede link işlemini yapan programcıların daha az tuşa basarak genel bir isim kullanması sağlanmıştır. 
     Bu durumda örneğin biz libmyutil isimli kütüphaneyi kullanan programı link etmek istersek şöyle yapabiliriz:
 
-    gcc -o app app.c libmyutil.so
+    $ gcc -o app app.c libmyutil.so
 
     Ya da şöyle yapabiliriz:
 
-    gcc -o app app.c -lmyutil -L.
+    $ gcc -o app app.c -lmyutil -L.
 
     Burada aslında "libmyutil.so" dosyası "so ismine" "so" ismi de "gerçek isme link yapılmış" durumdadır. Yani bu komutun 
     aslında eşdeğeri şöyledir:
 
-    gcc -o app app.c libmyutil.so.1.0.0
-
+    $ gcc -o app app.c libmyutil.so.1.0.0
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -51527,8 +51510,7 @@ void exit_sys(const char *msg)
     Aşağıda bir dinamik kütüphane dinamik olarak yüklenmiş ve oradan bir fonksiyon ve data adresi alınarak kullanılmıştır. 
     Buradaki dinamik kütüphaneyi daha önce yaptığımız gibi derleyebilirsiniz:
 
-    gcc -fPIC -shared -o libmyutil.so.1.0.0 -Wl,-soname,libmyutil.so.1 libmyutil.c
-
+    $ gcc -fPIC -shared -o libmyutil.so.1.0.0 -Wl,-soname,libmyutil.so.1 libmyutil.c
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* libmyutil.c */
@@ -51698,9 +51680,8 @@ int main(void)
     dışarıdan çağrılamayacaktır. Tabii kütüphane içerisindeki foo fonksiyonu bar fonksiyonunu çağırabilmektedir. Dosyaları
     aşağıdaki gibi derleyebilirsiniz:
 
-    gcc -shared -fPIC -Wl,-soname,libmyutil.so.1 -o libmyutil.so.1.0.0 libmyutil.c
-    gcc -o app app.c libmyutil.so.1.0.0 -ldl
-
+    $ gcc -shared -fPIC -Wl,-soname,libmyutil.so.1 -o libmyutil.so.1.0.0 libmyutil.c
+    $ gcc -o app app.c libmyutil.so.1.0.0 -ldl
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* libmyutil.c */
@@ -51801,7 +51782,6 @@ int main(void)
     main ends...
     destructor bar begins...
     destructor bar ends...
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -52235,7 +52215,7 @@ int main()
 
     Burada executable dosyanın hedefi komut satırından elde edilmektedir. Örneğin biz make programını şöyle çalıştırabiliriz:
 
-    make executable=app
+    $ make executable=app
 
     Bu durumda "app" dosyası hedef olarak ele alınacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -52376,7 +52356,7 @@ void foo()
     kütüphaneler ve başlık dosyaları zaten yüklü biçimde bulunmaktadır. Tabii programcı kernel kodlarını da kendi makinesine 
     indirmek isteyebilir. Bunun için aşağıdaki komut kullanılabilir:
 
-    sudo apt-get install linux-source
+    $ sudo apt-get install linux-source
 
     Eğer sisteminizde Linux'un kaynak kodları yüklü ise bu kaynak kodlar "/usr/src" dizininde bulunmaktadır. Bu dizindeki 
     "linux-headers-$(uname -r)" dizini kaynak kodlar yüklü olmasa bile bulunan bir dizindir ve bu dizin çekirdek modülleri 
@@ -52527,7 +52507,7 @@ clean:
     Kernel modüller istenildiği zaman "rmmod" isimli programla kernel'dan çıkartılabilirler. Bu programın da yine sudo ile 
     "root" önceliğinde çalıştırılması gerekir. Örneğin:
 
-    sudo rmmod helloworld.ko
+    $ sudo rmmod helloworld.ko
 
     Aşağıda örnek için gerekli olan dosyalar verilmiştir. make işlemi şöyle yapılabilir:
 
@@ -52861,7 +52841,7 @@ clean:
     Kernel modüllere parametre geçirme işlemi insmod ile modül yüklenirken komut satırında modül isminden sonra "değişken=değer" 
     çiftleriyle yapılmaktadır. Örneğin:
 
-    sudo insmod helloworld.ko number=10 msg="\"This is a test\"" values=10,20,30,40,50
+    $ sudo insmod helloworld.ko number=10 msg="\"This is a test\"" values=10,20,30,40,50
 
     Bu örnekte number parametresi int bir değerden, msg parametresi ise bir yazıdan oluşmaktadır. values parametresi birden fazla
     int değerden oluşmaktadır. Bu tür parametrelere modülün dizi parametreleri denilmektedir.
@@ -52902,7 +52882,7 @@ clean:
     zorunlu hale getirmemektedir. Bu durumda bu parametreler default değerlerde kalacaktır. Yukarıdaki parametreleri helloworld modülüne
     aşağıdaki gibi geçirebiliriz:
 
-    sudo insmod helloworld.ko count=100 msg="\"this is a test\""
+    $ sudo insmod helloworld.ko count=100 msg="\"this is a test\""
 
     Burada neden iç içe tırnakların kullanıldığını merak edebilirsiniz. Kabuk üzerinde tırnaklar "boşluklarla ayrılmış olan yazıların 
     tek bir komut satırı argümanı olarak ele alınacağını belirtmektedir. Ancak bizim ayrıca yazısal argümanları modüllere parametre 
@@ -53374,12 +53354,11 @@ void exit_sys(const char *msg)
 
     Örneğin:
 
-    sudo mknod devfile c 25 0
+    $ sudo mknod devfile c 25 0
 
     mknod komutunu sudo ile çalıştırmayı unutmayınız. Yukarıdaki komut uygulandığında oluşturulan dosya şöyle olacaktır:
 
     crw-rw-rw- 1 root root 25, 0 Mar 29 22:05 mydriver
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -53637,7 +53616,7 @@ clean:
     kullanmaktadır. Dolayısıyla aşağıdaki programın testi için şöyle bir aygıt dosyasının yaratılmış olması gerekir. Yaratımı
     aşağıdaki gibi yapabilirsiniz:
 
-    sudo mknod mydriver -m=666 c 25 0
+    $ sudo mknod mydriver -m=666 c 25 0
 
     Bu aygıt sürücü insmod ile yüklendiğinde artık biz user mode'da "mydriver" dosyasını açıp kapattığımızda file_operations
     yapısına yerleştirdiğimiz generic_open ve generic_release fonksiyonları çağrılacaktır.
@@ -55262,7 +55241,7 @@ void exit_sys(const char *msg)
 
     Aygıt sürücünüzü önce build edip sonra aşağıdaki gibi yüklemelisiniz:
 
-    $ make file=pipe-dirver
+    $ make file=pipe-driver
     $ sudo ./load pipe-driver
 
     Buradaki boru aygıt sürücüsünü test etmek için "prog1" ve "prog2" isimli iki program yazılmıştır. "prog1" klavyeden 
@@ -60177,10 +60156,10 @@ void exit_sys(const char *msg)
     #define IOC_PIPE_GETBUFSIZE		_IOR(PIPE_MAGIC, 0, int)
 
     ioctl için kontrol kodları hem aygıt sürücünün içerisinden hem de user mode'dan kullanılacağına göre ortak bir başlık dosyasının 
-    oluşturulması uygun olabilir. Burada ioctl kontrol kodları bulundurulabilir. Örneğin boru aygıt sürücümüz için "pipedriver.h" 
+    oluşturulması uygun olabilir. Burada ioctl kontrol kodları bulundurulabilir. Örneğin boru aygıt sürücümüz için "pipe-driver.h" 
     dosyası açağıdaki gibi düzenlenebilir:
 
-    // pipedriver.h
+    // pipe-driver.h
 
     #ifndef PIPEDRIVER_H_
     #define PIPEDRIVER_H_
@@ -60344,7 +60323,7 @@ struct PIPE_PEEK {
 #include <linux/spinlock.h>
 #include <linux/wait.h>
 #include <linux/slab.h>
-#include "pipedriver.h"
+#include "pipe-driver.h"
 
 #define MIN(a, b)			((a) < (b) ? (a) : (b))
 #define NDEVICES			10
@@ -60743,7 +60722,7 @@ done
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
-#include "pipedriver.h"
+#include "pipe-driver.h"
 
 #define PIPE_SIZE		4096
 
@@ -60807,7 +60786,7 @@ void exit_sys(const char *msg)
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
-#include "pipedriver.h"
+#include "pipe-driver.h"
 
 #define BUFFER_SIZE 4096
 
@@ -61293,7 +61272,7 @@ static ssize_t proc_read(struct file *filp, char *buf, size_t size, loff_t *off)
 	esize = left < size ? left : size;
 
 	if (esize != 0) {
-		if (copy_to_user(buf, g_count_str, esize) != 0)
+		if (copy_to_user(buf, g_count_str + *off, esize) != 0)
 			return -EFAULT;
 		*off += esize;
 	}
@@ -61397,8 +61376,8 @@ rm -f $module
 
     void proc_remove(struct proc_dir_entry *de);
 
-    Bu fonksiyon DA İNE parametre olarak proc_create ya da proc_mkdir fonksiyonun verdiği geri dönüş değerini alır. proc 
-    dosya sisteminin kök dizininde silme yapılmak isteniyorsa aşağıdaki her iki çağrım eşdeğerdir:
+    Bu fonksiyon parametre olarak proc_create ya da proc_mkdir fonksiyonun verdiği geri dönüş değerini alır. proc dosya sisteminin 
+    kök dizininde silme yapılmak isteniyorsa aşağıdaki her iki çağrım eşdeğerdir:
 
     remove_proc_entry("file_name", NULL);
     proc_remove("file_name");
@@ -61414,9 +61393,8 @@ rm -f $module
 #include <linux/kernel.h>
 #include <linux/fs.h>
 #include <linux/cdev.h>
+#include <linux/uaccess.h>
 #include <linux/proc_fs.h>
-
-#define PIPE_BUFSIZE		4096
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Kaan Aslan");
@@ -61557,7 +61535,7 @@ static ssize_t proc_read(struct file *filp, char *buf, size_t size, loff_t *off)
 	esize = left < size ? left : size;
 
 	if (esize != 0) {
-		if (copy_to_user(buf, g_count_str, esize) != 0)
+		if (copy_to_user(buf, g_count_str + *off, esize) != 0)
 			return -EFAULT;
 		*off += esize;
 	}
@@ -61630,17 +61608,809 @@ mode=666
 /sbin/rmmod ./$module.ko || exit 1
 rm -f $module
 
-<BURADA KALDIK>
 /*--------------------------------------------------------------------------------------------------------------------------
-    Kesmeler (interrupts) konusunda bugün kullandığımız PC mimarisindeki kesme mekanizmasının donanımsal tarafını ele alacağız. 
-    Eskiden tek CPU'lu makineler kullanıyordu. Bugün ağırlıklı olarak birden fazla çekirdeğe sahip işlemcileri kullanıyoruz. 
-    Bu çekirdeklerin her birinin içerisinde o çekirdeğe özgü periyodik kesme oluşturan bir timer devresi vardır. Böylece her çekirdek
-    kendi timer devresiyle "context switch" yapmakta ve proses istatistiklerini güncellemektedir. Fakat bunların dışında ayrıca bir de
-    eski sistemlerde zaten var olan IRQ0 harttına bağlı global bir timer bulunmaktadır. Bu global timer "context switch" değil sistem zamanının 
-    ilerletilmesi görevini yapmaktadır. Bugünki Linux sistemlerinde söz konusu olan bu timer'ların hepsi 1 milisaniye ya da 10 milisaniye 
-    periyoda kurulmuş durumdadır. Yani böylece her 1 milisaniye ya da 10 milisaniyede araya timer kesmesi gelip sistem zamanını güncellemektedir. 
-    İşte global timer'ın (IRQ0) her periyotta oluşturduğu kesmeler "jiffies" isimli kernel içerisindeki global bir değişkeni artırmaktadır.
-    Dolayısıyla bu jiffies değişkeni iki farklı zamanda okunduğunda geçen gerçek zaman timer periyodu da biiniyorsa elde edilebilmektedir.
+												153. Ders 07/07/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Şimdi de boru aygıt sürücüsüne proc dosya sistemi desteği verelim. Aygıt sürücümüz proc kök dizininde minör numara 
+    kadar ayrı dizin oluşturmaktadır. Sonra da bu dizinlerin içerisinde ilgili aygıtların bufsize ve count değerlerini iki dosya
+    ile dış dünyaya vermektedir. Örneğimizde dikkat edilmesi gereken birkaç nokta üzerinde durmak istiyoruz:
+
+    - proc dosya sistemi içerisindeki bir dosya user moddan açıldığında aygıt sürücümüz hangi dosyanın açıldığını nereden 
+    bilecektir? İşte dosya nesnesi görevinde olan file yapısının f_path elemanı path isimli bir yapı türündendir. Bu yapı 
+    şöyle bildirilmiştir:
+
+    struct path {
+        struct vfsmount *mnt;
+        struct dentry *dentry;
+    } __randomize_layout;
+
+    Yapının deentry elemanı dosya hakkında bilgiler içermektedir:
+
+    struct dentry {
+        /* RCU lookup touched fields */
+        unsigned int d_flags;		/* protected by d_lock */
+        seqcount_spinlock_t d_seq;	/* per dentry seqlock */
+        struct hlist_bl_node d_hash;	/* lookup hash list */
+        struct dentry *d_parent;	/* parent directory */
+        struct qstr d_name;
+        struct inode *d_inode;		/* Where the name belongs to - NULL is negative */
+        unsigned char d_iname[DNAME_INLINE_LEN];	/* small names */
+
+        /* Ref lookup also touches following */
+        struct lockref d_lockref;	/* per-dentry lock and refcount */
+        const struct dentry_operations *d_op;
+        struct super_block *d_sb;	/* The root of the dentry tree */
+        unsigned long d_time;		/* used by d_revalidate */
+        void *d_fsdata;			/* fs-specific data */
+
+        union {
+            struct list_head d_lru;		/* LRU list */
+            wait_queue_head_t *d_wait;	/* in-lookup ones only */
+        };
+        struct hlist_node d_sib;	/* child of parent list */
+        struct hlist_head d_children;	/* our children */
+        /*
+        * d_alias and d_rcu can share memory
+        */
+        union {
+            struct hlist_node d_alias;	/* inode alias list */
+            struct hlist_bl_node d_in_lookup_hash;	/* only for in-lookup ones */
+            struct rcu_head d_rcu;
+        } d_u;
+    };
+
+    Burada yapının d_name elemanı qstr isimli bir yapı türündedir:
+
+    struct qstr {
+        union {
+            struct {
+                HASH_LEN_DECLARE;
+            };
+            u64 hash_len;
+        };
+        const unsigned char *name;
+    };
+
+    İşte buradaki name elemanı ilgili dosyanın ismini belirtmektedir. Özetle biz file yapısından hareketle dosyanın ismini 
+    elde edebilmekteyiz.
+
+    Böylece biz proc dosya sistemi içerisinde bir dosya açıldığında o dosyanın isminden hareketle hangi dosyanın açılmış 
+    olduğunu anlayabiliriz. Ayrıca dentry yapısının d_parent elemanı dosya ya da dizin'in içinde bulunduğu dizine ilişkin 
+    dentry nesnesini vermektedir. Yani biz istersek dosyanın içinde bulunduğu dizinin ismini de alabiliriz.
+
+    Aşağıda örneği bir bütün olarak veriyoruz. Aygıt sürücüyü yine aşağıdaki gibi derleyebilirsiniz:
+
+    $ make file=pipe-driver
+
+    Yüklemeyi aşağıdaki gibi yapabilirsiniz:
+
+    $ sudo ./loadmulti 5 pipe-driver ndevices=5
+
+    Aygıt sürüyü yükledikten sonra artık proc dosya sisteminde "pipe-driver" isimli bid dizin oluşturulacak ve bu dizin 
+    içerisinde de aşağıdaki gibi 3 dizin yaratılmış olacaktır:
+
+    $ ls /proc/pipe-driver
+    pipe0  pipe1  pipe2  pipe3  pipe4
+
+    Bu dosyaların her birinin içerisinde de "bufsize" ve "count" isimli iki dosya bulunacaktır. Burada teti "prog1.c" ve 
+    "prog2.c" programları yardımıyla yapabilirisiniz. Örneğin "prog1" programı ile "pipe-driver3" borusunu açıp içerisine 
+    bir şeyler yazarsanız "/proc/pipe-driver/pipe3/count" dosyasının içerisinde yazılan byte sayısını görebilirsiniz. Aygıt
+    sürücümüzü yine "unloadmulti" script'i ile boşaltabilirisiniz:
+
+    $ sudo ./unloadmulti 5 pipe-drive
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* pipe-driver.h */
+
+#ifndef PIPEDRIVER_H_
+#define PIPEDRIVER_H_
+
+#include <stddef.h>
+#include <linux/ioctl.h>
+
+struct PIPE_PEEK {
+	size_t size;
+	void *buf;
+};
+
+#define PIPE_DRIVER_MAGIC		'p'
+#define IOC_PIPE_GETCOUNT		_IOR(PIPE_DRIVER_MAGIC, 0, size_t)
+#define IOC_PIPE_GETBUFSIZE		_IOR(PIPE_DRIVER_MAGIC, 1, size_t)
+#define IOC_PIPE_SETBUFSIZE		_IOW(PIPE_DRIVER_MAGIC, 2, size_t)
+#define IOC_PIPE_PEEK			_IOWR(PIPE_DRIVER_MAGIC, 3, struct PIPE_PEEK)
+
+#endif
+
+/* pipe-driver.c */
+
+#include <linux/module.h>
+#include <linux/kernel.h>
+#include <linux/fs.h>
+#include <linux/cdev.h>
+#include <linux/uaccess.h>
+#include <linux/spinlock.h>
+#include <linux/wait.h>
+#include <linux/slab.h>
+#include <linux/proc_fs.h>
+#include "pipe-driver.h"
+
+#define MIN(a, b)			((a) < (b) ? (a) : (b))
+#define NDEVICES			10
+#define DEF_PIPE_BUFSIZE	10
+#define MAX_PIPE_BUFSIZE	131072		/* 128K */
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Kaan Aslan");
+MODULE_DESCRIPTION("Pipe Driver");
+
+static int generic_open(struct inode *inodep, struct file *filp);
+static int generic_release(struct inode *inodep, struct file *filp);
+static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off);
+static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off);
+static long generic_ioctl(struct file *filp, unsigned int cmd, unsigned long arg);
+
+static int proc_open(struct inode *inodep, struct file *filp);
+static int proc_release(struct inode *inodep, struct file *filp);
+static ssize_t proc_read(struct file *filp, char *buf, size_t size, loff_t *off);
+static ssize_t proc_read(struct file *filp, char *buf, size_t size, loff_t *off);
+
+static struct file_operations g_fops = {
+	.owner = THIS_MODULE,
+	.open = generic_open,
+	.read = generic_read,
+	.write = generic_write,
+	.release = generic_release,
+	.unlocked_ioctl = generic_ioctl
+};
+
+
+static struct proc_ops g_proc_ops = {
+	.proc_open = proc_open,
+	.proc_release = proc_release,
+	.proc_read = proc_read,
+};
+
+/*
+static struct file_operations g_proc_ops = {
+	.open = proc_open,
+	.release = proc_release,
+	.read = proc_read,
+};
+*/
+
+struct PIPE_DEVICE {
+	unsigned char *pipebuf;
+	size_t head;
+	size_t tail;
+	size_t count;
+	size_t bufsize;
+	struct semaphore sem;
+	wait_queue_head_t wqread;
+	wait_queue_head_t wqwrite;
+	struct cdev cdev;
+};
+
+struct PROC_INFO {
+	struct PIPE_DEVICE *pdevice;
+	int filetype;		/* 0 = count, 1 = bufsize */
+	char strbuf[32];
+};
+
+static int set_bufsize(struct PIPE_DEVICE *pdevice, unsigned long arg);
+static int read_peek(struct PIPE_DEVICE *pdevice, unsigned long arg);
+
+static dev_t g_dev;
+static struct PIPE_DEVICE *g_pdevices;
+static int ndevices = NDEVICES;
+
+module_param(ndevices, int, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+
+static int __init generic_init(void)
+{
+	int result;
+	dev_t dev;
+	int i, k;
+	struct proc_dir_entry *pde_root, *pde_pipe;
+	char namebuf[16];
+
+	printk(KERN_INFO "pipe-driver module initialization...\n");
+
+	if ((result = alloc_chrdev_region(&g_dev, 0, ndevices, "pipe-driver")) < 0) {
+		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		return result;
+	}
+
+	if ((g_pdevices = (struct PIPE_DEVICE *)kmalloc(sizeof(struct PIPE_DEVICE) * ndevices, GFP_KERNEL)) == NULL) {
+		unregister_chrdev_region(g_dev, ndevices);
+		return -ENOMEM;
+	}
+
+	if ((pde_root = proc_mkdir("pipe-driver", NULL)) == NULL) {
+		kfree(g_pdevices);
+		unregister_chrdev_region(g_dev, 1);
+		return -ENOMEM;
+	}
+
+	for (i = 0; i < ndevices; ++i) {
+		sprintf(namebuf, "pipe%d", i);
+		if ((pde_pipe = proc_mkdir(namebuf, pde_root)) == NULL) {
+			kfree(g_pdevices);
+			unregister_chrdev_region(g_dev, 1);
+			remove_proc_entry("pipe-driver", NULL);
+			return -ENOMEM;
+		}
+		g_pdevices[i].head = g_pdevices[i].tail = g_pdevices[i].count = 0;
+		g_pdevices[i].bufsize = DEF_PIPE_BUFSIZE;
+		sema_init(&g_pdevices[i].sem, 1);
+		init_waitqueue_head(&g_pdevices[i].wqread);
+		init_waitqueue_head(&g_pdevices[i].wqwrite);
+		cdev_init(&g_pdevices[i].cdev, &g_fops);
+		dev = MKDEV(MAJOR(g_dev), i);
+		g_pdevices[i].pipebuf = (char *)kmalloc(DEF_PIPE_BUFSIZE, GFP_KERNEL);
+		result = cdev_add(&g_pdevices[i].cdev, dev, 1);
+
+		if (g_pdevices[i].pipebuf == NULL || result < 0) {
+			if (g_pdevices[i].pipebuf != NULL)
+				kfree(g_pdevices[i].pipebuf);
+
+			for (k = 0; k < i; ++k) {
+				cdev_del(&g_pdevices[k].cdev);
+				kfree(g_pdevices[k].pipebuf);
+			}
+
+			kfree(g_pdevices);
+			unregister_chrdev_region(dev, ndevices);
+			printk(KERN_ERR "Cannot add device!...\n");
+
+			return result;
+		}
+
+		if ((proc_create("count", S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH, pde_pipe, &g_proc_ops)) == NULL
+				|| proc_create("bufsize", S_IRUSR|S_IRGRP|S_IROTH, pde_pipe, &g_proc_ops) == NULL) {
+			remove_proc_entry("pipe-driver", NULL);
+			for (k = 0; k < i; ++k) {
+				cdev_del(&g_pdevices[k].cdev);
+				kfree(g_pdevices[k].pipebuf);
+			}
+			unregister_chrdev_region(g_dev, 1);
+			return -ENOMEM;
+		}
+	}
+
+	return 0;
+}
+
+static void __exit generic_exit(void)
+{
+	int i;
+
+	for (i = 0; i < ndevices; ++i)
+		cdev_del(&g_pdevices[i].cdev);
+	kfree(g_pdevices);
+	remove_proc_entry("pipe-driver", NULL);
+	unregister_chrdev_region(g_dev, ndevices);
+
+	printk(KERN_INFO "pipe-driver module exit...\n");
+}
+
+static int generic_open(struct inode *inodep, struct file *filp)
+{
+	struct PIPE_DEVICE *pdevice;
+
+	pdevice = container_of(inodep->i_cdev, struct PIPE_DEVICE, cdev);
+	filp->private_data = pdevice;
+
+	printk(KERN_INFO "pipe-driver opened...\n");
+
+	return 0;
+}
+
+static int generic_release(struct inode *inodep, struct file *filp)
+{
+	printk(KERN_INFO "pipe-driver-closed...\n");
+
+	return 0;
+}
+
+static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
+{
+	struct PIPE_DEVICE *pdevice;
+	size_t esize, size1, size2;
+
+	pdevice = (struct PIPE_DEVICE *)filp->private_data;
+
+	if (size == 0)
+		return 0;
+
+	if (down_interruptible(&pdevice->sem))
+		return -ERESTARTSYS;
+
+	while (pdevice->count == 0) {
+		up(&pdevice->sem);
+
+		if (filp->f_flags & O_NONBLOCK)
+			return -EAGAIN;
+
+		if (wait_event_interruptible(pdevice->wqread, pdevice->count > 0))
+			return -ERESTARTSYS;
+		if (down_interruptible(&pdevice->sem))
+			return -ERESTARTSYS;
+	}
+
+	esize = MIN(pdevice->count, size);
+
+	if (pdevice->tail <= pdevice->head)
+		size1 = MIN(pdevice->bufsize - pdevice->head, esize);
+	else
+		size1 = esize;
+
+	size2 = esize - size1;
+
+	if (copy_to_user(buf, pdevice->pipebuf + pdevice->head, size1) != 0) {
+		up(&pdevice->sem);
+		return -EFAULT;
+	}
+
+	if (size2 != 0)
+		if (copy_to_user(buf + size1, pdevice->pipebuf, size2) != 0) {
+			up(&pdevice->sem);
+			return -EFAULT;
+		}
+
+	pdevice->head = (pdevice->head + esize) % pdevice->bufsize;
+	pdevice->count -= esize;
+
+	up(&pdevice->sem);
+
+	wake_up_interruptible_all(&pdevice->wqwrite);
+
+	return esize;
+}
+
+static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
+{
+	struct PIPE_DEVICE *pdevice;
+	size_t esize, size1, size2;
+
+	pdevice = (struct PIPE_DEVICE *)filp->private_data;
+
+	if (down_interruptible(&pdevice->sem))
+		return -ERESTARTSYS;
+
+	if (size > pdevice->bufsize) {
+		up(&pdevice->sem);
+		return -EINVAL;
+	}
+
+	while (pdevice->bufsize - pdevice->count < size) {
+		up(&pdevice->sem);
+
+		if (filp->f_flags & O_NONBLOCK)
+			return -EAGAIN;
+
+		if (wait_event_interruptible(pdevice->wqwrite, pdevice->bufsize - pdevice->count >= size))
+			return -ERESTARTSYS;
+
+		if (down_interruptible(&pdevice->sem))
+			return -ERESTARTSYS;
+	}
+
+	esize = MIN(pdevice->bufsize - pdevice->count, size);
+
+	if (pdevice->tail >= pdevice->head)
+		size1 = MIN(pdevice->bufsize - pdevice->tail, esize);
+	else
+		size1 = esize;
+
+	size2 = esize - size1;
+
+	if (copy_from_user(pdevice->pipebuf + pdevice->tail, buf, size1) != 0) {
+		up(&pdevice->sem);
+		return -EFAULT;
+	}
+
+	if (size2 != 0)
+		if (copy_from_user(pdevice->pipebuf, buf + size1, size2) != 0) {
+			up(&pdevice->sem);
+			return -EFAULT;
+		}
+
+	pdevice->tail = (pdevice->tail + esize) % pdevice->bufsize;
+	pdevice->count += esize;
+
+	up(&pdevice->sem);
+
+	wake_up_interruptible_all(&pdevice->wqread);
+
+	return esize;
+}
+
+static long generic_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+{
+	struct PIPE_DEVICE *pdevice;
+
+	printk(KERN_INFO "ioctl");
+
+	pdevice = (struct PIPE_DEVICE *)filp->private_data;
+
+	switch (cmd) {
+		case IOC_PIPE_GETCOUNT:
+			return put_user(pdevice->count, (size_t *)arg);
+		case IOC_PIPE_GETBUFSIZE:
+			return put_user(pdevice->bufsize, (size_t *)arg);
+		case IOC_PIPE_SETBUFSIZE:
+			return set_bufsize(pdevice, arg);
+		case IOC_PIPE_PEEK:
+			return read_peek(pdevice, arg);
+		default:
+			return -ENOTTY;
+	}
+
+	return 0;
+}
+
+static int set_bufsize(struct PIPE_DEVICE *pdevice, unsigned long arg)
+{
+	char *new_pipebuf;
+	size_t size;
+
+	if (arg > MAX_PIPE_BUFSIZE)
+		return -EINVAL;
+
+	if (arg <= pdevice->count)
+		return -EINVAL;
+
+	if (down_interruptible(&pdevice->sem))
+		return -ERESTARTSYS;
+
+	if ((new_pipebuf = (char *)kmalloc(arg, GFP_KERNEL)) == NULL) {
+		up(&pdevice->sem);
+		return -ENOMEM;
+	}
+
+	if (pdevice->count != 0) {
+		if (pdevice->tail <= pdevice->head) {
+			size = pdevice->bufsize - pdevice->head;
+			memcpy(new_pipebuf, pdevice->pipebuf + pdevice->head, size);
+			memcpy(new_pipebuf + size, pdevice->pipebuf, pdevice->count - size);
+		}
+		else
+			memcpy(new_pipebuf, pdevice->pipebuf + pdevice->head, pdevice->count);
+	}
+
+	pdevice->head = 0;
+	pdevice->tail = pdevice->count;
+
+	kfree(pdevice->pipebuf);
+	pdevice->pipebuf = new_pipebuf;
+	pdevice->bufsize = arg;
+
+	up(&pdevice->sem);
+
+	return 0;
+}
+
+static int read_peek(struct PIPE_DEVICE *pdevice, unsigned long arg)
+{
+	size_t esize, size1, size2;
+	struct PIPE_PEEK *userpp = (struct PIPE_PEEK *)arg;
+	struct PIPE_PEEK pp;
+	int status = 0;
+
+	if (copy_from_user(&pp, userpp, sizeof(struct PIPE_PEEK)) != 0)
+		return -EFAULT;
+
+	if (pp.size == 0)
+		return 0;
+
+	if (down_interruptible(&pdevice->sem))
+		return -ERESTARTSYS;
+
+	esize = MIN(pdevice->count, pp.size);
+
+	if (pdevice->tail <= pdevice->head)
+		size1 = MIN(pdevice->bufsize - pdevice->head, esize);
+	else
+		size1 = esize;
+
+	size2 = esize - size1;
+
+	if (copy_to_user(pp.buf, pdevice->pipebuf + pdevice->head, size1) != 0) {
+		status = -EFAULT;
+		goto EXIT;
+	}
+
+	if (size2 != 0)
+		if (copy_to_user(pp.buf + size1, pdevice->pipebuf, size2) != 0) {
+			status = -EFAULT;
+			goto EXIT;
+		}
+
+	if (put_user(esize, &userpp->size) != 0)
+		status = -EFAULT;
+
+EXIT:
+	up(&pdevice->sem);
+
+	return status;
+}
+
+static int proc_open(struct inode *inodep, struct file *filp)
+{
+	const char *file_name = filp->f_path.dentry->d_name.name;
+	const char *parent_file_name = filp->f_path.dentry->d_parent->d_name.name;
+	struct PROC_INFO *pi;
+
+	printk(KERN_INFO "pipe-driver proc file opened...\n");
+
+	if ((pi = (struct PROC_INFO *)kmalloc(sizeof(struct PROC_INFO), GFP_KERNEL)) == NULL)
+		return -ENOMEM;
+
+	pi->pdevice = &g_pdevices[parent_file_name[4] - '0'];
+
+	if (!strcmp(file_name, "bufsize"))
+		pi->filetype = 1;
+	else if (!strcmp(file_name, "count"))
+		pi->filetype = 0;
+
+	filp->private_data = pi;
+
+	return 0;
+}
+
+static int proc_release(struct inode *inodep, struct file *filp)
+{
+	struct PROC_INFO *pi;
+
+	pi = (struct PROC_INFO *)filp->private_data;
+
+	kfree(pi);
+
+	return 0;
+}
+
+static ssize_t proc_read(struct file *filp, char *buf, size_t size, loff_t *off)
+{
+	struct PROC_INFO *pi;
+	size_t esize, left;
+
+	pi = (struct PROC_INFO *)filp->private_data;
+
+	switch (pi->filetype) {
+		case 0:
+			sprintf(pi->strbuf, "%lu\n", (unsigned long)pi->pdevice->count);
+			left = strlen(pi->strbuf) - *off;
+			esize = left < size ? left : size;
+			if (esize != 0) {
+				if (copy_to_user(buf, pi->strbuf + *off, esize) != 0)
+					return -EFAULT;
+				*off += esize;
+			}
+			break;
+		case 1:
+			sprintf(pi->strbuf, "%lu\n", (unsigned long)pi->pdevice->bufsize);
+			left = strlen(pi->strbuf) - *off;
+			esize = left < size ? left : size;
+			if (esize != 0) {
+				if (copy_to_user(buf, pi->strbuf + *off, esize) != 0)
+					return -EFAULT;
+				*off += esize;
+			}
+			break;
+	}
+
+	return esize;
+}
+
+module_init(generic_init);
+module_exit(generic_exit);
+
+# Makefile
+
+obj-m += $(file).o
+
+all:
+	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
+clean:
+	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
+
+/* loadmulti (bu satırı dosyaya kopyalamayınız) */
+
+#!/bin/bash
+
+module=$2
+mode=666
+
+/sbin/insmod ./${module}.ko ${@:3} || exit 1
+major=$(awk "\$2 == \"$module\" {print \$1}" /proc/devices)
+
+for ((i = 0; i < $1; ++i))
+do
+	rm -f ${module}$i
+	mknod ${module}$i c $major $i
+	chmod $mode ${module}$i
+done
+
+/* unloadmulti (bu satırı dosyaya kopyalamayınız) */
+
+#!/bin/bash
+
+module=$2
+
+/sbin/rmmod ./$module.ko || exit 1
+for ((i = 0; i < $1; ++i))
+do
+	rm -f ${module}$i
+done
+
+/* prog1.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
+#include "pipe-driver.h"
+
+#define PIPE_SIZE		4096
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int fd;
+	char buf[PIPE_SIZE];
+	char *str;
+	size_t len, bufsize, new_bufsize;
+
+	if ((fd = open("pipe-driver3", O_WRONLY)) == -1)
+		exit_sys("open");
+
+	for (;;) {
+		printf("Enter text:");
+		fflush(stdout);
+		fgets(buf, PIPE_SIZE, stdin);
+		if ((str = strchr(buf, '\n')) != NULL)
+			*str = '\0';
+		if (!strcmp(buf, "quit"))
+			break;
+
+		if (buf[0] == '!') {
+			new_bufsize = atoi(&buf[1]);
+			printf("%zd\n", new_bufsize);
+			if (ioctl(fd, IOC_PIPE_SETBUFSIZE, new_bufsize) == -1)
+				exit_sys("ioctl");
+			if (ioctl(fd, IOC_PIPE_GETBUFSIZE, &bufsize) == -1)
+				exit_sys("ioctl");
+			printf("new pipe buffer size is %zu\n", bufsize);
+		}
+		else {
+			len = strlen(buf);
+			if (write(fd, buf, len) == -1)
+				exit_sys("write");
+
+			printf("%lu bytes written...\n", (unsigned long)len);
+		}
+	}
+
+	close(fd);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/* prog2.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
+#include "pipe-driver.h"
+
+#define BUFFER_SIZE 4096
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int pdriver;
+	char buf[BUFFER_SIZE + 1];
+	int count, size;
+	ssize_t result;
+	struct PIPE_PEEK pp;
+	char *peekbuf;
+
+	if ((pdriver = open("pipe-driver3", O_RDONLY)) == -1)
+		exit_sys("open");
+
+	for (;;) {
+		if (ioctl(pdriver, IOC_PIPE_GETCOUNT, &count) == -1)
+			exit_sys("ioctl");
+		printf("There are (is) %d byte(s) in the pipe\n", count);
+		printf("Size:");
+		scanf("%d", &size);
+		if (size > BUFFER_SIZE) {
+			printf("size is very long!..\n");
+			continue;
+		}
+		if (size == 0)
+			break;
+		if (size < 0) {
+			pp.size = -size;
+			if ((pp.buf = malloc(-size)) == NULL) {
+				fprintf(stderr, "cannot allocate memory!..\n");
+				exit(EXIT_FAILURE);
+			}
+
+			if (ioctl(pdriver, IOC_PIPE_PEEK, &pp) == -1)
+				exit_sys("ioctl");
+
+			peekbuf = (char *)pp.buf;
+			for (size_t i = 0; i < pp.size; ++i)
+				putchar(peekbuf[i]);
+			putchar('\n');
+
+			free(pp.buf);
+
+		}
+		else {
+			if ((result = read(pdriver, buf, size)) == -1)
+				exit_sys("read");
+			buf[result] = '\0';
+			printf("%jd bytes read: %s\n", (intmax_t)result, buf);
+		}
+	}
+
+	close(pdriver);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Şimdi de aygıt sürücülerde zamanla işlemlerinin nasıl yapılacağı üzerinde duracağız. Çekirdeğin zamanlama mekanizması
+    periyodik oluşturulan donanım kesmeleriyle sağlanmaktadır. Bu kesmelere genel olarak "timer kesmeleri" ya da Linux 
+    terminolojisinde "jiffy" denilmektedir. Eskiden tek CPU'lu makineler kullanıyordu ve eski işlemcilerde işlemcinin içerisinde 
+    periyodik kesme oluşturacak bir mekanizma yoktu. Ancak daha sonraları işlemcilere kendi içerisinde periyodik kesme 
+    oluşturabilecek timer devreleri eklendi. Bugün ağırlıklı olarak birden fazla çekirdeğe sahip işlemcileri kullanıyoruz. Bu 
+    işlemcilerin içerisindeki çekirdeklerin her birinde o çekirdekte periyodik kesme oluşturan (local interrupts) timer devereleri 
+    bulunmaktadır. Böylece her çekirdek kendi timer devresiyle "context switch" yapmakta ve proses istatistiklerini güncellemektedir. 
+    Bugün PC mimarisinde yerel çekirdeklerin kesme mekanizmaları dışında ayrıca bir de eski sistemlerde zaten var olan IRQ0 harttına 
+    bağlı global bir timer devresi de bulunmaktadır. Bu global timer devresi "context switch" yapmakta değil sistem zamanının 
+    ilerletilmesi amacıyla kullanılmaktadır.
+
+    Bugünki Linux sistemlerinde söz konusu olan bu timer devrelerinin hepsi 1 milisaniye, 4 milisaniye ya da 10 milisaniyeye 
+    kurulmaktadır. Eskiden ilk Linux çekirdeklerinde 10 milisaniyelik periyotlar kullanılıyordu. Sonra bilgisayarlar hızlanınca 
+    1 milissaniye periyot yaygın olarak kullanılmaya başlandı. Ancak bugünlerde 4 milisaniye periyotları kullanan çekirdekler de 
+    yaygın biçimde bulunmaktadır. Aslında timer frekansı çekirdek konfigüre edilirken kullanıcılar tarafından da değiştirilebilmektedir. 
+    (Çekirdek derlenmeden önce çekirdeğin davranışları üzerinde etkili olan parametrelerin belirlenmesi sürecine "çekirdeğin konfigüre"
+    edilmesi denilmektedir.)
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Global timer kesmelerine (PC mimarisinde IRQ0) ilişkin kesme kodları çekirdek içerisindeki jiffies isimli bir global 
+    değişkeni artırmaktadır. Böylece eğer timer kesme periyodu biliniyorsa iki jiffies değeri arasındaki farka bakılarak 
+    bir zaman ölçümü mümkün olabilmektedir.
+
+    <BURADA KALDIK>
 
     Timer periyodu Linux kernel içerisindeki HZ isimli sembolik sabitle bildirilmiştir. Ancak bu HZ sembolik sabiti bu timer değeri için nihai
     belirlemeyi içermez, default durumu belirtir. Timer periyodunun ne olacağı aslında boot işlemi sırasında kernel konfigürasyonlarına da bakılarak 
@@ -61654,7 +62424,7 @@ rm -f $module
     generic-char-driver isimli dosyayı okuduğumuzda aslında aygıt sürücünün en son yazmış olduğu jiffies değerini görmüş oluruz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-/* generic-char-driver.c */
+/* jiffy-driver.c */
 
 #include <linux/module.h>
 #include <linux/kernel.h>
@@ -61662,30 +62432,47 @@ rm -f $module
 #include <linux/cdev.h>
 #include <linux/uaccess.h>
 #include <linux/proc_fs.h>
-#include <linux/sched.h>
 
 MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("General Character Device Driver");
 MODULE_AUTHOR("Kaan Aslan");
+MODULE_DESCRIPTION("procfs driver");
+
+static int generic_open(struct inode *inodep, struct file *filp);
+static int generic_release(struct inode *inodep, struct file *filp);
+static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off);
+static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off);
+
+static int proc_open(struct inode *inodep, struct file *filp);
+static int proc_release(struct inode *inodep, struct file *filp);
+static ssize_t proc_read(struct file *filp, char *buf, size_t size, loff_t *off);
 
 static dev_t g_dev;
 static struct cdev *g_cdev;
-static struct file_operations g_file_ops = {
+static struct file_operations g_fops = {
 	.owner = THIS_MODULE,
+	.open = generic_open,
+	.read = generic_read,
+	.write = generic_write,
+	.release = generic_release
 };
-
-static ssize_t proc_read(struct file *filp, char *buf, size_t size, loff_t *off);
 
 static struct file_operations g_proc_ops = {
-	.owner = THIS_MODULE,
+	.open = proc_open,
+	.release = proc_release,
 	.read = proc_read,
 };
+
+static char g_jiffies_str[32];
 
 static int __init generic_init(void)
 {
 	int result;
+	struct proc_dir_entry *pde_dir;
+	struct proc_dir_entry *pde;
 
-	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "generic-char-driver")) < 0) {
+	printk(KERN_INFO "jiffy-driver module initialization...\n");
+
+	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "jiffy-driver")) < 0) {
 		printk(KERN_INFO "Cannot alloc char driver!...\n");
 		return result;
 	}
@@ -61696,72 +62483,104 @@ static int __init generic_init(void)
 	}
 
 	g_cdev->owner = THIS_MODULE;
-	g_cdev->ops = &g_file_ops;
+	g_cdev->ops = &g_fops;
 
-	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
+	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add character device driver!...\n");
+		printk(KERN_ERR "Cannot add device!...\n");
 		return result;
 	}
 
-	if (proc_create("generic-char-driver", S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH, NULL, &g_proc_ops) == NULL) {
+	if ((pde_dir = proc_mkdir("jiffy-driver", NULL)) == NULL) {
 		cdev_del(g_cdev);
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot create proc file!...\n");
 		return -ENOMEM;
 	}
 
-	printk(KERN_INFO "Module initialized with %d:%d device number...\n", MAJOR(g_dev), MINOR(g_dev));
+	if ((pde = proc_create("jiffy", S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH, pde_dir, &g_proc_ops)) == NULL) {
+		remove_proc_entry("jiffy-driver", NULL);
+		cdev_del(g_cdev);
+		unregister_chrdev_region(g_dev, 1);
+		return -ENOMEM;
+	}
 
 	return 0;
 }
 
 static void __exit generic_exit(void)
 {
+	remove_proc_entry("jiffy-driver", NULL);
 	cdev_del(g_cdev);
 	unregister_chrdev_region(g_dev, 1);
-	remove_proc_entry("generic-char-driver", NULL);
-	printk(KERN_INFO "Goodbye...\n");
+
+	printk(KERN_INFO "procfs driver module exit...\n");
+}
+
+static int generic_open(struct inode *inodep, struct file *filp)
+{
+	printk(KERN_INFO "jiffy-driver opened...\n");
+
+	return 0;
+}
+
+static int generic_release(struct inode *inodep, struct file *filp)
+{
+	printk(KERN_INFO "jiffy-driver closed...\n");
+
+	return 0;
+}
+
+static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
+{
+	printk(KERN_INFO "jiffy-driver read\n");
+
+	return 0;
+}
+
+static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
+{
+	printk(KERN_INFO "jiffy-driver write...\n");
+
+	return 0;
+}
+
+static int proc_open(struct inode *inodep, struct file *filp)
+{
+	printk(KERN_INFO "jiffy-driver proc file opened...\n");
+
+	return 0;
+}
+
+static int proc_release(struct inode *inodep, struct file *filp)
+{
+	printk(KERN_INFO "jiffy-driver proc file closed...\n");
+
+	return 0;
 }
 
 static ssize_t proc_read(struct file *filp, char *buf, size_t size, loff_t *off)
 {
-	static char sbuf[32];
-	ssize_t left, n;
+    size_t esize;
+	size_t left;
 
-	sprintf(sbuf, "%lu\n", jiffies);
+	sprintf(g_jiffies_str, "%lu\n", jiffies);
 
-	left = strlen(sbuf) - *off;
-	n = left < size ? left : size;
-	if (n != 0) {
-		if (copy_to_user(buf, sbuf + *off, n) != 0)
+	left = strlen(g_jiffies_str) - *off;
+	esize = left < size ? left : size;
+
+	if (esize != 0) {
+		if (copy_to_user(buf, g_jiffies_str + *off, esize) != 0)
 			return -EFAULT;
-		*off += n;
+		*off += esize;
 	}
 
-	return n;
+	printk(KERN_INFO "procfs-driver proc file read...\n");
+
+	return esize;
 }
 
 module_init(generic_init);
 module_exit(generic_exit);
-
-obj-m += $(file).o
-
-all:
-	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
-clean:
-	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
-
-#!/bin/bash
-
-module=$1
-mode=666
-
-/sbin/insmod ./$module.ko ${@:2} || exit 1
-major=$(awk "\$2 == \"$module\" {print \$1}" /proc/devices)
-rm -f $module
-mknod $module c $major 0
-chmod $mode $module
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Eğer 64 bit sistemde çalışılıyorsa jiffies değerinin taşması (overflow olması) mümkün değildir. Ancak 32 bit sistemlerde
@@ -63747,7 +64566,7 @@ chmod $mode $module
     Yukarıdaki blok aygıt sürücüsü bir dosya sistemi ile formatlanarak sanki bir disk bölümüymüş gibi de kullanılabilir. Bunun için
     önce aygıt sürücünün idare ettiği alanın formatlanması gerekir. Formatlama işlemi mkfs isili utility programla yapılmaktadır:
 
-    sudo mkfs -t ext2 generic-bdriver
+    $ sudo mkfs -t ext2 generic-bdriver
 
     Burada -t seçeneği volümün hangi dosya sistemi ile formatlanacağını belirtmektedir. Formatlama aslında volümdeki bazı sektörlerde
     özel meta alanlarının yaratılması anlamına gelmektedir. Dolayısıyla mkfs komutu aslında ilgili aygıt sürücüyü açıp onun bazı sektörlerine 
@@ -63756,7 +64575,7 @@ chmod $mode $module
     Formatlama işleminden sonra artık blok aygıt sürücüsünün mount edilmesi gerekmektedir. mount işlemi bir dosya sisteminin dizin ağacının belli bir dizinine
     monte edilmesi anlamına gelmektedir. Dolayısıyla mount komutunda kullanıcı block aygıt sürücüsünü ve mount edilecek dizini girmektedir. Örneğin:
 
-    sudo mount generic-bdriver /mnt/myblock
+    $ sudo mount generic-bdriver /mnt/myblock
 
     Burada mount noktası (mount point) /ment dizinin altında myblock isimli dizindir. Bu dizinin kullanıcı tarafından önceden mkdir komutu ile
     yaratılması gerekir. Tabii mount noktalarının /mnt dizinin altında bulndurulması gibi zorunluluk yoktur. Mount noktasına ilişkin dizinin içinin
@@ -63767,7 +64586,7 @@ chmod $mode $module
     Aygıt sürücümüzü mount ettikten sonra artık onu unmount etmeden rmmod komutuyla boşaltamayız. mount edilen dosya sistemi umount komutuyla eski haline getirilmektedir. 
     Örneğin:
 
-    sudo umount /mnt/myblock
+    $ sudo umount /mnt/myblock
 
     umount komutunun komutu argümanının mount noktasını belirten dizin olduğuna dikkat ediniz. Tabii aslında umount komutu da işlemini umount isimli sistem fonksiyonuyla yapmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -63785,18 +64604,18 @@ chmod $mode $module
 
     2) Şimdi losetup isimli programla bu dosyanın bir loopback aygıt sürücüsü ile ilişkilendirilmesi gerekmektedir. Örneğin:
 
-    sudo losetup /dev/loop0 mydisk.dat
+    $ sudo losetup /dev/loop0 mydisk.dat
 
     Artık biz /dev/loop0 blok aygıt sürücüsü ile işlem yaptığımızda bu aygıt sürücü hedef olarak mydisk.dat dosyasını kullanacaktır.
 
     3) Artık dosya sistemini mkfs ile formatlayabiliriz:
 
-    sudo mkfs -t ext2 /dev/loop0
+    $ sudo mkfs -t ext2 /dev/loop0
 
     4) Artık mount işlemi yapabiliriz:
 
-    mkdir mydisk
-    sudo mount /dev/loop0 mydisk
+    $ mkdir mydisk
+    $ sudo mount /dev/loop0 mydisk
 
     Artık mydisk dizini bizim için adeta bir disk volümü gibidir. Ancak orada yapacağımız işlemler aslında yalnızca mydisk.dat dosyasını etkileyecektir. 
 
@@ -63804,12 +64623,11 @@ chmod $mode $module
 
     5) Önce volüm umont yapılır:
 
-    sudo umount mydisk
+    $ sudo umount mydisk
 
     5) Şimdi /dev/loop0 ile dosya (yani mydisk.dat) arasında bağlantı losetup -d komutuyla koparılır 
 
-    sudo losetup -d /dev/loop0
-
+    $ sudo losetup -d /dev/loop0
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -63837,12 +64655,12 @@ chmod $mode $module
     versiyonu yerel makineye indirilmelidir. İndirme işlemi doğrudan tarayıcı yoluyla yapılabileceği gibi komut satırından wget 
     utility'si ile de yapılabilmektedir. Örneğin:
 
-    wget https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.0.10.tar.xz
+    $ wget https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.0.10.tar.xz
 
     Kaynak kodlar indirildikten sonra bunlar açılır. Kaynak kodların bulundurulması için en normal yer /usr/src dizinidir. Bu dizine yazma hakkımız olmadığı 
     için açım işleminin sudo ile yapılması gerekir. Örneğin:
 
-    sudo tar -xvf linux-5.0.10.tar.gz -C /usr/src
+    $ sudo tar -xvf linux-5.0.10.tar.gz -C /usr/src
 
     Bu komutla artık kaynak kodlar /usr/src dizinin altına açılmıştır. 
 
@@ -63851,15 +64669,15 @@ chmod $mode $module
     çalıştırarak build işlemini yapmaktadır. Kernel'ın build edilmesi için gereken başka yardımcı araçlar da bulunmaktadır. Dolayısıyla bu araçlar 
     eğer sistemimizde yoksa onları da indirip kurmalıyız. Genellikle olmayan araçlar şunlardır:
 
-    sudo apt-get install libssl-dev
-    sudo apt-get install libelf-dev
+    $ sudo apt-get install libssl-dev
+    $ sudo apt-get install libelf-dev
 
     Eğer build işleminde sorun çıkarsa sisteminizde başka gerekli araçların olmadığından şüphelenmelisiniz. Pek çok sistemde aşağıdaki 
     araçlar default durumda bulunmaktadır. Ancak eğer build işlemi başarısız olursa aşağıdaki araçların olmadığından şüphelenmelisiniz:
 
-    sudo apt-get install libncurses5-dev
-    sudo apt-get install flex
-    sudo apt-get install bison
+    $ sudo apt-get install libncurses5-dev
+    $ sudo apt-get install flex
+    $ sudo apt-get install bison
 
     Debian türevi sistemlerde ayrıca paket yöneticisinin repository dosyasının sudo apt-get update komutu ile güncellenmesi gerekebilmektedir.
 
@@ -63868,23 +64686,23 @@ chmod $mode $module
     belirtmektedir. Normal olarak kernel konfigürasyon dosyası utility'ler tarafında oluşturulmaktadır. Bu utility'ler bize onlarca 
     soru sormaktadır. Tipik utility'ler şunlardır:
 
-    make config
-    make menuconfig
-    make xconfig
+    $ make config
+    $ make menuconfig
+    $ make xconfig
 
     Söz konusu konfigürasyon dosyasının ismi ".config" biçimindedir. Bu konf,igürasyon dosyasının oluşturulması biraz zahmetli olduğu 
     için daha çok mevcut bir .config dosyasını kullanma yöntemine gidilmektedir. Aslında aşağıdaki komutla default bir .config dosyası oluşturulabilir:
 
-    sudo make defconfig
+    $ sudo make defconfig
 
     Ancak daha sağlam bir yöntem /boot dizini içerisinde bulunan mevcut sistemin konfigürasyon dosyasını yeni kaynak kod dizinine 
     .config ismiyle kopyalamak olabilir. Örneğin:
 
-    sudo cp /boot/config-4.15.0-20-generic .config
+    $ sudo cp /boot/config-4.15.0-20-generic .config
 
     Kernel konfigürasyon dosyası bu biçimlerle elde edilmişse oluşturacağımız yeni kernel'a uyumunu sağlamak için aşağıdaki komut uygulanmalıdır:
 
-    sudo make oldconfig
+    $ sudo make oldconfig
 
     Bu komut referans aldığımız .config dosyasının içine bakar. Versiyon uyuşmazlığı ile ilgili satırları siler. Bu komut uygulandığında biz 
     uyuşmazlıklarla ilgili birtakım sorular sorabilmektedir. Bu sorular default seçeneklerle geçilebilir. Tabii biz yine istersek bu .config 
@@ -63892,18 +64710,18 @@ chmod $mode $module
 
     Artık tüm hazırlıklar yapılmıştır ve uzun bir zaman alabilen build işlemi yapılacaktır. Build işlemi aşağıdaki komut ile başlatılabilir:
 
-    sudo make
+    $ sudo make
 
     Ancak işlemi hızlandırmak içib birden fazla çekirdeğin kullanılmasını -j seçeneği ile sağlayabiliriz. Örneğin:
 
-    sudo make -j 4
+    $ sudo make -j 4
 
     Burada 4 çekirdek birlikte build işlemine katılacaktır. 
 
     Build işlemi bittikten sonra artık yeni sistem için son iki işlem yapılmalıdır. Bunlardan birincisi oluşturulan ama kernel image 
     içerisinde olmayan bazı aygıt sürücülerin uygun dizinlere çekilmesidir. Bu işlem aşağıdaki komutla yapılır:
 
-    sudo make modules_install
+    $ sudo make modules_install
 
     Böylece biz aygıt sürücüleri de yenilemiş olmaktayız. Burada söz konusu modüller kernel image içerisinde olmayan fakat çeşitli aşamalarda 
     yüklenen aygıt sürücü modülleridir. 
@@ -63911,7 +64729,7 @@ chmod $mode $module
     Nihayet ikinci olarak gerçek kernel image dosyasının ve yardımcı birkaç dosyann /boot dizinine çekilip boot-loader'ın güncellenmesidir.
     Bu da şu komutla yapılmaktadır:
 
-    sudo make install
+    $ sudo make install
 
     Linux işletim sisteminin boot edilmesi sırasında yüklenecekgerçek kernel image dosyasının /boot dizininde bulunması gerekmektedir. 
     Genellikle bu kernel image dosyası vmlinuz-xxxx biçiminde isimlendirilmiş durumadır. Ancak kernel'ın boot edilmesi için "kök dosya sistemini 
@@ -63930,14 +64748,14 @@ chmod $mode $module
     temel alınarak ayarlanır. Ama bu dosyanın güncellenmesi zordur. Bunun için daha basit yöntem /etc/default/grub dosyası 
     üzerinde basit değişiklikler yapmak ama bunu yaptıktan sonra aşağıdaki komutu uygulamaktır:
 
-    sudo update-grub
+    $ sudo update-grub
 
     Bu komutla birkte aslında /boot/grub/grub.cfg dosyası da güncellenmektedir. GRUB güncellemesinin diğer bir yolu da bunun için yazılmış olan GUI programlarını kullanmaktır. 
     Yaygın olanlardan biri grub-customizer isimli programdır. Bu program şöyle kurulabilir:
 
-    sudo add-apt-repository ppa:danielrichter2007/grub-customizer
-    sudo apt-get update
-    sudo apt-get install grub-customizer
+    $ sudo add-apt-repository ppa:danielrichter2007/grub-customizer
+    $ sudo apt-get update
+    $ sudo apt-get install grub-customizer
 
     Böylece artık grub-customizer yazıldığnda bir GUI program görüntülenecektir.
 
