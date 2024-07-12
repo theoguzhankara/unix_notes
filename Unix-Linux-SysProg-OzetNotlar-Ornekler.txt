@@ -10,7 +10,7 @@
 
                             (Notları okurken editörünüzün "Line Wrapping" özelliğini pasif hale getiriniz.)
 
-                                                    Son Güncelleme: 05/07/2024 - Cuma
+                                                    Son Güncelleme: 12/07/2024 - Cuma
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -12285,7 +12285,7 @@ void exit_sys(const char *msg)
     gruplara dahil edilecek ekstra bir grubu belirtmektedir. Tipik olarak login prosesi prosesin etkin grup id'sini bu listeye 
     eklemek için fonksiyonun ikinci parametresini prosesin etkin grup id'si ile çağırmaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
-<BURADA KALDIK>
+
 /*--------------------------------------------------------------------------------------------------------------------------
     Bugünkü masaüstü işletim sistemleri "zaman paylaşımlı (time sharing)" bir çalışma ortamı oluşturmaktadır. Zaman paylaşımlı 
     çalışma fikri ilk kez 1957 yılında uygulanmış ve sonra aktif bir biçimde işletim sistemlerine sokulmuştur. Dolayısıyla bugün 
@@ -12339,16 +12339,16 @@ void exit_sys(const char *msg)
     bir şey yoktur. Bu durum tıpkı yemek verilen bir kurumda yemeğin birden fazla koldan fazla verilmesi gibidir. İşletim 
     sisteminin zaman paylaşımlı çalışma için oluşturduğu kuyruğa işletim sistemleri dünyasında "çalıştırma kuyruğu (run queue)" 
     denilmektedir. Bu çalıştırma kuyruğu çok CPU söz konusu olduğunda her CPU için oluşturulmaktadır. Böylece her CPU yine zaman 
-    paylaşımlı bir biçimde çalıştırma kuyruğundaki thread'leri çalıştırmaktadır. Yani yukarıda açıkladığımız temel prensip değişmemektedir. 
-    Tabii burada işletim sisteminin bazı kararları da vermesi gerekir. Örneğin yeni bir thread (ya da proses) yaratıldığında bunun 
-    hangi CPU'ya atanacağı gibi. Bazen işletim sistemi thread'i bir CPU'nun çalıştırma kuyruğuna atar. Ancak diğer kuyruklar 
-    daha boş hale gelirse (çünkü o sırada çeşitli prosesler ve thread'ler sonlanmış olabilir) işletim sistemi başka bir CPU'nun 
-    çalıştırma kuyruğundaki thread'i kuyruğu daha boş olan CPU'nun çalıştırma kuyruğuna atayabilir. (Biz bir süpermarkette işin 
-    başında boş bir kasanın kuyruğuna girmiş olabiliriz. Sonra başka bir kasadaki kuyruk çok azalmış duruma gelebilir. Biz de o 
-    kuyruğua geçmeyi tercih ederiz. İşletim sistemi de buna benzer davranmaktadır.) Linux işletim sistemi, Windows sistemleri ve 
-    macOS sistemleri buna benzer bir çizelgeleme algoritması kullanmaktadır. Bir ara Linux O(1) çizelgelemesi denilen bir yöntem 
-    denemiştir. Bu yöntemde işletim sistemi tek bir çalıştırma kuyruğu kullanıyordu. Hangi CPU'daki parçalı çalışma süresi biterse
-    bu kuyruktan seçme yapılıyordu. 
+    paylaşımlı bir biçimde çalıştırma kuyruğundaki thread'leri çalıştırmaktadır. Yani yukarıda açıkladığımız temel prensip 
+    değişmemektedir. Tabii burada işletim sisteminin bazı kararları da vermesi gerekir. Örneğin yeni bir thread (ya da proses) 
+    yaratıldığında bunun hangi CPU'ya atanacağı gibi. Bazen işletim sistemi thread'i bir CPU'nun çalıştırma kuyruğuna atar. Ancak 
+    diğer kuyruklar daha boş hale gelirse (çünkü o sırada çeşitli prosesler ve thread'ler sonlanmış olabilir) işletim sistemi 
+    başka bir CPU'nun çalıştırma kuyruğundaki thread'i kuyruğu daha boş olan CPU'nun çalıştırma kuyruğuna atayabilir. (Biz bir 
+    süper markette işin başında boş bir kasanın kuyruğuna girmiş olabiliriz. Sonra başka bir kasadaki kuyruk çok azalmış duruma 
+    gelebilir. Biz de o kuyruğua geçmeyi tercih ederiz. İşletim sistemi de buna benzer davranmaktadır.) Linux işletim sistemi, 
+    Windows sistemleri ve macOS sistemleri buna benzer bir çizelgeleme algoritması kullanmaktadır. Bir ara Linux O(1) çizelgelemesi 
+    denilen bir yöntem denemiştir. Bu yöntemde işletim sistemi tek bir çalıştırma kuyruğu kullanıyordu. Hangi CPU'daki parçalı 
+    çalışma süresi biterse bu kuyruktan seçme yapılıyordu.
 
     Çok CPU'lu zaman paylaşımlı çalışmada CPU sayısı artırıldıkça total performans artacaktır. Çünkü CPU'lar için düzenlenen 
     çalıştırma kuyruklarında daha az thread bulunacaktır. 
@@ -18677,11 +18677,11 @@ void exit_sys(const char *msg)
 
     Proses kavramı çalışmakta olan programın tüm bilgilerini belirtmektedir. Thread ise yalnızca bir akış belirtmektedir. Örneğin:
 
-    - Thread'lerin gerçek ve etkin kullanıcı id'leri ve grup id'leri yoktur. Proseslerin vardır. Yani bir prosesin tüm thread'leri aynı
-    kullancı ve grup id'sine sahiptir.
+    - Thread'lerin gerçek ve etkin kullanıcı id'leri ve grup id'leri yoktur. Proseslerin vardır. Yani bir prosesin tüm thread'leri 
+    aynı kullancı ve grup id'sine sahiptir.
 
-    - Thread'lerin çalışma dizinleri, çevre değişkenleri yoktur. Proseslerin vardır. Örneğin biz bir proseste chdir POSIX fonksiyonu 
-    ile çalışma dizinini (current working directory) değiştirdiğimizde tüm thread'ler bunu değiştirmiş oluruz.
+    - Thread'lerin çalışma dizinleri, çevre değişkenleri yoktur. Proseslerin vardır. Örneğin biz bir proseste chdir POSIX 
+    fonksiyonu ile çalışma dizinini (current working directory) değiştirdiğimizde tüm thread'ler bunu değiştirmiş oluruz.
 
     - Dosya betimleyici tablosu prosese özgüdür. Dolayısıyla tüm thread'ler aynı dosya betimleyici tablosunu kullanmaktadır. 
 
@@ -18730,10 +18730,10 @@ void exit_sys(const char *msg)
 
     Biz burada benzer işlemi fork ile yapmaya çalıştık. Ancak fork yaptığımızda biz maliyetli bir biçimde yeni bir proses yarattık. 
     Bu prosesin bilgileri üst prosesten alınmaktadır. Ayrıca yarattığımız alt proses ayrı bir bellek alanına sahiptir. Dolayısıyla
-    örneğin aynı global değişkenleri kendi aralarında paylaşmamaktadır. Örneğin biz alt proseste dosya açsak üst proses bunu görmeyecektir. 
-    Halbuki thread'ler aynı prosesin akışlarıdır. Prosesin bir thread'i bir dosya açsa diğer thread'i onu açık olarak görmektedir. 
-    Proseslerle thread'ler akış bakımından benzemektedir. Her iki durumda da farklı akış oluşturulmaktadır. Thread'lere ilk 
-    zamanlar bu benzerlikten hareketle "lightweight (hafif siklet) proses" de denilmektedir.
+    örneğin aynı global değişkenleri kendi aralarında paylaşmamaktadır. Örneğin biz alt proseste dosya açsak üst proses bunu 
+    görmeyecektir. Halbuki thread'ler aynı prosesin akışlarıdır. Prosesin bir thread'i bir dosya açsa diğer thread'i onu açık 
+    olarak görmektedir. Proseslerle thread'ler akış bakımından benzemektedir. Her iki durumda da farklı akış oluşturulmaktadır. 
+    Thread'lere ilk zamanlar bu benzerlikten hareketle "lightweight (hafif siklet) proses" de denilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -18774,11 +18774,11 @@ void exit_sys(const char *msg)
         ...
     }
 
-    Burada iki thread foo üzerinde ilerlerken aslında yerel değişken olan a'nın kendi kopyaları üzerinde işlem yapmaktadır. Yani 
-    bir thread buradaki yerel "a" değişkenini değiştirdiğinde diğer thread bu değişikliği görmez. Başka bir deyişle her thread'in 
-    kendine özgü farklı bir "a" değişkeni vardır. Bu durumun teknik açıklaması şöyledir: Yerel değişkenler stack'te yaratılmaktadır. 
-    Thread'lerin de stack'leri birbirinden ayrıldığı için bu "a" değişkeni hangi thread akışı o fonksiyonu çağırmışsa onun 
-    stack'inde yaratılmaktadır.
+    Burada iki thread foo üzerinde ilerlerken aslında yerel değişken olan a'nın kendi kopyaları üzerinde işlem yapmaktadır. 
+    Yani bir thread buradaki yerel "a" değişkenini değiştirdiğinde diğer thread bu değişikliği görmez. Başka bir deyişle her 
+    thread'in kendine özgü farklı bir "a" değişkeni vardır. Bu durumun teknik açıklaması şöyledir: Yerel değişkenler stack'te 
+    yaratılmaktadır. Thread'lerin de stack'leri birbirinden ayrıldığı için bu "a" değişkeni hangi thread akışı o fonksiyonu 
+    çağırmışsa onun stack'inde yaratılmaktadır.
 
     Ancak prosesin bütün thread'leri aynı ".data" ve ".bss" ve "heap" alanını kullanmaktadır. Bu nedenle thread'lerden biri 
     yukarıdaki örnekte "++g_x" global değişkenini artırdığında diğeri onu artırılmış olarak görecektir. Anımsanacağı gibi 
@@ -18844,6 +18844,10 @@ void exit_sys(const char *msg)
     - Thread kullanan programları derlerken link aşaması için "-lpthread" komut satırı argümanını kullanmayı unutmayınız. Örneğin:
 
     $ gcc -o sample sample.c -lpthread
+
+    gcc ve clang derleyicilerinin ileri versiyonlarında başlık dosyalarındaki pragma direktifleri ile belli bir başlık dosyası 
+    include edildiğinde ilgili kütüphanenin link aşamasına otomatik biçimde sokulması sağlanabilmektedir. Ancak siz her zaman
+    thread'li programları derlerken "-lpthread" seçeneği ile bağlayıcının bu kütüphaneye bakmasını sağlamalısınız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -21045,8 +21049,8 @@ void exit_sys_errno(const char *msg, int eno)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir thread, bir mutex nesnesinin sahipliğini pthread_mutex_lock fonksiyonu ile aldıktan sonra yeniden aynı fonksiyonu çağırarak
-    aynı mutex nesnesinin sahipliğini almaya çalışırsa ne olur? Muhtemel üç durum söz konusudur:
+    Bir thread, bir mutex nesnesinin sahipliğini pthread_mutex_lock fonksiyonu ile aldıktan sonra yeniden aynı fonksiyonu 
+    çağırarak aynı mutex nesnesinin sahipliğini almaya çalışırsa ne olur? Muhtemel üç durum söz konusudur:
 
     1) Thread kendi kendini kilitler ve "deadlock" oluşur.
 
@@ -21211,9 +21215,9 @@ void exit_sys_errno(const char *msg, int eno)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Şimdi de yukarıdaki örneği mutex türünü PTHREAD_MUTEX_RECURSIVE yaparak yeniden düzenleyelim. Burada artık mutex nesnesi "recursive"
-    duruma sokulduğu için aynı thread mutex nesnesinin sahipliğini almaya çalıştığında bloke oluşmayacaktır. Ekrana çıkan yazıları dikkatlice
-    inceleyiniz. 
+    Şimdi de yukarıdaki örneği mutex türünü PTHREAD_MUTEX_RECURSIVE yaparak yeniden düzenleyelim. Burada artık mutex nesnesi 
+    "recursive" duruma sokulduğu için aynı thread mutex nesnesinin sahipliğini almaya çalıştığında bloke oluşmayacaktır. Ekrana 
+    çıkan yazıları dikkatlice inceleyiniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -21645,17 +21649,18 @@ namespace CSD
     sistemlerinde isimleri olsaydı bu kullanım kolaylıkla sağlanabilirdi. Ancak UNIX/Linux sistemlerinde mutex nesnelerinin isimleri 
     yoktur. O halde tek yol mutex nesnesini paylaşılan bir bellek alanında yaratmaktır. Ancak POSIX standartlarına göre mutex 
     nesnelerinin paylaşılan bellek alanlarında yaratılması proseslerarası kullanım için yeterli değildir. Aynı zamanda mutex 
-    nesnesinin proseslerarası paylaşılabilirliğini set etmek gerekir. Bu da mutex özellikleriyle yapılmaktadır. pthread_mutexattr_setpshared 
-    fonksiyonu ile mutex paylaşımlı moda sokulabilmektedir:
+    nesnesinin proseslerarası paylaşılabilirliğini set etmek gerekir. Bu da mutex özellikleriyle yapılmaktadır. 
+    pthread_mutexattr_setpshared fonksiyonu ile mutex paylaşımlı moda sokulabilmektedir:
 
     #include <pthread.h>
 
     int pthread_mutexattr_setpshared(pthread_mutexattr_t *attr, int pshared);
 
-    Fonksiyonun birinci parametresi mutex özellik nesnesinin adresini almaktadır. İkinci parametresi ise nesnenin proseslerarası paylaşımını 
-    belirtmektedir. Bu parametre PTHREAD_PROCESS_SHARED geçilirse nesne proseslerarasında paylaşılmakta, PTHREAD_PROCESS_PRIVATE geçilirse
-    nesne proseslerarasında paylaşılmamaktadır. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda errno değerine geri 
-    dönmektedir. Mutex özellik nesnesinin paylaşılabilirlik özelliği pthread_mutexattr_getpshared fonksiyonu ile elde edilebilir:
+    Fonksiyonun birinci parametresi mutex özellik nesnesinin adresini almaktadır. İkinci parametresi ise nesnenin proseslerarası 
+    paylaşımını belirtmektedir. Bu parametre PTHREAD_PROCESS_SHARED geçilirse nesne proseslerarasında paylaşılmakta, 
+    PTHREAD_PROCESS_PRIVATE geçilirse nesne proseslerarasında paylaşılmamaktadır. Fonksiyon başarı durumunda 0 değerine, başarısızlık 
+    durumunda errno değerine geri dönmektedir. Mutex özellik nesnesinin paylaşılabilirlik özelliği pthread_mutexattr_getpshared 
+    fonksiyonu ile elde edilebilir:
 
     #include <pthread.h>
 
@@ -21873,47 +21878,47 @@ void exit_sys_errno(const char *msg, int eno)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Mutex nesneleri, UNIX/Linux sistemlerinde nispeten hızlı senkronizasyon nesneleridir. Linux sistemlerinde senkronizasyon nesnelerinin
-    hepsi zaten "futex (fast user space mutex)" denilen sistem fonksiyonu çağrılarak gerçekleştirilmektedir. mutex fonksiyonları 
-    duruma göre hiç kernel moda geçmeden işlemini user mode'da yapabilmektedir. Şöyle ki: Biz mutex nesnesini pthread_mutex_lock 
-    fonksiyonu ile kilitlemek isteyelim. Mutex nesnesi kendi içerisinde bayrak değişkenleri tutarak kilitleme işlemini atomik bir biçimde 
-    yapmak isteyecektir. Atomikliği sağlamanın bir yolu "kernel moda geçerek CLI gibi makine komutuyla kesme mekanizmasını kapatıp bayrak
-    değişkenlerini set etmek" olabilir. Ancak kernel moda geçmenin maliyeti yüksektir. İşte daha önceden de belirttiğimiz gibi yeni 
-    modern işlemcilere "compare and set" gibi atomik makine komutları eklenmiştir. Bu makine komutları sayesinde bu tür flag değişkenleri 
-    hiç kernel moda geçmeden user mode'da atomik bir biçimde set edilebilmektedir. 
+    Mutex nesneleri, UNIX/Linux sistemlerinde nispeten hızlı senkronizasyon nesneleridir. Linux sistemlerinde senkronizasyon 
+    nesnelerinin hepsi zaten "futex (fast user space mutex)" denilen sistem fonksiyonu çağrılarak gerçekleştirilmektedir. 
+    mutex fonksiyonları duruma göre hiç kernel moda geçmeden işlemini user mode'da yapabilmektedir. Şöyle ki: Biz mutex nesnesini 
+    pthread_mutex_lock fonksiyonu ile kilitlemek isteyelim. Mutex nesnesi kendi içerisinde bayrak değişkenleri tutarak kilitleme 
+    işlemini atomik bir biçimde yapmak isteyecektir. Atomikliği sağlamanın bir yolu "kernel moda geçerek CLI gibi makine komutuyla 
+    kesme mekanizmasını kapatıp bayrak değişkenlerini set etmek" olabilir. Ancak kernel moda geçmenin maliyeti yüksektir. İşte 
+    daha önceden de belirttiğimiz gibi yeni modern işlemcilere "compare and set" gibi atomik makine komutları eklenmiştir. Bu 
+    makine komutları sayesinde bu tür flag değişkenleri hiç kernel moda geçmeden user mode'da atomik bir biçimde set edilebilmektedir.
 
     Ancak pthread_mutex_lock gibi bir fonksiyonun hiç kernel moda geçmeden işlem yapma olanağı da yoktur. Eğer mutex nesnesi kilitli 
     değilse onun kilitlenmesi user mode'da "compare and set" komutlarıyla yapılabilmektedir. Ancak ya mutex nesnesi zaten kilitliyse? 
     İşte bu durumda mecburen fonksiyon kernel moda geçerek thread'i bloke edecektir. Tabii aslında mutex kilitliyken bu fonksiyonlar
     hemen kernel moda geçip bloke oluşturmazlar. Çünkü pek çok senkronizasyon nesnesi çok kısa bir süre için kilitlenip açılmaktadır. 
-    Bu nedenle pthread_mutex_lock, mutex'in kilitli olduğunu gördüğünde birden fazla işlemci ya da çekirdek varsa başka bir işlemci ya da 
-    çekirdekteki mutex'i kilitleyen thread'in kısa süre içerisinde kilidi bırakacağını umarak meşgul bir döngüde sürekli bayrak değişkenine bakıp 
-    bir süre beklemektedir. Bu tür meşgul döngülere senkronizasyon dünyasında "spin lock" denilmektedir. 
+    Bu nedenle pthread_mutex_lock, mutex'in kilitli olduğunu gördüğünde birden fazla işlemci ya da çekirdek varsa başka bir işlemci 
+    ya da çekirdekteki mutex'i kilitleyen thread'in kısa süre içerisinde kilidi bırakacağını umarak meşgul bir döngüde sürekli 
+    bayrak değişkenine bakıp bir süre beklemektedir. Bu tür meşgul döngülere senkronizasyon dünyasında "spin lock" denilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Yaygın seknronizasyon nesnelerinden bir diğeri de "koşul değişkenleri (condition variables)" denilen nesnelerdir. 
-    Bu nesneler UNIX/Linux sistemlerinde uzunca bir süredir bulunmaktadır. Windows sistemlerine de belli bir süreden sonra sokulmuştur. 
-    Koşul değişken nesneleri tek başlarına kullanılmaz mutex nesneleriyle beraber kullanılmaktadır. Koşul değişkenlerinin temel kullanım amacı 
-    "belli bir koşul sağlanana kadar" thread'in blokede bekletilmesidir. Bu koşul programcı tarafından oluşturulur. Örneğin 
-    programcı global bir g_count değişkeni 0'dan büyük olana kadar thread'i bloke edip bekletmek isteyebilir. Ya da örneğin programcı
-    bir g_flag değişkeni 1 olana kadar thread'ini blokede bekletmek isteyebilir. 
+    Bu nesneler UNIX/Linux sistemlerinde uzunca bir süredir bulunmaktadır. Windows sistemlerine de belli bir süreden sonra 
+    sokulmuştur. Koşul değişken nesneleri tek başlarına kullanılmaz mutex nesneleriyle beraber kullanılmaktadır. Koşul değişkenlerinin 
+    temel kullanım amacı "belli bir koşul sağlanana kadar" thread'in blokede bekletilmesidir. Bu koşul programcı tarafından 
+    oluşturulur. Örneğin programcı global bir g_count değişkeni 0'dan büyük olana kadar thread'i bloke edip bekletmek isteyebilir. 
+    Ya da örneğin programcı bir g_flag değişkeni 1 olana kadar thread'ini blokede bekletmek isteyebilir.
 
-    Maalesef koşul değişkenleri anlaşılması en zor senkronizasyon nesnelerinden biridir. Bu nesnelerin düzgün kullanılabilmesi için belli bir 
-    yöntemin izlenmesi gerekmektedir. Programcılar koşul değişkenlerinin kullanımına ilişkin kalıpları anlamakta zorluk çekebilmektedir. 
-    Aynı zamanda programcıların kafası bu senkronizasyon nesnelerinin neden gerektiği konusunda da kafası karışabilmektedir. Biz önce 
-    koşul değişkenlerinin tipik olarak nasıl kullanılması gerektiği üzerinde duracağız. Sonra konunun ayrıntılarına gireceğiz. 
+    Maalesef koşul değişkenleri anlaşılması en zor senkronizasyon nesnelerinden biridir. Bu nesnelerin düzgün kullanılabilmesi 
+    için belli bir yöntemin izlenmesi gerekmektedir. Programcılar koşul değişkenlerinin kullanımına ilişkin kalıpları anlamakta 
+    zorluk çekebilmektedir. Aynı zamanda programcıların kafası bu senkronizasyon nesnelerinin neden gerektiği konusunda da kafası 
+    karışabilmektedir. Biz önce koşul değişkenlerinin tipik olarak nasıl kullanılması gerektiği üzerinde duracağız. Sonra konunun 
+    ayrıntılarına gireceğiz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Koşul değişkenleri tipik olarak şu adımlardan geçilerek kullanılmaktadır:
 
-    1) Koşul değişkenleri pthread_cond_t türü ile temsil edilmiştir. Bu tür <pthread.h> ve <sys/types.h> içerisinde typedef 
-    edilmiştir. pthread_cont_t türü, sistemlerde tipik olarak bir yapı biçiminde typedef edilmektedir. Örneğin:
+    1) Programcı önce global düzeyde pthread_cond_t türünden bir koşul değişken nesnesi tanımlar. Koşul değişkenleri pthread_cond_t 
+    türü ile temsil edilmiştir. Bu tür <pthread.h> ve <sys/types.h> içerisinde typedef edilmiştir. pthread_cond_t türü sistemlerde 
+    tipik olarak bir yapı biçiminde typedef edilmektedir. Örneğin:
 
     pthread_cond_t g_cond;
-
-    Programcı yine koşul değişkenlerini farklı thread'ler erişebilsin diye tipik olarak global bir değişken biçiminde tanımlar.
 
     2) Koşul değişkenlerine tıpkı mutex nesnelerinde olduğu gibi statik ya da dinamik olarak ilk değer verilebilmektedir. Biz 
     koşul değişkenlerine statik düzeyde PTHREAD_COND_INITIALIZER makrosuyla ilk değer verebiliriz. Örneğin:
@@ -22053,12 +22058,13 @@ void exit_sys_errno(const char *msg, int eno)
     pthread_cond_signal(&g_cond);
     pthread_mutex_unlock(&g_mutex);
 
-    En normal durum, koşul değişkeninin koşulun sağlanması biçiminde ayarlanması işleminin ve pthread_cond_signal ya da 
-    pthread_cond_broadcast işleminin de aynı mutex'i kullanarak kritik kod içerisinde yapılmasıdır. Çünkü programda başka bir 
-    thread bu değişkene aynı anda erişirse yine sorun ortaya çıkabilir. Tabii böyle bir durum yoksa koşul kritik kod içerisinde
-    set edilmeye de bilir. Özetle diğer bir thread koşul değişkenindeki blokeyi pthread_cond_signal ya da pthread_cond_broadcast 
-    ile kaldırmadan önce koşul değişkenini koşul sağlanacak biçimde set etmesi gerekir. Aksi takdirde koşul sağlanmadığı için 
-    pthread_cond_wait fonksiyonundan uyanan thread döngü içerisinde yeniden uykuya dalacaktır.
+    Burada koşulun sağlanma işleminin kritik kod içerisinde yapıldığını görüyorsunuz. Normal olarak koşul değişkeninin koşulun 
+    sağlanması biçiminde ayarlanması işleminin ve pthread_cond_signal ya da  pthread_cond_broadcast işleminin de aynı mutex'i 
+    kullanarak kritik kod içerisinde yapılmasıdır. Çünkü programda başka bir thread bu değişkene aynı anda erişirse yine sorun 
+    ortaya çıkabilir. Tabii böyle bir durum yoksa koşul kritik kod içerisinde set edilmeye de bilir. Özetle diğer bir thread 
+    koşul değişkenindeki blokeyi pthread_cond_signal ya da pthread_cond_broadcast ile kaldırmadan önce koşul değişkenini koşul 
+    sağlanacak biçimde set etmesi gerekir. Aksi takdirde koşul sağlanmadığı için pthread_cond_wait fonksiyonundan uyanan thread 
+    döngü içerisinde yeniden uykuya dalacaktır.
 
     7) Kullanım bittikten sonra koşul değişkeni pthread_cond_destroy fonksiyonu ile boşaltılmalıdır. Fonksiyonun prototipi 
     şöyledir:
@@ -51049,7 +51055,7 @@ void exit_sys(const char *msg)
     5) Nihayet dinamik bağlayıcı dinamik kütüphaneleri sırasıyla "/lib", /usr/lib" dizinlerinde de aramaktadır. 64 bit Linux 
     sistemlerininin bir bölümünde 64 bit dinamik kütüphaneler için "/lib64" ve "/usr/lib64" dizinlerine de bakılabilmektedir.
 
---------------------------------------------------------------------------------------------------------------------------*/
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Yukarıdaki üçüncü maddede aranacak yol ifadesini çalıştırılabilir dosyanın DT_RUNPATH tag'ına yerleştirmek için ld 
@@ -51925,7 +51931,6 @@ int main(void)
 
     $ g++ -shared -fPIC -Wl,-soname,libmyutil.so.1 -o libmyutil.so.1.0.0 libmyutil.cpp
     $ g++ -o app app.cpp libmyutil.so.1.0.0
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* util.hpp */
@@ -51997,11 +52002,11 @@ int main()
 
     $ gcc -c app1.c
     $ gcc -c app2.c
-    # gcc -c app3.c
+    $ gcc -c app3.c
     ...
-    # gcc -c app10.c
+    $ gcc -c app10.c
 
-    # gcc -o app app1.o app2.o app3.o ... app10.o
+    $ gcc -o app app1.o app2.o app3.o ... app10.o
 
     Bu çalışma biçiminde bir kaynak dosyada değişiklik yapıldığında yalnızca değişikliğin yapılmış olduğu kaynak dosya yeniden
     derlenir ancak link işlemine yine tüm amaç dosyalar dahil edilir. Örneğin app3.c üzerinde bir değişilik yapmış olalım:
@@ -52065,7 +52070,7 @@ int main()
     Burada eğer "a.o" ya da "b.o" ya da "c.o" dosyalarının tarih ve zamanı "app" dosyasının tarih ve zamanından ilerideyse
     aşağıdaki kabuk komutu çalıştırılacaktır:
 
-    gcc -o app a.o b.o c.o
+    $ gcc -o app a.o b.o c.o
 
     Bu link işlemi anlamına gelir. Link işleminden sonra artık "app" dısyasının tarih ve zamanı ön koşul dosyalarından daha
     ileride olacağı için kural "güncel (up to date)" hale gelir. Artık bu kural işletildiğinde bu link işlemi yapılmayacaktır. 
@@ -52275,7 +52280,6 @@ int main()
 
     $ gcc -c x.c
     $ ld -o x x.o --entry=foo
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* x.c */
@@ -52709,7 +52713,6 @@ clean:
     Aşağıda örnek bütünsel olarak verilmiştir. make işlemi şöyle yapılabilir:
 
     $ make file=helloworld
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* helloworld.c */
@@ -52849,7 +52852,7 @@ clean:
     Kernel modüllere geçirilen parametreleri modül içerisinde almak için module_param ve module_param_array isimli makrolar kullanılır. 
     module_param makrosunun üç parametresi vardır:
 
-    module_param(name, type, perm)
+    module_param(name, type, perm);
 
     name parametresi ilgili değişkenin ismini belirtmektedir. Biz makroyu çağırmadan önce bu isimde bir global değişkeni tanımlamalıyız. 
     Ancak buradaki değişken isminin komut satırında verilen parametre (argüman da diyebiliriz) ismi ile aynı olması gerekmektedir. 
@@ -53803,7 +53806,7 @@ static int generic_open(struct inode *inodep, struct file *filp)
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "generic-char-driver-closed...\n");
+	printk(KERN_INFO "generic-char-driver closed...\n");
 
 	return 0;
 }
@@ -54106,7 +54109,7 @@ static int generic_open(struct inode *inodep, struct file *filp)
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "generic-char-driver-closed...\n");
+	printk(KERN_INFO "generic-char-driver closed...\n");
 
 	return 0;
 }
@@ -54275,7 +54278,7 @@ static int generic_open(struct inode *inodep, struct file *filp)
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "generic-char-driver-closed...\n");
+	printk(KERN_INFO "generic-char-driver closed...\n");
 
 	return 0;
 }
@@ -54497,7 +54500,7 @@ static int generic_open(struct inode *inodep, struct file *filp)
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "generic-char-driver-closed...\n");
+	printk(KERN_INFO "generic-char-driver closed...\n");
 
 	return 0;
 }
@@ -54748,7 +54751,7 @@ static int generic_open(struct inode *inodep, struct file *filp)
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "generic-char-driver-closed...\n");
+	printk(KERN_INFO "generic-char-driver closed...\n");
 
 	return 0;
 }
@@ -55051,7 +55054,7 @@ static int generic_open(struct inode *inodep, struct file *filp)
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "generic-char-driver-closed...\n");
+	printk(KERN_INFO "generic-char-driver closed...\n");
 
 	return 0;
 }
@@ -55497,7 +55500,7 @@ int main(void)
 		printf("Size:");
 		scanf("%d", &size);
 		if (size > BUFFER_SIZE) {
-			printf("size is very long!..\n");
+			printf("size is very long!...\n");
 			continue;
 		}
 		if (size == 0)
@@ -55715,7 +55718,7 @@ static int generic_open(struct inode *inodep, struct file *filp)
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "pipe-driver-closed...\n");
+	printk(KERN_INFO "pipe-driver closed...\n");
 
 	return 0;
 }
@@ -55900,7 +55903,7 @@ int main(void)
 		printf("Size:");
 		scanf("%d", &size);
 		if (size > BUFFER_SIZE) {
-			printf("size is very long!..\n");
+			printf("size is very long!...\n");
 			continue;
 		}
 		if (size == 0)
@@ -56080,7 +56083,7 @@ static int generic_open(struct inode *inodep, struct file *filp)
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "pipe-driver-closed...\n");
+	printk(KERN_INFO "pipe-driver closed...\n");
 
 	return 0;
 }
@@ -56265,7 +56268,7 @@ int main(void)
 		printf("Size:");
 		scanf("%d", &size);
 		if (size > BUFFER_SIZE) {
-			printf("size is very long!..\n");
+			printf("size is very long!...\n");
 			continue;
 		}
 		if (size == 0)
@@ -56476,7 +56479,7 @@ static int generic_open(struct inode *inodep, struct file *filp)
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "pipe-driver-closed...\n");
+	printk(KERN_INFO "pipe-driver closed...\n");
 
 	return 0;
 }
@@ -56659,7 +56662,7 @@ int main(void)
 		printf("Size:");
 		scanf("%d", &size);
 		if (size > BUFFER_SIZE) {
-			printf("size is very long!..\n");
+			printf("size is very long!...\n");
 			continue;
 		}
 		if (size == 0)
@@ -57406,7 +57409,7 @@ static int generic_open(struct inode *inodep, struct file *filp)
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "pipe-driver-closed...\n");
+	printk(KERN_INFO "pipe-driver closed...\n");
 
 	return 0;
 }
@@ -57616,7 +57619,7 @@ int main(void)
 		printf("Size:");
 		scanf("%d", &size);
 		if (size > BUFFER_SIZE) {
-			printf("size is very long!..\n");
+			printf("size is very long!...\n");
 			continue;
 		}
 		if (size == 0)
@@ -57647,9 +57650,9 @@ void exit_sys(const char *msg)
     Aslında bekleme kuyrukları wait_queue_entry isimli yapı nesnelerinden oluşan bir çift bağlı listedir. wait_queue_head_t 
     yapısı da bağlı listenin ilk ve son elemanlarının adresini tutmaktadır:
 
-    wait_queue_head ---> wait_queue_entry <-----> wait_queue_entry <-----> wait_queue_entry <-----> wait_queue_entry ...
+    wait_queue_head <-----> wait_queue_entry <-----> wait_queue_entry <-----> wait_queue_entry <-----> wait_queue_entry ...
 
-    Çekirdek kodlarında bu yapılar "include/linux/wait.h" dosyası içersinde aşağıdaki gibi bildirilmiştir:
+    Çekirdek kodlarında bu yapılar "include/linux/wait.h" dosyası içerisinde aşağıdaki gibi bildirilmiştir:
 
     struct wait_queue_head {
         spinlock_t	lock;
@@ -57666,7 +57669,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Biz aygıt sürücü kodumuzda o anda quanta süresini bırakıp çizelgeleyicinin kendi algortimasına göre sıradaki thread'i 
-    çizelgelemesini sağlayabiliriz. Bunun schedule isimli fonksiyon kullanılmaktadır. Bu fonksiyon bloke oluşturmamaktadır. 
+    çizelgelemesini sağlayabiliriz. Bunun için schedule isimli fonksiyon kullanılmaktadır. Bu fonksiyon bloke oluşturmamaktadır. 
     Yalnızca thread'ler arası geçiş (context switch) oluşturmaktadır. Fonksiyon herhangi bir parametre almamaktadır:
 
     #include <linux/kernel.h>
@@ -57691,7 +57694,7 @@ void exit_sys(const char *msg)
 
     DEFINE_WAIT(wqentry);
 
-    Ya da açıkça tanımlanıp init_wait makrosuyle ilk değerlenebilir. Örneğin:
+    Ya da açıkça tanımlanıp init_wait makrosuyla ilk değerlenebilir. Örneğin:
 
     struct wait_queue_entry wqentry;
     ...
@@ -57700,16 +57703,16 @@ void exit_sys(const char *msg)
     DEFINE_WAIT makrosu global tanımlamalarda kullanılamamktadır. Çünkü bu makro küme parantezleri içerisinde sabit ifadesi olmayan 
     ifadeler barındırmaktadır. Ancak makro yerel tanımlamalarda kullanılabilir.
 
-    Dolayısıyla prepare_to_wait ve prepare_to_wait_exclusive fonksiyonları da aslında bekleme kuruğuna bir wait_queue_enty nesnesi 
+    Dolayısıyla prepare_to_wait ve prepare_to_wait_exclusive fonksiyonları da aslında bekleme kuyruğuna bir wait_queue_entry nesnesi 
     eklemektedir. Yani programcının bunun için yeni bir wait_queue_entry nesnesi oluşturması gerekmektedir. prepare_to_wait_exclusive 
     exclusive uyuma için kullanılmaktadır.
 
     prepare_to_wait ve prepare_to_wait_exclusive fonksiyonları şunları yapmaktadır:
 
-    1) Thread'i çalışma kuyruğundan çıkartıp bekleme kuyruğuna yerleştirir. (Çalışma kuruğunun organizasyonu ve bu işlemin gerçek 
+    1) Thread'i çalışma kuyruğundan çıkartıp bekleme kuyruğuna yerleştirir. (Çalışma kuyruğunun organizasyonu ve bu işlemin gerçek 
     ayrıntıları biraz karmaşıktır.)
     2) Thread'in durum bilgisini (task state) state parametresiyle belirtilen duruma çeker.
-    3) prepare_to_wait fonksiyonu kuyruk elemanını eclusive olmaktan çıkartırken, prepare_to_wait_exclusive onu exclusive yapar.
+    3) prepare_to_wait fonksiyonu kuyruk elemanını exclusive olmaktan çıkartırken, prepare_to_wait_exclusive onu exclusive yapar.
 
     Thread'in çalışma kuyruğundan bekleme kuyruğuna aktarılması onun uykuya dalması anlamına gelmemektedir. Programcı artık thread 
     çalışma kuyruğunda olmadığına göre schedule fonksiyonu ile thread'ler arası geçiş (context switch) uygulamalı ve akış kontrolünü 
@@ -57718,11 +57721,11 @@ void exit_sys(const char *msg)
 
     Tabii biz prepare_to_wait ya da prepare_to_wait_exclusive fonksiyonlarını çağırdıktan sonra bir biçimde koşul durumuna bakmalıyız. 
     Eğer koşul sağlanmışsa hiç prosesi uykuya daldırmadan hemen bekleme kuyruğundan çıkarmalıyız. Eğer koşul sağlanmamışsa gerçekten 
-    artık schedule fonksiyonuyla "thread'lerarası geçiş" yapmalıyız. Thread'imiz schedule fonksiyonunu çağırdıktan sonra artık 
-    uyandırılana kadar bir daha çizelgelenmyecektir. Bu da bizim uykuya dalmamız anlamına gelmektedir.
+    artık schedule fonksiyonuyla "thread'ler arası geçiş" yapmalıyız. Thread'imiz schedule fonksiyonunu çağırdıktan sonra artık 
+    uyandırılana kadar bir daha çizelgelenmeyecektir. Bu da bizim uykuya dalmamız anlamına gelmektedir.
 
     Pekiyi thread'imiz uyandırıldığında nereden çalışmaya devam edecektir? İşte schedule fonksiyonu thread'ler arası geçiş yaparken 
-    kalınan yeri thread'e ilişki task_struct yapısının içerisine kaydetmektedir. Kalının yer schudule fonksiyonunun içerisinde bir yerdir. 
+    kalınan yeri thread'e ilişkin task_struct yapısının içerisine kaydetmektedir. Kalınan yer schedule fonksiyonunun içerisinde bir yerdir. 
     O halde thread'imiz uyandırıldığında schedule fonksiyonunun içerisinden çalışma devam eder. schedule fonksiyonu geri dönecek ve 
     thread akışı devam edecektir.
 
@@ -57747,7 +57750,7 @@ void exit_sys(const char *msg)
 
     Tabii eğer thread INTERRUPTIBLE olarak uyuyorsa schedule fonksiyonundan çıkıldığında sinyal dolayısıyla da çıkılmış olabilir. 
     Bunu anlamak için signal_pending isimli fonksiyon çağrılır. Bu fonksiyon sıfır dışı bir değerle geri dönmüşse uyandırma işleminin 
-    sinyal yoluyla yapıldığı anlaşılır. Bu durumda tabii aygıt sürücüdeki fonksiyon bu durumda -ERESTARTSYS ile geri döndürülmelidir. 
+    sinyal yoluyla yapıldığı anlaşılır. Bu durumda tabii aygıt sürücüdeki fonksiyon -ERESTARTSYS ile geri döndürülmelidir. 
     signal_pending fonksiyonunun prototipi şöyledir:
 
     #include <linux/kernel.h>
@@ -57766,12 +57769,12 @@ void exit_sys(const char *msg)
         return -ERESTARTSYS;
     finish_wait(&wqentry);
 
-    wake_up makrolarının şunları yaptıpını anımsayınız:
+    wake_up makrolarının şunları yaptığını anımsayınız:
 
     1) Wait kuyruğundaki prosesleri çıkartarak run kuyruğuna yerleştirir.
     2) Prosesin durumunu TASK_RUNNING haline getirir.
 
-    Aşağıda boru örneğinde manuel uykuya dalma işlemi uygulamıştır.
+    Aşağıdaki boru örneğinde manuel uykuya dalma işlemi uygulanmıştır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* pipe-driver-manual-wait.c */
@@ -57820,7 +57823,7 @@ static int __init generic_init(void)
 {
 	int result;
 
-	printk(KERN_INFO "pipe-driver module initialization...\n");
+	printk(KERN_INFO "pipe-driver-manual-wait module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "pipe-driver-manual-wait")) < 0) {
 		printk(KERN_INFO "Cannot alloc char driver!...\n");
@@ -57852,19 +57855,19 @@ static void __exit generic_exit(void)
 	cdev_del(g_cdev);
 	unregister_chrdev_region(g_dev, 1);
 
-	printk(KERN_INFO "pipe-driver module exit...\n");
+	printk(KERN_INFO "pipe-driver-manual-wait module exit...\n");
 }
 
 static int generic_open(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "pipe-driver opened...\n");
+	printk(KERN_INFO "pipe-driver-manual-wait opened...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "pipe-driver-closed...\n");
+	printk(KERN_INFO "pipe-driver-manual-wait closed...\n");
 
 	return 0;
 }
@@ -58082,7 +58085,7 @@ int main(void)
 		printf("Size:");
 		scanf("%d", &size);
 		if (size > BUFFER_SIZE) {
-			printf("size is very long!..\n");
+			printf("size is very long!...\n");
 			continue;
 		}
 		if (size == 0)
@@ -58104,6 +58107,10 @@ void exit_sys(const char *msg)
 
 	exit(EXIT_FAILURE);
 }
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												143. Ders 26/05/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Aslında wait_event fonksiyonları yukarıda açıkladığımız daha aşağı seviyeli fonksiyonlar kullanılarak gerçekleştirilmiştir. 
@@ -58159,14 +58166,14 @@ void exit_sys(const char *msg)
     için open POSIX fonksiyonunda fonksiyonun ikinci parametresine O_NONBLOCK bayrağının eklenmelidir. Normal disk dosyalarında 
     O_NONBLOCK bayrağının bir anlamı yoktur. Ancak boru gibi özel dosyalarda ve aygıt sürücülerde bu bayrak şu anlama gelmektedir:
 
-    1) Okuma sırasında eğer okunacak bir bilgi yoksa read fonksiyonu bloke oluşturmaz başarısızlıkla geri döner ve errno değeri 
+    1) Okuma sırasında eğer okunacak bir bilgi yoksa read fonksiyonu bloke oluşturmaz, başarısızlıkla geri döner ve errno değeri 
     EAGAIN olarak set edilir.
 
-    2) Yazma sırasında yazma eylemi meşguliyet yüzünden yapılamıyorsa write fonksiyonu bloke oluşturmaz başarısızlıkla geri döner 
+    2) Yazma sırasında yazma eylemi meşguliyet yüzünden yapılamıyorsa write fonksiyonu bloke oluşturmaz, başarısızlıkla geri döner 
     ve errno değeri yine EAGAIN olarak set edilir.
 
-    Aygıt sürücü açıldığında open fonksiyonun ikinci parametresi file yapısının (dosya nesnesinin) f_flags elemanına 
-    yerleştirilmektedir. Dosya nesnesinin adresinin aygıt sürücüdeki fonksiyonları filp parametresiyle aktarıldığını anımsayınız. 
+    Aygıt sürücü açıldığında open fonksiyonunun ikinci parametresi file yapısının (dosya nesnesinin) f_flags elemanına 
+    yerleştirilmektedir. Dosya nesnesinin adresinin aygıt sürücüdeki fonksiyonlara filp parametresiyle aktarıldığını anımsayınız. 
     Bu durumda biz aygıt dosyasının blokesiz modda açılıp açılmadığını şöyle test edebiliriz:
 
     if (filp->f_flags & O_NONBLOCK) {		/* blokesiz modda mı açılmış */
@@ -58176,14 +58183,14 @@ void exit_sys(const char *msg)
     }
 
     Aygıt sürücümüz blokesiz modda işlemlere izin vermiyorsa biz bu durumu kontrol etmeyebiliriz. Yani böyle bir aygıt sürücüde 
-    programcının aygıt sürücüyğ O_NONBLOCK bayrağını kullanarak açmışsa bu durumu hiç dikkate almayabiliriz. (Örneğin disk dosyalarında
+    programcı aygıt sürücüyü O_NONBLOCK bayrağını kullanarak açmışsa bu durumu hiç dikkate almayabiliriz. (Örneğin disk dosyalarında
     blokesiz işlemlerin bir anlamı olmadığı halde Linux çekirdeği disk dosyaları O_NONBLOCK bayrağıyla açıldığında hata ile geri 
     dönmeden bayrağı dikkate almamaktadır.) Eğer bu kontrol yapılmak isteniyorsa aygıt sürücünün açılması sırasında kontrol 
-    aygıt sürücünün open fonksiyonund yapılabilir. Bu durumda open fonksiyonunu -EINVAL değeriyşe geri döndürebilirsiniz. Örneğin:
+    aygıt sürücünün open fonksiyonunda yapılabilir. Bu durumda open fonksiyonunu -EINVAL değeriyle geri döndürebilirsiniz. Örneğin:
 
     static int generic_open(struct inode *inodep, struct file *filp)
     {
-        if (filp->f_flas & O_NONBLOK)
+        if (filp->f_flags & O_NONBLOCK)
             return -EINVAL;
 
         return 0;
@@ -58191,7 +58198,7 @@ void exit_sys(const char *msg)
 
     Pekiyi boru aygıt sürücümüze nasıl blokesiz mod desteği verebiliriz? Aslında bunun için iki şeyi yapmamız gerekir:
 
-    1) Yazma yapıldığı zaman boruda yazılanları alacak kadar yoksa aygıt sürücümüzün write fonksiyonunu -EAGAIN değeriyşe 
+    1) Yazma yapıldığı zaman boruda yazılanları alacak kadar yer yoksa aygıt sürücümüzün write fonksiyonunu -EAGAIN değeriyle 
     geri döndürmeliyiz. Örneğin:
 
     ...
@@ -58212,7 +58219,7 @@ void exit_sys(const char *msg)
 	}
     ...
 
-    2) Okuma yapıldığı zaman eğer boruda hiç bilgi yoksa aygıt sürücümüzün read fonksiyonunu -EAGAIN geri döndürmeliyiz.
+    2) Okuma yapıldığı zaman eğer boruda hiç bilgi yoksa aygıt sürücümüzün read fonksiyonunu -EAGAIN değeriyle geri döndürmeliyiz.
     Örneğin:
 
     ...
@@ -58233,10 +58240,10 @@ void exit_sys(const char *msg)
 	}
     ...
 
-    read ve write fonksiyonlarının -EAGAIN değeriyle geri döndürülmeden önce aygıt dosyasının blokesiz modda açlıp açılmadığının
+    read ve write fonksiyonlarının -EAGAIN değeriyle geri döndürülmeden önce aygıt dosyasının blokesiz modda açılıp açılmadığının
     kontrol edilmesi gerektiğine dikkat ediniz.
 
-    Aşaşğıdaki örnekte boru aygıt sürücüsüne blokesiz okuma ve yazma desteği verilmiştir.
+    Aşağıdaki örnekte boru aygıt sürücüsüne blokesiz okuma ve yazma desteği verilmiştir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* pipe-driver.c */
@@ -58329,7 +58336,7 @@ static int generic_open(struct inode *inodep, struct file *filp)
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "pipe-driver-closed...\n");
+	printk(KERN_INFO "pipe-driver closed...\n");
 
 	return 0;
 }
@@ -58552,7 +58559,7 @@ int main(void)
 		printf("Size:");
 		scanf("%d", &size);
 		if (size > BUFFER_SIZE) {
-			printf("size is very long!..\n");
+			printf("size is very long!...\n");
 			continue;
 		}
 		if (size == 0)
@@ -58630,7 +58637,7 @@ void exit_sys(const char *msg)
     fiziksel RAM'in ilk 896MB'sine doğrudan ancak bunun ötesine sayfa tablosunun son 128 MB'lik bölgesini değiştirerek erişmektedir. 
     32 bit sistemlerde 896MB'nin ötesine dolaylı biçimde erişildiği için bu bölgeye "high memory zone" denilmektedir. Tabii 64 bit 
     sistemlerde böyle bir problem yoktur. Çünkü bu sistemlerde yine sayfa tablolarının kernel alanı fiziksel RAM'i başından itibaren 
-    haritlandırmaktadır. Ancak 128TB'lik alan zaten şimdiki bilgisayarlara takılabilecek fiziksel RAM'in çok ötesindedir. Bu nedenle
+    haritalandırmaktadır. Ancak 128TB'lik alan zaten şimdiki bilgisayarlara takılabilecek fiziksel RAM'in çok ötesindedir. Bu nedenle
     64 bit sistemlerde "high memory zone" kavramı yoktur.
 
     Çekirdek kodların kernel alanın başlangıcı PAGE_OFFSET makrosuyla belirlenmiştir.
@@ -58830,7 +58837,7 @@ static int generic_open(struct inode *inodep, struct file *filp)
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "pipe-driver-closed...\n");
+	printk(KERN_INFO "pipe-driver closed...\n");
 
 	return 0;
 }
@@ -59048,7 +59055,7 @@ int main(void)
 		printf("Size:");
 		scanf("%d", &size);
 		if (size > BUFFER_SIZE) {
-			printf("size is very long!..\n");
+			printf("size is very long!...\n");
 			continue;
 		}
 		if (size == 0)
@@ -59271,7 +59278,7 @@ static int generic_open(struct inode *inodep, struct file *filp)
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "pipe-driver-closed...\n");
+	printk(KERN_INFO "pipe-driver closed...\n");
 
 	return 0;
 }
@@ -59785,7 +59792,7 @@ static int generic_open(struct inode *inodep, struct file *filp)
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "pipe-driver-closed...\n");
+	printk(KERN_INFO "pipe-driver closed...\n");
 
 	return 0;
 }
@@ -60015,7 +60022,7 @@ int main(void)
 		printf("Size:");
 		scanf("%d", &size);
 		if (size > BUFFER_SIZE) {
-			printf("size is very long!..\n");
+			printf("size is very long!...\n");
 			continue;
 		}
 		if (size == 0)
@@ -60040,7 +60047,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
 												147. Ders 09/06/2024 - Pazar
-/*--------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Aygıt sürücüden bilgi okumak için read fonksiyonun, aygıt sürücüye bilgi göndermek için ise write fonksiyonun kullanıldığını 
@@ -60073,7 +60080,7 @@ void exit_sys(const char *msg)
 
     ioctl fonksiyonu başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri döner. errno uygun biçimde set 
     edilmektedir.
-/*--------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     User mode'dan bir program aygıt sürücü için ioctl fonksiyonunu çağırdığında akış user mode'dan kernel moda geçer ve aygıt 
@@ -60102,7 +60109,7 @@ void exit_sys(const char *msg)
         .release = generic_release,
         .unlocked_ioctl = generic_ioctl
     };
-/*--------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     ioctl işleminde ioctl fonksiyonunun ikinci parametresi olan kontrol kodu dört parçanın bit düzeyinde birleştirilmesiyle
@@ -60445,7 +60452,7 @@ static int generic_open(struct inode *inodep, struct file *filp)
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "pipe-driver-closed...\n");
+	printk(KERN_INFO "pipe-driver closed...\n");
 
 	return 0;
 }
@@ -60811,7 +60818,7 @@ int main(void)
 		printf("Size:");
 		scanf("%d", &size);
 		if (size > BUFFER_SIZE) {
-			printf("size is very long!..\n");
+			printf("size is very long!...\n");
 			continue;
 		}
 		if (size == 0)
@@ -60819,7 +60826,7 @@ int main(void)
 		if (size < 0) {
 			pp.size = -size;
 			if ((pp.buf = malloc(-size)) == NULL) {
-				fprintf(stderr, "cannot allocate memory!..\n");
+				fprintf(stderr, "cannot allocate memory!...\n");
 				exit(EXIT_FAILURE);
 			}
 
@@ -61909,7 +61916,7 @@ static int generic_open(struct inode *inodep, struct file *filp)
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "pipe-driver-closed...\n");
+	printk(KERN_INFO "pipe-driver closed...\n");
 
 	return 0;
 }
@@ -62342,7 +62349,7 @@ int main(void)
 		printf("Size:");
 		scanf("%d", &size);
 		if (size > BUFFER_SIZE) {
-			printf("size is very long!..\n");
+			printf("size is very long!...\n");
 			continue;
 		}
 		if (size == 0)
@@ -62350,7 +62357,7 @@ int main(void)
 		if (size < 0) {
 			pp.size = -size;
 			if ((pp.buf = malloc(-size)) == NULL) {
-				fprintf(stderr, "cannot allocate memory!..\n");
+				fprintf(stderr, "cannot allocate memory!...\n");
 				exit(EXIT_FAILURE);
 			}
 
@@ -64215,7 +64222,7 @@ void exit_sys(const char *msg)
     request: bio ---> bio ---> bio ---> bio ---> bio ---> ...
     bio: bio_vec[N]
 
-    İşte transfer fonksiyonunun kernel tarafından çağrıldığında "request_queue içersindeki request nesnelerine elde edip, bu request nesnelerinin içerisindeki bio nesnelerini elde edip,
+    İşte transfer fonksiyonunun kernel tarafından çağrıldığında "request_queue içerisindeki request nesnelerine elde edip, bu request nesnelerinin içerisindeki bio nesnelerini elde edip,
     bio nesneleri içerisindeki bio_vec dizisinde belirtilen transfer bilgilerine ilişkin transfeleri" yapması gerekir. Şüphesiz bu işlem ancak açık ya da örtük iç içe 3 döngü ile
     yapılabilir. Yani bir döngü request nesnelerini elde etmeli, onun içerisindeki bir döngü bio nesnelerini elde etmeli, onun içerisindeki bir döngü de bio_vec nesleerini elde etmelidir. 
 
