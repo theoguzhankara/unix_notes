@@ -54913,7 +54913,7 @@ void exit_sys(const char *msg)
     dev_t g_dev;
     ...
 
-	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "generic-char-driver")) < 0) {
+	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "generic-char-driver")) != 0) {
 		printk(KERN_ERR "cannot register device!...\n");
 		return result;
 	}
