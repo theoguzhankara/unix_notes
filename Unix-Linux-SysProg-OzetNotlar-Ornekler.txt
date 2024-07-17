@@ -4001,7 +4001,7 @@ void exit_sys(const char *msg)
     struct passwd *getpwuid(uid_t uid);
 
     Fonksiyon yine başarı durumunda statik düzeyde tahsis edilmiş olan struct passwd türünden yapı nesnesinin adresiyle, başarısızlık 
-    durumunda  NULL adresle geri dönmektedir. Başarısızlığın nedeni kullanı id'sine ilişkin kullanıcının bulunamaması nedeni ile ise 
+    durumunda NULL adresle geri dönmektedir. Başarısızlığın nedeni kullanı id'sine ilişkin kullanıcının bulunamaması nedeni ile ise 
     bu durumda fonksiyon errno değerini değiştirmemektedir. 
 
     Aşağıdaki örnekte komut satırından verilen kullanıcı id'sine ilişkin kullanıcı bilgileri ekrana (stdout dosyasına) yazdırılmıştır.
@@ -4442,7 +4442,7 @@ void exit_sys(const char *msg)
     standartlarında bu işi yapan ayrı fonksiyonlar bulundurulmuştur.)
 
     Linux sistemlerinde dizin girişlerinin okunması için getdents isimli bir sistem fonksiyonu bulundurulmuştur. Dolayısıyla 
-    aşağıda açıklayacağımız  POSIX fonksiyonları arka planda Linux sistemlerinde getdents sistem fonksiyonunu çağırmaktadır. 
+    aşağıda açıklayacağımız POSIX fonksiyonları arka planda Linux sistemlerinde getdents sistem fonksiyonunu çağırmaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -5310,7 +5310,6 @@ void exit_sys(const char *msg)
     -1: POSIX fonksiyonlarından birinin hatayla geri dönmesi
     > 0: Erken sonlanmayı belirtir.
     0: Normal sonlanmayı belirtir.
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -5449,7 +5448,7 @@ EXIT:
     scandir fonksiyonu başarı durumunda gösterici dizisine yerleştirilen eleman sayısı ile başarısızlık durumunda -1 ile geri döner ve errno uygun biçimde değer 
     alır. 
 
-    scandir fonksiyonu tüm tahisatları malloc fonksiyonunu kullanarak yapmaktadır. Dolayısıyla programcının tahsis edilen bu alanları kendisinin
+    scandir fonksiyonu tüm tahsisatları malloc fonksiyonunu kullanarak yapmaktadır. Dolayısıyla programcının tahsis edilen bu alanları kendisinin
     free hale getirmesi gerekmektedir. 
 
     scandir kendi içerisinde her biriktirilecek dizin girişi için malloc fonksiyonu ile bir truct dirent yapısı tahsis eder, bunların adreslerini 
@@ -5627,7 +5626,7 @@ void exit_sys(const char *msg)
 
     Programcı bu dördüncü parametreye hiçbir bayrak geçmek istemezse 0 girebilir. 
 
-    nftw fonksiyonun geri dönüş değeri fonksiyon başarıssa -1, başarılıysa 0'dır. Ancak aslında fonksiyon başarılı durumda callback fonksiyonun 
+    nftw fonksiyonun geri dönüş değeri fonksiyon başarısızsa -1, başarılıysa 0'dır. Ancak aslında fonksiyon başarılı durumda callback fonksiyonun 
     geri dönüş değeri ile geri döner. Şöyle ki: Biz callback fonksiyonu 0 ile geri döndürürsek özyinelemeye devam etmek istediğimizi belirtmiş 
     oluruz. Bu durumda bir IO hatası da olmazsa nftw fonksiyonu 0 ile geri döner. Eğer biz bu fonksiyondan sıfır dışı bir değerle geri dönersek.
     nftw fonksiyonu özyinelemeyi bırakıp hemen geri çıkar ve bizim callback fonksiyondan döndürdüğümüz sıfır dışı değerle geri döner. 
@@ -8353,7 +8352,7 @@ int main(void)
     işleminin sonunda üst prosesin dosya betimleyici tablosunun slotları ile alt prosesin dosya betimleyici tablosunun slotları 
     (yani dosya betimleyicileri) aynı dosya nesnesini gösteriyor durumda olur. Bu tür kopyalamalara "sığ kopyalama (shallow copy)" 
     da denilmektedir. Mademki açık dosyaya ilişkin tüm bilgiler dosya nesnesinde tutulmaktadır, o halde fork işleminden sonra 
-    proseslerden  biri bir dosyanın dosya göstericisini değiştirirse diğer proses bunu değişmiş olarak görecektir. Tabii fork 
+    proseslerden biri bir dosyanın dosya göstericisini değiştirirse diğer proses bunu değişmiş olarak görecektir. Tabii fork 
     işlemi sırasında dosya nesnelerinin referans sayaçları da bir artırılmaktadır. Benzer biçimde aslında işin başında açık olan 
     0, 1 ve numaralı betimleyiciler login işlemi öncesinde yaratılmış durumdadır. Her fork işleminde bu betimleyicilere ilişkin 
     dosya nesnelerinin kopyaları çıkartılmamaktadır. Prosesler aslında genellikle aynı 0, 1 ve 2 numaralı dosya nesnelerini 
@@ -8550,7 +8549,7 @@ int main(void)
     verilir. Makro bu nesnenin bazı bitlerinden alt prosesin normal sonlanıp sonlanmadığını anlar ve eğer alt proses normal 
     bir biçimde sonlanmışsa sıfır dışı herhangi bir değere, normal bir biçimde sonlanmamışsa sıfır değerine geri döner. Benzer 
     biçimde biz prosesin anormal bir biçimde bir sinyal dolayısıyla sonlanıp sonlanmadığını da WIFSIGNALED makrosuyla tespit 
-    edebiliriz. Proses SIGSTOP sinyali ile  geçici süre durdurulmuş da olabilir. Bu durum da WIFSTOPPED makrosu ile tespit 
+    edebiliriz. Proses SIGSTOP sinyali ile geçici süre durdurulmuş da olabilir. Bu durum da WIFSTOPPED makrosu ile tespit 
     edilebilmektedir. Prosesin exit kodu ise WEXITSTATUS makrosuyla elde edilmektedir. Yine bu makroya wait fonksiyonuna geçirilen 
     int nesne argüman olarak verilmektedir. Programcı wait fonksiyonuna argüman olarak NULL adres de geçebilir. Bu durumda 
     fonksiyon exit koduyla ilgili bir yerleştirme yapmaz. Ancak yine ilk alt prosesin bitmesini bekler. 
@@ -8738,7 +8737,7 @@ void exit_sys(const char *msg)
 
     Fonksiyonun birinci parametresi beklenecek alt prosesin proses id değerini belirtir. Bu sayede programcı belli bir alt prosesi 
     bekleyebilmektedir. Bu birinci parametre aslında birkaç biçimde geçilebilmektedir. Eğer bu parametre negatif bir proses id 
-    değeri olarak geçilirse  bu durumda fonksiyon proses grup id'si bu değerin pozitifi olan herhangi bir alt prosesi beklemektedir. 
+    değeri olarak geçilirse bu durumda fonksiyon proses grup id'si bu değerin pozitifi olan herhangi bir alt prosesi beklemektedir. 
     Eğer bu parametre -1 olarak geçilirse bu durumda fonksiyon tamamen wait fonksiyonundaki gibi davranmaktadır. Yani herhangi bir 
     alt prosesi beklemektedir.Eğer bu parametre 0 olarak geçilirse fonksiyon proses grup id'si waitpid fonksiyonunu çağıran prosesin 
     id'si ile aynı olan herhangi bir alt prosesi beklemektedir. Tabii normal olarak bu parametreye programcı pozitif olan bir proses 
@@ -8968,7 +8967,7 @@ void exit_sys(const char *msg)
     Fonksiyon parametre olarak çevre değişkeninin ismini (yani anahtarı) alır geri dönüş değeri olarak onun değerinin bulunduğu 
     bellek adresini verir. Fonksiyonun geri döndürdüğü adres prosesin adres alanı içerisindeki statik düzeyde tahsis edilmiş 
     bir alanın adresidir. Fonksiyon eğer ilgili çevre değişkeni yoksa NULL adrese geri dönmektedir. Fonksiyonun geri dönüş 
-    değeri const olmayan bir gösterici olsa da  programcı geri döndürülen bu adresteki yazıyı değiştirmeye çalışmamalıdır. 
+    değeri const olmayan bir gösterici olsa da programcı geri döndürülen bu adresteki yazıyı değiştirmeye çalışmamalıdır. 
     C standartlarında bu değiştirme durumu işletim sisteminin isteğine bırakılmış olsa da UNIX/Linux sistemlerinde bu durum 
     tanımsız davranışa yol açmaktadır. getenv fonksiyonu başarısızlık durumunda errno değişkenini herhangi bir değerle set 
     etmemektedir. 
@@ -9035,7 +9034,7 @@ int main(int argc, char *argv[])
     int setenv(const char *name, const char *value, int overwrite);
 
     Fonksiyonun birinci parametresi çevre değişkeninin ismini ikinci parametresi onun değerini alır. Üçüncü parametre eğer o 
-    çevre değişkeni zaten varsa  onun değerinin değiştirilip değiştirilmeyeceğini belirtir. Bu parametre sıfır dışı bir değer 
+    çevre değişkeni zaten varsa onun değerinin değiştirilip değiştirilmeyeceğini belirtir. Bu parametre sıfır dışı bir değer 
     olarak geçilirse çevre değişkeninin değeri değiştirilir. Sıfır geçilirse değiştirilmez ve fonksiyon yine başarıyla geri 
     döner. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri dönmektedir. Başarısızlık durumunda 
     errno değeri uygun biçimde set edilmektedir. 
@@ -9100,7 +9099,6 @@ int main(int argc, char *argv[])
     Aşağıdaki örnekte yine program aşağıdakine benzer çalıştırılmalıdır:
 
     ./sample ali=100 veli=200
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -9439,7 +9437,6 @@ void exit_sys(const char *msg)
      Örneğin:
 
     export C_INCLUDE_PATH=/home/kaan:/home/kaan/Study
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -9511,7 +9508,7 @@ void exit_sys(const char *msg)
     belirtmemesi gerekir. Çünkü NULL sembolik sabiti düz sıfır olarak da define edilmiş olabilir. Benzer biçimde programcı burada 
     NULL adres sabiti için düz sıfır da geçmemelidir. Uygun olan durum düz sıfır değerinin ya da NULL sembolik sabitinin bir adres 
     türüne (tipik olarak char * türüne) dönüştürülerek aktarılmasıdır. Yukarıda da belirtildiği exec fonksiyonları başarı durumunda 
-    zaten geri dönmezler. Başarısızlık durumunda -1 değerine geri dönerler ve  errno değişkeni uygun biçimde set edilir. Örneğin:
+    zaten geri dönmezler. Başarısızlık durumunda -1 değerine geri dönerler ve errno değişkeni uygun biçimde set edilir. Örneğin:
 
     if (execl("mample", "mample", "ali", "veli", "selami", (char *)0) == -1)
 		exit_sys("execl");
@@ -9533,7 +9530,6 @@ void exit_sys(const char *msg)
     ali
     veli
     selami
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* sample.c */
@@ -10586,10 +10582,10 @@ void exit_sys(const char *msg)
     Tabii aynı işlem şöyle de yapılabilirdi:
 
     if ((fd = open("sample.c", O_RDONLY)) == -1)
-		exit_sys("open");
+        exit_sys("open");
 
-	if (fcntl(fd, F_SETFD, fcntl(fd, F_GETFD)|FD_CLOEXEC) == -1)
-		exit_sys("fcntl");
+    if (fcntl(fd, F_SETFD, fcntl(fd, F_GETFD)|FD_CLOEXEC) == -1)
+        exit_sys("fcntl");
 
     close on exec bayrağı bazı işlemler sırasında işletim sistemi tarafından set ya da reset edilebilmektedir. Örneğin dup ve 
     dup2 fonksiyonları ile dosya betimleyicisinin kopyası çıkartılırken her zaman yeni betimleyicinin close on exec bayrağı 
@@ -10634,9 +10630,9 @@ int main(int argc, char *argv[])
 
 void exit_sys(const char *msg)
 {
-    perror(msg);
+	perror(msg);
 
-    exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 }
 
 /* mample.c */
@@ -10645,7 +10641,7 @@ void exit_sys(const char *msg)
 #include <stdlib.h>
 #include <unistd.h>
 
-#define BUFFER_SIZE     4096
+#define BUFFER_SIZE		4096
 
 void exit_sys(const char *msg);
 
@@ -10949,7 +10945,6 @@ int main(int argc, char *argv[])
     shebang içerdiğinden dolayı komut satırında "x" verilmişse doğrudan aşağıdaki gibi çalıştırılabilmektedir:
 
     ./sample.py
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #!/usr/bin/python3
@@ -10981,7 +10976,6 @@ for i in range(10):
     Bu çalıştırma aslında aşağıdakiyle eşdeğer olacaktır:
 
     /bin/make -f sample.mak
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -11473,7 +11467,6 @@ void exit_sys(const char *msg)
     "/tmp" dizininin erişim hakları şöyledir:
 
     drwxrwxrwt 19 root root 65536 Şub 25 10:05 /tmp
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -11816,7 +11809,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Yukarıdaki fonksiyonlara ek olarak setreuid ve setregid isimli iki yardımcı fonksiyon da bulundurulmuştur. Aslında bu 
-    fonksiyonlara  mutlak anlamda gerek yoktur. Ancak bazı işlemleri kolaytırmaktadır. Bu fonksiyonlar ilk kez BSD UNIX 
+    fonksiyonlara mutlak anlamda gerek yoktur. Ancak bazı işlemleri kolaytırmaktadır. Bu fonksiyonlar ilk kez BSD UNIX 
     sistemlerinde kullanılmış daha sonra POSIX standartlarına dahil edilmiştir. Bu fonksiyonların ana amacı tek hamlede gerçek 
     kullanıcı ve etkin kullanıcı id'lerini, gerçek grup id ve etkin grup id'lerini değiştirebilmektedir. Genellikle gerçek 
     id'lerle etkin id'leri yer değiştirmek amacıyla bu fonksiyon kullanılmaktadır. 
@@ -12018,7 +12011,7 @@ void exit_sys(const char *msg)
 
     Bir prosesin gerçek kullanıcı ve gerçek grup id'leri login prosesi tarafından "/etc/passwd" dosyasına başvurularak belirlenmektedir.
     İşte login programı prosesin ek gruplarını da "/etc/group" dosyasına bakarak belirlemektedir. Anımsanacağı gibi "/etc/group" 
-    dosyasındaki  her satır bir gruba ilişkin bilgileri barındırıyordu. Satırın sonundaki son eleman ise o gruba ek grup olarak 
+    dosyasındaki her satır bir gruba ilişkin bilgileri barındırıyordu. Satırın sonundaki son eleman ise o gruba ek grup olarak 
     dahil olan kullanıcıları belirtmektedir. Örneğin:
 
     ...
@@ -12321,8 +12314,8 @@ void exit_sys(const char *msg)
     Bu kesme kodu da 60 ms. gibi bir zaman dolduğunda threadler arası geçiş (context switch) yapmaktadır. Thread akışının bu 
     biçimde quanta süresi dolduğunda donanım kesmesi yoluyla zorla ara verilmesine işletim sistemleri dünyasında "preemptive" 
     işletim sistemleri denilmektedir. UNIX/Linux, Windows ve macOS sistemleri preemptive işletim sistemleridir. Artık pek çok 
-    işlemci ailesi bu biçimdeki donanım kesmeleri oluşturan timer devrelerini CPU'nun içerisine de dahil etmiştir. Ancak X86 
-    ve X64 sistemlerinde timer sistemi için genel olarak eskiye uyum bakımından Intel 8254 ve onun ileri versiyonları olan ve 
+    işlemci ailesi bu biçimdeki donanım kesmeleri oluşturan timer devrelerini CPU'nun içerisine de dahil etmiştir. Ancak x86 
+    ve x64 sistemlerinde timer sistemi için genel olarak eskiye uyum bakımından Intel 8254 ve onun ileri versiyonları olan ve 
     ismine "PIT (Programmable Interval Timer)" denilen devreler aktif olarak kullanılmaktadır. Preemptive sistemlere bir 
     alternatif olarak "non-preemptive" ya da "cooperative multitask" da denilen sistemler bulunmaktadır. Bu sistemlerde bir 
     thread çalıştığında kendi rızası ile CPU'yu birakır. Eğer CPU bırakmazsa diğer threadler çalışma fırsatı bulamazlar. 
@@ -12422,7 +12415,7 @@ int main(int argc, char *argv[])
 	if (clock_gettime(CLOCK_MONOTONIC, &ts1) == -1)
 		exit_sys("clock_gettime");
 
-	for (long  i = 0; i < 1000000000; ++i)
+	for (long i = 0; i < 1000000000; ++i)
 		for (int k = 0; k < 30; ++k)
 			;
 	if (clock_gettime(CLOCK_MONOTONIC, &ts2) == -1)
@@ -12488,11 +12481,11 @@ void exit_sys(const char *msg)
 
     Bir program içerisinde kullanılan yani derleyicinin ürettiği adresler aslında gerçek fiziksel adresler değildir. Bu adreslere 
     "sanal adresler (virtual addresses)" denilmektedir. Derleyiciler kodları sanki geniş bir RAM'de program tek başına çalışacakmış 
-    gibi üretmektedir. Örneğin 32 bit işlemcilerin kullanıldığı bir Linux sisteminde derleyici sanki program 4GB'lik RAM'de tek başına 
-    4MB'den itibaren yüklenecekmiş gibi kod üretmektedir. Yani örneğin 32 bit Linux sistemlerinde (Windows ve macOS'te de böyle) 
+    gibi üretmektedir. Örneğin 32 bit işlemcilerin kullanıldığı bir Linux sisteminde derleyici sanki program 4 GB'lik RAM'de tek başına 
+    4 MB'den itibaren yüklenecekmiş gibi kod üretmektedir. Yani örneğin 32 bit Linux sistemlerinde (Windows ve macOS'te de böyle) 
     sanki derleyiciler program 4 GB bellekte 4 MB'den itibaren tek başlarına yüklenecekmiş gibi bir kod üretmektedir. Her program 
     derlendiğinde aynı biçimde kod üretilmektedir. Çünkü derleyicinin ürettiği bu adresler sanal adreslerdir. Pekiyi her program 
-    aynı biçimde sanki RAM'in 4MB'sinden başlanarak ardışıl bir biçimde yüklenecekmiş gibi bir koda sahipse bu programlar nasıl 
+    aynı biçimde sanki RAM'in 4 MB'sinden başlanarak ardışıl bir biçimde yüklenecekmiş gibi bir koda sahipse bu programlar nasıl 
     çalışmaktadır?
 
     İşte sayfalama mekanizmasına sahip olan CPU'lar aslında "sayfa tablosu (page table)" denilen bir taloya bakarak çalışırlar. 
@@ -12558,7 +12551,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Buaraya kadar şunları anladık:
 
-    - Derleyici 32 bit bir sistemde sanki program 4GB'lik bir RAM'de tek başına 4MB'ye yüklenerek çalıştırılacakmış gibi bir kod
+    - Derleyici 32 bit bir sistemde sanki program 4 GB'lik bir RAM'de tek başına 4 MB'ye yüklenerek çalıştırılacakmış gibi bir kod
     üretmektedir. 
 
     - İşlemci kodu çalıştırırken her bellek erişiminde sayfa tablosuna bakıp aslında o sanal adresleri fiziksel adreslere dönüştürmektedir. 
@@ -12595,12 +12588,12 @@ void exit_sys(const char *msg)
     o thread'e ilişkin prosesin sayfa tablosunu kullanıyor durumdadır. Dolayısıyla bu iki farklı proseste işletim sistemi sayfa 
     tablolarının ilgili sayfalarını aslında farklı fiziksel sayfalara yönlendirmiş durumdadır. 
 
-    Soru: 32 bit bir derleyicinin ürettiği kodun aslında sanki 4GB belleğe tek başına 4MB'den itibaren yüklenecekmiş gibi üretildiği 
-    söylendi. Sanal bellek alanındaki bu 4MB boşluğun anlamı nedir?
+    Soru: 32 bit bir derleyicinin ürettiği kodun aslında sanki 4 GB belleğe tek başına 4 MB'den itibaren yüklenecekmiş gibi üretildiği 
+    söylendi. Sanal bellek alanındaki bu 4 MB boşluğun anlamı nedir?
 
     Yanıt: Bunun çok özel bir anlamı yoktur. Bir kere NULL adres için en az bir sayfa gerekmektedir. Pek çok işletim sistemi
     güvenlik amacıyla ve bazı başka nedenlerden dolayı sanal bellek alanının belli bir bölümünü boş bırakmaktadır. Windows'ta da
-    bu alan 4MB'dir. Ancak programın minimal yüklenme adresi 64K'ya kadar düşürülebilmektedir. 
+    bu alan 4 MB'dir. Ancak programın minimal yüklenme adresi 64K'ya kadar düşürülebilmektedir. 
 
     Soru: CPU sayfa tablosunun yerini nereden bilmektedir?
     Yanıt: CPU'lar sayfa tablosunu özel bir yazmacın gösterdiği yerde arayacak biçimde tasarlanmıştır. Dolayısıyla context switch 
@@ -12654,12 +12647,12 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi 32 bit bir mimaride işletim sisteminin sayfa tablosu yukarıdaki şekillere göre ne kadar yer kaplar? 32 bit mimaride
-    fiziksel RAM en fazla 4GB olabilir. Proseslerin sanal bellek alanları da 4GB'dir. O halde toplam sayfa sayısı 
+    fiziksel RAM en fazla 4 GB olabilir. Proseslerin sanal bellek alanları da 4 GB'dir. O halde toplam sayfa sayısı 
     4GB/4K = 2^32/2^12 = 2^20 = 1 MB olur. Her sayfa tablosu girişi Intel mimarisinde 4 byte'tır. Dolayısıyla yukarıdaki 
-    şekillere göre bir prosesin sayfa tablosu 4MB yer kaplar. Bu alan sayfa tablosu için çok büyüktür. Bu nedenle işlemcileri 
+    şekillere göre bir prosesin sayfa tablosu 4 MB yer kaplar. Bu alan sayfa tablosu için çok büyüktür. Bu nedenle işlemcileri 
     tasarlayanlar sayfa tablolarının kapladığı alanı küçültmek için sanal adresleri iki parçaya değil, üç ya da dört parçaya 
     ayırma yoluna gitmişlerdir. Gerçekten de örneğin Intel'in 32 bit mimarisinde bir sanal adres üç parçaya ayrılmaktadır. Bu 
-    ayrıntı kursumuzun konusu dışındadır ve Derneğimizde "80X86 ve ARM Sembolik Makine Dilleri" kursunda ele alınmaktadır. 
+    ayrıntı kursumuzun konusu dışındadır ve Derneğimizde "80x86 ve ARM Sembolik Makine Dilleri" kursunda ele alınmaktadır. 
     Biz bu kursumuzda çeşitli gösterimlerde sanal adresleri ikiye ayıracağız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -12702,7 +12695,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Sanal bellek (virtual memory) bir programın tamamının değil belli kısmının belleğe yüklenerek disk ile RAM arasında yer 
-    değiştirmeli bir biçimde çalıştırılmasına yönelik bir mekanizmadır. Bu mekanizma sayesinde örneğin 100MB'lık bir programın 
+    değiştirmeli bir biçimde çalıştırılmasına yönelik bir mekanizmadır. Bu mekanizma sayesinde örneğin 100 MB'lık bir programın 
     başlangıçta yalnızca 64K'lık kısmı RAM'e yüklenebilir. Sonra program çalışmaya başlar. Çalışma sırasında programın bellekte 
     olmayan bir kısmına erişildiğinde işletim sistemi programın bellekte olmayan kısmını o anda diskten belleğe yükler ve çalışma 
     kesintisiz devam ettirilirir.
@@ -12804,7 +12797,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi sanal bellek toplamda bize ne sağlamaktadır? Şüphesiz sanal bellek mekanizmasının en önemli faydası RAM yeterli olmasa bile
-    çok sayıda büyük programın aynı anda çalışır durumda tutulabilmesidir. Bizim elimizde 8GB RAM olsa bile biz onlarca büyük programı 
+    çok sayıda büyük programın aynı anda çalışır durumda tutulabilmesidir. Bizim elimizde 8 GB RAM olsa bile biz onlarca büyük programı 
     çalışır durumda tutabiliriz. Ancak yukarıda da belirtildiği gibi işletim sistemi bir swap alanı bulundurmaktadır. Eğer bu swap alanı 
     dolarsa başka bir limit nedeniyle "out of memory" durumu oluşabilmektedir. Bu nedenle eğer programlar çok fazla bellek kullanıyorsa
     bu swap alanlarının büyütülmesi de gerekebilir. 
@@ -12814,7 +12807,7 @@ void exit_sys(const char *msg)
     Sayfalama ve sanal bellek mekanizmasında işletim sistemi de o anda sanal bellek alanı içerisinde bulunmak zorundadır. Pekiyi 
     işletim sisteminin kodları sayfa tablosunda sanal belleğin neresindedir? İşte genellikle işletim sistemi tasarımcıları
     sanal bellek alanını "user sapace" ve "kernel space" olarak ikiye ayırmaktadır. "user space" genellikle sanal bellek alanının düşük 
-    anlamlı kısmında, kernel space ise yüksek anlamlı kısmında bulundurulur. Örneğin 32 bit Linux sistemleri 4GB'lik sanal bellek alanını 
+    anlamlı kısmında, kernel space ise yüksek anlamlı kısmında bulundurulur. Örneğin 32 bit Linux sistemleri 4 GB'lik sanal bellek alanını 
     şöyle ayırmıştır:
 
     32 Bit Linux Proses Sanal Bellek Alanı
@@ -12822,7 +12815,7 @@ void exit_sys(const char *msg)
     3 GB        User Space
     1 GB        Kernel Space
 
-    Bu durumda 32 bit Linux sistemlerinde bir programın kullanabileceği maksimum sanal bellek 3 GB'dir. (Windows ta 2GB user space için, 
+    Bu durumda 32 bit Linux sistemlerinde bir programın kullanabileceği maksimum sanal bellek 3 GB'dir. (Windows ta 2 GB user space için, 
     2 GB kernel space için kullanılmıştır.) 64 bit Linux sistemlerinde ise prosesin sanal bellek alanı şöyle organize edilmiştir:
 
     64 Bit Linux Proses Sanal Bellek Alanı
@@ -12851,7 +12844,7 @@ void exit_sys(const char *msg)
     dosyasında tahsisatı henüz yapmayabilir. Bu işlemi dinamik alan kullanıldığında yapabilir. Genellikle Linux sistemleri bu 
     yola başvurmaktadır. Literatürde dinamik alan için swap dosyasında baştan yer ayrılmasına "alanın commit edilmesi" denilmektedir. 
 
-    Aşağıdaki 3GB RAM olan 2GB swap alanına sahip 64 bit Linux sisteminde 5GB alan dinamik olarak tahsis edilmek istenmiştir. 
+    Aşağıdaki 3 GB RAM olan 2 GB swap alanına sahip 64 bit Linux sisteminde 5 GB alan dinamik olarak tahsis edilmek istenmiştir. 
     Burada tahsisat başarılı gibi gözükse de tahsis edilen alan kullanılırken swap alanı yetersizliğinden dolayı sinyal oluşacak 
     ve proses sonlandırılacaktır.
 
@@ -13510,7 +13503,6 @@ void exit_sys(const char *msg)
 
     if (unlink("mypipe") == -1)
         exit_sys("mypipe")
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -14643,7 +14635,7 @@ void exit_sys(const char *msg)
 
     Eğer programcı dosya erişim modlarını elde etmek istiyorsa erişim modları ile bit AND işlemini kullanmamlıdır. Bunun 
     için önce fonksiyonun geri dönüş değeri O_ACCMODE değeri ile bit AND işlemine sokulup erişim modlarıyla == karşılaştıması 
-    yapılmalıdır.  Örneğin biz dosyanın O_RDWR modunda açılıp açılmadığını anlam isteyelim. Bu işlemi şöyle yapmamalıyız:
+    yapılmalıdır. Örneğin biz dosyanın O_RDWR modunda açılıp açılmadığını anlam isteyelim. Bu işlemi şöyle yapmamalıyız:
 
     result = fcntl(fd, F_GETFL);
     if (result & O_RDWR) {		/* dikkat! hatalı kullanım */
@@ -15105,12 +15097,12 @@ void exit_sys(const char *msg)
     Dolayısıyla erişim hakları için yine <sys/stat.h> içerisindeki S_IXXX sembolik sabitleri ya da bunların sayısal değerleri kullanılır. 
     Bu erişim haklarının IPC_CREAT ve IPC_EXCL ile bitsel OR işlemine sokulması gerekmektedir. Örneğin:
 
-	msgid = msgget(0x12345, IPC_CREAT|S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+    msgid = msgget(0x12345, IPC_CREAT|S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
 
     Anımsanacağı gibi POSIX 2008 standardı ile bu S_IXXX sembolik sabitlerine sayısal değerler de karşılık getirilmişti. O halde POSIX 2008 
     ve sonrasında bu işlemi şöyle de yapabiliriz:
 
-	msgid = msgget(0x12345, IPC_CREAT|0644);
+    msgid = msgget(0x12345, IPC_CREAT|0644);
 
     Tabii anahtara ilişkin mesaj kuyruğu zaten varsa buradaki erişim haklarının ve O_CREAT bayrağının hiçbir etkisi yoktur. Erişim hakları, 
     nesne gerçekten yaratılacaksa kullanılmaktadır.
@@ -15119,7 +15111,7 @@ void exit_sys(const char *msg)
     bu durumda kullanılmayan bir anahtar oluşturulup mesaj kuyruğu yaratılır. msgget fonksiyonu da bu mesaj kuyruğunun id değerine
     geri döner. Örneğin:
 
-	msgid = msgget(IPC_PRIVATE, IPC_CREAT|S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+    msgid = msgget(IPC_PRIVATE, IPC_CREAT|S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
 
     Burada olmayan bir anahtardan hareketle mesaj kuyruğu yaratıldığı için bir çakışma söz konusu olmayacaktır. Tabii bu durumda 
     bu id değerinin (anahtarı bilmiyoruz) diğer prosese aktarılması gerekmektedir. Bu aktarım da olsa olsa komut satırı argümanıyla 
@@ -15415,11 +15407,11 @@ void exit_sys(const char *msg)
     Eğer kuyruktaki tüm mesajların alınıp döngüden çıkılması isteniyorsa bu durumda blokesiz okuma yoluna gidilebilir. Örneğin:
 
     while (msgrcv(msgid, &msg, sizeof(int), 0, IPC_NOWAIT) != -1)
-		printf("Message type: %ld\n", msg.mtype);
-		printf("Message content: %d\n", msg.val);
-	}
-	if (errno != EAGAIN)
-		exit_sys("msgrcv");
+        printf("Message type: %ld\n", msg.mtype);
+        printf("Message content: %d\n", msg.val);
+    }
+    if (errno != EAGAIN)
+        exit_sys("msgrcv");
 
     Aşağıdaki örnekte prog1 programı mesaj kuyruğuna 0'dan 1000000'a kadar değerleri mesaj olarak yerleştirmektedir. Mesajın tür
     değeri programlar tarafından kullanılmadığı için 1 olarak geçilmiştir. prog2 programı bu değerleri kuyruktan almış 1000000 
@@ -16511,7 +16503,7 @@ void exit_sys(const char *msg)
     öncelik derecesini belirtmektedir. Bu öncelik derecesi >= 0 bir değer olarak girilmelidir. POSIX mesaj kuyruklarında öncelik 
     derecesi yüksek olan mesajlar FIFO sırasına göre önce alınmaktadır. Bu mesaj kuyruklarının klasik Sistem 5 mesaj kuyruklarında 
     olduğu gibi belli bir öncelik derecesine sahip mesajları alabilme yeteneği yoktur. Buradaki öncelik derecesinin <limits.h> 
-    içerisindeki  MQ_PRIO_MAX değerinden küçük olması gerekmektedir. Bu değer ise işletim sistemlerini yazanlar tarafından 
+    içerisindeki MQ_PRIO_MAX değerinden küçük olması gerekmektedir. Bu değer ise işletim sistemlerini yazanlar tarafından 
     belirlenmektedir. Ancak bu değer _POSIX_MQ_PRIO_MAX (32) değerinden düşük olamaz. Yani başka bir deyişle buradaki desteklenen 
     değer 32'den küçük olamamaktadır. (Mevcut Linux sistemlerinde bu değer 32768 biçimindedir.)
 
@@ -16549,11 +16541,11 @@ void exit_sys(const char *msg)
     ilişkin mq_msgsize değerinden küçük ise fonksiyon hemen başarısız olmaktadır. Bu durumda errno değişkeni EMSGSIZE değeri ile set 
     edilmektedir. Pekiyi bu değeri mq_receive fonksiyonunu uygulayacak programcı nasıl bilecektir? Eğer kuyruğu kendisi yaratmışsa 
     ve yaratım sırasında mq_attr parametresiyle özellik belirtmişse programcı zaten bunu biliyor durumdadır. Ancak genellikle mq_receive
-    fonksiyonunu kullanan programcılar bunu bilmezler. Çünkü  genellikle kuyruk mq_receive yapan programcı tarafından yaratılmamıştır 
+    fonksiyonunu kullanan programcılar bunu bilmezler. Çünkü genellikle kuyruk mq_receive yapan programcı tarafından yaratılmamıştır 
     ya da kuyruk default özelliklerle yaratılmıştır. Bu durumda mecburen programcı mq_getattr fonksiyonu ile bu bilgiyi elde etmek 
     zorunda kalır. Tabii bu işlem programın çalışma zamanında yapıldığına göre programcının mesajın yerleştirileceği alanı da malloc 
     fonksiyonu ile dinamik bir biçimde tahsis etmesi gerekmektedir. mq_receive fonksiyonun son parametresi kuyruktan alınan mesajın 
-    öncelik derecesinin yerleştirileceği unsigned int türden nesnenin adresini almaktadır. Ancak bu parametre NULL  adres biçiminde 
+    öncelik derecesinin yerleştirileceği unsigned int türden nesnenin adresini almaktadır. Ancak bu parametre NULL adres biçiminde 
     geçilebilir. Bu durumda fonksiyon mesajın öncelik derecesini yerleştirmez.
 
     Fonksiyon başarı durumunda kuyruktaki mesajın uzunluğu ile, başarısızlık durumunda -1 ile geri dönmektedir ve errno değişkeni 
@@ -17044,7 +17036,6 @@ void exit_sys(const char *msg)
     - POSIX mesaj kuyrukları dosya sistemi gibi mount edilebilmektedir. Dolayısıyla silme işlemi dosya siler gibi yapılabilmektedir.
 
     - Her iki mesaj kuyruğu da silinene kadar ya da sistem reboot edilene kadar yaşamaktadır.
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -17121,11 +17112,11 @@ void exit_sys(const char *msg)
 
     Örneğin:
 
-	int shmid;
+    int shmid;
     ...
 
-	if ((shmid = shmget(SHM_KEY, 4096, 0)) == -1)
-		exit_sys("shmget");
+    if ((shmid = shmget(SHM_KEY, 4096, 0)) == -1)
+        exit_sys("shmget");
 
     2) Zaten yaratılmış bir klasik Sistem 5 paylaşılan bellek alanı nesnesini, prosesin sanal bellek alanında oluşturmak gerekir. 
     Buna klasik Sistem 5 paylaşılan bellek alanları terminolojisinde "paylaşılan bellek alanının attach edilmesi" denilmektedir. 
@@ -18066,7 +18057,6 @@ void exit_sys(const char *msg)
 
     ./sample test.txt
     ./mample test.txt
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* sample.c */
@@ -18787,7 +18777,7 @@ void exit_sys(const char *msg)
     yerel yerel değişkeni değiştirirse diğer thread onu değişmiş olarak görmektedir.
 
     İşletim sistemlerinde yaratılan bir thread'in default stack büyüklüğü sistemden sisteme değişebilmektedir. Örneğin Linux 
-    sistemlerinde thread'ler default olarak  8MB stack ile yaratılmaktadır. Ancak thread'ler yaratılırken programcı isterse 
+    sistemlerinde thread'ler default olarak 8 MB stack ile yaratılmaktadır. Ancak thread'ler yaratılırken programcı isterse 
     stack büyüklüğünü kendisi de belirleyebilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -18876,7 +18866,7 @@ void exit_sys(const char *msg)
     fonksiyonuna geçirilecek parametreyi belirtmektedir. Böylece aynı thread fonksiyonu farklı bilgilerle başlatılabilmektedir. 
     Thread'e geçirilecek parametrenin void * türünden olduğuna dikkat ediniz. Çünkü adres bilgisi en genel parametrik bilgi 
     durumundadır. Tabii programcı bu parametreye bir adres geçirmeyip bir değer de geçirmek isteyebilir. Bu durumda değeri void * 
-    türüne dönüştürmelidir. Fonksiyonun üçüncü parametresiyle   belirtilen thread fonksiyonunun geri dönüş değerinin de void * 
+    türüne dönüştürmelidir. Fonksiyonun üçüncü parametresiyle belirtilen thread fonksiyonunun geri dönüş değerinin de void * 
     türünden olduğuna dikkat ediniz. Thread'ler de sonlandığında tıpkı prosesler gibi bir exit kodu oluşturmaktadır. Ancak bu exit 
     kodu int türden değil void * türündendir. Bu exit kodunun nasıl elde edileceği izleyen paragraflarda ele alınmaktadır.
 
@@ -18936,7 +18926,7 @@ void exit_sys_errno(const char *msg, int eno)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Thread fonksiyonuna parametre geçebiliriz. Bunun için genellikle programcılar heap'te tahsisat yaparlar. Tahsis edilen 
-    bu alanlar  thread fonksiyonunun sonunda free hale getirilebilmektedir.
+    bu alanlar thread fonksiyonunun sonunda free hale getirilebilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -19250,7 +19240,7 @@ int main(void)
 
 	/* Dikkat! main bittiğinde proses sonlanacak ve dolayısıyla prosesin tüm thread'leri de sonlandırılacaktır. */
 
-    return 0;
+	return 0;
 }
 
 void *thread_proc(void *param)
@@ -19852,7 +19842,7 @@ void exit_sys_errno(const char *msg, int eno)
     5) Thread yaratıldıktan sonra pthread_attr_init fonksiyonuyla yapılan işlemler pthread_attr_destroy fonksiyonu ile geri 
     alınabilir. Bu fonksiyon thread yaratıldıktan sonra hemen çağrılabilir. Yani pthread_create fonksiyonu bizim verdiğimiz 
     pthread_attr_t nesnesinin adresini saklayıp kullanmak yerine onun içerisindekileri ilgili yere kopyalamaktadır. pthread_attr_destroy 
-    fonksiyonun prototipi şöyledir:
+    fonksiyonunun prototipi şöyledir:
 
     #include <pthread.h>
 
@@ -19890,7 +19880,7 @@ void exit_sys_errno(const char *msg, int eno)
 
     Fonksiyonun birinci parametresi thread özelliklerine ilişkin pthread_attr_t türünden nesnenin adresini almaktadır. İkinci 
     parametresi ise stack uzunluğunu belirtmektedir. Eğer bu set işlemi yapılmazsa Linux sistemlerinde glibc kütüphanesi default 
-    stack uzunluğunu X86 32 bit sistemlerinde 2MB, X86 64 bit sistemlerde 8MB almaktadır.
+    stack uzunluğunu x86 32 bit sistemlerinde 2 MB, x86 64 bit sistemlerde 8 MB almaktadır.
 
     pthread_attr_init fonksiyonundan sonra biz bu özellik nesnesinden default stack uzunluğunu pthread_attr_getstacksize fonksiyonu 
     ile elde edebiliriz:
@@ -20051,7 +20041,7 @@ void exit_sys_errno(const char *msg, int eno)
     int pthread_detach(pthread_t thread);
 
     Fonksiyon detached duruma sokulacak thread'in id değerini parametre olarak almaktadır. Başarı durumunda 0 değerine, 
-    başarısızlık durumunda  errno değerine geri dönmektedir. Zaten detached durumda olan bir thread için bu çağrının yapılması 
+    başarısızlık durumunda errno değerine geri dönmektedir. Zaten detached durumda olan bir thread için bu çağrının yapılması 
     POSIX standartlarına göre "tanımsız davranışa" yol açmaktadır. Linux sistemlerinde "joinable" olmayan thread'lerde bu 
     fonksiyon başarısız olmakta ve EINVAL errno değeri ile geri dönmektedir. Thread fonksiyon çağrıldığında zaten sonlanmışsa 
     thread'in kaynakları yine otomatik olarak yok edilmektedir.
@@ -20740,7 +20730,6 @@ void exit_sys_errno(const char *msg, int eno)
     Nihayet bağlı liste destroy_llist fonksiyonu ile silinmektedir:
 
     void destroy_llist(LLIST *llist);
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -21932,7 +21921,7 @@ void exit_sys_errno(const char *msg, int eno)
     int pthread_cond_init(pthread_cond_t *cond, const pthread_condattr_t *attr);
 
     Fonksiyonun birinci parametresi koşul değişken nesnesinin adresini, ikinci parametresi onun özellik bilgilerinin bulunduğu 
-    özellik nesnesinin  adresini almaktadır. Koşul değişkenlerinin de özellik bilgisi vardır. Koşul değişkenlerinin özellikleri 
+    özellik nesnesinin adresini almaktadır. Koşul değişkenlerinin de özellik bilgisi vardır. Koşul değişkenlerinin özellikleri 
     üzerinde daha ileride duracağız. İkinci parametre NULL geçilirse koşul değişkenleri default özelliklerle yaratılmış olur. 
     Aşağıdaki iki yaratım işlevsel olarak eşdeğer etkiyi sağlamaktadır:
 
@@ -21992,7 +21981,7 @@ void exit_sys_errno(const char *msg, int eno)
     pthread_cond_broadcast yerine çoğu kez pthread_cond_signal fonksiyonu kullanılır.
 
     pthread_cond_wait fonksiyonu koşul değişkeni nesnesinin yanı sıra bir de mutex nesnesini de bizden istemektedir. Fonksiyon 
-    atomik bir biçimde (yani tek bir işlem gibi) uykuya dalaken (yani bloke olurken) aynı zamanda bu mutex nesnesinin sahipliğini 
+    atomik bir biçimde (yani tek bir işlem gibi) uykuya dalarken (yani bloke olurken) aynı zamanda bu mutex nesnesinin sahipliğini 
     bırakmaktadır. Yani mutex nesnesinin sahipliği yukarıdaki kalıpta aslında pthread_cond_wait tarafından bırakılmaktadır. 
     Örneğin:
 
@@ -22059,7 +22048,7 @@ void exit_sys_errno(const char *msg, int eno)
     pthread_mutex_unlock(&g_mutex);
 
     Burada koşulun sağlanma işleminin kritik kod içerisinde yapıldığını görüyorsunuz. Normal olarak koşul değişkeninin koşulun 
-    sağlanması biçiminde ayarlanması işleminin ve pthread_cond_signal ya da  pthread_cond_broadcast işleminin de aynı mutex'i 
+    sağlanması biçiminde ayarlanması işleminin ve pthread_cond_signal ya da pthread_cond_broadcast işleminin de aynı mutex'i 
     kullanarak kritik kod içerisinde yapılmasıdır. Çünkü programda başka bir thread bu değişkene aynı anda erişirse yine sorun 
     ortaya çıkabilir. Tabii böyle bir durum yoksa koşul kritik kod içerisinde set edilmeye de bilir. Özetle diğer bir thread 
     koşul değişkenindeki blokeyi pthread_cond_signal ya da pthread_cond_broadcast ile kaldırmadan önce koşul değişkenini koşul 
@@ -22311,7 +22300,7 @@ void exit_sys_errno(const char *msg, int eno)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Üretici-Tüketici Problemi (Producer-Consumer Problem) gerçek hayatta en fazla karşılaşılan senkronizasyon problemlerinden 
-    biridir.  Problemin çeşitli varyasyonları vardır. Üretici-Tükettici problemi aynı prosesin thread'leri arasında uygulanabileceği 
+    biridir. Problemin çeşitli varyasyonları vardır. Üretici-Tükettici problemi aynı prosesin thread'leri arasında uygulanabileceği 
     gibi farklı proseslerin thread'leri arasında da uygulanabilmektedir. Üretici-Tüketici probleminde en az bir üretici thread 
     ve en az bir tüketici thread vardır. Biz bir üretici bir de tüketici thread'in olduğunu varsayalım. Üretici thread belli 
     bir işlemden sonra bir değer üretir. Ancak o değerin işlenmesini tüketici thread'e havale eder. Bunun için ortak bir 
@@ -26258,7 +26247,7 @@ void *thread_proc4(void *param)
 /*--------------------------------------------------------------------------------------------------------------------------
     İşlemcileri, CISC (Complex Intruction Set Computing) ve RISC (Reduced Instruction Set Computing) olmak üzere iki sınıfa 
     ayırabiliriz. Tabii bu iki sınıf aslında bir spektrumdur. Yani işlemciler bir tarafı CISC olan diğer tarafı RISC olan 
-    bu spektrumda herhangi bir yerde olabilirler. Intel X86 işlemcileri CISC işlemlerine örnek oluştururken, ARM işlemcileri 
+    bu spektrumda herhangi bir yerde olabilirler. Intel x86 işlemcileri CISC işlemlerine örnek oluştururken, ARM işlemcileri 
     RISC işlemlerine bir örnek oluşturmaktadır. İki işlemci ailesi arasında temel farklılıklar şunlardır:
 
     - CISC işlemlerinde çok sayıda makine komutu vardır. Bu komutların bazıları karmaşık işlemler yapmaktadır. Ancak RISC 
@@ -36173,8 +36162,8 @@ void exit_sys(const char *msg)
     bu data segment kısmını büyüttüğü için bu limitten etkilenmektedir. Bu limitin Linux'taki default hard ve soft değeri 
     RLIM_INFINITY biçimindedir. 
 
-    - RLIMIT_FSIZE: Prosesin toplamda yaratabileceği maksimum dosya uzunluğudur. Örneğin bu limit 5MB'a ayarlanmışsa proses
-    toplamda (tüm yarattığı dosyaların uzunluğu) ancak 5MB uzunluğunda dosya yaratabilecektir. Bu limitin Linux'taki default
+    - RLIMIT_FSIZE: Prosesin toplamda yaratabileceği maksimum dosya uzunluğudur. Örneğin bu limit 5 MB'a ayarlanmışsa proses
+    toplamda (tüm yarattığı dosyaların uzunluğu) ancak 5 MB uzunluğunda dosya yaratabilecektir. Bu limitin Linux'taki default
     hard ve soft değerleri RLIM_INFINITY biçimindedir. Eğer bu limit aşılırsa işletim sistemi prosese SIGXFSZ sinyalini 
     göndermektedir. Bu sinyalin defaut eylemi prosesin sonlandırılmasıdır.
 
@@ -36211,7 +36200,7 @@ void exit_sys(const char *msg)
     değerleri mevcut çekirdeklerde 15070 biçimindedir. 
 
     - RLIMIT_STACK: Bir thread'in stack uzunluğunu sınırlandırmak için kullanılmaktadır. Linux'ta default durumda thread'lerin 
-    stack uzunlukları 8MB'dir. Bu limitin Linux'taki default soft değeri 8MB, hard değeri ise RLIM_INFINITY biçimindedir. 
+    stack uzunlukları 8 MB'dir. Bu limitin Linux'taki default soft değeri 8 MB, hard değeri ise RLIM_INFINITY biçimindedir. 
     (Yani biz thread yaratırken stack uzunluğunu bu soft limiti yukarı çekmeden artıramayız, ancak düşürebiliriz.)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -50493,7 +50482,7 @@ void exit_sys(const char *msg)
     64K olabilir. Çünkü bunun için TCP başlığında 16 bit yer ayrılmıştır.
 
     Şimdi bir tarafın diğer tarafa send fonksiyonu ile sürekli bilgi gönderdiğini ancak diğer tarafın bilgiyi recv ile okumadığını 
-    düşünelim. İşletim sisteminin alıcı taraf için oluşturduğu alma tamponunun 1MB olduğunu düşünelim. Alıcı taraf muhtemelen bilgi
+    düşünelim. İşletim sisteminin alıcı taraf için oluşturduğu alma tamponunun 1 MB olduğunu düşünelim. Alıcı taraf muhtemelen bilgi
     geldikçe ACK yaparken 64K'lık pencere genişliğini karşı tarafa bildirecektir. Ancak zamanla alma tamponu dolduğu için bu pencere 
     genişliğini düşürecek en sonunda ACK ile pencere genişliğini 0 yapacak ve karşı tarafa "artık gönderme" diyecektir. Pencere 
     genişliği ile alma tamponunun genişliği birbirine karıştırılmamalıdır. Alma tamponu gelen bilgilerin yerleştirildiği tampondur. 
@@ -52019,7 +52008,7 @@ int main()
     "cmake" gibi "qmake" gibi daha yüksek seviyeli build araçları da zamanla geliştirilmiştir. make aracı pek çok sistemde 
     benzer biçimde bulunmaktadır. Bugün UNIX/Linux sistemlerinde "GNU make" aracı kullanılmaktadır. Microsoft klasik make
     aracının "nmake" ismiyle başka versiyonunu geliştirmiştir. Ancak Microsoft uzun bir süredir "msbuild" denilen başka bir
-    build sistemini kulanmaktadır. Örneğin Microsoft'un Visual Studio IDE'si arka planda bu "msbuild" aracını kullanmaktadır. 
+    build sistemini kullanmaktadır. Örneğin Microsoft'un Visual Studio IDE'si arka planda bu "msbuild" aracını kullanmaktadır. 
     Qt Framework'ünde "qmake" isimli üst düzey make aracı kullanılmaktadır. Bazı IDE'ler "cmake" kullanmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -53161,7 +53150,7 @@ clean:
 /*--------------------------------------------------------------------------------------------------------------------------
     Aygıt dosyaları mknod isimli POSIX fonksiyonuyla (bu fonksiyon Linux'ta doğrudan sys_node isimli sistem fonksiyonunu 
     çağırmaktadır) ya da komut satırından mknod komutuyla (bu komut da mknod fonksiyonu ile işlemini yapmaktadır) yaratılabilir. 
-    mknod fonksiyonun prototipi şöyledir:
+    mknod fonksiyonunun prototipi şöyledir:
 
     #include <sys/stat.h>
 
@@ -58603,16 +58592,16 @@ void exit_sys(const char *msg)
     tüm proseslerin sayfa tablosunda aynı yerde bulunmaktadır. Başka bir deyişle her prosesin sayfa tablosunda çekirdek hep aynı sanal 
     adreslerde bulunmaktadır. Örneğin sys_open sistem fonksiyonuna girildiğinde bu fonksiyonun sanal adresi her proseste aynıdır.
 
-    32 Bit linux sistemlerinde proseslerin sanal bellek alanları 3GB User, 1GB Kernel olmak üzere 2 bölüme ayrılmıştır. 64 bir Linux
-    sistemlerinde ise yalnızca sanal bellek alanının 256 TB'si kullanılmaktadır. Bu sistemlerde user alanı için 128 TB, Kernel alanı için de
-    128 TB yer ayrılmıştır. 32 Bit Linux sistemlerindeki prosesin sanal bellek alanı şöyle gösterilebilir:
+    32 bit linux sistemlerinde proseslerin sanal bellek alanları 3 GB user, 1 GB kernel olmak üzere 2 bölüme ayrılmıştır. 64 bit Linux
+    sistemlerinde ise yalnızca sanal bellek alanının 256 TB'si kullanılmaktadır. Bu sistemlerde user alanı için 128 TB, kernel alanı için de
+    128 TB yer ayrılmıştır. 32 bit Linux sistemlerindeki prosesin sanal bellek alanı şöyle gösterilebilir:
 
     00000000
                 USER ALANI (3 GB)
     C0000000
-                KERNEL ALANI (1GB)
+                KERNEL ALANI (1 GB)
 
-    64 Bit Linux sistemlerindeki sanal bellek alanı ise kabaca şöyledir:
+    64 bit Linux sistemlerindeki sanal bellek alanı ise kabaca şöyledir:
 
     0000000000000000
                             USER ALANI (128 TB)
@@ -58624,20 +58613,20 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir sistem fonksiyonunun çağrıldığını düşünelim. İşlemci kernel moda'a otomatik olarak geçirilecektir. Bu durumda sayfa tablosu 
+    Bir sistem fonksiyonunun çağrıldığını düşünelim. İşlemci kernel mode'a otomatik olarak geçirilecektir. Bu durumda sayfa tablosu 
     değişmeyecektir. Pekiyi kernel nasıl tüm fiziksel belleğe erişebilmektedir? İşte 32 bitlik sistemlerde proseslerin sayfa 
-    tablolarının son 1GB'yi sayfalandırdığı girişleri tamamen fiziksel belleği eşlemektedir. Başka bir deyişle bu sistemlerde 
+    tablolarının son 1 GB'yi sayfalandırdığı girişleri tamamen fiziksel belleği eşlemektedir. Başka bir deyişle bu sistemlerde 
     çekirdek alanının başlangıcı olan C0000000 adresi aslında sayfa tablosunda 00000000 fiziksel adresini belirtmektedir. Böylece 
-    kernel'ın herhangi bir fiziksel adrese erişmek istediği zaman tek yapacağı şey bu adrese C00000000 değerini toplamaktır. 
-    Bu sistemlerde C0000000 adresinden itibaren proseslerin sayfa tabloları zaten fiziksel belleği 0'dan itibaren haritalandırmaktadır. 
-    Ancak 32 bit sistemlerde şöyle bir sorun vardır: Sayfa tablosunda C0000000'dan itibaren sayfalar fiziksel belleği haritalandırdığına
-    göre 32 bit sistemlerin maksimum sahip olacağı 4GB fiziksel RAM'in hepsi haritalandırılamamaktadır. İşte Linux tasarıcıları 
-    sayfa tablolarında C0000000'dan itibaren fiziksel RAM'in 1GB'sini değil 896MB'sini haritalandırmıştır. Geri kalan 128 MB'lik 
+    kernel'ın herhangi bir fiziksel adrese erişmek için yapacağı tek şey bu adrese C00000000 değerini toplamaktır. Bu sistemlerde 
+    C0000000 adresinden itibaren proseslerin sayfa tabloları zaten fiziksel belleği 0'dan itibaren haritalandırmaktadır. Ancak 
+    32 bit sistemlerde şöyle bir sorun vardır: Sayfa tablosunda C0000000'dan itibaren sayfalar fiziksel belleği haritalandırdığına
+    göre 32 bit sistemlerin maksimum sahip olacağı 4 GB fiziksel RAM'in hepsi haritalandırılamamaktadır. İşte Linux tasarımcıları 
+    sayfa tablolarında C0000000'dan itibaren fiziksel RAM'in 1 GB'sini değil 896 MB'sini haritalandırmıştır. Geri kalan 128 MB'lik 
     sayfa tablosu alanı fiziksel RAM'de 896MB'nin ötesine erişmek için değiştirilerek kullanılmaktadır. Yani 32 bit sistemlerde kernel 
-    fiziksel RAM'in ilk 896MB'sine doğrudan ancak bunun ötesine sayfa tablosunun son 128 MB'lik bölgesini değiştirerek erişmektedir. 
-    32 bit sistemlerde 896MB'nin ötesine dolaylı biçimde erişildiği için bu bölgeye "high memory zone" denilmektedir. Tabii 64 bit 
+    fiziksel RAM'in ilk 896 MB'sine doğrudan ancak bunun ötesine sayfa tablosunun son 128 MB'lik bölgesini değiştirerek erişmektedir. 
+    32 bit sistemlerde 896 MB'nin ötesine dolaylı biçimde erişildiği için bu bölgeye "high memory zone" denilmektedir. Tabii 64 bit 
     sistemlerde böyle bir problem yoktur. Çünkü bu sistemlerde yine sayfa tablolarının kernel alanı fiziksel RAM'i başından itibaren 
-    haritalandırmaktadır. Ancak 128TB'lik alan zaten şimdiki bilgisayarlara takılabilecek fiziksel RAM'in çok ötesindedir. Bu nedenle
+    haritalandırmaktadır. Ancak 128 TB'lik alan zaten şimdiki bilgisayarlara takılabilecek fiziksel RAM'in çok ötesindedir. Bu nedenle
     64 bit sistemlerde "high memory zone" kavramı yoktur.
 
     Çekirdek kodların kernel alanın başlangıcı PAGE_OFFSET makrosuyla belirlenmiştir.
@@ -58650,7 +58639,7 @@ void exit_sys(const char *msg)
     için de __pa makrosu kullanılmaktadır. Biz bu makroya sanal adresi veririz o da bize o sanal adresin aslında RAM'deki hangi 
     fiziksel adres olduğunu verir. __va makrosu parametre olarak unsigned long biçiminde fiziksel adresi alır, o fiziksel adrese 
     erişmek için gerekli olan sanal adresi void * türünden bize verir. __pa makrosu bunun tam tersini yapmaktadır. Bu makro bizden 
-    unsigned long biçiminde sanal adresi alır. O sanal adrese sayfa tablo tablosunda karşı gelen fiziksel adresi bize verir.
+    unsigned long biçiminde sanal adresi alır. O sanal adrese sayfa tablosunda karşı gelen fiziksel adresi bize verir.
 
     Kernel mode'da RAM'in her yerine erişebildiğimize ve bu konuda bizi engelleyen hiçbir mekanizmanın olmadığına dikkat ediniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -58666,8 +58655,8 @@ void exit_sys(const char *msg)
     fiziksel RAM'in her yerine transfer yapamamaktadır. ZONE_NORMAL doğrudan çekirdeğin sayfa tablosu yoluyla haritalandırdığı 
     fiziksel bellek bölgesidir. Intel 32 bit Linux sistemlerinde bu bölge ilk 896 MB'dir. Ancak 64 bit Linux sistemlerinde bu 
     bölge tüm fiziksel RAM'i içermektedir. ZONE_HIGHMEM ise 32 bit sistemlerde çekirdeğin doğrudan haritalandıramadığı sayfa 
-    tablosunda değişiklik yapılarak erişilebilen fiziksel RAM alanıdır. 32 Linux sistemlerinde 896 MB'nin yukarısındaki fiziksel 
-    RAM ZONE_HIHMEM alanıdır. Yukarıda da belirttiğimiz gibi 64 bit Intel işlemcilerinde ZONE_HIGHMEM biçiminde bir alan yoktur.
+    tablosunda değişiklik yapılarak erişilebilen fiziksel RAM alanıdır. 32 bit Linux sistemlerinde 896 MB'nin yukarısındaki fiziksel 
+    RAM ZONE_HIGHMEM alanıdır. Yukarıda da belirttiğimiz gibi 64 bit Intel işlemcilerinde ZONE_HIGHMEM biçiminde bir alan yoktur.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -58683,14 +58672,14 @@ void exit_sys(const char *msg)
     sırasında uygun bir boş alan aramaya gerek kalmaz. Bir dizisi içerisinde boş alanlar tutulabilir. Bu boş alanlardan herhangi 
     biri verilebilir. Tabii uygulamalarda tahsis edilecek alanların büyükleri farklı olmaktadır.
 
-    İşte BSD ve Linux sistemlerindekullanılan "dilimli tahsisat sistemi (slab allocator)" denilen tahsisat sisteminin anahtar noktası
+    İşte BSD ve Linux sistemlerinde kullanılan "dilimli tahsisat sistemi (slab allocator)" denilen tahsisat sisteminin anahtar noktası
     eşit uzunlukta ismine "dilim (slab)" denilen blokların tahsis edilmesidir. Kernel içerisinde çeşitli nesneler için o nesnelerin 
     uzunluğuna ilişkin farklı dilimli tahsisat sistemleri oluşturulmuştur. Örneğin bir proses yaratıldığında task_struct yapısı 
     çekirdeğin heap alanında tahsis edilmektedir. İşte dilimli tahsisat sistemlerinden biri sizeof(struct task_struct) kadar 
-    dilimlerdne oluşan sistemdir. Böylece pek çok kernel nesnesi için ayrı dilimli tahisat sistemleri oluşturulmuştur. Bunların 
+    dilimlerden oluşan sistemdir. Böylece pek çok kernel nesnesi için ayrı dilimli tahsisat sistemleri oluşturulmuştur. Bunların 
     yanı sıra ayrıca bir de genel kullanım için blok uzunlukları 32, 64, 96, 128, 192, 256 512, 1024, 2048, 4096, 8192, 16384, 
-    32768, 65536, ... biçiminde olan farklı dilimli tahsisat sistemleri de bulundurulmuştur. Böylece kernek mod programcısı 
-    belli uzunlukta bir alan tahsis etmek istediğinde bu uzunlupa en yakın bu uzunluktan büyük bir dilimli tahsisat sistemini 
+    32768, 65536, ... biçiminde olan farklı dilimli tahsisat sistemleri de bulundurulmuştur. Böylece kernel mod programcısı 
+    belli uzunlukta bir alan tahsis etmek istediğinde bu uzunluğa en yakın bu uzunluktan büyük bir dilimli tahsisat sistemini 
     kullanır. Tabii kernel mode programcılar isterse kendi nesneleri için o nesnelerin uzunluğu kadar yeni dilimli tahsisat 
     sistemleri de oluşturabilmektedir.
 
@@ -58703,10 +58692,12 @@ void exit_sys(const char *msg)
     Çekirdek kodlamasında çekirdek alanında dinamik tahsisat yapmak için kullanılan en genel fonksiyon kmalloc isimli fonksiyondur. 
     Bu fonksiyon aslında parametresiyle belirtilen uzunluğa en yakon önceden yaratılmış olan dilimli tahsisat sisteminden dilim 
     vermektedir (yani blok tahsis etmektedir). Örneğin biz kmalloc fonksiyonu ile 100 byte tahsis etmek istesek 100 byte'lık blokların 
-    bulunduğu önceden yaratılmış bir dilimli tahsisat sistemi olmadığ için kmalloc 128 byte'lık bloklara sahip dilimli tahsisat 
+    bulunduğu önceden yaratılmış bir dilimli tahsisat sistemi olmadığı için kmalloc 128 byte'lık bloklara sahip dilimli tahsisat 
     sisteminden bir dilim tahsis ederek bize vermektedir. Tabii bu örnekte 28 byte boşuna tahsis edilmiş olacaktır. Ancak çekirdek 
-    tahsisat sisteminin amacı en uygun miktarda belleği tahsis etmek değil talep edilen miktarda belleği hızlı tahsis etmektir.
+    tahsisat sisteminin amacı en uygun miktarda belleği tahsis etmek değil, talep edilen miktarda belleği hızlı tahsis etmektir.
     kmalloc fonksiyonu ile tahsis edilen dilimler kfree fonksiyonu ile serbest bırakılmaktadır. Fonksiyonların prototipleri şöyledir:
+
+    #include <linux/slab.h>
 
     void *kmalloc (size_t size, int flags);
     void kfree (const void *objp);
@@ -58717,15 +58708,15 @@ void exit_sys(const char *msg)
 
     GFP_KERNEL: Kernel alanı içerisinde normal tahsisat yapmak için kullanılır. Bu bayrak en sık bu kullanılan bayraktır. Burada 
     eğer RAM doluysa işletim sistemi prosesi bloke ederek swap işlemi ile yer açabilmektedir. Bu işlem sırasında akış kernel mode'da 
-    bekleme kuruklarında bekletilebilir. Tahsisat işlemi ZONE_NORMAL alanından yapılmaktadır.
+    bekleme kuyruklarında bekletilebilir. Tahsisat işlemi ZONE_NORMAL alanından yapılmaktadır.
 
-    GFP_NOWAIT: GFP_KERNEL gibidir. Ancak hazırda bellek yoksa proses uykuya yatılmaz. Fonksiyon başarısız olur.
+    GFP_NOWAIT: GFP_KERNEL gibidir. Ancak hazırda bellek yoksa proses uykuya dalmaz. Fonksiyon başarısız olur.
 
-    GFP_HIGHUSER: 32 bit sistemlerde ZONE_HIHMEM alanından tahssat yapar.
+    GFP_HIGHUSER: 32 bit sistemlerde ZONE_HIGHMEM alanından tahsisat yapar.
 
     GFP_DMA: İlgili sistemde DMA'nın erişebildiği fiziksel RAM alanından tahsisat yapar.
 
-    kmalloc fonksiyonu başarı durumunda tahsis edilen alanın sanal bellek adresiyle başarısızlık durumunda NULL adresle geri
+    kmalloc fonksiyonu başarı durumunda tahsis edilen alanın sanal bellek adresiyle, başarısızlık durumunda NULL adresle geri
     dönmektedir. Çekirdek modülleri ve aygıt sürücüler dinamik tahsisat başarısız olursa tipik olarak -ENOMEM değerine geri 
     dönmelidir.
 
@@ -59093,12 +59084,12 @@ void exit_sys(const char *msg)
             unsigned int align, slab_flags_t flags, void (*ctor)(void *));
 
     Fonksiyonun birinci parametresi yeni yaratılacak dilim sisteminin ismini belirtmektedir. Herhangi bir isim verilebilir. 
-    İkinci parametre dilimlerin büyüklüğünü belirtmektedir. Üçücnü parametre hizalama değerini belirtir. Bu parametre 0 geçilirse
+    İkinci parametre dilimlerin büyüklüğünü belirtmektedir. Üçüncü parametre hizalama değerini belirtir. Bu parametreye 0 geçilirse
     default hizalama kullanılır. Fonksiyonun dördüncü parametresi yaratılacak dilim sistemine ilişkin bazı özelliklerin belirlenmesi 
     için kullanılmaktadır. Buradaki bayrakların önemli birkaç tanesi şöyledir:
 
     SLAB_NO_REAP: Fiziksel RAM'in dolması nedeniyle kullanılmayan dilimlerin otomatik olarak sisteme iade edileceği anlamına gelir. 
-    Uç durumlarda bu bayrak kulanılabilir.
+    Uç durumlarda bu bayrak kullanılabilir.
 
     SLAB_HWCACHE_ALIGN: Bu bayrak özellikle SMP sistemlerinde işlemci ya da çekirdeklerin cache alanları için hizalama yapılmasının
     sağlamaktadır. Yaratım sırasında bu parametreyi kullanabilirsiniz.
@@ -59106,7 +59097,7 @@ void exit_sys(const char *msg)
     SLAB_CACHE_DMA: Bu parametre DMA alanında (DMA zone) tahsisat için kullanılmaktadır.
 
     Fonksiyonun son parametresi dilim sistemi yaratıldığında çağrılacak callback fonksiyonu belirtmektedir. Bu parametre NULL 
-    geçilebilir. Fonksiyon başarı durumunda kmem_cache_create fonksiyonu kmem_cache türünden bir yapı nesnesinin adresiyle 
+    geçilebilir. Fonksiyon başarı durumunda kmem_cache_create fonksiyonu kmem_cache türünden bir yapı nesnesinin adresiyle, 
     başarısızlık durumunda NULL adrese geri dönmektedir. Başarısızlık durumunda aygıt sürücü fonksiyonunun -ENOMEM değeri ile 
     geri döndürülmesi uygundur.
 
@@ -59126,7 +59117,7 @@ void exit_sys(const char *msg)
 
     Fonksiyonun birinci parametresi yaratılmış olan dilim sisteminin handle değerini, ikinci parametresi yaratım bayraklarını 
     almaktadır. Bu bayraklar kmalloc fonksiyonundaki bayraklarla aynıdır. Yani örneğin bu parametreye GFP_KERNEL geçilebilir. 
-    Fonksiyon başarı durumunda tahsis edilen sanal adrese başarısızlık durumunda NULL adrese geri dönmektedir. Bu durumda
+    Fonksiyon başarı durumunda tahsis edilen sanal adrese, başarısızlık durumunda NULL adrese geri dönmektedir. Bu durumda
     aygıt sürücüdeki fonksiyonun -ENOMEM değeri ile geri döndürülmesi uygundur. Örneğin:
 
     if ((g_queue = (struct QUEUE *)kmem_cache_alloc(g_queue_cachep, GFP_KERNEL)) == NULL) {
@@ -59153,7 +59144,7 @@ void exit_sys(const char *msg)
 
     int kmem_cache_destroy(kmem_cache_t *cache);
 
-    Fonksiyon dilim sisteminin handle değerini parametre olarak alır. Başarı durumunda 0 değerine başarısızlık durumunda negatif
+    Fonksiyon dilim sisteminin handle değerini parametre olarak alır. Başarı durumunda 0 değerine, başarısızlık durumunda negatif
     errno değerine geri döner. Örneğin:
 
     kmem_cache_destroy(g_queue_cachep);
@@ -59163,7 +59154,7 @@ void exit_sys(const char *msg)
     Ancak "çok sayıda aynı büyüklükte alanların" tahsis edildiği durumlarda programcının talep ettiği uzunlukta kendi dilim
     sistemini yaratması tavsiye edilebilir. Bunun dışında genel amaçlı kmalloc fonksiyonu tercih edilebilir. Örneğin boru 
     aygıt sürücümüzde yeni bir dilim sisteminin yaratılmasına hiç gerek yoktur. Ancak bir aşağıda örnek vermek amacıyla 
-    boru aygıt sürücünde yeni bir dilim sistemi yarattık. Örneği inceleyiniz.
+    boru aygıt sürücüsünde yeni bir dilim sistemi yarattık. Örneği inceleyiniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* pipe-driver.c */
@@ -59394,7 +59385,7 @@ module_exit(generic_exit);
     bu dosya nesnesini göstermektedir. Biz user mode'taki dosya işlemlerinde bu konuyu zaten açıklamıştık. Ancak kısaca bir 
     anımsatma yapalım:
 
-    Dosya Betimeleyici Tablosu
+    Dosya Betimleyici Tablosu
     --------------------------
 
     0 ----> dosya nesnesi (struct file)
@@ -59450,9 +59441,9 @@ module_exit(generic_exit);
 
     inode yapısı dosyanın diskteki bilgilerini tutmaktadır. Yani aynı dosya üç kez açılsa çekirdek üç farklı file nesnesi 
     oluşturmaktadır. Ancak bu dosya diskte bir tane olduğuna göre çekirdek bunun için toplamda bir tane inode yapısı oluşturacaktır.
-    file yapısının içerisinde dosyanın diskteki bilgilerine ilişkin bu inode yapısınıa f_inode elemanı yoluyla erişilebilmektedir. 
+    file yapısının içerisinde dosyanın diskteki bilgilerine ilişkin bu inode yapısına f_inode elemanı yoluyla erişilebilmektedir. 
     Daha önceden de gördüğümüz gibi bir dosya isimleri diskte dizin girişlerinde tutulmaktadır. Örneğin "/home/kaan/Study/test.c"
-    isimli dosyanın i-node elemanına erişmek için işletim sistemi sırasıyla "/home", "/home/kaan", "ome/kaan/Stduy" ve 
+    isimli dosyanın i-node elemanına erişmek için işletim sistemi sırasıyla "/home", "/home/kaan", "/home/kaan/Study" ve 
     "/home/kaan/Study/test.txt" dizin girişlerini taramak zorundadır. Bu işleme işletim sistemlerinde "yol ifadelerinin 
     çözümlenmesi (pathname resolution)" denilmektedir. Aynı dosyaların tekrar tekrar açılması durumunda bu işlemlerin yeniden 
     yapılması oldukça zahmetlidir. Dolayısıyla bulunan dizin girişlerinin bir yapı ile temsil edilerek bir cache sisteminde 
@@ -59474,7 +59465,7 @@ module_exit(generic_exit);
 
     Bir aygıt sürücü üzerinde dosya işlemi yapıldığında çekirdek aygıt sürücü fonksiyonlarına dosya nesnesinin adresini 
     (filp göstericisi) geçirmektedir. Yalnızca aygıt sürücü open fonksiyonuyla açılırken ve close fonksiyonu ile kapatılırken
-    indode nesnesinin adresi de bu fonksiyonlara geçirilmektedir. Aygıt sürücünün fonksiyonlarının parametrik yapılarını 
+    inode nesnesinin adresi de bu fonksiyonlara geçirilmektedir. Aygıt sürücünün fonksiyonlarının parametrik yapılarını 
     aşağıda yeniden veriyoruz:
 
     int open(struct inode *inodep, struct file *filp);
@@ -59490,7 +59481,7 @@ module_exit(generic_exit);
     aygıt sürücümüzün tek bir boruyu değil on farklı boruyu idare etmesini isteyebiliriz. Bu durumda aygıt sürücümüzün bir tane 
     majör numarası ancak 10 tane minör numarası olacaktır. Aygıt sürücülerin majör numaraları aynı ise bunların kodları da aynıdır. 
     O aynı kod birden fazla aygıt için işlev görmektedir. Örneğin seri portu kontrol eden bir aygıt sürücü söz konusu olsun. 
-    Ancak bilgissayarımızda dört seri port olsun. İşte bu durumda bu seri porta ilişkin aygıt dosyalarının hepsinin majör numaraları
+    Ancak bilgisayarımızda dört seri port olsun. İşte bu durumda bu seri porta ilişkin aygıt dosyalarının hepsinin majör numaraları
     aynıdır. Ancak minör numaraları farklıdır. Ya da örneğin terminal aygıt sürücüsü bir tanedir. Ancak bu aygıt sürücü birden 
     fazla terminali yönetebilmektedir. O halde her terminale ilişkin aygıt dosyasının majör numaraları aynı minör numaraları 
     farklı olacaktır. Örneğin:
@@ -62406,7 +62397,7 @@ void exit_sys(const char *msg)
 
     Bugünki Linux sistemlerinde söz konusu olan bu timer devrelerinin hepsi 1 milisaniye, 4 milisaniye ya da 10 milisaniyeye 
     kurulmaktadır. Eskiden ilk Linux çekirdeklerinde 10 milisaniyelik periyotlar kullanılıyordu. Sonra bilgisayarlar hızlanınca 
-    1 milissaniye periyot yaygın olarak kullanılmaya başlandı. Ancak bugünlerde 4 milisaniye periyotları kullanan çekirdekler de 
+    1 milisaniye periyot yaygın olarak kullanılmaya başlandı. Ancak bugünlerde 4 milisaniye periyotları kullanan çekirdekler de 
     yaygın biçimde bulunmaktadır. Aslında timer frekansı çekirdek konfigüre edilirken kullanıcılar tarafından da değiştirilebilmektedir. 
     (Çekirdek derlenmeden önce çekirdeğin davranışları üzerinde etkili olan parametrelerin belirlenmesi sürecine "çekirdeğin konfigüre"
     edilmesi denilmektedir.)
