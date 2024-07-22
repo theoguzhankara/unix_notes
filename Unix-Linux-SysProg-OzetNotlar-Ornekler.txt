@@ -11620,7 +11620,7 @@ void exit_sys(const char *msg)
     Etkin kullanıcı id'si: root
     Saklı kullanıcı id'si: root
 
-    Şimdi biz sonraki pragrafta göreceğimiz seteuid fonksiyonu ile geri dönüp prosesin yetkisini azaltarak onun etikin kullanıcı
+    Şimdi biz sonraki paragrafta göreceğimiz seteuid fonksiyonu ile geri dönüp prosesin yetkisini azaltarak onun etikin kullanıcı
     id'sinin kaan olmasını sağlayalım. Bu durumdaki id'ler şöyle olacaktır:
 
     Gerçek kullanıcı id'si: kaan
@@ -41217,7 +41217,7 @@ void exit_daemon(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    server program bind işleminden sonra soketi aktif dinleme konumuna sokmak için listen fonkiyonunu çağırmalıdır. Fonksiyonun 
+    server program bind işleminden sonra soketi aktif dinleme konumuna sokmak için listen fonksiyonunu çağırmalıdır. Fonksiyonun 
     prototipi şöyledir:
 
     #include <sys/socket.h>
@@ -59380,10 +59380,10 @@ module_init(generic_init);
 module_exit(generic_exit);
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Linux'un dosya sistemi önemli üç yapı vardır. Bunlar file, inode ve dentry yapılarıdır. file isimli yapıya biz "dosya nesnesi"
-    demiştik. Anımsanacağı gibi ne zaman bir dosya açılsa dosya betimleyici tablosunda dosya betimleyicisi denilen bir indeks
-    bu dosya nesnesini göstermektedir. Biz user mode'taki dosya işlemlerinde bu konuyu zaten açıklamıştık. Ancak kısaca bir 
-    anımsatma yapalım:
+    Linux'un dosya sistemi için önemli üç yapı vardır. Bunlar file, inode ve dentry yapılarıdır. file isimli yapıya biz "dosya 
+    nesnesi" demiştik. Anımsanacağı gibi ne zaman bir dosya açılsa dosya betimleyici tablosunda dosya betimleyicisi denilen bir 
+    indeks bu dosya nesnesini göstermektedir. Biz user mode'taki dosya işlemlerinde bu konuyu zaten açıklamıştık. Ancak kısaca 
+    bir anımsatma yapalım:
 
     Dosya Betimleyici Tablosu
     --------------------------
@@ -59394,8 +59394,7 @@ module_exit(generic_exit);
     3 ----> dosya nesnesi (struct file)
     ...
 
-    Dosya nesnesi "açık dosyaların bilgilerini" tutmaktadır. Aşağıda file yapısının mevcut çekirdeklerdeki içeriğini
-    görüyorsunuz:
+    Dosya nesnesi "açık dosyaların bilgilerini" tutmaktadır. Aşağıda file yapısının mevcut çekirdeklerdeki içeriğini görüyorsunuz:
 
     struct file {
         union {
@@ -59442,7 +59441,7 @@ module_exit(generic_exit);
     inode yapısı dosyanın diskteki bilgilerini tutmaktadır. Yani aynı dosya üç kez açılsa çekirdek üç farklı file nesnesi 
     oluşturmaktadır. Ancak bu dosya diskte bir tane olduğuna göre çekirdek bunun için toplamda bir tane inode yapısı oluşturacaktır.
     file yapısının içerisinde dosyanın diskteki bilgilerine ilişkin bu inode yapısına f_inode elemanı yoluyla erişilebilmektedir. 
-    Daha önceden de gördüğümüz gibi bir dosya isimleri diskte dizin girişlerinde tutulmaktadır. Örneğin "/home/kaan/Study/test.c"
+    Daha önceden de gördüğümüz gibi dosya isimleri diskte dizin girişlerinde tutulmaktadır. Örneğin "/home/kaan/Study/test.c"
     isimli dosyanın i-node elemanına erişmek için işletim sistemi sırasıyla "/home", "/home/kaan", "/home/kaan/Study" ve 
     "/home/kaan/Study/test.txt" dizin girişlerini taramak zorundadır. Bu işleme işletim sistemlerinde "yol ifadelerinin 
     çözümlenmesi (pathname resolution)" denilmektedir. Aynı dosyaların tekrar tekrar açılması durumunda bu işlemlerin yeniden 
@@ -59549,40 +59548,40 @@ module_exit(generic_exit);
     }
 
     Burada görüldüğü gibi her farklı borunun farklı bekleme kuyrukları ve semaphore nesnesi vardır. cdev yapı nesnesinin yapının 
-    içerisine yerleştirilmesinin amacı şleride görüleceği gibi bu adresten hareketle yapı nesnesinin adresinin elde edilmesini 
-    sağlamaktır. Bunun nasıl yapıldığı izleyen pragraflarda görülecektir.
+    içerisine yerleştirilmesinin amacı ileride görüleceği gibi bu adresten hareketle yapı nesnesinin adresinin elde edilmesini 
+    sağlamaktır. Bunun nasıl yapıldığı izleyen paragraflarda görülecektir.
 
     3) N tane minör numaralı aygıt için cdev_add fonksiyonuyla aygıtlar çekirdeğe eklenmelidir. Örneğin:
 
-	for (i = 0; i < ndevices; ++i) {
-		g_pdevices[i].head = g_pdevices[i].tail = g_pdevices[i].count = 0;
-		sema_init(&g_pdevices[i].sem, 1);
-		init_waitqueue_head(&g_pdevices[i].wqread);
-		init_waitqueue_head(&g_pdevices[i].wqwrite);
-		cdev_init(&g_pdevices[i].cdev, &g_fops);
+    for (i = 0; i < ndevices; ++i) {
+        g_pdevices[i].head = g_pdevices[i].tail = g_pdevices[i].count = 0;
+        sema_init(&g_pdevices[i].sem, 1);
+        init_waitqueue_head(&g_pdevices[i].wqread);
+        init_waitqueue_head(&g_pdevices[i].wqwrite);
+        cdev_init(&g_pdevices[i].cdev, &g_fops);
 
-		dev = MKDEV(MAJOR(g_dev), i);
-		if ((result = cdev_add(&g_pdevices[i].cdev, dev, 1)) < 0) {
-			for (k = 0; k < i; ++k)
-				cdev_del(&g_pdevices[k].cdev);
-			kfree(g_pdevices);
-			unregister_chrdev_region(dev, ndevices);
-			printk(KERN_ERR "Cannot add device!...\n");
+        dev = MKDEV(MAJOR(g_dev), i);
+        if ((result = cdev_add(&g_pdevices[i].cdev, dev, 1)) < 0) {
+            for (k = 0; k < i; ++k)
+                cdev_del(&g_pdevices[k].cdev);
+            kfree(g_pdevices);
+            unregister_chrdev_region(dev, ndevices);
+            printk(KERN_ERR "Cannot add device!...\n");
 
-			return result;
-		}
-	}
+            return result;
+        }
+    }
 
-    Burada yapı dizisininin her elemanındaki elemanlara ilkdeğerleri verilmiştir. Sonra her boru için ayrı bir cdev nesnesi cdev_add 
+    Burada yapı dizisinin her elemanındaki elemanlara ilkdeğerleri verilmiştir. Sonra her boru için ayrı bir cdev nesnesi cdev_add 
     fonksiyonu ile eklenmiştir. Eklemelerden biri başarısız olursa daha önce eklenenlerin de cdev_del fonksiyonu ile silindiğine 
     dikkat ediniz.
 
-    4) Bizim read, write gibi fonksiyonlarında file yapısı türünden adres belirten filp parametre değişkeni yoluyla DEVICE yapısına 
+    4) Bizim read, write gibi fonksiyonlarında file yapısı türünden adres belirten filp parametre değişkeni yoluyla PIPE_DEVICE yapısına 
     erişmemiz gerekir. Bu işlem dolaylı bir biçimde şöyle yapılmaktadır:
 
         - Önce aygıt sürücünün open fonksiyonunda programcı inode yapısının i_cdev elemanından hareketle cdev nesnesinin içinde 
         bulunduğu yapı nesnesinin başlangıç adresini container_of makrosuyla elde eder. Çünkü inode yapısının i_cdev elemanı cdev_add
-        fonkisyonuyla eklenen cdev yapı nesnesinin adresini tutmaktadır.
+        fonksiyonuyla eklenen cdev yapı nesnesinin adresini tutmaktadır.
 
         - Programcı device nesnesinin adresini elde ettikten sonra onu file yapısının private_data elemanına yerleştirir. file yapısının
         private_data elemanı programcının kendisinin isteğe bağlı olarak yerleştirebileceği bilgiler için bulundurulmuştur.
@@ -59608,8 +59607,8 @@ module_exit(generic_exit);
     7) Aygıt sürücünün exit fonksiyonunda yine tüm minör numaralar için cdev_del fonksiyonu çağrılır ve unregister_chrdev_region 
     işlemi yapılır.
 
-    8) Birden fazla minör numara için çalışacak aygıt sürücülerin birden fazla aygıt dosdyası yaratması gerekir. Yani aygıt sürücüsü 
-    kaç minör numarayı destekliyorsa o sayıda aygıt dıosyalarının yaraılması gerekmektedir. Bu da onları yüklemek için kullandığımız 
+    8) Birden fazla minör numara için çalışacak aygıt sürücülerin birden fazla aygıt dosyası yaratması gerekir. Yani aygıt sürücüsü 
+    kaç minör numarayı destekliyorsa o sayıda aygıt dosyalarının yaratılması gerekmektedir. Bu da onları yüklemek için kullandığımız 
     load scriptinde değişiklik yapmayı gerektirmektedir. N tane minör numaraya ilişkin aygıt dosyası yaratacak biçimde yeni bir 
     "loadmulti" isimli script aşağıdaki gibi yazılabilir:
 
@@ -59648,7 +59647,7 @@ module_exit(generic_exit);
 
     Aygıt dosyalarının majör numaralarının hepsi aynıdır ancak minör numaraları farklıdır. Burada adeta birbirinden bağımsız 
     10 ayrı boru aygıtı var gibidir. Ancak aslında tek bir aygıt sürücü kodu bulunmaktadır. Tabii bizim benzer biçimde "unload"
-    script'ini de tüm aygıt dosyalarını silecek biçimde düzeltmemiz gerekir. Bunun için "unloadmulti" scritp'ini aşağıdaki 
+    script'ini de tüm aygıt dosyalarını silecek biçimde düzeltmemiz gerekir. Bunun için "unloadmulti" script'ini aşağıdaki gibi
     yazabiliriz:
 
     #!/bin/bash
@@ -59661,12 +59660,12 @@ module_exit(generic_exit);
         rm -f ${module}$i
     done
 
-    Bu scrip'te biz modülü önce çekirdekten sonra da "loadmulti" ile yarattığımız aygıt dosyalarını dosya sisteminden sildik. 
+    Bu script'te biz modülü önce çekirdekten sonra da "loadmulti" ile yarattığımız aygıt dosyalarını dosya sisteminden sildik. 
     Script aşağıdaki örnekteki gibi kullanılmalıdır:
 
     $ sudo ./unloadmulti 10 pipe-driver
 
-    Daha önce yapımış olduğumuz boru aygıt sürücücüsünün 10 farklı minör numarayı destekleyen biçimini aşağıda veriyoruz.
+    Daha önce yapmış olduğumuz boru aygıt sürücüsünün 10 farklı minör numarayı destekleyen biçimini aşağıda veriyoruz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* pipe-driver.c */
@@ -63872,7 +63871,7 @@ chmod $mode $module
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Blok aygıt sürücünde de ilk yapılacak işlem blok aygıt sürücüsünün bir isim altında aygıt numarası belirtilerek register ettirilmesidir. 
-    Bu işlem register_blkdev fonkiyonuyla yapılmaktadır:
+    Bu işlem register_blkdev fonksiyonuyla yapılmaktadır:
 
     int register_blkdev(unsigned int major, const char *name);
 
