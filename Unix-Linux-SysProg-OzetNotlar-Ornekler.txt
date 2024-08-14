@@ -60352,6 +60352,14 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												148. Ders 16/06/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												149. Ders 23/06/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Aygıt sürücüden bilgi okumak için read fonksiyonun, aygıt sürücüye bilgi göndermek için ise write fonksiyonun kullanıldığını 
     gördük. Ancak bazen aygıt sürücüye write fonksiyonunu kullanmadan bazı bilgilerin gönderilmesi, aygıt sürücüden read 
     fonksiyonunu kullanmadan bazı bilgilerin alınması gerekebilmektedir. Bazen hiç bilgi okumadan ve bilgi göndermeden aygıt 
@@ -60573,7 +60581,7 @@ void exit_sys(const char *msg)
     }
 
     Burada gördüğünüz gibi ilgili minör numaradaki borudaki byte sayısı IOC_PIPE_GETCOUNT, uzunluğu ise IOC_PIPE_GETBUFSIZE ioctl kodu 
-    ile alınmakta ve bu boru uzunluğu uzunluk IOC_PIPE_SETBUFSIZE ioctl kodu ile değiştirilebilmektedir. Boru için kullanılan tampon 
+    ile alınmakta ve bu boru uzunluğu IOC_PIPE_SETBUFSIZE ioctl kodu ile değiştirilebilmektedir. Boru için kullanılan tampon 
     değiştirilirken eşzamanlı erişimlere dikkat edilmelidir. Çünkü daha önceden de belirttiğimiz gibi aygıt sürücünün içerisindeki 
     fonksiyonlar farklı prosesler tarafından aynı anda çağrılabilmektedir. Bu tür durumlarda daha önce görmüş olduğumuz çekirdek 
     senkronizasyon nesneleri ile işlemlerin senkronize edilmesi gerekmektedir. Örneğimizdeki senkronizasyon PIPE_DEVICE yapısının 
@@ -64951,26 +64959,26 @@ clean:
 
  /* loadblk (bu satırı dosyaya kopyalamayınız) */
 
-    #!/bin/bash
+#!/bin/bash
 
-    module=$1
-    mode=666
+module=$1
+mode=666
 
-    /sbin/insmod ./$module.ko ${@:2} || exit 1
-    major=$(awk "\$2 == \"$module\" {print \$1}" /proc/devices)
-    rm -f $module
-    mknod $module b $major 0
-    chmod $mode $module
+/sbin/insmod ./$module.ko ${@:2} || exit 1
+major=$(awk "\$2 == \"$module\" {print \$1}" /proc/devices)
+rm -f $module
+mknod $module b $major 0
+chmod $mode $module
 
-    /* unloadblk (bu satırı dosyaya kopyalamayınız) */
+/* unloadblk (bu satırı dosyaya kopyalamayınız) */
 
-    #!/bin/bash
+#!/bin/bash
 
-    module=$1
-    mode=666
+module=$1
+mode=666
 
-    /sbin/rmmod ./$module.ko || exit 1
-    rm -f $module
+/sbin/rmmod ./$module.ko || exit 1
+rm -f $module
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Blok aygıt sürücüleri için en önemli nesne gendisk isimli nesnesidir. Blok aygıt sürücü çekirdekte bu nesne ile temsil 
@@ -65120,7 +65128,7 @@ clean:
         ...
     }
 
-    blk_init_queue fonksiyonunun ikinci paarametresi kernel'ın kuyruğa erişirken kullanacağı spinlock nesnesinin adresidir. Programcı bunesneyi kendisi oluişturup 
+    blk_init_queue fonksiyonunun ikinci paarametresi kernel'ın kuyruğa erişirken kullanacağı spinlock nesnesinin adresidir. Programcı bu nesneyi kendisi oluşturup 
     initialize etmelidir. 
 
     blk_init_queue fonksiyonuyla yaratılan kuyruk nesnesinin kullanım bittikten sonra cleanup_queue fonksiyonuyla boşaltılması gerekmektedir:
