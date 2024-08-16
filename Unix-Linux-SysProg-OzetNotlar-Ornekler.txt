@@ -11,7 +11,7 @@
                         (Notları sabit genişlikli font kullanan programlama editörleri ile açınız.)
                             (Editörünüzün "Line Wrapping" özelliğini pasif hale getiriniz.)
 
-                                                    Son Güncelleme: 13/08/2024 - Salı
+                                                    Son Güncelleme: 16/08/2024 - Cuma
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -54901,10 +54901,12 @@ static ssize_t generic_write(struct file *filp, const char *buf, size_t size, lo
 	size_t esize;
 
 	esize = *off + size > FILE_MEMORY_MAX_SIZE ? FILE_MEMORY_MAX_SIZE - *off : size;
+
 	if (copy_from_user(g_fmem + *off, buf, esize) != 0)
 		return -EFAULT;
 
 	*off += esize;
+
 	if (*off > g_fmem_size)
 		g_fmem_size = *off;
 
@@ -55204,10 +55206,12 @@ static ssize_t generic_write(struct file *filp, const char *buf, size_t size, lo
 	size_t esize;
 
 	esize = *off + size > FILE_MEMORY_MAX_SIZE ? FILE_MEMORY_MAX_SIZE - *off : size;
+
 	if (copy_from_user(g_fmem + *off, buf, esize) != 0)
 		return -EFAULT;
 
 	*off += esize;
+
 	if (*off > g_fmem_size)
 		g_fmem_size = *off;
 
@@ -58520,6 +58524,7 @@ static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *o
 
 		if (wait_event_interruptible(g_wqread, g_count > 0))
 			return -ERESTARTSYS;
+
 		if (down_interruptible(&g_sem))
 			return -ERESTARTSYS;
 	}
@@ -59025,6 +59030,7 @@ static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *o
 
 		if (wait_event_interruptible(g_wqread, g_queue->count > 0))
 			return -ERESTARTSYS;
+
 		if (down_interruptible(&g_sem))
 			return -ERESTARTSYS;
 	}
@@ -59470,6 +59476,7 @@ static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *o
 
 		if (wait_event_interruptible(g_wqread, g_pinfo->count > 0))
 			return -ERESTARTSYS;
+
 		if (down_interruptible(&g_sem))
 			return -ERESTARTSYS;
 	}
@@ -60118,6 +60125,7 @@ static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *o
 
 		if (wait_event_interruptible(pdevice->wqread, pdevice->count > 0))
 			return -ERESTARTSYS;
+
 		if (down_interruptible(&pdevice->sem))
 			return -ERESTARTSYS;
 	}
@@ -60356,10 +60364,6 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-												149. Ders 23/06/2024 - Pazar
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
     Aygıt sürücüden bilgi okumak için read fonksiyonun, aygıt sürücüye bilgi göndermek için ise write fonksiyonun kullanıldığını 
     gördük. Ancak bazen aygıt sürücüye write fonksiyonunu kullanmadan bazı bilgilerin gönderilmesi, aygıt sürücüden read 
     fonksiyonunu kullanmadan bazı bilgilerin alınması gerekebilmektedir. Bazen hiç bilgi okumadan ve bilgi göndermeden aygıt 
@@ -60526,6 +60530,10 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												149. Ders 23/06/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Aşağıdaki örnekte boru aygıt sürücüsünün kullandığı boru uzunluğu IOC_PIPE_GETBUFSIZE ioctl koduyla elde edilip
     IOC_PIPE_SETBUFSIZE fonksiyonuyla değiştirilebilmektedir. Buradaki IOCTL kodları şöyle oluşturulmuştur:
 
@@ -60533,7 +60541,7 @@ void exit_sys(const char *msg)
     #define IOC_PIPE_GETCOUNT		_IOR(PIPE_DRIVER_MAGIC, 0, size_t)
     #define IOC_PIPE_GETBUFSIZE		_IOR(PIPE_DRIVER_MAGIC, 1, size_t)
     #define IOC_PIPE_SETBUFSIZE		_IOW(PIPE_DRIVER_MAGIC, 2, size_t)
-    #define IOC_PIPE_PEEK		_IOWR(PIPE_DRIVER_MAGIC, 3, struct PIPE_PEEK)
+    #define IOC_PIPE_PEEK			_IOWR(PIPE_DRIVER_MAGIC, 3, struct PIPE_PEEK)
 
     Ancak bu örnek için yukarıda vermiş olduğumuz boru aygıt sürücüsünde bazı değişiklikler yaptık. Bu değişiklikler şunlardır:
 
@@ -60606,7 +60614,7 @@ void exit_sys(const char *msg)
 
     $ sudo ./unloadmulti 10 pipe-driver
 
-    Aşağıda örneğin tüm modlarını veriyoruz.
+    Aşağıda örneğin tüm kodlarını veriyoruz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* pipe-driver.h */
@@ -60788,6 +60796,7 @@ static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *o
 
 		if (wait_event_interruptible(pdevice->wqread, pdevice->count > 0))
 			return -ERESTARTSYS;
+
 		if (down_interruptible(&pdevice->sem))
 			return -ERESTARTSYS;
 	}
@@ -61179,15 +61188,15 @@ void exit_sys(const char *msg)
 
     proc dosya sistemi aslında yalnızca çekirdek tarafından değil aygıt sürücüler tarafından da kullanılabilmektedir. Ancak bu 
     dosya sisteminin içerisinde user mode'dan dosyalar ya da dizinler yaratılamamaktadır. proc dosya sistemindeki tüm girişlerin 
-    dosya uzunluları 0 biçiminde rapor edilmektedir.
+    dosya uzunlukları 0 biçiminde rapor edilmektedir.
 
-    proc dosya sisteminin kullanımına yönelik çekirdek fonksiyonları çekirdeğin versyionları ile zamanla birkaç değiştirilmiştir. 
-    Dolayısıyla eski çekirdeklere çalışan kodlar yeni çekirdeklerde derlenmeyecektir. Biz burada en yeni fonksiyonları ele 
+    proc dosya sisteminin kullanımına yönelik çekirdek fonksiyonları çekirdeğin versiyonları ile zamanla birkaç kez değiştirilmiştir. 
+    Dolayısıyla eski çekirdeklerde çalışan kodlar yeni çekirdeklerde derlenmeyecektir. Biz burada en yeni fonksiyonları ele 
     alacağız.
 
-    User mode'dan prog dosya sistemindeki bir dosya üzerinde open, read, write, lseek, close işlmeler yapıldığında aslında
+    User mode'dan prog dosya sistemindeki bir dosya üzerinde open, read, write, lseek, close işlemler yapıldığında aslında
     aygıt sürücülerin belirlediği fonksiyonlar çağrılmaktadır. Yani örneğin biz user mode'dan proc dosya sistemi içerisindeki 
-    bir dosyadan okuma yapmak istediğimizde aslında onu oluşturan aygıt sürücünün içerisindeki bir fonksiyon çalışıtırılır.
+    bir dosyadan okuma yapmak istediğimizde aslında onu oluşturan aygıt sürücünün içerisindeki bir fonksiyon çalıştırılır.
     Bu fonksiyon bize okuma sonucunda elde edilecek bilgileri verir. Benzer biçimde proc dosya sistemindeki bir dosyaya 
     user mode'dan yazma yapılmak istendiğinde aslında o dosyaya ilişkin aygıt sürücünün bir fonksiyonu çağrılmaktadır. 
     Yani proc dosya sistemi aslında aygıt sürücüden fonksiyon çağıran bir mekanizmaya sahiptir.
@@ -61206,7 +61215,7 @@ void exit_sys(const char *msg)
     Bu parametre 0 geçilirse default erişim hakları kullanılır. Üçüncü parametre dosyanın hangi dizinde yaratılacağını 
     belirtmektedir. Bu parametre NULL geçilirse dosya ana "/proc" dizini içerisinde yaratılır. proc dosya sistemi içerisinde 
     dizinlerin nasıl yaratıldığını izleyen paragraflarda açıklayacağız. Son parametre proc dosya sistemindeki ilgi dosyaya yazma 
-    ve okuma yapldığında çalıştırılacak fonksiyonları belirtir. Aslında birkaç sene önceki çekirdeklerde (3.10 çekirdeklerine 
+    ve okuma yapıldığında çalıştırılacak fonksiyonları belirtir. Aslında birkaç sene önceki çekirdeklerde (3.10 çekirdeklerine 
     kadarki çekirdeklerde) bu fonksiyonun son parametresi proc_ops yapısını değil, file_operations yapısını kullanıyordu. Dolayısıyla 
     çekirdeğinizdeki fonksiyonun son parametresinin ne olduğuna dikkat ediniz. Örneğin önceki kursun yapıldığı makinede bu son 
     parametre file_operations yapısına ilişkinken bu kursun yapıldığı makinede proc_ops yapısına ilişkindir. proc_ops yapısı 
@@ -61233,11 +61242,11 @@ void exit_sys(const char *msg)
     };
 
     proc_ops yapısının elemanlarına ilişkin fonksiyon göstericilerinin türlerinin file_operations yapısındaki elemanlara ilişkin
-    fonksiyon gösterişcilerinin türleri ile aynı olduğuna dikkat ediniz.ç Bu fonksiyonların kullanımı tamamen aygıt sürücü 
+    fonksiyon göstericilerinin türleri ile aynı olduğuna dikkat ediniz. Bu fonksiyonların kullanımı tamamen aygıt sürücü 
     için oluşturduğumuz file_operations yapısı ile aynı biçimdedir.
 
     proc dosya sistemi genel olarak text tabanlı bir dosya sistemi biçiminde düşünülmüştür. Yani buradaki dosyalar genel olarak 
-    text içeriğe sahiptir. Siz de aygıt sürücünüz için proc dosya sisteminde dosya oluşturacaksınız onların içeriğini text 
+    text içeriğe sahiptir. Siz de aygıt sürücünüz için proc dosya sisteminde dosya oluşturacaksanız onların içeriğini text 
     olarak oluşturmalısınız.
 
     Fonksiyon başarı durumunda yaratılan dosyanın bilgilerini içeren proc_dir_entry türünden bir yapı nesnesinin adresiyle, 
@@ -61254,7 +61263,7 @@ void exit_sys(const char *msg)
     proc_dir_entry nesnesinin adresini almaktadır. Yine bu parametre NULL adres girilirse dosyanın ana "/proc" dizininde
     olduğu kabul edilmektedir.
 
-    Aşağıdaki örnekte proc sisteminde dosya yaratan iskelet bir aygıt sürücü programı verilmiştir. Bu aygıt sürücüde"/proc" 
+    Aşağıdaki örnekte proc sisteminde dosya yaratan iskelet bir aygıt sürücü programı verilmiştir. Bu aygıt sürücüde "/proc" 
     dizininde "procfs-driver" isminde bir dosya yaratılmaktadır. Aygıt sürücüyü install ettikten sonra "/proc" dizininde
     bu dosyanın yaratılıp yaratılmadığını kontrol ediniz. Bu dosyayı "cat" ile komut satırından okumak istediğinizde "cat" 
     programı bu dosyayı açıp, read işlemi uygulayıp kapatacaktır. "cat" işleminden sonra "dmesg" komutu ile aygıt sürücümüzde
@@ -62245,6 +62254,7 @@ static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *o
 
 		if (wait_event_interruptible(pdevice->wqread, pdevice->count > 0))
 			return -ERESTARTSYS;
+
 		if (down_interruptible(&pdevice->sem))
 			return -ERESTARTSYS;
 	}
@@ -62693,14 +62703,14 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Şimdi de aygıt sürücülerde zamanla işlemlerinin nasıl yapılacağı üzerinde duracağız. Çekirdeğin zamanlama mekanizması
+    Şimdi de aygıt sürücülerde zamanlama işlemlerinin nasıl yapılacağı üzerinde duracağız. Çekirdeğin zamanlama mekanizması
     periyodik oluşturulan donanım kesmeleriyle sağlanmaktadır. Bu kesmelere genel olarak "timer kesmeleri" ya da Linux 
     terminolojisinde "jiffy" denilmektedir. Eskiden tek CPU'lu makineler kullanıyordu ve eski işlemcilerde işlemcinin içerisinde 
     periyodik kesme oluşturacak bir mekanizma yoktu. Ancak daha sonraları işlemcilere kendi içerisinde periyodik kesme 
     oluşturabilecek timer devreleri eklendi. Bugün ağırlıklı olarak birden fazla çekirdeğe sahip işlemcileri kullanıyoruz. Bu 
-    işlemcilerin içerisindeki çekirdeklerin her birinde o çekirdekte periyodik kesme oluşturan (local interrupts) timer devereleri 
+    işlemcilerin içerisindeki çekirdeklerin her birinde o çekirdekte periyodik kesme oluşturan (local interrupts) timer devreleri 
     bulunmaktadır. Böylece her çekirdek kendi timer devresiyle "context switch" yapmakta ve proses istatistiklerini güncellemektedir. 
-    Bugün PC mimarisinde yerel çekirdeklerin kesme mekanizmaları dışında ayrıca bir de eski sistemlerde zaten var olan IRQ0 harttına 
+    Bugün PC mimarisinde yerel çekirdeklerin kesme mekanizmaları dışında ayrıca bir de eski sistemlerde zaten var olan IRQ0 hattına 
     bağlı global bir timer devresi de bulunmaktadır. Bu global timer devresi "context switch" yapmakta değil sistem zamanının 
     ilerletilmesi amacıyla kullanılmaktadır.
 
@@ -65490,7 +65500,7 @@ void exit_sys(const char *msg)
     Burada transferin yapılacağı sektörün numarası bio_vec içerisinde bulunmadığında iterator yolu ile iterator.iter.bi_sector ifadesiyle alınmıuştır.
     Transfer adresi olan buf biov.bv_page adresinden biov.bv_offset kadar ileridedir. Yine transferin yönü doğrudan bio_vec yapısının içerisinde değildir. 
     Bu yön bilgisinin bio_data_dir makrosuyla iterator yoluyla alındığına dikkat ediniz. (Aslında yön bilgisi bio yapısının içerisindedir. Bu makro onu buradan almaktadır.)
-    Örneğimizde transferin transfer_block isimli fonksiyonla yapldığını görüyorsunuz. Bu fonksiyon bizim tarafımızdan yazılan gerçek transferin yapıldığı fonksiyondur. 
+    Örneğimizde transferin transfer_block isimli fonksiyonla yapıldığını görüyorsunuz. Bu fonksiyon bizim tarafımızdan yazılan gerçek transferin yapıldığı fonksiyondur. 
     Aygıt sürücünün en önemli bilgilerinin BLOCKDEV isimli yapıda tutulduğunu anımsayınız. Her ne kadar bu yapı nesnesinin adresi global g_bdev göstericisinde tutuluyorsa da 
     yine de o bilgi örneğimizde requeat_queue nesnesinin queuedata elemanından çekilerek alınıp transfer_block fonksiyonuna verilmiştir. Bu durum yukarıdaki örnek için gereksiz olsa da 
     birden fazla minör numarayla çalışıldığı durumda aygıt bilgilerinin yerinin belirlebilmesi için genel bir çözüm oluşturmak amacıyla transfer_block fonksiyonuna aktarılmıştır. 
