@@ -64977,8 +64977,7 @@ mode=666
 /sbin/insmod ./$module.ko ${@:2} || exit 1
 major=$(awk "\$2 == \"$module\" {print \$1}" /proc/devices)
 rm -f $module
-mknod $module b $major 0
-chmod $mode $module
+mknod -m $mode $module c $major 0
 
 /* unloadblk (bu satırı dosyaya kopyalamayınız) */
 
@@ -64993,12 +64992,14 @@ rm -f $module
 /*--------------------------------------------------------------------------------------------------------------------------
     Blok aygıt sürücüleri için en önemli nesne gendisk isimli nesnesidir. Blok aygıt sürücü çekirdekte bu nesne ile temsil 
     edilmektedir. gendisk nesnesi alloc_disk isimli fonksiyonla (aslında bir makro olarak yazılmıştır) tahsis edilmektedir.
-    Ancak 5'li çekirdeklerle birlikte fonksiyonun ismi blk_alloc_disk biçiminde değiştirilmiştir.
+    Ancak 5'li çekirdeklerle birlikte fonksiyonun ismi blk_alloc_disk biçiminde değiştirilmiştir. Ayrıca aşağıdaki fonksiyonların 
+    bir bölümünün bulunduğu <linux/genhd.h> dosyası da çekirdeğin 5.18 versiyonunda kaldırılmış buradaki fonksiyonların 
+    prototipleri <linux/blkkdev.h> dosyasına taşınmıştır.
 
     #include <linux/genhd.h>
 
-    struct gendisk *alloc_disk(int minors);         /* eski çekirdek versiyonları bu fonksiyonu kullanıyor */
-    struct gendisk *blk_alloc_disk(int minors);     /* yeni çekirdek versiyonlar bu fonksiyonu kullanıyor */
+    struct gendisk *alloc_disk(int minors);			/* eski çekirdek versiyonları bu fonksiyonu kullanıyor */
+    struct gendisk *blk_alloc_disk(int minors);		/* yeni çekirdek versiyonlar bu fonksiyonu kullanıyor */
 
     Fonksiyonlar parametre olarak aygıt sürücünün destekleyeceği minör numara sayısını almaktadır. Geri dönüş değeri de diski 
     temsil eden gendisk isimli yapı nesnesinin adresidir. (Birden fazla minör numaranın söz konusu olduğu durumda geri döndürülen 
@@ -65012,155 +65013,253 @@ rm -f $module
         return -NOMEM;
     }
 
+    alloc_disk ile elde edilen gendisk nesnesinin içinin doldurulması gerekmektedir. Bu yapının doldurulması gereken elemanları 
+    şunlardır:
+
+    - Yapının major isimli elemanına aygıt sürücünün majör numarası yerleştirilmelidir. Örneğin:
+
+    g_gdisk->major = g_major;
+
+    - Yapının first_minor elemanına aygıt sürücünün ilk minör numarası yerleştirilmelidir (Tipik olarak 0). Örneğin:
+
+    g_gdisk->first_minor = 0;
+
+    - Yapının flags elemanına duruma göre bazı bayraklar girilebilmektedir. Öreğin ramdisk için bu bayrak GENHD_FL_NO_PART_SCAN 
+    biçiminde girilebilir. Örneğin:
+
+    g_gdisk->flags = GENHD_FL_NO_PART_SCAN;
+
+    - Yapının fops elemanına aygıt sürücü açıldığında, kapatıldığında, ioctl işlemi sırasında vs. çağrılacak fonksiyonların 
+    bulunduğuğu block_device_operations isimli yapının adresi atanmalıdır. Bu yapı karakter aygıt sürücülerindeki file_operations 
+    yapısına benzetilebilir. Yapıının iki önemli elemanı open ve release elemanlarıdır. Burada belirtilen fonksiyonlar aygıt 
+    sürücü açıldığında ve her kapatıldığında çağrılmaktadır. Örneğin:
+
+    static struct block_device_operations g_bops = {
+        /* ... */
+    };
+
+    g_gdisk->fops = &g_bops;
+
+    - Yapının queue elemanına programcı tarafından yaratılacak olan request_queue nesnesinin adresi atanmalıdır. request_queue 
+    aygıt sürücüden read/write işlemi yapıldığında çekirdeğin IO çizelgeleyici alt sistemi tarafından optimize edilen işlemlerin 
+    yerleştirileceği kuyruk sistemidir. Programcı ileride görüleceği üzere bu kuyruk sisteminden istekleri alarak yerine getirir. 
+    Maalesef bu kuyruğun yaratılması ve işleme sokulması için gerekli kernel fonksiyonları kernel'ın çeşitli versiyonlarında 
+    değiştirilmiştir. Eskiden 4'lü çekirdeklerde request_queue nesnesi oluşturmak için blk_init_queue isimli bir fonksiyon 
+    kullnılıyordu. Sonra 5'li çekirdeklerle birlikte request_queue işlemleri üzerinde değişiklikler yapıldı. Biz kursumuzda 
+    5'li çekirdekler kullanıyoruz. Ancak önceki çekirdeklerdeklerde kullanılan fonksiyonlar üzerinde de durmak istiyoruz. Burada 
+    önce eski çekirdeklerdeki request queue işlemlerini ele alıp sonra ayrı paragrafta yeni çekirdeklere ilişkin değişiklikler üzerinde
+    duracağız.
+
+    Eski çekirdeklerde request_queue nesnesi oluşturmak için blk_init_queue isimli bir fonksiyon kullanılıyordu. Fonksiyonun 
+    prototipi şöyledi:
+
+    #include <linux/blkdev.h>
+
+    typedef void (request_fn_proc) (struct request_queue *q);
+    struct request_queue *blk_init_queue(request_fn_proc *rfn, spinlock_t *lock);
+
+    Fonksiyonun birinci parametresi kuyruktan gelen istekleri almakta kullanılan request_fn_proc türünden bir nesnenin 
+    adresini almaktadır. İkinci parametre kuyruğu korumak için kullanılan spinlock nesnesini belirtmektedir. Fonksiyonun 
+    birinci parametresine geri dönüş değeri void olan parametresi struct gendisk * türünden olan bir fonksiyonun adresi 
+    girilmelidir. Bu fonksiyon kuyruk işlemlerini yapmak için bulundurulur. blk_init_queue fonksiyonu başarı durumunda request_queue 
+    nesnesinin adresi ile, başarısızlık durumunda NULL adresle geri dönmektedir. Bu durumda çağıran fonksiyonu -ENOMEM değeri 
+    geri döndürebilirsiniz. Örneğin:
+
+    static struct request_queue *g_rq;
+    static spinlock_t g_sl;
+
+    static void request_proc(struct request_queue *rq)
+    {
+        /* ... */
+    }
+    ...
+    if ((g_rq = blk_init_queue(request_proc, &g_sl)) == NULL) {
+        ...
+        retur -ENOMEM;
+    }
+
+    Biz burada elde ettiğimiz request_queue nesnesinin adresini gendisk yapısının queue elemanına atamalıyız. Örneğin:
+
+    g_gdisk->queue = g_rq;
+
+    blk_init_queue fonksiyonuyla yaratılan kuyruk nesnesinin kullanım bittikten sonra cleanup_queue fonksiyonuyla boşaltılması 
+    gerekmektedir:
+
+    #include <linux/blkdev.h>
+
+    void blk_cleanup_queue(struct request_queue *rq);
+
+    Fonksiyon parametre olarak request_queue nesneesinin adresini almaktadır.
+
+    Yeni kuyruk fonksiyonları izleyen paragraflarda ele alınacaktır.
+
+    - gendik yapısının içerisine diskin (blok aygıt sürücüsünün temsil ettiği medyanın) kapasitesi set edilmelidir. Bu işlem 
+    set_capacity fonksiyonuyla yapılmaktadır. Fonksiyon prototipi şöyledir:
+
+    #include <linux/genhd.h>
+
+    void set_capacity(struct gendisk *disk, sector_t size);
+
+    Fonksiyonun birinci parametresi gendisk yapısının adresini, ikinci parametresi aygıtın sektör uzunluğunu almaktadır. (Aslında 
+    bu fonksiyon gendisk yapısının ilgili elemanını set etmektedir.) Fonksşyonun ikinci parametresi aygıt sürücünün temsil 
+    ettiği aygıtın sektör uzunluğunu almaktadır. Bir sektör 512 byte'tır. Örneğin:
+
+    set_capacity(g_gdisk, 1000);
+
+    - gendisk yapısının disk_name isimli elemanı char türden bir dizi belirtmektedir. Bu diziye disk isminin bulunduğu 
+    yazı kopyalanmalıdır. Disk ismi "/sys/block" dizininde görüntülenecek dosya ismini belirtmektedir. Örneğin:
+
+    strcpy(g_gdisk->disk_name, "myblockdev");
+
+    - Nihayet gendisk yapısının private_data elemanına programcı kendi yapı nesnesinin adresini yerleştirebilir. Örneğin 
+    daha önce karakter aygıt sürücülerinde yaptığımız gibi bu private_data elemanına gendisk nesnesinni içinde bulunduğu 
+    yapı nesnesinin adresini atayabiliriz.
+
+    Aşağıdaki örnekte yukarıda anlatılan kısma kadar olan işlemleri içeren bir blok aygıt sürücü örneği verilmiştir. Örneğin:
+
+    struct BLOCKDEV {
+        spinlock_t sl;
+        struct gendisk *gdisk;
+        struct request_queue *rq;
+        size_t capacity;
+    };
+    static struct BLOCKDEV g_bdev;
+    ...
+    g_gdisk->private_data = &g_bdev;
+
+    Tabii buradaki örnekte g_bdev zaten bir nesne oludğu için ona private_data yoluyla erişmeye gerek kalmamaktadır. Ancak 
+    aygıt sürücümüz birden fazla minör numarayı destekliyorsa her aygıtın ayrı bir BLOCKDEV yapısı olacağı için ilgili 
+    aygıta bu private_data elemanı yoluyla erişebiliriz.
+
     blk_alloc_disk fonksiyonu ile elde edilen gendisk nesnesi add_disk fonksiyonu ile sisteme eklenmelidir:
 
     #include <linux/genhd.h>
 
-    void add_disk(struct gendisk *disk);        /* eski çekirdek versiyonlarındaki prototip */
+    void add_disk(struct gendisk *disk);		/* eski çekirdek versiyonlarındaki prototip */
 
     Bu fonksiyonun geri dönüş değeri 5'li çekirdeklerle birlikte int yapılmıştır:
 
-    int add_disk(struct gendisk *disk);         /* yeni çekirdek versiyonlarındaki prototip */
+    int add_disk(struct gendisk *disk);			/* yeni çekirdek versiyonlarındaki prototip */
 
-    Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda negatif errno değerine geri dönmektedir. Örneğin:
+    Fonksiyon başarı durumunda 0 değrine başarısızlık durumunda negatif errno değerine geri dönmektedir. Örneğin:
 
     if ((result = add_disk(g_gdisk)) != 0) {
         ...
         return result;
     }
 
-    <BURADA KALDIK>
-
-    alloc_disk ve add_disk fonksiyonuyla tahsis edilen sisteme yerleştirilen gendisk nesnesi del_gendisk fonksiyonuyla serbest 
+    alloc_disk ve add_disk fonksiyonuyla tahsis edilen ve sisteme yerleştirilen gendisk nesnesi del_gendisk fonksiyonuyla serbest 
     bırakılmaktadır:
+
+    #include <linux/genhd.h>
 
     void del_gendisk(struct gendisk *gdisk);
 
     Örneğin:
 
-    if ((g_bdev->gdisk = alloc_disk(1)) == NULL) {
-        result = -ENOMEM;
-        goto EXIT2;
-    }
-    ...
-
-    add_disk(g_bdev->gdisk);
-
-    alloc_disk ile elde edilen gendisk nesnesinin içinin doldurulması gerekmektedir. Bu yapının doldurulması gereken elemanları 
-    şunlardır:
-
-    - Yapının major isimli elemanına aygıt sürücünün majör numarası yerleştirilmelidir.
-    - Yapının first_minor elemanına aygıt sürücünün minör numarası yerleştirilmelidir (Tipik olarak 0).
-    - Yapının flags elemanına duruma göre bazı bayraklar girilebilmektedir. Öreğin ramdisk için bu bayrak GENHD_FL_NO_PART_SCAN biçiminde girilebilir.
-    - Yapının fops elemanına aygıt sürücü açıldığında, kapatıldığında, ioctl işlemi sırasında vs. çağrılacak fonksiyonların bulunduğuğu block_device_operations isimli yapının adresi 
-    atanmalıdır. Bu yapı karakter aygıt sürücülerindeki file_operations yapısına benzetilebilir. Yapıının iki önemli elemanı open ve release elemanlarıdır. Burada belirtilen fonksiyonlar
-    aygıt sürücü açıldığında ve her kapatıldığında çağrılmaktadır.
-    - Yapının queue elemanına programcı tarafından yaratılacak olan request_queue nesnesinin adresi atanmalıdır. request_queue aygıt sürücüden read/write işlemi yapıldığında
-    kernel'ın IO çizelgeleyici alt sistemi tarafından optimize edilen işlemlerin yerleştirileceği kuyruk sistemidir. Programcı ileride görüleceği üzere bu kuyruk sisteminden 
-    istekleri alarak yerine getirir. Maalesef bu kuyruğun yaratılması ve işleme sokulması için gerekli kernel fonksiyonları kernel'ın çeşitli versiyonlarında değiştirilmiştir. 
-    Kurs 4.15 kernel'ı ile yapılmaktadır. Buradaki fonksiyonlar 5'li kernel'larda yeniden değiştirilmiş durumdadır. Fakat biz şimdilik burada mevcut kernel üzerinde işlem yapacağız.
-    Bu kernel'larda kuyruk yaratmak için 2.6'dan beri blk_init_queue fonksiyonu kullanılmaktadır:
----------------------------------------------------------------------------------------------------------------------------*/
-
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
-    Blok aygıt sürücülerine deneme amaçlı verilebilecek en iyi örneklerden birisi "ramdisk"lerdir. Ramdisk pek çok sistemde 
-    bulunan RAM'in sanki disk gibi kullanılmasını sağlayan bir organizasyondur. Ramdisk'ler geçici dosyaların hızlı bir biçimde 
-    oluşturulabilmesi için özellikle tercih edilmektedir. Bazı UNIX sistemlerde geçici dosyaların yaratıldığı "/temp" dizinleri 
-    ramdisk biçiminde oluşturulmuştur. (Örneğin Linux sistemlerinde "/tmp" dizini "tmpfs" isimli bir blok aygıt sürücüsü ile 
-    kontrol edilmektedir. Ramdisk'ler tipik blok aygıt sürücüleridir. Çünkü diski taklit etmektedirler.
-
-    Blok aygıt sürücülerini tasarlarken aygıt sürücüye ilişkin bilgilerin yine bir yapı biçiminde organize edilmesi ve bilgilerin
-    bu yapının elemanlarında saklanması uygun olur. Böylece birden fazla minör numara ile çalışılırken bu yapı nesneleri dinamik 
-    bir biçimde tahsis edilebilir ve fonksiyonlara parametre yoluyla aktarılabilir. Örneğin bir Ramdisk uygulaması için blok 
-    aygıt sürücü bilgileri aşağıdaki bir yapıyla temsil edilebilir:
-
-    struct BLOCKDEV {
-        spinlock_t sl;
-        struct gendisk *gdisk;
-        struct request_queue rq;
-        void *data;
-        size_t capacity;
-    };
-
-    Bu yapı türünden nesne global olarak alınabileceği gibi kmalloc fonksiyonuyla da dinamik biçimde tahsis edilebilir. 
-
-    Blok aygıt sürücüleri için en önemli nesne gendisk nesnesidir. Blok aygıt sürücüsünü çekirdekte bu nesne ile temsil edilmektedir. 
-    gendisk besbesi alloc_disk isimli fonksiyonla tahsis edilir:
-
-    struct gendisk *alloc_disk(int minors);
-
-    Fonksiyon parametre olarak aygıt sürücünün destekleyeceği minör numara sayısını almaktadır. Geri dönüş değeri de diski temsil 
-    eden gendisk isimli yapı nesnesinin adresidir. (Birden fazla minör numaranın söz konusu olduğu durumda geri döndürülen adres 
-    aslında bir dizi adresidir.)
-
-    alloc_disk fonksiyonu ile elde edilen nesne add_disk ile sisteme eklenmelidir:
-
-    void add_disk(struct gendisk *disk);
-
-    alloc_disk ve add_disk fonksiyonuyla tahsis edilen sisteme yerleştirilen gendisk nesnesi del_gendisk fonksiyonuyla serbest 
-    bırakılmaktadır:
-
-    void del_gendisk(struct gendisk *gdisk);
-
-    Örneğin:
-
-    if ((g_bdev->gdisk = alloc_disk(1)) == NULL) {
-        result = -ENOMEM;
-        goto EXIT2;
-    }
-    ...
-
-    add_disk(g_bdev->gdisk);
-
-    alloc_disk ile elde edilen gendisk nesnesinin içinin doldurulması gerekmektedir. Bu yapının doldurulması gereken elemanları 
-    şunlardır:
-
-    - Yapının major isimli elemanına aygıt sürücünün majör numarası yerleştirilmelidir. 
-    - Yapının first_minor elemanına aygıt sürücünün minör numarası yerleştirilmelidir (Tipik olarak 0).
-    - Yapının flags elemanına duruma göre bazı bayraklar girilebilmektedir. Öreğin ramdisk için bu bayrak GENHD_FL_NO_PART_SCAN biçiminde girilebilir. 
-    - Yapının fops elemanına aygıt sürücü açıldığında, kapatıldığında, ioctl işlemi sırasında vs. çağrılacak fonksiyonların bulunduğuğu block_device_operations isimli yapının adresi 
-    atanmalıdır. Bu yapı karakter aygıt sürücülerindeki file_operations yapısına benzetilebilir. Yapıının iki önemli elemanı open ve release elemanlarıdır. Burada belirtilen fonksiyonlar
-    aygıt sürücü açıldığında ve her kapatıldığında çağrılmaktadır. 
-    - Yapının queue elemanına programcı tarafından yaratılacak olan request_queue nesnesinin adresi atanmalıdır. request_queue aygıt sürücüden read/write işlemi yapıldığında
-    kernel'ın IO çizelgeleyici alt sistemi tarafından optimize edilen işlemlerin yerleştirileceği kuyruk sistemidir. Programcı ileride görüleceği üzere bu kuyruk sisteminden 
-    istekleri alarak yerine getirir. Maalesef bu kuyruğun yaratılması ve işleme sokulması için gerekli kernel fonksiyonları kernel'ın çeşitli versiyonlarında değiştirilmiştir. 
-    Kurs 4.15 kernel'ı ile yapılmaktadır. Buradaki fonksiyonlar 5'li kernel'larda yeniden değiştirilmiş durumdadır. Fakat biz şimdilik burada mevcut kernel üzerinde işlem yapacağız.
-    Bu kernel'larda kuyruk yaratmak için 2.6'dan beri blk_init_queue fonksiyonu kullanılmaktadır:
-
-    struct request_queue *blk_init_queue(request_fn_proc *rfn, spinlock_t *lock);
-
-    Fonksionun birinci parameresi kernel tarafından IO işlemi yapılacağı zaman çağrılacak fonksiyonun adresini almaktadır. Bu fonksiyonun parametrik yapısı şöyle olmalıdır:
-
-    void request_proc(request_queue *rq)
-    {
+    if ((g_gdisk = alloc_disk(1)) == NULL) {
         ...
+        return -ENOMEM;
     }
 
-    blk_init_queue fonksiyonunun ikinci paarametresi kernel'ın kuyruğa erişirken kullanacağı spinlock nesnesinin adresidir. Programcı bu nesneyi kendisi oluşturup 
-    initialize etmelidir. 
+    if ((result = add_disk(g_bdev->gdisk)) != 0) {
+        ...
+        return result;
+    }
+    ...
+    del_gendisk(g_gdisk);
 
-    blk_init_queue fonksiyonuyla yaratılan kuyruk nesnesinin kullanım bittikten sonra cleanup_queue fonksiyonuyla boşaltılması gerekmektedir:
-
-    void blk_cleanup_queue(struct request_queue *rq);
-
-    - Oluşturulan blok aygıtının (diskin) kapasitesinin de belirtilmesi gerekmektedir. Bu işlem doğrudan değil set_capacity fonksiyonuyla yapılmalıdır:
-
-    void set_capacity(struct gendisk *disk, sector_t size);
-
-    Fonksiyonun birinci parametresi gendisk yapısının adresini, ikinci parametresi aygıtın sektör uzunluğunu almaktadır. (Aslında bu fonksiyon gendisk yapısının ilgili elemanını
-    set etmektedir.)
-
-    - gendisk yapısının disk_name isimli elemanına disk isminin bulunduğu yazının başlangıç adresi atanmalıdır. Bu isim /sys/block dizinin de görüntülenecek dosya ismini belirtmektedir.
-
-    - Nihayet gendisk yapısının private_data elemanına programcı kendi yapı nesnesinin adresini yerleştirebilir. 
-
-    Aşağıdaki örnekte yukarıda anlatılan kısma kadar olan işlemleri içeren bir blok aygıt sürücü örneği verilmiştir. "load" scriptinde aygıt dosyasının "block" aygıt dosyası
-    olarak yaratılması gerektiğine dikkat ediniz. 
+    Aşağıda şimdiye kadar gördüğümüz işlemleri yapan basit bir blok aygıt sürücüsü iskeleti verilmiştir. Burada iki ayrı 
+    program veriyoruz. Birinci program global değişkenler kullanılarak yazılmıştır. İkincisi ise bu global değişkenlerin 
+    BLOCKDEV isimli bir yapıya yerleştirilmiş biçimidir. Tabii yukarıda da belirttiğimiz gibi aşağıdaki aygıt sürücü kodlarında
+    eski request_queue fonksiyonları kullanılmıştır. Dolayısıyla bu kodlar 5'li ve sonraki çekirdeklerde derlenmeyecektir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-/* generic-bdriver.c */
+/* generic-blkdev.c */
+
+#include <linux/module.h>
+#include <linux/kernel.h>
+#include <linux/fs.h>
+#include <linux/blkdev.h>
+#include <linux/genhd.h>
+
+#define KERNEL_SECTOR_SIZE		512
+#define CAPACITY				(KERNEL_SECTOR_SIZE * 1000)
+
+MODULE_LICENSE("GPL");
+MODULE_DESCRIPTION("General Block Device Driver");
+MODULE_AUTHOR("Kaan Aslan");
+
+static int g_major;
+static struct gendisk *g_gdisk;
+static struct block_device_operations g_bops = {
+	//...
+};
+static struct request_queue *g_rq;
+static struct request_queue *g_rq;
+static spinlock_t g_sl;
+
+typedef void (request_fn_proc) (struct request_queue *q);
+struct request_queue *blk_init_queue(request_fn_proc *rfn, spinlock_t *lock);
+
+static void request_proc(struct request_queue *rq);
+
+static int __init generic_init(void)
+{
+	int result;
+
+	if ((g_major = register_blkdev(0, "generic-blkdev")) < 0) {
+		printk(KERN_INFO "cannot block driver!..\n");
+		return result;
+	}
+
+	if ((g_gdisk = blk_alloc_disk(1)) == NULL) {
+		printk(KERN_ERR "Cannot alloc disk!..\n");
+		return -ENOMEM;
+	}
+	if ((result = add_disk(g_gdisk)) != 0) {
+		del_gendisk(g_gdisk);
+		printk(KERN_ERR "Cannot add disk!..\n");
+		return result;
+	}
+	g_gdisk->major = g_major;
+	g_gdisk->first_minor = 0;
+	g_gdisk->flags = GENHD_FL_NO_PART_SCAN;
+	g_gdisk->fops = &g_bops;
+
+	if ((g_rq = blk_init_queue(request_proc, &g_sl)) == NULL) {
+		del_gendisk(g_gdisk);
+		unregister_blkdev(g_major, "generic-blkdev");
+		return -ENOMEM;
+	}
+
+	g_gdisk->queue = g_rq;
+	set_capacity(g_gdisk, CAPACITY);
+	strcpy(g_gdisk->disk_name, "myblockdev");
+
+	printk(KERN_INFO "generic-block-driver init...\n");
+
+	return 0;
+}
+
+static void request_proc(struct request_queue *rq)
+{
+	/* ... */
+}
+
+static void __exit generic_exit(void)
+{
+	cleanup_queue(g_rq);
+	del_gendisk(g_gdisk);
+	unregister_blkdev(g_major, "generic-blkdev");
+
+	printk(KERN_INFO "generic-block-driver exit...\n");
+}
+
+module_init(generic_init);
+module_exit(generic_exit);
+
+/* generic-blkdev.c */
 
 #include <linux/module.h>
 #include <linux/kernel.h>
@@ -65279,12 +65378,16 @@ static void __exit generic_exit(void)
 module_init(generic_init);
 module_exit(generic_exit);
 
-obj-m += $(file).o
+# Makefile
+
+obj-m += generic.o
 
 all:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
+
+/* loadblk (bu satırı dosyaya kopyalamayınız) */
 
 #!/bin/bash
 
@@ -65294,8 +65397,17 @@ mode=666
 /sbin/insmod ./$module.ko ${@:2} || exit 1
 major=$(awk "\$2 == \"$module\" {print \$1}" /proc/devices)
 rm -f $module
-mknod $module b $major 0
-chmod $mode $module
+mknod -m $mode $module b $major 0
+
+/* unloadblk (bu satırı dosyaya kopyalamayınız ) */
+
+#!/bin/bash
+
+module=$1
+mode=666
+
+/sbin/rmmod ./$module.ko || exit 1
+rm -f $module
 
 /* sample.c */
 
@@ -65329,26 +65441,37 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Blok aygıt sürücülerinde yukarıda belirtilen işlemlerden sonra artık transfer işleminin yapılması için bulundurulan fonksiyonun
-    (örneğimizde request_proc) yazılması aşamasına geldik. Anımsanacağı gibi user mode ya da kernel mode kodlar tarafından blok transferine yönelik
-    bir istek oluştuğunda kernel IO çizelgeleyicisi bunları çizelgeleio uygun bir zamanda transfer edilebilmesi için bizim belirttiğimiz bu fonksiyonu çağırıyordu.
-    Yani örneğimizdeki request_proc bizim tarafımızdan değil kernel tarafından callback fonksiyon olarak çağrılmaktadır. Bizim de bu fonksiyon içerisinde kuyruğa
-    bırakılmış blok transfer isteklerini kuyruktan alarak gerçekleştirmemiz gerekir. 
+    (örneğimizde request_proc) yazılması aşamasına geldik. User mode kodlar tarafından blok transferine yönelik bir istek oluştuğunda 
+    (örneğin blok aygıt sürücüsünden bir sektör okunmak istediğinde) çekirdeğin IO çizelgeleyicisi bunları çizelgeleyerek uygun bir 
+    zamanda transfer edilebilmesi için bizim belirttiğimiz ve yukarıdaki örnekte ismini request_proc olarak verdiğimiz fonksiyonu 
+    çağrımaktadır. Yani örneğimizdeki request_proc bizim tarafımızdan değil çekirdek tarafından callback fonksiyon olarak çağrılmaktadır. 
+    Bizim de bu fonksiyon içerisinde kuyruğa bırakılmış blok transfer isteklerini kuyruktan alarak gerçekleştirmemiz gerekir.
 
-    Örneğin bir blok aygıt sürücüsünü user mode'da open fonksiyonuyla açıp içerisinden 10 byte'ı read fonksiyonuyşa okumak isteyelim. Eğer bu aygıt sürücü karakter aygıt sürücüsü olsaydı 
-    kernel doğrudan aygıt sürücünün read fonksiyonunu çağıracaktı. Aygıt sürücü de tam belirlenen değer olan 10 byte'ı user mode'daki adrese transfer edecekti. Halbuki blok aygıt
-    sürücüsü durumunda kernel aygıt sürücüden 10 byte transfer istemeyecektir. İlgili 10 byte'ın blunduğu bloğun (block ardışıl n sektördür) transferini isteyecektir. User mod programa
-    o bloğun içerisindeki 10 byte'ı vermek kernel'ın görevidir. Şüphesiz kernel 10 byte okuma isteğine konu olan yerin aygıttaki sektör numarasını hesap eder ve o sektörden itibaren
-    blok transferi ister. 
+    Örneğin bir blok aygıt sürücüsünü user mode'da open fonksiyonuyla açıp içerisinden 10 byte'ı read fonksiyonuyla okumak isteyelim. 
+    Eğer bu aygıt sürücü karakter aygıt sürücüsü olsaydı çekirdek doğrudan aygıt sürücünün read fonksiyonunu çağıracaktı. Aygıt 
+    sürücü de istenen 10 byte'ı user mode'daki adrese transfer edecekti. Halbuki blok aygıt sürücüsü durumunda çekirdek aygıt 
+    sürücüden 10 byte transfer istemeyecektir. İlgili 10 byte'ın blunduğu bloğun (block ardışıl n sektördür) transferini isteyecektir. 
+    User mod programa o bloğun içerisindeki 10 byte'ı vermek kernel'ın görevidir. Blok aygıt sürücülerinden transferler byte 
+    düzeyinde değil blok düzeyinde yapılmaktadır. Yani block aygıt sürücülerinden transfer edilecek en küçük birim 1 sektör 
+    yani 512 byte'tır. Şüphesiz kernel 10 byte okuma isteğine konu olan yerin aygıttaki sektör numarasını hesap eder ve o sektörden 
+    itibaren blok transferi ister.
 
-    Kernel aygıt sürücünün transfer edeceği blokları bir kuyruk sistemine yerleştirir. Bu kuyruk sistemi request_queue denilen bir yapı ile temsil edilmiştir. Bu kuyruğun 
-    içerisindeki kuyruk elemanları request isimli yapı nesnelerinden oluşmaktadır. (Yani request_queue aslında request yapılarının oluşturduğu bir kuyruk sistenidir.) 
+    Kernel aygıt sürücünün transfer edeceği blokları bir kuyruk sistemine yerleştirir. Bu kuyruk sistemi request_queue denilen 
+    bir yapı ile temsil edilmiştir. Bu kuyruğun içerisindeki kuyruk elemanları request isimli yapı nesnelerinden oluşmaktadır. 
+    (Yani request_queue aslında request yapılarının oluşturduğu bir kuyruk sistenidir.)
 
-    Her request nesnesi kendi içerisinde bio isimli yapı nesnelerinden oluşmaktadır. request nesnesinin içerisindeki bio nesnleri bir bağlı liste biçiminde tutulmaktadır. Her bio yapısının
-    sonunda ise değişken sayıda (yani n tane) bio_vec yapıları bulunmaktadır. İşte transfer işini yapacak fonksiyon transfere ilişkin bilgileri bu bio_vec yapısından elde etmektedir. 
+    Her request nesnesi kendi içerisinde bio isimli yapı nesnelerinden oluşmaktadır. request nesnesinin içerisindeki bio nesnleri 
+    bir bağlı liste biçiminde tutulmaktadır. Her bio yapısının sonunda ise değişken sayıda (yani n tane) bio_vec yapıları bulunmaktadır. 
+    İşte transfer işini yapacak fonksiyon transfere ilişkin bilgileri bu bio_vec yapısından elde etmektedir.
 
     request_queue: request ---> request ---> request ---> request ...
     request: bio ---> bio ---> bio ---> bio ---> bio ---> ...
     bio: bio_vec[N]
+
+    Buradan da görüldüğü gibi request_queue nesneleri request nesnelerinden, request nesneleri bio nesnelerinden, bio nesneleri de 
+    bio_vec nesnelerinden oluşmaktadır.
+
+    <BURADA KALDIK>
 
     İşte transfer fonksiyonunun kernel tarafından çağrıldığında "request_queue içerisindeki request nesnelerine elde edip, bu request nesnelerinin içerisindeki bio nesnelerini elde edip,
     bio nesneleri içerisindeki bio_vec dizisinde belirtilen transfer bilgilerine ilişkin transfeleri" yapması gerekir. Şüphesiz bu işlem ancak açık ya da örtük iç içe 3 döngü ile
