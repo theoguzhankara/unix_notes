@@ -61447,7 +61447,7 @@ mode=666
 rm -f $module
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Aşağıdaki örnekte aygıt sürücüsü içerisindeki count isimli global değişken proc dosya sistemindeki "profs-driver" isimli
+    Aşağıdaki örnekte aygıt sürücüsü içerisindeki count isimli global değişken proc dosya sistemindeki "procfs-driver" isimli
     bir dosya ile temsil edilmiştir. Bu dosyadan okuma yapıldığında bu count değişkeninin değeri elde edilmektedir. Dosyaya 
     yazma yapıldığında bu count değişkeninin değeri güncellenmektedir. Yazma işleminde dosya göstericisi dikkate alınmamış ve
     yazma işlemi her zaman sanki ilgili dosyanın başından itibaren yapılıyormuş gibi bir etki oluşturulmuştur.
@@ -61538,7 +61538,7 @@ static void __exit generic_exit(void)
 	cdev_del(g_cdev);
 	unregister_chrdev_region(g_dev, 1);
 
-	printk(KERN_INFO "procfs driver module exit...\n");
+	printk(KERN_INFO "procfs-driver module exit...\n");
 }
 
 static int generic_open(struct inode *inodep, struct file *filp)
