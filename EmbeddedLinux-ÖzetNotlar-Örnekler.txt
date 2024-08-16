@@ -10,9 +10,10 @@
 
           Bu notlar Kaan ASLAN tarafından oluşturulmuştur. Kaynak belirtmek koşulu ile her türlü alıntı yapılabilir.
 
-                    (Notları okurken editörünüzün "Line Wrapping" özelliğini pasif hale getiriniz.)
+                    (Notları sabit genişlikli font kullanan programlama editörleri ile açınız.)
+                        (Editörünüzün "Line Wrapping" özelliğini pasif hale getiriniz.)
 
-                                                Son Güncelleme: 25/06/2024
+                                            Son Güncelleme: 08/08/2024 - Perşembe
 
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -317,8 +318,8 @@
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    ARM bir tasarım firmasıdır. Yani fabrikalara sahip değildir. ARM yaptığı tasarımları lisanslandırarak üretici firmalara 
-    satmaktadır. ARM'ın uyguladığı dört tür lisans vardır:
+    ARM (İngilizce'de de "ey ar em" biçiminde değil "arm" biçiminde okuyorlar) bir tasarım firmasıdır. Yani fabrikalara sahip 
+    değildir. ARM yaptığı tasarımları lisanslandırarak üretici firmalara satmaktadır. ARM'ın uyguladığı dört tür lisans vardır:
 
     Entegre Devre Lisansı (Full Custom License): Bu lisans müşterinin mikrodenetleyici tasarımını kendi özel ihtiyaçlarına 
     göre özelleştirmesine ve optimize etmesine olanak tanır. Örneğin Apple gibi, Qualcomm gibi, Samsung gibi firmalar bu 
@@ -343,13 +344,13 @@
     eklendiğinde "cortex'ler" oluşmaktadır. ARM firması ARM'ın klasik versiyonlarında "cortex" terimini kullanmamıştır. Cortex
     terimi ARM11'den sonra kullanılmaya başlanmıştır. Bir cortex belli sayıda "core" içerebilir. Bu "core"lar noktalı sayılara
     (floating point) ilişkin işlem yapan birimlere sahip olabilirler. Cortex içerisindeki core'ların belli hızları vardır. Core 
-    ve cortex terimleri daha çok çip düzeyindeki mimariyi belirtmektedir. Ancak cortex'lerde kullanılan işlemcilerin (core'ların) 
-    sistem programcısını ilgilendiren "komut kümeleri (instruction sets)" de vardır. Böylece bir grup cortex belli bir komut
-    kümesi ile kullanılabilecek biçimde tasarlanmıştır. Komut kümesi mimarisine "ARM Versiyonları" ya da İngilizcesiyle "ARM ISA
-    (Instruction Set Architecture) Mimarisi" denilmektedir. Biz sistem programcısı olarak elimizdeki cortex'in hangi komut kümesini 
-    kullanan ARM versiyonuna ilişkin olduğunu bilmek durumundayız. Burada dikkat edilmesi gereken nokta "Cortex teriminin donanımsal 
-    mimariyi, versiyonun ise yazılımsal mimariyi belirtiyor" olmasıdır. O halde gömülü sistem geliştiricisi olarak bizim ilgilendiğimiz 
-    ARM içeren kart ile ilgili şu iki özelliği biliyor olamamız gerekir:
+    ve cortex terimleri daha çok çip düzeyindeki mimariyi belirtmektedir. Cortex'lerdeki işlemcilerin (core'ların) sistem programcısını 
+    ilgilendiren "komut kümeleri (instruction sets)" de vardır. Böylece bir grup cortex belli bir komut kümesi ile kullanılabilecek 
+    biçimde tasarlanmıştır. Komut kümesi mimarisine "ARM Versiyonları" ya da İngilizcesiyle "ARM ISA (Instruction Set Architecture)" 
+    denilmektedir. Biz sistem programcısı olarak elimizdeki cortex'in hangi komut kümesini kullanan ARM versiyonuna ilişkin olduğunu 
+    bilmek durumundayız. Burada dikkat edilmesi gereken nokta "Cortex teriminin donanımsal mimariyi, versiyonun ise yazılımsal mimariyi 
+    belirtiyor" olmasıdır. O halde gömülü sistem geliştiricisi olarak bizim ilgilendiğimiz ARM içeren kart ile ilgili şu iki özelliği 
+    biliyor olamamız gerekir:
 
     1) Kartımızda ARM'ın hangi cortex'i kullanılmıştır?
     2) Bu cortex'in ilişkin olduğu versiyon numarası nedir?
@@ -365,16 +366,16 @@
     Bu profiller ilgili cortex'lerin hangi tür uygulamalarda ideal olarak kullanılabileceğini belirtmektedir. Profil isimleri 
     cortex'lerde ve versiyon numaralarında '-' karakterinden sonra A, R, M harfleriyle belirtilmektedir. Örneğin "Cortex-A8" ve 
     "ARMv7-A" gibi. A profilleri masasüstü işletim sistemlerinin çalıştırılabileceği, tamamen kişisel bilgisayar olarak kullanılabilecek 
-    cortex'leri belirtmektedir. Biz kursumuzda "gömülü Linux programcısı" olarak bu "A" profilleriyle çalışacağız. R profilleri
+    cortex'leri belirtmektedir. Biz kursumuzda gömülü Linux programcısı olarak bu "A" profilleriyle çalışacağız. R profilleri
     "gerçek zamanlı (realtime)" uygulamalar için daha uygun olabilecek cortex'leri belirtmektedir. R profilleri ile A profilleri 
     birbirlerine benzemektedir. R profilleri A profillerine göre çok daha seyrek kullanılmaktadır. M profilleri ARM'ın mikrodenetleyici
-    olarak kullanılan cortex'lerini belirtmektedir. Bu cortex'ler genel olarak Linux işletim sisteminin yüklenmesine izin vermemektedir. 
-    Bu cortex'ler genellikle "bare-metal" programlarla ya da gerçek zamanlı işletim sistemleriyle kullanılmaktadır.
+    olarak kullanılan cortex'lerini belirtmektedir. Bu cortex'ler Linux işletim sisteminin yüklenmesine izin vermemektedir. Bu cortex'ler 
+    genellikle "bare-metal" programlarla ya da gerçek zamanlı işletim sistemleriyle kullanılmaktadır.
 
-    ARM'ın iki önemli versiyonu ARMv7-A ve ARMv8-A dır. ARMv7 32 bitlik bir arayüz sunmaktadır. Dolayısıyla bu komut mimarisini 
+    ARM'ın iki önemli versiyonu ARMv7-A ve ARMv8-A dır. ARMv7'ler 32 bitlik bir arayüz sunmaktadır. Dolayısıyla bu komut mimarisini 
     kullanan cortex'ler 32 bitlik işlemciler içermektedir. ARMv8-A versiyonları ise 64 bitlik arayüz sunmaktadır. Dolayısıyla bu 
-    versiyonları kullanan cortex'ler 64 bitlik işlemcilere ilişkindir. Ancak ARM cortex'lerinin bir grubu hem 32 bit hem de 64 bit 
-    olarak kullanılabilmektedir. Bu cortex'lerdeki işlemcileri kullanan işletim sistemleri 32 bitlik ve 64 bitlik programları 
+    versiyonları kullanan cortex'ler 64 bitlik işlemcilere ilişkindir. Ancak ARM cortex'lerinin bir grubu hem 32 bit hem de 64 
+    bit olarak kullanılabilmektedir. Bu cortex'lerdeki işlemcileri kullanan işletim sistemleri 32 bitlik ve 64 bitlik programları 
     zaman paylaşımlı olarak bir arada çalıştırabilmektedir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -390,15 +391,17 @@
     - N bitlik bir mikroişlemciler genellikle (ama her zaman değil) 2^N uzunlukta bir fiziksel RAM'i adresleyebilmektedir. Örneğin
     32 bitlik bir mikroişlemciye biz tipik olarak 2^32 = 4GB'lik bir RAM bağlayabiliriz. Elimizdeki RAM 64GB olsa bile 32 bit
     bir mikroişlemci bu RAM'in ancak ilk 4GB'sini kullanabilmektedir. Tabii bu durum her zaman böyle değildir. Örneğin 8086 
-    işlemcisi 16 bit olduğu halde 2^16 değil 2^20 uzunluğunda (1MB) fiziksel belleği adresleyebiliyordu. Benzer biçimde bugünkü
-    64 bitlik Intel ve AMD işlemcileri gereksiz olduğu gerekçesiyle 2^64 değil 2^48 uzunluğundaki RAM'leri adresleyebilmektedir.
+    işlemcisi 16 bit olduğu halde 2^16 değil 2^20 uzunluğunda (1MB) fiziksel belleği adresleyebiliyordu. Benzer biçimde 64 bitlik 
+    Intel ve AMD işlemcileri 2^64 değil 2^48 uzunluğundaki RAM'leri adresleyebilmektedir.
 
     - N bitlik bir mikroişlemcide genellikle işlemci ile RAM arasında transfer N bit olarak yapılmaktadır. Örneğin 32 bitlik
-    bir mikroişlemcide tek bir makine komutuyla RAM'den CPU'ya 32 bitlik bir veri transfer edilebilir.
+    bir mikroişlemcide tek bir makine komutuyla RAM'den CPU'ya 32 bitlik bir veri transfer edilebilir. Ancak bu durum her zaman 
+    böyle değildir. örneğin 16 bitlik  Intel 8086 işlemcisi bellek transferlerini 16 bit olarak yaparken 8088 işlemcisi 8 bit 
+    yapıyordu.)
 
-    8 bitten 16 bite geçişte ve 16 bitten 32 bite geçişte çok farkedilir bir hızlanma yaşanmıştır. Ancak 32 bitten 64 bite 
+    8 bitten 16 bite geçişte ve 16 bitten 32 bite geçişte çok fark edilir bir hızlanma yaşanmıştır. Ancak 32 bitten 64 bite 
     geçişte hızlanma öncekiler kadar olmamıştır. Bunun nedeni 64 bitlik işlemlerin aslında yoğun olarak yapılmadığındandır. Ancak 
-    32 bitten 64 bite geçişin en önemli etkisi işlemciye bağlanabilecek RAM miktarı üzerinde olmuştur. Örneğin elimizde 8 GB 
+    32 bitten 64 bite geçişin en önemli etkisi işlemciye bağlanabilecek RAM miktarı üzerinde olmuştur. Örneğin elimizde 8GB 
     RAM'li Raspberry Pi 5 olsun. Buradaki ARM cortex'i hem 32 bit hem de 64 bit işlemci gibi çalışabilmektedir. Dolayısıyla biz 
     bu kartımıza 32 bitlik de 64 bitlik de Linux yükleyebilriz. Ancak 32 bitlik Linux işletim sistemi işlemciyi 32 bit modda 
     çalıştıracağı için işletim sistemi 8GB RAM'in ancak 4GB'sini kullanabilecektir. Bu 8GB RAM'in tamamından istifade edebilmemiz 
@@ -464,15 +467,15 @@
     Şimdi de Raspberry Pi 5 donanımını inceleyelim. Kartın üzerinde BCM2712 SoC'u hemen dikkati çekmektedir. Bu SoC'un hemen 
     yanında RAM chip'i bulunmaktadır. Raspberyy Pi 5'in 1GB, 2GB, 4GB ve 8GB RAM'li modelleri bulunmaktadır. Raspberry Pi 5 
     modelinde toplam 4 USB soketi bulunmaktadır. Bunlardan iki tanesi USB 2.0, diğer 2 tanesi de USB 3.0'dır. Klavye ve fare gibi 
-    yavaş aygıtları USB 2.0 girişlerine bağlayabilirsiniz. Bunların hemen yanında Ethernet girişi bulunmaktadır. Kenarlarda toplam 
-    40 tane (20'lik iki sıra) GPIO uçları bulunmaktadır. Bu GPIO uçları aygıtın dış dünya ile elektriksel olarak haberleşmesi
-    için kullanılmaktadır. Raspberry Pi 5'te iki Micro HDMI girişi bulunmaktadır. Bu uçlardan birine monitörümüzü bağlamalıyız.
+    yavaş aygıtları USB 2.0 girişlerine bağlayabilirsiniz. Bunların hemen yanında Ethernet girişi, kenarlarda toplam 40 tane 
+    (20'lik iki sıra) GPIO uçları bulunmaktadır. Bu GPIO uçları aygıtın dış dünya ile elektriksel olarak haberleşmesi için 
+    kullanılmaktadır. Raspberry Pi 5'te iki micro HDMI girişi bulunmaktadır. Bu uçlardan birine monitörümüzü bağlayabiliriz. 
     Raspberry Pi 5 modelinde arka tarafta SD kart girişine yakın bir bölgede çok küçük ON/OFF düğmesi bulunmaktadır. Bu düğme 
-    bilgisayarlarımızdaki "Power Off" düğmesi gibidir. Ayrıca kamera ve LCD bağlamak için iki adet MIP DSI/CSI bulunmaktadır. 
-    Kartın arka tarafında bir Micro SD kart girişi bulunmaktadır. Buraya disk görevini görecek olan micro SD kartımızı takacağız.
-    Giriş kısmında da belirttiğimiz gibi şu an için 64GB'lik SD kartlar fiyat bakımından uygun bir büyüklüktür. Ancak denemeler 
-    için birden fazla (bunlar daha küçük de olabilir) SD kart kullanabilirsiniz. Kart üzerindeki diğer bileşenlerin bazılarını 
-    ilerleyen bölümlerde ayrıca ele alacağız.
+    bilgisayarlarımızdaki "Power Off" düğmesi gibidir. Ayrıca kamera ve LCD bağlamak için iki adet MIP DSI/CSI ve kartın arka 
+    tarafında da bir micro SD kart girişi bulunmaktadır. Buraya disk görevini görecek olan micro SD kart takılmaktadır. Giriş 
+    kısmında da belirttiğimiz gibi kursun yapıldığı zaman diliminde 64GB'lik SD kartlar fiyat bakımından uygun bir büyüklüktür. 
+    Ancak denemeler için birden fazla SD kart (bunlar daha küçük de olabilir) kullanabilirsiniz. Kart üzerindeki diğer bileşenlerin 
+    bazılarını ilerleyen bölümlerde ayrıca ele alacağız.
 
     Kart üzerindeki bileşenleri inceleyebilmek için aşağıdaki bağlantıyı kullanabilirsiniz:
 
@@ -491,10 +494,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------
     Raspberry Pi için birkaç işletim sistemi oluşturulmuştur. Ancak bunlardan en yaygın kullanılan ikisi Linux'un "Raspberry Pi 
     OS (eski ismiyle Raspbian)" ve "Ubuntu" dağıtımlarıdır. Raspberry Pi ile tam uyum içinde olan ana dağıtım "Raspberry Pi OS"
-    dağıtımıdır. Biz en azından "Raspberry Pi OS" ve "Ubuntu" dağıtımlarını ayrı micro SD kartlara yüklemenizi tavsiye ediyoruz.
+    dağıtımıdır. Biz sizlerinde de "Raspberry Pi OS" ve "Ubuntu" dağıtımlarını ayrı micro SD kartlara yüklemenizi tavsiye ediyoruz.
 
-    Bir bilgisayar sistemini reset ettiğimizde işletim sisteminin (ya da bu görevdeki yazılımın) yüklenmesini sağlayan mekanizmalara
-    "boot loader" denilmektedir. Gömülü sistemlerde kullanılan "boot loader" mekanizmaları kursumuzun ayrı bir konusunu oluşturmaktadır. 
+    Bir bilgisayar sistemini reset ettiğimizde işletim sisteminin (ya da bu görevdeki yazılımın) yüklenmesini sağlayan yazılımlara
+    "boot loader" denilmektedir. Gömülü sistemlerde kullanılan "boot loader" yazılımları kursumuzun ayrı bir konusunu oluşturmaktadır. 
     Ancak kabaca boot işlemi şöyle gerçekleşmektedir: Biz mikroişlemciyi reset ettiğimizde çalışma belli bir adresten başlatılmaktadır. 
     Yani işlemci reset edildiğinde çalıştırılacak kodun önceden hazır bir biçimde kalıcı bir bellekte (bugün bunlar için flash 
     EPROM'lar kullanılmaktadır) bulunuyor olması gerekir. Buradaki kod çeşitli donanım birimlerini programlar ve onları kullanıma 
@@ -515,14 +518,14 @@
 
     https://www.raspberrypi.com/software/
 
-    RaspberryImager programı indirilip kurulup çalıştırılınca program bize üç şey sormaktadır?
+    Raspberry Pi Imager programı indirilip kurulup çalıştırılınca program bize üç şey sormaktadır?
 
     1) Hangi Rasperry Pi modelini kullandığımızı
     2) Hangi işletim sistemini yükleyeceğimizi
     3) Hangi micro SD karta yüklemeyi yapacağımızı
 
-    Bu sorulara yanıt verdikten sonra yüklenecek Linux üzerinde bazı basit konfigürasyon işlemleri de "Edit Setting" seçeneği 
-    yapılabilmektedir. Tabii bunları yüklemeden sonra da yapabiliriz.
+    Bu sorulara yanıt verdikten sonra yüklenecek Linux üzerinde bazı basit konfigürasyon işlemleri de "Edit Setting" seçeneği ile 
+    yapılabilmektedir. Tabii bunları yükleme işleminden sonra da yapabiliriz.
 
     Raspberry Pi Imager her şeyi kendisi yapmaktadır. Program önce ilgili imajı yerel makineye indirir, sonra da micro SD karta 
     yazma yapar.
@@ -548,19 +551,19 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Gömülü sistemimize Linux'u kurduktan sonra ona başka bir makineden erişmek isteyebiliriz. Bunun çeşitli yolları varsa da 
-    en tipik üç yöntem kullanılmaktadır:
+    en çok kullanılan yöntemler şunlardır:
 
     1) SSH protokolü ile erişim
     2) VNC protokolü ile erişim
-    3) Microsoft Remote Desktop Protokolü (RDP) ile erişim
+    3) Microsoft RDP protokolü (Remote Desktop Protocol) ile erişim
 
     VNC ve RDP ile gömülü aygıtımızdaki Linux'a erişebilmemiz için orada bir pencere yönetici programın (yani masaüstü sisteminin)
-    kurulu olması gerekir. RSapberry Pi güçlü bir donanıma sahip olduğu için ve kişisel bir bilgisayar gibi kullanılabildiği için
-    buraya yüklediğimiz Linux sistemlerinde pencere yöneticisi zaten bulunuyor olacaktır. Ancak server sistemlerinde ve pek çok 
-    gömülü Linux sisteminde bir pencere yöneticisi bulunmamaktadır. Bu durumda SSH protokolü ile erişim sağlanmaktadır. Eskiden 
-    SSH protokolünden önce telnet isimli benzer bir protokol vardı. Ancak telnet protokolünün güvenilirliği zayıf olduğu için 
-    SSH protokolü geliştirildi. Bugün konsol tabanlı bir ortamda bir Linux sistemine uzaktan bağlanmak için genellikle SSH protokolü 
-    kullanılmaktadır.
+    kurulu olması gerekir. Raspberry Pi güçlü bir donanıma sahip olduğu için ve kişisel bir bilgisayar gibi kullanılabildiği için
+    bu aygıtlara yüklediğimiz Linux sistemlerinde pencere yöneticisi zaten bulunuyor olabilir. Ancak server sistemlerinde ve pek çok 
+    gömülü Linux sisteminde bir pencere yöneticisi bulunmamaktadır. Bu durumda erişim genellikle SSH protokolü ile sağlanmaktadır. 
+    Eskiden SSH protokolünden önce Telnet isimli benzer bir protokol kullanılıyordu. Ancak Telnet protokolünün güvenilirliği zayıf 
+    olduğu için zaman içerisinde SSH protokolü geliştirildi. Bugün konsol tabanlı bir ortamda bir Linux sistemine uzaktan bağlanmak 
+    için genellikle SSH protokolü kullanılmaktadır.
 
     Her türlü TCP/IP uygulamalarında haberleşmenin yapılabilmesi için bir "server" program ile bir de "client" programın bulunuyor 
     olması gerekir. Bize erişimi sağlayan uzak makinedeki program "server" programdır. Bizim erişmek için kullandığımız program 
@@ -570,18 +573,18 @@
 
     $ sudo apt-get install openssh-server
 
-    Bu işlem SSH server programının kurulup çalışır hale getirilmesini sağlamaktadır. client program da benzer biçime kurulabilir:
+    Bu işlem SSH server programının kurulup çalışır hale getirilmesini sağlamaktadır. Client program da benzer biçime kurulabilir:
 
     $ sudo apt-get install openssh-client
 
-    ssh client programıyla bağlantı aşağıdaki gibi sağlanabilir:
+    ssh client program ile bağlantı aşağıdaki gibi sağlanabilir:
 
     $ ssh user_name@host_name
 
     Bizim bağlantı sağlayabilmek için uzak makinede bir kullanıcının ismini ve parolasını biliyor olmamız gerekir. SSH client programı 
-    benzer komut satırı argümanlarıyla Windows sistemlerinde ve macOS sistemlerinde de hazır bir biçimde bulunmaktadır. Dolayısıyla
-    Windows ve macOS sistemlerinden de gömülü aygıtınıza benzer biçimde bağlanabilirsiniz. SSH programı ile bağlantı yapılırken 
-    kullanıcı ismini "-l" seçeneği ile de belirtebilirsiniz. Örneğin:
+    Windows ve macOS sistemlerinde de benzer komut satırı argümanlarıyla hazır bir biçimde bulunmaktadır. Dolayısıyla Windows ve 
+    macOS sistemlerinden de gömülü aygıtınıza benzer biçimde bağlanabilirsiniz. SSH programı ile bağlantı yaparken kullanıcı ismini 
+    "-l" seçeneği ile de belirtebilirsiniz. Örneğin:
 
     $ ssh -l user_name host_name
 
@@ -642,6 +645,11 @@
 
     4) BBB'de de Raspberry Pi'da olduğu gibi micro HDMI soketi vardır. Bu sokete doğrudan monitörümüzü bağlayabiliriz.
 
+    5) BBB'de iki önemli düğmecik bulunmaktadır. Bunlardan biri SD kartın yanındaki (USB soket tarafındaki) düğmeciktir. Bu düğmeciğe 
+    "boot düğmeciciği (Boot button)" denilmektedir. Diğer düğmecik ise ethernet soketinin hemen yanında bulunmaktadır. Buna da 
+    "reset düğmeciği (reset button)" denilmektedir. Boot düğmeciği SD karttan boot sürecini başlatmak için reset düğmeciği ise
+    sistemi reset etmek için kullanılmaktadır.
+
     Tipik olarak BBB'yi ilk kez kullanırken mini USB soketini masaüstü bilgisayarımızın standart USB soketine takarız. Böylece
     masaüstü bilgisayarımız otomatik olarak BBB'nin on-board flash belleğindeki bir disk bölümünü bir sürücü biçiminde görür. 
     Bu sürücü içerisinde host sistem için gerekli olan aygıt sürücüler bulunmaktadır. Eğer host makine olarak Windows'ta çalışıyorsak 
@@ -696,11 +704,11 @@
 
     3) İmaj SD karta Rufus ya da Etcher benzeri bir programla yazılmalıdır.
 
-    4) SD karta yazma işlemi bittikten sonra SD kart BBB'nin SD kart yuvasına takılır. Sonra "Boot switch" denilen küçük düğmeciğe
-    basılarak board'a güç verilir. Güç verildikten sonra 7, 8 saniye boot switch'e basılmaya devam edilmelidir. Sonra el boot 
-    switch'ten çekilir. BBB'nin dört LED'i önce tamamen yanar. Sonra sırasıyla yanıp sönmeye başlar. Bu durum yazmanın başladığı
-    anlamına gelmektedir. Yazma takriben 5 dakika civarında sürmektedir. Yazma bittikten sonra LED'ler tamamen söner. Boot switch
-    Micro SD kartın yanındaki switch'tir.
+    4) SD karta yazma işlemi bittikten sonra SD kart BBB'nin SD kart yuvasına takılır. Sonra "Boot düğmeciği" denilen küçük 
+    düğmeciğe basılarak board'a güç verilir. Güç verildikten sonra 7, 8 saniye boot düğmeceğine basılmaya devam edilmelidir. 
+    Sonra el boot düğmeciğinden çekilir. BBB'nin dört LED'i önce tamamen yanar. Sonra sırasıyla yanıp sönmeye başlar. Bu durum 
+    yazmanın başladığı anlamına gelmektedir. Yazma takriben 5 dakika civarında sürmektedir. Yazma bittikten sonra LED'ler 
+    tamamen söner. (Boot düğmeciği Micro SD kartın yanındaki (USB portun bulunduğu taraftaki) düğmeciktir.
 
     5) SD kart çıkartılarak sistem yeniden boot edilir. Artık on-board flash üzerine çektiğimiz işletim sistemi ile boot işlemini
     yapmış olduk. Ancak bizim indirdiğimiz imaj İngilizce (US) olarak ayarlanmıştır. Dolayısıyla default klavye ayarları da 
@@ -803,11 +811,11 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     BBB'yi on-board flash (eMMC) üzerine yüklü olan Linux sistemiyle açmak zorunda değiliz. SD kartımıza Linux kurup SD kart ile 
-    de boot edebiliriz. SD karttan boot işlemi için yine "boot switch"e basılı olarak board'a güç verilir. Led'ler yandığında 
-    basılı olan boot switch'ten el bırakılır. Böylece boot işlemi SD karttan harekeetle başlatılacaktır. BBB kartlarının ileri 
-    sürümlerinde SD karttan boot işlemi için boot switch'e basmaya gerek kalmamıştır. Bu ileri modellerde SD kart takılıysa 
-    zaten boot işlemi SD karttan başlatılmaktadır. SD karta yazacağınız Linux sistemine dikkat ediniz. Buraya "flasher" olmayan 
-    bir imajı yerleştirmelisiniz. SD kartınıza yükleyeceğiniz hazır Debian imajını aşağıdaki bağlantıdan indirebilirsiniz:
+    de boot edebiliriz. SD karttan boot işlemi için yine "boot düğmeciğine basılı olarak board'a güç verilir. Led'ler yandığında 
+    basılı olan boot düğmeciğinden el bırakılır. Böylece boot işlemi SD karttan hareketle başlatılacaktır. (Ayrıca internal eMMC'de 
+    bir boot loader yoksa yine boot işlemi otomatik olarak SD karttan başlatılmaktadır.) SD karta yazacağınız Linux sistemine 
+    dikkat ediniz. Buraya "flasher" olmayan bir imajı yerleştirmelisiniz. SD kartınıza yükleyeceğiniz hazır Debian imajını aşağıdaki 
+    bağlantıdan indirebilirsiniz:
 
     https://www.beagleboard.org/distros
 
@@ -1492,7 +1500,7 @@
 
     3) Kabuktan dizine geçilir ve ilk iş olarak "bootstrap" isimli program aşağıdaki gibi çalıştırılır:
 
-    $ ./bootstarp
+    $ ./bootstrap
 
     4) Daha sonra "autoconf" projelerinin çoğunda olduğu gibi bir "configure" işlemi yapılmalıdır. Bunun için "configure" denilen 
     program çalıştırılır. Bu program çalıştırılırken kurulumun hangi dizine yapılacağı da "--prefix" komut satırı argümanı
@@ -4796,7 +4804,7 @@ int main(void)
 -------------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------------
-												25. Ders 11/06/2024 - Salı
+												    25. Ders 11/06/2024 - Salı
 -------------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------------
@@ -4808,14 +4816,14 @@ int main(void)
     PC demekle Intel ve ARM tabanlı macOS sistemlerini kastetmiyoruz.)
 
     Bugünkü PC sistemlerini reset ettiğimizde çalışma BIOS denilen EEPROM bellekten başlamaktadır. Buradaki kod DRAM belleği ve
-    pek çok donanım birimini programladıktan sonra CMOS setup'ta belirtilen "boot sırasına (boot seqeunce) bakarak ilgili medyanın 
+    pek çok donanım birimini programladıktan sonra CMOS setup'ta belirtilen "boot sırasına (boot seqeunce)" bakarak ilgili medyanın 
     0'ıncı sektörünü belleğe yükleyip akışı oraya devretmektedir. (PC mimarisinde diskten okunabilecek ya da diske yazılabilecek en 
     küçük birime "sektör" denilmektedir.) İkincil belleklerdeki ilk sektöre "MBR (Master Boot Record)" denilmektedir. MBR'de toplam 
-    512 byte'lık bir program bulunmaktadır. MBR'nin son 64 byte'ında (bir byte eksik) "Disk Bölümleme Tablosu (Disk Partition Table)" 
-    vardır. MBR'deki program duruma göre ya bir boot loader programını yüklemekte ya da default durumda aktif disk bölümünün 0'ıncı 
+    512 byte'lık bir program bulunmaktadır. MBR'nin sonunda 64 byte'lık "Disk Bölümleme Tablosu (Disk Partition Table)" vardır. 
+    MBR'deki program duruma göre ya bir boot loader programını yüklemekte ya da default durumda aktif disk bölümünün 0'ıncı 
     sektörünü RAM'e yükleyip akışı oraya devretmektedir. (PC sistemlerinde her disk bölümünün ilk sektörüne (0'ıncı sektörüne) "boot 
     sektör" denilmektedir. Boot sektör ilgili işletim sisteminin yüklenmesinden sorumludur.) Tabii MBR'deki program daha büyük 
-    bir boot loader programı da yükleyebilir. Bu durumda hangi işletim sisteminin yükleneceği bir menü yoluyla kullanıcıya da 
+    bir boot loader programını da yükleyebilir. Bu durumda hangi işletim sisteminin yükleneceği bir menü yoluyla kullanıcıya da 
     sorulabilmektedir. PC sistemlerindeki boot sürecini aşağıdaki gibi özetleyebiliriz:
 
     PC'ye güç veriliyor ---> EEPROM'daki BIOS kadları temel hazırlık işlemlerini yapıyor ---> EEPROM'daki BIOS kadları diskin ilk 
@@ -4830,13 +4838,14 @@ int main(void)
     Şimdi Raspberry Pi donanımındaki boot süreci üzerinde duralım. Raspberry Pi donanımlarındaki boot süreci şu aşamalardan geçilerek 
     yürütülmektedir:
 
-    1) Raspberry Pi'ye güç verildiğinde CPU reset vektöründen çalışmaya başlar.
+    1) Raspberry Pi'ye güç verildiğinde CPU reset vektöründen çalışmaya başlar. Reset vektöründe SoC'un (System on Chip) ROM alanı 
+    vardır. Dolayısıyla çalışma SoC'un ROM'una yerleştirilmiş programdan başlamaktadır.
 
-    2) CPU, SoC'un (System on Chip) ROM'unda bulunan programdan çalışmaya başlar. Bu kod GPU'yu başlatır. GPU SD karttaki FAT 
-    dosya sisteminin kök dizininde "bootcode.bin" dosyasını arar. Buradaki kod FAT dosya sistemini tanımaktadır. Bu dosya bulunursa 
-    onu SoC içerisindeki GPU'nın L2 cache belleğine (internal RAM) yükler ve akışı oraya devreder. (Uzantısı ".bin" olan dosyalara "pure 
-    binary" ya da "flat binary" dosyalar da denilmektedir. Bu dosyalar hiçbir başlık kısmı içermezler, doğrudan makine kodları 
-    içerirler.) "bootcode.bin" dosyası sırasıyla şu medyalarda aranmaktadır:
+    2) SoC'un ROM'undaki prgram GPU'yu başlatır. GPU SD karttaki FAT dosya sisteminin kök dizininde "bootcode.bin" dosyasını arar. 
+    Buradaki kod FAT dosya sistemini tanımaktadır. Bu dosya bulunursa onu SoC içerisindeki GPU'nın L2 cache belleğine (internal RAM) 
+    yükler ve akışı oraya devreder. (Uzantısı ".bin" olan dosyalara "pure binary" ya da "flat binary" dosyalar da denilmektedir. 
+    Bu dosyalar hiçbir başlık kısmı içermezler, doğrudan makine kodlarını içerirler.) "bootcode.bin" dosyası sırasıyla şu medyalarda 
+    aranmaktadır:
 
     Birincil SD Kart (Primary SD Card)
     İkinci SD Kart (Secondary SD Card)
@@ -4844,7 +4853,8 @@ int main(void)
     SPI
     USB
 
-    Bu aşamada henüz DRAM belleğin initialize edilmediğine dolayısıyla henüz onun kullanılamayacağına dikkat ediniz.
+    Bu aşamada henüz DRAM belleğin kullanıma hazır hale getirilmediğine (initialize edilmediğine) dolayısıyla henüz onun kullanılamayacağına 
+    dikkat ediniz.
 
     3) "bootcode.bin" dosyası GPU tarafından çalıştırılmaktadır. (Bunun nedeni üzerinde durmayacağız.) Bu dosyaya "birinci aşama boot 
     loader (stage-1 / first stage boot loader)" da diyebiliriz. Bu kod DRAM belleği kullanıma hazır hale getirir (initialize eder), 
@@ -4852,14 +4862,15 @@ int main(void)
 
     4) "start.elf dosyası" donanım birimlerini kullanıma hazır hale getirir, sonra işletim sisteminin çekirdeğini ve gerekli olan diğer 
     öğeleri DRAM belleğe yükler ve akışı işletim sisteminin çekirdek dosyasının (kernel image) başındaki koda devreder. (Genellikle 
-    çekirdek kodları sıkıştırılmış biçimde DRAM'e yüklenmektedir. Çekirdek kodlarının açılması da yine bu sıkıştırılmış çekirdek 
-    dosyaının başındaki programdır.) Buradaki "start.elf" dosyası "ikinci aşama boot loader (stage-2 / second stage boot loader) 
-    görevindedir. Sürecin işleyişini şekille şöyle gösterebiliriz:
+    çekirdek kodları sıkıştırılmış biçimde DRAM'a yüklenmektedir. Çekirdek kodlarının açılması da yine bu sıkıştırılmış çekirdek 
+    dosyasının başındaki program tarafından yapılmaktadır.) Buradaki "start.elf" dosyası "ikinci aşama boot loader (stage-2 / second 
+    stage boot loader) görevindedir. Sürecin işleyişini şekille şöyle gösterebiliriz:
 
-    ROM'daki kod çalışıyor (CPU --> GPU) --> ROM'daki kod "bootcode.bin" dosyasını içsel SRAM'e yüklüyor (GPU) ---> 
-    "bootcode.bin" dosyası DRAM belleği kullanıma hazır hale getiriyor ve "start.elf" dosyasını DRAM belleğe yüklüyor (GPU)---> "start.elf" 
-    dosyası donanım bileşenlerini ayarlıyor, Linux çekirdeğini ve diğer bileşenleri DRAM beleğe yüklüyor (GPU) ---> Akış Çekirdek Dosyasının 
-    başına devrediliyor (CPU) ---> Çekirdek kodları kendi kendini açıyor ve çekirdeği kullanıma hazır hale getiriyor (CPU)
+    CPU reset ediliyor ---> ROM'daki kod çalışıyor (CPU --> GPU) --> ROM'daki kod "bootcode.bin" dosyasını içsel SRAM'e yüklüyor (GPU) 
+    ---> "bootcode.bin" dosyası DRAM belleği kullanıma hazır hale getiriyor ve "start.elf" dosyasını DRAM belleğe yüklüyor (GPU) 
+    ---> "start.elf" dosyası donanım bileşenlerini ayarlıyor, Linux çekirdeğini ve diğer bileşenleri DRAM beleğe yüklüyor (GPU) ---> 
+    Akış çekirdek Dosyasının başına devrediliyor (CPU) ---> Çekirdek kodları kendi kendini açıyor ve çekirdeği kullanıma hazır hale 
+    getiriyor (CPU)
 
     "start.elf" programı çeşitli firmware kodlarını içermektedir. Bu kod FAT dosya sistemindeki kök dizinde bulunan "config.txt" 
     dosyasını okuyarak donanım bileşenlerini yapılandırmaktadır. "config.txt" dosyası pek çok donanım biriminin konfigürasyon ayarlarını 
@@ -4870,24 +4881,23 @@ int main(void)
 
     Bunu bulursa burada belirtilen çekirdek dosyasını yükler. Bulamazsa FAT dosya sisteminin kökünde "kernel.img", "kernel7.img" 
     ve "kernel8.img" gibi önceden belirlenmiş çekirdek dosyalarını arar. Yukarıda da belirttiğimiz gibi aslında çekirdek dosyası 
-    diskte sıkıştırılmış bir biçimde bulunmaktadır ve sıkıştırılmış bu dosya boot loader tarafından DRAM'e yüklenmektedir.
+    diskte sıkıştırılmış bir biçimde bulunmaktadır ve sıkıştırılmış bu dosya boot loader tarafından DRAM'a yüklenmektedir.
 
     FAT Microsoft tarafından tasarlanmış ve ilk kez DOS sistemlerinde kullanılmış bir dosya sistemidir. FAT dosya sisteminin kendi
     içerisinde FAT12, FAT16 ve FAT32 isminde türleri vardır. Bu türler arasındaki farklılık dosya sisteminin "File Allocation Table"
     denilen veri yapısıyla ilgilidir. Microsoft halen bu dosya sistemini desteklemeye devam etmektedir. Ancak birinci dosya sistemi
-    olarak Windows sistemlerinde uzunca bir süredir NTFS (Windows NT File System) dosya sistemi kullanılmaktadır.
--------------------------------------------------------------------------------------------------------------------------------*/
+    olarak Windows sistemlerinde uzunca bir süredir NTFS (Windows NT File System) dosya sistemi kullanılmaktadır. Yukarıdaki anlatımlardan
+    da gördüğünüz gibi FAT dosya sistemi bugün hala gömülü Linux sistemlerinin boot sürecinde kullanılmaktadır.
 
-/*--------------------------------------------------------------------------------------------------------------------------------
-    İkinci aşama boot loader yalnızca çekirdek imajını RAM'e yüklememektedir. Çekirdeğin kullanacağı bazı bileşenleri de RAM'e 
-    yüklemektedir. Bu bileşenler tipik olarak şunlardır:
+    Raspberry Pi'ın ikinci aşama boot loader programı yalnızca çekirdek imajını RAM'e yüklememektedir. Çekirdeğin kullanacağı bazı 
+    bileşenleri de DRAM'a yüklemektedir. Bu bileşenler tipik olarak şunlardır:
 
     - Çekirdek Komut Satırı Parametreleri (Kernel Command Line Parameters)
     - Geçici Kök Dosya Sistemi (Temporary Root File System)
     - Aygıt Ağacı (Device Tree)
 
-    Raspberry Pi'da bu bileşenlerin FAT dosya sistemindeki dosya isimleri yukarıda sözünü ettiğimiz "config.txt" dosyası 
-    içerisinde belirtilebilmektedir. Ancak bu belirlemeler bu dosya içerisinde yapılmadıysa FAT dosya sistemindeki kök dizinde 
+    Raspberry Pi'da bu bileşenlerin FAT dosya sistemindeki dosya isimleri yukarıda sözünü ettiğimiz "config.txt" dosyası içerisinde 
+    belirtilebilmektedir. Ancak bu belirlemeler bu dosya içerisinde yapılmadıysa FAT dosya sistemindeki kök dizinde 
     bulunan default bazı dosyalar kullanılmaktadır.
 -------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -4897,7 +4907,8 @@ int main(void)
 
 /*--------------------------------------------------------------------------------------------------------------------------------
     Yukarıda da belirttiğimiz gibi FAT dosya sistemi içerisindeki "config.txt" dosyası ikinci aşama boot loader görevinde olan 
-    "start.elf" programı tarafından okunmaktadır. Bu dosyanın konfigürasyon parametreleri aşağıdaki bağlantıdan erişebilirsiniz:
+    "start.elf" programı tarafından okunmaktadır. Bu dosyanın konfigürasyon parametrelerine ilişkin bilgilere aşağıdaki bağlantıdan 
+    erişebilirsiniz:
 
     https://www.raspberrypi.com/documentation/computers/config_txt.html
 
@@ -4927,7 +4938,7 @@ int main(void)
 -------------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------------
-    Linux çekirdeğinin kodlarına dokunmadan onunla ilgili bazı davranış değrişikliklerinin yapılması üç biçimde sağlanabilmektedir:
+    Linux çekirdeğinin kodlarına dokunmadan onunla ilgili bazı davranış değişikliklerinin yapılması üç biçimde sağlanabilmektedir:
 
     1) Çekirdek derlenirken bazı konfigürasyon parametrelerine bakılmaktadır. O halde biz çekirdei derlemeden önce çekirdek konfigürasyon
     parametreleri üzerinde değişiklik yapıp çekirdeği derlersek bir davranış değişikliği oluşturabiliriz.
@@ -5005,7 +5016,1842 @@ int main(void)
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+												27. Ders 25/06/2024 - Salı
+-----------------------------------------------------------------------------------------------------------------------------*/
 
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Beaglebone Black'teki boot süreci de aslında Raspberry Pi'a benzemektedir. İşlemci reset edildiğinde yine reset vektöründen
+    çalışmaya başlar. Orada ROM bellek bulunmaktadır. Bu ROM bellekteki program minimal bazı ön işlemleri yaparak boot aygıtını 
+    belirlemeye çalışır. Eğer SD kart yuvasında SD kart varsa ve güç verilirken BOOT düğmesine basılıysa boot işlemi SD karttan 
+    değilse içsel emmc bellekten yürütülür. Diğer medyalardan boot etme süreci ileride ayrıca ele alınacaktır.
+
+    Eskiden BBB SD karttan boot edilirken FAT32 disk bölümü mutlaka bulunduruluyordu. Sonra artık yeni hazır imajlarda FAT32 
+    disk bölümü bulundurulmamaktadır. Ancak yine boot işleminde FAT32 içeren SD kart da kullanılabilir. Örneğin bizim aşağıdaki
+    bağlantıdan indirdiğimiz BBB Linux imajı FAT32 disk bölümü içermemektedir:
+
+    https://www.beagleboard.org/distros
+
+    Burada SD kart şöyle bir organizasyona sahiptir:
+
+    |Disk Bölümleme Tablosu|Boot Loader Programlar|EXT4 Dosya sistemi|
+
+    Yine kart üzerindeki EMMC bellkteki imaj da bu biçimdedir. Ancak yine biz boot işlemini iki disk bölümü ile Raspberry Pi'daki
+    gibi de yapabiliriz. Bu durumda SD kart organizasyonu şöyle olacaktır:
+
+    |Disk Bölümleme Tablosu|FAT32 Dosya Sistemi|EXT4 Dosya sistemi|
+
+    Bu organizasyonda boot loader programlar Raspberry Pi'da olduğu gibi FAT32 disk bölümünde bulundurulabilmektedir. Tabii 
+    boot loader programların FAT32 disk bölümünde değil de doğrudan SD karttaki bazı bloklarda bulunuyor olması boot sürecini 
+    biraz daha hızlandırmaktadır.
+
+    BBB'de de boot sürecinde iki düzeyli boot loader kullanılmaktadır. ROM'daki kod önce minimal birtakım ilk işlemleri yaptıktan 
+    sonra ismine "x-loader" ya da "MLO" denilen birinci düzey boot loader'ı board üzerindeki içsel RAM'e yükler. (Bu RAM 128K 
+    büyüklüğündedir ve L2 cache olarak da kullanılmaktadır.) X-loader ya da MLO artık gerekli olan donanımsal hazırlık işlemlerini 
+    yapar (örneğin DRAM belleğin initialize edilmesi de bu birinci düzey boot loader tarafından yapılmaktadır.) işletim sistemini 
+    yükleyecek ikinci düzey boot loader'ı SD karttan ya da EMMC bellekten DRAM belleğe yükler. Nihayet ikinci düzey boot loader 
+    da işletim sistemini ve "aygıt ağacı", "geçici root dosya sistemini" yükleyerek akışı işletim sistemine devreder.
+
+    BBB'de boot loader olarak U-Boot kullanılmaktadır. Burada sözünü ettiğimiz MLO programı (yani birinci düzey boot loader programı)
+    U-Boot ile oluşturulabilmektedir. X-Loader aslında TI firmasının kendi birinci düzey boot loader'ı için kullandığı bir 
+    terimdi. Bugün genellikle x-loader denildiğinde TI firmasının eskiden ürettiği birinci düzey boot loader'lar MLO denildiğinde
+    ise U-Boot tarafından üretilen birinci düzey boot loader'lar anlaşılmaktadır. BBB'ye ilişkin herhangi bir dokümanda "x-loader"
+    ya da "MLO" terimlerini görürseniz bunların işlev olarak aynı anlama geldiğini düşünebilrisiniz. BBB'de bu terimlerle kastedilen 
+    şey birinci düzey boot loader'lardır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Kalıcı bellek görevinde olan hard disklere, SSD belleklere ve micro SD kartlara genel olarak disk denilmektedir. Disk ile 
+    DRAM arasında aktarımlar byte byte değil blok blok yapılmaktadır. Terminoloji ortamlara göre değişebilmektedir. Ancak 
+    genel olarak disk ile RAM arasında transfer edilecek en küçük byte topluluğuna sektör denilmektedir. Bir sektör genellikle
+    512 byte biçimindedir. Bu durumda örneğin diskteki 1 byte'ı değiştirecek bile olsak önce o byte'ın içinde bulunduğu 512 
+    byte'lık sektörün RAM'e çekilmesi, değişikliğin RAM'de yapılması ve yine 512 byte'tın sektör biçiminde diske geri yazılması 
+    gerekmektedir. Donanımsal düzeyde baktığımızda diskte dosyalar yoktur yalnızca sektörler vardır. Dosya kavramı işletim 
+    sistemleri tarafında oluşturulan yüksek seviyeli kavramdır. Yani işletim sistemleri aslında diskteki hangi sektörlerin 
+    hangi dosyanın hangi parçası olduğunu bir biçimde tutmaktadır. Böylece sanki programcılara dosyaların ardışıl byte 
+    topluluklarından oluşturğu gibi bir algı sunmaktadır. İşte işletim sistemlerinin diskteki sektörleri dosya gibi gösteren 
+    ve dosya kavramını oluşturan alt sistemlerine "dosya sistemleri (file systems)" denilmektedir.
+
+    Diskteki sektörlere tıpkı bellekteki byte'larda olduğu gibi bir sıra numarası karşılık düşürülmüştür. Yani her sektörün
+    ilk sektör 0 olmak üzere bir numarası vardır. Donanımsal olarak bir sektöre onun sektör numarasıyla erişilmektedir. 
+    Bu sektör numarasına LBA (logicak Block Address) de denilmektedir.
+
+    Dosya sistemlerinin işletim sistemleri bakımından iki tarafı vardır: Disk ve bellek. İşletim sistemleri hangi sektörlerin 
+    hangi dosyanın parçası oludğunu kalıcı olarak tutmak için diskte bir organizasyon yapmaktadır. Bu dosya sisteminin disk
+    tarafıdır. Ayrıca işletim sistemi diskteki dosyalar üzerinde işlemler yapabilmek için çekirdek alanı içerisinde bazı 
+    otganizasyonlar da yapmaktadır. Bu da dosya sisteminin bellek tarafıdır.
+
+    Bugün için çok sayıda dosya sistemi vardır. Örneğin Microsoft'un işletim sistemleri FAT tabanlı dosya sistemlerini kullanırken 
+    UNIX/Linux sistemleri i-node tabanlı dosya sistemlerini kullanmaktadır. MacOS sistemlerindeki dosya sistemleri de i-node
+    tabanlı dosya sistemlerine benzemektedir. Tabii bir işletim sistemi başka bir işletim sisteminni dosya sistemlerini de 
+    destekleyebilmektedir. Örneğin biz Linux'ta FAT dosyası sistemi üzerinde NTFS dosya sistemi üzerinde işlemler yapabilmekteyiz.
+    Ancak UNIX/Linux dünyasının asıl dosya sistemleri i-node tabanlı sistemlerdir. Bugün Linux sistemlerinde i-node tabanlı 
+    dosya sistemi olarak Ext-2, Extg-3 ve Ext-4 dosya sistemleri yoğun kullanılmaktadır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Bir diske birden fazla bağımısız dosya sisteminin (ve belki de işletim sisteminin) yüklenebilmesi için diskin mantıksal 
+    bakımdan parçalara ayrılması gerekmektedir. Diskin mantıksal bakımdan parçalara ayrılmasına ise "disk bölümlemesi" 
+    denilmektedir. Disk bölümlemesi aslında disk bölümlerinin hangi sektmrden başlayıp kaç sektör uzunlupunda olduğunun belirlenmesi
+    anlamına gelmektedir. Böylece her dosya sistemi başkasının alanına müdahale etmeden yalnızca o disk bölümünü kullanmaktadır.
+
+    Diskteki disk bölümleri hakkında bilgileri barındıran tabloya "disk bölümleme tablosu (disk partition table)" denilmektedir. 
+    Bugün için iki disk bölümleme tablo formatı kullanılmaktadır:
+
+    1) Klasik (legacy) MBR Disk Bölümleme Tablo Formatı
+    2) Modern UEFI BIOS Sistemlerinin Kullandığı GPT (Guid Partiton Table) Tablo Formatı
+
+    UEFI BIOS'lar GPT disk bölmleme tablosu kullanırken eski sistemler ve gömülü sistemler genel olarak klasik MBR disk bölümleme
+    tablosunu kullanmaktadır. Gömülü sistemler için oluşturduğumuz SD kartlar'daki disk bölümleme tablosu klasik (legacy) 
+    disk bölümleme tablosudur. Anca bugünkü büyük çaplı UEFI BIOS'lar önce GPT disk bölümleme tablosuna bakmakta eğer onu bulamazsa
+    klasik disk bölümleme tablosunu aramaktadır. Yani geçmişe doğru uyum korunmaya çalışılmıştır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+												28. Ders 27/06/2024 - Perşembe
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Gömülü Linux programcılarının disk sistemi üzerinde temel bazı bilgilere ve becerilere sahip olması gerekmektedir. UNIX/Linux 
+    sistemlerinde diskler blok aygıt sürücüleri tarafından yönetilmektedir. Disklere ilişkin blok aygıt sürücüleri için "/dev" 
+    dizini içerisinde aygıt dosyaları bulunmaktadır. Örneğin hard diskler ve SSD diskler için blok aygıt sürücülerinin isimleri 
+    genellikle "sda" ve "sdb" biçimindedir. Burada "sda" birinci diski "sdb" ise ikinci diski belirtmektedir. Disk bölümlendirmesi 
+    yapılmışsa disk bölümleri için ayrı minör numaralı aygıt dosyaları bulunur. Örneğin kursun yapıldığı sanal makinede disklere 
+    ilişkin aygıt sürücüler şöyledir:
+
+    $ lsblk
+    NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+    sda      8:0    0   60G  0 disk
+    ├─sda1   8:1    0    1M  0 part
+    ├─sda2   8:2    0  513M  0 part /boot/efi
+    └─sda3   8:3    0 59,5G  0 part /
+    sr0     11:0    1 1024M  0 rom
+
+    Burada "/dev/sda" aygıt dosyası diski bir bütün olarak ele almakta "/dev/sda1", "/dev/sda2" ve "/dev/sda3" aygıt dosyaları 
+    ise ilgili disk bölümlerini bağımsız birer diskmiş gibi ele almaktadır.
+
+    Disklere ilişkin aygıt sürücü isimleri diskin türüne göre değişebilmektedir. Örneğin "lsblk" komutunu BBB'de uyguladığımızda
+    aşağıdaki gibi bir çıktı elde ediyoruz:
+
+    $ lsblk
+    NAME         MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+    mmcblk1      179:0    0  3,6G  0 disk
+    └─mmcblk1p1  179:1    0  3,6G  0 part /
+    mmcblk1boot0 179:256  0    2M  1 disk
+    mmcblk1boot1 179:512  0    2M  1 disk
+
+    Burada görüldüğü gibi kart üzerindeki built-in EMMC diskine ilişkin aygıt dosyası "mmcblk1" biçimindedir. BBB'de SD kart yuvasına
+    SD kartı taktığmızda ona ilişkin aygıt dosyasının "mmcblk0" isminde olduğunu göreceksiniz. SD kartlardaki disk bölümleri aygıt 
+    "mmcblk0p1", "mmcblk0p1" gibi ana ismin yanında "p1" "p2" sonekleriyle isimlendirilmektedir.
+
+    O halde biz aslında bir C programcısı olarak bu aygıt sürücülerini bir dosya gibi açıp onun içerisindeki byte'ları okuyabiliriz. 
+    Tabii bunu yapan utility programlar zaten vardır. Dosyayı hex biçimde görüntüleyen "od" gibi "hexdump" gibi utility programların 
+    komut satırından kullanımını anlatan pek çok kaynak bulunmaktadır. Aşağıdaki basit C programı bir dosyanın ilk 512 byte'ını 
+    HEX sistemde görüntülemektedir. Biz bu programı çalıştırırken dosya olarak yukarıda sözünü ettiğimiz aygıt dosyalarını verirsek 
+    ilgili diskten okuma yapmış oluruz. Örneğin programın ismi "sample" olmak üzere:
+
+    ./sample /dev/sda
+
+    çalıştırmayı bu biçimde yapabilirsiniz.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define BUFFER_SIZE		512
+
+int main(int argc, char *argv[])
+{
+	FILE *f;
+	unsigned char buf[BUFFER_SIZE];
+
+	if (argc != 2) {
+		fprintf(stderr, "wrony number of arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if ((f = fopen(argv[1], "rb")) == NULL) {
+		fprintf(stderr, "cannot open file!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if (fread(buf, 1, BUFFER_SIZE, f) != BUFFER_SIZE) {
+		fprintf(stderr, "cannot read!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	for (int i = 0; i < BUFFER_SIZE; ++i)
+		printf("%02X%c", buf[i], i % 16 == 15 ? '\n' : ' ');
+
+	fclose(f);
+
+	return 0;
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    "hexdump" isimli utility program ile aynı diskin ilk 512 byte'ı şöyle görüntülenebilir:
+
+    $ sudo hexdump -C -n 512 -v /dev/sda
+
+    "od" utility programı aynı şey şöyle de yapılabilir:
+
+    $sudo od -t x1 -N 512 -v /dev/sda
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Disk işlemlerinde çok kullanılan diğer bir utility ptogram da "dd" isimli programdır. Aslında bu program dosyalar üzerinde 
+    blok transferi ile kopyalama işlemi yapan genel amaçlı bir programdır. Bu programın beş önemli komut satırı argümanı vardır:
+
+    if=<yol_ifadesi>: Bu okumanın yapılacağı dosyanın yol ifadesini belirtmek için kullanılır.
+    of=<yol_ifadesi>: Yazmanın yapılacağı dosyanın yol ifadesini belirtmek için kullanılır.
+    bs: "if" dosyasından "of" dosyasına yapılacak okuma yazma işlemlerinin byte miktarını belirtmektedir. (Default değeri 512'dir.)
+    count: bs parametresi ile belirtilen byte aktarımının kaç kere yapılacağını belirtmektedir. Bu argüman belirtilmezse kaynak
+    "if" dosyasının tamamı kopyalanana kadar aktarıma devam edilmektedir.
+    skip: Bu argüman "if" ile belirtilen dosyanın neresinden başlanarak kopyalamanın yapılacağını belirtmektedir. Buradaki birim bs 
+    cinsindendir.
+    seek: Bu argüman ise "of" ile belirtilen dosyanın neresinden başlanarak kopyalamanın yapılacağını belirtmektedir. Buradaki birim 
+    yine bs cinsindendir.
+
+    Eğer yalnızca "if" ve "of" argümanları belirtilirse ancak count değeri belirtilmezse bu durumda if dosyanının sonuna gelinene
+    kadar of dosyasına kopyaalama yapılmaktadır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    "/dev" dizinin altında bazı ilginç karakter aygıt sürücülerine ilişkin aygıt dosyaları da bulunmaktadır. Bunlardan biri 
+    "/dev/zero" aygıt dosyasıdır. Bu aygıt dosyasından okuma yapıldığında her zaman 0 değerleri okunmaktadır. Bu aygıt dosyasının 
+    sonu yoktur. Yani okuma yapıldığında hiçbirt zaman EOF oluşmamaktadır. Bu dosyaya yapılan yazma işlemleri ise atılmaktadır.
+
+    "/dev" dizini altındaki diğer ilginç bir aygıt dosyası da "/dev/null" isimli aygıt dosyasıdır. Bu aygıt dosyasına yazma 
+    yapıldığında ilgili aygıt sürücü yazılanları atmaktadır. "/dev/null" aygıt dosyasından okuma yapılmak istendiğinde ise sanki 
+    EOF pozisyonundan okuma yapılıyormuş gibi bir etki oluşmaktadır. "/dev/null" aygıt dosyası özellikle IO yönlendirmesi ile
+    birtakım çıktıların atılması gerektiği durumlarda kullanılmaktadır. Örneğin:
+
+    $ find / -name "sample.c" 2> /dev/null
+
+    Burada stderr dosyasına yazılan tüm mesajlar atılmaktadır. Örneğin biz içi sıfırlarla dolu 512 * 100 byte'lık bir dosyayı 
+    şöyle oluşturabiliriz:
+
+    $ dd if=/dev/zero of=test.dat bs=512 count=10000
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Linux sistemlerinde bir dosyayı sanki blok aygıt sürücüsüymüş gibi gösteren hazır aygıt sürücüler bulunmaktadır. Bunlara 
+    "loop" aygıt sürücüleri denilmektedir. Bu aygıt sürücülere ilişkin aygıt dosyaları "/dev" dizini içerisinde "loopN" ismiyle 
+    (burada N bir sayı belirtiyor) bulunmaktadır. Örneğin:
+
+    $ ls -l /dev/loop*
+    brw-rw---- 1 root disk  7,   0 Haz  4 22:31 /dev/loop0
+    brw-rw---- 1 root disk  7,   1 Haz  4 22:31 /dev/loop1
+    brw-rw---- 1 root disk  7,   2 Haz  4 22:31 /dev/loop2
+    brw-rw---- 1 root disk  7,   3 Haz  4 22:31 /dev/loop3
+    brw-rw---- 1 root disk  7,   4 Haz  4 22:31 /dev/loop4
+    brw-rw---- 1 root disk  7,   5 Haz  4 22:31 /dev/loop5
+    brw-rw---- 1 root disk  7,   6 Haz  4 22:31 /dev/loop6
+    brw-rw---- 1 root disk  7,   7 Haz  4 22:31 /dev/loop7
+    crw-rw---- 1 root disk 10, 237 Haz  4 22:31 /dev/loop-control
+
+    Bir dosyayı blok aygıt sürücüsü biçiminde kullanabilmek için önce "losetup" programı ile bir hazırlık işleminin yapılması 
+    gerekir. Hazırlık işleminde "loop" aygıt sürücüsüne ilişkin aygıt dosyası ve blok aygıt sürücüsü olarak gösterilecek dosya 
+    belirtilir. Bu işlemin sudo ile yapılması gerekmektedir. Örneğin:
+
+    $ dd if=/dev/zero of=test.dat bs=512 count=10000
+    $ sudo losetup /dev/loop0 test.dat
+
+    Burada artık "/dev/loop0" aygıt dosyası adeta bir disk gibi kullanılabilir hale gelmiştir. Biz bu "/dev/loop0" dosyasını 
+    kullandığımızda bu işlemlerden aslında "test.dat" dosyası etkilenecektir. Biz bir diski nasıl formatlıyorsak bu "/dev/loop0"
+    aygıt dosyasını aynı biçimde formatlayabiliriz. Örneğin:
+
+    $ sudo mkfs.ext2 /dev/loop0
+
+    işlemiyle "test.dat" dosyasının içi "ext2" dosya sistemi ile formatlanmıştır.
+
+    Artık formatladığımız aygıta ilişkin dosya sistemini aşağıdaki gibi mount edebiliriz:
+
+    $ mkdir mydisk
+    # sudo mount /dev/loop0 mydisk
+
+    Loop aygıtının dosya ile bağlantısını kesmek için "losetup" programı "-d" seçeneği ile çalıştırılır. Tabii önce aygıtın 
+    kullanımdan düşürülmesi gerekir:
+
+    $ sudo umount mydisk
+    $ sudo losetup -d /dev/loop0
+
+    Eğer loop aygıt sürücüsünün bir dosyayı onun belli bir offset'inden itibaren kullanmasını istiyorsak losetup programında
+    "-o (ya da "--offset") seçeneğini kullanmalıyız. Örneğin bir disk imajının içerisindeki Linux dosya sisteminin disk imajının 
+    8192'inci sektöründen başladığını varsayalım. "dev/loop0" aygıt sürücüsünün bu imaj dosyasını bu offset'ten itibaren kullanmasını
+    şöyle sağlayabiliriz:
+
+    sudo losetup -o 4194304 /dev/loop0 am335x-debian-11.7-iot-armhf-2023-09-02-4gb.img
+
+    512 * 8192 = 4194304 olduğuna dikkat ediniz.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Şimdi "loop" aygıt sürücüsü yoluyla BBB'nin siteden indirdiğimiz imajın üzerinde gezinelim. Siteden indirilen imaj bir disk 
+    imajı olduğuna göre diskin içerisinde disk bölümleme tablosu ve u-boot boot loader programları bulunmaktadır. O halde bizim 
+    bu imaj içerisindeki Linux dosya sisteminin nereden başladığını belirlememiz gerekir. Bu belirlemeyi şöyle yapabiliriz:
+
+    ******************************************************
+    $ fdisk -l am335x-debian-11.7-iot-armhf-2023-09-02-4gb.img
+    Disk am335x-debian-11.7-iot-armhf-2023-09-02-4gb.img: 3,52 GiB, 3774873600 bytes, 7372800 sectors
+    Units: sectors of 1 * 512 = 512 bytes
+    Sector size (logical/physical): 512 bytes / 512 bytes
+    I/O size (minimum/optimal): 512 bytes / 512 bytes
+    Disklabel type: dos
+    Disk identifier: 0xee60af7b
+
+    Device                                           Boot Start     End Sectors  Size Id Type
+    am335x-debian-11.7-iot-armhf-2023-09-02-4gb.img1 *     8192 7372799 7364608  3,5G 83 Linux
+    ******************************************************
+
+    Buradan Linux dosya sisteminin imaj dosyasının 8192'inci sektöründen (yani 8192 * 512 offset'inden) başladığını anlıyoruz.
+    O halde loop aygıtını şöyle kullanıma hazırlayabiliriz:
+
+    $ sudo losetup -o 4194304 /dev/loop0 am335x-debian-11.7-iot-armhf-2023-09-02-4gb.img
+
+    Artık mount işlemini aşağıdaki gibi yapabiliriz.
+
+    $ sudo mount /dev/loop0 mydisk
+
+    Şimdi "mydisk" geçtiğimizde aslında bu dizin imaj dosyasının içerisindeki Linux dosya sistemini kullannaktadır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+												29. Ders 02/07/2024 - Salı
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Klasik MBR disk bölümlendirmesinde diskin ilk sektörüne (0 numaralı sektörüne) MBR sektörü denilmektedir. MBR sektörünün 
+    sonundaki 2 byte MBR'nin bilinçli olarak oluşturulduğunu belirten sihirli bir sayıdan (magic number) oluşmaktadır. Bu sihirli 
+    sayı hex olarak 55 AA biçimindedir.
+
+    Klasik MBR Disk Bölümlemesinde MBR sektörünün sonundaki 64 byte'a "Disk Bölümleme Tablosu (Disk Partition Table)" denilmektedir. 
+    Tabii sektörün sonunda hex olarak 55 AA bulunduğu için disk bölümleme tablosu da bu 55 AA byte'larının hemen gerisindeki 64 
+    byte'tadır. O halde MBR sektörünün sonu aşağıdaki gibidir:
+
+    ... <64 byte (Disk Bölümleme Tablosu)> 55 AA
+
+    Başka bir deyişle Disk Bölümleme Tablosu MBR sektörünün 0x1BE (446) offset'inden başlayıp 64 byte sürmektedir. Disk Bölümleme 
+    Tablosundaki her disk bölümü 16 byte ile betimlenmektedir. Dolayısıyla Disk Bölümleme Tablosu 4 disk bölümünü barındırmaktadır. 
+    Pekiyi bu durumda 4'ten fazla disk bölümü oluşturulamaz mı? İşte "Genişletilmiş Disk Bölümü (Extended Disk Partition)" kavramı 
+    ile bu durum mümkün hale getirilmiştir.
+
+    Disk Bölümleme Tablosundaki 16 byte'lık disk bölümünün içeriği şöyledir:
+
+    Offset (Hex)    uzunluk         Anlamı
+    -------------------------------------------------------------------------------------------------
+    0               1 BYTE          Disk Bölümünün Aktif Olmadığı Bilgisi
+    1               3 BYTE          Disk Bölümünün Eski Sistemdeki (CHS Sistemindeki) Başlangıç Sektörü
+    4               1 BYTE          Sistem ID Değeri
+    5               3 Byte          Disk Bölümünün Eski Sistemdeki (CHS Sistemindeki) Bitiş Sektörü
+    8               4 BYTE (DWORD)  Disk Bölümünün LBA Sistemindeki Başlangıç Sektörü
+    C               4 BYTE (DWORD)  Disk Bölümündeki Sektör Sayısı (Disk Bölümünün Uzunluğu)
+
+    - 4 disk bölümünden yalnızca bir tanesi aktif olabilmektedir. Sistem aktif disk bölümünden boot edilmektedir. Aktif disk 
+    bölümü için 0x80 değeri aktif olmayan disk bölümü için 0x00 değeri kullanılmaktadır.
+
+    - Eskiden diskteki bir sektörün yeri "hangi yüzde (her yüzü bir kafa okuduğu için, hangi kafada), hangi track'te (track'e 
+    silindir (cylinder) de denilmektedir) ve hangi sektör diliminde olduğu bilgisiyle ifade ediliyordu. Bu koordinat sistemine
+    CHS (Cylinder-Head-Sector) koordinat sistemi deniyordu. Sonra bu koordinat sisteminden vazgeçildi. Sektörün yeri ilk sektör 
+    0 olmak üzere tek bir sayıyla temsil edilmeye başlandı.
+
+    - Her disk bölümünde farklı bir işletim sisteminin kullandığı dosya sistemi bulunuyor olabilir. "Sistem ID Değeri" o disk 
+    bölümünde hangi işletim sistemine ilişkin bir dosya sisteminin bulunduğunu belirtmektedir. Böylece Disk Bölümleme Tablosunu 
+    inceleyen kişiler disk bölümlerinin hangi işletim sistemi için oluşturulduğunu anlayabilmektedir. Tüm Sistem ID Değerleri 
+    için bunların listelendiği dokümanlara başvurabilirsiniz. Biz burada birkaç System ID değerini verelim:
+
+    0C: Windows FAT32 Sistemi
+    0E: Windows FAT Sistemi
+    0F: Genişletilmiş Disk Bölümü
+    83: Linux Dosya Sistemlerinden Birisi
+    82: Linux İçin Swap Alanı Olarak Kullanılacak Disk Bölümü
+
+    - Bir disk bölümü için en önemli iki bilgi onun diskin hangi sektöründen başlayıp hangi sektöründe bittiğidir. Yani disk 
+    bölümünün başlangıç sektör numarası ve toplam sektör sayısıdır. İşletim sistemleri böylece kendileri için belirlenmiş olan 
+    disk bölümlerinin dışına erişmezler. Yani disk bölümleri adeta disk içerisindeki disklerin yerlerini belirtmektedir.
+
+    - 90'larla birlikte diskteki sektörlerin adreslenmesi için CHS sistemi yavaş yavaş bırakılmaya başlanmış LBA (Logical Block 
+    Address) denilen sisteme geçilmiştir. Bu sistemde diskin ilk sektörü 0 olmak üzere her sektöre artan sırada bir tamsayı karşılık 
+    düşürülmüştür. İşte bu koordinat sistemine LBA denilmektedir. Artık MBR Disk Bölümlerinde disk bölümünün başlangıç sektörü 
+    LBA sistemine göre belirtilmektedir.
+
+    - LBA sisteminde bir disk bölümünde en fazla 2^32 tane sektör bulunabilir. Bir sektör 2^9 (512) byte olduğuna göre MBR
+    Disk Bölümleme Tablosu en fazla 2^41 = 2TB diskleri destekleyebilmektedir. Gömülü sistemlerde henüz bu büyüklükte diskler 
+    kullanılmadığı için klasik MBR Disk Bölümleme Tablosu iş görmektedir. Ancak masaüstü sistemlerde artık bu sınır aşılmaktadır. 
+    İşte UEFI BIOS'lar tarafından kullanılan "GUID Disk Bölümlemesi (GPT)" bu sınırı çok daha ötelere taşımaktadır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    MBR Disk Bölümleme Tablosunun 4 girişe sahip olması en fazla 4 tane disk bölümünün oluşturulabilmesine yol açmaktadır. 
+    Ancak bazen 4'ten fazla disk bölümünün oluşturulması istenebilir. İşte bunun için "Genişletilmiş Disk Bölümü (Extended 
+    Partition)" denilen bir yöntem oluşturulmuştur. Genişletilmiş bir disk bölümü ana 4 girişten bir tanesi olarak oluşturulur. 
+    Genişletilmiş Disk Bölümü aslında diskin bir parçasını sanki ayrı bir diskmiş gibi betimlemektedir. Şöyle ki, Genişletilmiş 
+    Disk Bölümünün 0'ıncı sektöründe (yani ilk sektöründe) yine aynı yerde Disk Bölümleme Tablosu vardır. Bu disk Bölümleme Tablosu 
+    sanki disk o kadarmış gibi bölümleme yapmaktadır. Genişletilmiş Disk Bölümlerindeki Disk Bölümleme Tabloları en fazla 2 girişe
+    sahip olabilir. Bu girişlerden biri o genişletilmiş bölümdeki yeni disk bölümünü diğeri ise yine o Genişletilmiş Disk bölümündeki
+    Genişletilmiş Disk Bölümünü betimler.
+
+    Ancak gömülü sistemlerde genellikle 4'ten fazla disk bölümünün kullanılması karşılaşılan bir durum değildir. Bu nedenle biz
+    burada Genişletilmiş Disk Bölümlerinin formatı konusundaki ayrıntılar girmeyeceğiz.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+												30. Ders 04/07/2024 - Perşembe
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Pekiyi biz disk bölümlemesi nasıl yapabiliriz? Aslında mademki disk bölümleme tablosunun tüm formatı zaten biliniyor bu 
+    durumda bir disk editörle (hex editörle) manuel olarak disk bölümleri üzerinde işlemler yapabiliriz. Tek yapılacak şey diskin 
+    MBR bölümünü okuyup Disk Bölümleme Tablosunun yerini bulup onu değiştirmektir.
+
+    Diskteki sektörler üzerinde görüntüleme ve güncelleme işlemlerini yapan programlara "disk editörleri" denilmektedir. UNIX/Linux
+    sistemlerinde diskler de aygıt sürücüler sayesinde birer dosya gibi kullanılabildiği için disk editörler yerine GUI hex
+    editörler de bu amaçla kullanılabilmektedir. Windows sistemlerinde "freeware (yani parasız kullanılabilen)" HxD isimli
+    program oldukça iyi yazılmıştır. Maalesef UNIX/Linux sistemlerinde HxD kalitesinde bir disk editör programı bulunmamaktadır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Linux sistemlerinde disk bölündermesi için en yaygın kullanılan program "fdisk" isimli programdır. Microsoft'un da Windows
+    sistemlerinde kullanılabilen aynı isimli bir programı vardır. fdisk konsol ekranında interaktif olarak kullanılabilen 
+    bir programdır. Aslında doğrudan belli bir dosya üzerinde de disk gibi bölümlendirme işlemlerini yapabilmektedir. fdisk
+    programının temel kullanımı şöyledir:
+
+    1) Hangi disk üzerinde işlem yapılacaksa o diske ilişkin aygıt dosyası fdisk programına komut satırı argümanı olarak 
+    verilmelidir. Tabii disk aygıt dosyaları "root" kullanıcısına ilişkin olduğu için fdisk programı da genellikle "sudo" 
+    ile çalıştırılır. Örneğin önce blok aygıt sürücülerimize bakalım:
+
+    ******************************************************
+    $ lsblk
+    NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+    sda      8:0    0   80G  0 disk
+    ├─sda1   8:1    0  512M  0 part /boot/efi
+    ├─sda2   8:2    0    1K  0 part
+    └─sda5   8:5    0 79,5G  0 part /
+    sr0     11:0    1 1024M  0 rom
+    ******************************************************
+
+    Burada "sda" diski bir bütün olarak gösteren aygıt sürücüsüdür. Bu aygıt sürücüye ilişkin aygıt dosyası "/dev/sda" biçimindedir. 
+    "sda1", "sda2" ve "sda5" disk üzerindeki disk bölümleridir. Bizim bölümlendirme için diski bir bütün olarak ele almamız 
+    gerekir. Bu nedenle "sda" diski için fdisk programı şöyle çalıştırılmalıdır:
+
+    $ sudo fdisk /dev/sda
+
+    Tabi biz örneğimizde loop aygıtı kullanacağız. Bu durumda loop aygıtını şöyle kullanıma hazır hale getirebiliriz:
+
+    ******************************************************
+    $ dd if=/dev/zero of=disk.img bs=300M count=1
+    1+0 kayıt girdi
+    1+0 kayıt çıktı
+    314572800 bytes (315 MB, 300 MiB) copied, 1,23241 s, 255 MB/s
+    ******************************************************
+
+    Buradan diski temsil eden içi sıfırlarla dolu 300MB'lik bir dosya oluşturduk. Şimdi bu dosyayı "/dev/loop0" aygıt dosyası 
+    ile bir blok aygıtı gibi gösterelim:
+
+    $ sudo losetup /dev/loop0 disk.img
+
+    Artık "/dev/loop0" aygıt dosyası sanki bir disk gibi kullanılabilecektir. Bu aygıt üzerinde işlem yaptığımızda işlemden 
+    "disk.img" dosyası etkilenecektir.
+
+    Artık blok aygıt sürücülerine baktığımızda "loop0" aygıtını göreceğiz:
+
+    ******************************************************
+    $ lsblk
+    NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+    loop0    7:0    0  300M  0 loop
+    sda      8:0    0   80G  0 disk
+    ├─sda1   8:1    0  512M  0 part /boot/efi
+    ├─sda2   8:2    0    1K  0 part
+    └─sda5   8:5    0 79,5G  0 part /
+    sr0     11:0    1 1024M  0 rom
+    *****************************************************
+
+    Artık fdisk programını bu aygıt üzerinde kullanabiliriz:
+
+    $ sudo fdisk /dev/loop0
+
+    2) Artık interaktif bir biçimde disk bölümlendirme işlemleri yapılabilir. Burada tek harfli çeşitli komutlar girildiğinde
+    interaktif bir biçimde işlemler yapılmaktadır. Bu komutlardan önemli olanlarını açıklamak istiyoruz:
+
+    - "n" (new) komutu yeni bir disk bölümü oluşturmak için kullanılmaktadır. Bu komut verildiğinde yaratılacak disk bölümünün 
+    "primary" bölüm mü "extended" bölüm mü olduğu sorulmaktadır. Primary disk bölümü ana 4'lük girişteki bölümlerdir. Dolayısıyla
+    burada genellikle "p" komutu ile "primary" disk bölümü oluşturulur. Sonra bize 4 girişten hangisinin disk bölümü olarak 
+    oluşturulacağı sorulmaktadır. Bu durumda sıradaki numarayı vermek (disk tamamen ilk kez bölümlendiriliyorsa 1) uygun olur. 
+    Sonra da bize ilgili disk bölümünün hangi sektörden başlatılacağı ve ne uzunlukta olacağı sorumaktadır. Aşağıda bir örnek 
+    görüyorsunuz:
+
+    **************************************************************************************
+    Komut (yardım için m): n
+    Disk bölümü tipi
+    p   birincil (0 birincil, 0 genişletilmiş, 4 boş)
+    e   genişletilmiş (mantıksal disk bölümleri için konteyner)
+    Seç (varsayılan p): p
+    Disk bölümü numarası (1-4, varsayılan 1): 1
+    İlk sektör (2048-614399, varsayılan 2048):
+    Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-614399, varsayılan 614399): +50M
+
+    Yeni bir disk bölümü 1, 'Linux' tipinde ve 50 MiB boyutunda oluşturuldu.
+    ***************************************************************************************
+
+    - "p" (print) komutu oluşturulmuş olan disk bölümlerini görüntülemektedir. Örneğin:
+
+    **************************************************************************************
+    Komut (yardım için m): p
+    Disk /dev/loop0: 300 MiB, 314572800 bayt, 614400 sektör
+    Birimler: sektör'i 1 * 512 = 512 baytın
+    Sektör boyutu (montıksal/fiziksel): 512 bayt / 512 bayt
+    G/Ç boyutu (en düşük/en uygun): 512 bayt / 512 bayt
+    Disketikeri tipi: dos
+    Disk belirleyicisi: 0x267a62e0
+
+    Aygıt        Açılış Başlangıç    Son Sektör Boyut ld Türü
+    /dev/loop0p1             2048 104447 102400   50M 83 Linux
+    **************************************************************************************
+
+    - fdisk yaratılan disk bölümlerinin ID'sini default olarak 0x83 (Linux) yapmaktadır. Eğer disk bölümüne FAT dosya sistemi 
+    yerleştirilecekse "t" (type) komutu ile bölüm ID'si değitirilmelidir. Örneğin:
+
+    **************************************************************************************
+    Komut (yardım için m): t
+    Seçilen disk bölümü 1
+    Hex kod (bütün kodlar için L tuşlayın): c
+    'Linux' disk bölümünün tipini 'W95 FAT32 (LBA)' olarak değiştirin.
+
+    Komut (yardım için m): p
+    Disk /dev/loop0: 300 MiB, 314572800 bayt, 614400 sektör
+    Birimler: sektör'i 1 * 512 = 512 baytın
+    Sektör boyutu (montıksal/fiziksel): 512 bayt / 512 bayt
+    G/Ç boyutu (en düşük/en uygun): 512 bayt / 512 bayt
+    Disketikeri tipi: dos
+    Disk belirleyicisi: 0x267a62e0
+
+    Aygıt        Açılış Başlangıç    Son Sektör Boyut ld Türü
+    /dev/loop0p1             2048 104447 102400   50M  c W95 FAT32 (LBA)
+    **************************************************************************************
+
+    Şu anda biz bir FAT disk bölümü yaratmış olduk. Şimdi ikinci Linux dosya sistemleri için ikinci bölümünü de yaratalım:
+
+    **************************************************************************************
+    Komut (yardım için m): n
+    Disk bölümü tipi
+    p   birincil (1 birincil, 0 genişletilmiş, 3 boş)
+    e   genişletilmiş (mantıksal disk bölümleri için konteyner)
+    Seç (varsayılan p): p
+    Disk bölümü numarası (2-4, varsayılan 2):
+    İlk sektör (104448-614399, varsayılan 104448):
+    Last sector, +/-sectors or +/-size{K,M,G,T,P} (104448-614399, varsayılan 614399):
+
+    Yeni bir disk bölümü 2, 'Linux' tipinde ve 249 MiB boyutunda oluşturuldu.
+
+    Komut (yardım için m): p
+    Disk /dev/loop0: 300 MiB, 314572800 bayt, 614400 sektör
+    Birimler: sektör'i 1 * 512 = 512 baytın
+    Sektör boyutu (montıksal/fiziksel): 512 bayt / 512 bayt
+    G/Ç boyutu (en düşük/en uygun): 512 bayt / 512 bayt
+    Disketikeri tipi: dos
+    Disk belirleyicisi: 0x267a62e0
+
+    Aygıt        Açılış Başlangıç    Son Sektör Boyut ld Türü
+    /dev/loop0p1             2048 104447 102400   50M  c W95 FAT32 (LBA)
+    /dev/loop0p2           104448 614399 509952  249M 83 Linux
+    **************************************************************************************
+
+    Artık diskimizde iki disk bölümü vardır.
+
+    - Bir disk bölümünü aktive etmek için "a" komutu (activate) kullanılmaktadır. Örneğin biz FAT32 disk bölümünü aktif disk 
+    bölümü haline getirelim:
+
+    **************************************************************************************
+    Komut (yardım için m): a
+    Disk bölümü numarası (1,2, varsayılan 2): 1
+
+    Disk bölümü 1'de önyüklenebilir bayrağı artık etkin.
+
+    Komut (yardım için m): p
+    Disk /dev/loop0: 300 MiB, 314572800 bayt, 614400 sektör
+    Birimler: sektör'i 1 * 512 = 512 baytın
+    Sektör boyutu (montıksal/fiziksel): 512 bayt / 512 bayt
+    G/Ç boyutu (en düşük/en uygun): 512 bayt / 512 bayt
+    Disketikeri tipi: dos
+    Disk belirleyicisi: 0x267a62e0
+
+    Aygıt        Açılış Başlangıç    Son Sektör Boyut ld Türü
+    /dev/loop0p1 *           2048 104447 102400   50M  c W95 FAT32 (LBA)
+    /dev/loop0p2           104448 614399 509952  249M 83 Linux
+    **************************************************************************************
+
+    - fdisk önce yazılacakları kendi içerisinde biriktirmekte sonra bunları diske yazmaktadır. Biriktilenlerin diske yazılması 
+    için "w" (write) komutu kullanılmaktadır. Örneğin:
+
+    **************************************************************************************
+    Komut (yardım için m): w
+    Disk bölümleme tablosu değiştirildi.
+    Disk bölüm tablosunu yeniden okumak için ioctl() çağrılıyor.
+    Disk bölümü tablosu yeniden okunamadı.: Geçersiz bağımsız değişken
+
+    Çekirdek hala eski tabloyu kullanıyor. Yeni tablo bir sonraki yeniden başlatma işleminden sonra ya da partprobe(8) veya kpartx(8)'i 
+    çalıştırdığınızda kullanılacak.
+    **************************************************************************************
+
+    - Bir disk bölümünü silmek için "d" komutu kullanılmaktadır. Disk bölümlerini silerken dikkat ediniz.
+
+    3) Disk bölümlerini oluşturduktan sonra çekirdeğin onları o anda görmesi için "partprobe" komutu kullanılmalıdır. Örneğin:
+
+    **************************************************************************************
+    $ sudo partprobe /dev/loop0
+    [sudo] kaan için parola:
+    $ lsblk
+    NAME      MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+    loop0       7:0    0  300M  0 loop
+    ├─loop0p1 259:0    0   50M  0 part
+    └─loop0p2 259:1    0  249M  0 part
+    sda         8:0    0   80G  0 disk
+    ├─sda1      8:1    0  512M  0 part /boot/efi
+    ├─sda2      8:2    0    1K  0 part
+    └─sda5      8:5    0 79,5G  0 part /
+    sr0        11:0    1 1024M  0 rom
+    **************************************************************************************
+
+    Aslında yukarıda yapılan işlemlerin soucu olarak Disk Bölümleme Tablosundaki iki giriş (32 byte) güncellenmiştir.
+
+    5) fdisk programının başka komutları da vardır. Örneğin disk bölümlendirmesi yapıldıktan sonra bu bölümlendirme bilgileri 
+    "O" komutu ile bir dosyaya aktarılabilir. Sonra "I" komutu ile bu dosyadan yükleme yapılabilir. Böylece farklı diskler için
+    aynı işlemlerin daha kolay yapılması sağlanabilmektedir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Disk bölümlendirmesi GUI araçlarıyla da görsel bir biçimde yapılabilmektedir. Örneğin "gparted" bunun için en çok tercih
+    edilen programdır. Ancak "gparted" pek çok dağıtımda default olarak bulunmamaktadır. Onu Debian tabanlı dağıtımlarda aşağıdaki 
+    gibi kuarabiliriz:
+
+    $ sudo apt-get install gparted
+
+    Programı hiç komut satırı argümanı vermedne çalıştırırsak sabit diskler üzerinde işlemler yapmaktadır. Ancak istersek 
+    işlem yapmak istediğimiz diski de programı çalıştırırken belirtebiliriz. Örneğin:
+
+    $ sudo gparted /dev/loop
+
+    gparted GUI bir uygulama olduğu için kullanımı oldukça kolaydır. Kullanıcılar ilk kez karşılaştıklarında bile sezgisel 
+    biçimde gerekli işlemleri yapabilmektedir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Son yıllarda sık kullanılmaya başlanan diğer bir disk bölümleme aracı da "sfdisk" isimli programdır. Bu program eskiden bazı 
+    dağıtımlarda default olarak bulundurulmuyordu. Ancak bu program bir süredir "fdisk" paketinin içerisindedir. Dolayısıyla artık 
+    pek çok dağıtımda default olarak bulunmaktadır.
+
+    sfdisk programının fdisk programından temel farklılığı disk bölümlerinin "stdin" dosyasından okuma yapılarak basit bir biçimde
+    oluşturulabilmesidir. Bu nedenle tek hamlede disk bölümlerini komut satırından oluşturmak isteyenler sfdisk programını tercih
+    edebilmektedir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Disk bölümlendirmesi yapıldıktan sonra disk bölümlerinin formatlanması gerekmektedir. Burada formatlama demekle disk bölümüne
+    yerleştirilecek dosya sistemi için metadata alanların oluşturulması kastedilmektedir. (Formatlama terimi Microsoft tarafından
+    sıkça kullanılan eski bir terimdir.)
+
+    Linux sistemlerinde formatlama için (yani ilgili disk bölümünü belli bir dosya sistemine hazırlamak için) "mkfs.xxx" biçiminde
+    programlar bulundurulmuştur. Örneğin disk bölümünü Microsoft'un FAT dosya sistemi için formalyacaksak "mkfs.fat" programını, 
+    Linux ext2 dosya sistemi için formalyacaksak "mkfs.ext2" programını kullanırız. Tabii bu programların komut satırı argümanları 
+    birbirinden farklıdır. Çünkü dosya sisteminin parametrik yapıları diğerinden farklıdır.
+
+    Disk bölümünü FAT32 olarak formatlamak için "mkfs.fat" programında disk bölümüne ilişkin aygıt dosyası belirtilmeli ve FAT32 
+    için -F32 seçeneği bulundurulmalıdır. FAT16 için -F16 ve FAT12 için -F12 seöenekleri de bulunmaktadır.
+
+    $ sudo mkfs.fat -F32 /dev/loop0p1
+    mkfs.fat 4.1 (2017-01-24)
+
+    Diğer disk bölümünü ext2 dosya sistemi ile aşağıdaki gibi formatlayabiliriz:
+
+    $ sudo mkfs.ext2 /dev/loop0p2
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Bir dosya sistemi belli bir dizin altına mount edilebilmektedir. Mount etmek "bir dosya sistemini ana dizin ağacının herhangi
+    bir yerine takmak" anlamına gelmektedir. Mount işleminde disk bölümüne ilişkin aygıt dosyası ve mount edilecek dizin belirtilmektedir. 
+    Mount işlemi sonrasında mount edilen dosya sisteminin kökü o dizinde olacak biçimde bir durum oluşturulur. Linux sistemlerinde
+    kök altındaki "/mnt" dizini "mount dizinleri (mount points)" için oluşturulmuştur. Tabii biz dosya sistemini istediğimiz 
+    bir yere mount edebiliriz. Mount işleminde eğer mount dizini doluysa mount işlemi sonrasında artık o dizinin içeriği erişilemez
+    hale gelir. Unmount işlemi yapıldığında yeniden o dizin eski yerinde görünecektir. Mount işlemi sırasında Linux çekirdeği dosya 
+    sistemini otomatik olarak anlamaya çalışır. Ancak "-t" seçeneği ile biz açıkça dosya sistemini de belirtebiliriz. Örneğin yukarıda
+    oluşturmuş olduğumuz iki dosya sistemini aşağıdaki gibi mount edebiliriz:
+
+    $ mkdir fatpart
+    $ mkdir linuxpart
+    $ sudo mount /dev/loop0p1 fatpart
+    $ sudo mount /dev/loop0p2 linuxpart
+
+    Artık "fatpart" ve "linuxpart" dizinleri ilgili disk bölümlerindeki dosya sistemlerinin kökü olarak işlev görecektir.
+
+    Mount edilen disk bölümleri "umount" komutuyla unmount edilebilir. umount komutunda argüman olarak mount dizini verilmelidir. 
+    Örneğin:
+
+    $ sudo umount fatpart
+    $ sudo umount linuxpart
+
+    umount komutuna mount dizini yerine aygıt dosyası da verilebilmektedir. Bu durumda o aygıtın tüm mount işlemleri unmount
+    edilmektedir.
+
+    Bazen sistem yöneticileri mount işleminin boot süreci sırasında otomatik yapılmasını da isteyebilmektedir. Bunun için 
+    "/etc/fstab" dosyasında mount edilecek aygıt dosyası ve mount dizini bir satır içerisinde belirtilmektedir. Bu dosya 
+    boot işlemi sırasında init prosesi tarafından okunup işletilmektedir. Tabii loop aygıtları üzerinde otomatik maount işlemi
+    yapmak istiyorsanız "losetup" işlemini de bu boot işlemi sırasında yapmanız gerekir. Bunun da birkaç yolu vardır. Ancak bu 
+    işlemler "systemd" paketinin anlatıldığı bölümde ele alınacaktır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Biz daha önce kök dosya sistemini henüz oluşturamadığımız için BBB'nin sitesinden indirdiğimiz imajın içerisindeki kök 
+    dosya sistemini kullanmıştık. Ancak bu imajın içerisindeki Linux disk bölümü 3.5GB kadardır. Dosya sisteminin büyüklüğü
+    yalnızca onun yer aldığı disk bölümünün büyüklüğü ile ilgili değildir. Dosya sisteminin kendi büyüklüğü o dosya sisteminin 
+    kendi meta data alanlarında da belirtilmektedir. Dolayısıyla biz 3.5GB civarındaki disk bölümünü dd programıyla daha büyük
+    bir micro SD kartttaki daha büyük bir disk bölümüne kopyaladığımızda o dosya sisteminin uzunluğunu değiştirmiş olmayız. 
+    Dosya sisteminin uzunluğunu değiştirebilmek için o dosya sistemine özgü bir biçimde o dosya sisteminin meta data alanlarında
+    değişikilk yapmak gerekir. Ext dosya sistemleri için bu işlemi yapan "resize2fs" isimli hazır bir program bulunmaktadır. Bu 
+    programın kullanımı oldukça basittir. Tek yapılacak şey programa komut satırı argümanı olarak disk bölümünün aygıt dosyasını 
+    vermmektedir. Örneğin:
+
+    $ sudo resize2fs /dev/sdc2
+
+    "resize2fs" programı duruma göre dosya sisteminin "fsck" programı ile kontrol edilmesini talep edebilmektedir. Bu işlem şöyle 
+    yapılabilir:
+
+    $ sudo e2fsck -f /dev/sdc2
+
+    "resize2fs" programı default olarak dosya sistemini içinde bulunduğu disk bölümü kadar büyütmeye çalışmaktadır. Ancak bu 
+    program tam ters amaçla da kullanılabilmektedir. -M seçeneği dosya sistemini olabilecek en kompakt duruma getirmektedir. 
+    Örneğin:
+
+    $ sudo resize2fs -M /dev/sdc2
+
+    Tabii aslında dosya sistemini ve disk bölümlerini büyütmek başka uitility programlarla da yapılabilmektedir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+												31. Ders 11/07/2024 - Perşembe
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Şimdi de gömülü Linux sistemlerinde çokça kullanılan U-Boot isimli boot loader'ın kullanımı üzerinde duracağız. Bu boot 
+    loader'ı kendi projelerinizde sıfırdan kullanacaksanız öncelikle kaynak kodlarını indirip hedef makine için derlemeniz 
+    gerekir. Örneğin biz U-Boot'u BBB'de ya da Raspberry Pi'da kullanmak istiyorsak önce onun kaynak kodlarını sitesinden indirip 
+    ARM işlemcileri için ARM araç zincirlerini kullanarak derlememiz gerekir. Bu derleme işleminden birinci düzey ve ikinci düzey 
+    boot loader dosyaları elde edilir. Bu dosyalar da hedef sistemde uygun yerlere yerleştirilir. Yapılacak işlemleri şöyle 
+    özetleyebiliriz:
+
+    U-Boot Kaynak Kodları İndirilir ---> Kaynak Kodlar Hedef Araç Zinciri Kullanarak Derlenir ---> Oluşturulan Birinci ve İkinci 
+    Düzey Boot Loader Dosyaları Hedef Sistemde Uygun Yerlere Yerleştirilir
+
+    U-Boot'un dokümanlarına aşağıdaki bağlantıdan erişebilirisiniz:
+
+    https://docs.u-boot.org/en/latest/
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    U-Boot derlemesi aşağıdaki adımlardan geçilerek gerçekleştirilmektedir:
+
+    1) Öncelikle U-Boot'un kaynak kodları sitesinden indirilir. Bunun için aşağıdaki git komutunu kullanabilirsiniz:
+
+    $ git clone https://source.denx.de/u-boot/u-boot.git
+
+    Bu işlemden sonra U-Boot'un kaynak kodları "u-boot" isimli bir dizin yaratılarak onun içerisine yerleştirilecektir.
+
+    2) Derleme için hedef makineye ilişkin uygun araç zinciri elde edilmelidir. Çünkü oluşturulan dosyaların hedef makinede 
+    çalışabilmesi için hedef makineye uygun makine kodlarının oluşturulması gerekir. Örneğin biz BBB için U-Boot'u kullanmak 
+    isteyelim. (BBB'de zaten default durumda U-Boot'un kullanıldığını anımsayınız). Bu durumda 32 bit ARM işlemcileri için 
+    uygun araç zincirinin yüklenmesi gerekir. Eğer Raspberry Pi için aynı işlemi yapacak olsaydık 64 bitlik ARM araç zincirini 
+    hazır bulundurmamız gerekecekti. Anımsanacağı gibi bu araç zincirleri zaten birkaç kaynakta hazır bir biçimde ("pre-built"
+    biçimde) bulunmaktadır. Ancak istersiniz daha önce görmüş olduğumuz corosstool-NG ile de araç zincirini sıfırdan da 
+    oluşturabilirsiniz. Biz burada ARM'ın kendisinin sunduğu araç zincirlerini indirip kullanalım. Bu araç zincirlerinin aşağıdaki 
+    bağlantıdan elde edilebileceğini görmüştük:
+
+    https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads
+
+    Bu sayfa açıldığında "x86_64 Linux hosted cross toolchains" başlığı altındaki "AArch32 GNU/Linux target with hard float 
+    (arm-none-linux-gnueabihf)" alt başlığında belirtilen "arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi.tar.xz" dosyasını
+    indirip aşağdaki gibi açabiliriz:
+
+    $ tar -xf arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz
+
+    3) Projenin make dosyasında derleme işlemi yapılırken derleyicinin dışında bazı araçlar da kullanılmıştır. U-Boot'un kendi
+    sitesinde aşağıdaki araçların make dosyası tarafından kullanılabileceği belirtilmiştir. Bu araçların bazıları standart bir 
+    Linux dağıtımında zaten yüklenmiş biçimde bulunmaktadır. Ancak siz bunların hepsini aşağıdaki gibi yüklemeye çalışabilirsiniz:
+
+    sudo apt-get install bc bison build-essential coccinelle \
+    device-tree-compiler dfu-util efitools flex gdisk graphviz imagemagick \
+    liblz4-tool libgnutls28-dev libguestfs-tools libncurses-dev \
+    libpython3-dev libsdl2-dev libssl-dev lz4 lzma lzma-alone openssl \
+    pkg-config python3 python3-asteval python3-coverage python3-filelock \
+    python3-pkg-resources python3-pycryptodome python3-pyelftools \
+    python3-pytest python3-pytest-xdist python3-sphinxcontrib.apidoc \
+    python3-sphinx-rtd-theme python3-subunit python3-testtools \
+    python3-virtualenv swig uuid-dev
+
+    Tabii bu araçlar o anda derlemenin yapılacağı host sistemde çalışacak olan araçlardır.
+
+    4) Build işleminden önce bizim CROSS_COMPILE çevre değişkenini araç zincirimizin önekini belirtecek biçimde oluşturmamız 
+    gerekir. Çünkü U-Boot'un make dosyası bu önekin sonuna "gcc", "ld" gibi program isimlerini ekleyerek araçları çalıştırmaktadır. 
+    Örneğin bizim ARM sitesinden indirdiğimiz araç zincirlerinin öneki "arm-none-linux-gnueabihf-" biçimindedir. İşte CROSS_COMPILE 
+    çevre değişkenini bu öneki belirtecek biçiminde set etmeliyiz:
+
+    $ export CROSS_COMPILE=arm-none-linux-gnueabihf-
+
+    Bu ayarlama yapıldıktan sonra bizim ayrıca araç zincirlerinin bulunduğu dizini de PATH çevre değişkenine eklememiz gerekir. 
+    Sınıfta yaptığımız örnekte araç zincirini "/home/kaan/Study/EmbeddedLinux/U-Boot" dizinine açmıştık. Bu durumda araç 
+    zincirlerinin içerisindeki programlar da aşağıdaki dizinde bulunacaktır:
+
+    "/home/kaan/Study/EmbeddedLinux/U-Boot/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf/bin"
+
+    Bu dizini PATH çevre değişkenine şöyle ekleyebiliriz:
+
+    $ PATH=$PATH:/home/kaan/Study/EmbeddedLinux/U-Boot/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf/bin
+
+    5) Şimdi bizim derleme sırasında kullanılacak olan hedef donanıma ilişkin ayarları belirlememiz gerekir. Kaynak kodlar 
+    içerisindeki "configs" dizini altında pek çok kart için hazır config dosyaları bulunmaktadır. Bu config dosyalarından bizim 
+    hedefimize en yakın olanını seçip onu temel alarak ayarlamaları yapabilirsiniz. Örneğin BBB için "am335x_evm_defconfig" isimli 
+    konfigürasyon dosyası kullanılabilir. Bu konfigürasyon dosyasının seçimi şöyle yapılabilir:
+
+    $ make am335x_evm_defconfig
+
+    Bu komutu uygularken "u-boot" ana dizinin kökünde olmanız gerekir. Bu duruma dikkat ediniz. Bu işlem sonrasında artık söz 
+    konusu configürasyon dosyası "u-boot" dizinin kökünde ".config" dosyası olarak kopyalanacaktır.
+
+    6) Eğer istenirse seçilen konfigürasyon dosyası temel alınarak bazı boot parametreleri değiştirilebilir. Bu işlem şöyle yapılır:
+
+    $ make menuconfig
+
+    Burada karşımıza bir GUI penceresi çıkacaktır. menuconfig işleminde ".config" dosyası okunarak oradaki seçimler menü elemanlarında 
+    belirtilir. Uygulamacı da bunlar üzerinde değişiklikler yapıp ".config" dosyasını yeniden save edebilir.
+
+    7) Build işlemi sırasında seçilen karta ilişkin aygıt ağacı da (device tree) otomatik oluşturulmaktadır. Ancak programcı 
+    isterse make işlemi öncesinde aygıt ağacını da belirleyebilir. Bu konu üzerinde daha sonra duracağız.
+
+    8) Nihayet build işlemi aşağıdaki gibi "make" komutu ile başlatılır:
+
+    $ make
+
+    Build işlemi bittiğinde u-boot dizininin kök dizininde bazı önemli dosyalar oluşturulmuş olacaktır. Bunlardan biri "birinci 
+    düzey boot loader" görevinde olan MLO dosyasıdır. Oluşturulan diğer bir dosya da "u-boot.img" isimli dosyadır. Bu dosya
+    "ikinci düzey boot loader" görevini yapmaktadır. Yani Linux çekirdeği, geçici kök dizin ve aygıt ağacı bu dosyadaki kodlar
+    tarafından yüklenmektedir. Kök dizinde ayrıca yine ikinci düzey boot loader görevinde olan "u-boot.bin" isimli diğer bir 
+    dosya da oluşturulmaktadır. Bu dosyanın başında birtakım başlık kısımları yoktur. Dolayısıyla bu dosya dosya sistemine 
+    yerleştirilmek yerine doğrudan sektörlere yazılmak için kullanılmaktadır. Yine kök dizinde "u-boot.dtb" isimli bir dosya 
+    da oluşturulmuştur. Bu dosya ileride ele alacağımız "aygıt ağacı" dosyasıdır.
+
+    9) Eğer sıfırdan yeni bir derleme yapmak isterseniz bunun için clean işlemi yapabilirsiniz:
+
+    $ make clean
+
+    Eğer U-Boot tarafından yaratılmış olan dosyaları da silmek isterseniz clean işlemini şöyle de yapabilirsiniz:
+
+    $ make distclean
+
+    distclean işleminden sonra artık default konfigürasyon dosyası da (".config" dosyasını kastediyoruz) silinmiş olacaktır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Pekiyi U-Boot hedef aygıt için derlendikten sonra elde edilen dosyaların konuşlandırılması nasıl yapılacaktır? Burada iki
+    yöntem izlenebilir. Birincisi micro SD kartımızda bir FAT bölümü oluşturup "MLO" ve "u-boot.img" dosyalarını bu FAT 
+    dosya sisteminin kök dizinine kopyalamktır. Bu gömülü Linux sistemlerinde izlenen klasik yoldur. Anımsayacağınız gibi bu 
+    yöntem Raspberry Pi'da aynı biçimde kullanılmaktadır. İkincisi elde edilen dosyaları micro SD kartın ilk sektörlerine
+    yazmaktır. ROM'daki kod eğer FAT disk bölümünü bulamazsa boot işlemini bu biçimde yapmaktadır. Anımsanacağı gibi BBB'nin 
+    kendi sitesindeki yeni imajlar bu yöntemi kullanmaktadır. Biz burada önce FAT dosya sistemi yöntemini kullanacağız. Ancak 
+    konuşlandırmayı yaptıktan sonra boot işlemi otomatik yapılmamaktadır. Bu işlemin nasıl otomatize edileceği izleyen paragraflarda
+    ele alınmaktadır.
+
+    Öncelikle micro SD kartımızı kullanıma hazır hale getireceğiz. Kartımızda bir tane FAT disk bölümü bir tane de Linux disk 
+    bölümü olmalıdır. İşlemleri sırasıyla şöyle yapabiliriz:
+
+    1) Kartımızı micro SD okuyucuya yerleştiririz. Aygıt dosyasının ismini "lsblk" komutu ile elde edebiliriz. Örneğin:
+
+    $ lsblk
+    NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+    loop0    7:0    0  3,5G  0 loop /home/kaan/Study/EmbeddedLinux/mydisk
+    sda      8:0    0   60G  0 disk
+    ├─sda1   8:1    0    1M  0 part
+    ├─sda2   8:2    0  513M  0 part /boot/efi
+    └─sda3   8:3    0 59,5G  0 part /
+    sdb      8:16   1    0B  0 disk
+    sdc      8:32   1 29,7G  0 disk
+    sdd      8:48   1    0B  0 disk
+    sr0     11:0    1 1024M  0 rom
+
+    Burada "sdc" aygıtı bizim micro SD kartımızı belirtmektedir. Aygıt dosyası "/dev/sdc" biçimindedir. O halde fdisk programı
+    ile bu blok aygıt dosyası üzerinde bölümleme yapabiliriz:
+
+    $ sudo fdisk /dev/sdc
+
+    2) Şimdi önce FAT disk bölümünü sonra da Linux disk bölümünü daha önce gördüğümüz komutlarla oluşturacağız:
+
+    ***********************************************************
+        Command (m for help): n
+    Partition type
+    p   primary (0 primary, 0 extended, 4 free)
+    e   extended (container for logical partitions)
+    Select (default p): p
+    Partition number (1-4, default 1): 1
+    First sector (2048-62333951, default 2048):
+    Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-62333951, default 62333951): +60M
+
+    Created a new partition 1 of type 'Linux' and of size 60 MiB.
+
+    Command (m for help): t
+    Selected partition 1
+    Hex code or alias (type L to list all): C
+    Changed type of partition 'Linux' to 'W95 FAT32 (LBA)'.
+
+    Command (m for help): p
+    Disk /dev/sdc: 29,72 GiB, 31914983424 bytes, 62333952 sectors
+    Disk model: MassStorageClass
+    Units: sectors of 1 * 512 = 512 bytes
+    Sector size (logical/physical): 512 bytes / 512 bytes
+    I/O size (minimum/optimal): 512 bytes / 512 bytes
+    Disklabel type: dos
+    Disk identifier: 0x04c91dbe
+
+    Device     Boot Start    End Sectors Size Id Type
+    /dev/sdc1        2048 124927  122880  60M  c W95 FAT32 (LBA)
+
+    Command (m for help): n
+    Partition type
+    p   primary (1 primary, 0 extended, 3 free)
+    e   extended (container for logical partitions)
+    Select (default p): p
+    Partition number (2-4, default 2):
+    First sector (124928-62333951, default 124928):
+    Last sector, +/-sectors or +/-size{K,M,G,T,P} (124928-62333951, default 62333951):
+
+    Created a new partition 2 of type 'Linux' and of size 29,7 GiB.
+
+    Command (m for help): p
+    Disk /dev/sdc: 29,72 GiB, 31914983424 bytes, 62333952 sectors
+    Disk model: MassStorageClass
+    Units: sectors of 1 * 512 = 512 bytes
+    Sector size (logical/physical): 512 bytes / 512 bytes
+    I/O size (minimum/optimal): 512 bytes / 512 bytes
+    Disklabel type: dos
+    Disk identifier: 0x04c91dbe
+
+    Device     Boot  Start      End  Sectors  Size Id Type
+    /dev/sdc1         2048   124927   122880   60M  c W95 FAT32 (LBA)
+    /dev/sdc2       124928 62333951 62209024 29,7G 83 Linux
+
+    Command (m for help): a
+    Partition number (1,2, default 2): 1
+
+    The bootable flag on partition 1 is enabled now.
+
+    Command (m for help): p
+    Disk /dev/sdc: 29,72 GiB, 31914983424 bytes, 62333952 sectors
+    Disk model: MassStorageClass
+    Units: sectors of 1 * 512 = 512 bytes
+    Sector size (logical/physical): 512 bytes / 512 bytes
+    I/O size (minimum/optimal): 512 bytes / 512 bytes
+    Disklabel type: dos
+    Disk identifier: 0x04c91dbe
+
+    Device     Boot  Start      End  Sectors  Size Id Type
+    /dev/sdc1  *      2048   124927   122880   60M  c W95 FAT32 (LBA)
+    /dev/sdc2       124928 62333951 62209024 29,7G 83 Linux
+
+    Command (m for help): w
+    The partition table has been altered.
+    Calling ioctl() to re-read partition table.
+    Syncing disks.
+    ***********************************************************
+
+    Görüldüğü gibi bu işlemin sonucunda bir FAT disk bölümü bir de Linux dosya bölümü oluşturulmuştur.
+
+    3) Şimdi ilgili disk bölümlerini ilgili dosya sistemleriyle formatlayalım:
+
+    $ sudo partprobe
+    $ sudo mkfs.fat /dev/sdc1 -F32 -n "BOOTFS"
+    $ sudo mkfs.ext2 /dev/sdc2 -L rootfs
+
+    4) U-Boot'ta oluşturduğumuz "MLO" ve "u-boot.img" dosyalarını FAT dosya sisteminin köküne kopyalamamız gerekir. Tabii 
+    bunun için önce mount işlemi yapmalıyız:
+
+    $ mkdir bootfs
+    $ sudo mount /dev/sdc1 bootfs
+    $ sudo cp u-boot/MLO u-boot/u-boot.img bootfs
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+												32. Ders 16/07/2024 - Salı
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    5) Şimdi biz SD kartımızın FAT disk bölümüne MLO ve u-boot.img dosyalarını kopyaladık. Ancak SD kartımızın Linux disk bölümü
+    boştur. Biz sistemi reboot etmeye çalışırsak bunu başaramayız. Çünkü u-boot'un yükleyeceği bir çekirdek imajı, aygıt ağacı
+    dosyası ve kök dosya sistemi yoktur. Bunları biz manuel bir biçimde Linux disk bölümünün boot dizini içerisine kopyalasak 
+    bile yine boot işlemini yapamayız. Çünkü SD kartımızın Linux disk bölümünde boot sonrasına devreye girmesi gereken dizin 
+    yapısı ve dosyalar da yoktur. Yani bizim boot işlemini yapabilmemiz için SD kartımızın kök dizininde kurulu bir Linux 
+    sisteminin olması gerekir. Biz minimal düzeyde boot işlemi yapılabilmesi için gerekli olan dizinlerin ve dosyaların nasıl 
+    oluşturulacağını ayrı bir başlık altında ele alacağız. Ancak burada daha pratik bir yöntem izleyeceğiz. Daha önce 
+    https://www.beagleboard.org/distros sitesinden indirdiğimiz imajın Linux disk bölümünü SD kartımızın Linux disk bölüme 
+    kopyalarsak bu durumda zaten her şeyiyle hazır olan Linux kurulumunu hemen kullanabiliriz. Bu kopyalama işlemini komut satırından 
+    dd komutuyla yapabiliriz. Aslında bunun için BBB disk imajının bir loop aygıtı olarak gösterilmesine gerek yoktur. Ancak biz 
+    daha önce öğrendiklerimizi uygulamak için bu yola sapalım. Siteden indirdiğimiz ve açtığımız BBB disk imajının ismi şöyledir:
+
+    am335x-debian-11.7-iot-armhf-2023-09-02-4gb.img
+
+    Bu imaja fdisk ile bakalım:
+
+    ***********************************************************
+    $ fdisk am335x-debian-11.7-iot-armhf-2023-09-02-4gb.img
+
+    Welcome to fdisk (util-linux 2.37.2).
+    Changes will remain in memory only, until you decide to write them.
+    Be careful before using the write command.
+
+    Command (m for help): p
+    Disk am335x-debian-11.7-iot-armhf-2023-09-02-4gb.img: 3,52 GiB, 3774873600 bytes, 7372800 sectors
+    Units: sectors of 1 * 512 = 512 bytes
+    Sector size (logical/physical): 512 bytes / 512 bytes
+    I/O size (minimum/optimal): 512 bytes / 512 bytes
+    Disklabel type: dos
+    Disk identifier: 0xee60af7b
+
+    Device                                           Boot Start     End Sectors  Size Id Type
+    am335x-debian-11.7-iot-armhf-2023-09-02-4gb.img1 *     8192 7372799 7364608  3,5G 83 Linux
+
+    Command (m for help):
+    ***********************************************************
+
+    Buradan disk bölümünün 8192'inci sektörden (512 * 8192 = 4194304 numaralı offset'ten) başladığı görülmektedir. O halde loop 
+    aygıtını bu offset'ten başlayacak biçimde ayarlayalım:
+
+    $ sudo losetup -o 4194304 /dev/loop0 am335x-debian-11.7-iot-armhf-2023-09-02-4gb.img
+
+    SD kartımızı kart okuyucuya takıp lsblk komutunu kullanalım:
+
+    $ lsblk
+    NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+    loop0    7:0    0  3,5G  0 loop
+    sda      8:0    0   60G  0 disk
+    ├─sda1   8:1    0    1M  0 part
+    ├─sda2   8:2    0  513M  0 part /boot/efi
+    └─sda3   8:3    0 59,5G  0 part /
+    sdb      8:16   1    0B  0 disk
+    sdc      8:32   1 29,7G  0 disk
+    ├─sdc1   8:33   1   60M  0 part /media/kaan/BOOTFS
+    └─sdc2   8:34   1 29,7G  0 part /media/kaan/a139ac97-bdce-4e23-9d9f-e7e342030530
+    sdd      8:48   1    0B  0 disk
+    sr0     11:0    1 1024M  0 rom
+
+    Burada SD kartın Linux disk bölümüne ilişkin aygıtın "/dev/sdc2" olduğu görülmektedir. O halde kopyalamayı şöyle yapabiliriz:
+
+    $ sudo dd if=/dev/loop0 of=/dev/sdc2 status=progress
+
+    Tabii burada işlem biraz zaman alacaktır. dd komutundaki "status=progress" komut satırı argümanı uzun süre alacak bu 
+    işlemde işlemin normal biçimde devam ilerlediğini gösteren bir geri bildirim verilmesini sağlamaktadır.
+
+    6) Bu biçimde oluşturduğumuz SD kartımızı BBB'nin SD kart slotuna takıp Boot düğmesine basılı biçimde BBB'ye güç verdiğimizde
+    boot işlemi henüz otomatik biçimde gerçekleşmeyecektir. Bu aşamadan sonra bu boot işleminin nasıl yapılacağı izleyen 
+    paragraflarda ele alınmaktadır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Yukarıdaki işlemlerde bizim henüz incelemediğimiz şu konular vardır:
+
+    1) Sistem boot edilirken Linux disk bölümündeki boot dizininde şu dosyaların bulunuyor olması gerekir:
+
+        - Linux çekirdek imaj dosyası (Linux kernel image)
+        - Aygıt ağacı dosyası (device tree file)
+        - Geçici kök dosya sistemini bulunduran ramdisk dosyası
+
+    Pekiyi bu dosyalar nasıl elde edilecektir? Biz yukarıda zaten hazır disk imajını kullandığımız için bu dsoyaları biz 
+    oluşturmadık. Linux çekirdek imaj dosyası Linux çekirdeğinin kaynak kodları derlenerek oluşturulmaktadır. Aygıt ağacı 
+    dosyası çeşitli yardımcı programlarla oluşturulabilmektedir. Yine geçici kök dosya sistemine ilişkin ramdisk dosyası 
+    da çeşitli yardımcı programlarla oluşturulabilmektedir.
+
+    2) Linux boot edilirken yalnızca yukarıdaki dosyalar değil kalıcı kök dosya sistemine ilişkin dosyaların da SD kartta 
+    bulunması gerekir. Yani başka bir deyişle bizim SD kartımızda dolu bir Linux sisteminin konuşlandırılmış olması gerekir. 
+    Çünkü boot sürecinde çekirdek kendini ayarladıktan sonra dosya sistemindeki bazı programları çalıştırmaktadır. Örneğin 
+    bunlardan en önemlisi "init" paketi denilen ve şimdilerde daha çok "systemd" biçiminde kullanılan pakettir.
+
+    3) Yukarıda belirttiğimiz tüm dosyalar olması gereken yerlerde bulunuyor olsa bile yine de boot işlemi otomatik bir biçimde 
+    gerçekleştirilemeyecektir. Boot işleminin otomatik bir biçimde yapılabilmesi için U-Boot'a ilişkin bazı düzenlemelere 
+    gereksinim duyulmaktadır.
+
+    Bu konular kursumuzmda izleyen konularda tek tek ele alınacaktır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Anımsanacağı gibi artık BeagleBoard sitesinde BBB için indirilen imajda bir FAT dosya sistemi bulunmamaktadır. Pekiyi bu 
+    durumda bu imaj ile boot işlemi nasıl yapılmaktadır? İşte BBB reset edildiğinde BBB içerisindeki ROM kodu önce SD karttaki 
+    FAT disk bölümünü aramakta eğer onu bulursa MLO prgramını oradan yüklemektedir. Ancak SD kartta bir FAT bölümünü bulamazsa 
+    bu durumda SD kartın 0x20000 offsetindeki disk bloklarını SRAM'e yükleyip oradaki kodu çalıştırmaktadır. Yani eğer biz MLO
+    programını FAT disk bölümüne yerleştirmeyeceksek SD kartın 0x20000 offsetine (256'ıncı sektörüne) kopyalamalıyız. MLO programı 
+    default durumda "u-boot.img" dosyasını eğer FAT disk bölümü yoksa SD kartın 0x60000 offsetinden (768'inci) sektörden yüklemektedir. 
+    Bu durumda bizim "u-boot.img" dosyasını bu offset'ten itibaren SD karta kopyalamamız gerekir. Bu işlemler aşağıdaki gibi 
+    yapılabilir:
+
+    $ sudo dd if=MLO of=/dev/sdc bs=512 seek=256
+    $ sudo dd if=u-boot.img of=/dev/sdc bs=512 seek=768
+
+    Burada "dev/sdc" aygıt dosyası SD kartı belirtmektedir. Tabii bizim yine kök dosya sisteminin bulunduğu içi dolu bir Linux
+    disk bölümümüzün olması gerekir. Tipik olarak bu Linux disk bölümünü SD kartımızın 8192'inci sektöründen oluşturabiliriz.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+												33. Ders 18/07/2024 - Perşembe
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Bugünkü masaüstü bilgisayarlarda artık klasik seri port'lar bulundurulmamaktadır. Seri port bağlantısı gereken yerlerde 
+    "seri port-USB" dönüştürücüleri kullanılmaktadır. Biz kursumuzun başında üç uçlu böyle bir dönüştürücüyü (CP2102 bodülü) 
+    malzeme listesine eklemiştik. Kursumuzda kullandığımız CP2102 modülünde seri port için üç uç bulunmaktadır. Bu uçlar RxD, 
+    TxD ve GND uçlarıdır. Seri port bağlantısında bir tarafın RxD ucu karşı tarafın TxD ucuna, TxD ucu ise karşı tarafın RxD 
+    ucuna bağlanır. GND uçları da karşılıklı bağlanmaktadır. Yani bağlantı şöyle yapılmaktadır.
+
+    RxD <------ TxD
+    TxD ------> RxD
+    GND ------- GND
+
+    Bu durumda biz kullandığımız CP2102 modülünün RxD ucunun BBB'nin TxD ucuna, TxD ucunun ise BBB'nin RxD ucuna bağlanması 
+    gerekir. GNC uçları da karşılıklı bağlanmalıdır. BBB'nin yeni modellerinde seri port için GPIO soketlerinin yanında 6 
+    tane erkek pin bulunmaktadır. Bu pinlerin bizim için önemli olan üç tanesi şöyledir:
+
+    PIN-1 ---> GND
+    PIN-4 ---> RxD
+    PIN-5 ---> TxD
+
+    Seri port haberleşmesi aslında oldukça basittir. Gönderici taraf bir byte'ı bitlerine ayrıştrır ve TxD ucundan bu bitleri 
+    belli bir periyotta gönderir. Karşı taraf da RxD ucunu aynı periyotta örnekler ve bitleri alır. Bu haberleşmede byte'lar 
+    arasındaki süre değişebilir, ancak byte'ların bitleri aynı hızda gönderilip alınmaktadır. Başka bir deyişle bir grup byte
+    biçimde gönderilip alınacaksa byte'lar arasındaki süreler değişebilir. Ancak bir byte'ın bitleri belirlenen hızda gönderilip
+    alınmaktadır. İki tarafın belirlediği bu hız için genellikle "baud rate" terimi kullanılmaktadır. Bu tarz seri haberleşmelere
+    "asenkron seri haberleşmeler (asynchronous serial communication)" denilmektedir. (Eğer byte'ların da aynı hızda gönderilmesi 
+    söz konusu ise buna da genellikle "senkron seri haberleşme (synchronous serial communication)" denilmektedir.) Asenkron seri 
+    haberlerşmede byte'ların bitlere ayrıştırılması ve gönderilip alınması için özel devreler tasarlanmıştır. Bu devrelere genel 
+    olarak UART (Universial Aysnchronous Transmitter ans Receiver) denilmektedir. Eski kişisel bilgisayarlarda UART devresi olarak 
+    Intel'in 8250 işlemcisi kullanılıyordu. Sonra NS firmasının 16550 işlemcileri yaygın kullanılmaya başlandı. Bugün artık USB 
+    haberleşmesinin yaygınlaşmasıyla UART haberleşmesi çok az kullanılır hale gelmiştir. UART işlemcilerinin çıktıları TTL 
+    düzeyindedir (ani kabaca +5V, 0V). Ancak eski PC'lerde uzun kablolar ile haberleşme yapılabilmesi için UART çıkış seviyeleri 
+    RS232 denilen standarda (-15V, +15V) yükseltilmektedir.
+
+    Seri port ayarlanırken aşağıdaki parametrelerin belirlenmiş olması gerekir:
+
+    - Data bitlerinin sayısı (5, 6, 7 ya da 8)
+    - Stop bit sayısı (1 ya da 2)
+    - Parity durumu (none, even ya da odd)
+    - Baud rate
+
+    En çok kullanılan ayar takımı "8 data bit, 1 stop bit, no parity ve en yüksek hız olan 115200 baud rate" biçimindedir. 
+    Zaten pek çok programda baud rate dışındaki default ayarlar bu biçimdedir. Asenkron seri haberleşmede bilgi gönderilmiyorken 
+    hat lojik 1 seviyesinde bekletilir. Bilgi gönderilmeye başlanacakken hat bir periyot lojik 0'a çekilir. Sonra belirlenen 
+    kadar data biti belirlenen baud rate ile kodlanır. Data bitleri gönderildikten sonra isteğe bağlı bir parity biti de 
+    gönderilebilmektedir. Parity "gönderilen bitlerdeki 1'lerin sayısını çifte ya da teke tamamlamak için gereken" bite 
+    denilmektedir. Çift parity (even parity) çifte tamamlama, tek parity ise teke tamamlama anlamına gelmektedir. Bu bitler
+    gönderildikten sonra hattın yeniden lojik 1 seviyesine çekilmesi gerekmektedir. Buna da "stop bit" denilmektedir. Norrmal 
+    durumda 1 stop bir kullanılmaktadır. Eskiden haberleşmeyi yavaşlatmak için 2 stop bit de kullanılabiliyordu.
+
+    Asenkron seri haberleşme aslında 3 uçtan daha fazla uçla da yapılabilmektedir. Diğer uçlar genellikle "akış kontrolü 
+    (flow control)" için kullanılmaktadır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Seri port üzerinde işlem yapmak için kullanılan çeşitli yardımcı programlar vardır. En çok tercih edilenlerden biri 
+    PuTTY isimli programdır. Bu program hem Windows sistemleri hem de Linux sistemleri için bulunmaktadır. Siz de Linux sisteminize
+    programı aşağıdaki gibi kuarabilirsiniz:
+
+    $ sudo apt-get install putty
+
+    Linux'ta seri port-USB dönüştürücüsü için aygıt dosyası genellikle "/dev/ttyUSB0" biçimindedir. Yani biz bu aygıt sürücüyü 
+    open fonksiyonuyla açarsak read fonksiyonuyla karşı tarafın gönderdiği byte'ları okuyabiliriz. write fonksiyonuyla da 
+    karşı atarafa byte'lar gönderebiliriz. IOCTL işlemleri ile seri port konfügüre edilebilmektedir.
+
+    Linux sistemlerinde seri port haberleşmesi için yaygın biçimde kullanılan diğer bir program da "picocom" isimli programdır. 
+    Programı şöyle indirip kurabilirsiniz:
+
+    $ sudo apt-get install picocom
+
+    "picocom" ile seri port bağlantısını aşağıdaki gibi yapabilirsiniz:
+
+    $ picocom -b 115200 /dev/ttyUSB0
+
+    Burada -b seri port'un hızını belirlemek için kullanılmaktadır. Default durumda zaten parity off, data birlerinin sayısı 8 
+    ve 1 stop bit söz konusudur.
+
+    Diğer bir alternatif de "minicom" isimli programdır. Bu programı da aşağıdaki gibi indirip kurabilirsiniz:
+
+    $ sudo apt-get install minicom
+
+    Programın örnek kullanımı şöyledir:
+
+    $ minicom -D /dev/ttySUB0 -b 115200
+
+    Diğer bir alternatif de "screen" isimli programdır. Programı şöyle indirip kuarabilirsiniz:
+
+    $ sudo apt-get install screen
+
+    Örnek bir kullanım şöyle olabilir:
+
+    $ screen /dev/ttyUSB0 115200
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    BBB cihazımızla bilgisayarımızı CP2102 modülü ile bağladıktan sonra artık U-Boot boot sürecinde olan biteni gözlemleyebiliriz
+    ve boot süreci üzerinde etkili olabiliriz. U-Boot boot loader'ı bir komut satırı eşliğinde kullanıcıdan komutlar alabilmektedir. 
+    Tabii bunun için önce U-Boot'ub komut satırına düşmek gerekir. Bunun için yapılması gereken şeyler şunlardır:
+
+    1) PC tarafındaki seri port'u hızı 115200 baud, 8 bit veri ve 1 stop bit ve No Parity olacak biçimde ayarlamalısınız. Seri 
+    porta ilişkin aygıt dosyası yukarıda da belirttiğimiz gibi genellikle "/dev/ttyUSB0" biçimindedir. putty programını sudo 
+    ile çalıştırmayı unutmayınız.
+
+    2) Aygıtınızı reset ederken klavyeden bir tuşa basınız. (Eğer bu tuşa zamanında basamazsanız komut satırını kaçırabilirsiniz. 
+    Bu nedenle reset işlemi sırasında klavyeden herhangi bir tuşa basarak bekleyebilirsiniz.)
+
+    U-Boot'un komut satırı imleci => biçimindedir. U-Boot komut satırına düşmekteki amacımız manuel biçimde bazı ayaralamaları
+    yapıp boot sürecini manuel yürütebilmektir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    U-Boot komut satırında bizim girebileceğimiz çeşitli komutlar vardır. Bu komutların listesi için "U-Boot Reference Manual"
+    isimli dokümandan ya da kendi sitesindeki dokümanlardan faydalanabilirsiniz. Bunun için doğrudan U-Boot komut satırındaki 
+    "help" komutunu da kullanabilirsiniz. Aşağıda önemli U-Boot kabuk komutları hakkında kısa açıklamalar yapıyoruz:
+
+    - Komut satırına düştükten sonra boot işlemini sanki komut satırına düşmemişsiniz gibi devam ettirkemk için "boot" komutu 
+    kullanılmaktadır.
+
+    - "bdinfo (board info)" komutu genel olarak kullandığımız kart hakkında donanımsal bilgileri bize vermektedir.
+
+    - U-Boot'ta önemli bir kavram "çevre değişkeni (envirionmet variable)" kavramıdır. Tabii buradaki çevre dğeişkeni kavramının
+    Linux sistemlerindeki çevre değişkenei kavramıyla bir ilgisiyi yoktur. Buradaki çevre değişkeni birtakım ayarlamalarda 
+    kullanılan değişkenlerdir. Ancak uygulamacı da çevre değişkeni yaratabilmektedir. Bir çevre değişkeni bir sisim ve ona karşı
+    gelen bir yazıdan oluşmaktadır.
+
+    - Bir çevre değişkeninin değeri "printenv" komutuyla elde edilebilir. Örneğin:
+
+    => printenv loadaddr
+    loadaddr=0x82000000
+    => printenv bootcmd
+    bootcmd=run findfdt; run init_console; run envboot; run distro_bootcmd
+
+    - Yeni bir çevre değişkeni oluşturmak için "setenv" komutu kullanılmaktadır. Bu komutta önce çevre değişkeninin ismi boşluk
+    ve sonra da değeri girilir. Tırnaklama zorunluluğu yoktur. Örneğin:
+
+    => setenv myenv "this is a test"
+    => printenv myenv
+    myenv=this is a test
+
+    - Bir çevre değişkeninin değeri tıpkı UNIX/Linux sistemlerinin kabuklarında olduğu gibi ${çevre_değişkeni} biçiminde elde 
+    edilebilir. Örneğin:
+
+    => setenv myenv "loading address = ${loadaddr}"
+    => printenv myenv
+    myenv=loading address = 0x82000000
+
+    - "resetenv" komutu tüm standart çevre değişkenlerini komut satırına ilk düşüldüğü değerlere geri çekmektedir.
+
+    - Bir çevre değişkeni aslında bir script gibi de kullanılabilmektedir. Script içerisinde birden fazla komut varsa komutlar 
+    ';' karakteriyle ayrılmalıdır. Bir script'i çalıştırmak için "run" komutu kullanılmaktadır. Örneğin:
+
+    => setenv myscript 'printenv loadaddr;printenv fdtaddr'
+    => run myscript
+    loadaddr=0x82000000
+    fdtaddr=0x88000000
+
+    Burada myscript bir çevre değişkeni biçiminde oluşturulmuştur. "run" komutu uygulandığında o çevre değişkenindeki komutlar
+    çalıştırılmaktadır.
+
+    - U-Boot içerisinde bazı built-in çevre değişkenleri de vardır. Örneğin "baudrate" çevre değişkeni cihazın seri port hızını 
+    belirtmektedir. Değerini şöyle yazdırabiliriz:
+
+    => printenv baudrate
+    baudrate=115200
+
+    Bu buil-in çevre değişkenlerinin değerleri değiştirilebilir. Örneğin iyi bir fikir olmasa da biz U-Boot'un kullandığı seri port 
+    hızını "setenv" komutu ile değiştirebiliriz:
+
+    => setenv baudrate 9600
+    ## Switch baudrate to 9600 bps and press ENTER ...
+
+    - Built-in "bootcmd" çevre değişkeni default boot işlemini devam ettirmektedir. Zaten "boot" komutu da bu script'i 
+    çalıştırmaktadır.
+
+    - Aslında çevre değişkenlerine ilişkin printenv, "setenv", "resetenv" gibi komutlar yerine daha genel olan "env" komutunun 
+    argümanlı biçimleri de kullanılabilir. "env" komutlarının listesi şöyledir:
+
+    env ask name [message] [size]
+    env callbacks
+    env default [-f] (-a | var [...])
+    env delete [-f] var [...]
+    env edit name
+    env erase
+    env exists name
+    env export [-t | -b | -c] [-s size] addr [var ...]
+    env flags
+    env grep [-e] [-n | -v | -b] string [...]
+    env import [-d] [-t [-r] | -b | -c] addr [size] [var ...]
+    env info [-d] [-p] [-q]
+    env load
+    env print [-a | name ...]
+    env print -e [-guid guid] [-n] [name ...]
+    env run var [...]
+    env save
+    env select [target]
+    env set [-f] name [value]
+    env set -e [-nv][-bs][-rt][-at][-a][-i addr:size][-v] name [value]
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+												34. Ders 23/07/2024 - Salı
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    U-Boot komut satırında aygıtlara birer isim verilmektedir. Bu isimler flash bellekler için mm0, mmc1, ... biçimindedir. 
+    O anda hangi disk aygıtlarına erişilebileceği bilgisi lsblk komutuyla elde edilebilir. (Bu lsblk komutu Linux'un lsblk komutu 
+    değildir. U-Boot isim benzerliği oluşturmuştur.) Örneğin:
+
+    => lsblk
+    Block Driver          Devices
+    -----------------------------
+    efi_blk             : <none>
+    mmc_blk             : mmc 0, mmc 1
+    usb_storage_blk     : <none>
+
+    Burada mmc 0 ve mmc 1 biçiminde iki aygıtın olduğu görülmektedir. Bu aygıt isimleri izleyen paragraflarda açıklayacağımız 
+    bazı komutlarda kullanılacaktır. Eğer ilgili blok aygıtlarında disk bölümü varsa bu disk bölümleri 1'den başlatılmaktadır.
+    Çeşitli komutlarda disk bölümü aşağıdaki kalıpla belirtilmektedir:
+
+    mmc 0:1
+    mmc 1:1
+
+    Burada ':' karakterinin solundaki sayı aygıtın numarasını sağındaki sayı ise onun disk bölümünü belirtmektedir. Genel 
+    olarak SD kart yuvasına takılan SD kartın aygıt ismi mmc 0, internal eMMC'nin ise mmc 1 biçimindedir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    - Belli bir dosya sisteminin içerisindeki dosyaları görebilmek için "ext2ls", "ext4ls" "fatls" gibi komutlar bulunmaktadır. Bu 
+    komutlar birinci argüman olarak disk bölümünü almaktadır. Bu disk bölümü yukarıda açıkladığımız kalıpta mmc x:y biçiminde 
+    belirtilmelidir. Örneğin:
+
+    => fatls mmc 0:1
+   110272   MLO
+        0   u-boot.img
+
+    2 file(s), 0 dir(s)
+
+    => ext4ls mmc 0:2 /boot
+    <DIR>       4096 .
+    <DIR>       4096 ..
+            7719588 initrd.img-5.10.168-ti-r71
+    <DIR>       4096 dtbs
+            190939 config-5.10.168-ti-r71
+            11342336 vmlinuz-5.10.168-ti-r71
+            4782766 System.map-5.10.168-ti-r71
+                1713 uEnv.txt
+                542 SOC.sh
+    <DIR>       4096 uboot
+            11342336 vmlinuz
+            89880 u-boot.dtb
+            93494 am335x-boneblack.dtb
+
+    Belli bir disk bölümündeki dosya sistemininin ne olduğunu anlamak için "fstype" komutu kullanılabilir. Örneğin:
+
+    => fstype mmc 0:2
+    ext4
+    => fstype mmc 0:1
+    fat
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    - "mmc list" komutu bağlı olan disklerin listesini elde etmek için kullanılmaktadır. Örneğin:
+
+    => mmc list
+    OMAP SD/MMC: 0 (SD)
+    OMAP SD/MMC: 1 (eMMC)
+
+    Bu komut sayesinde biz hangi mmc numarasının hangi medya olduğunu anlayabiliriz. Örneğin yukarıdaki çıktıdan 0 numaralı diskin 
+    SD kart olduğu, 1 numaralı diskin imternal SD (eMMC) olduğu anlaşılmaktadır.
+
+    - mmc komutunun bazı argümanlı biçimleri default disk üzerinde işlem yapmaktadır. Default diskin değiştirilmesi "mmc dev <numara>" 
+    komutuyla yapılmaktadır. Örneğin:
+
+    => mmc dev 0
+    switch to partitions #0, OK
+    mmc0 is current device
+
+    - "mmc dev" komutu disk numarası verilmeden kullanılırsa aktif olan diskin hangisi olduğunu yazdırmaktadır. Örneğin:
+
+    => mmc dev
+    switch to partitions #0, OK
+    mmc0 is current device
+
+    - "mmc part" komutu aktif diskin disk bölümlemesi hakkında bilgi vermektedir. Örneğin:
+
+    => mmc part
+
+    Partition Map for MMC device 0  --   Partition Type: DOS
+
+    Part    Start Sector    Num Sectors     UUID            Type
+    1     2048            122853          58501095-01     0b
+    2     124928          62209024        58501095-02     83
+
+    - "mmc read" ve "mmc write" komutları disk sektörlerini belleğe okumak ve bellekten disk sektörlerine yazma yapmak için 
+    kullanılmaktadır. Bu komutların genel biçimi şöyledir:
+
+    mmc read <adres> <sektör_numarası> <sektör_sayısı>
+    mmc write <adres> <sektör_numarası> <sektör_sayısı>
+
+    Bu komutların dosya sisteminden dosya okuyup yazmadığına sektör temelinde işlem yaptığına dikkat ediniz. Komutlar default
+    disk üzerinde işlem yapmaktadır. Diskin bir dik bölümü üzerinde işlem yapmamaktadır.
+
+    - "mmc rescan" komutu ile hang disklerin ve disklerdeki hangi disk bölümlerinin mevcut olduğu bilgisi güncellenmektedir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    - U-Boot komut satırında diskteki dosyaları belleğe yüklemek için bir grup komut bulunmaktadır. Komutlar dosya sistemlerine 
+    göre "xxxload" biçiminde isimlendirilmiştir. Örneğin ext-4 dosya sistemindeki bir dosyayı belleğe yüklemek için "ext4load", 
+    ext2 dosya sistemindeki bir dosyayı belleğe yüklemek için "ext2load", FAT dosya sistemindeki bir dosyayı belleğe yüklemek 
+    için "fatload" komutu kullanılmaktadır.
+
+    BBB'de U-Boot'un komut satırında dosyaları belleğe yüklerken BBB özelinde bazı noktalara dikkat etmek gerekir. BBB'de TI
+    firmasının 335X SoC çiplerinde fiziksel RAM 4GB'lik bellek alanın başına değil ortasına yerleştirilmiştir. 4GB'lik bellek 
+    alanının ilk 2GB'si bazı aygıtlara (memory mapped IO) ayrılmıştır. Bu nedenle BBB'nin bellek haritalandırması kabaca aşağıdaki 
+    gibidir:
+
+    00000000
+        Aygıtlar İçin Memory Mapped IO
+    80000000
+        DRAM Bllek
+    FFFFFFFF
+
+    U-Boot çalışırken işlemcinin sayfalama mekanizması (paging) aktive edilmemiştir. Dolayısıyla U-Boot'taki tüm adresler 
+    gerçek fiziksel adreslerdir. O halde BBB'de bizim bellek adresi olarak kullanacağımız adreslerin 0x80000000'dan başlaması 
+    gerekir. Tabii U-Boot'un ikinci düzey boot loader'ı (u-boot.img) o anda bellektedir. BBB'de U-Boot'un kendisi default 
+    durumda DRAM başlangıcından itibaren (yani 0x80000000'dan itibaren) belleğe yüklenmiş durumdadır. O halde bizim bellek 
+    adresi olarak biraz daha öte adresleri kullanmamız gerekir. Örneğin default durumda genellikle çekirdek imajı 0x82000000
+    adresine aygıt ağacı ise 0x88000000 adresine yüklenmektedir. Tabii bu değerlerin bir özelliği yoktur.
+
+    "xxxload" komutlarının genel biçimi şöyledir:
+
+    xxxload mmc x:y <adres> <dosyanın_yol_ifadesi>
+
+    Aslında "ext4load" gibi "fatload" gibi "xxxload" komutlarının yanı sıra doğrudan "load" isimli bir komut da vardır. Bu komut 
+    önce ilgili aygıttaki dosya sistemini kendisi tespit etmekte ve o dosya sistemine göre otomatik yükleme yapmaktadır. load 
+    komutları kullanıldıktan sonra son load edilen dosyaya ilişkin yükleme adresi (bu adresi zaten biz veriyoruz) "fileaddr" 
+    isimli çevre değişkeninden, yüklenen dosyanın uzunluğu da "filesize" isimli çevre değişkeninden elde edilebilir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Örneğin biz ext4 dosya sistemi içerisindeki "/boot" dizininde bulunan "vmlinuz-5.10.168-ti-r71" isimli çekirdek imajını 
+    bellekte 0x82000000 fiziksel adresine şöye yükleyebiliriz:
+
+    => ext4load mmc 0:2 0x82000000 /boot/vmlinuz-5.10.168-ti-r71
+
+    Bu komut uygulandığıdan U-Boot bize kaç byte'lık bir bilginin transfer edildiğini rapor edecektir:
+
+    => ext4load mmc 0:2 0x82000000 /boot/vmlinuz-5.10.168-ti-r71
+    11342336 bytes read in 731 ms (14.8 MiB/s)
+
+    Biz şimdi çekirdek imajını belleğe yüklemiş olduk. Aslında yalnızca U-Boot'ta değil tüm boot loader'larda bir biçimde 
+    çekirdek imajının RAM'e yüklenmesi gerekmektedir. Biz bunu manuel bir biçimde yapmış olduk. Ancak tek başına çekirdek imajı
+    Linux'u boot etmek için yeterli değildir. En azından bir aygıt ağacının da yüklenmesi gerekir. Hazır BBB imajımızda
+    aygıt ağacı "/boot/dtbs/5.10.168-ti-r71" dizininde "am335x-boneblack.dtb" ismiyle bulunmaktadır. O halde aygıt ağacını da
+    şöyle yükleyebiliriz:
+
+    => ext4load mmc 0:2 0x88000000 /boot/dtbs/5.10.168-ti-r71/am335x-boneblack.dtb
+
+    Tabii biz aslında U-Boot'u BBB için derlediğimizde elde ettiğimiz "u-boot.dtb" aygıt ağacı dosyasını da kullanabilirdik.
+
+    Bundan sonra çerkirek komut satırı parametrelerinin oluşturulması gerekmektedir. U-Boot çekirdek komut satırı parametreleri 
+    için "bootargs" çevre değişkenine başvurmaktadır. O halde bizim "bootargs" çevre değişkenini oluşturmamız gerekir. Minimal 
+    çekirdek komut satırı parametreleri şöyle oluşturulabilir:
+
+    => setenv bootargs 'console=ttyS0,115200 root=/dev/mmcblk0p2 rw'
+
+    Burada "root=/dev/mmcblk0p2" parametresi kök dosya sisteminin mmcblk0 aygıtındaki (SD kart) 2 numaralı disk bölününde olduğunu
+    belirtmektedir. (1 numaralı disk bölümünün FAT disk bölümü olduğuna dikkat ediniz.) Artık her şey hazırlanmıştır. boot işlemi 
+    yapılabilir. u-Boot'ta bir grup boot komutu vardır. Sıkıştırılmış çekirdek ile (Buna "zimage" de denilmektedir) boot işlemi 
+    yapmak için "bootz" komutu kullanılmaktadır. bootz komutunun genel biçimi şöyledir:
+
+    bootz [çekirdek_imajının_adresi] [geçici_kök_dosya_sisteminin_adresi] [aygıt_ağacının_adresi]
+
+    Eğer komutta başlangıçtaki ramdisk (geçici kök dosya sistemi) belirtilmeyecekse onun yerine '-' karakteri girilmelidir. 
+    O halde biz boot işlemini şöyle gerçekleştirebiliriz:
+
+    => bootz 0x82000000 - 0x88000000
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+												35. Ders 25/07/2024 - Perşembe
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    - U-Boot'ta script çalıştırma işlemi için iki temel komut kullanılmaktadır: "run" ve "source" komutları. "run" komutu bir 
+    çevre değişkeninin içerisindeki komutları çalıştırmaktadır. Örneğin biz bir çevre değişkenine noktalı virgüller ile komutlar
+    girebiliriz. Sonra o komutları "run" komutuyla çalıştırabiliriz. "run" komutunun genel biçimi şöyledir:
+
+    run <çevre_değişkeninin_ismi>
+
+    Örneğin:
+
+    => setenv myscript "echo \"this is a test script\"; mmc list;"
+    => run myscript
+    "this is a test script"
+    OMAP SD/MMC: 0 (SD)
+    OMAP SD/MMC: 1 (eMMC)
+
+    U-Boot'un da bir script dili vardır. Bu script dili bash kabuğunun diline oldukça benzemektedir. Örneğin biz tıpkı bash'te 
+    olduğu gibi döngüler kurabiliriz, if deyimini kullanabiliriz.
+
+    "source" komutu derlenmiş bir biçimde bellekte bulunan komutları çalıştırmak için kullanılmaktadır. Bir script dosyasını 
+    binary hale getirerek (derleyerek) onu belleğe yükleyip "source" komutuyla çalıştırabiliriz. Script dosyasını derlemek için 
+    U-Boot projesindeki "mkimage" isimli program kullanılmaktadır. Bu program "u-boot-tools" paketi içerisindedir. Paketi şöyle 
+    install edebilirsiniz:
+
+    $ sudo apt-get install u-boot-tools
+
+    "mkimage" programının çeşitli komut satırı argümanları vardır. Örneğin "-A (architecture)" seçeneği derlemenin hangi işlemci
+    ailesine göre yapılacağını belirtmektedir. Biz ARM işlemcileriyla çalıştığımıza göre "-A arm" seçeneğini kullanmalıyız. 
+    "-d" seçeneği kaynak dosyanın yol ifadesini belirtmektedir. "-T (type)" seçeneği kaynak dosyanın ne dosyası olduğunu 
+    belirtmektedir. Biz bu bağlamda script dosyasını derleyeceğimize göre bu seçeneği "-T script" biçiminde kullanmalıyız. 
+    "-n (name)" seçeneği derlenmiş dosyaya içsel isim vermek için kullanılmaktadır. "-C (compression)" seçeneği üretilen binary 
+    kodda sıkıştırma biçimine belirlemekte kullanılmaktadır. Biz burada sıkıştırma istemediğimiz için bu seçeneği "-C none" 
+    biçiminde girebiliriz. O halde örneğin "test.cmd" dosyası içerisindeki U-Boot script'ini "mkimage" programı ile şöyle 
+    derleyebiliriz:
+
+    $ mkimage -A arm -T script -C none -n "My Script" -d test.cmd test.scr
+
+    Burada "test.cmd" script dosyası ARM için derlenerek "test.scr" haline getirilmiştir. Artık derlenmiş olan bu script'i 
+    belleğe yükleyerek "source" komutuyla çalıştırabiliriz:
+
+    => ext4load mmc 0:2 0x85000000 /home/debian/test.scr
+    => source 0x85000000
+    ## Executing script at 85000000
+    script starts...
+    OMAP SD/MMC: 0 (SD)
+    OMAP SD/MMC: 1
+    script ends...
+
+    Buradaki örnek "test.cmd" dosyasının içeriği şöyledir:
+
+    echo "script starts..."
+    mmc list
+    echo "script ends..."
+
+    Pekiyi bizim bir script dosyasını derleyip yukarıdaki gibi çalıştırabilmemizin ne faydası olabilir? İşte buradan amaç 
+    aslında kullanıcının oluşturduğu bir dosyadakilerin boot zamanı sırasında devreye sokulabilmesidir. Yani amaç U-Boot'un
+    komut satırına düşmeden tamamen Linux'ta bir dosyanın içerisine komutları yazarak U-Boot'un bunları otomatik olarak 
+    çalıştırmasını sağlamaktır. İzleyen paragraflarda bunun başka bir yolununuın da olduğunu göreceksiniz.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Daha önceden de belirttiğimiz gibi default durumda boot işlemi "bootcmd" isimli bir çevre değişkenindeki script'in çalıştırılması 
+    ile yapılmaktadır. "boot" komutu ile "run bootcmd" komutunun aynı anlama geldiğini anımsayınız. O halde biz "bootcmd" çevre 
+    değişkenini kalıcı bir biçimde değiştirirsek boot işleminde istediğimiz etkiyi yaratabiliriz. Bunun için komut satırına düşmemiz 
+    gerekmez. U-Boot çevre değişkenlerini kalıcı hale getirmek için birkaç yol söz konusu olabilir. Çevre değişkenleri komut 
+    satırında değiştirilip "saveenv" komutu uygulanırsa disk üzerinde çevre değişkenleri saklanacağı için bir sonraki boot 
+    işleminde değişiklikler devreye girebilmektedir. Diğer bir yol default durumda (bu konfigürasyon sırasında değiştirilebilir) 
+    U-Boot'un çevre değişkenlerini bir dosyadan okumasıdır. Böylece bu dosya üzerinde dğişikli yapılarak uygulamacı boot süreci 
+    üzerinde etkili olabilmektedir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+												36. Ders 01/08/2024 - Perşembe
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    - Normal olarak çevre değişkenleri saveenv komutu ile boot edilen medyada saklanabilmektedir. Böylece U-Boot yeniden açılırken
+    bu yeni evre değişkenlerini dikkate alacaktır. Ancak çevre değişkenlerinin save edilmesi konusunda bazı problemlerle karşılaşılabilir.
+    Örneğin U-Boot konfigüre edilirken bu save özelliği devre dışı bırakılmış olabilir. Ancak default durumda bu save işleminin 
+    yapılabilmesi gerekir. Save işleminin hangi dosya sistemine yapılabileceği de yine U-Boot konfigüre edilirken belirlenebilmektedir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+												37. Ders 06/08/2024 - Salı
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    U-Boot'ta reset işlemi yapıldığında U-Boot default durumda "botcmd" isimli bir çevre değişkenindeki script'i çalıştırdığına
+    göre biz bu çevre değişkenine kendi script'imizi girip "bootargs" çevre değişkenini de istediğimiz gibi oluşturup "saveenv" 
+    işlemini yaparsak boot işleminin otomatik olarak bizim istediğimiz gibi yapılmasını sağlayabiliriz. Örneğin:
+
+    => setenv bootcmd "ext4load mmc 0:2 0x82000000 /boot/vmlinuz-5.10.168-ti-r71;ext4load mmc 0:2 0x88000000
+    /boot/dtbs/5.10.168-ti-r71/am335x-boneblack.dtb;bootz 0x82000000 - 0x88000000"
+    => setenv bootargs "console=ttyS0,115200 root=/dev/mmcblk0p2 rw"
+    => saveenv
+    Saving Environments to FAT... OK
+
+    Artık boot komutunu uyguladığımızda ya da yeniden reset işlemi yaptığımızda bizim yönergelerimizle boot işlemi gerçekleşecektir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+												38. Ders 08/08/2024 - Perşembe
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    U-Boot'u derlediğimizde "bootcmd" çevre değişkeni default bir değere sahip olmaktadır. Böylece boot işlemi bu default "bootcmd"
+    değişkenindeki script ile yapılmaktadır. Pekiyi bu default "bootcmd" script'i nasıl belirlenmektedir? İşte aslında U-Boot 
+    derlenirken bu script ilgili hedef platforma göre default değerini almaktadır. Ancak U-Boot'un belli bir versiyonundan sonra
+    hiç kaynak kodlarda değişiklik yapmadan bu "bootcmd" script'i konfigürasyon parametreleriyle değiştirilebilir. hale getirilmiştir. 
+    "make menuconfig" yaptığımızda "Boot options ---> Enable a default value for bootcmd" girişinden bu defaut "bootcmd" 
+    scirpt'i elle değiştirilebilmektedir. BBB için default "bootcmd" script'i şöyledir:
+
+    "run findfdt; run init_console; run finduuid; run distro_bootcmd"
+
+    Ancak BBB'nin kendi sitesinden indirdiğimiz imajı içerisindeki U-Boot'un "bootcmd" script'i ise şöyledir:
+
+    "bootcmd=run findfdt; run init_console; run envboot; run distro_bootcmd"
+
+    Burada en önemli script'lerden biri "envboot" çevre değişkenindeki script'tir. Bu script şöyle yazılmıştır:
+
+    "envboot=mmc dev ${mmcdev}; if mmc rescan; then echo SD/MMC found on device ${mmcdev};if run loadbootscript; 
+    then run bootscript;else if run loadbootenv; then echo Loaded env from ${bootenvfile};run importbootenv;fi;
+    if test -n $uenvcmd; then echo Running uenvcmd ...;run uenvcmd;fi;fi;fi;"
+
+    Burada kabaca şu işlemler yapılmıştır: Önce "loadbootscript" script'ine bakılmış eğer bu script varsa o çalıştırılmış 
+    yoksa "loadbootenv" isimli script çalıştırılmıştır. Eğer "loadbootenv" çalıştırılmışsa aynı zamanda "uenvcmd" script'i
+    de varsa çalıştırılmıştır.
+
+    "loadbootscript" isimli script şöyle oluşturulmuştur:
+
+    "loadbootscript=load ${devtype} ${bootpart} ${loadaddr} ${scriptfile};"
+
+    Buradaki "scriptfile" çeve değişkeni "boot.scr" isimli bir dosyayı belirtmektedir. "loadbootenv" script ise şöyle 
+    oluşturulmuştur:
+
+    "loadbootenv=load ${devtype} ${bootpart} ${loadaddr} ${bootenvfile}"
+
+    Buradaki "bootenvfile" çevre değişkeni ise "uEnv.txt" isimli dosyayı belirtmektedir.
+
+    Yukarıdaki açıklamalar özetle şu anlama gelmektedir: Siteden indirdiğimiz imajdaki U-Boot default olarak önce "boot.scr" 
+    dosyasını sonra "uEnv.txt" isimli dosyayı aramakta ve hangisi varsa onu çalıştırmaktadır. O halde eğer biz bu default 
+    "bootcmd" script'ini kullanıyorsak birtakım işlemleri söz konusu olan bu dosyalarda da yapabiliriz.
+
+    Eğer biz "bootcmd" script'ini kendimiz oluşturmuşsak yukarıda sözünü ettiğimiz "boot.scr" ya da "uEnv.txt" dosyalarına 
+    otomatik bir biçimde bakılmayacaktır. Bu işlemi olsa olsa biz manuel yapabiliriz.
+
+    Burada bir noktaya dikkatinizi çekmek istiyoruz. U-Boot'u BBB için derlediğimizde default "bootcmd" aşağıdaki gibidir:
+
+    "run findfdt; run init_console; run finduuid; run distro_bootcmd"
+
+    Burada "envboot" script'i çalıştırılmamaktadır. Dolayısıyla "boot.scr" ya da "uEnv.txt" dosyaları default olarak devreye
+    girmeyecektir.
+
+    Orijinal siteden indirilen imajdaki U-Boot'ta bulunan konu ilgili çevre değişkenlerini aşağıda veriyoruz:
+
+    ******************************************************
+    => printenv bootcmd
+    bootcmd=run findfdt; run init_console; run envboot; run distro_bootcmd
+
+    => printenv findfdt
+    findfdt=echo board_name=[$board_name] ...; if test $board_name = A335BLGC; then setenv fdtfile am335x-beaglelogic.dtb; fi; 
+    if test $board_name = A335BONE; then setenv fdtfile am335x-bone.dtb; fi; if test $board_name = A335BNLT; then echo board_rev=[$board_rev] ...; 
+    if test $board_rev = GH01; then setenv fdtfile am335x-boneblack.dtb; elif test $board_rev = BBG1; then setenv fdtfile am335x-bonegreen.dtb; 
+    elif test $board_rev = BP00; then setenv fdtfile am335x-pocketbone.dtb; elif test $board_rev = GW1A; then setenv fdtfile am335x-bonegreen-wireless.dtb; 
+    elif test $board_rev = GG1A; then setenv fdtfile am335x-bonegreen-gateway.dtb; elif test $board_rev = AIA0; then setenv fdtfile am335x-abbbi.dtb; 
+    elif test $board_rev = EIA0; then setenv fdtfile am335x-boneblack.dtb; elif test $board_rev = ME06; then setenv fdtfile am335x-bonegreen.dtb; 
+    elif test $board_rev = OS00; then setenv fdtfile am335x-osd3358-sm-red.dtb; elif test $board_rev = OS01; then setenv fdtfile am335x-osd3358-sm-red-v4.dtb; 
+    else setenv fdtfile am335x-boneblack.dtb; => printenv init_console
+    init_console=if test $board_name = A335_ICE; then setenv console ttyS3,115200n8;elif test $board_name = A335BLGC; then setenv console ttyS4,115200n8;
+    else setenv console ttyS0,115200n8;fi;
+
+    => printenv envboot
+    envboot=mmc dev ${mmcdev}; if mmc rescan; then echo SD/MMC found on device ${mmcdev};if run loadbootscript; then run bootscript;
+    else if run loadbootenv; then echo Loaded env from ${bootenvfile};run importbootenv;fi;if test -n $uenvcmd; then echo Running uenvcmd ...;
+    run uenvcmd;fi;fi;fi;
+
+    => printenv loadbootscript
+    loadbootscript=load ${devtype} ${bootpart} ${loadaddr} ${scriptfile};
+
+    => printenv bootpart
+    bootpart=0:2
+
+    => printenv scriptfile
+    scriptfile=${script}
+
+    => printenv script
+    script=boot.scr
+
+    => printenv loadbootenv
+    loadbootenv=load ${devtype} ${bootpart} ${loadaddr} ${bootenvfile}
+
+    => printenv bootenvfile
+    bootenvfile=uEnv.txt
+
+    => printenv importbootenv
+    importbootenv=echo Importing environment from ${devtype} ...; env import -t ${loadaddr} ${filesize}
+
+    => printenv distro_bootcmd
+    distro_bootcmd=for target in ${boot_targets}; do run bootcmd_${target}; done
+
+    => printenv boot_targets
+    boot_targets=mmc0 legacy_mmc0 mmc1 legacy_mmc1 usb0 pxe dhcp
+
+    => print bootcmd_mmc0
+    bootcmd_mmc0=devnum=0; run mmc_boot
+
+    => print bootcmd_mmc1
+    bootcmd_mmc1=devnum=1; run mmc_boot
+
+    => printenv mmc_boot
+    mmc_boot=if mmc dev ${devnum}; then devtype=mmc; run scan_dev_for_boot_part; fi
+
+    => printenv scan_dev_for_boot_part
+    scan_dev_for_boot_part=part list ${devtype} ${devnum} -bootable devplist; env exists devplist || setenv devplist 1; 
+    for distro_bootpart in ${devplist}; do if fstype ${devtype} ${devnum}:${distro_bootpart} bootfstype; 
+    then run scan_dev_for_boot; fi; done; setenv devplist
+
+    ******************************************************
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    U-Boot'ta diskteki bir text script dosyasını load komutlaıyla belleğe yükleyip doğrudan çalıştırma mümkün değildir. Ancak 
+    script dosyasını önce ".scr" ya da ".fit" formatına dönüştürüp dönüştürülmüş dosyayı yükleyerek "source" komutu ile çalıştırma 
+    olanağımız vardır. Fakat U-Boot'ta ayrıca "değişken=değer" biçiminde satırların bulunduğu bir text dosya yüklenerel "import env"
+    komutu ile onun içerisindeki çevre değişkenleri U-Boot çevre değişkenlerine eklenebilir. Örneğin diskimizin FAT disk bölümünde
+    "myenv.txt" isimli bir dosya bulunuyor olsun. Bu dosyayı yükleyip bu dosya içerisindeki çevre değişkenlerini U-Boot çevre
+    değişken listesine şöyle ekleyebiliriz:
+
+    => load mmc 0:1 0x88000000 /myenv.txt
+    15 bytes read in 2 ms (6.8 KiB/s)
+    => env import -t 0x88000000
+    ## Info: input data size = 33232 = 0x81D0
+
+    "env import" komutundaki "-t" seçeneği import işleminin text dosyadan hareketle yapılacağını belirtmektedir. Eğer dosyadaki 
+    bir çevre değişkeni zaten U-Boot çevre değişkeni olarak varsa default durumda eski çevre değişkeni ezilmektedir.
+
+    Ayrıca anımsanacağı gibi eğer bir çevre değişkeni bir script içeriyorsa "run" komutuyla o çevre değişkeninin içerisindeki 
+    script çalıştırılabiliyordu.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Şimdi de boot sürecini bir dosyadan hareketle gerçekleştirmek için kendimiz "bootcmd" script'ini oluşturalım. Bu işlemi yine 
+    iki biçimde yapabiliriz:
+
+    1) "xxx.scr" isimli dosyayı yükleyerek "source" komutuyla onun içerisindeki script'i çalıştırabiliriz. Uyumluluk bakımından
+    dosyanın ismini "boot.scr" olarak verebiliriz.
+
+    2) "xxx.txt" isimli bir dosyadan çevre değişkenlerini belleğe yükleyip "env import" komutuyla onu çevre değişken listesine 
+    ekleyip oradaki bir script'i çalıştırabiliriz. Burada da uyumluluk bakımından dosyanın ismini "uEnv.txt" olarak verebiliriz. 
+    Çalıştırılacak çevre değişkenini ise uyumluluk bakımından "uenvcmd" olarak alabiliriz.
+
+    Aslında siteden indirdiğimiz imajdaki "bootcmd" script'i zaten yukarıdaki işlemleri yapmaktadır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    "bootcmd" script'inin ""xxx.scr" dosyasını yükleyerek "source" komutuyla o script'i çalıştırmasını adım adım şöyle 
+    sağlayabiliriz:
+
+    1) Önce bir dosyaya script'imizi yazarız. Örneğin bu dosya "boot.cmd" isminde olsun. Script'imizin içeriği şöyle olabilir:
+
+    load mmc 0:2 0x82000000 /boot/vmlinuz-5.10.168-ti-r71
+    load mmc 0:2 0x88000000 /boot/dtbs/5.10.168-ti-r71/am335x-boneblack.dtb
+    setenv bootargs "console=ttyS0,115200 root=/dev/mmcblk0p2 rw"
+    bootz 0x82000000 - 0x88000000
+
+    Bu dosyayı aşağıdaki gibi derleyerek ".scr" uzantılı hale getirebiliriz:
+
+    $ mkimage -A arm -T script -C none -n "Boot Script" -d boot.cmd boot.scr
+
+    2) U-boot'a geçilir. "bootcmd" çevre değişkeni aşağıdaki biçimde ayarlanır ve "saveenv" komutuyla save edilir:
+
+    => setenv bootcmd "load mmc 0:1 0x8A000000 /boot.scr;source 0x8A000000"
+    => saveenv
+    Saving Environment to FAT... OK
+
+    Burada yazmış olduğumuz "bootcmd" scrtipt'inde "boot.scr" dosyasının FAT disk bölümünün kök dizininde olduğu varsayılmıştır. 
+    Bu durumda bizim birinci adımda elde ettiğimiz "boot.scr" dosyasını FAT disk bölümünün kök dizinine çekmeliyiz.
+
+    Ancak burada dikkat edilmesi gereken bir nokta vardır. Default durumda "am335x_evm_defconfig" dosyasında "source" komutunun
+    "scr" dosya formatı desteği disable edilmiştir. Bunun enable edilerek U-Boot'un derlenmesi gerekmektedir. Bu seçeneğin
+    enable edilmesi "make menuconfig" menüsünde "Boot options / Boot images / Enable support for the legacy image format" 
+    girişiyle saplanabilir. Ya da doğrudan ".config" dosyasında "CONFIG_LEGACY_IMAGE_FORMAT=y" yapılabilir. (Siteden indirilen 
+    orijinal BBB imajındaki U-Boot'ta bu seçenek zaten enable edilmiş durumdadır.)
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Şimdi de çevre değişkenlerinin bulunduğu bir text dosyadan hareketle boot işlemini otomatize etmeye çalışalım. Burada text
+    dosya herhangi bir isimde olabilir. Ancak orijinal imajdaki "uEnv.txt" ismini kullanabiliriz. O halde işlemler şöyle 
+    yürütülebilir:
+
+    1) Önce FAT disk bölümünde ilgili text dosyaya aşağıdaki gibi çevre değişkenleri script'ler içerecek biçimde girilir. 
+    Buradaki dosyanın "uEnv.txt" isimli dosya olduğunu varsayalım:
+
+    loadkernel=load mmc 0:2 0x82000000 /boot/vmlinuz
+    loadfdt=load mmc 0:2 0x88000000 /boot/am335x-boneblack.dtb
+    bootargs=console=ttyS0,115200 root=/dev/mmcblk0p2 rw
+    bootsys=bootz 0x82000000 - 0x88000000
+    uenvcmd=run loadkernel;run loadfdt;run bootsys
+
+    Burada aslında boot işlemini asıl yapan script "uenvcmd" isimli script'tir. O halde bu çevre değişken listesi U-Boot'ta
+    dahil edilip "uenvcmd" isimli script çalıştırılırsa boot işlemi otomatik gerçekleşecektir.
+
+    2) Şimdi de U-Boot komut satırına düşüp "bootcmd" çevre değişkenini uygun biçimde set edelim:
+
+    => bootcmd=load mmc 0:1 0x8A000000 /uEnv.txt;env import -t 0x8A000000;run uenvcmd
+    => saveenv
+    Saving Environment to FAT... OK
+
+    Burada "bootcmd" script'i önce "uEnv.txt" dosyasındaki çevre dğeişkenlerini çevre değişken listesine eklemiş sonra da 
+    "uenvcmd" çevre değişkeninde belirtilen script'i çalıştırmıştır.
+
+    Bu biçimdeki otomatik boot yaklaşımı kullanıcılar için biraz daha kolaydır. Çünkü önceki yaklaşımda olduğu gibi bir derleme 
+    işlemi yapılmamaktadır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Aslında daha önce de belirttiğimiz gibi siteden indirdiğimiz orijinal imajdaki "bootcmd" script'i yukarıdakilere benzer işlemler 
+    yapmaktadır. Orijinal imajdaki "bootcmd" script'inin yaptığı işlemi kabaca şöyle özetleyebiliriz:
+
+    1) Önce SD karttaki ilk Linux disk bölümünde sırasıyla önce "/boot/boot.scr" sonra "/boot/uEnv.txt" dosyalarının olup olmadığına 
+    bakmaktadır. Eğer bu dosyalardan biri varsa boot işlemi bu dosyalardan hareketle yürütülmektedir. (Bu kısım orijinal "bootcmd"
+    script'indeki "envboot" script'i tarafından yapılmaktadır.)
+
+    2) Eğer SD karttaki ilk Linux disk bölümünde önce "/boot.scr" conra "/boot/uEnv.txt" dosyaları yoksa internal eMMC'deki Linux 
+    disk bölümündeki "/boot/scr" ve "/boot/uEnv.txt" dosyaları işleme sokulmaktadır. ("Bu kısım "bootcmd" script'indeki 
+    "distro_bootcmd" script'i tarafından yapılmaktadır.)
+
+    Orijinal script'in ayrıntıarını gözle inceleyebilirsiniz.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Pekiyi U-Boot boot loader'ını Raspberry Pi'ya nasıl yükleyebiliriz? Anımsanacağı gibi Raspberry Pi'ın kendi boot loader'ı 
+    vardı. Bizin U-Boot'u Raspberry Pi için derleyip elde edilen imajı benzer biçimde Raspberry Pi boot sürecine dahil etmemiz 
+    gerekir. U-Boot Raspberry Pi için şöyle derlenebilir:
+
+    1) Raspberry Pi'ya uygun bir araç zincirinin elde edilmesi gerekir. Raspberry Pi 5'te biz genellikle 64 bit Linux kullanmaktayız. 
+    (Halbuki BBB'de 32 bit Linux kullanılmaktadır). O halde derlemede bizim 64 bit ARM araç zincirini kullanmamız gerekir. Yine
+    bu araç zinciri sıfırdan crosstool-NG ile oluşturulabilir ya da hazır araç zincirleri kullanılabilir. Örneğin söz konusu 
+    araç zincirisini yine aşağıdaki bağlantıdan indirebiliriz:
+
+    https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads
+
+    Burada "x86_64 Linux hosted cross toolchains" başlığı altındaki "AArch64 GNU/Linux target (aarch64-none-linux-gnu)" 
+    araç zinciri indirilebilir.
+
+    2) Derleme öncesinde daha önce görmüş olduğumuz çevre değişkenleri ayarlanır:
+
+    $ export CROSS_COMPILE=aarch64-none-linux-gnu-
+    $ PATH=$PATH:/home/kaan/Study/EmbeddedLinux/U-Boot/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu/bin
+
+    3) Şimdi Raspberry Pi için hazır bir konfigürasyon dosyası set edilebilir. u-boot dizinindeki configs dizini içerisinde 
+    Raspberry Pi'a ilişkin aşağıdaki config dosyaları bulunmaktadır:
+
+    kaan@kaan-virtual-machine:~/Study/EmbeddedLinux/U-Boot/u-boot/configs$ find . -name "*rpi*"
+    ./rpi_4_defconfig
+    ./rpi_3_defconfig
+    ./rpi_4_32b_defconfig
+    ./rpi_arm64_defconfig
+    ./rpi_2_defconfig
+    ./rpi_3_32b_defconfig
+    ./rpi_defconfig
+    ./rpi_3_b_plus_defconfig
+    ./rpi_0_w_defconfig
+
+    Burada rpi_5 ile başlayan bir konfigürasyon dosyasının olmadığında dikkat ediniz. Biz "rpi_4_defconfig" dosyasını ya da 
+    "rpi_arm64_defconfig" dosyasını kullanabiliriz:
+
+    $ make rpi_arm64_defconfig
+
+    4) Artık make işlemi yapılabilir:
+
+    $ make
+
+    U-Boot'un derlenmesi sonucunda elde edilen dosyaları Raspberry Pi'yın SD kartına nasıl yerleştireceğimizi izleyen paragraflarda
+    ele alacağız.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
