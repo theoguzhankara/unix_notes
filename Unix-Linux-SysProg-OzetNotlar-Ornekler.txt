@@ -61667,7 +61667,11 @@ mode=666
 rm -f $module
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Biz yukarıdaki örneklerde dosyayı proc dosya sisteminin kök diininde yarattık. İstersek proc dizininde bir dizin yaratıp 
+												151. Ders 30/06/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Biz yukarıdaki örneklerde dosyayı proc dosya sisteminin kök dizininde yarattık. İstersek proc dizininde bir dizin yaratıp 
     dosyalarımızı o dizinin içerisinde de oluşturabilirdik. proc dosya sisteminde bir dizin yaratmak için proc_mkdir fonksiyonu 
     kullanılmaktadır:
 
@@ -61675,13 +61679,11 @@ rm -f $module
 
     struct proc_dir_entry *proc_mkdir(const char *name, struct proc_dir_entry *parent);
 
-    Fonksiyonun birinci parametresi yaratılacak dizin'in simini, ikinci parametresi dizinin hanfi dizin içerisinde yaratılacağını 
+    Fonksiyonun birinci parametresi yaratılacak dizin'in ismini, ikinci parametresi dizinin hangi dizin içerisinde yaratılacağını 
     belirtir. Bu parametre NULL geçilirse dizin proc dosya sisteminin kök dizininde yaratılır. Buradan aldığımız geri dönüş değerini 
-    proc_create fonksiyonun parent parametresinde kullanırsak ilgili dosyamızı bu dizinde yaratmış oluruz. Tabii benzer biçimde 
+    proc_create fonksiyonunun parent parametresinde kullanırsak ilgili dosyamızı bu dizinde yaratmış oluruz. Tabii benzer biçimde 
     dizin içerisinde dizin de yaratabiliriz. proc_mkdir fonksiyonu başarısızlık durumunda NULL adrese geri dönmektedir. Çağıran 
-    fonksiyonun yine -ENOMEM değeriyle geri döndürülmesi uygundur.
-
-    Örneğin:
+    fonksiyonun yine -ENOMEM değeriyle geri döndürülmesi uygundur. Örneğin:
 
     struct proc_dir_entry *pdir;
 
@@ -61689,15 +61691,15 @@ rm -f $module
     proc_create("info", 0, pdir, &g_proc_ops);
 
     Dizinlerin silinmesi yine remove_proc_entry fonksiyonuyla yapılmaktadır. Tabii dizin içerisindeki dosyaları silerken 
-    remove_proc_entry fonksiyonda dosyanın hangi dizin içerisinde olduğu belirtilmelidir. Bu fonksiyon ile dizin silinirken 
-    dizin'in içi boş değilse bile o dizin ve onun içindeki girişlerin hepsi silinmektedir. Ayrıca kök dizindeki girişleri silmek 
+    remove_proc_entry fonksiyonunda dosyanın hangi dizin içerisinde olduğu belirtilmelidir. Bu fonksiyon ile dizin silinirken 
+    dizinin içi boş değilse bile o dizin ve onun içindeki girişlerin hepsi silinmektedir. Ayrıca kök dizindeki girişleri silmek 
     için proc_remove fonksiyonu da bulundurulmuştur. Fonksiyonun prototipi şöyledir:
 
     #include <linux/proc_fs.h>
 
     void proc_remove(struct proc_dir_entry *de);
 
-    Bu fonksiyon parametre olarak proc_create ya da proc_mkdir fonksiyonun verdiği geri dönüş değerini alır. proc dosya sisteminin 
+    Bu fonksiyon parametre olarak proc_create ya da proc_mkdir fonksiyonunun verdiği geri dönüş değerini alır. proc dosya sisteminin 
     kök dizininde silme yapılmak isteniyorsa aşağıdaki her iki çağrım eşdeğerdir:
 
     remove_proc_entry("file_name", NULL);
@@ -61929,6 +61931,10 @@ mode=666
 rm -f $module
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												152. Ders 06/07/2024 - Cumartesi
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
 												153. Ders 07/07/2024 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -61946,7 +61952,7 @@ rm -f $module
         struct dentry *dentry;
     } __randomize_layout;
 
-    Yapının deentry elemanı dosya hakkında bilgiler içermektedir:
+    Yapının dentry elemanı dosya hakkında bilgiler içermektedir:
 
     struct dentry {
         /* RCU lookup touched fields */
@@ -62017,7 +62023,7 @@ rm -f $module
     Bu dosyaların her birinin içerisinde de "bufsize" ve "count" isimli iki dosya bulunacaktır. Burada teti "prog1.c" ve 
     "prog2.c" programları yardımıyla yapabilirisiniz. Örneğin "prog1" programı ile "pipe-driver3" borusunu açıp içerisine 
     bir şeyler yazarsanız "/proc/pipe-driver/pipe3/count" dosyasının içerisinde yazılan byte sayısını görebilirsiniz. Aygıt
-    sürücümüzü yine "unloadmulti" script'i ile boşaltabilirisiniz:
+    sürücümüzü yine "unloadmulti" script'i ile boşaltabilirsiniz:
 
     $ sudo ./unloadmulti 5 pipe-drive
 ---------------------------------------------------------------------------------------------------------------------------*/
