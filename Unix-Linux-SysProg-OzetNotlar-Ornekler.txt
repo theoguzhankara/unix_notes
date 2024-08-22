@@ -41230,7 +41230,7 @@ void exit_daemon(const char *msg)
     "network byte ordering" denilmektedir. Dolayısıyla bizim soket API'lerine verdiğimiz birtakım değerlerin big endian formata 
     dönüştürülmesi gerekmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
-<BURADA KALDIK>
+
 /*--------------------------------------------------------------------------------------------------------------------------
     Biz kursumuzda önce soket kütüphanesi ile TCP/IP client-server programların oluşturulması konusunu ele alacağız. 
     Sonra TCP/IP haberleşmesinin bazı protokol detaylarından bahsedeceğiz. Sonra da UDP/IP haberleşme üzerinde duracağız. 
@@ -50841,7 +50841,7 @@ void exit_sys(const char *msg)
 
     $ gcc -o sample sample.c libx.a liby.a
 ---------------------------------------------------------------------------------------------------------------------------*/
-
+<BURADA KALDIK>
 /*--------------------------------------------------------------------------------------------------------------------------
 												121. Ders 18/02/2024 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
