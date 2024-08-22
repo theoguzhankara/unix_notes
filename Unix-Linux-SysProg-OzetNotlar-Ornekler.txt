@@ -11,7 +11,7 @@
                         (Notları sabit genişlikli font kullanan programlama editörleri ile açınız.)
                             (Editörünüzün "Line Wrapping" özelliğini pasif hale getiriniz.)
 
-                                                    Son Güncelleme: 16/08/2024 - Cuma
+                                                    Son Güncelleme: 22/08/2024 - Perşembe
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -55080,7 +55080,6 @@ void exit_sys(const char *msg)
     #!/bin/bash
 
     module=$1
-    mode=666
 
     /sbin/rmmod ./$module.ko || exit 1
     rm -f $module
@@ -55273,7 +55272,6 @@ mknod -m $mode $module c $major 0
 #!/bin/bash
 
 module=$1
-mode=666
 
 /sbin/rmmod ./$module.ko || exit 1
 rm -f $module
@@ -55548,7 +55546,6 @@ mknod -m $mode $module c $major 0
 #!/bin/bash
 
 module=$1
-mode=666
 
 /sbin/rmmod ./$module.ko || exit 1
 rm -f $module
@@ -55962,7 +55959,6 @@ mknod -m $mode $module c $major 0
 #!/bin/bash
 
 module=$1
-mode=666
 
 /sbin/rmmod ./$module.ko || exit 1
 rm -f $module
@@ -56326,7 +56322,6 @@ mknod -m $mode $module c $major 0
 #!/bin/bash
 
 module=$1
-mode=666
 
 /sbin/rmmod ./$module.ko || exit 1
 rm -f $module
@@ -56714,7 +56709,6 @@ mknod -m $mode $module c $major 0
 #!/bin/bash
 
 module=$1
-mode=666
 
 /sbin/rmmod ./$module.ko || exit 1
 rm -f $module
@@ -57314,7 +57308,6 @@ mknod -m $mode $module c $major 0
 #!/bin/bash
 
 module=$1
-mode=666
 
 /sbin/rmmod ./$module.ko || exit 1
 rm -f $module
@@ -57701,7 +57694,6 @@ mknod -m $mode $module c $major 0
 #!/bin/bash
 
 module=$1
-mode=666
 
 /sbin/rmmod ./$module.ko || exit 1
 rm -f $module
@@ -58170,7 +58162,6 @@ mknod -m $mode $module c $major 0
 #!/bin/bash
 
 module=$1
-mode=666
 
 /sbin/rmmod ./$module.ko || exit 1
 rm -f $module
@@ -58641,7 +58632,6 @@ mknod -m $mode $module c $major 0
 #!/bin/bash
 
 module=$1
-mode=666
 
 /sbin/rmmod ./$module.ko || exit 1
 rm -f $module
@@ -59147,7 +59137,6 @@ mknod -m $mode $module c $major 0
 #!/bin/bash
 
 module=$1
-mode=666
 
 /sbin/rmmod ./$module.ko || exit 1
 rm -f $module
@@ -59593,7 +59582,6 @@ mknod -m $mode $module c $major 0
 #!/bin/bash
 
 module=$1
-mode=666
 
 /sbin/rmmod ./$module.ko || exit 1
 rm -f $module
@@ -61441,7 +61429,6 @@ mknod -m $mode $module c $major 0
 #!/bin/bash
 
 module=$1
-mode=666
 
 /sbin/rmmod ./$module.ko || exit 1
 rm -f $module
@@ -61661,7 +61648,6 @@ mknod -m $mode $module c $major 0
 #!/bin/bash
 
 module=$1
-mode=666
 
 /sbin/rmmod ./$module.ko || exit 1
 rm -f $module
@@ -61925,7 +61911,6 @@ mknod -m $mode $module c $major 0
 #!/bin/bash
 
 module=$1
-mode=666
 
 /sbin/rmmod ./$module.ko || exit 1
 rm -f $module
@@ -62545,7 +62530,6 @@ clean:
 #!/bin/bash
 
 module=$2
-mode=666
 
 /sbin/insmod ./${module}.ko ${@:3} || exit 1
 major=$(awk "\$2 == \"$module\" {print \$1}" /proc/devices)
@@ -64430,7 +64414,6 @@ mknod -m $mode $module c $major 0
 #!/bin/bash
 
 module=$1
-mode=666
 
 /sbin/rmmod ./$module.ko || exit 1
 rm -f $module
@@ -64657,7 +64640,6 @@ mknod -m $mode $module c $major 0
 #!/bin/bash
 
 module=$1
-mode=666
 
 /sbin/rmmod ./$module.ko || exit 1
 rm -f $module
@@ -64914,16 +64896,14 @@ void exit_sys(const char *msg)
     /sbin/insmod ./$module.ko ${@:2} || exit 1
     major=$(awk "\$2 == \"$module\" {print \$1}" /proc/devices)
     rm -f $module
-    mknod $module b $major 0
-    chmod $mode $module
+    mknod -m $mode $module c $major 0
 
     /* unloadblk (bu satırı dosyaya kopyalamayınız) */
 
     #!/bin/bash
 
     module=$1
-    mode=666
-
+ 
     /sbin/rmmod ./$module.ko || exit 1
     rm -f $module
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -64990,7 +64970,6 @@ mknod -m $mode $module c $major 0
 #!/bin/bash
 
 module=$1
-mode=666
 
 /sbin/rmmod ./$module.ko || exit 1
 rm -f $module
@@ -65410,7 +65389,6 @@ mknod -m $mode $module b $major 0
 #!/bin/bash
 
 module=$1
-mode=666
 
 /sbin/rmmod ./$module.ko || exit 1
 rm -f $module
@@ -65477,11 +65455,11 @@ void exit_sys(const char *msg)
     Buradan da görüldüğü gibi request_queue nesneleri request nesnelerinden, request nesneleri bio nesnelerinden, bio nesneleri de 
     bio_vec nesnelerinden oluşmaktadır.
 
-    <BURADA KALDIK>
-
-    İşte transfer fonksiyonunun kernel tarafından çağrıldığında "request_queue içerisindeki request nesnelerine elde edip, bu request nesnelerinin içerisindeki bio nesnelerini elde edip,
-    bio nesneleri içerisindeki bio_vec dizisinde belirtilen transfer bilgilerine ilişkin transfeleri" yapması gerekir. Şüphesiz bu işlem ancak açık ya da örtük iç içe 3 döngü ile
-    yapılabilir. Yani bir döngü request nesnelerini elde etmeli, onun içerisindeki bir döngü bio nesnelerini elde etmeli, onun içerisindeki bir döngü de bio_vec nesleerini elde etmelidir. 
+    İşte transfer fonksiyonu kernel tarafından çağrıldığında "request_queue içerisindeki request nesnelerine elde edip, bu request 
+    nesnelerinin içerisindeki bio nesnelerini elde edip, bio nesneleri içerisindeki bio_vec dizisinde belirtilen transfer bilgilerine 
+    ilişkin transfeleri" yapması gerekir. Şüphesiz bu işlem ancak açık ya da örtük iç içe 3 döngü ile yapılabilir. Yani bir döngü 
+    request nesnelerini elde etmeli, onun içerisindeki bir döngü bio nesnelerini elde etmeli, onun içerisindeki bir döngü de bio_vec 
+    nesleerini elde etmelidir.
 
     request_queue içerisindeki request nesnelerinin elde edilmesi birkaç biçimde yapılabilmektedir. Yöntemlerden tipik olanı şöyledir:
 
@@ -65504,16 +65482,19 @@ void exit_sys(const char *msg)
         }
     }
 
-    Burada blk_fetch_request fonksiyonu kuyruğun hemen başındaki request nesnesini alarak onu kuyruktan siler. Böylece döngü içerisinde tek tek request nesneleri elde dilmiştir. 
-    blk_rq_is_passthrough fonksiyonu dosya sistemi ile alakıs olmayan request nesnelerini geçmek için kullanılır. Bazı request nesneleri transferle ilgili değildir. Bunların
-    geçilmesi gerekmektedir. Bir request nesnesi kuyruktan alındıktan sonra akibeti konusunda kernel'a bilgi vermek gerekmektedir. İşte bu işlem __blk_end_request_all fonksiyonuyla
-    yapılmaktadır. -EIO bu işlemin yapılmadığını 0 ise bu işlemin başarılı bir biçimde yapıldığını belirtmektedir. 
+    Burada blk_fetch_request fonksiyonu kuyruğun hemen başındaki request nesnesini alarak onu kuyruktan siler. Böylece döngü 
+    içerisinde tek tek request nesneleri elde dilmiştir. blk_rq_is_passthrough fonksiyonu dosya sistemi ile alakalı olmayan request 
+    nesnelerini geçmek için kullanılır. Bazı request nesneleri transferle ilgili değildir. Bunların geçilmesi gerekmektedir. Bir 
+    request nesnesi kuyruktan alındıktan sonra akibeti konusunda çekirdeğe bilgi verilmesi gerekmektedir. İşte bu işlem 
+    __blk_end_request_all fonksiyonuyla yapılmaktadır. Bu fonksiyonun ikinci parametresi -EIO girilirse bu durum bu işlemin 
+    yapılmadığını 0 girilirse bu da bu işlemin başarılı bir biçimde yapıldığını belirtmektedir.
 
-    Pekiyi kernel ne zaman kuyruğa request nesnesi yerleştirmektedir? Şüphesiz kernel'ın böyle bir nesneyi kuyruğua yerleştirmesi için aygıt üzerinde bir okuma ya da yazma olayının 
-    gerçekleşmiş olması gerekir. Bunun tipik yolu aygıt dosyasının open fonksiyonuyla açılıp read ya da write yapılmasıdır. Tabii blok aygıt sürücüsü bir dosya sistemi yani bir disk bölümü
-    haline getirilmiş olabilir. Bu durumda formatlama gibi, mount etme gibi eylemlerde de gizli bir okuma yazma işlemleri söz konusu olmaktadır. 
+    Pekiyi çekirdek ne zaman kuyruğa request nesnesi yerleştirmektedir? Şüphesiz çekirdeğin böyle bir nesneyi kuyruğua yerleştirmesi 
+    için aygıt üzerinde bir okuma ya da yazma olayının gerçekleşmiş olması gerekir. Bunun tipik yolu aygıt dosyasının open fonksiyonuyla 
+    açılıp read ya da write yapılmasıdır. Tabii blok aygıt sürücüsü bir dosya sistemi yani bir disk bölümü haline getirilmiş olabilir. 
+    Bu durumda formatlama gibi, mount etme gibi eylemlerde de gizli bir okuma yazma işlemleri söz konusu olmaktadır.
 
-    Pekiyi kernel aygıt sürücü açılıp aşağıdaki gibi iki ayrı read işleminde iki ayrı request nesnesi mi oluşturmaktadır?
+    Pekiyi çekirdek aygıt sürücü açılıp aşağıdaki gibi iki ayrı read işleminde iki ayrı request nesnesi mi oluşturmaktadır?
 
       if ((fd = open("generic-bdriver", O_RDONLY)) == -1)
         exit_sys("open");
@@ -65524,33 +65505,37 @@ void exit_sys(const char *msg)
       if ((result = read(fd, buf, 10)) == -1)
             exit_sys("read");
 
-      Aslında kernel burada iki okumanın aynı blok içerisinde kaldığını anladığı için aygıttan yalnızca tek blokluk okuma talep edecektir. Çünkü okunan iki kısım da aynı blok içerisindedir. 
-      Eğer bu iki okuma aşağıdaki gibi olsaydı bu durumda kernel iki farklı blok için iki farklı request nesnesi oluşturacaktı:
+    Aslında çekirdek burada iki okumanın aynı blok içerisinde kaldığını anladığı için aygıttan yalnızca tek blokluk okuma talep 
+    edecektir. Çünkü okunan iki kısım da aynı blok içerisindedir. (Çekirdeğin bu biçimde düzenleme yapan kısmına "IO çizelgeleyicisi
+    (IO scheduler)" denilmektedir.) Eğer bu iki okuma aşağıdaki gibi yapılmış olsaydı bu durumda çekirdek iki farklı blok için 
+    iki farklı request nesnesi oluşturacaktı:
 
-        if ((fd = open("generic-bdriver", O_RDONLY)) == -1)
-            exit_sys("open");
+    if ((fd = open("generic-bdriver", O_RDONLY)) == -1)
+        exit_sys("open");
 
-        if ((result = read(fd, buf, 10)) == -1)
-            exit_sys("read");
+    if ((result = read(fd, buf, 10)) == -1)
+        exit_sys("read");
 
-        lseek(fd, 5000, 0);
+    lseek(fd, 5000, 0);
 
-        if ((result = read(fd, buf, 10)) == -1)
-            exit_sys("read");
+    if ((result = read(fd, buf, 10)) == -1)
+        exit_sys("read");
 
-    Pekiyi kernel aygıt sürücüden kaç byte'lık bir bloğun transferini istemektedir? Bunun bir sektör olması gerektiğini düşünebilirsiniz. Ancak kernel sektör küçük olduğu için
-    aygıt sürücüden bir "block" transfer istemektedir. Bir block ardışıl n tane sektörden oluşmaktadır (örneğin 8 sektör = 4K) ve bu durum kernel konfigürasyonuna bağlıdır. Ancak kernel
-    transfer isteklrinde istenen bloğu her zaman sektör olarak ifade etmektedir. Başka bir deyişle kernel aygıt sürücüden "şu sektörden itibaren 4096 byte transfer et" gibi bir istekte
-    bulunmaktadır. 
+    Pekiyi çekirdek aygıt sürücüden kaç byte'lık bir bloğun transferini istemektedir? Bunun bir sektör olması gerektiğini düşünebilirsiniz. 
+    Ancak çekirdek sektör küçük olduğu için aygıt sürücüden bir "blok" transfer istemektedir. Bir blok ardışıl n tane sektörden 
+    oluşmaktadır (örneğin bir blok 8 sektörden yani 4K'dan oluşabilir) ve bu durum çekirdek konfigürasyonuna bağlıdır. Ancak çekirdek 
+    transfer isteklerinde istenen bloğu her zaman sektör olarak ifade etmektedir. Başka bir deyişle çekirdek aygıt sürücüden "şu 
+    sektörden itibaren 4096 byte transfer et" gibi bir istekte bulunmaktadır.
 
-    Şimdi biz request nesnesinin içerisinden bio nesnelerini, bio nesnelerinin içerisinden de bio_vec nesnelerini elde edelim. Pekiyi kernel neden transfer bilgilerini doğrudan
-    request nesnelerinin içerisine kodlamak yerine böylesi iç nesneler oluşturmuştur? İşte aslında bir request nesnesi ardışıl sektör transferi ile ilgildidir. Ancak bu ardışıl sektörler
-    read ya da write biçimde olabilir. İşte bu read ve write yönleri o request nesnesinin ayrı bio nesnelerinde kodlanmıştır. Read ve write işlemleri ise aslında birdebn fazla tampon
-    ile (yani aktarılacak hedef adres ile) ilgili olabilir. Bu bilgiler de bio_vec içerisine kodlanmıştır. Dolayısıyla aslında programcı tüm bio'lar içerisindeki 
-    bio_vec'leri dolaşmalıdır. 
+    Şimdi biz request nesnesinin içerisinden bio nesnelerini, bio nesnelerinin içerisinden de bio_vec nesnelerini elde edelim. 
+    Pekiyi çekirdek neden transfer bilgilerini doğrudan request nesnelerinin içerisine kodlamak yerine böylesi iç nesneler 
+    oluşturmuştur? İşte aslında bir request nesnesi ardışıl sektör transferi ile ilgilidir. Ancak bu ardışıl sektörler read ya da 
+    write biçimde olabilir. İşte bu read ve write yönleri o request nesnesinin ayrı bio nesnelerinde kodlanmıştır. Read ve write 
+    işlemleri ise aslında birden fazla tampon ile (yani aktarılacak hedef adres ile) ilgili olabilir. Bu bilgiler de bio_vec 
+    içerisine kodlanmıştır. Dolayısıyla aslında programcı tüm bio'lar içerisindeki bio_vec'leri dolaşmalıdır.
 
-    Bir süre önceye kadar request içerisindeki bio nesnelerinin dolaşılması normal kabul ediliyordu. Ancak belli bir kernel'dan sonra bu tavsiye edilmemeye başlanmıştır. Fakat yine de
-    request içerisindeki bio nesneleri şöyle dolaşılabilir:
+    Bir süre önceye kadar request içerisindeki bio nesnelerinin dolaşılması normal kabul ediliyordu. Ancak belli bir çekirdekten
+    sonra bu tavsiye edilmemeye başlanmıştır. Fakat yine de request içerisindeki bio nesneleri şöyle dolaşılabilir:
 
     struct bio *bio;
     ...
@@ -65559,17 +65544,18 @@ void exit_sys(const char *msg)
         ...
     }
 
-    for_each_bio makrosunun artık doğrudan yukarıdaki biçimde kullanılması önerilmemektedir. 
-
-    Artık bugünlerde bio nesnelerini dolaşmak yerine zaten bio nesnelerini ve onların içerisindeki bio-vec'leri dolaşan (yani içteki iki döngünün işlevini tek başına yapan) rq_for_each_segment isimli makronun kullanılması tavsiye edilmektedir. Bu makro şöyle yzılmıştır:
+    for_each_bio makrosunun artık doğrudan yukarıdaki biçimde kullanılması önerilmemektedir. Artık bugünlerde bio nesnelerini 
+    dolaşmak yerine zaten bio nesnelerini ve onların içerisindeki bio-vec'leri dolaşan (yani içteki iki döngünün işlevini tek 
+    başına yapan) rq_for_each_segment isimli makronun kullanılması tavsiye edilmektedir. Bu makro şöyle yzılmıştır:
 
     #define rq_for_each_segment(bvl, _rq, _iter)			\
-	__rq_for_each_bio(_iter.bio, _rq)			        \
+	__rq_for_each_bio(_iter.bio, _rq)			            \
 		bio_for_each_segment(bvl, _iter.bio, _iter.iter)
 
-    Görüldüğü gibi aslında bu makro request nesnesi içerisindeki bio nesnelerini, bio nesneleri içerisindeki bio_vec nesnelerini dolaşmaktadır. rq_for_each_segment makrosunun birinci
-    parametresi bio_vec tründen nesneyi almaktadır. Makronun ikinci parametresi request nesnesinin adresini almaktadır. Üçüncü parametre ise dolaşım sırasında kullanılacak bir iteratör
-    nesnesidir.Bu nesne req_iterator isimli bir yapı türünden olmalıdır. Bu durumda transfer fonksiyonun yeni durumu aşağıdaki gibi olacaktır:
+    Görüldüğü gibi aslında bu makro request nesnesi içerisindeki bio nesnelerini, bio nesneleri içerisindeki bio_vec nesnelerini 
+    dolaşmaktadır. rq_for_each_segment makrosunun birinci parametresi bio_vec tründen nesneyi almaktadır. Makronun ikinci parametresi 
+    request nesnesinin adresini almaktadır. Üçüncü parametre ise dolaşım sırasında kullanılacak bir iteratör nesnesidir. Bu nesne 
+    req_iterator isimli bir yapı türünden olmalıdır. Bu durumda transfer fonksiyonun yeni durumu aşağıdaki gibi olacaktır:
 
     static void request_proc(struct request_queue *rq)
     {
@@ -65588,7 +65574,7 @@ void exit_sys(const char *msg)
             }
 
             rq_for_each_segment(biov, rqs, iterator) {
-                ...
+                /* biov kullanılarak transfer yapılır */
             }
 
             __blk_end_request_all(rqs, 0);
@@ -65605,14 +65591,19 @@ void exit_sys(const char *msg)
         unsigned int bv_offset;
     };
 
-    Yapının bv_page elemanı transferin yapılacağı adresi belirtmektedir. Blok aygıt sürücüsü karakter aygıt sürücülerinin yaptığı gibi transferi user alanına kopyalamamaktadır. 
-    Blok aygıt sürücüsü transferi kernel tarafından tahsis edilen sayfalara (bu sayfaların oluşturduğu organizasyona "page cache" denilmektedir) yapar. Kernel o sayfalardaki bilgiyi
-    user alanına transfer eder. Ancak bu sayfa adresinin özellikle 32 bit Linux sistemlerinde sayfa tablosunda girişi olmayabilir. Programcının bu girişi oluşturması gerekmektedir.
-    Bu girişi oluşturmak için kmap_atomic isimli fonksiyon ve girişi boşaltmak için ise kunmap_atomic isimli fonksiyon kullanılmaktadır. Yapının ikinci elemanı elemanı olan bv_len transfer edilecek byte sayısını barındırmaktadır. (Bu elemanda transfer edilecek sektör sayısı değil doğrudan byte sayısı bulunmaktadır.) Nihayet yapının 
-    üçüncü elemanı olan bv_offset birinci elemanında belirtilen adresten uzaklığı tutmaktadır. Yani aslında gerçek transfer adtesi bv_page değildir. bv_page + bv_offset'tir. 
-    Bu yapıda en önemli bilgi olan transferin söz konusu olduğu sektör bilgisi yoktur. İşte aslında transfere konu olan sektör numarası bio yapısının içerisindedir. Her ne kadar biz
-    yukarıdaki makroda bio yapısına erişemiyor olsak da buna dolaylı olarak iterator nesnesi yoluyla iterator.iter.bi_sect ifadesi ile erişilebilmektedir. 
-
+    Yapının bv_page elemanı transferin yapılacağı adresi belirtmektedir. Çekirdek ismine eskiden "buffer cache" denilen daha sonra 
+    "page cache" denilen bir cache veri yapısı kullanmaktadır. İşletim sistemi read/write işlemlerinde önce bu "page cache" e 
+    başvurmakta eğer ilgili blok cache'te varsa buradan almaktadır. Eğer ilgili blok cache'te yoksa blok aygıt sürücüsünden 
+    transfer istemektedir. Blok aygıt sürücüleri karakter aygıt sürücülerinin yaptığı gibi transferleri user alanına kopyalamamaktadır. 
+    Blok aygıt sürücüleri transferi çekirdek tarafından tahsis edilen cache'teki sayfalara yapar. Çekirdek o sayfalardaki bilgiyi
+    user alanına transfer eder. Ancak bu sayfa adresinin özellikle 32 bit Linux sistemlerinde sayfa tablosunda girişi olmayabilir. 
+    Programcının bu girişi oluşturması gerekmektedir. Bu girişi oluşturmak için kmap_atomic isimli fonksiyon ve girişi boşaltmak için 
+    ise kunmap_atomic isimli fonksiyon kullanılmaktadır. Yapının ikinci elemanı olan bv_len transfer edilecek byte sayısını barındırmaktadır. 
+    (Bu elemanda transfer edilecek sektör sayısı değil doğrudan byte sayısı bulunmaktadır.) Nihayet yapının üçüncü elemanı olan 
+    bv_offset birinci elemanında belirtilen adresten uzaklığı tutmaktadır. Yani aslında gerçek transfer adresi bv_page değildir. 
+    bv_page + bv_offset'tir. Bu yapıda en önemli bilgi olan transferin söz konusu olduğu sektör bilgisi yoktur. İşte aslında 
+    transfere konu olan sektör numarası bio yapısının içerisindedir. Her ne kadar biz yukarıdaki makroda bio yapısına erişemiyor 
+    olsak da buna dolaylı olarak iterator nesnesi yoluyla iterator.iter.bi_sect ifadesi ile erişilebilmektedir. Bu durumda 
     rq_for_each_segment fonksiyonu içerisinde transfer tipik olarak şöyle yapılmaktadır:
 
     rq_for_each_segment(biov, rqs, iterator) {
@@ -65620,31 +65611,31 @@ void exit_sys(const char *msg)
         char *buf = (char *)kmap_atomic(biov.bv_page);
         size_t len = biov.bv_len;
         int direction = bio_data_dir(iterator.bio);
-
         transfer_block(bdev, sector, buf + biov.bv_offset, len, direction);
-
         kunmap_atomic(buf);
     }
 
-    Burada transferin yapılacağı sektörün numarası bio_vec içerisinde bulunmadığında iterator yolu ile iterator.iter.bi_sector ifadesiyle alınmıuştır.
-    Transfer adresi olan buf biov.bv_page adresinden biov.bv_offset kadar ileridedir. Yine transferin yönü doğrudan bio_vec yapısının içerisinde değildir. 
-    Bu yön bilgisinin bio_data_dir makrosuyla iterator yoluyla alındığına dikkat ediniz. (Aslında yön bilgisi bio yapısının içerisindedir. Bu makro onu buradan almaktadır.)
-    Örneğimizde transferin transfer_block isimli fonksiyonla yapıldığını görüyorsunuz. Bu fonksiyon bizim tarafımızdan yazılan gerçek transferin yapıldığı fonksiyondur. 
-    Aygıt sürücünün en önemli bilgilerinin BLOCKDEV isimli yapıda tutulduğunu anımsayınız. Her ne kadar bu yapı nesnesinin adresi global g_bdev göstericisinde tutuluyorsa da 
-    yine de o bilgi örneğimizde requeat_queue nesnesinin queuedata elemanından çekilerek alınıp transfer_block fonksiyonuna verilmiştir. Bu durum yukarıdaki örnek için gereksiz olsa da 
-    birden fazla minör numarayla çalışıldığı durumda aygıt bilgilerinin yerinin belirlebilmesi için genel bir çözüm oluşturmak amacıyla transfer_block fonksiyonuna aktarılmıştır. 
-    Aygıt bilgilerinin request_queue yapısının quedata elemanına nesne tahsis edildikten sonra yerleştirildiğini anımsayınız. 
-
-    Buradaki transfer_block fonksiyonun parametrik yapısı şöyle olabilir:
+    Burada transferin yapılacağı sektörün numarası bio_vec içerisinde bulunmadığından bu bilgi iterator yolu ile iterator.iter.bi_sector 
+    ifadesiyle alınmıştır. Transfer adresi olan buf adresi biov.bv_page adresinden biov.bv_offset kadar ileridedir. Yine transferin 
+    yönü doğrudan bio_vec yapısının içerisinde değildir. Bu yön bilgisinin bio_data_dir makrosuyla iterator yoluyla alındığına 
+    dikkat ediniz. (Aslında yön bilgisi bio yapısının içerisindedir. Bu makro onu buradan almaktadır.) Örneğimizde transferin 
+    transfer_block isimli fonksiyonla yapldığını görüyorsunuz. Bu fonksiyon bizim tarafımızdan yazılan gerçek transferin yapıldığı 
+    fonksiyondur. Aygıt sürücünün en önemli bilgilerinin bizim tarafımızdan oluşturulan BLOCKDEV isimli yapıda tutulduğunu 
+    anımsayınız. Her ne kadar bu yapı nesnesinin adresi global g_bdev göstericisinde tutuluyor olsa da örneğimizde requeat_queue 
+    nesnesinin queuedata elemanından çekilerek alınıp transfer_block fonksiyonuna verilmiştir. Bu durum yukarıdaki örnek için 
+    gereksiz olsa da birden fazla minör numarayla çalışıldığı durumda aygıt bilgilerinin yerinin belirlebilmesi için genel bir 
+    çözüm oluşturmak amacıyla transfer_block fonksiyonuna aktarılmıştır. Aygıt bilgilerinin request_queue yapısının quedata 
+    elemanına nesne tahsis edildikten sonra yerleştirildiğini anımsayınız. Buradaki bizim tarafımızdan yazılması gereken 
+    transfer_block fonksiyonun parametrik yapısı şöyle olabilir:
 
     static void transfer_block(struct BLOCKDEV *bdev, sector_t sector, char *buf, size_t len, int direction);
 
     direction değeri READ (0) ve WRITE (1) sembolik sabitleriyle define edilmiştir. 
 
-    Aşağıda RAMDISK block aygıt sürücüsünün tüm kodlarını görüyorsunuz.
+    Aşağıda RAMDISK 5'li çekirdekler öncesinde kullabileceğiniz block aygıt sürücüsünün tüm kodlarını görüyorsunuz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-/* generic-bdriver.c */
+/* ramdisk-driver.c */
 
 #include <linux/module.h>
 #include <linux/kernel.h>
@@ -65656,7 +65647,7 @@ void exit_sys(const char *msg)
 #define CAPACITY				(KERNEL_SECTOR_SIZE * 1000)
 
 MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("General Block Device Driver");
+MODULE_DESCRIPTION("Ramdisk Device Driver");
 MODULE_AUTHOR("Kaan Aslan");
 
 int g_major = 0;
@@ -65808,12 +65799,16 @@ static void __exit generic_exit(void)
 module_init(generic_init);
 module_exit(generic_exit);
 
-obj-m += $(file).o
+# Makefile
+
+obj-m += generic.o
 
 all:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
+
+/* loadblk (bu satırı dosyaya kopyalamayınız) */
 
 #!/bin/bash
 
@@ -65823,8 +65818,75 @@ mode=666
 /sbin/insmod ./$module.ko ${@:2} || exit 1
 major=$(awk "\$2 == \"$module\" {print \$1}" /proc/devices)
 rm -f $module
-mknod $module b $major 0
-chmod $mode $module
+mknod -m $mode $module b $major 0
+
+/* unloadblk (bu satırı dosyaya kopyalamayınız ) */
+
+#!/bin/bash
+
+module=$1
+
+/sbin/rmmod ./$module.ko || exit 1
+rm -f $module
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Yukarıdaki örneklerdeki request kuyruk yapısı Linux'un 5'ten önceki çekirdeklerine özgüdür. Maalesef blok aygıt sürücülerinin
+    içsel yapısı birkaç kere değiştirilmiştir. Burada yeni çekirdeklerdeki request kuyruk yapısı üzerinde duracağız. Yeni 
+    çekirdeklerde bu kuyruk yapısı şöyle kullanılmaktadır:
+
+    1) Programcı blk_mq_tag_set isimli yapı türünden bir yapı nesnesi oluşturur. Bu yapı nesnesi blok yagıt sürücüsünün 
+    bilgilerinin tutulacağı yapının bir elemanı olarak alınabilir. Ya da global bir değişken olarak alınabilir.
+
+    #include <linux/blk-mq.h>
+
+    struct BLOCKDEV {
+        spinlock_t sl;
+        struct gendisk *gdisk;
+        struct blk_mq_tag_set ts;
+        struct request_queue *rq;
+        size_t capacity;
+        void *data;
+    };
+    static struct BLOCKDEV *g_bdev;
+
+    2) Bu blk_mq_tag_set yapısının içi aşağıdaki gibi doldurulur:
+
+    g_bdev->ts.ops = &g_mqops;
+    g_bdev->ts.nr_hw_queues = 1;
+    g_bdev->ts.queue_depth = 128;
+    g_bdev->ts.numa_node = NUMA_NO_NODE;
+    g_bdev->ts.cmd_size = 0;
+    g_bdev->ts.flags = BLK_MQ_F_SHOULD_MERGE;
+    g_bdev->ts.driver_data = &g_bdev;
+
+    Buradaki elemanlar çekirdeğin blok aygıt sürücü mimarisiyle ilgilidir. Biz burada tipik değerler kullandık. blk_mq_tag_set
+    yapısının ops elemanı transfer isteklerini yerine getiren ana fonksiyonun adresini almaktadır. Bu fonksiyonun parametrik 
+    yapısı şöyle olmalıdır:
+
+    static blk_status_t request_proc(struct blk_mq_hw_ctx *ctx, const struct blk_mq_queue_data *data);
+
+    Yapının driver_data elemanına bu fonksiyon içerisinde eişilebilecek nesnenin adresi girilmelidir. Örneğimizde bu elemana 
+    g_bdev nesnesinin adresini girdik. Tabii aslında bu nesne global olduğu için zaten bu nesneye her yerden erişilebilmektedir. 
+    Ancak birden fazla minör numaranın desteklendiği durumda buraya ilgili minör numaraya ilişkin aygıt bilgisi girilebilir.
+
+    3) İçi doldurulan blk_mq_tag_set nesnesi blk_mq_alloc_tag_set fonksiyonu ile tahsis edilip set edilmelidir. Fonksiyonun 
+    prototipi şöyledir:
+
+    #include <linux/blk-mq.h>
+
+    int blk_mq_alloc_tag_set(struct blk_mq_tag_set *set);
+
+    Fonksiyon blk_mq_tag_set yapı nesnesinin adresini alır. Başarı durumunda 0 değerine başarısızlık durumunda negatif errno 
+    değerine geri döner.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Yukarıdaki blok aygıt sürücüsü bir dosya sistemi ile formatlanarak sanki bir disk bölümüymüş gibi de kullanılabilir. Bunun için
