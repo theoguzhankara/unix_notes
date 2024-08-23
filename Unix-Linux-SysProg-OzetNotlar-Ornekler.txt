@@ -61988,7 +61988,7 @@ rm -f $module
     elde edebilmekteyiz.
 
     Böylece biz proc dosya sistemi içerisinde bir dosya açıldığında o dosyanın isminden hareketle hangi dosyanın açılmış 
-    olduğunu anlayabiliriz. Ayrıca dentry yapısının d_parent elemanı dosya ya da dizin'in içinde bulunduğu dizine ilişkin 
+    olduğunu anlayabiliriz. Ayrıca dentry yapısının d_parent elemanı dosya ya da dizinin içinde bulunduğu dizine ilişkin 
     dentry nesnesini vermektedir. Yani biz istersek dosyanın içinde bulunduğu dizinin ismini de alabiliriz.
 
     Aşağıda örneği bir bütün olarak veriyoruz. Aygıt sürücüyü yine aşağıdaki gibi derleyebilirsiniz:
@@ -61999,16 +61999,16 @@ rm -f $module
 
     $ sudo ./loadmulti 5 pipe-driver ndevices=5
 
-    Aygıt sürüyü yükledikten sonra artık proc dosya sisteminde "pipe-driver" isimli bid dizin oluşturulacak ve bu dizin 
-    içerisinde de aşağıdaki gibi 3 dizin yaratılmış olacaktır:
+    Aygıt sürücüyü yükledikten sonra artık proc dosya sisteminde "pipe-driver" isimli bir dizin oluşturulacak ve bu dizin 
+    içerisinde de aşağıdaki gibi 5 dizin yaratılmış olacaktır:
 
     $ ls /proc/pipe-driver
     pipe0  pipe1  pipe2  pipe3  pipe4
 
-    Bu dosyaların her birinin içerisinde de "bufsize" ve "count" isimli iki dosya bulunacaktır. Burada teti "prog1.c" ve 
-    "prog2.c" programları yardımıyla yapabilirisiniz. Örneğin "prog1" programı ile "pipe-driver3" borusunu açıp içerisine 
+    Bu dosyaların her birinin içerisinde de "bufsize" ve "count" isimli iki dosya bulunacaktır. Burada testi "prog1.c" ve 
+    "prog2.c" programları yardımıyla yapabilirsiniz. Örneğin "prog1" programı ile "pipe-driver3" borusunu açıp içerisine 
     bir şeyler yazarsanız "/proc/pipe-driver/pipe3/count" dosyasının içerisinde yazılan byte sayısını görebilirsiniz. Aygıt
-    sürücümüzü yine "unloadmulti" script'i ile boşaltabilirsiniz:
+    sürücümüzü yine "unloadmulti" script'i ile boşaltabilirsiniz.
 
     $ sudo ./unloadmulti 5 pipe-drive
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -62701,12 +62701,12 @@ void exit_sys(const char *msg)
     işlemcilerin içerisindeki çekirdeklerin her birinde o çekirdekte periyodik kesme oluşturan (local interrupts) timer devreleri 
     bulunmaktadır. Böylece her çekirdek kendi timer devresiyle "context switch" yapmakta ve proses istatistiklerini güncellemektedir. 
     Bugün PC mimarisinde yerel çekirdeklerin kesme mekanizmaları dışında ayrıca bir de eski sistemlerde zaten var olan IRQ0 hattına 
-    bağlı global bir timer devresi de bulunmaktadır. Bu global timer devresi "context switch" yapmakta değil sistem zamanının 
+    bağlı global bir timer devresi de bulunmaktadır. Bu global timer devresi "context switch" yapmak için değil sistem zamanının 
     ilerletilmesi amacıyla kullanılmaktadır.
 
     Bugünkü Linux sistemlerinde söz konusu olan bu timer devrelerinin hepsi 1 milisaniye, 4 milisaniye ya da 10 milisaniyeye 
     kurulmaktadır. Eskiden ilk Linux çekirdeklerinde 10 milisaniyelik periyotlar kullanılıyordu. Sonra bilgisayarlar hızlanınca 
-    1 milissaniye periyot yaygın olarak kullanılmaya başlandı. Ancak bugünlerde 4 milisaniye periyotları kullanan çekirdekler de 
+    1 milisaniye periyot yaygın olarak kullanılmaya başlandı. Ancak bugünlerde 4 milisaniye periyotları kullanan çekirdekler de 
     yaygın biçimde bulunmaktadır. Aslında timer frekansı çekirdek konfigüre edilirken kullanıcılar tarafından da değiştirilebilmektedir. 
     (Çekirdek derlenmeden önce çekirdeğin davranışları üzerinde etkili olan parametrelerin belirlenmesi sürecine "çekirdeğin 
     konfigüre" edilmesi denilmektedir.)
@@ -62721,9 +62721,9 @@ void exit_sys(const char *msg)
     değişkeni artırmaktadır. Böylece eğer timer kesme periyodu biliniyorsa iki jiffies değeri arasındaki farka bakılarak 
     bir zaman ölçümü mümkün olabilmektedir.
 
-    Timer frekeansı Linux kernel içerisindeki HZ isimli sembolik sabitle belirtilmiştir. Timer periyodu çekirdek konfigüre 
+    Timer frekansı Linux kernel içerisindeki HZ isimli sembolik sabitle belirtilmiştir. Timer periyodu çekirdek konfigüre 
     edilirken değiştirilebilmektedir. Genellikle bu süre 1 ms, 4 ms ya da 10 ms olmaktadır. (Ancak değişik mimarilerde farklı 
-    değerlerde olabilir.) Örneğin kursun yapıldığı sanal makinede timer periyodu 4 milisaneye'dir. Bu da saniyede 250 kez timer
+    değerlerde olabilir.) Örneğin kursun yapıldığı sanal makinede timer periyodu 4 milisaniye'dir. Bu da saniyede 250 kez timer
     kesmesinin oluşacağı anlamına gelmektedir. Başka bir deyişle bu makinede HZ sembolik sabiti 250 olarak define edilmiştir.
 
     İşte timer kesmesi her oluşturduğunda işletim sisteminin kesme kodu (interrupt handler) devereye girip "jiffies" isimli 
@@ -62744,7 +62744,7 @@ void exit_sys(const char *msg)
 
     Aşağıdaki örnekte çekirdek modülü içerisinde proc dosya sisteminde "jify-module" isimli bir dizin, dizin'in içerisinde de 
     "jiffy" ve "hertz" isimli iki dosya yaratılmıştır. jiffy dosyası okunduğunda o anki jiffies değeri elde edilmektedir. 
-    hertz dosyası okundauğunda ise timer frekansı elde edilmektedir. Aygıt sürücüyü aşağıdaki gibi derleyip yükleyebilirsiniz:
+    hertz dosyası okunduğunda ise timer frekansı elde edilmektedir. Aygıt sürücüyü aşağıdaki gibi derleyip yükleyebilirsiniz:
 
     $ make file=jiffy-module
     $ sudo insmod jiffy-module.ko
