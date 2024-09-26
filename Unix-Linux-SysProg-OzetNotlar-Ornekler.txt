@@ -11,7 +11,7 @@
                         (Notları sabit genişlikli font kullanan programlama editörleri ile açınız.)
                             (Editörünüzün "Line Wrapping" özelliğini pasif hale getiriniz.)
 
-                                                    Son Güncelleme: 22/08/2024 - Perşembe
+                                                    Son Güncelleme: 26/09/2024 - Perşembe
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -5303,8 +5303,8 @@ void exit_sys(const char *msg)
     int walkdir(const char *path, int (*proc)(const char *, const struct stat *, int));
 
     Fonksiyonun birinci parametresi dolaşılacak dizinin yol ifadesini belirtir. İkinci parametre callback fonksiyonun adresini almaktadır. 
-    callback fonksiyonun virinci parametresi bulunan dizin girişinin ismini (tüm yol ifadesi değil), ikinci parametresi bu dosyanın 
-    stat bilgilerini belirtmektedir. Üçüncü parametre ise özyinleme için kademe bilgisini belirtir. Callback fonksiyon 0 ile geri dönerse 
+    callback fonksiyonun birinci parametresi bulunan dizin girişinin ismini (tüm yol ifadesi değil), ikinci parametresi bu dosyanın 
+    stat bilgilerini belirtmektedir. Üçüncü parametre ise özyineleme için kademe bilgisini belirtir. Callback fonksiyon 0 ile geri dönerse 
     özyineleme devam ettirlir. Ancak sıfır dışı bir değerle geri dönerse özyineleme sonlandırılır ve walkdir fonksiyonu da bu değerler 
     geri döner. Bu durumda walkdir fonksiyonun geri dönüş değeri üç biçimde olabilir:
 
@@ -15180,7 +15180,8 @@ void exit_sys(const char *msg)
 
     Bu komut anahtarları hex sistemde yazdırmaktadır. Bizim anahtarları hex olarak vermemize gerek yoktur. ipcs komutu 
     default olarak tüm IPC nesnelerini görüntülemektedir. Ancak -q komut satırı argümanıyla yalnızca mesaj kuyrukları,
-    -m komutuyla yalnızca paylaşılan bellek alanları ve -s komutuyla da yalnızca semaphore nesneleri görüntülenebilir. Örneğin:
+    -m komutuyla yalnızca paylaşılan bellek alanları ve -s komutuyla da yalnızca semaphore nesneleri görüntülenebilir. 
+    Örneğin:
 
     $ ipcs -q
 
@@ -15188,13 +15189,13 @@ void exit_sys(const char *msg)
     anahtar    iltkiml    sahibi     izinler    kull-bayt    ileti-sayısı
     0x01234567 0          kaan       644        0            0
 
-    Aslında Linux çekirdeği IPC nesneleri yaratıldığında onların bilgilerini proc dosya sisteminde "/proc/sysvipc" dizini içerisinde 
-    msg, sem, shm dosyalarının içerisine yazmaktadır. ipcs komutu da zaten bu dosyaların içindekilerini görüntülemektedir. 
+    Aslında Linux çekirdeği IPC nesneleri yaratıldığında onların bilgilerini proc dosya sisteminde "/proc/sysvipc" dizini 
+    içerisinde msg, sem, shm dosyalarının içerisine yazmaktadır. ipcs komutu da zaten bu dosyaların içindekilerini görüntülemektedir.
 
     Not: proc dosya sistemi bellekte oluşturulan, kernel tarafından bir dosya sistemi gibi sürekli güncellenen ve çekirdeğin 
-    yaptığı önemli işlemleri dış dünyaya bildirmek amacıyla kullanılan özel bir dosya sistemidir. Kursumuzda proc dosya sistemi ileride 
-    ayrı bir bölümde ele alınacaktır. proc dosya sisteminde bazı dosyalar yazılabilir durumda da olabilmektedir. Bu durumda bu dosyalara
-    yazma yapıldığında çekirdeğin bazı ayarları da değiştirilmiş olmaktadır.
+    yaptığı önemli işlemleri dış dünyaya bildirmek amacıyla kullanılan özel bir dosya sistemidir. Kursumuzda proc dosya sistemi 
+    ileride ayrı bir bölümde ele alınacaktır. proc dosya sisteminde bazı dosyalar yazılabilir durumda da olabilmektedir. Bu 
+    durumda bu dosyalara yazma yapıldığında çekirdeğin bazı ayarları da değiştirilmiş olmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -17369,8 +17370,8 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Her ne kadar POSIX standartlarında belirtilmiş olmasa da işletim sistemleri, paylaşılan bellek alanları için çeşitli sınır değerler
-    oluşturmaktadır. Linux sistemlerinde paylaşılan bellek alanlarına ilişkin sınırlar şöyledir:
+    Her ne kadar POSIX standartlarında belirtilmiş olmasa da işletim sistemleri, paylaşılan bellek alanları için çeşitli sınır 
+    değerler oluşturmaktadır. Linux sistemlerinde paylaşılan bellek alanlarına ilişkin sınırlar şöyledir:
 
     SHMALL: Sistemdeki tüm paylaşılan bellek alanlarının kaplayabileceği toplam alanı sayfa sayısı cinsinden belirtmektedir. 
     Bu değer Linux sistemlerinde /proc/sys/kernel/shmall dosyasından elde edilebilir ve değiştirilebilir. Buradaki default değer
@@ -36915,18 +36916,18 @@ void exit_sys(const char *msg)
     arasında hiçbir farklılık yoktur. Kilitleme isteğe bağlı mı yoksa zorunlu mu olduğu "mount parametrelerine" ve "dosyanın erişim 
     haklarına" bakılarak belirlenmektedir. 
 
-    Zorunlu kilitleme kavramı POSIX standartlarında bulunmamaktadır. POSIX standartları fcntl fonksiyonunun açıklamasında bunun gerekçelerini
-    belirtmiştir. Zaten bazı işletim sistemleri zorunlu kilitlemeyi hiç desteklememektedir. Linux 2.4 çekirdeği ile birlikte zorunlu 
-    dosya kilitlemesini destekler hale gelmiştir. Yukarıda da belirttiğimiz gibi zorunlu kilitleme için aslında fcntl fonksiyonunda 
-    ek bir şey yapılmaz. Linux'ta zorunlu kilitleme için şu koşulların sağlanmış olması gerekmektedir:
+    Zorunlu kilitleme kavramı POSIX standartlarında bulunmamaktadır. POSIX standartları fcntl fonksiyonunun açıklamasında bunun 
+    gerekçelerini belirtmiştir. Zaten bazı işletim sistemleri zorunlu kilitlemeyi hiç desteklememektedir. Linux 2.4 çekirdeği 
+    ile birlikte zorunlu dosya kilitlemesini destekler hale gelmiştir. Yukarıda da belirttiğimiz gibi zorunlu kilitleme için aslında 
+    fcntl fonksiyonunda ek bir şey yapılmaz. Linux'ta zorunlu kilitleme için şu koşulların sağlanmış olması gerekmektedir:
 
-    1) Dosyanın içinde bulunduğu dosya sisteminin -o mand ile mount edilmiş olması gerekir. Mevcut mount edilmiş olan bir dosya sisteminin 
-    mount parametreleri aşağıdaki gibi değiştirilebilir:
+    1) Dosyanın içinde bulunduğu dosya sisteminin -o mand ile mount edilmiş olması gerekir. Mevcut mount edilmiş olan bir dosya 
+    sisteminin mount parametreleri aşağıdaki gibi değiştirilebilir:
 
     $ sudo mount -o mand,remount <device> <mount point>
 
-    Hangi dosya sisteminin "mand" parametresi ile mount edileceğini tespit etmeniz gerekir. Bunun için df komutunu argümansız biçimde 
-    kullanabilirsiniz. Örneğin:
+    Hangi dosya sisteminin "mand" parametresi ile mount edileceğini tespit etmeniz gerekir. Bunun için df komutunu argümansız 
+    biçimde kullanabilirsiniz. Örneğin:
 
     $ df
     Dosyasistemi    1K-blok     Dolu      Boş Kull% Bağlanılan yer
@@ -36960,11 +36961,11 @@ void exit_sys(const char *msg)
 
     $ chmod g+s,g-x test.txt
 
-    Bir dosyanın bir proses tarafından zorunlu kilitlenmiş olması dosyanın silinmesini engellememektedir. Dosyanın truncate ve 
-    ftruncate fonksiyonu ile genişletilmesi ya da budanması işleminde zorunlu kilitleme mekanizması devreye girmektedir. 
+    Bir dosyanın bir proses tarafından zorunlu kilitlenmiş olması dosyanın silinmesini engellememektedir. Dosyanın truncate 
+    ve ftruncate fonksiyonu ile genişletilmesi ya da budanması işleminde zorunlu kilitleme mekanizması devreye girmektedir. 
     Yani bu fonksiyonlar sanki dosyaya yazma yapıyormuş gibi etki göstermektedir. Benzer biçimde örneğin dosyaya zorunlu 
     kilit konulmuşsa dosya O_TRUNC modunda açılamamaktadır. Ancak yukarıda belirttiğimiz gibi dosya remove ya da unlink 
-    fonksiyonlarıyla üzerinde zorunlu kilit olsa bile silinebilmektedir. 
+    fonksiyonlarıyla üzerinde zorunlu kilit olsa bile silinebilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -37262,6 +37263,114 @@ void exit_sys(const char *msg)
     itibaren sonraki bütün kilitler kaldırılmaktadır. Fonksiyonun uzunluk belirten size parametresi negatif de girilebilir. 
     Bu durumda dosya göstericisinin gösterdiği yerden geriye doğru alan kilitlenir. Fonksiyon başarı durumunda 0 değerine, 
     başarısızlık durumunda -1 değerine geri dönmektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Biz şimdiye kadar proc dosya sistemindeki bazı dosyaları hedefe yönelik biçimde gördük. Şimdi proc dosya sistemini 
+    genel olarak ele almak istiyoruz. proc dosya sistemi disk tabanlı bir dosya sistemi değildir. Bu dosya sistemi bellek 
+    tabanlıdır. Genellikle bu dosya sistemindeki bilgiler çekirdek modülleri ve aygıt sürücüler tarafından talep edildiğinde
+    verilmektedir. proc dosya sistemi standart bir dosya sistemi değildir. Dolayısıyla bu dosya sistemi POSIX standartlarında 
+    belirtilmemiştir. Linux gibi bazı UNIX türevi sistemler bu dosya sistemini desteklerken bazıları desteklememektedir. 
+    (Örneğin macOS sistemleri proc dosya sistemini desteklememektedir.) proc dosya sistemi boot işlemi sırasında "/proc" dizinine 
+    mount edilmektedir.
+
+    proc dosya sistemindeki dosyaların ve dizinlerin listesi alındığında sanki onların uzunlukları "0" imiş gibi rapor edilmektedir. 
+    Bunun nedeni bu dizindeki dosyaların içeriklerinin talep edildiğinde oluşturulmasıdır. Örneğin:
+
+    $ ls -l /proc
+
+    dr-xr-xr-x  9 root             root                           0 Ağu 21 11:21 1
+    dr-xr-xr-x  9 root             root                           0 Ağu 21 11:21 10
+    dr-xr-xr-x  9 root             root                           0 Ağu 21 11:21 100
+    dr-xr-xr-x  9 root             root                           0 Ağu 21 11:21 1001
+    dr-xr-xr-x  9 root             root                           0 Ağu 21 11:21 1003
+    dr-xr-xr-x  9 root             root                           0 Ağu 21 11:21 101
+    dr-xr-xr-x  9 root             root                           0 Ağu 21 11:21 102
+    dr-xr-xr-x  9 root             root                           0 Ağu 21 11:21 103
+    dr-xr-xr-x  9 root             root                           0 Ağu 21 11:21 105
+    dr-xr-xr-x  9 root             root                           0 Ağu 21 11:21 107
+    dr-xr-xr-x  9 root             root                           0 Ağu 21 11:21 108
+    dr-xr-xr-x  9 root             root                           0 Ağu 21 11:21 11
+    dr-xr-xr-x  9 root             root                           0 Ağu 21 11:21 110
+    dr-xr-xr-x  9 root             root                           0 Ağu 21 11:21 111
+    dr-xr-xr-x  9 root             root                           0 Ağu 21 11:21 112
+    ...
+
+    proc dosya sistemi içerisinde dizinler ve dosyalar bulunmaktadır. Bu dizinlerin ve dosyaların nasıl oluşturulduğu aygıt 
+    sürücülerin ele alındığı bölümde açıklanmaktadır.
+
+    proc dosya sistemi çekirdeğin ve aygıt sürücülerin birtakım bilgileri dış dünyaya iletmesini basit bir biçimde sağlamaktadır. 
+    Bu dosya sistemi sayesinde biz sistemde ne olup bittiğini buradaki dosyaların içeriklerini okuyarak anlayabiliriz. Gerçekten 
+    de pek çok UNIX/Linux komutu aslında çekirdeğe ilişkin birtakım bilgileri bu dosya sisteminden elde etmektedir. Örneğin 
+    "ps" komutu ile sistemdeki proseslerin bilgilerini elde edebiliyorduk. Aslında "ps" komutu bu bilgileri proc dosya sistemindeki
+    dosyalardan elde etmektedir. Biz bazı konularda bazı bilgileri elde etmek için bu proc dosya sistemindeki birtakım dosyaları 
+    kullanmıştık. proc dosya sistemindeki dosyaların bazıları yazmaya da izin vermektedir. Eğer sistem yöneticisi bu dosyalarda
+    değişiklik yaparsa çekirdek ve aygıt sürücüler bu değişikleri dikkate alıp çalışmasını bu değişiklere göre ayarlayabilmektedir.
+    proc dosya sistemi içerisindeki dosyalar genel olarak "text dosyalar" biçimindedir. Yani bunların içeriklerini biz "cat" 
+    komutuyla elde edebiliriz.
+
+    proc dosya sisteminde iç içe pek çok dizin ve dosya bulunmaktadır. Biz burada bu dosya sisteminin genel içeriği hakkında 
+    bazı bilgiler vereceğiz.
+
+    proc dosya sisteminin kökünde (yani "/proc" dizininde) her proses için ayrı bir dizin yaratılmaktadır. Yaratılan dizinin 
+    ismi prosesin id değeri biçimindedir. Yani örneğin biz bir programı çalıştırdığımızda yaratılan prosesin proses id'sine 
+    ilişkin bir dizin "/proc" dizinin kökünde yaratılmaktadır:
+
+    $ ./app
+    press ENTER to exit...
+
+    Şimdi yaratılan prosesin proses id'sine başka bir terminalden bakalım:
+
+    $ ps -a
+    PID TTY          TIME CMD
+    16852 pts/0    00:00:00 app
+    16854 pts/3    00:00:00 ps
+
+    İşte çekirdek "/proc" dizininde "16852" ismiyle bir dizin yaratıp o ilgili prosesin tüm bilgilerini bu dizinin içerisine 
+    yerleştirmektedir:
+
+    $ ls -ld /proc/16852
+    dr-xr-xr-x 9 kaan study 0 Ağu 27 13:40 /proc/16852
+
+    Bu dizin içeriğini görüntülediğimizde aşağıdaki gibi bir dizin yapısıyla karşılaşmaktayız:
+
+    $ ls /proc/16852
+    arch_status  cmdline             environ  limits     mounts      oom_score      root       smaps_rollup  task
+    attr         comm                exe      loginuid   mountstats  oom_score_adj  sched      stack         timens_offsets
+    autogroup    coredump_filter     fd       map_files  net         pagemap        schedstat  stat          timers
+    auxv         cpu_resctrl_groups  fdinfo   maps       ns          patch_state    sessionid  statm         timerslack_ns
+    cgroup       cpuset              gid_map  mem        numa_maps   personality    setgroups  status        uid_map
+    clear_refs   cwd
+
+    Buradaki girişlerin bazıları "dizin" bazıları da dosyadır. Buradaki bazı dizin ve dosyalar hakkında kısa açıklamalar yapalım:
+
+    - fd dizini prosesin açmış olduğu dosyalara ilişkin bilgileri bulundurmaktadır. Örneğin:
+
+    $ ls -l
+    toplam 0
+    lrwx------ 1 kaan study 64 Ağu 27 14:00 0 -> /dev/pts/0
+    lrwx------ 1 kaan study 64 Ağu 27 14:00 1 -> /dev/pts/0
+    lrwx------ 1 kaan study 64 Ağu 27 14:00 2 -> /dev/pts/0
+
+    Burada dosyaların sembolik bağlantı dosyaları olduğuna dikkat ediniz.
+
+    - fdinfo isimli dizin içerisinde açılmış dosyaların bazı önemli bilgileri bulundurulmaktadır.
+
+    - environ isimli dosya prosesin çevre değişken listesini bize vermektedir.
+
+    - cmdline isimli dosyada program çalıştırılırken kullanılan komut satırı argümanları bulunmaktadır.
+
+    proc dosya sisteminin kök dizininde sisteme ilişkin bilgi veren pek çok dosya dosya bulunmaktadır. Burada bunların
+    birkaçı üzerinde duralım:
+
+    - version isimli dosya yüklü olan çekirdek ve dağıtım hakkında temel bilgileri vermektedir.
+
+    - devices dosyası yüklü olan aygıt sürücüler hakkında bilgiler vermektedir.
+
+    - modules isimli dosya yüklü olan çekirdek modülleri hakkında bilgiler vermektedir.
+
+    proc dosya sistemi oldukça fala dizine ve dosyaya sahiptir. Bazı dosyalar özel birtakım konularla ilgildir. Dolayısıyla 
+    bu dosyaların ve dizinlerin "konuya göre gerektikçe öğrenilmesi" yoluna gidilebilir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -40517,7 +40626,7 @@ void exit_sys(const char *msg)
     Dolayısıyla buradaki bilgiler reboot işleminde kalıcı değildir. Bu dosya uzayabileceği için bir kuyruk sistemi gibi oluşturulmaktadır. 
     Yani belli süre sonra önce yazılmış olan mesajlar kaybolabilmektedir. Dosyanın sonunu görebilmek için "tail" komutunu 
     kullanabilirsiniz. tail komutu default olarak dosyanın sonundaki 10 satırı göstermektedir. Ancak -n seçeneği ile daha fazla 
-    satır görüntülenebilmektedir. 
+    satır görüntülenebilmektedir.
 
     Aşağıda loglama için basit bir örnek verilmiştir.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -40545,15 +40654,15 @@ int main(void)
     çalışmaya başladıklarında default durumda "/etc/syslog.conf" ya da "/etc/rsyslog.conf" dosyalarına bakmaktadır. İşte aslında 
     bu daemon'ların hangi dosyalara yazacağı bu konfigürasyon dosyalarında sistem yöneticisi tarafından belirlenmektedir. 
     Ancak bu dosyada da belirleme yapılmamışsa default olarak pek çok mesaj grubu (error, warning, info) "/var/log/syslog" 
-    dosyasına yazılmaktadır. O halde programcı syslog mesajları için default durumda bu dosyaya başvurmalıdır. 
+    dosyasına yazılmaktadır. O halde programcı syslog mesajları için default durumda bu dosyaya başvurmalıdır.
 
-    Log dosyalarını incelemek için pek çok utility bulunmaktadır. Örneğin lnav, glogg, ksystemlog gibi. systemd init paketi içerisindeki
-    servis programları olan systemctl ve journalctl komutları ile de görüntüleme yapılabilmektedir.
+    Log dosyalarını incelemek için pek çok utility bulunmaktadır. Örneğin lnav, glogg, ksystemlog gibi. systemd init paketi 
+    içerisindeki servis programları olan systemctl ve journalctl komutları ile de görüntüleme yapılabilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Şimdi de log mekanizmasının bir daemon programda kullanımına bir örnek verelim. Merkezi log mekanizması daha çok terminal 
-    ilişkisi olmayan daemon'lar ve aygıt sürücüler gibi programlar tarafından kullanılmaktadır. 
+    ilişkisi olmayan daemon'lar ve aygıt sürücüler gibi programlar tarafından kullanılmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* mydaemond.c */
@@ -40720,9 +40829,9 @@ void exit_daemon(const char *msg)
     upstart
     systemd
 
-    Kursun yapıldığı zaman diliminde ağırlıklı biçimde init paketi olarak systemd paketi kullanılmaktadır. Upstart paketinin 
+    Kursun yapıldığı zaman diliminde ağırlıklı biçimde init paketi olarak "systemd" paketi kullanılmaktadır. Upstart paketinin 
     de sürdürümü artık yapılmamaktadır. Tabii eskiden kurulmuş Linux sistemleri ve bazı dağıtımlar hala bu paketi kullanıyor 
-    olabilmektedir. Biz kursumuzda "systemd" paketi hakkında temel bilgiler vereceğiz. 
+    olabilir. Biz kursumuzda "systemd" paketi hakkında temel bilgiler vereceğiz.
 
     Sisteminizde hangi init paketinin kurulu olduğunu çeşitli biçimlerde anlayabilirsiniz. Örneğin:
 
@@ -40735,10 +40844,19 @@ void exit_daemon(const char *msg)
     Hangi init paketinin kullanıldığının anlaşılması için diğer bir yöntem de şöyle olabilir:
 
     $ cat /proc/1/status
+    Name:	systemd
+    Umask:	0000
+    State:	S (sleeping)
+    Tgid:	1
+    Ngid:	0
+    Pid:	1
+    PPid:	0
+    ...
 
-    Bunun için ps komutundan da faydalanılabilir:
+    Sisteminizde hangi init paketinin kullanıldığını anlamanın diğer bir yolu da doğrudan ps komutunu "-p 1" seçeneği ile 
+    kullanmaktır:
 
-    $ ps -p 1 (ya da "ps -p 1 -o comm=")
+    $ ps -p 1 (ya da "ps -p 1 -o comm")
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -50699,24 +50817,25 @@ void exit_sys(const char *msg)
     Kütüphaneler "statik" ve "dinamik" olmak üzere ikiye ayrılmaktadır. Statik kütüphane dosyalarının uzantıları UNIX/Linux 
     sistemlerinde ".a (archive)" biçiminde, Windows sistemlerinde ".lib (library)" biçimindedir. Dinamik kütüphane dosyalarının 
     uzantıları ise UNIX/Linux sistemlerinde ".so (shared object), Windows sistemlerinde ".dll (dynamic link library)" biçimindedir. 
-    UNIX/Linux dünyasında kütüphane dosyaları geleneksel olarak başında "lib" öneki olacak biçimde isimlendirilmektedir. (Örneğin "x"
-    isimli bir statik kütüphane dosyası UNIX/Linux sistemlerinde genellikle "libx.a" biçiminde, "x" isimli bir dinamik kütüphane 
-    dosyası ise UNIX/Linux sistemlerinde genellikle "libx.so" biçiminde isimlendirilmektedir.)
+    UNIX/Linux dünyasında kütüphane dosyaları geleneksel olarak başında "lib" öneki olacak biçimde isimlendirilmektedir. 
+    (Örneğin "x" isimli bir statik kütüphane dosyası UNIX/Linux sistemlerinde genellikle "libx.a" biçiminde, "x" isimli bir 
+    dinamik kütüphane dosyası ise UNIX/Linux sistemlerinde genellikle "libx.so" biçiminde isimlendirilmektedir.)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Statik kütüphaneler aslında "object modülleri (yani .o dosyalarını)" tutan birer kap gibidir. Yani statik kütüphaneler object
-    modüllerden oluşmaktadır. Statik kütüphanelere link aşamasında linker tarafından bakılır. Bir program statik kütüphane dosyasından 
-    bir çağırma yaptıysa (ya da o kütüphaneden bir global değişkeni kullandıysa) linker o statik kütüphane içerisinde ilgili 
-    fonksiyonun bulunduğu object modülü link aşamasında statik kütüphane dosyasından çekerek çalıştırılabilir dosyaya yazar. 
-    (Yani statik kütüphaneden bir tek fonksiyon çağırsak bile aslında o fonksiyonun bulunduğu object modülün tamamı çalıştırılabilen 
-    dosyaya yazılmaktadır.) Statik kütüphaneleri kullanan programlar artık o statik kütüphaneler olmadan çalıştırılabilirler.
+    Statik kütüphaneler aslında "object modülleri (yani .o dosyalarını)" tutan birer kap gibidir. Yani statik kütüphaneler 
+    object modüllerden oluşmaktadır. Statik kütüphanelere link aşamasında linker tarafından bakılır. Bir program statik 
+    kütüphane dosyasından bir çağırma yaptıysa (ya da o kütüphaneden bir global değişkeni kullandıysa) linker o statik kütüphane 
+    içerisinde ilgili fonksiyonun bulunduğu object modülü link aşamasında statik kütüphane dosyasından çekerek çalıştırılabilir 
+    dosyaya yazar. (Yani statik kütüphaneden bir tek fonksiyon çağırsak bile aslında o fonksiyonun bulunduğu object modülün 
+    tamamı çalıştırılabilen dosyaya yazılmaktadır.) Statik kütüphaneleri kullanan programlar artık o statik kütüphaneler olmadan 
+    çalıştırılabilirler.
 
     Statik kütüphane kullanımının şu dezavantajları vardır:
 
-    1) Kütüphaneyi kullanan farklı programlar aynı fonksiyonun (onun bulunduğu object modülün) bir kopyasını çalıştırılabilir dosya 
-    içerisinde bulundururlar. Yani örneğin printf fonksiyonu statik kütüphanede ise her printf kullanan C programı aslında printf 
-    fonksiyonunun bir kopyasını da barındırıyor durumda olur. Bu da programların diskte fazla yer kaplamasına yol açacaktır.
+    1) Kütüphaneyi kullanan farklı programlar aynı fonksiyonun (onun bulunduğu object modülün) bir kopyasını çalıştırılabilir 
+    dosya içerisinde bulundururlar. Yani örneğin printf fonksiyonu statik kütüphanede ise her printf kullanan C programı aslında 
+    printf fonksiyonunun bir kopyasını da barındırıyor durumda olur. Bu da programların diskte fazla yer kaplamasına yol açacaktır.
 
     2) Aynı statik kütüphaneyi kullanan programlar belleğe yüklenirken işletim sistemi aynı kütüphane kodlarınını yeniden fiziksel 
     belleğe yükleyecektir. İşletim sistemi bu kodların ortak olarak kullanıldığını anlayamamaktadır.
@@ -50737,37 +50856,43 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     UNIX/Linux sistemlerinde statik kütüphane dosyaları üzerinde işlemler "ar" isimli utility program yoluyla yapılmaktadır. 
-    ar programına önce bir seçenek, sonra statik kütüphane dosyasının ismi, sonra da bir ya da birden fazla object modül ismi komut
-    satırı argümanı olarak verilir. Örneğin:
+    "ar" programına önce bir seçenek, sonra statik kütüphane dosyasının ismi, sonra da bir ya da birden fazla object modül ismi 
+    komut satırı argümanı olarak verilir. Örneğin:
 
     $ ar r libmyutil.a x.o y.o
 
-    Burada r seçeneği belirtmektedir. ar eski bir komut olduğu için burada seçenekler '-' ile başlatılarak verilmemektedir. Komuttaki
-    "libmyutil.a" işlemden etkilenecek statik kütüphane dosyasını "x.o" ve "y.o" argümanları ise object modülleri belirtmektedir. 
+    Burada "r" seçeneği belirtmektedir. ar eski bir komut olduğu için burada seçenekler '-' ile başlatılarak verilmeyebilir. 
+    Ancak POSIX standartlarında seçenekler yine "-" ile belirtilmektedir. Komuttaki "libmyutil.a" işlemden etkilenecek statik 
+    kütüphane dosyasını "x.o" ve "y.o" argümanları ise object modülleri belirtmektedir. Biz buradaki seçeneği "-" ile de 
+    belirtebiliriz:
+
+    $ ar -r libmyutil.a x.o y.o
+
     Tipik ar seçenekleri ve yaptıkları işler şunlardır:
 
-    r (replace) seçeneği (yanında "-" olmadığına dikkat ediniz) ilgili object modüllerin kütüphaneye yerleştirilmesini sağlar. 
-    Eğer kütüphane dosyası yoksa komut aynı zamanda onu yaratmaktadır. Örneğin:
+    -r (replace) seçeneği ilgili object modüllerin kütüphaneye yerleştirilmesini sağlar. Eğer kütüphane dosyası yoksa komut aynı 
+    zamanda onu yaratmaktadır. Örneğin:
 
-    $ ar r libmyutil.a x.o y.o
+    $ ar -r libmyutil.a x.o y.o
 
     Burada "libmyutil.a" statik kütüphane dosyasına "x.o" ve "y.o" object modülleri yerleştirilmiştir. Eğer "libmyutil.a" dosyası
-    yoksa aynı zamanda bu dosya yaratılacaktır.
+    yoksa aynı zamanda bu dosya yaratılacaktır. Bu seçenekte eğer kütüphaneye yerleştirilmek istenen amaç dosya zaten kütüphane
+    içerisinde varsa değiştirilmektedir ("replace" zaten buradan geliyor).
 
-    t seçeneği kütüphane içerisindeki object modüllerin listesini almakta kullanılır. Örneğin:
+    -t seçeneği kütüphane içerisindeki object modüllerin listesini almakta kullanılır. Örneğin:
 
-    $ ar t libsample.a
+    $ ar -t libsample.a
 
-    d (delete) seçeneği kütüphaneden bir object modülü silmekte kullanılır. Örneğin:
+    -d (delete) seçeneği kütüphaneden bir object modülü silmekte kullanılır. Örneğin:
 
-    $ ar d libmyutil.a x.o
+    $ ar -d libmyutil.a x.o
 
-    x (extract) seçeneği kütüphane içerisindeki object modülü bir dosya biçiminde diske save etmekte kullanılır. Ancak bu object 
+    -x (extract) seçeneği kütüphane içerisindeki object modülü bir dosya biçiminde diske save etmekte kullanılır. Ancak bu object 
     modül kütüphane dosyasından silinmeyecektir. Örneğin:
 
-    $ ar x libmyutil.a x.o
+    $ ar -x libmyutil.a x.o
 
-    m (modify) seçeneği de bir object modülün yeni versiyonunu eski versiyonla değiştirmekte kullanılır.
+    -m (modify) seçeneği de bir object modülün yeni versiyonunu eski versiyonla değiştirmekte kullanılır.
 
     O halde "x.c" ve "y.c" dosyalarının içerisindeki fonksiyonları statik kütüphane dosyasına eklemek için sırasıyla şunlar
     yapılmalıdır:
@@ -50778,7 +50903,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Statik kütüphane kullanan programları derlerken statik kütüphane dosyaları komut satırında belirtilebilir. Bu durumda gcc 
+    Statik kütüphane kullanan programlar derlenirken statik kütüphane dosyaları komut satırında belirtilebilir. Bu durumda gcc 
     ve clang derleyicileri o dosyayı bağlama (link) işleminde kullanmaktadır. Örneğin:
 
     $ gcc -o app app.c libmyutil.a
@@ -50797,7 +50922,7 @@ void exit_sys(const char *msg)
 
     gcc eskiden C derleyicisi anlamına geliyordu (GNU C Compiler). Ancak zamanla derleyicileri çalıştıran bir önyüz (frontend) 
     program haline getirildi ve ismi de "GNU Compiler Collection" biçiminde değiştirildi. Yani aslında uzunca bir süredir gcc 
-    programı ile yalnızca C programlarını değil diğer programlama dillerinde yazılmıl olan programları da derleyebilmekteyiz.
+    programı ile yalnızca C programlarını değil diğer programlama dillerinde yazılmış olan programları da derleyebilmekteyiz.
 
     Komut satırında kütüphane dosyalarının komut satırı argümanlarının sonunda belirtilmesi uygundur. Çünkü gcc programı kütüphane 
     dosyalarını yalnızca onların solunda belirtilen dosyaların bağlanmasında kullanmaktadır. Örneğin:
@@ -50819,10 +50944,10 @@ void exit_sys(const char *msg)
 
     $ gcc -o sample sample.c -lmyutil
 
-    İşleminde aslında "libmyutil.a" (ya da "libmyutil.so") dosyaları aranmaktadır. Arama işlemi sırasıyla bazı dizinlerde yapılmaktadır. 
-    Örneğin "/lib" dizini, "/usr/lib dizini", "/usr/local/lib" dizini gibi dizinlere bakılmaktadır. Ancak "bulunulan dizine (current 
-    working directory)" bakılmamaktadır. -l seçeneği ile belli bir dizine de bakılması isteniyorsa "-L" seçeneği ile ilgili dizin 
-    belirtilebilir. Örneğin:
+    İşleminde aslında "libmyutil.a" (ya da "libmyutil.so") dosyaları aranmaktadır. Arama işlemi sırasıyla bazı dizinlerde 
+    yapılmaktadır. Örneğin "/lib" dizini, "/usr/lib dizini", "/usr/local/lib" dizini gibi dizinlere bakılmaktadır. Ancak 
+    "bulunulan dizine (current working directory)" bakılmamaktadır. -l seçeneği ile belli bir dizine de bakılması isteniyorsa 
+    "-L" seçeneği ile ilgili dizin belirtilebilir. Örneğin:
 
     $ gcc -o sample sample.c -lmyutil -L.
 
@@ -50831,7 +50956,8 @@ void exit_sys(const char *msg)
 
     $ gcc -o sample sample.c -lmyutil -L. -L/home/csd
 
-    Geleneksel olarak "-l" ve "-L" seçeneklerinden sonra boşluk bırakılmamaktadır. Ancak boşluk bırakılmasında bir sakınca yoktur.
+    Geleneksel olarak "-l" ve "-L" seçeneklerinden sonra boşluk bırakılmamaktadır. Ancak boşluk bırakılmasında bir sakınca 
+    yoktur.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -50841,7 +50967,7 @@ void exit_sys(const char *msg)
 
     $ gcc -o sample sample.c libx.a liby.a
 ---------------------------------------------------------------------------------------------------------------------------*/
-<BURADA KALDIK>
+
 /*--------------------------------------------------------------------------------------------------------------------------
 												121. Ders 18/02/2024 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -50870,20 +50996,20 @@ void exit_sys(const char *msg)
     2) Dinamik kütüphaneler birden fazla proses tarafından fiziksel belleğe tekrar tekrar yüklenmeden kullanılabilmektedir.
     Yani işletim sistemi arka planda aslında aynı dinamik kütüphaneyi kullanan programlarda bu kütüphaneyi tekrar tekrar fiziksel 
     belleğe yüklememektedir. Bu da statik kütüphanelere göre önemli bir bellek kullanım avantaj oluşturmaktadır. Bu durumda eğer 
-    dinamik kütüphanenin ilgili kısmı daha önce fiziksel belleğe yüklenmişse bu durum dinamik kütüphane kullanan programın daha hızlı 
-    yüklemesine de yol açabilmektedir. Prog1 ve Prog2 biçiminde iki programın çalıştığını düşünelim. Bunlar aynı dinamik 
+    dinamik kütüphanenin ilgili kısmı daha önce fiziksel belleğe yüklenmişse bu durum dinamik kütüphane kullanan programın daha 
+    hızlı yüklemesine de yol açabilmektedir. Prog1 ve Prog2 biçiminde iki programın çalıştığını düşünelim. Bunlar aynı dinamik 
     kütüphaneyi kullanıyor olsun. İşletim sistemi bu dinamik kütüphaneyi bu proseslerin sanal bellek alanlarının farklı yerlerine 
     yükleyebilir. Ancak aslında işletim sistemi sayfa tablolarını kullanarak mümkün olduğunca bu iki dinamik kütüphaneyi aynı 
     fiziksel sayfaya eşlemeye çalışacaktır. Tabii bu durumda proseslerden biri dinamik kütüphane içerisindeki bir statik 
-    nesneyi değiştirdiğinde artık "copy on write" mekanizması devreye girecek ve dinamik kütüphanenin o sayfasının yeni bir kopyası 
-    oluşturulacaktır. Aslında bu durum fork fonksiyonu ile yeni bir prosesin yaratılması durumuna çok benzemektedir. Burada anlatılan 
-    unsurların ayrıntıları "sayfalama ve sanal bellek" kullanımın açıklandığı paragraflarda ele alınmıştır.
+    nesneyi değiştirdiğinde artık "copy on write" mekanizması devreye girecek ve dinamik kütüphanenin o sayfasının yeni bir 
+    kopyası oluşturulacaktır. Aslında bu durum fork fonksiyonu ile yeni bir prosesin yaratılması durumuna çok benzemektedir. 
+    Burada anlatılan unsurların ayrıntıları "sayfalama ve sanal bellek" kullanımın açıklandığı paragraflarda ele alınmıştır.
 
     3) Dinamik kütüphaneleri kullanan programlar bu dinamik kütüphanelerdeki değişikliklerden etkilenmezler. Yani biz dinamik 
     kütüphanenin yeni bir versiyonunu oluşturduğumuzda bunu kullanan programları yeniden derlemek ya da bağlamak zorunda kalmayız. 
-    Örneğin bir dinamik kütüphaneden foo fonksiyonunu çağırmış olalım. Bu foo fonksiyonunun kodları bizim çalıştırılabilir dosyamızın
-    içerisinde değil de dinamik kütüphanede olduğuna göre dinamik kütüphanedeki foo fonksiyonu değiştirildiğinde bizim programımız 
-    artık değişmiş olan foo fonksiyonunu çağıracaktır.
+    Örneğin bir dinamik kütüphaneden foo fonksiyonunu çağırmış olalım. Bu foo fonksiyonunun kodları bizim çalıştırılabilir 
+    dosyamızın içerisinde değil de dinamik kütüphanede olduğuna göre dinamik kütüphanedeki foo fonksiyonu değiştirildiğinde 
+    bizim programımız artık değişmiş olan foo fonksiyonunu çağıracaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -50894,13 +51020,13 @@ void exit_sys(const char *msg)
     alanına yüklenebildiğinden bunlar için yükleme adresinin önceden tespit edilmesi mümkün değildir. İşte bu sorunu giderebilmek 
     için işletim sistemlerinde değişik teknikler kullanılmaktadır. Windows sistemlerinde "import-export tablosu ve "load time 
     relocation" yöntemleri tercih edilmiştir. Bu sistemlerde dinamik kütüphane belli bir adrese yüklendiğinde işletim sistemi 
-    o dinamik kütüphanenin "relocation" tablosuna bakarak gerekli makine komutlarını düzeltmektedir. Dinamik kütüphane fonksiyonlarının
-    çağrımı için de "import tablosu" ve "export tablosu" denilen tablolar kullanılmaktadır. UNIX/Linux dünyasında dinamik kütüphanelerin 
-    herhangi bir yere yüklenebilmesi ve minimal düzeyde relocation uygulanabilmesi için "Konumdan Bağımsız Kod (Position Independent 
-    Code - PIC)" denilen teknik kullanılmaktadır. Konumdan bağımsız kod "nereye yüklenirse yüklenilsin çalışabilen kod" anlamına 
-    gelmektedir. Konumdan bağımsız kod oluşturabilmek derleyicinin yapabileceği bir işlemdir. Konumdan bağımsız kod oluşturabilmek 
-    için gcc ve clang derleyicilerinde derleme sırasında "-fPIC" seçeneğinin bulundurulması gerekmektedir. Biz kursumuzda konumdan 
-    bağımsız kod oluşturmanın ayrıntıları üzerinde durmayacağız.
+    o dinamik kütüphanenin "relocation" tablosuna bakarak gerekli makine komutlarını düzeltmektedir. Dinamik kütüphane 
+    fonksiyonlarının çağrımı için de "import tablosu" ve "export tablosu" denilen tablolar kullanılmaktadır. UNIX/Linux dünyasında 
+    dinamik kütüphanelerin herhangi bir yere yüklenebilmesi ve minimal düzeyde relocation uygulanabilmesi için "Konumdan Bağımsız 
+    Kod (Position Independent Code - PIC)" denilen teknik kullanılmaktadır. Konumdan bağımsız kod "nereye yüklenirse yüklenilsin 
+    çalışabilen kod" anlamına gelmektedir. Konumdan bağımsız kod oluşturabilmek derleyicinin yapabileceği bir işlemdir. Konumdan 
+    bağımsız kod oluşturabilmek için gcc ve clang derleyicilerinde derleme sırasında "-fPIC" seçeneğinin bulundurulması gerekmektedir. 
+    Biz kursumuzda konumdan bağımsız kod oluşturmanın ayrıntıları üzerinde durmayacağız.
 
     Pekiyi Windows sistemlerinin kullandığı "relocation" tekniği ile UNIX/Linux sistemlerinde kullanılan "konumdan bağımsız
     kod tekniği" arasında performans bakımından ne farklılıklar vardır? İşte bu tekniklerin kendi aralarında bazı avantaj 
@@ -50961,20 +51087,20 @@ void exit_sys(const char *msg)
     UNIX/Linux sistemleri genel olarak bu tekniği kullanmaktadır. Ayrıca birinci teknikte kod üzerinde relocation uygulandığı 
     için mecburen "copy on write" mekanizması devreye sokulmaktadır. Bu da fiziksel belleğin kullanım verimini düşürebilmektedir.
 
-    Bu noktada ek olarak işlemcilerde bazı makine komutlarının (MOV, LOAD, STORE gibi) mutlak adres kullandığını ancak CALL ve 
-    JMP gibi bazı makine komutlarının hem mutlak hem de göreli adres kullanabildiğini belirtelim. Aslında işlemcileri tasarlayanlar 
-    relocation işlemi gerekmesin diye CALL ve JMP komutlarının göreli (relative) versiyonlarını da oluşturmuşlardır.
+    Bu noktada ek olarak işlemcilerde bazı makine komutlarının (MOV, LOAD, STORE gibi) mutlak adres kullandığını ancak CALL 
+    ve JMP gibi bazı makine komutlarının hem mutlak hem de göreli adres kullanabildiğini belirtelim. Aslında işlemcileri 
+    tasarlayanlar relocation işlemi gerekmesin diye CALL ve JMP komutlarının göreli (relative) versiyonlarını da oluşturmuşlardır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     UNIX/Linux sistemlerinde dinamik kütüphaneler şöyle oluşturulmaktadır:
 
-    1) Önce dinamik kütüphaneye yerleştirilecek amaç dosyaların (object files) -fPIC seçeneği ile "Konumdan Bağımsız Kod (Position 
-    Independent Code)" tekniği kullanılarak derlenmesi gerekir. (-fPIC seçeneğinde -f'ten sonra boşluk bırakılmamalıdır.)
+    1) Önce dinamik kütüphaneye yerleştirilecek amaç dosyaların (object files) -fPIC seçeneği ile "Konumdan Bağımsız Kod 
+    (Position Independent Code)" tekniği kullanılarak derlenmesi gerekir. (-fPIC seçeneğinde -f'ten sonra boşluk bırakılmamalıdır.)
 
-    2) Bağlama işleminde "çalıştırılabilir (executable)" değil de "dinamik kütüphane" dosyasının oluşturulması için -shared seçeneğinin 
-    kullanılması gerekir. "-shared" seçeneği kullanılmazsa bağlayıcı dinamik kütüphane değil, normal çalıştırılabilir dosya oluşturmaya
-    çalışmaktadır. (Zaten bu durumda main fonksiyonu olmadığı için linker hata mesajı verecektir.) Örneğin:
+    2) Bağlama işleminde "çalıştırılabilir (executable)" değil de "dinamik kütüphane" dosyasının oluşturulması için -shared 
+    seçeneğinin kullanılması gerekir. "-shared" seçeneği kullanılmazsa bağlayıcı dinamik kütüphane değil, normal çalıştırılabilir 
+    dosya oluşturmaya çalışmaktadır. (Zaten bu durumda main fonksiyonu olmadığı için linker hata mesajı verecektir.) Örneğin:
 
     $ gcc -fPIC a.c b.c c.c
     $ gcc -shared -o libmyutil.so a.o b.o c.o
@@ -50983,14 +51109,13 @@ void exit_sys(const char *msg)
     gerekmektedir. Yukarıdaki işlem aslında tek hamlede de aşağıdaki gibi yapılabilmektedir:
 
     $ gcc -shared -o libmyutil.so -fPIC a.c b.c c.c
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi biz -fPIC seçeneğini kullanmadan yani "konumdan bağımsız kod" üretmeden dinamik kütüphane oluşturmaya çalışırsak
-    ne olur? Mevcut GNU linker programları "-shared" seçeneği kullanıldığında global değişkenler için relocation işlemi söz konusu
-    ise bir mesaj vererek link işlemini yapmamaktadır. Yani bu durumda mevcut GNU linker programları kodun "-fPIC" seçeneği ile
-    derlenmesini zorunlu tutmaktadır.
+    ne olur? Mevcut GNU linker programları "-shared" seçeneği kullanıldığında global değişkenler için relocation işlemi söz 
+    konusu ise bir mesaj vererek link işlemini yapmamaktadır. Yani bu durumda mevcut GNU linker programları kodun "-fPIC" 
+    seçeneği ile derlenmesini zorunlu tutmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -51058,11 +51183,12 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Standart C fonksiyonlarının ve POSIX fonksiyonlarının bulunduğu "libc" kütüphanesi gcc ve clang programlarıyla derleme yapıldığında 
-    otomatik olarak bağlama aşamasında devreye sokulmaktadır. Yani biz standart fonksiyonları ve POSIX fonksiyonları için bağlama 
-    aşamasında kütüphane belirtmek zorunda değiliz. Default durumda gcc ve clang programları standart C fonksiyonlarını ve POSIX 
-    fonksiyonlarını dinamik kütüphaneden alarak kullanır. Ancak programcı isterse "-static" seçeneği ile statik bağlama işlemi 
-    de yapabilir. Bu durumda bu fonksiyonlar statik kütüphanelerden alınarak çalıştırılabilen dosyalara yazılacaktır. Örneğin:
+    Standart C fonksiyonlarının ve POSIX fonksiyonlarının bulunduğu "libc" kütüphanesi gcc ve clang programlarıyla derleme 
+    yapıldığında otomatik olarak bağlama aşamasında devreye sokulmaktadır. Yani biz standart fonksiyonları ve POSIX fonksiyonları 
+    için bağlama aşamasında kütüphane belirtmek zorunda değiliz. Default durumda gcc ve clang programları standart C fonksiyonlarını 
+    ve POSIX fonksiyonlarını dinamik kütüphaneden alarak kullanır. Ancak programcı isterse "-static" seçeneği ile statik bağlama 
+    işlemi de yapabilir. Bu durumda bu fonksiyonlar statik kütüphanelerden alınarak çalıştırılabilen dosyalara yazılacaktır. 
+    Örneğin:
 
     $ gcc -o app -static app.c
 
@@ -51070,8 +51196,8 @@ void exit_sys(const char *msg)
     kalmamaktadır. Zaten "-static" seçeneği belirtildiğinde artık dinamik kütüphaneler bağlama aşamasına programcı tarafından da 
     dahil edilememektedir. Tabii bu biçimde statik bağlama işlemi yapıldığında çalıştırılabilen dosyanın boyutu çok büyüyecektir.
 
-    Eğer "libc" kütüphanesinin default olarak bağlama aşamasında devreye sokulması istenmiyorsa "-nodefaultlibs" seçeneğinin kullanılması 
-    gerekir. Örneğin:
+    Eğer "libc" kütüphanesinin default olarak bağlama aşamasında devreye sokulması istenmiyorsa "-nodefaultlibs" seçeneğinin 
+    kullanılması gerekir. Örneğin:
 
     $ gcc -nodefaultlibs -o app app.c
 
@@ -51119,7 +51245,6 @@ void exit_sys(const char *msg)
 
     $ readelf -d sample | grep "NEEDED"
     0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -51242,9 +51367,9 @@ void exit_sys(const char *msg)
     yapılabilmesi için "sözlük (dictionary)" tarzı yani algoritmik aramaya izin verecek biçimde bir içeriğe sahiptir. Bu dosya
     ilgili dinamik kütüphane dosyalarının hangi dizinler içerisinde olduğunu gösteren bir yapıdadır. (Yani bu dosya ".so" dosyalarının 
     hangi dizinlerde olduğunu belirten binary bir dosyadır.) Başka bir deyişle bu dosyanın içerisinde "falanca .so dosyası filanca 
-    dizinde" biçiminde bilgiler vardır. İlgili ".so" dosyasının yerinin bu dosyada aranması dizinlerde aranmasından çok daha hızlı 
-    yapılabilmektedir. Ayrıca dinamik kütüphaneler değişik dizinlerde bulunabilmektedir. Bunların LD_LIBRARY_PATH çevre değişkeninde
-    belirtilen dizinlerde tek tek aranması bir yavaşlık oluşturabilmektedir.
+    dizinde" biçiminde bilgiler vardır. İlgili ".so" dosyasının yerinin bu dosyada aranması dizinlerde aranmasından çok daha 
+    hızlı yapılabilmektedir. Ayrıca dinamik kütüphaneler değişik dizinlerde bulunabilmektedir. Bunların LD_LIBRARY_PATH çevre 
+    değişkeninde belirtilen dizinlerde tek tek aranması bir yavaşlık oluşturabilmektedir.
 
     Pekiyi bu "/etc/ld.so.cache" dosyasının içerisinde hangi ".so" dosyaları vardır? Aslında bu dosyanın içerisinde "/lib" ve 
     "/usr/lib" dizinindeki ".so" dosyalarının hepsi bulunmaktadır. Ama programcı isterse kendi dosyalarını da bu cache dosyasının 
@@ -51265,10 +51390,10 @@ void exit_sys(const char *msg)
 
     Biz "ldconfig" programını çalıştırdığımızda bu program "/lib", "/usr/lib" ve "/etc/ld.so.conf" (dolayısıyla "/etc/ld.so.conf.d" 
     dizinindeki ".conf" dosyalarına) bakarak "/etc/ld.so.cache" dosyasını yeniden oluşturmaktadır. O halde bizim bu cache'e ekleme 
-    yapmak için tek yapacağımız şey "/etc/ld.so.conf.d" dizinindeki bir ".conf" dosyasına yeni bir satır olarak bir dizinin yol ifadesini
-    girmektir. (".conf" dosyaları her satırda bir dizinin yol ifadesinden oluşmaktadır.) Tabii programcı isterse bu dizine yeni bir 
-    ".conf" dosyası da ekleyebilir. İşte programcı bu işlemi yaptıktan sonra "/sbin/ldconfig" programını çalıştırınca artık onun 
-    eklediği dizinin içerisindeki ".so" dosyaları da "/etc/ld.so.cache" dosyasının içerisine eklenmiş olacaktır. Daha açık bir 
+    yapmak için tek yapacağımız şey "/etc/ld.so.conf.d" dizinindeki bir ".conf" dosyasına yeni bir satır olarak bir dizinin yol 
+    ifadesini girmektir. (".conf" dosyaları her satırda bir dizinin yol ifadesinden oluşmaktadır.) Tabii programcı isterse bu dizine 
+    yeni bir ".conf" dosyası da ekleyebilir. İşte programcı bu işlemi yaptıktan sonra "/sbin/ldconfig" programını çalıştırınca artık 
+    onun eklediği dizinin içerisindeki ".so" dosyaları da "/etc/ld.so.cache" dosyasının içerisine eklenmiş olacaktır. Daha açık bir 
     anlatımla programcı bu cache dosyasına ekleme işini adım adım şöyle yapar:
 
     1) Önce ".so" dosyasını bir dizine yerleştirir.
@@ -51418,8 +51543,8 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Dinamik kütüphanelerin linker isimleri o kütüphaneyi kullanan programlar link edilirlen link aşamasında (link ederken) 
-    kullanılan isimlerdir. Bu sayede link işlemini yapan programcıların daha az tuşa basarak genel bir isim kullanması sağlanmıştır. 
-    Bu durumda örneğin biz libmyutil isimli kütüphaneyi kullanan programı link etmek istersek şöyle yapabiliriz:
+    kullanılan isimlerdir. Bu sayede link işlemini yapan programcıların daha az tuşa basarak genel bir isim kullanması 
+    sağlanmıştır. Bu durumda örneğin biz libmyutil isimli kütüphaneyi kullanan programı link etmek istersek şöyle yapabiliriz:
 
     $ gcc -o app app.c libmyutil.so
 
@@ -51533,7 +51658,6 @@ void exit_sys(const char *msg)
     - Kütüphane için "linker ismi" ve "so ismini" sembolik link biçiminde oluşturmak
     - Kütüphane paylaşılacaksa onu "/lib" ya da tercihen "/usr/lib" dizinine yerleştirmek ve ldconfig programı çalıştırarak 
     /etc/ld.so.cache dosyasının güncellenmesini sağlamak
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -53132,14 +53256,15 @@ clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    errno değişkeni aslında libc kütüphanesinin (standart C ve POSIX kütüphanesi) içerisinde tanımlanmış bir değişkendir. Kernel mode'da 
-    yani kernel'ın içerisinde errno isimli bir değişken yoktur. Bu nedenle kernel'daki fonksiyonlar POSIX fonksiyonları gibi başarısızlık 
-    durumunda -1 ile geri dönüp errno değişkenini set etmezler. Kernel içerisindeki fonksiyonlar başarısızlık durumunda negatif errno 
-    değeri ile geri dönerler. Örneğin "open" POSIX fonksiyonu "sys_open" isimli kernel içerisinde bulunan sistem fonksiyonunu çağırdığında 
-    onun negatif bir değerle geri dönüp dönmediğine bakar. Eğer "sys_open" fonksiyonu negatif değerle geri dönerse bu durumda bu değerin 
-    pozitiflisini errno değişkenine yerleştirip -1 ile geri dönmektedir. Başka bir deyişle aslında bizim çağırdığımız int geri dönüş değerine 
-    sahip POSIX fonksiyonları sistem fonksiyonlarını çağırıp o fonksiyonlar negatif bir değerle geri dönmüş ise bir hata oluştuğunu düşünerek 
-    o negatif değerin pozitiflisini errno değişkenine yerleştirip -1 ile geri dönmektedir.
+    errno değişkeni aslında libc kütüphanesinin (standart C ve POSIX kütüphanesi) içerisinde tanımlanmış bir değişkendir. 
+    Kernel mode'da yani kernel'ın içerisinde errno isimli bir değişken yoktur. Bu nedenle kernel'daki fonksiyonlar POSIX 
+    fonksiyonları gibi başarısızlık durumunda -1 ile geri dönüp errno değişkenini set etmezler. Kernel içerisindeki fonksiyonlar 
+    başarısızlık durumunda negatif errno değeri ile geri dönerler. Örneğin "open" POSIX fonksiyonu "sys_open" isimli kernel 
+    içerisinde bulunan sistem fonksiyonunu çağırdığında onun negatif bir değerle geri dönüp dönmediğine bakar. Eğer "sys_open" 
+    fonksiyonu negatif değerle geri dönerse bu durumda bu değerin pozitiflisini errno değişkenine yerleştirip -1 ile geri dönmektedir. 
+    Başka bir deyişle aslında bizim çağırdığımız int geri dönüş değerine sahip POSIX fonksiyonları sistem fonksiyonlarını çağırıp 
+    o fonksiyonlar negatif bir değerle geri dönmüş ise bir hata oluştuğunu düşünerek o negatif değerin pozitiflisini errno değişkenine 
+    yerleştirip -1 ile geri dönmektedir.
 
     Kernel modül yazan programcıların da bu geleneğe uyması iyi bir tekniktir. Örneğin:
 
@@ -53151,22 +53276,23 @@ clean:
     başarısızlığa ilişkin errno numarasını vermektedir.
 
     POSIX arayüzünde adrese geri dönen fonksiyonlar genel olarak başarısızlık durumunda NULL adrese geri dönmektedir. Oysa kernel 
-    kodlarında adrese geri dönen fonksiyonlar başarısız olduklarında yine sanki bir adresmiş gibi negatif errno değerine geri dönerler. 
-    Örneğin şöyle bir kernel fonksiyonu olsun:
+    kodlarında adrese geri dönen fonksiyonlar başarısız olduklarında yine sanki bir adresmiş gibi negatif errno değerine geri 
+    dönerler. Örneğin şöyle bir kernel fonksiyonu olsun:
 
     void *foo(void);
 
     Biz bu fonksiyonu kernel modülümüz içerisinde çağırdığımızda eğer fonksiyon başarısızsa negatif errno değerini bir adres gibi
-    geri döndürmektedir. Negatif küçük değerlerin 2'ye tümleyen aritmetiğinde başı 1'lerle dolu olan bir sayı olacağına dikkat ediniz. 
-    Örneğin bu foo fonksiyonu EPERM değeri ile geri dönüyor olsun. EPERM değeri 1'dir. 64 bit sistemdeki -1 değeri ise şöyledir:
+    geri döndürmektedir. Negatif küçük değerlerin 2'ye tümleyen aritmetiğinde başı 1'lerle dolu olan bir sayı olacağına dikkat 
+    ediniz. Örneğin bu foo fonksiyonu EPERM değeri ile geri dönüyor olsun. EPERM değeri 1'dir. 64 bit sistemdeki -1 değeri ise 
+    şöyledir:
 
     FF FF FF FF FF FF FF FF
 
     Bu değer ise çok yüksek bir adres gibidir. O zaman eğer fonksiyon çok yüksek bir adres geri döndürdüyse başarısız olduğu 
     sonucunu çıkartabiliriz. Tabi bu işlemler için makrolar bulundurulmuştur.
 
-    Kernel kodlarındaki ERR_PTR isimli makro ya da inline fonksiyon bir tamsayı değeri alıp onu adres türüne dönüştürmektedir. Bu 
-    nedenle adrese geri dönen fonksiyonlarda aşağıdaki gibi kodlar görebilirsiniz:
+    Kernel kodlarındaki ERR_PTR isimli makro ya da inline fonksiyon bir tamsayı değeri alıp onu adres türüne dönüştürmektedir. 
+    Bu nedenle adrese geri dönen fonksiyonlarda aşağıdaki gibi kodlar görebilirsiniz:
 
     void *foo(void)
     {
@@ -53223,17 +53349,18 @@ clean:
     Aygıt sürücüler open fonksiyonuyla bir dosya gibi açılırlar. Bu açma işleminden bir dosya betimleyicisi elde edilir. Bu dosya
     betimleyicisi read, write, lseek, close gibi fonksiyonlarda kullanılabilir. Aygıt sürücülere ilişkin dosya betimleyicileri
     bu fonksiyonlarla kullanıldığında aygıt sürücü içerisindeki belirlenen bazı fonksiyonlar çağrılmaktadır. Yani tersten gidersek 
-    biz örneğin aygıt sürücümüze ilişkin dosya betimleyicisi ile read ve write fonksiyonlarını çağırdığımızda aslında aygıt sürücümüzdeki 
-    belli fonksiyonlar çalıştırılmaktadır. Böylece aygıt sürücü ile user mode arasında veri transferleri yine dosyalarda olduğu gibi 
-    dosya fonksiyonlarıyla yapılabilmektedir. Ayrıca user mode'dan aygıt sürücümüzdeki herhangi bir fonksiyonu da çağırabiliriz. Bunun 
-    için ioctl isimli bir POSIX fonksiyonu (tabii bu POSIX fonksiyonu sys_ioctl isimli sistem fonksiyonunu çağırmaktadır) kullanılmaktadır. 
-    Aygıt sürücü içerisinde fonksiyonlara birer kod numarası atanır. Sonra ioctl fonksiyonunda bu kod numarası belirtilir. Böylece akış 
-    user mode'dan kernel mode'a geçerek belirlenen fonksiyonu kernel mode'da çalıştıracaktır.
+    biz örneğin aygıt sürücümüze ilişkin dosya betimleyicisi ile read ve write fonksiyonlarını çağırdığımızda aslında aygıt 
+    sürücümüzdeki belli fonksiyonlar çalıştırılmaktadır. Böylece aygıt sürücü ile user mode arasında veri transferleri yine 
+    dosyalarda olduğu gibi dosya fonksiyonlarıyla yapılabilmektedir. Ayrıca user mode'dan aygıt sürücümüzdeki herhangi bir 
+    fonksiyonu da çağırabiliriz. Bunun için ioctl isimli bir POSIX fonksiyonu (tabii bu POSIX fonksiyonu sys_ioctl isimli sistem 
+    fonksiyonunu çağırmaktadır) kullanılmaktadır.  Aygıt sürücü içerisinde fonksiyonlara birer kod numarası atanır. Sonra ioctl 
+    fonksiyonunda bu kod numarası belirtilir. Böylece akış user mode'dan kernel mode'a geçerek belirlenen fonksiyonu kernel mode'da 
+    çalıştıracaktır.
 
     Özetle bir aygıt sürücüsü kernel mode'da çalışmaktadır. Biz aygıt sürücüsünü open fonksiyonu ile açıp elde ettiğimiz betimleyici 
     ile read, write, lseek ve close fonksiyonlarını çağırdığımızda aygıt sürücü içerisindeki ilgili fonksiyon çalıştırılmaktadır. 
-    Aygıt sürücüsü içerisindeki herhangi bir fonksiyon ise user mode'dan ioctl isimli fonksiyonla çalıştırılmaktadır. Tabii user mode 
-    programlar aygıt sürücü içerisindeki kodları read, write, lseek, close, ioctl gibi fonksiyonlar yoluyla çalıştırdıklarında 
+    Aygıt sürücüsü içerisindeki herhangi bir fonksiyon ise user mode'dan ioctl isimli fonksiyonla çalıştırılmaktadır. Tabii user 
+    mode programlar aygıt sürücü içerisindeki kodları read, write, lseek, close, ioctl gibi fonksiyonlar yoluyla çalıştırdıklarında 
     proses user mode'dan geçici süre kernel mode'a geçer, ilgili kodlar kernel mode'da koruma engeline takılmadan çalıştırılır. 
     Fonksiyonların çalışması bittiğinde proses yine user mode'da döner.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -53592,6 +53719,8 @@ clean:
     zorundadırlar. (Linux çekirdeğinin aygıt sürücü mimarisi oldukça karmaşıktır. Bu konu "Linux Kernel" kursunda ele alınmaktadır.)
 
     cdev yapısı aşağıdaki gibi bir yapıdır:
+
+    #include <linux/fs.h>
 
     struct cdev {
         struct kobject kobj;
@@ -62726,9 +62855,9 @@ void exit_sys(const char *msg)
     değerlerde olabilir.) Örneğin kursun yapıldığı sanal makinede timer periyodu 4 milisaniye'dir. Bu da saniyede 250 kez timer
     kesmesinin oluşacağı anlamına gelmektedir. Başka bir deyişle bu makinede HZ sembolik sabiti 250 olarak define edilmiştir.
 
-    İşte timer kesmesi her oluşturduğunda işletim sisteminin kesme kodu (interrupt handler) devereye girip "jiffies" isimli 
-    global değişkeni 1 artırmaktadır. Bu jiffies değişkeni unsigned long türdendir. Bildindiği gibi unsigned long türü 32 
-    bit Linux sistemlerinde 32 bit 64 bit Linux sistemlerinde 64 bittir. 32 bit Linux sistemlerinde ayrıca jiffies_64 isimli 
+    İşte timer kesmesi her oluştuğunda işletim sisteminin kesme kodu (interrupt handler) devreye girip "jiffies" isimli 
+    global değişkeni 1 artırmaktadır. Bu jiffies değişkeni unsigned long türdendir. Bilindiği gibi unsigned long türü 32 
+    bit Linux sistemlerinde 32 bit, 64 bit Linux sistemlerinde 64 bittir. 32 bit Linux sistemlerinde ayrıca jiffies_64 isimli 
     bir değişken daha vardır. Bu değişken hem 32 bit sistemde hem de 64 bit sistemde 64 bitliktir. 32 bit sistemde jiffies 
     değişkeni 32 bit olduğu için bilgisayar uzun süre açık kalırsa taşma (overflow) oluşabilmektedir. Ancak 64 bit sistemlerde 
     taşma mümkün değildir. 32 bit sistemlerde jiffies_64 değeri çekirdek tarafından iki ayrı makine komutuyla güncellenmektedir. 
@@ -62736,15 +62865,15 @@ void exit_sys(const char *msg)
     durumunda yanlış okunabilme olasılığı vardır. Hem 32 bit hem 64 bit sistemlerde 64 bitlik jiffies değerini düzgün bir 
     biçimde okuyabilmek için get_jiffies_64 isimli fonksiyon bulundurulmuştur:
 
-    include <linux/jiffies.h>
+    #include <linux/jiffies.h>
 
     u64 get_jiffies_64(void);
 
     Biz 32 bit sistemde de olsak bu fonksiyonla 64 bitlik jiffies değerini düzgün bir biçimde okuyabiliriz.
 
-    Aşağıdaki örnekte çekirdek modülü içerisinde proc dosya sisteminde "jify-module" isimli bir dizin, dizin'in içerisinde de 
-    "jiffy" ve "hertz" isimli iki dosya yaratılmıştır. jiffy dosyası okunduğunda o anki jiffies değeri elde edilmektedir. 
-    hertz dosyası okunduğunda ise timer frekansı elde edilmektedir. Aygıt sürücüyü aşağıdaki gibi derleyip yükleyebilirsiniz:
+    Aşağıdaki örnekte çekirdek modülü içerisinde proc dosya sisteminde "jiffy-module" isimli bir dizin, dizinin içerisinde de 
+    "jiffy" ve "hertz" isimli iki dosya yaratılmıştır. "jiffy" dosyası okunduğunda o anki jiffies değeri elde edilmektedir. 
+    "hertz" dosyası okunduğunda ise timer frekansı elde edilmektedir. Aygıt sürücüyü aşağıdaki gibi derleyip yükleyebilirsiniz:
 
     $ make file=jiffy-module
     $ sudo insmod jiffy-module.ko
@@ -62873,8 +63002,10 @@ clean:
     ...
     net_jiffies = (long) next_jiffies - (long) prev_jiffies;
 
-    Çekirdek içerisinde iki jiffy değerini alarak bunları öncelik sonralık ilişkisi altında karşılaştıran aşağıdaki fonksiyonlar 
+    Çekirdek içerisinde iki jiffy değerini alarak bunları öncelik sonralık ilişkisi altında karşılaştıran aşağıdaki makrolar 
     bulunmaktadır:
+
+    #include <linux/jiffies.h>
 
     time_after(jiffy1, jiffy2)
     time_before(jiffy1, jiffy2)
@@ -63073,8 +63204,8 @@ clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Aygıt sürücü içerisinde bazen belli bir süre bekleme yapmak gerekebilmektedir. Biz kursumuzda daha önce user modda bekeleme
-    yapan fonksiyonları görmüştük. Ancak o fonksiyonlar kernel modda kullanılamamtadır. Kermel modda çekirdek içerisindeki 
+    Aygıt sürücü içerisinde bazen belli bir süre bekleme yapmak gerekebilmektedir. Biz kursumuzda daha önce user modda bekleme
+    yapan fonksiyonları görmüştük. Ancak o fonksiyonlar kernel modda kullanılamamaktadır. Kernel modda çekirdek içerisindeki 
     olanaklarla bekleme yapılabilmektedir.
 
     Eğer bekleme süresi kısa ise bekleme işlemi meşgul bir döngü ile yapılabilir. Örneğin:
@@ -63086,20 +63217,22 @@ clean:
     uykuya yatırmamaktadır. Yalnızca thread'ler arası geçiş oluşmasına yol açmaktadır. Yani bu fonksiyon uykuya dalmadan CPU'yu 
     bırakmak için kullanılmaktadır. schedule fonksiyonunu çağıran thread çalışma kuyruğunda (run queue) kalmaya devam eder. Yine
     çalışma sırası ona geldiğinde kaldığı yerden çalışmaya devam eder. Ancak meşgul bir döngü içerisinde schedule işlemi yine
-    önemli bir CPU zamanın harcanmasına yol açmaktadır. Bu nedenle uzun beklelemelerin yukarıdaki gibi yapılması tavsiye edilmemektedir. 
+    önemli bir CPU zamanın harcanmasına yol açmaktadır. Bu nedenle uzun beklemelerin yukarıdaki gibi yapılması tavsiye edilmemektedir. 
     Uzun beklemelerin uykuya dalarak yapılması gerekir.
 
-    Uzun beklemeler için bir wait kuyruğu oluşturulup wait_event_timeout ya da wait_event_interrptible_timeout fonksiyonlarıyla koşul 
+    Uzun beklemeler için bir wait kuyruğu oluşturulup wait_event_timeout ya da wait_event_interruptible_timeout fonksiyonlarıyla koşul 
     0 yapılarak gerçekleştirilebilir. Ancak bunun için bir wait kuyruğunun oluşturulması gerekir. Bu işlemi zaten kendi içerisinde 
     yapan özel fonksiyonlar vardır.
 
     schedule_timeout fonksiyonu belli bir jiffy zamanı geçene kadar thread'i çekirdek tarafından bu amaçla oluşturulmuş olan bir
     wait kuyruğunda bekletir.
 
+    #include <linux/sched.h>
+
     signed long schedule_timeout(signed long timeout);
 
     Fonksiyon parametre olarak beklenecek jiffy değerini alır. Eğer sinyal dolayısıyla fonksiyon sonlanırsa kalan jiffy sayısına, 
-    eğer zaman aşımının dolması nedeniyle fonksiyon sonlanısa 0 değerine geri döner. Fonksiyon başarısız olmamaktadır. Fonksiyonu 
+    eğer zaman aşımının dolması nedeniyle fonksiyon sonlanırsa 0 değerine geri döner. Fonksiyon başarısız olmamaktadır. Fonksiyonu 
     kullanmadan önce prosesin durum bilgisini set_current_state isimli fonksiyonla değiştirmek gerekir. Değiştirilecek durum 
     TASK_UNINTERRUPTIBLE ya da TASK_INTERRUPTIBLE olabilir. Bu işlem yapılmazsa bekleme gerçekleşmemektedir. Örneğin:
 
@@ -63114,8 +63247,10 @@ clean:
     unsigned long msleep_interruptible(unsigned int msecs);
     void ssleep(unsigned int secs);
 
-    Aşağıdaki örnekte "jiffy-module" dizinindeki "sleep" dosyasından okuma yapıldığında (denemeyi cat yapabilirsiniz) 10 saniye 
-    bekleme oluşacaktır.
+    Aşağıdaki örnekte "jiffy-module" dizinindeki "sleep" dosyasından okuma yapıldığında (denemeyi cat komutuyla yapabilirsiniz) 
+    10 saniye bekleme oluşacaktır.
+
+    $ cat /proc/jiffy-module/sleep
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* jiffy-module.c */
@@ -63289,6 +63424,10 @@ clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												155. Ders 14/07/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Aygıt sürücü içerisinde kısa beklemeler gerebilmektedir. Çünkü bazı donanım aygıtlarının programlanabilmesi için bazı 
     beklemelere gereksinim duyulabilmektedir. Kısa beklemeler meşgul döngü yoluyla yani hiç sleep yapılmadan sağlanmaktadır. 
     Ayrıca kısa bekleme yapan fonksiyonlar atomiktir. Atomiklikten kastedilen şey threadler arası geçiş işleminin kapatılmasıdır. 
@@ -63301,14 +63440,14 @@ clean:
     void udelay(unsigned int usecs);
     void mdelay(unsigned int msecs);
 
-    Burada delay nano saniye cinsinden bekleme yapmak için, udelay mikro saniye cinsinden bekeleme yapmak için mdelay ise 
-    mili saniye cinsinden bekleme yapmak için kullanılmaktadır.
+    Burada delay nano saniye cinsinden bekleme yapmak için, udelay mikrosaniye cinsinden bekleme yapmak için, mdelay ise 
+    milisaniye cinsinden bekleme yapmak için kullanılmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Linux çekirdeklerine belli versiyonyondan sonra bir timer mekanizması da eklenmiştir. Bu sayede aygıt sürücü programcısı 
     belli bir zaman sonra belirlediği bir fonksiyonun çağrılmasını saplayabilmektedir. Bu mekanizmaya "kernel timer" mekanizması 
-    denilmektedir. Maalesef kernel timer mekanizması da birkaç kere arayüz olarak değiştirilmiştir. Bu mekanizma kullanılıken 
+    denilmektedir. Maalesef kernel timer mekanizması da birkaç kere arayüz olarak değiştirilmiştir. Bu mekanizma kullanırlıken 
     dikkat edilmesi gereken bir nokta callback fonksiyonun bir proses bağlamında çağrılmadığıdır. Yani callback fonksiyon 
     çağrıldığında biz current makrosu ile o andaki prosese erişemeyiz. O anda çalışan prosesin user alanına kopyalamalar 
     yapamayız. Çünkü callback fonksiyon timer kesmeleri tarafından çağrılmaktadır. Dolayısıyla callback fonksiyon çağrıldığında
@@ -63667,12 +63806,12 @@ clean:
     Intel tabanlı bilgisayar mimarisinde artık IOAPIC kesme denetleyicileri bulunmaktadır. Bu yeni kesme denetleyicisinin 24 IRQ 
     ucu vardır. IOAPIC birden fazla çekirdeğin bulunduğu durumda tek bir çekirdeğe değil tüm çekirdeklere bağlanmaktadır. Dolayısıyla
     istenilen bir çekirdekte kesme oluşturabilmektedir. IOAPIC devresinin bazı uçları bazı donanım birimelrine bağlı biçimdedir. Ancak 
-    bazı uçları boştadır. Bugün kullanılan ve ismine PCI ya da PCI-X denilen genişleme yuvaalarının bazı uçları bu IOAPIC ile 
+    bazı uçları boştadır. Bugün kullanılan ve ismine PCI ya da PCI-X denilen genişleme yuvalarının bazı uçları bu IOAPIC ile 
     bağlantılıdır. Dolayısıyla genişleme yuvalarına takılan kartlar da IRQ oluşturabilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bugün Pentium ve eşdeğer AMD ieşlemcilerinin içerisinde (her çekirdeğin içeisidne) aynı zamanda ismine "Local APIC" denilen 
+    Bugün Pentium ve eşdeğer AMD işlemcilerinin içerisinde (her çekirdeğin içerisinde) aynı zamanda ismine "Local APIC" denilen 
     bir kesme denetleyicisi de vardır. Bu local APIC iki uca sahiptir. Local APIC içerisinde aynı zamanda bir timer devresi de 
     bulunmaktadır. Bu timer devresi periyodik donanım kesmesi oluşturmak için kullanılmaktadır. Intel ve AMD çekirdeklerinin 
     içerisinde bulunan APIC devresinin en önemli özelliği kesmeleri artık uçlarla değil veri yoluyla (data bus) oluşturabilmesidir.
@@ -63680,7 +63819,7 @@ clean:
     oluşturulabilmektedir. Bu tekniğe "Message Signaled Intterpt (MSI)" denilmektedir. Gerçekten de bugün PCI slotlara takılan 
     bazı kartlar kesmeleri doğrudan belli bir çekirdekte MSI kullanarak oluşturmaktadır.
 
-    O halde kullanığımız Intel taabanlı PC mimarisideki bugünkü durum şöyledir:
+    O halde kullanığımız Intel tabanlı PC mimarisideki bugünkü durum şöyledir:
 
     - Bazı donanım birimleri built-in biçimde IOAPIC'in uçlarına bağlı durumdadır. Bu uçlar eskiye uyumu korumak için 8259'un 
     uçlarıyla aynı biçimde bağlı gibi IRQ oluşturmaktadır.
@@ -63752,7 +63891,7 @@ clean:
     typedef enum irqreturn irqreturn_t;
 
     request_irt fonksiyonun üçüncü parametresi bazı bayraklardan oluşur. Bu bayrak 0 geçilebilir ya da örneğin IRQF_SHARED 
-    geçilebilir. Diğer seçenkler için dokümanlara başvurabilirsiniz. IRQF_SHARED aynı kesmenin birden fazla aygıt sürücü tarafından 
+    geçilebilir. Diğer seçenekler için dokümanlara başvurabilirsiniz. IRQF_SHARED aynı kesmenin birden fazla aygıt sürücü tarafından 
     kullanılabileceği anlamına gelmektedir. (Tabii biz ilk register ettiren değilsek daha önce resgister ettirenlerin bu bayrağı 
     kullanmış olması gerekir. Aksi halde biz de bu bayrağı kullanamayız.) Fonksiyonun dördüncü parametresi "/proc/interrupts" 
     dosyasında görüntülenecek ismi belirtir. Son parametre ise sistem genelinde tek olan bir nesnenin adresi olarak girilmelidir. 
@@ -63844,7 +63983,7 @@ clean:
     denetleyici) isterse klavye içerisindeki işlemciye komutlar gönderebilmektedir. Aslında klavye üzerindeki ışıkların 
     yakılması da klavyenin içerisinde tuşa basılınca yapılmamaktadır. Işıklı tuşlara basıldığında gönderilen scan kod klavye 
     denetleyicisi tarafından alınır, eğer bu tuş ışıklı tuşlardan biri ise klavye denetleyicisi klavye işlemcisine "falanca 
-    ışığı yak" komutunu göndermektedir. Özetle yeniden ifade edersek klavyedki ışıklar klaye devresi tarafından ilgili 
+    ışığı yak" komutunu göndermektedir. Özetle yeniden ifade edersek klavyedeki ışıklar klaye devresi tarafından ilgili 
     tuşlara basılınca yakılmamaktadır. Karşı taraftan emir geldiğinde yakılmaktadır. Tasarımın bu biçimde yapılmış olması
     çok daha esnek bir kullanım oluşturmaktadır.
 
@@ -65878,14 +66017,7 @@ rm -f $module
 
     Fonksiyon blk_mq_tag_set yapı nesnesinin adresini alır. Başarı durumunda 0 değerine başarısızlık durumunda negatif errno 
     değerine geri döner.
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
+    <DEVAM EDECEK>
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -65918,42 +66050,430 @@ rm -f $module
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Linux sistemlerinde /dev dizinini altında "loopN" (N burada bir sayıdır) isimli "loopback aygıtı" denilen ilginç bir blok aygıt sürücüsü vardır. 
-    Bu loopback aygıtı aslında bir dosyayı disk gibi kullanmak için düşünülmüştür. Bu aygıt sürücüün tipik kullanımı şöyledir:
+    Kursumuzun bu bölümünde dosya sistemlerini belli bir derinlikte inceleyeceğiz. Dosya sistemlerini ele almadan önce bilgisayar
+    sistemlerindeki disk sistemleri hakkında bazı temel bilgilerin edinilmesi gerekmektedir. Eskiden diskler yerine teyp bantları
+    kullanılıyordu. Teyp bantları sıralı erişim sağlıyordu. Sonra manyetik diskler kullanılmaya başlandı. Kişisel bilgisayarlardaki
+    manyetik disklere "hard disk" de deniyordu. Bugünlerde artık hard diskler de teknoloji dışı kalmaya başlamıştır. Bugün disk 
+    sistemleri için artık flash bellekler (EEPROM bellekler) kullanılmaktadır. Yani SSD (Solid State Disk) diye isimlendirilen 
+    bu disk sistemlerinin artık mekanik bir parçası yoktur. Bunlar tamamen yarı iletken teknolojisiyle üretilmiş entegre 
+    devrelerdir. Disk sisteminin türü olursa olsun bu disk sistemini yöneten ondan sorumlu bir denetleyici birim bulunmaktadır. 
+    Buna "disk denetleyicisi (disk controller)" denilmektedir. Kernel mod aygıt sürücüler bu disk denetleyicisini programlayarak
+    transferleri gerçekleştirmektedir. Bugünkü disk sistemlerini şekilsel olarak aşağıdaki gibi düşünebiliriz:
 
-    1) Önce aygıtı temsil eden bir dosya yaratılır. Mademki bu dosya bir disk yerine geçecektir. O zaman bu dosya belli bir sektör
-    uzunluğunda dd komutuyla oluşturulabilir:
+    DISK BIRIMI <======> DİSK DENETLEYİCİSİ <=======> Aygıt Sürücü <=======> User Mod
+                                                            |
+                                                            |
+                                                            |
+                                                        Disk Cache
 
-    dd if=/dev/zero of=mydisk.dat bs=512 count=2880
+    Örneğin biz uder modda bir diskten bir sektör okumak istediğimizde bu işlemi yapan blok aygıt sürücüsünden istekte 
+    bulunuruz. Blok aygıt sürücüleri disk denetleyicilerini programlar, disk denetleyicileri disk birimine erişir ve transfer
+    gerçekleşir. Disk tarnsferleri CPU aracalığıyla değil "DMA (Direct Memory Access)" denilen özel denetleyicilerle sağlanmaktadır. 
+    Yani aygıt sürücü disk denetleyicisini ve DMA'yı programlar transfer yapılana kadar bekler. Bu surada işletim sistemi 
+    zaman alacak bu işlemi meşgul bir döngüde beklemez. O anda istekte bulunan thread'i bekleme kuyruğuna yerleştirerek sıradaki
+    thread'i çizelgeler.
 
-    Burada toplam 2880 * 512 byte uzunlukta içi 0'larla dolu bir dosya oluşturulmuştur.
+    İşletim sistemlerinde diskten transfer işlemi yapan blok aygıt sürücüleri ismine "disk cache" ya da "buffer cache" ya da
+    "page cache" denilen bir cache sistemi kullanmaktadır. Tabii cache sistemi aslında çekirdek tarafından organize edilmiştir. 
+    Blok aygıt sürücüsünden bir sektörlük bilgi okunmak istediğinde aygıt sürücü önce bu cache sistemine bakar. Eğer istenen 
+    sektör bu cache sisteminde varsa hiç bekleme yapmadan oradan alıp talep eden thread'e verir. Eğer sektör cache'te yoksa
+    blok aygıt sürücüsü disk denetleyicisini ve DMA denetleyicisini programlayarak sektörü önce cache'e tarnsfer eder. Oradan
+    talep eden thread'e verir. Bu amaçla kullanılan cache'lerde cache algoritması (cache replacement algorithm) genel olarak 
+    LRU algoritmasıdır. Yani son zamanalrda erişilen yerler mümkün olduğunca cache'te tutulmaktadır. İşlerim sistemlerinin 
+    dosya sistemleri arka planda bu blok aygıt sürücülerini kullanmaktadır. Dolayısıyla tüm dosya işlemleri aslında bu cache
+    sistemi ile gerçekleşmektedir. Yani örneğin bugünkü modern işletim sistemlerinde ne zaman bir dosya işlemi yapılsa o dosyanın
+    okunan ya da yazılan kısmı disk cache içerisine çekilemektedir. Aynı dosya üzerinde bir işlem yapıldığında zaten o dosyanın 
+    diskteki blokları cache'te olduğu için gerçek anlamda bir disk işlemi yapılmayacaktır.
 
-    2) Şimdi losetup isimli programla bu dosyanın bir loopback aygıt sürücüsü ile ilişkilendirilmesi gerekmektedir. Örneğin:
+    Pekiyi aygıt sürücü bir sektörü yazmak isterse ne olmaktadır? İşte yazma işlemleri de doğrudan değil cache yoluyla 
+    yapılmaktadır. Yani sektör önce disk cache'e yazılır. Sonra çizelgelenir ve işletim sisteminin bir kernel thread'i 
+    yoluyla belli periyotlarda diske transfer edilir. USer moddan çeşitli thread'lerin diskten okumalar yaptığını düşünelim.
+    Önce bu talepler işletim sistemi tarafından kuyruklanır, çizelgelenir sonra etkin bir biçimde transfer gerçekleştirilir. 
+    İşletim sistemlerinin bu kısmına "IO çizelgeleyeicisi (IO scheduler)" denilmektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
 
-    $ sudo losetup /dev/loop0 mydisk.dat
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir diskten transfer edilecek en küçük birime sektör denilmektedir. Bir sektör genel olarak 512 byte uzunluğundadır. 
+    Örneğin biz bir diskteki 1 byte'ı değiştirmek istesek önce onun içinde bulunduğu sektörü belleğe okuyup değişikliği 
+    bellekte yapıp o sektörü yeniden diske yazarız. Disklere byte düzeyinde değil sektör düzeyinde erişilmektedir.
 
-    Artık biz /dev/loop0 blok aygıt sürücüsü ile işlem yaptığımızda bu aygıt sürücü hedef olarak mydisk.dat dosyasını kullanacaktır.
+    Diskteki her sektöre ilk sektör 0 olmak üzere bir numara verilmiştir. Disk denetleyicileri bu numarayla çalışmaktadır. 
+    Eskiden disklerdeki koordinat sistemi daha farklıydı. Daha sonra teknoloji geliştikçe sektörünü yerini belirlemek için 
+    tek bir sayı kullanılmaya başlandı. Bu geçiş sırasında kullanılan bu sisteme LBA (Logical Block Addressing) deniliyordu. 
+    Artık ister hard diskler olsun isterse SSD'ler olsun tıpkı bellekte her byte'ın bir numarası olduğu gibi her sektörün de 
+    bir sektör numarası vardır. Transflerler bu sektör numarasayla yapılmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
 
-    3) Artık dosya sistemini mkfs ile formatlayabiliriz:
+/*--------------------------------------------------------------------------------------------------------------------------
+    Aslında "dosya (file)" kavramı mantıksal bir kavramdır. Diskteki fiziksel birimler sektör denilen birimlerdir. Yani diskler
+    dosyalardan oluşmaz sektörlerden oluşur. Dosya bir isim altında bir grup sektörü organize etmek için uydurulmuş bir 
+    kavramdır. Aslında dosyanın içindekiler diskte ardışıl sektörlerde olmak zorunda -değildir. Kullanıcı için dosya sanki 
+    ardışıl byte'lardan oluşan bir topluluk gibidir. Ancak bu bir aldatmacadır. Dosyadaki byte'lar herhangi bir biçimde ardışıl 
+    olmak zorunda değildir. Örneğin elimizde 100K'lık bir dosya olsun. Aslında bu 100K'lık dosya diskte 200 sektör içerisindedir. 
+    Peki bu dosyanın parçaları hangi 200 sektör içerisindedir? İşte bir biçimde bu bilgiler de disk üzerinde tutulmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
 
-    $ sudo mkfs -t ext2 /dev/loop0
+/*--------------------------------------------------------------------------------------------------------------------------
+    Disk sistemleriyle ilgili programcıların ilk bilmesi gereken işlemler bir sektörün okunmasının ve yazılmasının nasıl 
+    yapılacağıdır. Yukarıda bu işlemleri yapan yazılımsal birimin blok aygıt sürücüleri olduğunu belirtmiştik. Aygıt sürücülerin 
+    de birer dosya gibi açılıp kullanıldığını biliyoruz. O halde sektör transferi için bizim hangi aygıt sürücüyü kullanacağımızı
+    bilmemiz gerekir. UNIX/Linux sistemlerinde bilindiği gibi tüm temel aygıt sürücülere ilişkin aygıt dosyaları "/dev" dizini 
+    içerisindedir.
 
-    4) Artık mount işlemi yapabiliriz:
+    Bir Linux sisteminde lsblk" komutu ile disklere ilişkin blok aygıt sürücülerinin listesini elde edebilirsiniz. Örneğin:
 
-    $ mkdir mydisk
-    $ sudo mount /dev/loop0 mydisk
+    $ lsblk
+    NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+    sda      8:0    0   60G  0 disk
+    ├─sda1   8:1    0    1M  0 part
+    ├─sda2   8:2    0  513M  0 part /boot/efi
+    └─sda3   8:3    0 59,5G  0 part /
+    sr0     11:0    1 1024M  0 rom
 
-    Artık mydisk dizini bizim için adeta bir disk volümü gibidir. Ancak orada yapacağımız işlemler aslında yalnızca mydisk.dat dosyasını etkileyecektir. 
+    Linux sistemlerinde disklere ilişkin blok aygıt sürücüleri diskin türüne göre farklı biçimlerde isimlendirilmektedir. 
+    Örneğin hard diskler ve SSD diskler tipik olarak "sda", "sdb", "sdc" biçiminde isimlendirilmektedir. Micro SD kartlar
+    ise genellikle "mmcblk0", mmcblk1", "mmcblk2" gibi isimlendirilmektedir. Örneğin burada "sda" ismi har diski bir bütün 
+    olarak ele alan aygıt dosyasının ismidir. Disk disk bölümlerinden oluşmaktadır. Bu disk bölümlerini sanki ayrı disklermiş 
+    gibi ele alan aygıt dosyaları da "sda1", "sda2", "sda3" biçimindedir. Burada "disk bölümü (disk partition)" terimini 
+    biraz açmak istiyoruz.
 
-    Bu işlemler şöyle geri alınmaktadır
+    Bir diskin bağımsız birden fazla diskmiş gibi kullanılabilmesi için disk mantıksal bölümlere ayrılmaktadır. Bu bölümlere
+    "disk bölümleri (disp partitions)" denilmektedir. Bir disk bölümü diskin belli bir sektöründen başlar belli bir sektör 
+    uzunluğu kadar devam eder. Disk bölümlerinin hangi sektörden başladığı ve hangi uzunlukta olduğu diskin başındaki bir 
+    tabloda tutulmaktadır. Bu tabloya "disk bölümleme tablosu (disk partition table)" denilmektedir. Disk bölümleme tablosu 
+    eskiden diskin ilk sektöründe tutuluyordu. Sonra UEFI BIOS'larla birlikte eski sistemle uyumlu olacak biçimde yeni 
+    disk bölümleme tablo formatı geliştirildi. Bunlara "GUID Disk Bölümleme Tablosu (GUID Partition Table)" denilmektedir. 
+    Örneğin 3 disk bölümüne sahip bir diskin mantıksal organizasyonu şöyledir:
 
-    5) Önce volüm umont yapılır:
+    Disk Bölümleme Tablosu
+    Birnci Disk Bölümü
+    İkinci Disk Bölümü
+    Üçüncü Disk Bölümü
+
+    İşte "lsblk" yaptığımız Linux sisteminde biz "/dev/sda" aygıt dosyaısnıürüsünü açarsak tüm diski tek parça olarak ele alırız. 
+    Eğer "/dev/sda" aygıt dosyasını açarsak sanki Birinci Disk Bölümü ayrı diskmiş gibi yalnızca o bölümü ele alabiliriz. 
+    Örneğin "/dev/sda" aygıt dosyasından okuyacağımız 0 numaralı sektör aslında İkinci Disk Bölümünün ilk sektörürüdr. 
+    Tabii bu sektör "/dev/sda" aygıt dosyasındaki 0 numaralı sektör değildir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Linux sistemlerinde bir diskten bir sektör okumak için yapılacak tek şey ilgili aygıt sürücüyü open fonksiyonuyla açmak 
+    dosya göstericisini konumlandırıp read fonksiyonu ile okuma yapmaktır. Biz yukarıda bir diskten okunup yazılabilen en 
+    küçük birimin bir sektör olduğunu (512 byte) söylemiştik. Her ne kadar donanımsal olarak bir diskten okunabilecek ya da 
+    diske yazılabilecek en küçük birim bir sektör olsa da aslında işletim sistemleri transferleri sektör olarak değil blok 
+    blok yapmaktadır. Bir blok ardışıl n tane sektöre denilmektedir. Örneğin Linux işletim sisteminin disk cache sistemi 
+    aslında 4K büyüklüğünde bloklara sahiptir. 4K'nın aynı zamanda sayfa büyüklüğü olduğunu anımsayınız. Dolayısıyla biz 
+    Linux'ta aslında disk ile bellek arasında en az 4K'lık transferler yapmaktayız. O halde işletim sisteminin dosya sistemi
+    ve diske doğrudan erişen sistem programcıları Linux sistemlerinde diskten birer sektör okuyup yazmak yerine 4K'lık blokları 
+    okuyup yazarsa sistemle daha uyumlu çalışmış olur.
+
+    Pekiyi biz ilgili disk aygıt sürücüsünü açıp read fonksiyonu ile yalnızca 10 byte okumak istersek ne olur? İşte bu durumda 
+    blok aygıt sürücüsü gerçek anlamda o 10 byte'ın içinde bulunduğu 4K'lık bir kısmı diskten okur onu cache'e yerleştirir 
+    ve bize onun yalnızca 10 byte'ını verir. Aynı byte'ları ikinci kez okumak istersek gerçek anlamda bir disk okuması 
+    yapılmayacak RAM'de saklanmış olan cache'in içerisindeki bilgiler bize verilecektir. Aşağıda diski bir bütün olarak gören 
+    "/dev/sda" aygıt sürücüsü açılıp onun ilk sektörü okunmuş ve içeriği HEX olarak ekrana (stdout dosyasına) yazıdırılmıştır. 
+    Burada bir noktaya dikkatinizi çekmek istiyoruz. Bu aygıt sürücüyü temsil eden aygıt dosyasına ancak root kullanıcısı 
+    erişebilmektedir. Bu dosyaların erişim haklarına dikkat ediniz:
+
+    $ ls /dev/sda* -l
+    brw-rw---- 1 root disk 8, 0 Ağu 29 14:56 /dev/sda
+    brw-rw---- 1 root disk 8, 1 Ağu 29 14:56 /dev/sda1
+    brw-rw---- 1 root disk 8, 2 Ağu 29 14:56 /dev/sda2
+    brw-rw---- 1 root disk 8, 3 Ağu 29 14:56 /dev/sda3
+
+    Bu durumda programınızı sudo ile çalıştırmalısınız.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int fd;
+	unsigned char buf[512];
+
+	if ((fd = open("/dev/sda", O_RDONLY)) == -1)
+		exit_sys("open");
+
+	if (read(fd, buf, 512) == -1)
+		exit_sys("read");
+
+	for (int i = 0; i < 512; ++i)
+		printf("%02x%c", buf[i], i % 16 == 15 ? '\n' : ' ');
+
+	close(fd);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Dosya sistemi (file system) denildiğinde ne anlaşılmaktadır? Bir dosya sisteminin iki yönü vardır: Bellek ve disk. 
+    Dosya sisteminin bellek tarafı işletim sisteminin açık dosyalar için kernel alanında yaptığı organizasyonla (dosya betimleyici 
+    tablosu, dosya nesnesi vs) ilgilidir. Disk tarafı ise diskteki organizasyonla ilgilidir. Biz kursumuzda bellek tarafındaki
+    organizasyonun temellerini gördük. Şimdi bu bu bölümde disk üzerindeki organizasyonu ele alacağız.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Dosya kavramını diskte oluşturmak için farklı dosya sistemleri tarafından farklı disk organizasyonları kullanılmaktadır. 
+    Bugün kullanılan çok sayıda dosya sistemi vardır. Bu sistemlerin her birinin disk organizasyonu diğerinden az çok farklıdır. 
+    Ancak bazı dosya sistemlerinin birbirlerine organizasyonları birbirine çok benzemektedir. Bunlar adreta bir aile oluşturmaktadır. 
+    Örneğin Microsoft'un FAT dosya sistemleri, Linux'un ext dosya sistemleri kendi aralarında birbirine oldukça benzemektedir.
+
+    Microsft'un dünyanın kişisel bilgisayarlarında kullandığı dosya sistemlerine aile olarak FAT (File Allocation Table) 
+    denilmektedir. Bu FAT dosya sistemlerinin kendi içerisinde FAT12, FAT16 ve FAT32 biçiminde varyasyonları vardır. Microsoft 
+    daha sonra yine FAT tabanlı ancak çok daha gelişmiş NTFS denilen bir dosya sistemi gerçekleştirmiştir. Bugün Windows 
+    sistemlerinde genel olarak NTFS (New Technology File SYstems) dosya sistemleri kullanılmaktadır. Ancak Microsoft hala 
+    FAT tabanlı dosya sistemlerini de desteklemektedir. Linux sistemlerinde "EXT (Extended File System)" ismi verilen 
+    "i-node tabanlı" dosya sistemleri kullanılmaktadır. Bu EXT dosya sistemlerinin EXT2, EXT3, EXT4 biçiminde varyasyonları 
+    vardır. Bugünkü Linux sistemlerinde en çok EXT4 dosya sistemi kullanılmaktadır. Apple firması yine i-node tabanlı HFS 
+    (Hierarchical File System), HFS+ (Hierarchical File System Plus) ve APFS (Apple File System) isimli dosya sistemlerini 
+    kullanmaktadır. Bunlar da aile olarak birbirlerine çok benzemektedir. Bugünkü macOS sistemlerinde genellikle HFS+ 
+    ya da APFS dosya sistemleri kullanılmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												166. Ders 22/09/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bilindiği gibi UNIX/Linux sistemlerinde Windows sistemlerinde olduğu gibi "sürücü (drive)" kavramı yoktur. Dosya sisteminde
+    tek bir "kök dizin (root directory)" vardır. Eğer biz bir dosya sistemine erişmek istiyorsak önce onu belli bir dizinin
+    üzerine "mount" ederiz. Artık o dosya sisteminin kökü mount ettiğimiz dizin üzerinde bulunur. Örneğin bir flash belleği 
+    USB yuvasına taktığımızda Windows'ta o flash bellek bir sürücü olarak gözükmektedir. Ancak Linux sistemlerinde o flash 
+    bellek belli bir dizinin altında gözükür. Yani o dizine mount işlemi yapılmaktadır. Bir dosya sistemi bir dizine mount 
+    edildiğinde artık o dizin ve onun altındaki dizin ağacı görünmez olur. Onun yerine mount ettiğimiz blok aygıtındaki dosya
+    sisteminin kökü görünür.
+
+    Mount işlemi Linux sistemlerinde aslında bir sistem fonksiyonuyla yapılmaktadır. Bu sistem fonksiyonu "libc" kütüphanesinde
+    "mount" ismiyle bulunmaktadır. mount fonksiyonunun prototipi şöyledir:
+
+     #include <sys/mount.h>
+
+    int mount(const char *source, const char *target, const char *filesystemtype, 
+        unsigned long mountflags, const void *data);
+
+    Fonksiyonun birinci parametresi blok aygıt dosyasının yol ifadesini, ikinci parametre mount dizinini (mount point)
+    belirtmektedir. Üçüncü parametre dosya sisteminin türünü almaktadır. Dördüncü parametre mount bayraklarını belirtmektedir. 
+    Bu parametre 0 geçilebilir. Son parametre ise dosya sistemi için gerekebilecek ekstra verileri belirtmektedir. Bu parametre 
+    de NULL adres geçilebilir. Fonksiyon başarı durumunda 0 değerine başarısızlık durumunda -1 değerine geri dönmektedir. Dosya
+    sisteminin türünün otomatik tespit eden bazı özel fonksiyonlar bulunmaktadır. Örneğin "libmount" kütüphanesi içerisindeki 
+    statfs fonksiyonu, "libblkid" kütüphanesi içerisindeki fonksiyonlarla bunu sağlayabilirsiniz.
+
+    Tabii bu fonksiyonu çağırabilmek için prosesimizin etkin kullanıcı id'sinin 0 olması ya da prosesimizin uygun önceliğe 
+    (appropriate privilege) sahip olması gerekir. mount fonksiyonu POSIX standartlarında yoktur. Çünkü işletim sisteminin
+    gerçekleştirimine oldukça bağlı bir fonksiyondur. Tabii kullanıcılar mount işlemini bu sistem fonksiyonu yoluyla değil 
+    "mount" isimli kabuk komutuyla yapmaktadır. mount işlemi için elimizde bir blok aygıt sürücüüsne ilişkin aygıt dosyasının
+    bulunuyor olması gerekir. Ancak blok aygıt sürücüleri mount edilebilmektedir. Tabii ilgili blok aygıt sürücüsünün sektörleri 
+    içerisinde bir dosya sisteminin bulunuyor olması gerekir. mount isimli kabuk komutunun tipik kullanımı şöyledir:
+
+    sudo mount <blok_aygıt_dosyası> <mount_edilecek_dizin>
+
+    Nount edilecek dizine genel olarak İngilizce "mount point" de denilmektedir. Örneğin bilgisayarımıza bir SD kart okuyu 
+    bağlamış olalım. lsblk yaptığımızda şöyle bir görüntüyle karşılaştığımızı varsayalım:
+
+    $ lsblk
+    NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+    sda      8:0    0   60G  0 disk
+    ├─sda1   8:1    0    1M  0 part
+    ├─sda2   8:2    0  513M  0 part /boot/efi
+    └─sda3   8:3    0 59,5G  0 part /
+    sdb      8:16   1    0B  0 disk
+    sdc      8:32   1 14,8G  0 disk
+    ├─sdc1   8:33   1   60M  0 part /media/kaan/72FA-ACF3
+    └─sdc2   8:34   1 14,8G  0 part /media/kaan/fa57bb30-99ca-4966-8249-6b0c6c4f4d8d
+    sdd      8:48   1    0B  0 disk
+    sr0     11:0    1 1024M  0 rom
+
+    Burada taktığımız SD kart "sdc" ismiyle gözükmektedir. "/dev/sdc" aygıt dosyası SD kartı bir bütün olarak görmektedir. 
+    Bu SD kartın içerisinde iki farklı disk bölümünün oluşturulduğu görülmektedir. Bu disk bölümlerine ilişkin aygıt dosyaları 
+    da "/dev/sdc1" ve "/dev/sdc2" dosyalarıdır. Biz "/dev/sdc" aygıtını mount edemeyiz. Çünkü bu aygıt diski bir bütün olarak 
+    görmektedir. Oysa "/dev/sdc1" ve "/dev/sdc2" aygıtlarının içerisinde daha öncedne oluşturulmuş olan dosya sistemleri vardır. 
+    Biz bu aygıtları mount edebiliriz. Mount işlemi için sistem yöneticisinin bir dizin oluşturması gerekir. Mount işlemleri 
+    için Linux sistemlerinde kök dizinin altında bir "mnt" oluşturulmuş durumdadır. Yani mount edilecek dizini bu dizinin 
+    altında yaratabilirsiniz. Tabii böyle bir zorunluluk yoktur. Biz bulunduğumuz dizinde boş bir dizin yaratıp bu dizini 
+    mount point olarak kullanabiliriz. Örneğin:
+
+    $ sudo mount /dev/sdc1 mydisk
+
+    mount komutu ilgi blok aygıtındaki dosya sistemini otomatik olarak tespit etmeye çalışır. Genellikle bu tespit otomatik 
+    yapılabilmektedir. Ancak bazı özel aygıtlar ve dosya sistemleri için bu belirlemenin açıkça yapılması gerekebilir. Bunun 
+    için mount komutunda "-t <dosya_sisteminin_türü> seçeneği kullanılır. Örneğin:
+
+     $ sudo mount -t vfat /dev/sdc1 mydisk
+
+     Burada -t seçeneğine argümanı olarak aşağıdaki gibi dosya sistemleri kullanılabilir:
+
+     ext2
+     ext3
+     ext4
+     ntfs
+     vfat
+     tmpfs
+     xfs
+     ...
+
+    Dosya sisteminin otomatik belirlenmesi mount sistem fonksiyonu tarafından yapılamaltadır. mount komutu e birtakım işlemlerle
+    bunu sağlamaktadır.
+
+    Mount edilmiş olan bir blok aygıtının mount işlemi umount isimli sistem fonksiyonuyla kaldırıalbilir. Fonksiyonun prototipi 
+    şöyledir:
+
+      #include <sys/mount.h>
+
+    int umount(const char *target);
+
+    Fonlsiyon mount dizininin parametre olarak almaktadır. Başarı durumunda 0 değerine başarısızlık durumunda -1 değerine geri 
+    döner. Artık umount yapıldıktan sonra mount point dizinin içeriğine yeniden erişilebilmektedir. Unmount işlemi de yine komut 
+    satırından "umount" komutuyla yapılabilmektedir. Komutun genel biçimi şöyledir:
+
+    $ sudo umount <mount_dizini ya da blok_aygıt_dosyası>
+
+    Örneğin:
 
     $ sudo umount mydisk
 
-    5) Şimdi /dev/loop0 ile dosya (yani mydisk.dat) arasında bağlantı losetup -d komutuyla koparılır 
+    Pek çok UNIX türevi sistemde oluduğu gibi Linux sistemlerinde de "otomatik mount" mekanizması bulunmaktadır. Sistem boot
+    edildiğinde konfigürasyon dosyalarından hareketle otomatik mount işlemleri yapılabilmektedir. USB ygıtları genel olarak 
+    zaten otomatik mount işlemi oluşturmaktadır. "systemd" init sisteminde "mount unit" dosyaları ile otomatik mount işlemleri
+    yönetilebilmektedir. Klasik "system5" init sistemlerinde çekirdektek yüklendikten sonra "/etc/fstab" dosyasında otomatik 
+    mount edilecek blok aygıtları belirtilebilmektedir. "/etc/fstab" dosyasına "systemd" tarafından da açılış sırasında 
+    bakılmaktadır.
 
+    Aşağıda mount sistem fonksiyonu çağrılarak mount işlemi yapan bir örnek verilmiştir. Programı aşağıdakine bzenzer biçimde 
+    çalıştırabilirsiniz:
+
+    $ sudo ./mymount /dev/sdc1 mydisk vfat
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* mymount.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/mount.h>
+
+void exit_sys(const char *msg);
+
+/* mymount <device> <mount_point> <filesystem_type> */
+
+int main(int argc, char *argv[])
+{
+	if (argc != 4) {
+		fprintf(stderr, "wrong number of arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if (mount(argv[1], argv[2], argv[3], 0, NULL) == -1)
+		exit_sys("mount");
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Linux sistemlerinde bir dosyayı sanki blok aygıtı gibi gösteren hazır aygıt sürücüler bulunmaktadır. Bunlara "loop" aygıt 
+    sürücüleri denilmektedir. Bu aygıt sürücülere ilişkin aygıt dosyaları "/dev" dizini içerisinde "loopN" ismiyle (burada N bir 
+    sayı belirtiyor) bulunmaktadır. Örneğin:
+
+    $ ls -l /dev/loop*
+    brw-rw---- 1 root disk  7,   0 Haz  4 22:31 /dev/loop0
+    brw-rw---- 1 root disk  7,   1 Haz  4 22:31 /dev/loop1
+    brw-rw---- 1 root disk  7,   2 Haz  4 22:31 /dev/loop2
+    brw-rw---- 1 root disk  7,   3 Haz  4 22:31 /dev/loop3
+    brw-rw---- 1 root disk  7,   4 Haz  4 22:31 /dev/loop4
+    brw-rw---- 1 root disk  7,   5 Haz  4 22:31 /dev/loop5
+    brw-rw---- 1 root disk  7,   6 Haz  4 22:31 /dev/loop6
+    brw-rw---- 1 root disk  7,   7 Haz  4 22:31 /dev/loop7
+    crw-rw---- 1 root disk 10, 237 Haz  4 22:31 /dev/loop-control
+
+    Bir dosyayı blok aygıt sürücüsü biçiminde kullanabilmek için önce "losetup" programı ile bir hazırlık işleminin yapılması 
+    gerekir. Hazırlık işleminde "loop" aygıt sürücüsüne ilişkin aygıt dosyası ve blok aygıt sürücüsü olarak gösterilecek dosya 
+    belirtilir. Bu işlemin sudo ile yapılması gerekmektedir. Örneğin:
+
+    $ sudo losetup /dev/loop0 mydisk.dat
+
+    Tabii bizim burada "mydisk.dat" isimli bir dosyaya sahip olmamız gerekir. İçi 0'larla dolu 100 MB'lik böyle bir dosyayı
+    dd komutuyla aşağıdaki gibi oluşturabiliriz:
+
+    $ dd if=/dev/zero of=test.dat bs=512 count=10000
+
+    Burada artık "/dev/loop0" aygıt dosyası adeta bir disk gibi kullanılabilir hale gelmiştir. Biz bu "/dev/loop0" dosyasını 
+    kullandığımızda bu işlemlerden aslında "mydisk.dat" dosyası etkilenecektir.
+
+    Sıfırdan bir diske ya da bir disk bölümüne bir dosya sistemi yerleştirebilmek için onun formatlanması gerekir. UNIX/Linux
+    sistemlerinde formatlama için "mkfs.xxx" isimli programlar bulundurulmuştur. Örneğin aygıtta FAT dosya sistemi oluşturmak 
+    için "mkfs.fat" programı, ext4 dosya sistemi oluşturmak için "mkfs.ext4" programu kullanılmaktadır. Örneğin biz yukarıda
+    oluşturmuş olduğumuz "/dev/loop" aygıtını ext2 dosya sistemi ile aşağıdaki gibi formatlayabiliriz:
+
+    $ sudo mkfs.ext2 /dev/loop0
+
+    Burada işlemden aslında "mydisk.dat" dosyası etkilenmektedir. Artık formatladığımız aygıta ilişkin dosya sistemini aşağıdaki 
+    gibi mount edebiliriz:
+
+    $ mkdir mydisk
+    # sudo mount /dev/loop0 mydisk
+
+    Loop aygıtının dosya ile bağlantısını kesmek için "losetup" programı "-d" seçeneği ile çalıştırılır. Tabii önce aygıtın 
+    kullanımdan düşürülmesi gerekir:
+
+    $ sudo umount mydisk
     $ sudo losetup -d /dev/loop0
+
+    Eğer loop aygıt sürücüsünün bir dosyayı onun belli bir offset'inden itibaren kullanmasını istiyorsak losetup programında
+    "-o (ya da "--offset") seçeneğini kullanmalıyız. Örneğin bir disk imajının içerisindeki Linux dosya sisteminin disk imajının 
+    8192'inci sektöründen başladığını varsayalım. "dev/loop0" aygıt sürücüsünün bu imaj dosyasını bu offset'ten itibaren 
+    kullanmasını şöyle sağlayabiliriz:
+
+    $ sudo losetup -o 4194304 /dev/loop0 am335x-debian-11.7-iot-armhf-2023-09-02-4gb.img
+
+    512 * 8192 = 4194304 olduğuna dikkat ediniz.
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Biz kursumuzda önce FAT dosya sisteminden bahsedeceğiz sonra UNIX/Linux sistemlerindeki i-node tabanlı EXT dosya sistemleri
+    üzerinde duracağız.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
