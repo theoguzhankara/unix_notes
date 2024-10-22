@@ -62880,7 +62880,7 @@ void exit_sys(const char *msg)
 
     Boşaltımı da şöyle yapabilirsiniz:
 
-    $ sudo rmmod jiffy-driver.ko
+    $ sudo rmmod jiffy-module.ko
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* jiffy-module.c */
@@ -62894,7 +62894,7 @@ void exit_sys(const char *msg)
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Kaan Aslan");
-MODULE_DESCRIPTION("procfs driver");
+MODULE_DESCRIPTION("jiffy module");
 
 static ssize_t proc_read_jiffy(struct file *filp, char *buf, size_t size, loff_t *off);
 static ssize_t proc_read_hertz(struct file *filp, char *buf, size_t size, loff_t *off);
@@ -63033,7 +63033,7 @@ clean:
 
     Bu fonksiyonlar o andaki aktif HZ değerini dikkate almaktadır.
 
-    Ayrıca jiffies değerini saniye ve nano saniye biçiminde ayırıp bize struct timespec64 biçiminde bir yapı nesnesi olarak veren 
+    Ayrıca jiffies değerini saniye ve nanosaniye biçiminde ayırıp bize struct timespec64 biçiminde bir yapı nesnesi olarak veren 
     jiffies_to_timespec64 isimli bir fonksiyon da vardır. Bunun tersi timespec64_to_jiffies fonksiyonuyla yapılmaktadır.
 
     timespec64 yapısı da şöyledir:
@@ -63043,7 +63043,7 @@ clean:
         long		tv_nsec;		/* nanoseconds */
     };
 
-    Eski çekirdeklerde bu fonksiyonların yerine aşağıdaki fonksiyonlar bulunyordu:
+    Eski çekirdeklerde bu fonksiyonların yerine aşağıdaki fonksiyonlar bulunuyordu:
 
     #include <linux/time.h>
 
@@ -63068,7 +63068,7 @@ clean:
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Kaan Aslan");
-MODULE_DESCRIPTION("procfs driver");
+MODULE_DESCRIPTION("jiffy module");
 
 static ssize_t proc_read_jiffy(struct file *filp, char *buf, size_t size, loff_t *off);
 static ssize_t proc_read_hertz(struct file *filp, char *buf, size_t size, loff_t *off);
@@ -63175,7 +63175,7 @@ static ssize_t proc_read_difference(struct file *filp, char *buf, size_t size, l
 
 	jiffies_to_timespec64(net_jiffies, &ts);
 
-	sprintf(g_difference_str, "Jiffy difference: %10ld (%ld seconds + %ld nonoseconds)\n", net_jiffies, (long)ts.tv_sec, (long)ts.tv_nsec);
+	sprintf(g_difference_str, "Jiffy difference: %10ld (%ld seconds + %ld nanoseconds)\n", net_jiffies, (long)ts.tv_sec, (long)ts.tv_nsec);
 
 	left = (loff_t)strlen(g_difference_str) - *off;
 	esize = left < size ? left : size;
@@ -63266,7 +63266,7 @@ clean:
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Kaan Aslan");
-MODULE_DESCRIPTION("procfs driver");
+MODULE_DESCRIPTION("jiffy module");
 
 static ssize_t proc_read_jiffy(struct file *filp, char *buf, size_t size, loff_t *off);
 static ssize_t proc_read_hertz(struct file *filp, char *buf, size_t size, loff_t *off);
@@ -63383,7 +63383,7 @@ static ssize_t proc_read_difference(struct file *filp, char *buf, size_t size, l
 
 	jiffies_to_timespec64(net_jiffies, &ts);
 
-	sprintf(g_difference_str, "Jiffy difference: %10ld (%ld seconds + %ld nonoseconds)\n", net_jiffies, (long)ts.tv_sec, (long)ts.tv_nsec);
+	sprintf(g_difference_str, "Jiffy difference: %10ld (%ld seconds + %ld nanoseconds)\n", net_jiffies, (long)ts.tv_sec, (long)ts.tv_nsec);
 
 	left = (loff_t)strlen(g_difference_str) - *off;
 	esize = left < size ? left : size;
@@ -63445,9 +63445,9 @@ clean:
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Linux çekirdeklerine belli versiyonyondan sonra bir timer mekanizması da eklenmiştir. Bu sayede aygıt sürücü programcısı 
+    Linux çekirdeklerine belli versiyondan sonra bir timer mekanizması da eklenmiştir. Bu sayede aygıt sürücü programcısı 
     belli bir zaman sonra belirlediği bir fonksiyonun çağrılmasını saplayabilmektedir. Bu mekanizmaya "kernel timer" mekanizması 
-    denilmektedir. Maalesef kernel timer mekanizması da birkaç kere arayüz olarak değiştirilmiştir. Bu mekanizma kullanırlıken 
+    denilmektedir. Maalesef kernel timer mekanizması da birkaç kere arayüz olarak değiştirilmiştir. Bu mekanizma kullanılırken 
     dikkat edilmesi gereken bir nokta callback fonksiyonun bir proses bağlamında çağrılmadığıdır. Yani callback fonksiyon 
     çağrıldığında biz current makrosu ile o andaki prosese erişemeyiz. O anda çalışan prosesin user alanına kopyalamalar 
     yapamayız. Çünkü callback fonksiyon timer kesmeleri tarafından çağrılmaktadır. Dolayısıyla callback fonksiyon çağrıldığında
@@ -63466,14 +63466,14 @@ clean:
 
     DEFINE_TIMER(g_mytimer, timer_proc);
 
-    Ya da alternatif olarak struct timer_list nesnesi yaratılıp timer_setup makrosuyle de ilkdeğer verilebilir. Makronun parametrik 
+    Ya da alternatif olarak struct timer_list nesnesi yaratılıp timer_setup makrosuyla da ilkdeğer verilebilir. Makronun parametrik 
     yapısı şöyledir:
 
     #include <linux/time.h>
 
     #define timer_setup(timer, callback, flags)
 
-    Makronun birinci parametresi timer nesnesinin adresini almaktadır. İkinci parametresi çağrılacak fonksiyonun belirtir. 
+    Makronun birinci parametresi timer nesnesinin adresini almaktadır. İkinci parametresi çağrılacak fonksiyonu belirtir. 
     flags parametresi 0 geçilebilir.
 
     Örneğin:
@@ -63482,7 +63482,7 @@ clean:
 
     timer_setup(&g_mytimer, timer_proc, 0);
 
-    Buradaki timer fonksiyonun parametrik yapısı şöyle olmalıdır:
+    Buradaki timer fonksiyonunun parametrik yapısı şöyle olmalıdır:
 
     void timer_proc(struct timer_list *tlisr);
 
@@ -63499,7 +63499,7 @@ clean:
 
     int mod_timer(struct timer_list *timer, unsigned long expires);
 
-    Buradaki expiry parametresi jiffy türündendir. Bu parametre hedef jiffy değerini içermelidir. (Yani jiffies + gecikme 
+    Buradaki expires parametresi jiffy türündendir. Bu parametre hedef jiffy değerini içermelidir. (Yani jiffies + gecikme 
     jiffy değeri)
 
     4) Timer nesnesinin silinmesi için del_timer ya da del_timer_sync fonksiyonu kullanılmaktadır:
@@ -63528,7 +63528,7 @@ clean:
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Kaan Aslan");
-MODULE_DESCRIPTION("Timmer Module");
+MODULE_DESCRIPTION("Timer Module");
 
 static void timer_proc(struct timer_list *tlist);
 
@@ -63579,6 +63579,10 @@ clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												156. Ders 19/07/2024 - Cuma
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Önceki konularda da UNIX/Linux sistemlerinde kernel mode'da çalışan işletim sistemine ait thread'ler olduğundan bahsetmiştik. 
     Bu thread'ler çalışma kuyruğunda (run queue) bulunan ve uykuya dalabilen işletim sisteminin bir parçası durumundaki 
     thread'lerdir. İşletim sistemine ait bu thread'ler çeşitli işlemlerden sorumludurlar. Linux işletim sisteminde kernel thread'ler 
@@ -63604,12 +63608,12 @@ clean:
     struct task_struct *kthread_create(int (*threadfn)(void *data), void *data, const char *namefmt);
 
     Fonksiyonun birinci parametresi thread akışının başlatılacağı fonksiyonun adresini almaktadır. Bu fonksiyon void * türünden 
-    parametreye ve int geri dönüş değerine sahip olma zorundadır. Fonksiyonun ikinci parametresi thread fonksiyonuna geçirilecek 
+    parametreye ve int geri dönüş değerine sahip olmak zorundadır. Fonksiyonun ikinci parametresi thread fonksiyonuna geçirilecek 
     parametreyi belirtmektedir. Eğer bir kernel thread'e bir parametre geçirilmek istenmiyorsa bu parametre için NULL adres 
-    girilebilir. Fonksiyon üçüncü parametresi proc dosya sisteminde (dolayısıyla "ps" komutunda) görüntülenecek ismi belirtir. 
+    girilebilir. Fonksiyonun üçüncü parametresi proc dosya sisteminde (dolayısıyla "ps" komutunda) görüntülenecek ismi belirtir. 
     Fonksiyon başarı durumunda yaratılan thread'in task_struct adresine, başarısızlık durumunda negatif errno değerine geri 
     dönmektedir. Adrese geri dönen diğer kernel fonksiyonlarında olduğu gibi fonksiyonun başarı durumu IS_ERR makrosuyla test 
-    edilmelidir. Eğer fonksiyon başarısız olmuşsa negatif errno değeri PTR_ERR makrosuyle elde elde edilebilir. Örneğin:
+    edilmelidir. Eğer fonksiyon başarısız olmuşsa negatif errno değeri PTR_ERR makrosuyle elde edilebilir. Örneğin:
 
     struct task_struct *ts;
 
@@ -63634,9 +63638,13 @@ clean:
 
     Aslında yukarıdaki işlemi tek hamlede yapan kthread_run isimli bir fonksiyon da vardır:
 
+    #include <linux/kthread.h>
+
     struct task_struct *kthread_run(int (*threadfn)(void *data), void *data, const char *namefmt);
 
     2) Kernel thread kthread_stop fonksiyonuyla herhangi bir zaman ya da aygıt sürücü bellekten atılırken yok edilebilir:
+
+    #include <linux/kthread.h>
 
     int kthread_stop(struct task_struct *ts);
 
@@ -63660,23 +63668,23 @@ clean:
 
     Tabii aslında biz kthread_create fonksiyonu ile bir kernel thread yaratmak istediğimizde asıl thread'in başlatıldığı 
     fonksiyon çekirdek içerisindeki bir fonksiyondur. Bizim kthread_create fonksiyonuna verdiğimiz fonksiyon bu fonksiyon 
-    tarafından çağrılmaktadır Dolayısıyla bizim fonksiyonumuz bittiğinde akış yine çekirdek içerisindeki asıl fonksiyona 
+    tarafından çağrılmaktadır. Dolayısıyla bizim fonksiyonumuz bittiğinde akış yine çekirdek içerisindeki asıl fonksiyona 
     döner. O fonksiyonda da yaratılmış thread kaynakları otomatik boşaltılır. Yani biz bir thread yarattığımız zaman 
     onun yok edilmesi thread fonksiyonu bittiğinde otomatik yapılmaktadır.
 
-    Kernel thread'in kendisini sonşandırması do_exit fonksiyonuyla sağlanabilmektedir. Aslında do_exit fonksiyonu prosesleri
-    sonlandıran sys_exit fonksiyonun doğrudan çağırdığı taban fonksiyondur.
+    Kernel thread'in kendisini sonlandırması do_exit fonksiyonuyla sağlanabilmektedir. Aslında do_exit fonksiyonu prosesleri
+    sonlandıran sys_exit fonksiyonunun doğrudan çağırdığı taban fonksiyondur.
 
     #include <linux/kernel.h>
 
     void do_exit(long code);
 
-    Fonksiyon thread'in exit kodunu parametre olarak almaktadır. Kernel thread normal biçimde ya da kthread_stop fonksiyonuyal 
-    sonlanmışsa artık thread'in tüm kaynakları (task_struct yapısı da) serbest bırakulmaktadır. Dolayısıyla artık ona kthread_stop
+    Fonksiyon thread'in exit kodunu parametre olarak almaktadır. Kernel thread normal biçimde ya da kthread_stop fonksiyonuyla 
+    sonlanmışsa artık thread'in tüm kaynakları (task_struct yapısı da) serbest bırakılmaktadır. Dolayısıyla artık ona kthread_stop
     uygulamamak gerekir.
 
-    Aşağıdaki örnekte modül initialize edilirken kernel thread yaratılmış, modül yok edilirken kthread_stop ile 
-    kernel thread'in sonlanması beklenmiştir. kernel thread içerisinde msleep fonksiyonu ile 1 saniyelik beklemeler yapılmıştır.
+    Aşağıdaki örnekte modül initialize edilirken kernel thread yaratılmış, modül yok edilirken kthread_stop ile kernel-thread'in 
+    sonlanması beklenmiştir. kernel-thread içerisinde msleep fonksiyonu ile 1 saniyelik beklemeler yapılmıştır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* kernel-thread-module.c */
@@ -63752,28 +63760,32 @@ clean:
     2) İçsel Kesmeler (Internal Interrupts)
     3) Yazılım Kesmeleri (Software Interrupts)
 
-    Kesme denildiğinde akla default olarak donanım kesmeleri gelmektedir. Donanım kesmeleri CPU'nın bir ucunun (genellekle bu 
+    Kesme denildiğinde akla default olarak donanım kesmeleri gelmektedir. Donanım kesmeleri CPU'nın bir ucunun (genellikle bu 
     uca INT ucu denilmektedir) elektriksel olarak dışsal bir birim tarafından uyarılmasıyla oluşmaktadır. Yani donanım kesmeleri 
     o anda çalışmakta olan koddan bağımsız bir biçimde dış dünyadaki birimler tarafından oluşturulmaktadır. PC terminolojisinde 
     donanım kesmesi oluşturan kaynaklara IRQ da denilmektedir. İçsel kesmeler CPU'nun kendi çalışması sırasında kendisinin 
     oluşturduğu kesmelerdir. Intel bu tür kesmelerin önemli bir bölümünü "fault" olarak isimlendirmektedir. Örneğin fiziksel 
     RAM'de olmayan bir sayfaya erişildiğinde CPU "page fault" denilen içsel kesme oluşturmaktadır. Yazılım kesmeleri ise 
-    programcının program kodyla oluşturduğu kesmelerdir. Her türlü CPU'da yazılım kesmesi oluşturulamamaktadır.
+    programcının program koduyla oluşturduğu kesmelerdir. Her türlü CPU'da yazılım kesmesi oluşturulamamaktadır.
 
-    Bir kesme oluştuğunda çalışıtırılan koda "kesme kodu (interrupt handler)" denilmektedir.
+    Bir kesme oluştuğunda çalıştırılan koda "kesme kodu (interrupt handler)" denilmektedir.
 
     Donanım kesmesi oluşturan elektronik birimlerin hepsi doğrudan CPU'nın INT ucuna bağlanmamaktadır. Çünkü bunun pek çok 
-    sakıncası vardır. Genellikle bu amaçla bu işe aracılık eden daha akıllı bir işlemciler kullanılmaktadır. Bu işlemcilere 
-    genel olarak "kesme denetelecileri (interrupt controllers)" denilmektedir. Bazı mimarilerde kesme denetleyicisi işlemci
-    işlemcinin içerisinde bulunmakıtadır. Bazı mimarilerde ise dışarıda ayrı bir entegre devre olarak bulunmaktadır. Tabii artık
-    pek çok entegre devre SoC (System on Chip) adı altında tek bir entegre devrenin içersine yerleşirilmiş durumdadır. Kesme
+    sakıncası vardır. Genellikle bu amaçla bu işe aracılık eden daha akıllı işlemciler kullanılmaktadır. Bu işlemcilere 
+    genel olarak "kesme denetleyicileri (interrupt controllers)" denilmektedir. Bazı mimarilerde kesme denetleyicisi işlemcinin 
+    içerisinde bulunmaktadır. Bazı mimarilerde ise dışarıda ayrı bir entegre devre olarak bulunmaktadır. Tabii artık
+    pek çok entegre devre SoC (System on Chip) adı altında tek bir entegre devrenin içerisine yerleşirilmiş durumdadır. Kesme
     denetleyicilerinin temel işlevi şöyledir:
 
     1) Birden fazla donanım biriminin aynı anda kesme oluşturması durumunda kesme denetleyicisi bunları sıraya dizebilmektedir.
     2) Birden fazla donanım biriminin aynı anda kesme oluşturması durumunda kesme denetleyicisi bunlara öncelik verebilmektedir.
-    3) Belli birimlerden gelen kesme isteklerini kesme denetleyicisi görmezden gelebilmektedir. Buna ilgili IR!'nun disable edilmesi
+    3) Belli birimlerden gelen kesme isteklerini kesme denetleyicisi görmezden gelebilmektedir. Buna ilgili IRQ'nun disable edilmesi
     denilmektedir.
-    4) Kesme denetleyicileri çok çekirdekli donanımlarda kesmenin belli bir çekirdekte çalışttırılabilmesini sağlayabilmektedir.
+    4) Kesme denetleyicileri çok çekirdekli donanımlarda kesmenin belli bir çekirdekte çalıştırılabilmesini sağlayabilmektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												157. Ders 21/07/2024 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -63787,12 +63799,12 @@ clean:
     0 1 2 3 4 5 6 7
 
     Bu uçlara IRQ uçları deniliyordu ve bu uçlar değişik donanım birimlerine bağlıydı. Böylece bir donanım birimi kesme oluşturmak
-    isterse kesme denetleyicisinin igili ucunu uyarıyordu. Kesme deetleyicisi de CPU'nın INT ucunu uuarıyordu. İlk PC'lerde 
-    toplam 8 IRQ vardı. Ancak 80'li yılların ortalarında PC mimarisinde değişikler yapılarak kesme denetleyicisinin sayısı iki'ye 
+    isterse kesme denetleyicisinin igili ucunu uyarıyordu. Kesme deetleyicisi de CPU'nun INT ucunu uyarıyordu. İlk PC'lerde 
+    toplam 8 IRQ vardı. Ancak 80'li yılların ortalarında PC mimarisinde değişikler yapılarak kesme denetleyicisinin sayısı ikiye 
     yükseltildi. Böylece IRQ uçlarının sayısı da 15'e yükseltilmiş oldu. Intel'in iki 8259 işlemcisini katkat bağlayabilmek için 
-    birinci kesme kesme denetleyicisinin (Master PIC) bir ucunun ikinci kesme denetleyicsinin INGT ucuna bağlanması gerekmektedir. 
-    İşte PC mimarsinde birinci kesme denetleyicisinin 2 numaralı ucu ikinci kesme denetleyicisine bağlanmıştır. Böylece toplam
-    IRQ'ların sayısı 16 değil 15 olmaktadır.
+    birinci kesme denetleyicisinin (Master PIC) bir ucunun ikinci kesme denetleyicisinin INT ucuna bağlanması gerekmektedir. 
+    İşte PC mimarisinde birinci kesme denetleyicisinin 2 numaralı ucu ikinci kesme denetleyicisine bağlanmıştır. Böylece toplam
+    IRQ'ların sayısı 16 değil, 15 olmaktadır.
 
     | (INT ucu CPU'ya baplanır)     |
       <8259 (PIC)>                     <8259 (PIC)>
@@ -63802,10 +63814,10 @@ clean:
 
     Ancak zamanla 15 IRQ ucu da yetersiz kalmaya başlamıştır. Çok çekirdekli sistemlerde her çekirdeğin (yani CPU'nun) ayrı bir
     INT ucu vardır. Yani bu çekirdekler diğerlerinden bağımsız kesme alabilmektedir. İşte zamanla Intel'in klasik 8259 kesme 
-    denetleyicisi daha gelişmiş olam ve ismine IOAPIC denilen kesme denetleyicisi ile değiştirilmiştir. Bugün kullandığımız 
+    denetleyicisi daha gelişmiş olan ve ismine IOAPIC denilen kesme denetleyicisi ile değiştirilmiştir. Bugün kullandığımız 
     Intel tabanlı bilgisayar mimarisinde artık IOAPIC kesme denetleyicileri bulunmaktadır. Bu yeni kesme denetleyicisinin 24 IRQ 
-    ucu vardır. IOAPIC birden fazla çekirdeğin bulunduğu durumda tek bir çekirdeğe değil tüm çekirdeklere bağlanmaktadır. Dolayısıyla
-    istenilen bir çekirdekte kesme oluşturabilmektedir. IOAPIC devresinin bazı uçları bazı donanım birimelrine bağlı biçimdedir. Ancak 
+    ucu vardır. IOAPIC birden fazla çekirdeğin bulunduğu durumda tek bir çekirdeğe değil, tüm çekirdeklere bağlanmaktadır. Dolayısıyla
+    istenilen bir çekirdekte kesme oluşturabilmektedir. IOAPIC devresinin bazı uçları bazı donanım birimlerine bağlı biçimdedir. Ancak 
     bazı uçları boştadır. Bugün kullanılan ve ismine PCI ya da PCI-X denilen genişleme yuvalarının bazı uçları bu IOAPIC ile 
     bağlantılıdır. Dolayısıyla genişleme yuvalarına takılan kartlar da IRQ oluşturabilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -63814,9 +63826,9 @@ clean:
     Bugün Pentium ve eşdeğer AMD işlemcilerinin içerisinde (her çekirdeğin içerisinde) aynı zamanda ismine "Local APIC" denilen 
     bir kesme denetleyicisi de vardır. Bu local APIC iki uca sahiptir. Local APIC içerisinde aynı zamanda bir timer devresi de 
     bulunmaktadır. Bu timer devresi periyodik donanım kesmesi oluşturmak için kullanılmaktadır. Intel ve AMD çekirdeklerinin 
-    içerisinde bulunan APIC devresinin en önemli özelliği kesmeleri artık uçlarla değil veri yoluyla (data bus) oluşturabilmesidir.
-    Buu özellik sayesinde hiç işlemcinin INT uyarılmadan çok fazla sayıda kesme sanki belleğe bir değer yazıyormuş gibi 
-    oluşturulabilmektedir. Bu tekniğe "Message Signaled Intterpt (MSI)" denilmektedir. Gerçekten de bugün PCI slotlara takılan 
+    içerisinde bulunan APIC devresinin en önemli özelliği kesmeleri artık uçlarla değil, veri yoluyla (data bus) oluşturabilmesidir.
+    Bu özellik sayesinde hiç işlemcinin INT uyarılmadan çok fazla sayıda kesme sanki belleğe bir değer yazıyormuş gibi 
+    oluşturulabilmektedir. Bu tekniğe "Message Signaled Interrupt (MSI)" denilmektedir. Gerçekten de bugün PCI slotlara takılan 
     bazı kartlar kesmeleri doğrudan belli bir çekirdekte MSI kullanarak oluşturmaktadır.
 
     O halde kullanığımız Intel tabanlı PC mimarisideki bugünkü durum şöyledir:
@@ -63827,14 +63839,14 @@ clean:
     - Bazı PCI kartlar slot üzerindeki 4 IRQ hattından (INTA, INTB, INTC, INTD) birini kullanarak kesme oluşturmaktadır. Bu hatlar 
     IOAPIC'in bazı uçlarına bağlıdır.
 
-    - Bazı PCI kartlar ise doğurdan modern MSI sistemini kullanarak IOAPIC'i pass geçerek bellek işlemleriyle doğrudan ilgili 
+    - Bazı PCI kartlar ise doğrudan modern MSI sistemini kullanarak IOAPIC'i pass geçerek bellek işlemleriyle doğrudan ilgili 
     çekirdekte kesme oluşturabilmektedir.
 
     Bir aygıt sürücü programcısı mademki birtakım kartlar için onu işler hale getiren temel yazılımları da yazma iddiasındadır. 
     O halde o kartın kullanacağı kesme için kesme kodlarını (interrupt handlers) yazabilmelidir. Tabii işletim sisteminin aygıt sürücü 
-    mimarisinde bu işlemler de özel zernel fonksiyonlarıyla yapılır. Yani kesme kodu yazmanın belli bir kuralı vardır.
+    mimarisinde bu işlemler de özel kernel fonksiyonlarıyla yapılır. Yani kesme kodu yazmanın belli bir kuralı vardır.
 
-    Pekiyi çok çekirdekli bilgisayar sistemlerinde oluşan bir kesme Intel taabanlı PC mimariisnde hangi çekirdek tarafından 
+    Pekiyi çok çekirdekli bilgisayar sistemlerinde oluşan bir kesme Intel tabanlı PC mimarisinde hangi çekirdek tarafından 
     işlenmektedir? İşte bugün kullanılan IOAPIC devreleri bu bakımdan şu özelliklere sahiptir:
 
     1) Kesme IOAPIC tarafından donanım biriminin istediği bir çekirdekte oluşturulabilir.
@@ -63854,7 +63866,7 @@ clean:
     numarası vardır. IRQ numarası ile kesme numarasının bir ilgisi yoktur. Biz örneğin PIC ya da IOAPIC'i programlayarak belli 
     bir kesmenin belli bir IRQ için belli numaralı bir kesmenin oluşmasını sağlayabiliriz. Örneğin timer (IRQ-0) için 8 numaralı 
     kesmenin çalışmasını sağlayabiliriz. Pekiyi bir IRQ oluşturulduğunda çekirdek kaç numaralı kesme kodunun çalıştırılacağını 
-    nereden anlamaktadır? İşte PIC ya da IOAPIC CPU'nun INT ucunu uyararak kesme oluşturuken veri yolunun ilk 8 ucundan kesme 
+    nereden anlamaktadır? İşte PIC ya da IOAPIC CPU'nun INT ucunu uyararak kesme oluştururken veri yolunun ilk 8 ucundan kesme 
     numarasını da CPU'ya bildirmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -63890,12 +63902,12 @@ clean:
 
     typedef enum irqreturn irqreturn_t;
 
-    request_irt fonksiyonun üçüncü parametresi bazı bayraklardan oluşur. Bu bayrak 0 geçilebilir ya da örneğin IRQF_SHARED 
+    request_irt fonksiyonunun üçüncü parametresi bazı bayraklardan oluşur. Bu bayrak 0 geçilebilir ya da örneğin IRQF_SHARED 
     geçilebilir. Diğer seçenekler için dokümanlara başvurabilirsiniz. IRQF_SHARED aynı kesmenin birden fazla aygıt sürücü tarafından 
     kullanılabileceği anlamına gelmektedir. (Tabii biz ilk register ettiren değilsek daha önce resgister ettirenlerin bu bayrağı 
     kullanmış olması gerekir. Aksi halde biz de bu bayrağı kullanamayız.) Fonksiyonun dördüncü parametresi "/proc/interrupts" 
     dosyasında görüntülenecek ismi belirtir. Son parametre ise sistem genelinde tek olan bir nesnenin adresi olarak girilmelidir. 
-    Aygıt sürücü programcıları bu parametreye tipik olarak aygıt yapısını ya da çağrılacak foksiyonu girerler. Bu parametre IRQ
+    Aygıt sürücü programcıları bu parametreye tipik olarak aygıt yapısını ya da çağrılacak fonksiyonu girerler. Bu parametre IRQ
     handler fonksiyonuna ikinci parametre olarak geçilmektedir. Fonksiyon başarı durumunda o değerine başarısızlık durumunda negatif 
     hata değerine geri dönmelidir. Örneğin:
 
@@ -63912,14 +63924,14 @@ clean:
 
     Fonksiyonun birinci parametresi silinecek irq numarasını, ikinci parametresi irq_reuest fonksiyonuna girilen son parametreyi 
     belirtir. Fonksiyon başarı durumunda aygıt irq_request fonksiyonunda verilen isme, başarısızlık durumunda NULL adrese geri 
-    dönmektedir. Geri dönüş değeri bir hata kodu ieçrmemektedir. Normal olarak fonksiyonun ikinci parametresine request_irq 
-    fonksiyonunun son parametresiyle aynı değer geçilir. Bu parametrenin neden bu fonksiyona geirildiğinin bazı ayrıntıları vardır. 
+    dönmektedir. Geri dönüş değeri bir hata kodu içermemektedir. Normal olarak fonksiyonun ikinci parametresine request_irq 
+    fonksiyonunun son parametresiyle aynı değer geçilir. Bu parametrenin neden bu fonksiyona geçirildiğinin bazı ayrıntıları vardır. 
     Örneğin:
 
     if (free_irq(1, NULL) == NULL)
         printk(KERN_INFO "cannot free IRQ\n");
 
-    Pekiyi IRQ fonksiyonundan (IRQ habdler) hangi değerle geri dönülmelidir. Aslında programcı bu fonksiyondan ya IRQ_NONE 
+    Pekiyi IRQ fonksiyonundan (IRQ handler) hangi değerle geri dönülmelidir. Aslında programcı bu fonksiyondan ya IRQ_NONE 
     değeri ile ya da IRQ_HANDLED değeri ile geri döner. Eğer programcı kesme kodu içerisinde yapmak istediği şeyi yapmışsa
     fonksiyondan IRQ_HANDLED, yapamamışsa ya da yapmak istememişse fonksiyondan IRQ_NONE değeri ile geri döner. Örneğin:
 
@@ -63933,7 +63945,7 @@ clean:
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Bazen sistem programcısı belli bir IRQ'yu belli süre için disable etmek isteyebilir. Bunun için disable_irq ve enable_irq 
-    isimli iki kernel fonksiyonu kullanılmaktadır. Bu fonksiyonlar belli numaralı bir IRQ'yu disable ve enable etmeketdir. Ancak 
+    isimli iki kernel fonksiyonu kullanılmaktadır. Bu fonksiyonlar belli numaralı bir IRQ'yu disable ve enable etmektedir. Ancak 
     bu fonksiyonlar bu işlemi doğrudan kesme denetleyicisini (PIC ya da IOAPIC) programlayarak yapmamaktadır. 
 
     void disable_irq(unsigned int irq);
@@ -63952,7 +63964,7 @@ clean:
     ve IRQ1 kesmesi oluşturulur. IRQ1 kesme kodu birincil olarak işletim sistemi tarafından ele alınmaktadır. İşletim sistemi 
     de bu IRQ oluştuğunda aygıt sürücülerin belirlediği fonksiyonları çağırmaktadır. Klavyede yalnızca bir tuşa basılınca 
     değil parmak tuştan çekildiğinde de yine klavye işlemcisi çekilen tuşun scan kodunu klavye denetleyicisine gönderip IRQ1 
-    kesmesinin oluşmasına yol açmaktadır. Yani hem tuşa basında hem de parmak tuştan çekildiğinde IRQ1 oluşmaktadır. Klavye 
+    kesmesinin oluşmasına yol açmaktadır. Yani hem tuşa basınca hem de parmak tuştan çekildiğinde IRQ1 oluşmaktadır. Klavye 
     terminolojisinde parmağın tuşa basılmasıyla gönderilen scan koda "make code", parmağın tuştan çekilmesiyle gönderilen koda
     ise "break code" denilmektedir. Bugün PC'lerde kullandığımız klavyelerde parmak tuştan çekildiğinde önce PC tarafında bir 
     F0 byte'ı ve sonra da tuşun scan kodu gönderilmektedir. Örneğin parmağımızı "A" tuşuna basıp çekelim şu scan kodlar bilgisayar
@@ -63970,9 +63982,9 @@ clean:
     eder. Böylece diğer tuşlara basıldığında bu flag'e bakılarak Ctrl tuşu ile bu tuşa basılıp basılmadığı anlaşılmaktadır.
 
     Pekiyi biz Linux'ta stdin dosyasından (0 numaralı betimleyici) okuma yaptığımızda neler olmaktadır? İşte aslında işletim 
-    sistemi bir tula basıldığında basılan tuşları klavye denetleyicisinde alır ve onları biz kuyruk sisteminde saklar. Terminal 
-    aygıt sürücüsü de bu kuyruğa başvurur. Kurukta hiç tuş yoksa thread'i bu amaçla oluşturulmuş bir wait kuruğunda bekletir. 
-    Klavyeden tuşa basılınca wait kuruğunda bekleyen thread'leri uyandırır. Yani okuma yapıldığında o anda klavyeden okuma 
+    sistemi bir tuşa basıldığında basılan tuşları klavye denetleyicisinde alır ve onları biz kuyruk sisteminde saklar. Terminal 
+    aygıt sürücüsü de bu kuyruğa başvurur. Kuyrukta hiç tuş yoksa thread'i bu amaçla oluşturulmuş bir wait kuyruğunda bekletir. 
+    Klavyeden tuşa basılınca wait kuyruğunda bekleyen thread'leri uyandırır. Yani okuma yapıldığında o anda klavyeden okuma 
     yapılmamaktadır. Kuyruklanmış tuşlar okunmaktadır.
 
     Klavyedeki tuşların üzerinde yazan harflerin hiçbir önemi yoktur. Yani İngilizce klavye ile Türkçe klavye aynı tuşlar için 
@@ -63983,7 +63995,7 @@ clean:
     denetleyici) isterse klavye içerisindeki işlemciye komutlar gönderebilmektedir. Aslında klavye üzerindeki ışıkların 
     yakılması da klavyenin içerisinde tuşa basılınca yapılmamaktadır. Işıklı tuşlara basıldığında gönderilen scan kod klavye 
     denetleyicisi tarafından alınır, eğer bu tuş ışıklı tuşlardan biri ise klavye denetleyicisi klavye işlemcisine "falanca 
-    ışığı yak" komutunu göndermektedir. Özetle yeniden ifade edersek klavyedeki ışıklar klaye devresi tarafından ilgili 
+    ışığı yak" komutunu göndermektedir. Özetle yeniden ifade edersek klavyedeki ışıklar klavye devresi tarafından ilgili 
     tuşlara basılınca yakılmamaktadır. Karşı taraftan emir geldiğinde yakılmaktadır. Tasarımın bu biçimde yapılmış olması
     çok daha esnek bir kullanım oluşturmaktadır.
 
@@ -65046,6 +65058,7 @@ void exit_sys(const char *msg)
     /sbin/rmmod ./$module.ko || exit 1
     rm -f $module
 ---------------------------------------------------------------------------------------------------------------------------*/
+
 /* generic-blkdev-driver.c */
 
 #include <linux/module.h>
@@ -66021,32 +66034,34 @@ rm -f $module
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Yukarıdaki blok aygıt sürücüsü bir dosya sistemi ile formatlanarak sanki bir disk bölümüymüş gibi de kullanılabilir. Bunun için
-    önce aygıt sürücünün idare ettiği alanın formatlanması gerekir. Formatlama işlemi mkfs isili utility programla yapılmaktadır:
+    Yukarıdaki blok aygıt sürücüsü bir dosya sistemi ile formatlanarak sanki bir disk bölümüymüş gibi de kullanılabilir. Bunun 
+    için önce aygıt sürücünün idare ettiği alanın formatlanması gerekir. Formatlama işlemi mkfs isimli utility programla yapılmaktadır:
 
     $ sudo mkfs -t ext2 generic-bdriver
 
-    Burada -t seçeneği volümün hangi dosya sistemi ile formatlanacağını belirtmektedir. Formatlama aslında volümdeki bazı sektörlerde
-    özel meta alanlarının yaratılması anlamına gelmektedir. Dolayısıyla mkfs komutu aslında ilgili aygıt sürücüyü açıp onun bazı sektörlerine 
-    bazı bilgileri yazmaktadır.
+    Burada -t seçeneği volümün hangi dosya sistemi ile formatlanacağını belirtmektedir. Formatlama aslında volümdeki bazı 
+    sektörlerde özel meta alanlarının yaratılması anlamına gelmektedir. Dolayısıyla mkfs komutu aslında ilgili aygıt sürücüyü 
+    açıp onun bazı sektörlerine bazı bilgileri yazmaktadır.
 
-    Formatlama işleminden sonra artık blok aygıt sürücüsünün mount edilmesi gerekmektedir. mount işlemi bir dosya sisteminin dizin ağacının belli bir dizinine
-    monte edilmesi anlamına gelmektedir. Dolayısıyla mount komutunda kullanıcı block aygıt sürücüsünü ve mount edilecek dizini girmektedir. Örneğin:
+    Formatlama işleminden sonra artık blok aygıt sürücüsünün mount edilmesi gerekmektedir. mount işlemi bir dosya sisteminin dizin 
+    ağacının belli bir dizinine monte edilmesi anlamına gelmektedir. Dolayısıyla mount komutunda kullanıcı block aygıt sürücüsünü 
+    ve mount edilecek dizini girmektedir. Örneğin:
 
     $ sudo mount generic-bdriver /mnt/myblock
 
-    Burada mount noktası (mount point) /ment dizinin altında myblock isimli dizindir. Bu dizinin kullanıcı tarafından önceden mkdir komutu ile
-    yaratılması gerekir. Tabii mount noktalarının /mnt dizinin altında bulndurulması gibi zorunluluk yoktur. Mount noktasına ilişkin dizinin içinin
-    boş olması da gerekmez. Fakat mount işleminden sonra artık o dizinin altı görünmez. Dosya sisteminin kök dizini o dizin olacak biçimde dosya sistemi
-    ağaca monte edilmiş olur. mount komutu aslında mount isimli bir sistem fonksiyonu çağrılarak gerçekleştirilmektedir. Yani aslında bu işlem programlama
-    yoluyla da yapılabilmektedir. 
+    Burada mount noktası (mount point) /ment dizinin altında myblock isimli dizindir. Bu dizinin kullanıcı tarafından önceden 
+    mkdir komutu ile yaratılması gerekir. Tabii mount noktalarının /mnt dizinin altında bulndurulması gibi zorunluluk yoktur. Mount 
+    noktasına ilişkin dizinin içinin boş olması da gerekmez. Fakat mount işleminden sonra artık o dizinin altı görünmez. Dosya 
+    sisteminin kök dizini o dizin olacak biçimde dosya sistemi ağaca monte edilmiş olur. mount komutu aslında mount isimli bir 
+    sistem fonksiyonu çağrılarak gerçekleştirilmektedir. Yani aslında bu işlem programlama yoluyla da yapılabilmektedir.
 
-    Aygıt sürücümüzü mount ettikten sonra artık onu unmount etmeden rmmod komutuyla boşaltamayız. mount edilen dosya sistemi umount komutuyla eski haline getirilmektedir. 
-    Örneğin:
+    Aygıt sürücümüzü mount ettikten sonra artık onu unmount etmeden rmmod komutuyla boşaltamayız. mount edilen dosya sistemi umount 
+    komutuyla eski haline getirilmektedir. Örneğin:
 
     $ sudo umount /mnt/myblock
 
-    umount komutunun komutu argümanının mount noktasını belirten dizin olduğuna dikkat ediniz. Tabii aslında umount komutu da işlemini umount isimli sistem fonksiyonuyla yapmaktadır.
+    umount komutunun komutu argümanının mount noktasını belirten dizin olduğuna dikkat ediniz. Tabii aslında umount komutu 
+    da işlemini umount isimli sistem fonksiyonuyla yapmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -66066,7 +66081,7 @@ rm -f $module
                                                             |
                                                         Disk Cache
 
-    Örneğin biz uder modda bir diskten bir sektör okumak istediğimizde bu işlemi yapan blok aygıt sürücüsünden istekte 
+    Örneğin biz user modda bir diskten bir sektör okumak istediğimizde bu işlemi yapan blok aygıt sürücüsünden istekte 
     bulunuruz. Blok aygıt sürücüleri disk denetleyicilerini programlar, disk denetleyicileri disk birimine erişir ve transfer
     gerçekleşir. Disk tarnsferleri CPU aracalığıyla değil "DMA (Direct Memory Access)" denilen özel denetleyicilerle sağlanmaktadır. 
     Yani aygıt sürücü disk denetleyicisini ve DMA'yı programlar transfer yapılana kadar bekler. Bu surada işletim sistemi 
@@ -66090,6 +66105,35 @@ rm -f $module
     yoluyla belli periyotlarda diske transfer edilir. USer moddan çeşitli thread'lerin diskten okumalar yaptığını düşünelim.
     Önce bu talepler işletim sistemi tarafından kuyruklanır, çizelgelenir sonra etkin bir biçimde transfer gerçekleştirilir. 
     İşletim sistemlerinin bu kısmına "IO çizelgeleyeicisi (IO scheduler)" denilmektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bugün artık SSD (yani elektornik devre biçiminde) diskler yaygın olarak kullanılıyorsa da bir dönem öncesine kadar 
+    manyetik tabanlı "hard diskler" yoğun kullanılıyordu. Burada bu hard disklerin genel yapısı üzerinde bazı açıklamalar da
+    yapmak istiyoruz.
+
+    Hard disklerde bir eksene monte edilmiş birden fazla yüzey vardır. Bu yüzeylere "platter" denilmektedir. Bir platter'da 
+    iki yüz bulunur. Her yüz bir disk kafası ile okunmaktadır. Örneğin bir hard diskte 4 platter varsa toplam 8 tane yüz
+    ve 8 tane kafa bulunur. Bilgiler tıpkı eski plaklarda olduğu gibi yuvarlak yollara yazılıp okunmaktadır. Bunlara "track"
+    denilmektedir. Dolayısıyla bir tarck'e bilginin yazılıp okunması için öncelikle kafanın o track hizasına konumlandırılması 
+    gerekmektedir. Tabii okuma yazma işlemi disk dönerken yapılmaktadır. Bu durumda manyetik tabanlı bu hard disklerde bir 
+    sektörün tarnsfer edilmesi için üç zaman unsuru vardır:
+
+    1) Disk kafasının ilgili track hizasına konumlandırılması için gereken zaman (seek time).
+    2) Diskin dönerek kafa hizasına gelmesi için gereken zaman (rotation delay).
+    3) Transfer zamanı (transfer time)
+
+    Buradaki en önemli zaman kaybu disk kafasının konumlandırılması sırasındaki kayıptır. Ortalama bir disk 6000 RPM hızında 
+    dönmektedir. Yani bir dakikada 6000 tur atmaktadır. İkinci önemli zaman kaybı ilgi sektörün track kafa hizasına gelmesi 
+    için harcanan zamandır. Nihayet en hızlı gerçekleşen işlem transfer işlemidir.
+
+    İşletim sistemlerinin eski hard disklerde uyguladığı en önemli optimizasyon işlemi kafa hareketinin azaltılması üzerinedir. 
+    Eğer dosyayı oluşturan sektörler biribine yakınsa daha az kafa hareketi oluşur ve toplam transfer zamanı azaltılmış olur. 
+    Tabii dosya sistemlerinde zamanla dosyanın parçaları zamanla birbirinden uzaklaşabilmektedir. Bunları birbirine yaklaştıran
+    genellikle "defrag" biçiminde isimlendirilen yardımcı programlar vardır.
+
+    Tabii artık şimdilerde kullandığımız SSD disklerde hiçbir mekanik unsur yoktur. Bunlar tamamen flash EPROM teknolojisi ile
+    yani yarı iletken teknolojisiyle entegre devre biçiminde üretilmektedir. Bunlar rastgele erişimlidir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -66258,7 +66302,7 @@ void exit_sys(const char *msg)
     Mount işlemi Linux sistemlerinde aslında bir sistem fonksiyonuyla yapılmaktadır. Bu sistem fonksiyonu "libc" kütüphanesinde
     "mount" ismiyle bulunmaktadır. mount fonksiyonunun prototipi şöyledir:
 
-     #include <sys/mount.h>
+    #include <sys/mount.h>
 
     int mount(const char *source, const char *target, const char *filesystemtype, 
         unsigned long mountflags, const void *data);
@@ -66273,7 +66317,7 @@ void exit_sys(const char *msg)
     Tabii bu fonksiyonu çağırabilmek için prosesimizin etkin kullanıcı id'sinin 0 olması ya da prosesimizin uygun önceliğe 
     (appropriate privilege) sahip olması gerekir. mount fonksiyonu POSIX standartlarında yoktur. Çünkü işletim sisteminin
     gerçekleştirimine oldukça bağlı bir fonksiyondur. Tabii kullanıcılar mount işlemini bu sistem fonksiyonu yoluyla değil 
-    "mount" isimli kabuk komutuyla yapmaktadır. mount işlemi için elimizde bir blok aygıt sürücüüsne ilişkin aygıt dosyasının
+    "mount" isimli kabuk komutuyla yapmaktadır. mount işlemi için elimizde bir blok aygıt sürücüsüne ilişkin aygıt dosyasının
     bulunuyor olması gerekir. Ancak blok aygıt sürücüleri mount edilebilmektedir. Tabii ilgili blok aygıt sürücüsünün sektörleri 
     içerisinde bir dosya sisteminin bulunuyor olması gerekir. mount isimli kabuk komutunun tipik kullanımı şöyledir:
 
@@ -66310,18 +66354,18 @@ void exit_sys(const char *msg)
     yapılabilmektedir. Ancak bazı özel aygıtlar ve dosya sistemleri için bu belirlemenin açıkça yapılması gerekebilir. Bunun 
     için mount komutunda "-t <dosya_sisteminin_türü> seçeneği kullanılır. Örneğin:
 
-     $ sudo mount -t vfat /dev/sdc1 mydisk
+    $ sudo mount -t vfat /dev/sdc1 mydisk
 
-     Burada -t seçeneğine argümanı olarak aşağıdaki gibi dosya sistemleri kullanılabilir:
+    Burada -t seçeneğine argümanı olarak aşağıdaki gibi dosya sistemleri kullanılabilir:
 
-     ext2
-     ext3
-     ext4
-     ntfs
-     vfat
-     tmpfs
-     xfs
-     ...
+    ext2
+    ext3
+    ext4
+    ntfs
+    vfat
+    tmpfs
+    xfs
+    ...
 
     Dosya sisteminin otomatik belirlenmesi mount sistem fonksiyonu tarafından yapılamaltadır. mount komutu e birtakım işlemlerle
     bunu sağlamaktadır.
@@ -66329,7 +66373,7 @@ void exit_sys(const char *msg)
     Mount edilmiş olan bir blok aygıtının mount işlemi umount isimli sistem fonksiyonuyla kaldırıalbilir. Fonksiyonun prototipi 
     şöyledir:
 
-      #include <sys/mount.h>
+    #include <sys/mount.h>
 
     int umount(const char *target);
 
@@ -66411,7 +66455,7 @@ void exit_sys(const char *msg)
     Tabii bizim burada "mydisk.dat" isimli bir dosyaya sahip olmamız gerekir. İçi 0'larla dolu 100 MB'lik böyle bir dosyayı
     dd komutuyla aşağıdaki gibi oluşturabiliriz:
 
-    $ dd if=/dev/zero of=test.dat bs=512 count=10000
+    $ dd if=/dev/zero of=test.dat bs=512 count=100000
 
     Burada artık "/dev/loop0" aygıt dosyası adeta bir disk gibi kullanılabilir hale gelmiştir. Biz bu "/dev/loop0" dosyasını 
     kullandığımızda bu işlemlerden aslında "mydisk.dat" dosyası etkilenecektir.
@@ -66443,8 +66487,10 @@ void exit_sys(const char *msg)
     $ sudo losetup -o 4194304 /dev/loop0 am335x-debian-11.7-iot-armhf-2023-09-02-4gb.img
 
     512 * 8192 = 4194304 olduğuna dikkat ediniz.
-/*--------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------*/
 
+/*--------------------------------------------------------------------------------------------------------------------------
+												167. Ders 27/09/2024 - Cuma
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -66453,15 +66499,194 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-
+    FAT dosya sistemi Microsof tarafından DOS işletim sistemi için geliştirilmiştir. Ancak bu dosya sistemi hala kullanılmaktadır. 
+    FAT dosya sistemi o zamanlar teknolojisiyle tasarlanmıştır. Dolayısıyla moren dosya sistemlerinde bulunan bazı özellikler 
+    bu dosya sisteminde bulunmamaktadır. FAT dosya sistemi kendi aralarında FAT12, FAT16 ve FAT32 olmak üzere üç gruba ayrılmaktadır.
+    Bu sistemlerin arasındaki en önemli fark dosya sistemi içerisindeki FAT (File ALlocation Table) denilen tablodaki elemanların
+    uzunluklarıdır. FAT12'de FAT elemanları 12 bit, FAT16'da 16 bir ve ve FAT32'de 32 bittir. Microsoft Windows sistemlerine
+    geçtiğinde bu FAT sistemini biraz revize etmiştir. Buna da VFAT denilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    Bir disk ya da disk bölümü (Disk Parititon) FAT dosya sistemiyle formatlandığında disk bölümünde dört mantıksal bölüm 
+    oluşturulmaktadır:
 
+    1) Boot Sektör
+    2) FAT Bölümü
+    3) RootDir Bölümü
+    4) Data Bölümü
+
+    Bir dosya sisteminin içi boş bir biçimde kullanıma hazır hale getirilmesi sürecine formatlama denilmektedir. Formatşama 
+    sırasında ilgili disk ya da disk bölümünde ilgili dosya sistemi için meta data alanlar oluşturulmaktadır.
+
+    Windows'ta ilgili disk ya da disk bölümünü FAT dosya sistemiyle formatlamak için "Bilgisayar Yönetimi / Disk Yönetimi" 
+    kısmından ilgili disk bölümü seçilir ve farenin sağ tuşuna basılarak formatlama yapılır. Benzer biçimde formatlama 
+    "Bilgisayarım (My Computer)" açılarak orada ilgili dik bölümünü üzerinde sağa tıklanarak da yapılabilmektedir.
+
+    Linux sistemlerinde bir blok aygıt sürücüsü ya da doğrudan bir dosya "mkfs.fat" programıyle formatalanbilir. Biz yukarıda 
+    da belirtitğimiz gibi bir dosyayı sanki disk gibi kullanacağız. Örneğin "dd" programıyla 50MB'lik içi sıfırlarla dolu 
+    bir dosya oluşturalım:
+
+    $ dd if=/dev/zero of=mydisk.dat bs=512 count=100000
+
+    Burada 512 * 10000 byte'lık (yaklaışık 50 MB) içi sıfırlarla dolu bir dosya oluşturulmuştur. Bu dosyayı "/dev/loop0" 
+    blok aygıt aygıt sürücüsü biçiminde kullanılabilmesi şöyle sağlanabilir:
+
+    $ sudo losetup /dev/loop0 mydisk.dat
+
+    Şimdi artık "mkfs.fat" programı ile formatlamayı yapabiliriz. Yukarıda FAT'in FAt12, FAT16 ve FAT32 olmak üzere üç 
+    türünün olduğunu belirtmiştik. FAT türü "mkfs.fat" programında -F12, -F16 ya da -F32 seçenekleriyle belirtilmektedir. 
+    Örneğin biz blok aygıtımızı FAT16 biçiminde şöyle formatlayabiliriz:
+
+    $ sudo mkfs.fat -F16 /dev/loop0
+
+    Aslında "mkfs.xxx" programları blok aygıt dosyası yerine normal bir dosya üzerinde de formatlama yapabilmektedir. Tabii 
+    biz kursumuzda bir blok aygıtı oluşturup onu mount edeceğiz. Şimdi biz FAT16 olarak formatladığımız "/dev/loop0" blok 
+    aygıtını mount edebiliriz. Tabii bunun için önce bir "mount dizininin (mount point)" oluşturulması gerekmektedir:
+
+    $ mkdir fat16
+    $ sudo mount /dev/loop0 fat16
+
+    Artık fat16 dizini oluşturduğumuz FAT dosya sisteminin kök dizinidir. Ancak bu dosya sisteminin tüm bilgileri "mydisk.dat"
+    dosyasında bulundurulacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    FAT dosya sistemiyle formatlanmış olan bir diskin ya da disk bölümünün ilk sektörüne Boot sektör denilmektedir. Dolayısıyla 
+    boot sektör ilgili diskin ya da disk bölümünün mantıksal 0 numaralı sektöründedir. Boot sektör isminden de anlaşılacağı 
+    gibi 512 byte uzunluğundadır. Bu sektörün iç organizasyonu şöyledir:
 
+    Jmp Kodu | BPB (BIOS Parameter Block) | DOS Yükleyici Programı | 55 AA
+
+    Boot sektörün hemen başında Intel Mimarisinde BPB bölümünü atlayarak DOS işletim sistemini yükleyen yükleyici program 
+    için bir jmp komutu bulunmaktadır. Bugün artık DOS işletim sistemi kullanılmadığı için burakai Jmp kodun ve yükleyici 
+    programın bir işlevi kalmamıştır. Ancak BPB alanı eskiden olduğu yerdedir ve dosya sistemi hakkında kritik bilgiler bu 
+    bölümde tutulmakttadır. Sektörün başındaki Jmp Code tipik olarak EB 3C 90 makine komutundan oluşmaktadır. Bazı kaynaklar 
+    bu jmp kodu da BPB alanına dahil etmektedir. Eğer dosya sisteminde yüklenecek bir DOS işletim sistemi yoksa buradaki 
+    yükleyici program yerine format programı buraya ekrana mesaj çıkartan küçük program kodu yerleştirmektedir. 
+    Aşağıda "mkfs.fat" programı ile FAT16 biçiminde formatlanan FAT dosya sisteminin boot sektör içeriği görülmektedir:
+
+    00000000  eb 3c 90 6d 6b 66 73 2e  66 61 74 00 02 04 04 00  |.<.mkfs.fat.....|
+    00000010  02 00 02 00 00 f8 64 00  20 00 08 00 00 00 00 00  |......d. .......|
+    00000020  a0 86 01 00 80 01 29 fa  0b 93 c5 4e 4f 20 4e 41  |......)....NO NA|
+    00000030  4d 45 20 20 20 20 46 41  54 31 36 20 20 20 0e 1f  |ME    FAT16   ..|
+    00000040  be 5b 7c ac 22 c0 74 0b  56 b4 0e bb 07 00 cd 10  |.[|.".t.V.......|
+    00000050  5e eb f0 32 e4 cd 16 cd  19 eb fe 54 68 69 73 20  |^..2.......This |
+    00000060  69 73 20 6e 6f 74 20 61  20 62 6f 6f 74 61 62 6c  |is not a bootabl|
+    00000070  65 20 64 69 73 6b 2e 20  20 50 6c 65 61 73 65 20  |e disk.  Please |
+    00000080  69 6e 73 65 72 74 20 61  20 62 6f 6f 74 61 62 6c  |insert a bootabl|
+    00000090  65 20 66 6c 6f 70 70 79  20 61 6e 64 0d 0a 70 72  |e floppy and..pr|
+    000000a0  65 73 73 20 61 6e 79 20  6b 65 79 20 74 6f 20 74  |ess any key to t|
+    000000b0  72 79 20 61 67 61 69 6e  20 2e 2e 2e 20 0d 0a 00  |ry again ... ...|
+    000000c0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    000000d0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    000000e0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    000000f0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00000100  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00000110  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00000120  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00000130  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00000140  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00000150  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00000160  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00000170  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00000180  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00000190  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    000001a0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    000001b0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    000001c0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    000001d0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    000001e0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    000001f0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 55 aa  |..............U.|
+
+    Burada yükleyici programın DOS olmaması durumunda ekrana yazdırdığı mesaj görülmektedir. Tabii bu mesajın çıkması için
+    bu diskin ya da disk bölümünün aktif disk ya da aktif disk bölümü olması gerekir. Yani bu diskten ya da disk bölümünde 
+    boot etme girişimi olmadıktan sonra bu mesaj görülmeyecektir.
+
+    FAT dosya sisteminin en önemli meta data bilgileri boot sektörün hemen başındaki BPB (Bios Parameter Block) alanında 
+    tutulmaktadır. Bu bölümün bozulması durumunda dosya sistemine erişim mümkün olamamaktadır. Başka bir deyişle bu dosya 
+    sisteminin bozulmasını sağlamak için tek yapılacak şey bu BPB alanındaki byte'ları sıfırlamaktır. Tabii zamanla FAT dosya
+    sistemindeki diğer bölümleri inceleyerek bozulmuş olan BPB alanını onaran yardımcı araçlar da çeşitli kişiler ve kurumlar 
+    tarafından geliştirilmiştir.
+
+    Boot sektörün sonunda 55 AA değeri bulunmaktadır. Bu bir sihirli sayı (magic number) olarak bulundurulmaktadır. Bazı 
+    programlar ve bazı boot loader'lar kontorlü boot sektöre bırakmadan önce bu sihirli sayıyı kontrol edebilmektedir. Böylece
+    rastgele bozulmalarda bu sihirli sayı da bozulacağı için yetersiz olsa da basit kontrol mekanizması oluşturulabilmektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												168. Ders 29/09/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    FAT dosya sisteminde en önemli kısım şüphesiz "BPP (BIOS Parameter Block)" denilen kısımdır. BPB hemen boot sektörün 
+    başındadır ve FAT dosya sisteminin diğer bölümleri hakkında kiritk bilgiler içermektedir. Tabii BPB bölümü 1980'lerin 
+    anlayışıyla tasarlanmıştır. Bu tasarımda hatalar DOS'un çeşitli versiyonlarında geçmişe doğru uyumu koruyarak giderilmeye
+    çalışılmıştır. Biz buarada BPB bloğunun içeriğini tek tek ele alacağız. Burada BPB içerisindeki ilgili alanın yerini 
+    boot sektörün başından itibaren offset numaralarıyla belirteceğiz.
+
+    Offset (Hex)        Uzunluk             Anlamı
+    00                  3 Byte              Jmp Kodu
+    03                  8 Byte              OEM Yorum Alanı
+    0B                  WORD                Sektördeki Byte Sayısı
+    0C                  BYTE                Cluster'daki Sektçr Sayısı
+    0E                  WORD                Ayrılmış Sektörlerin Sayısı
+
+    - Jump Kodu: Yukarıda da belirttiğimiz gibi BPB bloğunu geçerek yükleyici programa atlayan makine komutlarından oluşmaktadır. 
+    Boot loader programlar akışı buradan boot sektöre devretmektedir. Dolayısıyla BPB alanının atlanması gerekmektedir. Burada
+    bazen Intel short jump bazen de near jump komutları bulunur. Tipik içerik EB 3C 90 biçimindedir.
+
+    - OEM Yorum Alanı: Formatlama programının kendine özgü yazdığı 8 byte'lık küçük yazıdır. Buraya eskiden DOS işletim sisteminin 
+    versiyon numarası yazılıyordu. Örneğin Windows bu BPB alanın yeni biçiminin tanındığı en eski sistem olan "MSDOS5.0" 
+    yazısını buraya yerleştişrmektedir. Ancak buraya yerleştirilen yazı herhangi bir biçimde kullanılmamaktadır.
+
+    - Sektördeki Byte Sayısı: Bir sektörde kaç byte olduğu bilgisi burada tutulmaktadır. Tabii bu değer hemen her zaman 512'dir.
+    Yani Little Endian formatta hex olarak burada 00 02 değerlerini görmemiz gerekir.
+
+    - Cluster'daki Sektör Sayısı: Dosyaların parçaları disk üzerinde ardışıl bir biçimde konumlandırılmak zorunda değildir. 
+    FAT dosya sisteminde bir dosyanın hangi parçasının diskte nerede konumlandırıldığı FAT (File Allocation Table) denilen 
+    bir bölümde saklanmaktadır. Eğer bir dosya çok fazla parçaya ayrılırsa hem disk üzerinde daha çok yayılmış olur hem de FAT
+    bölümünde bu dosyanın parçalarının yerini turmak için gereken alan büyür. Bu nedenle dosyaların parçaları sektörlere değil
+    clutser denilen birimlere bölünmüştür. Bir cluster ardışıl n tane sektörün oluşturduğu topluluktur. Örneğin bir cluster'ın
+    4 sektör olması demek 4 sektörden oluşması (yani 2K) demektir. Şimdi elimizde 10,000 byte uzunluğunda bir dosya olsun. Bir 
+    cluster'ın 1 sektör olduğunu düşünelim. Bu durumda bu 10,000 byte'lık dosya toplamda 10000 / 512 = 19.53125 yani 20 cluster
+    yer kaplayacaktır. FAT bölümünde bu 20 cluster 20 elemanlık yer kaplayacaktır. Şimdi bir cluster'ın 4 sektörden oluşturğunu 
+    düşünelim. Bu duurmda 10,000 byte'lık dosya 10000 / 2048 = 4.8828125 yan, 5 cluster yer kaplayacaktır. Bu dosyanın yerini 
+    tutmak için FAT bölümünde 5 eleman yeterli olacaktır. Görüldüğü gibi cluster bir dosyanın bir parçasını tutabilen en düşük
+    tahsisat birimidir.Halbuki sektör diskten transfer edilecek en küçük birimdir. Sektör yerine dosya sisteminin cluster kavramını
+    kullanmasının iki nedeni vardır. Birincisi cluster ardışıl sektörlerden oluştuğu için dosyanın parçaları diskte daha az
+    yayılmış olur. İkincisi de dosyanın parçalarının yerlerini tutmak için daha az alan gerekmektedir.
+
+    Pekiyi bir cluster kaç sektörden oluşmalıdır? Eğer bir cluster çok fazla sayıda sektörden oluşursa dosyanın son parçasında 
+    kullanılmayan alan (buna "içsel bölünme (internal fragmentation)" da denilmektedir) fazlalaşır diskin kullanım kapasitesi 
+    azalmaya başlar. Örneğin bir cluster'ın 32 sektörden (16K) oluştuğunu varsayalım. Bu durumda 1 byte'lık bir dosya bile 
+    16K yer kaplayacaktır. Çünkü dosya sisteminin minimum tahsisat birimi 16K'dır. Örneğin bir sistemde 100 tane 1 byte'lık 
+    dosyanın diskte kapladığı alanla 1 tane 100 byte'lık dosyanın diskte kapladığı alan kıyaslandığında 100 tane 1 byte'lık 
+    dosyanın diskte çok daha fazla yer kapladığı görülecektir. İşte UNIX/Linux sistemlerinde dosyaları tek bir dosyada peşi 
+    sıra birleştiren ve bunların yerlerini dosyanın başındaki bir başlık kısmında tutan "tar" isimli bir yardımcı program 
+    bulunmaktadır. "tar" programının bir sıkıştırma yapmadığına diskteki kaplalan alanı azaltmak için yalnızca dosyaları 
+    uç uca eklediğine dikkat ediniz. Tabii genellikle dosyalar tar'landıktan sonra ayrıca sıkıştırılabilir. Bu sistemlerdeki 
+    "tar.gz" gibi dosya uzantıları tar'landıktan sonra zip'lenmiş olan dosyaları belirtmektedir. Pkiyi o halde bir cluster'ın
+    kaç sektör olacağına nasıl karar verilmektedir? İşte sezgisel olarak disk hacmi büyüdükçe kaybedeilen alanların önemi 
+    azalacağı için clutser'ın çok sektörden oluşturulması, disk hacmi azaldıkça az sektörden oluşturulması yoluna gidilmektedir. 
+    Format programları bu değerin kullanıcı tarafından belirlenmesine olanak sağlamakla birlikte default değer de önermektedir. 
+    Linux'taki "mkfs.fat" programında ise cluster boyutu "-s" seçeneği ile belirlenmektedir. Örneğin:
+
+    $ sudo mkfs.fat -F16 -s 2 /dev/loop0
+
+    Burada bir cluster 2 sektörden oluşturulmuştur.
+
+    İşte BPB bloğunun 0C offset'inde bir cluster'ın kaç sektörden oluştuğu bilgisi yer almaktadır. İşletim sistemi dosyaların 
+    parçalarına erişirken hep bu bilgiyi kullanmaktadır. (Burada değeri disk editörü ile değiştirsek dosya sistemi tamamen 
+    saçmalayacaktır.) Yukarıdaki örnek boot sektörde bir cluster 4 sektörden (yani 4K = 2048 byte'tan) oluşmaktadır.
+
+    Ayrılmış Sektörlerin Sayısı: Burada boot sektörü izleyen FAT bölümünün kaçıncı sektörden başladığı bilgisi yer almaktadır. 
+    Tabii buradaki orijin FAT disk bölümünün başıdır. Yani boot sektör 0'ıncı sektörde olmak üzere FAT bölümünün kaçıncı sektörden
+    başladığını belirtmektedir. Pekiyi neden boot sektör ile FAT arasında boşluk bırakmak gerekebilir? İşte hard disklerde 
+    işletim sistemi FAT bölümünü ilk silindire hizalamak isteyebilir. Eğer özel uygulamalarda boot sektör yükleyici programı
+    uzunsa yükleyicinin diğer parçaları da burada bulunabilmektedir. Yukarıdaki örnek FAT bölümünün boot sektöründe bu byte'lar
+    04 00 biçimindedir. Little Endian formatta bu bu değer 4'tür. O halde bu dosya sisteminde FAT bölümü 4'üncü sektörden 
+    başlamaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
