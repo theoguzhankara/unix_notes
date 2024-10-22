@@ -11,7 +11,7 @@
                         (Notları sabit genişlikli font kullanan programlama editörleri ile açınız.)
                             (Editörünüzün "Line Wrapping" özelliğini pasif hale getiriniz.)
 
-                                                    Son Güncelleme: 26/09/2024 - Perşembe
+                                                    Son Güncelleme: 22/10/2024 - Pazartesi
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -39809,11 +39809,11 @@ void exit_sys(const char *msg)
 
     Daemon programlar pek çok modern UNIX/Linux sisteminde "init paketleri" içerisindeki özel utility'ler tarafından başlatılıp, 
     sürdürülüp, sonlandırılmaktadır. Yani ilgili dağıtımın bu daemon'ları idare etmek için özel komutları bulunabilmektedir. Linux 
-    sistemlerinde init prosesi ve diğer proseslerin kodları ve boot süreci ile ilgili utility'ler "init paketleri" denilen 
-    paketler biçiminde farklı proje grupları tarafından oluşturulmuştur. Başka bir deyişle "servis yönetim (service management)"
-    işlemleri organize bir biçimde bu "init paketleri" tarafından yapılmaktadır. Yaygın olarak kullanılan üç "init paketi" bulunmaktadır:
+    sistemlerinde init prosesi ve diğer proseslerin kodları ve boot süreci ile ilgili utility'ler "init paketleri" denilen paketler 
+    biçiminde farklı proje grupları tarafından oluşturulmuştur. Başka bir deyişle "servis yönetim (service management)" işlemleri 
+    organize bir biçimde bu "init paketleri" tarafından yapılmaktadır. Yaygın olarak kullanılan üç "init paketi" bulunmaktadır:
 
-    1) sysvinit: Klasik System5'teki işlevleri yapan init paketidir. Linux uzun bir süre bu paketi kullanmıştır.
+    1) SysVinit: Klasik System5'teki işlevleri yapan init paketidir. Linux uzun bir süre bu paketi kullanmıştır.
     2) Upstart: 2006 yılında oluşturulmuştur ve 2010'ların ortalarına kadar (bazı dağıtımlarda hala) kullanılmaya yaygın 
     biçimde kullanılmıştır.
     3) systemd: 2010 yılında oluşturulmuştur ve son yıllarda pek çok Linux dağıtımında kullanılmaya başlanmıştır. Bugün en 
@@ -40214,10 +40214,10 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Daemon'ların çoğu tek bir proses olarak çalışmak zorundadır. Yani daemon'ın başka kopyasının da çalıştırılabilmesi 
     problemlere yol açabilmektedir. Daemon yazarken onun tek kopyasının çalıştığına emin olmak isteyebilirsiniz. Bunun nasıl 
-    yapıldığını "dosya kilitleme işlemlerinde" açıklamıştık. Geleneksel olarak daemon'ların bu amaçla oluşturacakları dummy 
-    dosyalar "/run" dizini içerisinde ".pid" uzantılı biçimde oluşturulmaktadır. Bu "/run" dizinine sıradan prosesler tarafından 
-    yazma hakkı verilmemektedir. Yani bu dizinde dosya yaratmak istiyorsanız daemon programınızı uygun önceliğe sahip olacak
-    biçimde (yani root olarak)" çalıştırmalısınız.
+    yapıldığını "dosya kilitleme işlemlerinde" açıklamıştık. Geleneksel olarak daemon'lar bu amaçla "/run" dizini içerisinde 
+    ".pid" uzantılı dosyalar oluşturmaktadır. Bu "/run" dizinine sıradan prosesler tarafından yazma hakkı verilmemektedir. Yani 
+    bu dizinde dosya yaratmak istiyorsanız daemon programınızı uygun önceliğe sahip olacak biçimde (yani root olarak)" 
+    çalıştırmalısınız.
 
     Aşağıda daemon'ın tek bir kopyasının çalıştırılmasının sağlanmasına yönelik bir örnek verilmiştir. Programı sudo ile 
     çalıştırmayı unutmayınız.
@@ -40348,10 +40348,10 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Daemon programların "reinitialize" edilebilmesi sık karşılaşılan bir uygulamadır. Daemon program konfigürasyon dosyasını 
     okuyup çalıştıktan sonra onu durdurmadan adeta reset etmek isteyebiliriz. Örneğin daemon çalışırken konfigürasyon dosyasında
-    bir değişiklik yapabiliriz. O değişiklikten sonra yeniden daemon programının o konfigürasyon dosyasını çalıştırmasını 
-    sağlamak isteyebiliriz. Genel olarak bu işlem için SIGHUP sinyalinden faydalanılmaktadır. SIGHUP sinyali terminal 
-    aygıt sürücüsü ve kabuk programları tarafından kullanılan bir sinyaldir. Ancak daemon programının terminal bağlantısı
-    kesildiğinden SIGHUP sinyali daemon programlar için "boşa çıkmış ve kullanılabilir" bir sinyal durumundadır. 
+    bir değişiklik yapabiliriz. O değişiklikten sonra yeniden daemon programının o konfigürasyon dosyasını çalıştırmasını sağlamak 
+    isteyebiliriz. Genel olarak bu işlem için SIGHUP sinyalinden faydalanılmaktadır. SIGHUP sinyali terminal aygıt sürücüsü ve 
+    kabuk programları tarafından kullanılan bir sinyaldir. Ancak daemon programının terminal bağlantısı kesildiğinden SIGHUP 
+    sinyali daemon programlar için "boşa çıkmış ve kullanılabilir" bir sinyal durumundadır.
 
     Aşağıda SIGHUP sinyalinin işlenmesine yönelik bir örnek verilmiştir. Burada konfigürasyon dosyası sinyal fonksiyonu 
     içerisinde okunmuştur. Bu durumda bu işlemlerin asenkron sinyal güvenli bir biçimde yapılması gerekir. Tabii buna 
@@ -40510,8 +40510,8 @@ void exit_sys(const char *msg)
     genel olarak "syslog" ismiyle belirtilmektedir. Öncelikle Linux sistemleri için bu merkezi syslog mekanizmasının çalışma 
     biçimi hakkında bilgi vereceğiz. Bu çalışma açıklanırken genellikle şekillerden faydalanılmaktadır. Ancak burada text editörde 
     çalıştığımızdan dolayı bu şekli çizemiyoruz. Bunun için "Linux Programming Environment" kitabının 775'inci sayfasına başvurabilirsiniz. 
-    Biz burada sözel anlatım uygulayacağız. Linux sistemlerindeki merkezi syslog mekanizması ile diğer sistemlerdeki syslog mekanizması bazı 
-    ayrıntılar dışında birbirine benzemektedir.
+    Biz burada sözel anlatım uygulayacağız. Linux sistemlerindeki merkezi syslog mekanizması ile diğer sistemlerdeki syslog 
+    mekanizması bazı ayrıntılar dışında birbirine benzemektedir.
 
     Merkezi syslog mekanizmasının üst seviye önemli bir bileşeni "syslogd" isimli bir daemon programdır. Bu program user mode'da
     çalışmaktadır. syslogd daemon programı iki kaynaktan mesajları alarak hedefte oluşturmaktadır. Loglamanın hedefi değiştirilebilmektedir. 
@@ -40825,7 +40825,7 @@ void exit_daemon(const char *msg)
     araçlar bulundurulmaktadır. Tarihsel süreç içerisinde Linux sistemlerinde boot sonrası işlemlerden ve servis işlemlerinden 
     sorumlu üç önemli init paketi geliştirilmiştir:
 
-    systemVinit (klasik)
+    SysVinit (klasik)
     upstart
     systemd
 
@@ -40890,7 +40890,7 @@ void exit_daemon(const char *msg)
     o özelliği değiştirebilir.
 
     systemd paketi içerisinde pek çok çalıştırılabilir program da bulunmaktadır. Bu programların bazıları "daemon" biçiminde 
-    yazılmıştır. systemd paketinin çalıştırılabilir (executable) program dosyaları "/lib/systemd" dizini içerisinde bulunmaktadır.
+    yazılmıştır. systemd paketinin çalıştırılabilir (executable) program dosyaları "/lib/systemd" dizinindedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -40908,10 +40908,9 @@ void exit_daemon(const char *msg)
     - Path unit dosyası (.path)
     - Swap unit dosyası (.swap)
 
-    Programcının kendi daemon'ları için "service unit dosyası" oluşturması gerekmektedir. Unit dosyaları genel olarak
-    "/lib/systemd/system" dizini içerisindedir. Programcı kendi unit dosyasını bu dizine kopyalamalıdır. Aslında "systemd"
-    paketinin unit dosyaları için hangi dizinlere bakacağı konfigürasyon dosyalarında ayarlanabilmektedir. Default bakılan 
-    dizinler sırasıyla şunlardır:
+    Programcının kendi daemon'ları için "service unit dosyası" oluşturması gerekmektedir. Unit dosyaları genel olarak 
+    "/lib/systemd/system" dizini içerisindedir. Aslında "systemd" paketinin unit dosyaları için hangi dizinlere bakacağı 
+    konfigürasyon dosyalarında ayarlanabilmektedir. Default bakılan dizinler sırasıyla şunlardır:
 
     /lib/systemd/system
     /etc/systemd/system
@@ -40919,6 +40918,7 @@ void exit_daemon(const char *msg)
     /usr/lib/systemd/system
     /usr/local/lib/systemd/system
 
+    Sistem yöneticileri genellikle kendi unit dosyalarını "/etc/systemd/system" dizini içerisine yerleştirmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -40927,12 +40927,12 @@ void exit_daemon(const char *msg)
     biçimde sistemde bir network kartı yoksa veya wireless özelliği yoksa bunlara yönelik daemon'ların (inetd gibi) aktif hale
     getirilmesi gereksizdir. 
 
-    Eskiden klasik systemVinit paketlerinde "run level" denilen boot seçenekleri bulunuyordu. Sistem yöneticisi de hangi servisin 
-    hangi run level'da aktive edeceğini belirtiyordu. Böylece sistem bir run level'da boot edildiğinde yalnızca o run level'da
-    aktif edilmesi gereken servisler (daemon'lar) aktive ediliyordu. Ancak bu run level sistemi kısıtlı bir seçenek oluşturmaktaydı.
-    systemd paketinde bu "run level" kullanımı kaldırılmıştır. Bunun yerine "target unit dosyası" yöntemi kullanılmaya başlanmıştır. 
-    Bu sistemlerde "run level" yerine ismine "target unit" denilen ve bir boot seçeneğini belirten bir unit dosyası bulundurulur.
-    Servisler de hangi target unit için aktive edileceklerini kendileri belirtirler.
+    Eskiden klasik SystemVinit paketlerinde "çalışma düzeyi (run level)" denilen boot seçenekleri bulunuyordu. Sistem yöneticisi 
+    de hangi servisin hangi çalışma düzeyinde aktive edeceğini belirtiyordu. Böylece sistem bir çalışma düzeyinde boot edildiğinde 
+    yalnızca o çalışma düzeyinde aktif edilmesi gereken servisler (daemon'lar) aktive ediliyordu. Ancak bu çalışma düzeyi sistemi 
+    kısıtlı bir seçenek oluşturmaktaydı. systemd paketinde bu "çalışma düzeyi" kullanımı kaldırılmıştır. Bunun yerine "target unit 
+    dosyası" yöntemi kullanılmaya başlanmıştır. Bu sistemlerde "çalışma düzeyi" yerine ismine "target unit" denilen ve bir boot 
+    seçeneğini belirten bir unit dosyası bulundurulur. Servisler de hangi target unit için aktive edileceklerini kendileri belirtirler.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -40951,7 +40951,7 @@ void exit_daemon(const char *msg)
 
     Burada "Description" bizim unit dosyamızı temsil eden bir yazıdır. Type daemon'ın nasıl çalıştırılacağını belirtir. 
     Burada "forking" normal fork mekanizmasıyla çalıştırma anlamına gelmektedir. ExecStart daemon dosyasının nerede olduğunu 
-    belirtmektedir. Daemon dosyaları tipik olarak "/usr/bin" dizinine ya da "usr/local/bin" dizinlerine yerleştirilmelidir. 
+    belirtmektedir. Daemon dosyaları tipik olarak "/usr/bin" dizinine ya da "/usr/local/bin" dizinlerine yerleştirilmelidir. 
     WantedBy hangi target ile sistem boot edildiğinde bu daemon'ın yükleneceğini belirtir. Buradaki "multi-user.target" isimli
     target unit klasik ve tipik boot işlemini belirtmektedir. 
 
@@ -40969,7 +40969,7 @@ void exit_daemon(const char *msg)
 
     1) Bir service unit dosyası oluşturulmalıdır. Bu dosyanın uzantısı ".service" biçiminde olmalıdır. Bu dosyada daemon 
     programının yol ifadesi ExecStart ismiyle bulunmaktadır.
-    2) Bu service unit dosyası "/lib/systemd/system" dizinine kopyalanmalıdır. 
+    2) Bu service unit dosyası "/etc/systemd/system" dizinine kopyalanmalıdır.
     3) Daemon programı "/usr/bin" ya da "usr/local/bin" dizinine kopyalanmalıdır. (Tabii bu dizin servis unit dosyasındaki
     ExecStart ile aynı olmalıdır.)
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -66490,7 +66490,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-												167. Ders 27/09/2024 - Cuma
+												168. Ders 27/09/2024 - Cuma
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -66619,18 +66619,33 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    FAT dosya sisteminde en önemli kısım şüphesiz "BPP (BIOS Parameter Block)" denilen kısımdır. BPB hemen boot sektörün 
-    başındadır ve FAT dosya sisteminin diğer bölümleri hakkında kiritk bilgiler içermektedir. Tabii BPB bölümü 1980'lerin 
+    FAT dosya sisteminde en önemli kısım şüphesiz "BPB (BIOS Parameter Block)" denilen kısımdır. BPB hemen boot sektörün 
+    başındadır ve FAT dosya sisteminin diğer bölümleri hakkında kritk bilgiler içermektedir. Tabii BPB bölümü 1980'lerin 
     anlayışıyla tasarlanmıştır. Bu tasarımda hatalar DOS'un çeşitli versiyonlarında geçmişe doğru uyumu koruyarak giderilmeye
-    çalışılmıştır. Biz buarada BPB bloğunun içeriğini tek tek ele alacağız. Burada BPB içerisindeki ilgili alanın yerini 
-    boot sektörün başından itibaren offset numaralarıyla belirteceğiz.
+    çalışılmıştır. Biz burada önce FAT12 ve FAT16 sistemlerinde kullanılan BPB bloğunun içeriğini tek tek ele alacağız. FAT32
+    ile birlikte BPB bloğuna eklemeler de yapılmıştır. FAT32 BPB formatını daha sonra ele alacağız.
+
+    Aşağıda Fat12 ve FAT16 sistemlerindeki BPB bloğunun formatı açıklanmaktadır. Tablodaki Offset sütunu Hex olarak ilgili alanın
+    Boot sektörün başından itibaren kaçıncı byte'tan başladığını belirtmektedir.
 
     Offset (Hex)        Uzunluk             Anlamı
     00                  3 Byte              Jmp Kodu
     03                  8 Byte              OEM Yorum Alanı
     0B                  WORD                Sektördeki Byte Sayısı
-    0C                  BYTE                Cluster'daki Sektçr Sayısı
+    0C                  BYTE                Cluster'daki Sektör Sayısı
     0E                  WORD                Ayrılmış Sektörlerin Sayısı
+    10                  BYTE                FAT Kopyalarının Sayısı
+    11                  WORD                Kök Dizinlerindeki Girişlerin Sayısı
+    13                  WORD                Toplam Sektör Sayısı (Eski)
+    15                  BYTE                Ortam Belirleyicisi (Media Descriptor)
+    16                  WORD                FAT'in Bir Kopyasındaki Sektör Sayısı
+    18                  WORD                Bir Yüzdeki Sektör Dilimlerinin Sayısı (Artık Kullanılmıyor)
+    1A                  WORD                Disk Yüzeylerinin (Kafalarının) Sayısı (Artık Kullanılmıyor)
+    1C                  DWORD               Saklı Sektörlerin Sayısı
+    20                  DWORD               Yeni Toplam Sektör Sayısı
+    24                  3 Byte              Reserved
+    27                  DWORD               Volüm Seri Numarası
+    2B                  11 Byte             Volüm İsmi
 
     - Jump Kodu: Yukarıda da belirttiğimiz gibi BPB bloğunu geçerek yükleyici programa atlayan makine komutlarından oluşmaktadır. 
     Boot loader programlar akışı buradan boot sektöre devretmektedir. Dolayısıyla BPB alanının atlanması gerekmektedir. Burada
@@ -66687,6 +66702,1189 @@ void exit_sys(const char *msg)
     uzunsa yükleyicinin diğer parçaları da burada bulunabilmektedir. Yukarıdaki örnek FAT bölümünün boot sektöründe bu byte'lar
     04 00 biçimindedir. Little Endian formatta bu bu değer 4'tür. O halde bu dosya sisteminde FAT bölümü 4'üncü sektörden 
     başlamaktadır.
+
+    FAT Kopyalarının Sayısı: FAT bölümü izleyen paragraflarda da görüleceği gibi FAT dosya sisteminin önemli bir meta-data 
+    alanıdır. Bu nedenle bu bölümün backup amaçlı birden fazla kopyasının bulundurulması uygun görülmüştür. Tipik olarak bu 
+    alanda 2 değeri bulunur. Yani FAT bölümünün toplamda iki kopyası vardır. FAT bölümünün kopyaları hemen biribbirinin 
+    peşi sıra dizilmiştir. Yani bir kopyanın bittiği yerde diğeri başlamaktadır.
+
+    Kök Dizinlerindeki Girişlerin Sayısı: FAT dosya sistemindeki bölümlerin dizilimin şöyle olduğunu belirtmiştik:
+
+    Boot Sektör
+    FAT ve Kopyaları
+    Root Dir Bölümü
+    Data Bölümü
+
+    İşletim sisteminin tüm bölümlerin hangi sektörden başladığını ve kaçş sektör uzunlukta olduğunu bilmesi gerekir. İşte 
+    "Root Dir" bölümü dizin girişlerinden oluşmaktadır. Bir dizin girişi 32 byte uzunluğundadır. Burada toplam kaç giriş 
+    olduğu belirtilmektedir. Dolayısıyla "Root Dir" bölümünün sektör duzunluğu buradaki sayının 32'ye bmlümü ile hesaplanır. 
+    Bizim oluşturduğumuz örnek FAT16 disk bölümünde burada 0x0200 (512) değeri bulunmaktadır. Bu durumda Root Dir bölümünün
+    sektör uzunluğu 512 / 32 = 16'dır.
+
+    Toplam Sektör Sayısı (Eski): Bu alanda disk bölümündeki toplam sektör sayısı bulundurulmaktadır. Ancak BPB formatının 
+    tasarlandığı 1980'lerin başında henüz hard diskler çok yeniydi ve teknolojinin bu kadar hızlı gelişeceği düşünülmemişti.
+    Dolayısıyla toplam sektör sayısı için 2 byte'lık yer o zamanlar için yeterli gibiydi. Toplam sektör sayısı için ayrılan 
+    2 byte'lık yerde yazılabilecek maksimum değer 65535'tir. Bu değeri 512 ile çarparsak 33MB'lık bir alan söz konusu olur. 
+    Gerçekten de o devirlerde diskler 33MB'den daha yukarıda formatlanamıyordu. DOS 4.01'e kadar 33MB bir üst sınırdı. Ancak 
+    DOS 4.01 ile birlikte bu toplam sektör sayısı geçmişe doğru uyum korunarak 4 byte yükseltildi. Dolayısıyla DOS 4.01 ve 
+    sonrasında artık disk bölümünün toplam kapasitesi 2^32 * 2^9 = 2TB'ye yükselmiş oldu. 4 Byte'tan oluşsan yeni toplam sektör
+    sayısı alanı boot sektörün 0x20 offsetinde bulunmaktadır. Dosya sistemleri toplam sektör sayısı için önce 0x13 offset'inde 
+    bulunan bu alana başvurmaktadır. Eğer bu alanda 0 yoksa bu alandaki bilgiyi eğer bu alanda 0 varsa 0x20 offset'inden çekilen 
+    DWORD bilgili dikkate almaktadır.
+
+    - Ortam Belirleyicisi (Media Descriptor): Bu alanda dosya sisteminin konuşlandığı medyanın türünün ne olduğu bilgisi bulunmaktadır. 
+    Aslında artık böyle bir bilgi işletim sistemleri tarafından kullanılmamaktadır. Buradaki 1 byte'ın yaygın değerleri şunlardır:
+
+    F0: 1.44 Floppy Disk
+    F8: Hard disk
+
+    Bu alanda artık hep F8 byte'ı bulunmaktadır.
+
+    FAT'in Bir Kopyasındaki Sektör Sayısı: Bu alanda FAT'in bir kopyasının kaç sektör uzunluğuğunda olduğu bilgisi bulunmaktadır.
+    FAT'in default olarak 2 kopyasının olduğunu anımsayınız.
+
+    Bir Yüzdeki Sektör Dilimlerinin Sayısı (Artık Kullanılmıyor): Bu alanda diskin bir yüzeyinde kaç sektör dilimi olduğu 
+    bilgisi yer almaktadır. Eskiden sektörlerin koordinatları "yüzey numarası, track numarası ve sektör dilimi numarası"
+    ile belirtiliyordu. Uzunca bir süredir artık bu sistem terk edilmiştir. Dolayısıyla bu alana başvurulmamaktadır.
+
+    Disk Yüzeylerinin (Kafalarının) Sayısı (Artık Kullanılmıyor): Burada diskte toplam kaç yüzey (kafa) olduğu bilgisi yer 
+    alıyordu. Ancak yine koordinat sistemi uzunca bir süre önce değiştirildiği için bu alan artık kullanılmamaktadır.
+
+    Saklı Sektörlerin Sayısı: Bu alanda FAT dosya sisteminin diskin toplamda kaçıncı sektöründen başladığı bilgisi yer 
+    almaktadır. Bu bilgi aynı zamanda Disk Bölümleme Tablosu (Disk Partition Table) içerisinde de yer almaktadır. İşletim 
+    sistemleri bu iki değeri karşılaştırıp BPB bloğunun bozuk olup olmadığı konusunda bir karar da verebilmektedir.
+
+    Yeni Toplam Sektör Sayısı: 0x13 Offset'indeki WORD olarak bulundurulan eski "toplam sektör sayısı" bilgisinin DWORD olarak
+    yenilenmiş biçimi bu alanda tutulmaktadır.
+
+    Volüm Seri Numarası: Bir disk bölümü FAT dosya sistemi ile formatlandığında oraya rasgele üretilmiş olan bir "volüm seri 
+    numarası" atanmaktadır. Bu volüm seri numarası eskiden floppy disket zamanlarında disketin değişip değişmediğini anlamak 
+    için kullanılıyordu. Bugünlerde artık bu alam herhangi bir amaçla kullanılmanaktadır. Ancak sistem programcısı bu seri 
+    numarasından başka amaçlar için faydalanabilir.
+
+    Volüm İsmi: Her volüm formatlanırken ona bir isim verilmektedir. Bu isim o zamanki dosya isimlendirme kuralı gereği 
+    8 + 3 = 11 karakterden oluşmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    FAT dosya sistemine ilişkin bir uygulama yazabilmek için yaılacak ilk şey boot sektörü okuyup buradaki BPB bilgilerini 
+    bir yapı nesnesinin içerisine yerleştirmektir. Bu bilgilerden hareketle bizim FAT dosya sistemine ilişkin meta data 
+    alanlarının ilgili disk bölümünün kaçıncı sektöründen başlayıp kaç sektör uzunluğunda olduğunu elde etmemiz gerekir. Çünkü
+    dosya sistemi ile ilgili işlemlerim hepsinde bu bilgilere gereksinim duyulacaktır. Bu bilgilerin yerleştirileceği yapı 
+    şöyle olabilir:
+
+    typedef struct tagBPB {
+        uint16_t fatlen;		/* number of sectors in FAT (A) */
+        uint16_t rootlen;		/* number of sectors in ROOT (NA) */
+        uint16_t nfats;	        /* number of copies of FAT (A) */
+        uint32_t tsects;		/* total sector (A) */
+        uint16_t bps;			/* byte per sector(A) */
+        uint16_t spc;			/* sector per cluster(A) */
+        uint16_t rsects;		/* reserved sectors(A) */
+        uint8_t mdes;			/* media descriptor byte(A) */
+        uint16_t spt;			/* sector per track(A) */
+        uint16_t rootents;		/* root entry (A) */
+        uint16_t nheads;		/* number of heads (A) */
+        uint16_t hsects;		/* number of hidden sector( A) */
+        uint16_t tph;			/* track per head (NA) */
+        uint16_t fatloc;		/* fat directory location (NA) */
+        uint16_t rootloc;		/* root directory location (NA) */
+        uint16_t dataloc;		/* first data sector location (NA) */
+        uint32_t datalen;       /* number of sectors in Data (NA) */
+        uint32_t serial;		/* Volume Serial Number (A) */
+        char vname[12];         /* Volume Name (A) */
+    } BPB;
+
+    Burada (A) ile belirtilen elemanlar zaten BPB içerisinde olan (avaliable) elemanlardır. NA (not available) ile belirtilen 
+    elemanlar BPB içerisinde yoktur. Dört işlemle hesaplanarak değeri oluşturulacaktır. Linux'ta boot sektör'ü okuyarak oradaki
+    BPN bilgilerini yukarıdaki gibi bir yapıya yerleştiren örnek bir program aşağıda verilmiştir. Derlemeyi şöyle yapabilirsiniz:
+
+    $ gcc -o app fatsys.c app.c
+
+    Programı FAT dosya sistemine ilişkin blok aygıt dosyasının yol ifadesini vererek suo ile çalıştırabilirsiniz. Örneğin:
+
+    $ sudo ./app /dev/loop0
+
+    Aşağıdakine benzer bir çıktı elde edilecektir:
+
+    Byte per sector: 512
+    Sector per cluster: 4
+    Number of reserved sectors: 4
+    Number of fat copies: 100
+    Number of sectors in Root Dir: 32
+    Number of fat copies: 2
+    Number of sectors in volume: 100000
+    Media Descriptor: F8
+    Number of Root Dir entries: 200
+    Number of hidden sectors: 0
+    Fat location: 4
+    Root Dir location: 204
+    Data location: 236
+    Volume Serial Number: BC7B-4578
+    Volume Name: FAT16
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* fatsys.h */
+
+#ifndef FATSYS_H_
+#define FATSYS_H_
+
+#include <stdint.h>
+
+#define FILE_INFO_LENGTH		32
+
+/* Type Declarations */
+
+typedef struct tagBPB {
+	uint16_t fatlen;		/* number of sectors in FAT (A) */
+	uint16_t rootlen;		/* number of sectors in ROOT (NA) */
+	uint16_t nfats;			/* number of copies of FAT (A) */
+	uint32_t tsects;		/* total sector (A) */
+	uint16_t bps;			/* byte per sector(A) */
+	uint16_t spc;			/* sector per cluster(A) */
+	uint16_t rsects;		/* reserved sectors(A) */
+	uint8_t mdes;			/* media descriptor byte(A) */
+	uint16_t spt;			/* sector per track(A) */
+	uint16_t rootents;		/* root entry (A) */
+	uint16_t nheads;		/* number of heads (A) */
+	uint16_t hsects;		/* number of hidden sector( A) */
+	uint16_t tph;			/* track per head (NA) */
+	uint16_t fatloc;		/* fat directory location (NA) */
+	uint16_t rootloc;		/* root directory location (NA) */
+	uint16_t dataloc;		/* first data sector location (NA) */
+	uint32_t datalen;		/* number of sectors in Data (NA) */
+	uint32_t serial;		/* Volume Serial Number (A) */
+	char vname[12];			/* Volume Name (A) */
+} BPB;
+
+/* Function prototypes */
+
+int read_bpb(int fd, BPB *bpb);
+
+#endif
+
+/* fatsys.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include "fatsys.h"
+
+int read_bpb(int fd, BPB *bpb)
+{
+	uint8_t bsec[512];
+
+	if (read(fd, bsec, 512) == -1)
+		return -1;
+
+	bpb->bps = *(uint16_t *)(bsec + 0x0B);
+	bpb->spc = *(uint8_t *)(bsec + 0x0D);
+	bpb->rsects = *(uint16_t *)(bsec + 0x0E);
+	bpb->fatlen = *(uint16_t *)(bsec + 0x16);
+	bpb->rootlen = *(uint16_t *)(bsec + 0x11) * FILE_INFO_LENGTH / bpb->bps;
+	bpb->nfats = *(uint8_t *)(bsec + 0x10);
+	if (*(uint16_t *)(bsec + 0x13))
+		bpb->tsects = *(uint16_t *)(bsec + 0x13);
+	else
+		bpb->tsects = *(uint32_t *)(bsec + 0x20);
+	bpb->mdes = *(bsec + 0x15);
+	bpb->spt = *(uint16_t *)(bsec + 0x18);
+	bpb->rootents = *(uint16_t *)(bsec + 0x11);
+	bpb->nheads = *(uint16_t *)(bsec + 0x1A);
+	bpb->hsects = *(uint16_t *)(bsec + 0x1C);
+	bpb->tph = (uint16_t)(bpb->tsects / bpb->spt / bpb->nheads);
+	bpb->fatloc = bpb->rsects;
+	bpb->rootloc = bpb->rsects + bpb->fatlen *bpb->nfats;
+	bpb->dataloc = bpb->rootloc + bpb->rootlen;
+	bpb->datalen = bpb->tsects - bpb->dataloc;
+	bpb->serial = *(uint32_t *)(bsec + 0x27);
+	memcpy(bpb->vname, bsec + 0x2B, 11);
+	bpb->vname[11] = '\0';
+
+	return 0;
+}
+
+/* app.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include "fatsys.h"
+
+void exit_sys(const char *msg);
+
+int main(int argc, char *argv[])
+{
+	BPB bpb;
+	int fd;
+
+	if (argc != 2) {
+		fprintf(stderr, "wrong number of arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	 if ((fd = open(argv[1], O_RDWR)) == -1)
+		return -1;
+
+	if (read_bpb(fd, &bpb) == -1)
+		exit_sys("read_bpb");
+
+	printf("Byte per sector: %d\n", bpb.bps);
+	printf("Sector per cluster: %d\n", bpb.spc);
+	printf("Number of reserved sectors: %d\n", bpb.rsects);
+	printf("Number of fat copies: %d\n", bpb.fatlen);
+	printf("Number of sectors in Root Dir: %d\n", bpb.rootlen);
+	printf("Number of fat copies: %d\n", bpb.nfats);
+	printf("Number of sectors in volume: %u\n", bpb.tsects);
+	printf("Media Descriptor: %02X\n", bpb.mdes);
+	printf("Number of Root Dir entries: %02X\n", bpb.rootents);
+	printf("Number of hidden sectors: %d\n", bpb.hsects);
+	printf("Fat location: %d\n", bpb.fatloc);
+	printf("Root Dir location: %d\n", bpb.rootloc);
+	printf("Data location: %d\n", bpb.dataloc);
+	printf("Number of sectors in Data: %d\n", bpb.datalen);
+	printf("Volume Serial Number: %04X-%04X\n", bpb.serial >> 16, 0xFFFF & bpb.serial);
+	printf("Volume Name: %s\n", bpb.vname);
+
+	close(fd);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Biz yukarıdaki örnekte FAT dosya sistemine ilişkin tüm önemli alanların yerlerine ve uzunluklarına ilişkin bilgileri 
+    elde ederek bir yapıya yerleştirdik. Artık şu bilgilere sahibiz:
+
+    - FAT bölümünün yeri ve uzunluğu (yapının fatloc ve fatlen elemanları)
+    - Root DIR bölümünün yeri ve uzunluğu (yapının rootloc ve rootlen elemanları)
+    - Data bölümünün yeri ve uzunluğu (yapının dataloc ve datalen elemanları)
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Şimdi yukarıdaki yapıp biraz daha geliştirelim. Bunun için dosya sistemini temsil eden aşağıdaki gibi bir yapı oluşturabiliriz:
+
+    typedef struct tagFATSYS {
+        int fd;             /* Volume file descriptor */
+        BPB bpb;            /* BPB info */
+        uint32_t fatoff;    /* offset of FAT */
+        uint32_t rootoff;   /* offset of root directory */
+        uint32_t dataoff;   /* offset of DATA */
+        uint32_t clulen;    /* cluster length as bytes */
+        /* ... */
+    } FATSYS;
+
+    Dosya işlemi yaparken dosya sisteminin belirli bölümlerine konumlandırma yapacağımız için onların offset'lerini de FATSYS 
+    yapısının içerisine yerleştireceğiz.
+
+    Dosya sistemini açan ve kapatan aşağıdaki fonksiyonlar oluşturabiliriz:
+
+    FATSYS *open_fatsys(const char *path)
+    {
+        FATSYS *fatsys;
+        int fd;
+
+        if ((fd = open(path, O_RDWR)) == -1)
+            return NULL;
+
+        if ((fatsys = (FATSYS *)malloc(sizeof(FATSYS))) == NULL)
+            return NULL;
+
+        if (read_bpb(fd, &fatsys->bpb) == -1) {
+            free(fatsys);
+            return NULL;
+        }
+
+        fatsys->fd = fd;
+        fatsys->fatoff = fatsys->bpb.fatloc * fatsys->bpb.bps;
+        fatsys->rootoff = fatsys->bpb.rootloc * fatsys->bpb.bps;
+        fatsys->dataoff = fatsys->bpb.dataloc * fatsys->bpb.bps;
+        fatsys->clulen = fatsys->bpb.bps * fatsys->bpb.spc;
+
+        return fatsys;
+    }
+
+
+    int close_fatsys(FATSYS *fatsys)
+    {
+        if (close(fatsys->fd) == -1)
+            return -1;
+
+        free(fatsys);
+
+        return 0;
+    }
+
+    Kullanım şöyle olabilir:
+
+    FATSYS *fatsys;
+
+    if ((fatsys = open_fatsys("/dev/loop0")) == NULL)
+        exit_sys("open_fatsys");
+
+    close_fatsys(fatsys);
+
+    Aşağıda bu değişliklerin yapıldığı kodlar verilmiştir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* fatsys.h */
+
+#ifndef FATSYS_H_
+#define FATSYS_H_
+
+#include <stdint.h>
+
+#define FILE_INFO_LENGTH		32
+
+/* Type Declarations */
+
+typedef struct tagBPB {
+	uint16_t fatlen;		/* number of sectors in FAT (A) */
+	uint16_t rootlen;		/* number of sectors in ROOT (NA) */
+	uint16_t nfats;			/* number of copies of FAT (A) */
+	uint32_t tsects;		/* total sector (A) */
+	uint16_t bps;			/* byte per sector(A) */
+	uint16_t spc;			/* sector per cluster(A) */
+	uint16_t rsects;		/* reserved sectors(A) */
+	uint8_t mdes;			/* media descriptor byte(A) */
+	uint16_t spt;			/* sector per track(A) */
+	uint16_t rootents;		/* root entry (A) */
+	uint16_t nheads;		/* number of heads (A) */
+	uint16_t hsects;		/* number of hidden sector( A) */
+	uint16_t tph;			/* track per head (NA) */
+	uint16_t fatloc;		/* fat directory location (NA) */
+	uint16_t rootloc;		/* root directory location (NA) */
+	uint16_t dataloc;		/* first data sector location (NA) */
+	uint32_t datalen;		/* number of sectors in Data (NA) */
+	uint32_t serial;		/* Volume Serial Number (A) */
+	char vname[12];			/* Volume Name (A) */
+} BPB;
+
+typedef struct tagFATSYS {
+	int fd;					/* Volume file descriptor */
+	BPB bpb;				/* BPB info */
+	uint32_t fatoff;		/* offset of FAT */
+	uint32_t rootoff;		/* offset of root directory */
+	uint32_t dataoff;		/* offset of DATA */
+	uint32_t clulen;		/* cluster length as bytes */
+	/* ... */
+} FATSYS;
+
+/* Function prototypes */
+
+int read_bpb(int fd, BPB *bpb);
+FATSYS *open_fatsys(const char *path);
+int close_fatsys(FATSYS *fatsys);
+int read_cluster(FATSYS *fatsys, uint32_t clu, void *buf);
+int wite_cluster(FATSYS *fatsys, uint32_t clu, const void *buf);
+
+#endif
+
+/* fatsys.c */
+
+
+FATSYS *open_fatsys(const char *path)
+{
+	FATSYS *fatsys;
+	int fd;
+
+	if ((fd = open(path, O_RDWR)) == -1)
+		return NULL;
+
+	if ((fatsys = (FATSYS *)malloc(sizeof(FATSYS))) == NULL)
+		return NULL;
+
+	if (read_bpb(fd, &fatsys->bpb) == -1) {
+		free(fatsys);
+		return NULL;
+	}
+
+	fatsys->fd = fd;
+	fatsys->fatoff = fatsys->bpb.fatloc * fatsys->bpb.bps;
+	fatsys->rootoff = fatsys->bpb.rootloc * fatsys->bpb.bps;
+	fatsys->dataoff = fatsys->bpb.dataloc * fatsys->bpb.bps;
+	fatsys->clulen = fatsys->bpb.bps * fatsys->bpb.spc;
+
+	return fatsys;
+}
+
+int close_fatsys(FATSYS *fatsys)
+{
+	if (close(fatsys->fd) == -1)
+		return -1;
+
+	free(fatsys);
+
+	return 0;
+}
+
+/* app.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include "fatsys.h"
+
+void exit_sys(const char *msg);
+
+int main(int argc, char *argv[])
+{
+	FATSYS *fatsys;
+
+	if ((fatsys = open_fatsys("/dev/loop0")) == NULL)
+		exit_sys("open_fatsys");
+
+	close_fatsys(fatsys);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    FAT dosya sisteminde dosya sistemindeki "Data Bölümü" dosya içeriklerinin tutulduğu bölümdür. İşletim sistemi bu bölümün
+    sektörlerden değil cluster'lardan oluştuğunu varsaymaktadır. Anımsanacağı gibi "cluster" bir dosyanın parçası olabilecek 
+    en küçük tahsisat birimidir ve ardışıl n sektörden olulmaktadır. Buradaki n değeri 2'nin bir kuvvetidir (yani 1, 2, 4, 
+    8, ... biçiminde). İşte volümün Data bölümündeki her cluster'a 2'den başlanarak (0 ve 1 reserved bırakılmıştır) bir 
+    cluster numarası karşı getirilmiştir. Örneğin bir cluster'ın 4 sektörden oluştuğunu düşünelim. Bu durumda Data bölümünün 
+    ilk 4 sektörü 2 numaralı cluster, sonraki 4 sektörü 3 numaralı cluster, sonraki 4 sektörü 4 numaralı cluster biçiminde 
+    numaralanmaktadır.
+
+    Bizim FAT dosya sistemi üzerinde ilk yapmaya çalışacağımız alt seviye işlemlerden biri belli bir numaralı cluster'ı okuyup 
+    yazan fonksiyonları gerçekleştirmektir. Bu fonksiyonların prototipleri şöyle olabilir:
+
+    int read_cluster(FATSYS *fatsys, uint32_t clu, void *buf);
+    int wite_cluster(FATSYS *fatsys, uint32_t clu, const void *buf);
+
+    Data bölümünün ilk cluster'ının 2 numaralı cluster olduğunu 0, 1 cluster'larının kullanılmadığını anımsayınız. Bu 
+    fonksiyonlar basit biçimde şöyle yazılabilir:
+
+    int read_cluster(FATSYS *fatsys, uint32_t clu, void *buf)
+    {
+        if (lseek(fatsys->fd, fatsys->dataoff + (clu - 2) * fatsys->clulen, SEEK_SET) == -1)
+            return -1;
+
+        return read(fatsys->fd, buf, fatsys->clulen);
+    }
+
+    int write_cluster(FATSYS *fatsys, uint32_t clu, const void *buf)
+    {
+        if (lseek(fatsys->fd, fatsys->dataoff + (clu - 2) * fatsys->clulen, SEEK_SET) == -1)
+            return -1;
+
+        return write(fatsys->fd, buf, fatsys->clulen);
+    }
+
+    Aşağıda fonksiyonun kullanımına ilişkin bir örnek verilmiştir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* fstsys.h */
+
+#ifndef FATSYS_H_
+#define FATSYS_H_
+
+#include <stdint.h>
+
+#define FILE_INFO_LENGTH		32
+
+/* Type Declarations */
+
+typedef struct tagBPB {
+	uint16_t fatlen;		/* number of sectors in FAT (A) */
+	uint16_t rootlen;		/* number of sectors in ROOT (NA) */
+	uint16_t nfats;			/* number of copies of FAT (A) */
+	uint32_t tsects;		/* total sector (A) */
+	uint16_t bps;			/* byte per sector(A) */
+	uint16_t spc;			/* sector per cluster(A) */
+	uint16_t rsects;		/* reserved sectors(A) */
+	uint8_t mdes;			/* media descriptor byte(A) */
+	uint16_t spt;			/* sector per track(A) */
+	uint16_t rootents;		/* root entry (A) */
+	uint16_t nheads;		/* number of heads (A) */
+	uint16_t hsects;		/* number of hidden sector( A) */
+	uint16_t tph;			/* track per head (NA) */
+	uint16_t fatloc;		/* fat directory location (NA) */
+	uint16_t rootloc;		/* root directory location (NA) */
+	uint16_t dataloc;		/* first data sector location (NA) */
+	uint32_t datalen;		/* number of sectors in Data (NA) */
+	uint32_t serial;		/* Volume Serial Number (A) */
+	char vname[12];			/* Volume Name (A) */
+} BPB;
+
+typedef struct tagFATSYS {
+	int fd;					/* Volume file descriptor */
+	BPB bpb;				/* BPB info */
+	uint32_t fatoff;		/* offset of FAT */
+	uint32_t rootoff;		/* offset of root directory */
+	uint32_t dataoff;		/* offset of DATA */
+	uint32_t clulen;		/* cluster length as bytes */
+	/* ... */
+} FATSYS;
+
+/* Function prototypes */
+
+int read_bpb(int fd, BPB *bpb);
+FATSYS *open_fatsys(const char *path);
+int close_fatsys(FATSYS *fatsys);
+int read_cluster(FATSYS *fatsys, uint32_t clu, void *buf);
+int wite_cluster(FATSYS *fatsys, uint32_t clu, const void *buf);
+
+#endif
+
+/* fatsys.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include "fatsys.h"
+
+int read_bpb(int fd, BPB *bpb)
+{
+	uint8_t bsec[512];
+
+	if (read(fd, bsec, 512) == -1)
+		return -1;
+
+	bpb->bps = *(uint16_t *)(bsec + 0x0B);
+	bpb->spc = *(uint8_t *)(bsec + 0x0D);
+	bpb->rsects = *(uint16_t *)(bsec + 0x0E);
+	bpb->fatlen = *(uint16_t *)(bsec + 0x16);
+	bpb->rootlen = *(uint16_t *)(bsec + 0x11) * FILE_INFO_LENGTH / bpb->bps;
+	bpb->nfats = *(uint8_t *)(bsec + 0x10);
+	if (*(uint16_t *)(bsec + 0x13))
+		bpb->tsects = *(uint16_t *)(bsec + 0x13);
+	else
+		bpb->tsects = *(uint32_t *)(bsec + 0x20);
+	bpb->mdes = *(bsec + 0x15);
+	bpb->spt = *(uint16_t *)(bsec + 0x18);
+	bpb->rootents = *(uint16_t *)(bsec + 0x11);
+	bpb->nheads = *(uint16_t *)(bsec + 0x1A);
+	bpb->hsects = *(uint16_t *)(bsec + 0x1C);
+	bpb->tph = (uint16_t)(bpb->tsects / bpb->spt / bpb->nheads);
+	bpb->fatloc = bpb->rsects;
+	bpb->rootloc = bpb->rsects + bpb->fatlen *bpb->nfats;
+	bpb->dataloc = bpb->rootloc + bpb->rootlen;
+	bpb->datalen = bpb->tsects - bpb->dataloc;
+	bpb->serial = *(uint32_t *)(bsec + 0x27);
+	memcpy(bpb->vname, bsec + 0x2B, 11);
+	bpb->vname[11] = '\0';
+
+	return 0;
+}
+
+FATSYS *open_fatsys(const char *path)
+{
+	FATSYS *fatsys;
+	int fd;
+
+	if ((fatsys = (FATSYS *)malloc(sizeof(FATSYS))) == NULL)
+		return NULL;
+
+	if ((fd = open(path, O_RDWR)) == -1)
+		return NULL;
+
+	if (read_bpb(fd, &fatsys->bpb) == -1) {
+		close(fd);
+		free(fatsys);
+		return NULL;
+	}
+
+	fatsys->fd = fd;
+	fatsys->fatoff = fatsys->bpb.fatloc * fatsys->bpb.bps;
+	fatsys->rootoff = fatsys->bpb.rootloc * fatsys->bpb.bps;
+	fatsys->dataoff = fatsys->bpb.dataloc * fatsys->bpb.bps;
+	fatsys->clulen = fatsys->bpb.bps * fatsys->bpb.spc;
+
+	return fatsys;
+}
+
+int close_fatsys(FATSYS *fatsys)
+{
+	if (close(fatsys->fd) == -1)
+		return -1;
+
+	free(fatsys);
+
+	return 0;
+}
+
+int read_cluster(FATSYS *fatsys, uint32_t clu, void *buf)
+{
+	if (lseek(fatsys->fd, fatsys->dataoff + (clu - 2) * fatsys->clulen, SEEK_SET) == -1)
+		return -1;
+
+	return read(fatsys->fd, buf, fatsys->clulen);
+}
+
+int write_cluster(FATSYS *fatsys, uint32_t clu, const void *buf)
+{
+	if (lseek(fatsys->fd, fatsys->dataoff + (clu - 2) * fatsys->clulen, SEEK_SET) == -1)
+		return -1;
+
+	return write(fatsys->fd, buf, fatsys->clulen);
+}
+
+/* app.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include "fatsys.h"
+
+void exit_sys(const char *msg);
+
+int main(int argc, char *argv[])
+{
+	FATSYS *fatsys;
+	unsigned char buf[8192];
+
+	if (argc != 2) {
+		fprintf(stderr, "wrong number of arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if ((fatsys = open_fatsys(argv[1])) == NULL)
+		exit_sys("open_fatsys");
+
+	if (read_cluster(fatsys, 2, buf) == -1)
+		exit_sys("read_cluster");
+
+	for (int i = 0; i < fatsys->clulen; ++i)
+		printf("%02X%c", buf[i], i % 16 == 15 ? '\n' : ' ');
+
+	close_fatsys(fatsys);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    FAT dosya sisteminde her dosya clutser'lara bölünerek Data bölümündeki cluster'larda tutulmaktadır. Dosyanın parçaları
+    ardışıl cluster'larda olmak zorunda değildir. Örneğin bir cluster'ın 4 sektör olduğu bir volümde 10000 byte uzunluğunda 
+    bir dosya söz konusu olsun. Bir cluster'ın bıyutu 4 * 512 = 2048 byte'tır. O halde bu dosya 5 cluster yer kaplayacaktır. 
+    Ancak son cluster'da kullanılmayan bir miktar boş alan da kalacaktır. İşte örneğin bu dosyanın cluster numaraları aşağıdaki
+    gibi olabilir:
+
+    2 8 14 15 21
+
+    Görüldüğü gibi dosyanın parçaları ardışıl cluster'larda olmak zorunda değildir. Tabi işletim sistemi genellikle dosyanın 
+    parçalarını mümkün olduğu kadar ardışıl cluster'larda saklama çalışır. Ancak bu durum mümkün olmayabilir. Belli bir süre 
+    sonra artık dosyaların parçalarını birbirinden uzaklaşmaya başlayabilir. İşte FAT dosya sisteminde hangi dosyanın hangi 
+    parçalarının Data bölümünün hangi cluster'larında olduğunun saklandığı meta data alana FAT (File Allocation Table) denilmektedir.
+
+    FAT bölümü FAT elemanlarındna oluşur. FAT'lar 12 bit 16 bit ve 32 bit olmak üzere üçe ayrılmaktadır. 12 bit FAT'lerde 
+    FAT elemanları 12 bit, 16 bit FAT'lerde FAT elemanları 16 bit ve 32 bit FAT'lerde FAT elemanları 32 bit uzunluğundadır. 
+    İlk iki cluster kullanılmadığı için FAT'in ilk elemanı da kullanılmaktadır.
+
+    FAT bağlı listelerden oluşan bir meta data alanıdır. Her dosyanın ilk cluster'ının nerede olduğu dizin girişinde tutulmaktadır. 
+    Sonra her FAT elemanı dosyanın ğparçasının hangi cluster'da olduğu bilgisini tıtar. Volümde toplan N tane cluster varsa
+    FAT bölümünde de toplam N tane FAT elemanı vardır. FAT bölümünde her bir dosya için ayrı bir bağlı liste bulunmaktadır. 
+    Bir dosyanın ilk cluster'ı biliniyorsa sonraki tüm cluster'ları bu bağlı liste izlenerek elde edilebilmektedir. Bağlı 
+    listenin organizasyonu şu biçimdedir: Dosyanın ilk cluster'ının yerinin 8 olduğunu varsayalım. Şimdi FAT'in 8'inci 
+    elemanına gidildiğinde orada 14 yazıyor olsun. 14 numaralı elemanına gittiğimizde orada 18 yazdığını düşünelim. 18 elemana 
+    gittiğimizde orada 22 yadığını düşünelim. Nihayet 22 numaralı elemana gittiğimizde orada FFFF biçiminde özel bir değerin 
+    yazdığını varsayalım. Bu durumu şekilsel olarak şöyle gösterebiliriz:
+
+    8 ----> 14 ----> 18 ----> 22 (FFFF)
+
+    Bu durumda bu dosyanın cluster'ları sırasıyla 8 14 18 22 numaralı cluster'lardır. Burada FFFF değeri EOF anlamına özel bir 
+    cluster numarasıdır. Yani FAT'teki her FAT elemanı dosyanın sonraki parçasının hangi cluster'da olduğunu belirtmektedir. 
+    Böylece işletim sistemi dosyanın ilk cluster numarasını biliyorsa bu zinciri takip ederek onun bütün cluster'larını elde 
+    edebilir.
+
+    Örneğin 1 clutser'ın 4 sektör olduğu bir FAT16 sisteminde 19459 byte'lık bir dosya toplam 10 cluster yer kaplamaktadır. 
+    Biz bu dosyanın ilk cluster numarasının 4 olduğunu biliyoruz. Aşağıdaki örnek FAT bölümünde bu dosyanın tüm cluster'larının 
+    numaraları bağlı liste izlenerek elde edilebilecektir:
+
+    00000800  f8 ff ff ff 00 00 ff ff  05 00 06 00 07 00 08 00  |................|
+    00000810  09 00 0a 00 0b 00 0c 00  0d 00 ff ff 00 00 00 00  |................|
+    00000820  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00000830  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00000840  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00000850  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    ...
+
+    Bu byte'lar bir FAT16 sisteminin FAT bölümüne ilişkin olduğuna göre her bir FAT elemanı 2 byte yer kaplayacaktır. Burada 
+    FAT elemanlarının hex karşılıkları şöyledir (Little Endian notasyon kullanıldığına dikkat ediniz):
+
+    0        1      2      3      4      5      6      7      8      9      10     11     12     13
+    <FFF8> <FFFF> <0000> <FFFF> <0005> <0006> <0007> <0008> <0009> <000A> <000B> <000C> <000D> <FFFF>
+
+    Burada FAT elemanlarının umaralarını desimal sistemde elemanların yukarısına yazdık. Söz konusu dosyanın ilk cluster 
+    numarasının 4 olduğunu bildiğimizi varsayıyoruz. 4 numaralı FAT elemanında 5 (0005) yazmaktadır. O halde dosyanın sonraki 
+    cluster numarası 5'tir. 5 numaralı FAT elemanında 6 (0006) yazmaktadır. 6 numaralı FAT elemanında 7 (0007), 7 numaralı FAT 
+    elemanında 8 (0008), 8 numaralı FAT elemanında 9 (0009), 9 numaralı FAT elemanında 10 (000A), 10 numaralı FAT elemanında 11 
+    (000B), 11 numaralı FAT elemanında 12 (0000D), 12 numaralı FAT elemanında 13 (000D), 13 FAT elemanında da özel değer olan 
+    65535 (FFFF) bulunmaktadır. Bu özel değer zinicirin sonuna gelindiğini belirtmektedir. Bu durumda bu dosyanın tüm parçaları 
+    sırasıyla şu cluster'lardadır:
+
+    4 5 6 7 8 9 10 11 12 13
+
+    Burada işletim sisteminin dosyanın parçalarını diskte ardışışıl cluster'lara yerleştirdiğini görüyorsunuz. Ancak bu durum 
+    her zaman böyle olma zorunda değildir.
+
+    16 bir FAT'te bir FAT elemanında bulunacak değerler şunlar olabilmektedir (değerler little Endian olarak WORD'e dönüştürülmüştür):
+
+    0000            Boş cluster
+    0001            Kullanılmıyor
+    0002 -  FFEF    Geçerli, sonraki cluster
+    FFF0H - FFF6    Reserved cluster
+    FFF7            Bozuk cluster, işletim sistemi bu cluster'a dosya parçası yerleştirmez
+    FFF8 - FFFF     Son cluster
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Pekiyi işletim sistemleri FAT bölümünü nasıl ele alıp işlemektedir? Aslında FAT bölümündeki sektörler zaten çok kullanıldığı 
+    için işletim sisteminin aşağı seviyeli disk cache sisteminde bulunuyor durumda olurlar. Ancak işletim sistemleri genellikle 
+    FAT elemanları temelinde de bir cache sistemi de oluşturmaktadır. Böylece bir cluster değeri verildiğinde eğer daha önce o 
+    cluster ile işlemler yapılmışsa o cluster'ın sonraki cluster'ı hızlı bir biçimde elde edilebilmektedir.
+
+    Biz burada volümü açtığımızda tğm FAT bölümünü okuyup FATSYS yapısının içerisine yerleştireceğiz. Sonra da ilk cluster 
+    numarası bilinen dosyaların cluster zincirini elde eden bir fonksiyon yazacağız. openfat_sys fonksiyonun yerni versiyonu 
+    aşağıdaki gibi olabilir:
+
+    FATSYS *open_fatsys(const char *path)
+    {
+        FATSYS *fatsys;
+        int fd;
+
+        if ((fatsys = (FATSYS *)malloc(sizeof(FATSYS))) == NULL)
+            return NULL;
+
+        if ((fd = open(path, O_RDWR)) == -1)
+            goto EXIT1;
+
+        if (read_bpb(fd, &fatsys->bpb) == -1)
+            goto EXIT2;
+
+        fatsys->fd = fd;
+        fatsys->fatoff = fatsys->bpb.fatloc * fatsys->bpb.bps;
+        fatsys->rootoff = fatsys->bpb.rootloc * fatsys->bpb.bps;
+        fatsys->dataoff = fatsys->bpb.dataloc * fatsys->bpb.bps;
+        fatsys->clulen = fatsys->bpb.bps * fatsys->bpb.spc;
+
+        if ((fatsys->fat = (uint8_t *)malloc(fatsys->bpb.fatlen * fatsys->bpb.bps)) == NULL)
+            goto EXIT2;
+
+        if (lseek(fatsys->fd, fatsys->fatoff, SEEK_SET) == -1)
+            goto EXIT3;
+
+        if (read(fd, fatsys->fat, fatsys->bpb.fatlen * fatsys->bpb.bps) == -1)
+            goto EXIT3;
+
+        return fatsys;
+    EXIT3:
+        free(fatsys->fat);
+    EXIT2:
+        close(fd);
+    EXIT1:
+        free(fatsys);
+
+        return NULL;
+    }
+
+    İlk cluster numarası bilinen dosyanın cluster zincirini elde eden fonksiyon da aşağıdaki gibi yazılabilir:
+
+    uint16_t *getclu_chain(FATSYS *fatsys, uint32_t firstclu, uint16_t *count)
+    {
+        uint16_t clu, n;
+        uint16_t *chain, *temp;
+        uint32_t capacity;
+
+        clu = firstclu;
+        capacity = CHAIN_DEF_CAPACITY;
+        n = 0;
+
+        if ((chain = (uint16_t *)malloc(sizeof(uint16_t) * CHAIN_DEF_CAPACITY)) == NULL)
+            return NULL;
+        do {
+            chain[n++] = clu;
+            if (n == capacity) {
+                capacity *= 2;
+                if ((temp = realloc(chain, sizeof(uint16_t) * capacity )) == NULL) {
+                    free(chain);
+                    return NULL;
+                }
+                chain = temp;
+            }
+            clu = *(uint16_t *)(fatsys->fat + clu * 2);
+        } while (clu < 0xFFF8);
+        *count = n;
+
+        return chain;
+    }
+
+    Bu fonksiyonda dosyanın cluster zinciri için uint16_t türünden dinamik büyütülen bir dizi oluşturulmuştur. Dizi eski 
+    uzunluğunun iki katı olacak biçimde büyütülmektedir. Fonkisyon bize cluster zincirini vermekte hem de bu zincirin 
+    uzunluğunu vermektedir.
+
+    Aşağıda tüm kodlar bütün olarak verilmiştir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* fatsys.h */
+
+#ifndef FATSYS_H_
+#define FATSYS_H_
+
+#include <stdint.h>
+
+#define FILE_INFO_LENGTH		32
+#define CHAIN_DEF_CAPACITY		8
+
+/* Type Declarations */
+
+typedef struct tagBPB {
+	uint16_t fatlen;		/* number of sectors in FAT (A) */
+	uint16_t rootlen;		/* number of sectors in ROOT (NA) */
+	uint16_t nfats;			/* number of copies of FAT (A) */
+	uint32_t tsects;		/* total sector (A) */
+	uint16_t bps;			/* byte per sector(A) */
+	uint16_t spc;			/* sector per cluster(A) */
+	uint16_t rsects;		/* reserved sectors(A) */
+	uint8_t mdes;			/* media descriptor byte(A) */
+	uint16_t spt;			/* sector per track(A) */
+	uint16_t rootents;		/* root entry (A) */
+	uint16_t nheads;		/* number of heads (A) */
+	uint16_t hsects;		/* number of hidden sector( A) */
+	uint16_t tph;			/* track per head (NA) */
+	uint16_t fatloc;		/* fat directory location (NA) */
+	uint16_t rootloc;		/* root directory location (NA) */
+	uint16_t dataloc;		/* first data sector location (NA) */
+	uint32_t datalen;		/* number of sectors in Data (NA) */
+	uint32_t serial;		/* Volume Serial Number (A) */
+	char vname[12];			/* Volume Name (A) */
+} BPB;
+
+typedef struct tagFATSYS {
+	int fd;					/* Volume file descriptor */
+	BPB bpb;				/* BPB info */
+	uint32_t fatoff;		/* offset of FAT */
+	uint32_t rootoff;		/* offset of root directory */
+	uint32_t dataoff;		/* offset of DATA */
+	uint32_t clulen;		/* cluster length as bytes */
+	uint8_t *fat;			/* FAT sectors */
+	/* ... */
+} FATSYS;
+
+/* Function prototypes */
+
+int read_bpb(int fd, BPB *bpb);
+FATSYS *open_fatsys(const char *path);
+int close_fatsys(FATSYS *fatsys);
+int read_cluster(FATSYS *fatsys, uint32_t clu, void *buf);
+int wite_cluster(FATSYS *fatsys, uint32_t clu, const void *buf);
+uint16_t *getclu_chain(FATSYS *fatsys, uint32_t firstclu, uint16_t *count);
+void freeclu_chain(uint16_t *chain);
+
+#endif
+
+/* fatsys.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include "fatsys.h"
+
+int read_bpb(int fd, BPB *bpb)
+{
+	uint8_t bsec[512];
+
+	if (read(fd, bsec, 512) == -1)
+		return -1;
+
+	bpb->bps = *(uint16_t *)(bsec + 0x0B);
+	bpb->spc = *(uint8_t *)(bsec + 0x0D);
+	bpb->rsects = *(uint16_t *)(bsec + 0x0E);
+	bpb->fatlen = *(uint16_t *)(bsec + 0x16);
+	bpb->rootlen = *(uint16_t *)(bsec + 0x11) * FILE_INFO_LENGTH / bpb->bps;
+	bpb->nfats = *(uint8_t *)(bsec + 0x10);
+	if (*(uint16_t *)(bsec + 0x13))
+		bpb->tsects = *(uint16_t *)(bsec + 0x13);
+	else
+		bpb->tsects = *(uint32_t *)(bsec + 0x20);
+	bpb->mdes = *(bsec + 0x15);
+	bpb->spt = *(uint16_t *)(bsec + 0x18);
+	bpb->rootents = *(uint16_t *)(bsec + 0x11);
+	bpb->nheads = *(uint16_t *)(bsec + 0x1A);
+	bpb->hsects = *(uint16_t *)(bsec + 0x1C);
+	bpb->tph = (uint16_t)(bpb->tsects / bpb->spt / bpb->nheads);
+	bpb->fatloc = bpb->rsects;
+	bpb->rootloc = bpb->rsects + bpb->fatlen *bpb->nfats;
+	bpb->dataloc = bpb->rootloc + bpb->rootlen;
+	bpb->datalen = bpb->tsects - bpb->dataloc;
+	bpb->serial = *(uint32_t *)(bsec + 0x27);
+	memcpy(bpb->vname, bsec + 0x2B, 11);
+	bpb->vname[11] = '\0';
+
+	return 0;
+}
+
+FATSYS *open_fatsys(const char *path)
+{
+	FATSYS *fatsys;
+	int fd;
+
+	if ((fatsys = (FATSYS *)malloc(sizeof(FATSYS))) == NULL)
+		return NULL;
+
+	if ((fd = open(path, O_RDWR)) == -1)
+		goto EXIT1;
+
+	if (read_bpb(fd, &fatsys->bpb) == -1)
+		goto EXIT2;
+
+	fatsys->fd = fd;
+	fatsys->fatoff = fatsys->bpb.fatloc * fatsys->bpb.bps;
+	fatsys->rootoff = fatsys->bpb.rootloc * fatsys->bpb.bps;
+	fatsys->dataoff = fatsys->bpb.dataloc * fatsys->bpb.bps;
+	fatsys->clulen = fatsys->bpb.bps * fatsys->bpb.spc;
+
+	if ((fatsys->fat = (uint8_t *)malloc(fatsys->bpb.fatlen * fatsys->bpb.bps)) == NULL)
+		goto EXIT2;
+
+	if (lseek(fatsys->fd, fatsys->fatoff, SEEK_SET) == -1)
+		goto EXIT3;
+
+	if (read(fd, fatsys->fat, fatsys->bpb.fatlen * fatsys->bpb.bps) == -1)
+		goto EXIT3;
+
+	return fatsys;
+
+EXIT3:
+	free(fatsys->fat);
+EXIT2:
+	close(fd);
+EXIT1:
+	free(fatsys);
+
+	return NULL;
+}
+
+int close_fatsys(FATSYS *fatsys)
+{
+	free(fatsys->fat);
+	if (close(fatsys->fd) == -1)
+		return -1;
+	free(fatsys);
+
+	return 0;
+}
+
+int read_cluster(FATSYS *fatsys, uint32_t clu, void *buf)
+{
+	if (lseek(fatsys->fd, fatsys->dataoff + (clu - 2) * fatsys->clulen, SEEK_SET) == -1)
+		return -1;
+
+	return read(fatsys->fd, buf, fatsys->clulen);
+}
+
+int write_cluster(FATSYS *fatsys, uint32_t clu, const void *buf)
+{
+	if (lseek(fatsys->fd, fatsys->dataoff + (clu - 2) * fatsys->clulen, SEEK_SET) == -1)
+		return -1;
+
+	return write(fatsys->fd, buf, fatsys->clulen);
+}
+
+uint16_t *getclu_chain(FATSYS *fatsys, uint32_t firstclu, uint16_t *count)
+{
+	uint16_t clu, n;
+	uint16_t *chain, *temp;
+	uint32_t capacity;
+
+	clu = firstclu;
+	capacity = CHAIN_DEF_CAPACITY;
+	n = 0;
+
+	if ((chain = (uint16_t *)malloc(sizeof(uint16_t) * CHAIN_DEF_CAPACITY)) == NULL)
+		return NULL;
+	do {
+		chain[n++] = clu;
+		if (n == capacity) {
+			capacity *= 2;
+			if ((temp = realloc(chain, sizeof(uint16_t) * capacity )) == NULL) {
+				free(chain);
+				return NULL;
+			}
+			chain = temp;
+		}
+		clu = *(uint16_t *)(fatsys->fat + clu * 2);
+	} while (clu < 0xFFF8);
+	*count = n;
+
+	return chain;
+}
+
+void freeclu_chain(uint16_t *chain)
+{
+	free(chain);
+}
+
+/* app.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include "fatsys.h"
+
+void exit_sys(const char *msg);
+
+int main(int argc, char *argv[])
+{
+	FATSYS *fatsys;
+	uint16_t count;
+	uint16_t *chain;
+
+	if (argc != 2) {
+		fprintf(stderr, "wrong number of arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if ((fatsys = open_fatsys(argv[1])) == NULL)
+		exit_sys("open_fatsys");
+
+	if ((chain = getclu_chain(fatsys, 4, &count)) == NULL) {
+		fprintf(stderr, "cannot get cluster chain!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	printf("Number of clusters in file: %u\n", count);
+	for (uint16_t i = 0; i < count; ++i)
+		printf("%u  ", chain[i]);
+	printf("\n");
+
+	freeclu_chain(chain);
+
+	close_fatsys(fatsys);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Biz şimdi ilk cluster'ını bildiğimiz bir text dosyanın içeriğini yazdırmak isteyelim. Bunun için önce getclu_chain 
+    fonksiyonunu çağırırız. Sonra read_cluster fonksiyonu ile cluster'ları okuyup içini yazdırabiliriz. Ancak burada şöyle 
+    bir sorun vardır: Dosyanın son cluster'ı tıka basa dolu değildir. Orada dosyaya dahil olmayan bye'lar da vardır. İşletim 
+    sistemi dosyanın uzunluğunu elde edip son cluster'daki dosyaya dahil olmayan kısmı belirleyebilmektedir.
+
+    Aşağıda ilk cluster'ı bilinen bir text dosyanın yazdırılmasına yönelik bir örnek verilmiştir. Burada dosyanın son cluster'ındaki
+    dosyaya ait olmayan kısım da yazdırılmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* app.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include "fatsys.h"
+
+void exit_sys(const char *msg);
+
+int main(int argc, char *argv[])
+{
+	FATSYS *fatsys;
+	unsigned char buf[8192];
+	uint16_t count;
+	uint16_t *chain;
+
+	if (argc != 2) {
+		fprintf(stderr, "wrong number of arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if ((fatsys = open_fatsys(argv[1])) == NULL)
+		exit_sys("open_fatsys");
+
+	if ((chain = getclu_chain(fatsys, 4, &count)) == NULL) {
+		fprintf(stderr, "cannot get cluster chain!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	for (uint16_t i = 0; i < count; ++i) {
+		if (read_cluster(fatsys, chain[i], buf) == -1)
+			exit_sys("read_cluster");
+		for (int i = 0; i < fatsys->clulen; ++i)
+			putchar(buf[i]);
+	}
+
+	freeclu_chain(chain);
+	close_fatsys(fatsys);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    İşletim sisteminin dosya sistemi bize aslıdna cluster'larda olan dosya parçalarını "dosya" adı altında ardışıl byte 
+    topluluğu gibi göstermektedir. Biz işletim sisteminin sistem fonksiyonu ile dosyayı açarız ve read fonksiyonu ile okumayı
+    yaparız. Bütün diğer işlemler işletim sisteminin çekirdek kodları tarafından yapılmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Biz yukarıda 16 bit FAT için işlemler yaptık. Pekiyi 12 bit ve 32 bit FAT bölüm nasıldır? 32 bit FAT önemli bir farklılığa 
+    sahip değildir. Her FAT elemanı 32 bir yani 4 byte uzunluktadır. Dolayısıyla daha büyük bir volüm için kullanılabilir. 
+    16 bit FAT'te toplam 65536 FAT elemanı elemanı olabilir (Bazılarının kullanılmadığını da anımsayınız.) Bir cluster en fazla
+    64 sektör uzunluğunda olabilmektedir. Bu durumda FAT16 sistremlerinde volümün maksimum uzunluğu 2^16 * 2^6 * 2^9 = 2GB.
+
+    12 Bit FAT'ler biraz daha karmaşık görünümdedir. 12 bit 8'in katı değildir ve 3 hex digitle temsil edilmektedir. Bu nedenle
+    12 Bit FAT'te FAT zinciri izlenirken dikkat edilmelidir. Eğer volüm küçükse (eskiden floppy diskler vardı ve onlar çok 
+    küçüktü) FAt12 sistemi FAT tablosunun daha az yer kaplamasını sağlamaktadır.
+
+    FAT12 sisteminde bir FAT elemanı 12 bit olduğu için FAT bölümünde en fazla 2^12 = 4096 FAT elemanı olabilir. Microsoft
+    kendi format programında FAT12 volümlerinde bir cluster'ı maksimum 8 sektör olarak almaktadır. Bu durumda FAT12 volümü 
+    maksimum 2^12 * 2^3 * 2^9 = 2^24 = 16MB olabilmektedir. Başka bir deyişle Microsoft 16MB'nin yukarısındaki volümleri FAT12
+    olarak formatlamamktadır.
+
+    Aşağıda 12 bit FAT tablosunun baş kısmı görülmektedir:
+
+    00000200  f8 ff ff 00 40 00 05 60  00 07 80 00 09 a0 00 0b  |....@..`........|
+    00000210  c0 00 ff 0f 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00000220  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00000230  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00000240  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00000250  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00000260  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00000270  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -66697,9 +67895,6 @@ void exit_sys(const char *msg)
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Linux kernel istenirse kaynak kodlarından yeniden derlenip (yani build edilip) elde edilen yeni kernel ile sistem başlatılabilir. 
