@@ -11,7 +11,7 @@
                         (Notları sabit genişlikli font kullanan programlama editörleri ile açınız.)
                             (Editörünüzün "Line Wrapping" özelliğini pasif hale getiriniz.)
 
-                                                    Son Güncelleme: 22/10/2024 - Pazartesi
+                                                    Son Güncelleme: 30/10/2024 - Çarşamba
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -32317,9 +32317,9 @@ int main(void)
     tuşlarına basıldığında SIGSTOP sinyali hem üst prosese hem de alt prosese gönderilecektir. Benzer biçimde "fg" komutunu 
     uyguladığımızda SIGCONT sinyali de hem üst prosese hem de alt prosese gönderilmektedir. 
 
-    Aşağıdaki programı çalıştırınız ve sonra Ctrl+C tuşlarına basınız. Hem üst prosesin hem de alt prosesin sonlandığını göreceksiniz. 
-    Sonra programı yeniden çalıştırıp bu kez de Ctrl+Z tuşlarına basınız. Hem üst prosesin hem de alt prosesin durdurulduğunu 
-    göreceksiniz.
+    Aşağıdaki programı çalıştırınız ve sonra Ctrl+C tuşlarına basınız. Hem üst prosesin hem de alt prosesin sonlandığını 
+    göreceksiniz. Sonra programı yeniden çalıştırıp bu kez de Ctrl+Z tuşlarına basınız. Hem üst prosesin hem de alt prosesin 
+    durdurulduğunu göreceksiniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -57984,7 +57984,7 @@ void exit_sys(const char *msg)
     ...
     init_wait(&wqentry);
 
-    DEFINE_WAIT makrosu global tanımlamalarda kullanılamamktadır. Çünkü bu makro küme parantezleri içerisinde sabit ifadesi olmayan 
+    DEFINE_WAIT makrosu global tanımlamalarda kullanılamamaktadır. Çünkü bu makro küme parantezleri içerisinde sabit ifadesi olmayan 
     ifadeler barındırmaktadır. Ancak makro yerel tanımlamalarda kullanılabilir.
 
     Dolayısıyla prepare_to_wait ve prepare_to_wait_exclusive fonksiyonları da aslında bekleme kuyruğuna bir wait_queue_entry nesnesi 
@@ -63753,6 +63753,10 @@ clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												157. Ders 21/07/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     İşlemcinin çalıştırmakta olduğu koda ara vererek başka bir kodu çalıştırması ve çalıştırma bittikten sonra kaldığı yerden 
     devam etmesi sürecine "kesme (interrupt)" denilmektedir. Kesmeler oluşma biçiminde göre üçe ayrılmaktadır:
 
@@ -63785,10 +63789,6 @@ clean:
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-												157. Ders 21/07/2024 - Pazar
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
     Bugün kullandığımız PC'lerde (laptop ve notebook'lar da dahil olmak üzere) eskiden kesme denetleyicisi olarak bir tane 
     Intel'in 8259 (PIC) denilen entegre devresi kullanılıyordu. Bunun 8 girişi bulunuyordu. Yani bu kesme denetleyicisinin 
     uçları 8 ayrı donanım birimine bağlanabiliyordu.
@@ -63799,14 +63799,14 @@ clean:
     0 1 2 3 4 5 6 7
 
     Bu uçlara IRQ uçları deniliyordu ve bu uçlar değişik donanım birimlerine bağlıydı. Böylece bir donanım birimi kesme oluşturmak
-    isterse kesme denetleyicisinin igili ucunu uyarıyordu. Kesme deetleyicisi de CPU'nun INT ucunu uyarıyordu. İlk PC'lerde 
+    isterse kesme denetleyicisinin igili ucunu uyarıyordu. Kesme denetleyicisi de CPU'nun INT ucunu uyarıyordu. İlk PC'lerde 
     toplam 8 IRQ vardı. Ancak 80'li yılların ortalarında PC mimarisinde değişikler yapılarak kesme denetleyicisinin sayısı ikiye 
     yükseltildi. Böylece IRQ uçlarının sayısı da 15'e yükseltilmiş oldu. Intel'in iki 8259 işlemcisini katkat bağlayabilmek için 
     birinci kesme denetleyicisinin (Master PIC) bir ucunun ikinci kesme denetleyicisinin INT ucuna bağlanması gerekmektedir. 
     İşte PC mimarisinde birinci kesme denetleyicisinin 2 numaralı ucu ikinci kesme denetleyicisine bağlanmıştır. Böylece toplam
     IRQ'ların sayısı 16 değil, 15 olmaktadır.
 
-    | (INT ucu CPU'ya baplanır)     |
+    | (INT ucu CPU'ya bağlanır)     |
       <8259 (PIC)>                     <8259 (PIC)>
     | | X | | | | |                 | | | | | | | |
 
@@ -63831,10 +63831,10 @@ clean:
     oluşturulabilmektedir. Bu tekniğe "Message Signaled Interrupt (MSI)" denilmektedir. Gerçekten de bugün PCI slotlara takılan 
     bazı kartlar kesmeleri doğrudan belli bir çekirdekte MSI kullanarak oluşturmaktadır.
 
-    O halde kullanığımız Intel tabanlı PC mimarisideki bugünkü durum şöyledir:
+    O halde kullanığımız Intel tabanlı PC mimarisindeki bugünkü durum şöyledir:
 
     - Bazı donanım birimleri built-in biçimde IOAPIC'in uçlarına bağlı durumdadır. Bu uçlar eskiye uyumu korumak için 8259'un 
-    uçlarıyla aynı biçimde bağlı gibi IRQ oluşturmaktadır.
+    uçlarıyla aynı biçimde bağlıymış gibi IRQ oluşturmaktadır.
 
     - Bazı PCI kartlar slot üzerindeki 4 IRQ hattından (INTA, INTB, INTC, INTD) birini kullanarak kesme oluşturmaktadır. Bu hatlar 
     IOAPIC'in bazı uçlarına bağlıdır.
@@ -63860,7 +63860,7 @@ clean:
     Böylece Linux sistemlerinde aslında donanım kesmeleri her defasında farklı çekirdeklerde çalıştırılıyor olabilir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
----------------------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------
     Pek çok CPU ailesinde donanım kesmelerinin teorik maksimum bir limiti vardır. Örneğin Intel mimarisinde toplam kesme sayısı 
     256'yı geçememektedir. Yani bu mimaride en fazla 256 farklı kesme oluşturulabilmektedir. Bu mimaride her kesmenin bir 
     numarası vardır. IRQ numarası ile kesme numarasının bir ilgisi yoktur. Biz örneğin PIC ya da IOAPIC'i programlayarak belli 
@@ -63868,6 +63868,10 @@ clean:
     kesmenin çalışmasını sağlayabiliriz. Pekiyi bir IRQ oluşturulduğunda çekirdek kaç numaralı kesme kodunun çalıştırılacağını 
     nereden anlamaktadır? İşte PIC ya da IOAPIC CPU'nun INT ucunu uyararak kesme oluştururken veri yolunun ilk 8 ucundan kesme 
     numarasını da CPU'ya bildirmektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												158. Ders 28/07/2024 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -63904,11 +63908,11 @@ clean:
 
     request_irt fonksiyonunun üçüncü parametresi bazı bayraklardan oluşur. Bu bayrak 0 geçilebilir ya da örneğin IRQF_SHARED 
     geçilebilir. Diğer seçenekler için dokümanlara başvurabilirsiniz. IRQF_SHARED aynı kesmenin birden fazla aygıt sürücü tarafından 
-    kullanılabileceği anlamına gelmektedir. (Tabii biz ilk register ettiren değilsek daha önce resgister ettirenlerin bu bayrağı 
+    kullanılabileceği anlamına gelmektedir. (Tabii biz ilk register ettiren değilsek daha önce register ettirenlerin bu bayrağı 
     kullanmış olması gerekir. Aksi halde biz de bu bayrağı kullanamayız.) Fonksiyonun dördüncü parametresi "/proc/interrupts" 
     dosyasında görüntülenecek ismi belirtir. Son parametre ise sistem genelinde tek olan bir nesnenin adresi olarak girilmelidir. 
     Aygıt sürücü programcıları bu parametreye tipik olarak aygıt yapısını ya da çağrılacak fonksiyonu girerler. Bu parametre IRQ
-    handler fonksiyonuna ikinci parametre olarak geçilmektedir. Fonksiyon başarı durumunda o değerine başarısızlık durumunda negatif 
+    handler fonksiyonuna ikinci parametre olarak geçilmektedir. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda negatif 
     hata değerine geri dönmelidir. Örneğin:
 
     if ((result = request_irq(1, my_irq_handler, IRQF_SHARED, "my_irq1", NULL)) != 0) {
@@ -63948,6 +63952,8 @@ clean:
     isimli iki kernel fonksiyonu kullanılmaktadır. Bu fonksiyonlar belli numaralı bir IRQ'yu disable ve enable etmektedir. Ancak 
     bu fonksiyonlar bu işlemi doğrudan kesme denetleyicisini (PIC ya da IOAPIC) programlayarak yapmamaktadır. 
 
+    #include <linux/interrupt.h>
+
     void disable_irq(unsigned int irq);
     void enable_irq(unsigned int irq);
 
@@ -63963,16 +63969,16 @@ clean:
     Dolayısıyla biz bir tuşa bastığımızda otomatik olarak basılan tuşa ilişkin klavye scan kodu bilgisayar tarafına iletilir 
     ve IRQ1 kesmesi oluşturulur. IRQ1 kesme kodu birincil olarak işletim sistemi tarafından ele alınmaktadır. İşletim sistemi 
     de bu IRQ oluştuğunda aygıt sürücülerin belirlediği fonksiyonları çağırmaktadır. Klavyede yalnızca bir tuşa basılınca 
-    değil parmak tuştan çekildiğinde de yine klavye işlemcisi çekilen tuşun scan kodunu klavye denetleyicisine gönderip IRQ1 
+    değil, parmak tuştan çekildiğinde de yine klavye işlemcisi çekilen tuşun scan kodunu klavye denetleyicisine gönderip IRQ1 
     kesmesinin oluşmasına yol açmaktadır. Yani hem tuşa basınca hem de parmak tuştan çekildiğinde IRQ1 oluşmaktadır. Klavye 
     terminolojisinde parmağın tuşa basılmasıyla gönderilen scan koda "make code", parmağın tuştan çekilmesiyle gönderilen koda
     ise "break code" denilmektedir. Bugün PC'lerde kullandığımız klavyelerde parmak tuştan çekildiğinde önce PC tarafında bir 
-    F0 byte'ı ve sonra da tuşun scan kodu gönderilmektedir. Örneğin parmağımızı "A" tuşuna basıp çekelim şu scan kodlar bilgisayar
-    tarafında gönderilecektir:
+    F0 byte'ı ve sonra da tuşun scan kodu gönderilmektedir. Örneğin parmağımızı "A" tuşuna basıp çekelim. Şu scan kodlar bilgisayar
+    tarafına gönderilecektir:
 
     <A'nın scan kodu> <F0> <A'nın scan kodu>
 
-    Ctrl, Shift, Alt, Caps-Lock gibi tuşların diğer tuşlardan bir farkı yoktur. Ctrl+C gibi bir tuşa basıdığı işletim sisteminin 
+    Ctrl, Shift, Alt, Caps-Lock gibi tuşların diğer tuşlardan bir farkı yoktur. Ctrl+C gibi bir tuşa basıldığı işletim sisteminin 
     tuttuğu flag değişkenlerle tespit edilmektedir. Örneğin biz Ctrl+C tuşlarına basıp çekmiş olalım. Klavye işlemcisi bilgisayar
     tarafında şu kodları gönderecektir:
 
@@ -63982,7 +63988,7 @@ clean:
     eder. Böylece diğer tuşlara basıldığında bu flag'e bakılarak Ctrl tuşu ile bu tuşa basılıp basılmadığı anlaşılmaktadır.
 
     Pekiyi biz Linux'ta stdin dosyasından (0 numaralı betimleyici) okuma yaptığımızda neler olmaktadır? İşte aslında işletim 
-    sistemi bir tuşa basıldığında basılan tuşları klavye denetleyicisinde alır ve onları biz kuyruk sisteminde saklar. Terminal 
+    sistemi bir tuşa basıldığında basılan tuşları klavye denetleyicisinden alır ve onları bir kuyruk sisteminde saklar. Terminal 
     aygıt sürücüsü de bu kuyruğa başvurur. Kuyrukta hiç tuş yoksa thread'i bu amaçla oluşturulmuş bir wait kuyruğunda bekletir. 
     Klavyeden tuşa basılınca wait kuyruğunda bekleyen thread'leri uyandırır. Yani okuma yapıldığında o anda klavyeden okuma 
     yapılmamaktadır. Kuyruklanmış tuşlar okunmaktadır.
@@ -66662,7 +66668,7 @@ void exit_sys(const char *msg)
     FAT dosya sisteminde bir dosyanın hangi parçasının diskte nerede konumlandırıldığı FAT (File Allocation Table) denilen 
     bir bölümde saklanmaktadır. Eğer bir dosya çok fazla parçaya ayrılırsa hem disk üzerinde daha çok yayılmış olur hem de FAT
     bölümünde bu dosyanın parçalarının yerini turmak için gereken alan büyür. Bu nedenle dosyaların parçaları sektörlere değil
-    clutser denilen birimlere bölünmüştür. Bir cluster ardışıl n tane sektörün oluşturduğu topluluktur. Örneğin bir cluster'ın
+    cluster denilen birimlere bölünmüştür. Bir cluster ardışıl n tane sektörün oluşturduğu topluluktur. Örneğin bir cluster'ın
     4 sektör olması demek 4 sektörden oluşması (yani 2K) demektir. Şimdi elimizde 10,000 byte uzunluğunda bir dosya olsun. Bir 
     cluster'ın 1 sektör olduğunu düşünelim. Bu durumda bu 10,000 byte'lık dosya toplamda 10000 / 512 = 19.53125 yani 20 cluster
     yer kaplayacaktır. FAT bölümünde bu 20 cluster 20 elemanlık yer kaplayacaktır. Şimdi bir cluster'ın 4 sektörden oluşturğunu 
@@ -66683,7 +66689,7 @@ void exit_sys(const char *msg)
     uç uca eklediğine dikkat ediniz. Tabii genellikle dosyalar tar'landıktan sonra ayrıca sıkıştırılabilir. Bu sistemlerdeki 
     "tar.gz" gibi dosya uzantıları tar'landıktan sonra zip'lenmiş olan dosyaları belirtmektedir. Pkiyi o halde bir cluster'ın
     kaç sektör olacağına nasıl karar verilmektedir? İşte sezgisel olarak disk hacmi büyüdükçe kaybedeilen alanların önemi 
-    azalacağı için clutser'ın çok sektörden oluşturulması, disk hacmi azaldıkça az sektörden oluşturulması yoluna gidilmektedir. 
+    azalacağı için cluster'ın çok sektörden oluşturulması, disk hacmi azaldıkça az sektörden oluşturulması yoluna gidilmektedir. 
     Format programları bu değerin kullanıcı tarafından belirlenmesine olanak sağlamakla birlikte default değer de önermektedir. 
     Linux'taki "mkfs.fat" programında ise cluster boyutu "-s" seçeneği ile belirlenmektedir. Örneğin:
 
@@ -67383,7 +67389,7 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    FAT dosya sisteminde her dosya clutser'lara bölünerek Data bölümündeki cluster'larda tutulmaktadır. Dosyanın parçaları
+    FAT dosya sisteminde her dosya cluster'lara bölünerek Data bölümündeki cluster'larda tutulmaktadır. Dosyanın parçaları
     ardışıl cluster'larda olmak zorunda değildir. Örneğin bir cluster'ın 4 sektör olduğu bir volümde 10000 byte uzunluğunda 
     bir dosya söz konusu olsun. Bir cluster'ın bıyutu 4 * 512 = 2048 byte'tır. O halde bu dosya 5 cluster yer kaplayacaktır. 
     Ancak son cluster'da kullanılmayan bir miktar boş alan da kalacaktır. İşte örneğin bu dosyanın cluster numaraları aşağıdaki
@@ -67416,7 +67422,7 @@ void exit_sys(const char *msg)
     Böylece işletim sistemi dosyanın ilk cluster numarasını biliyorsa bu zinciri takip ederek onun bütün cluster'larını elde 
     edebilir.
 
-    Örneğin 1 clutser'ın 4 sektör olduğu bir FAT16 sisteminde 19459 byte'lık bir dosya toplam 10 cluster yer kaplamaktadır. 
+    Örneğin 1 cluster'ın 4 sektör olduğu bir FAT16 sisteminde 19459 byte'lık bir dosya toplam 10 cluster yer kaplamaktadır. 
     Biz bu dosyanın ilk cluster numarasının 4 olduğunu biliyoruz. Aşağıdaki örnek FAT bölümünde bu dosyanın tüm cluster'larının 
     numaraları bağlı liste izlenerek elde edilebilecektir:
 
@@ -67509,7 +67515,7 @@ void exit_sys(const char *msg)
 
     İlk cluster numarası bilinen dosyanın cluster zincirini elde eden fonksiyon da aşağıdaki gibi yazılabilir:
 
-    uint16_t *getclu_chain(FATSYS *fatsys, uint32_t firstclu, uint16_t *count)
+    uint16_t *getclu_chain16(FATSYS *fatsys, uint32_t firstclu, uint16_t *count)
     {
         uint16_t clu, n;
         uint16_t *chain, *temp;
@@ -67597,7 +67603,7 @@ FATSYS *open_fatsys(const char *path);
 int close_fatsys(FATSYS *fatsys);
 int read_cluster(FATSYS *fatsys, uint32_t clu, void *buf);
 int wite_cluster(FATSYS *fatsys, uint32_t clu, const void *buf);
-uint16_t *getclu_chain(FATSYS *fatsys, uint32_t firstclu, uint16_t *count);
+uint16_t *getclu_chain16(FATSYS *fatsys, uint32_t firstclu, uint16_t *count);
 void freeclu_chain(uint16_t *chain);
 
 #endif
@@ -67712,7 +67718,7 @@ int write_cluster(FATSYS *fatsys, uint32_t clu, const void *buf)
 	return write(fatsys->fd, buf, fatsys->clulen);
 }
 
-uint16_t *getclu_chain(FATSYS *fatsys, uint32_t firstclu, uint16_t *count)
+uint16_t *getclu_chain16(FATSYS *fatsys, uint32_t firstclu, uint16_t *count)
 {
 	uint16_t clu, n;
 	uint16_t *chain, *temp;
@@ -67770,7 +67776,7 @@ int main(int argc, char *argv[])
 	if ((fatsys = open_fatsys(argv[1])) == NULL)
 		exit_sys("open_fatsys");
 
-	if ((chain = getclu_chain(fatsys, 4, &count)) == NULL) {
+	if ((chain = getclu_chain16(fatsys, 4, &count)) == NULL) {
 		fprintf(stderr, "cannot get cluster chain!..\n");
 		exit(EXIT_FAILURE);
 	}
@@ -67795,7 +67801,7 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Biz şimdi ilk cluster'ını bildiğimiz bir text dosyanın içeriğini yazdırmak isteyelim. Bunun için önce getclu_chain 
+    Biz şimdi ilk cluster'ını bildiğimiz bir text dosyanın içeriğini yazdırmak isteyelim. Bunun için önce getclu_chain16 
     fonksiyonunu çağırırız. Sonra read_cluster fonksiyonu ile cluster'ları okuyup içini yazdırabiliriz. Ancak burada şöyle 
     bir sorun vardır: Dosyanın son cluster'ı tıka basa dolu değildir. Orada dosyaya dahil olmayan bye'lar da vardır. İşletim 
     sistemi dosyanın uzunluğunu elde edip son cluster'daki dosyaya dahil olmayan kısmı belirleyebilmektedir.
@@ -67829,7 +67835,7 @@ int main(int argc, char *argv[])
 	if ((fatsys = open_fatsys(argv[1])) == NULL)
 		exit_sys("open_fatsys");
 
-	if ((chain = getclu_chain(fatsys, 4, &count)) == NULL) {
+	if ((chain = getclu_chain16(fatsys, 4, &count)) == NULL) {
 		fprintf(stderr, "cannot get cluster chain!..\n");
 		exit(EXIT_FAILURE);
 	}
@@ -67873,7 +67879,7 @@ void exit_sys(const char *msg)
     FAT12 sisteminde bir FAT elemanı 12 bit olduğu için FAT bölümünde en fazla 2^12 = 4096 FAT elemanı olabilir. Microsoft
     kendi format programında FAT12 volümlerinde bir cluster'ı maksimum 8 sektör olarak almaktadır. Bu durumda FAT12 volümü 
     maksimum 2^12 * 2^3 * 2^9 = 2^24 = 16MB olabilmektedir. Başka bir deyişle Microsoft 16MB'nin yukarısındaki volümleri FAT12
-    olarak formatlamamktadır.
+    olarak formatlamamaktadır.
 
     Aşağıda 12 bit FAT tablosunun baş kısmı görülmektedir:
 
@@ -67885,6 +67891,256 @@ void exit_sys(const char *msg)
     00000250  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
     00000260  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
     00000270  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+
+    12 bit'in 3 hex digit yani 1.5 olduğuna dikkat ediniz. Buradaki 12 bit şöyle yapılmaktadır. Cluster numarası önce 1.5 ile 
+    çarpılır ve noktalı kısım atılır. (Bu işlem 3 ile çarpılıp 2'ye bölünme biçiminde yapılabilir.) Elde edilen offset'ten WORD 
+    bilgi çekilir. Eğer cluster numarası çifte yüksek anlamlı 4 bit atılır, eğer cluster numarası tek ise düşük anlamlı 4 bit 
+    atılır. Yüksek anlamlı 4 bit'in atılması 0x0FFF ile "bit and" işlemi uygulanarak, düşük anlamlı 4 bit'in elde edilmesi 
+    sayının 4 kez sağa ötelenerek yapılabilir. Örneğin yukarıdaki FAT bölümünde biz 4 numaralı cluster'ın değerini elde edecek 
+    olalım. 4 * 1.5 = 6'dır. 6'ıncı offset'ten WORD çekilirse 0x6005 değeri elde edilir. Yüksek anlamı 4 bit atıldığında ise 
+    0x005 değeri elde edilecektir. Şimdi 5 numaralı cluster'ın değerini elde etmek isteyelim. Bu durumda 5 * 1.5 = 7.5 olur. 
+    Noktadan sonraki kısım atılırsa 7 elde edilir. 7'inci offset'ten WORD öçekildiğinde 0x0060 değeri elde edilecektir. Bu 
+    değerin de düşük anlamlı 4 biti atıldığında 0x006 değeri elde edilir.
+
+    12 Bit FAT sisteminde bir FAT elemanın alabileceği değerler de şöyledir:
+
+    000             Boş cluster
+    001             Kullanılmıyor
+    002 - FEF       Geçerli, sonraki cluster
+    FF0H - FF6      Reserved cluster
+    FF7             Bozuk cluster, işletim sistemi bu cluster'a dosya parçası yerleştirmez
+    FF8 - FFF       Son cluster
+
+    12 bit FAT tablosunda ilk cluster değeri bilinen dosyanın cluster zincirlerini elde etmek için aşağıdaki gibi bir fonksiyon 
+    yazılabilir.
+
+    uint16_t *getclu_chain12(FATSYS *fatsys, uint32_t firstclu, uint16_t *count)
+    {
+        uint16_t clu, word, n;
+        uint16_t *chain, *temp;
+        uint32_t capacity;
+
+        clu = firstclu;
+        capacity = CHAIN_DEF_CAPACITY;
+        n = 0;
+
+        if ((chain = (uint16_t *)malloc(sizeof(uint16_t) * CHAIN_DEF_CAPACITY)) == NULL)
+            return NULL;
+        do  {
+            chain[n++] = clu;
+            if (n == capacity) {
+                capacity *= 2;
+                if ((temp = realloc(chain, sizeof(uint16_t) * capacity )) == NULL) {
+                    free(chain);
+                    return NULL;
+                }
+                chain = temp;
+            }
+            word = *(uint16_t *)(fatsys->fat + clu * 3 / 2);
+            clu = clu % 2 == 0 ? word & 0x0FFF : word >> 4;
+        } while (clu < 0xFF8);
+        *count = n;
+
+        return chain;
+    }
+
+    Fonksiyonda 12 bit FAT değerinin elde edilmesi şöyle yapılmıştır:
+
+    clu = clu % 2 == 0 ? word & 0x0FFF : word >> 4;
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    FAT32 sisteminde her FAT elemanı 32 bittir. Ancak bu sistemde boot sektördeki BPB alanında da faklılıklar vardır. Bu nedenle
+    32 bit FAT sistemi FAT12 ve FAT16 ile tam uyumlu değildir. FAT32 için bazı fonksiyonların yeniden yazılması gerekir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Biz FAT doısya sisteminin boot sektörünü, FAT ve Data bölümlerini ele aldık. Ele almadığımız tek bölüm "Root Dir" bölümüdür. 
+    Şimdi "Root Dir" bölümü ve dosya bilgilerinin nasıl saklandığı konusu üzerinde duracağız.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Microsoft'un FAT dosya sisteminde ve UNIX/Linux sistemlerinde kullanılan i-node tabanlı dosya sistemlerinde dizinler de 
+    tamamen bir dosya gibi organize edilmektedir. Yani dizinler de aslında birer dosyadır. Bir dosyanın içerisinde o dosyanın 
+    bilgileri bulunurken bir dizin dosyasının içerisinde o dizindeki dosyalara ilişkin bilgiler bulunmaktadır. Yani dizinler 
+    aslında "o dizindeki dosyaların bilgilerini içeren dosyalar" gibidir. Bir dizin dosyası "dizin girişlerinden (directory 
+    entry) oluşmaktadır. FAt12 ve FAT16 dosya sistemlerinde bir dizin dosyasındaki dizin girişleri 32 byte uzunlupundaydı. 
+    Yani dizin ddosyaları 32 byte'lık kayıtların peşi sıra gelmesiyle oluşuyordu. O zamanalarda DOS sistemlerinde bir dosyanın 
+    ismi için en fazla 8 karakter, uzantısı için de en fazla 3 karakter kullanılabiliyordu. Dolayısıyla 32 byte'lık dizin 
+    girişlerinin 1 byte'ı dosyanın ismi için ayrılmıştı. Sonra Microsoft dosya isimlerini 8+3 formatından çıkartarak onların 
+    255'e kadar uzatılmasını sağladı. Ancak bu yaparken de geçmişe doğur uyumu korumak için birden fazla 32 byte'lık dizin
+    girişleri kullandı. Biz önce burada klasik 8+3'lük dizin girişlerinin formatını göreceğiz.
+
+    32'lik klasik dizin girişi formatı şöyledir:
+
+    Offset (Hex)                    Uzunluk                     Anlamı
+
+    00                              8 Byte                      Dosya ismi (File Name)
+    08                              3 Byte                      Dosya Uzantısı (Extension)
+    0B                              1 Byte                      Dosya Özelliği (Attribute)
+    0C                              1 Byte                      Kullanılmıyor (Reserved)
+    0D                              BYTE                        Yaratılma Zamanının Milisaniyesi
+    0E                              WORD                        Dosyanın Yaratılma Zamanı (Creation Time)
+    10                              WORD                        Dosyanın Yaratılma Tarihi (Creation Date)
+    12                              WORD                        Son Okunma Zamanı (Last Access Time)
+    14                              WORD                        Kullanılmıyor (Reserved)
+    16                              WORD                        Son Yazma Zamanı (Last Write Time)
+    18                              WORD                        Son Yazma Tarihi (Last Write Date)
+    1A                              WORD                        İlk Cluster Numarası (First Cluster)
+    1C                              DWORD                       Dosyanın Uzunluğu (File Length)
+
+    Aşağıda "x.txt" dosyanın ve "mydir" dizinin 32 byte'lık dizin girişleri görülmektedir.
+
+    58 20 20 20 20 20 20 20  54 58 54 20 00 0b 5d 92  |X       TXT ..].|
+    59 59 59 59 00 00 5d 92  59 59 0e 00 0f 00 00 00  |YYYY..].YY......|
+
+    4d 59 44 49 52 20 20 20  20 20 20 10 00 7a f0 96  |MYDIR      ..z..|
+    59 59 59 59 00 00 f0 96  59 59 10 00 00 00 00 00  |YYYY....YY......|
+
+    - Dosya İsmi: 32'lik dizin girişlerinin ilk 8'byte'ı dosya isminden oluşmaktadır. Eğer dosya ismi 8 karakterden kısa 
+    ise SPACE karakterleriyle (0x20) padding yapılmaktadır. Klasik FAT16 ve FAT12 sistemlerinde dosya isimlerinin ve uzantılarının
+    büyük harf-küçük harf duyarlılığı yoktur. Tüm dosyalar bu sistemlerde "büyük harfe dönüştürülerek" dizin girişlerinde 
+    tutulmaktadır.
+
+    - Dosya Uzantısı: Dosya uzantısı en fazla 3 karakterden oluşmaktadır. Eğer 3 karakterden kısa ise SPACE (0x20) karakterleriyle
+    padding yapılmaktadır.
+
+    - Dosya Özelliği: Bu alanda dosyanın özleliklerine ilişkin bit bit alanı bulundurulmaktadır. Buradaki her bit'in bir 
+    anlamı vardır. Özellik byte'ı aşağıdaki bitlerden oluşmaktadır:
+
+       7           6          5        4        3          2        1           0
+    Reserved    Reserved    Archive   Dir     VLabel     System    Hidden    ReadOnly
+
+    Eğer ReadOnly biti 1 ise dosya "read-only" biçimdedir. Böyle dosyalara işletim sistemi yazma yapmaz. Hidden biti 1 ise 
+    dosya "dir" komutu uygulandığında görüntülenmez. DOS işletim sisteminin kendi dosyalarını System özelliği ile vurgulamaktadır. 
+    Yani eğer bir dosya işletim sistemine ilişkin bir dosya ise System biti 1 olur.
+
+    Volüm isimleri boot sektörün yanı sıra kök dizinde bir dosya ismi gibi de tutulmaktadır. Böyle girişlerin VLabel biti 
+    1 olur. Eğer bir dizin söz konusu ise Dir biti 1 olmaktadır. FAT dosya sisteminde normal dosyalara "Archive" dosyaları 
+    denilmektedir. Bu nedenle bu bit hemen her zaman 1 olarak görülür. Aşağıda "x.txt" ve "mydir" dizin girişlerine ilişkin 
+    özellik byte'ınn bitleri görülmektedir:
+
+    x.txt (0x20)        0 0 1 0 0 0 0 0
+    mydir (0x10)        0 0 0 1 0 0 0 0
+
+    "x.txt" dosyasının özellik bitlerinden yalnızca Archive biti set edilmiştir. "mydir" dizinin de yalnızca "Dir" biti set 
+    edilmiştir. İşletim sistemi bir dizin girişinin normal bir dosyaya mı yoksa bir dizin dosyasına mı ilikin olduğunu özellik
+    byte'ının 4 numaralı bitine bakarak tespit etmektedir.
+
+    - Tarih ve Zaman Bilgileri FAT12 ve FAT16 dosya sistemlerinde 2 byte ile kodlanmaktadır. Eskiden DOS sistemlerinde dosyanın 
+    yaratılma tarihi ve zamanı ve son okunma tarihi tutulmazdı. Bu alanlar "reserved" durumdaydı. Sonra Microsoft bu alanları 
+    bu amaçla kullanmaya başladı. Tarih bilgisi byte içerisinde bitsel düzeyde tutulmaktadır. Tarih bilgisinin tutuluş formatı
+    şöyledir:
+
+    15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0
+    y  y  y  y  y  y  y m m m m d d d d d 
+
+    Burada WORD değerin düşük anlamlı 5 biti gün için, sonraki 4 biti ay için ve geri kalan 7 biti yıl için bulundurulmuştur. 
+    Tarih bilgisinin yıl alanı için 7 bit ayrıldığına göre buraya nasıl 2024 gibi bir tarih yerleştirilebilmektedir. İşte DOS
+    işletim sisteminin ilk versiyonu 1980 yılında oluşturulduğu için buradaki tarih bilgisi her zmana 1980 yılından itibaren 
+    bir offset belirtmektedir. Yani örneğin 2024 yılı için buradaki yıl bitlerine 44 kodlanmaktadır. Örneğin bir dosyanın 32'lik
+    dizin girişi şöyledir:
+
+    58 20 20 20 20 20 20 20 54 58 54 20 18 AB 03 B3
+    59 59 59 59 00 00 09 B3 59 59 06 00 1B 00 00 00
+
+    Buaradk 0x18'inci offset'ten little endian formatta WORD çekersek 0x5959 değerini elde ederiz. Şimdi bu WORD değeri 2'lik
+    sistemde ifade edelim:
+
+    5         9       5       9
+    0101    1001    0101    1001
+
+    Şimdi de yukarıda belirttiğimiz gibi sayıyı bit'lerine ayrıştıralım:
+
+    0101100 => 44    1010 => 10     11001 => 25
+      yıl             ay             gün
+
+    O halde buradaki tarih 25/10/2024'tür.
+
+    16 bitle (WORD ile) zaman bilgisi de şöyle kodlanmıştır:
+
+    15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0
+     h  h  h  h  h  m m m m m m s s s s s
+
+    Burada bir noktayaya dikkat ediniz: 0 ile 24 arasındaki saatler 5 bit ile tutulabilir. 0 ile 60 arasındaki dakikalar ise 
+    ancak 6 bit ile tutulabilir. Burada geriye 5 bit almıştır. Dolayısıyla saniyeleri tutmak için bu 5 bit yeterli değildir. 
+    İşte FAT dosya sistemini tasarlayanlar saniyedeki duyarlılığı azaltarak saniye değerinin yarısını buraya yazılması yoluna
+    gitmişlerdir. Yani zaman bilgisinin saniye kısmı eski FAT12 ve FAT16 sistemlerinde tam duyarlılıkla tutulamamaktadır. 
+    Örneğin yukarıdaki dizin girişinde dosyanın son değiştirilme zamanı için 0x16'ıncı offset'ten WORD çektiğimizde 0xB309
+    değerini elde ederiz. Şimdi bu değeri 2'lik sisteme dönüştürelim:
+
+     B       3       0       9
+    1011    0011    0000    1001
+
+    Şimdi de bit alanlarını ayrıştıralım:
+
+    10110 => 22     011000 => 24    01001 => 9
+      saat            dakika          saniye
+
+    Burada işletim sistemi saniye alanına mevcut saniyenin yarısını yazdığına göre bu dosyanın değiştirilme zamanı 22:24:18
+    olacaktır.
+
+    Burada küçük bir noktaya dikkatinizi çekmek istiyoruz: Eskiden dizin girişinin 0x0D numaralı BYTE'ı da "reserved" durumdaydı
+    sonra bu byte'a dosyanın yaratılma zamanına ilişkin milisaniye değeri yerleştirildi. Dolayısıyla artık dosyanın yaratılma 
+    zamanı saniye duyarlılığında ifade edilebilmektedir. Bu durumda yaratılma zamanındaki saniye 2 ile çarpılıp buradaki 
+    milisaniye ile toplanmaktadır. Tabii genel olarak Microsoft'un arayüzü dosyaların zaman gilfgilerinin saniyelerini default
+    durumda zaten gmstermemektedir. Örneğin:
+
+    D:\>dir
+    Volume in drive D is YENI BIRIM
+    Volume Serial Number is 2C68-EBFD
+
+    Directory of D:\
+
+    25.10.2024  22:24                27 x.txt
+    25.10.2024  22:26                 8 con
+    25.10.2024  22:26                59 y.txt
+    25.10.2024  22:28    <DIR>          mydir
+                   3 File(s)             94 bytes
+                1 Dir(s)      52.194.304 bytes free
+
+    - İlk Cluster Numarası: Biz daha önce FAT bölümünü incelerken bir dosyanın cluster zincirini elde edebilmek için onun 
+    ilk cluster numarasının bilinmesi gerektiğini belirtmiştik. (Bir bağlı listeyi dolaşabilmek için onun ilk düğümünün yerinin
+    bilinmesi gerektiğini anımsayınız.) İşte bir dosyanın ilk cluster numaarası dizin girişinde saklanmaktadır. Yani işletim 
+    sistemi önce dosyanın dizin girişini bulmakta sonra FAT'ten onun cluster zincirini elde etmektedir. Yukarıdaki dosyasının 
+    dizin girişini yeniden veriyoruz:
+
+    58 20 20 20 20 20 20 20 54 58 54 20 18 AB 03 B3
+    59 59 59 59 00 00 09 B3 59 59 06 00 1B 00 00 00
+
+    Burada söz konusu dosyanın ilk cluster numarası dizin girişinin 0x1A ofsfetinden başlayan WORD bilgidir. Bu bilgiyi örnek
+    dizin girişinden çektiğimizde 0x006 değerini elde ederiz. Bu durumda bu dosyanın ilk cluster numarası 6'dır.
+
+    - Dosyanın Uzunluğu: Dosyanın uzunluğu dizin girişindeki son 4 byte'lık (DWORD alan) alanda tutulmaktadır. İşletim sistemi
+    dosyanın son cluster'ındaki geçerli byte sayısını bu uzunluktan yararlanarak elde etmektedir. Örneğin yukarıdaki dizin 
+    girişine ilişkin dosya uzunluğu 0x0000001B = 27'dir. Dizin dosyalarına ilişkin uzunluklar için işletim sistemi hep 0 
+    değerini yazmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Pekiyi bir dosya silindiğinde ne olur? İşletim sistemi FAT dosya sisteminde bir dosya silindiğinde iki işlem yapar:
+
+    1) Dosyanın silindiğinin anlaşılması için dizin girişindeki dosya isminin ilk karakterini 0xE5 olarak değiştirir. Böylece 
+    dizin girişlerini tararken 32'lik girişin ilk karajkter 0xE5 ise o dizin girişini silindiği gerekçesiyle atlamaktadır. 
+    Ancak işletim sistemi bu 32'lik dizin girişinin diğer byte'larına dokunmamaktadır.
+
+    2) İşletim sistemi dosyanın cluster zincirini de sıfırlamaktadır. Böylece bu dosyanın FAT'te kapladığı alan artık "boş" 
+    gözükecektir. Ancak işletim sistemi dosyanın Data bölümündeki cluster'ları üzerinde herhangi bir işlem yapmaz.
+
+    Pekiyi FAT dosya sisteminde "undelete" yapan programlar nasıl çalışmaktadır? İşte bu programlar dosyanın dizin girişine 
+    bakıp onun ilk cluster'ının numarasını elde edip FAT bölümünde yersine bir algoritmayla onun cluster zincirini yenidne 
+    oluşturmaya çalışmaktadır. Ancak böyle bir kurtarmanın garantisi yoktur. Çünkü işletim sistemi boşaltılmış cluster'ları 
+    başka bir dosya için tahsis etmiş olabilir. Ya da FAT'teki cluster zincirini tahmin eden programlar bu konuda yanılabilmektedir. 
+    Ancak ne olursa olsun dosyanın ilk karakteri silindiği için bu karakter kurtarma sırasında kullanıcıya sorulmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -68008,7 +68264,7 @@ void exit_sys(const char *msg)
     GRUB isimli boot-loader'ı kullanmaktadır. İşte make install aynı zamanda GRUB boot-loader konfigürasyon dosyasını da güncelleyerek yeni
     sistemin de GRUB menüsünde gözükmesini sağlamaktadır. make install işlemi ile eski kernel'ın yok edilmediğini yeni 
     bir kenel'ın da /boot izininde bulundurulduğuna dikkat ediniz. Tabii artık programcı isterse eski kernel dosyalarını bu dizinden silebilir. 
-    GRUB boot loader ayarlarını kendisi manuel yolla ya da yardımcı proogramlarla yapabilir. 
+    GRUB boot loader ayarlarını kendisi manuel yolla ya da yardımcı programlarla yapabilir.
 
     GRUB boot-loader konfigürasyon dosyası normal olarak /boot/grub dizini içerisindedir. Yani boot-loader buradaki grub.cfg dosyası 
     temel alınarak ayarlanır. Ama bu dosyanın güncellenmesi zordur. Bunun için daha basit yöntem /etc/default/grub dosyası 
@@ -68029,7 +68285,7 @@ void exit_sys(const char *msg)
     kaynak dosyalarına yeni bir dosya eklemektir. Bu durumda genel olarak şöyle bir yöntem izlenebilir:
 
     1) Ekleyeceğiniz dosya için ana kaynak dizininde bir dizin yaratabilirsiniz. Bu dizin mycode olsun. (Başka yerde de yaratılabilir. Ancak en basiti budur.)
-    2) Ekleneceğiniz dosyaları bu dizine yerleştirebilirsiniz. Bu dosyaların x.c ve y.c olduğunu varsayalım. 
+    2) Ekleneceğiniz dosyaları bu dizine yerleştirebilirsiniz. Bu dosyaların x.c ve y.c olduğunu varsayalım.
     3) Yarattınız dizinin içerisinde ana Makefile tarafından devreye sokulacak olan bir Makefile dosyası yaratmalısınız. Bu dosyanın içerisinde şu satırlar olmalıdır:
 
     obj-y := x.o
