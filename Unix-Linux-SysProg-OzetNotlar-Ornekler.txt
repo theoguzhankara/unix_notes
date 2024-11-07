@@ -11,7 +11,7 @@
                         (Notları sabit genişlikli font kullanan programlama editörleri ile açınız.)
                             (Editörünüzün "Line Wrapping" özelliğini pasif hale getiriniz.)
 
-                                                    Son Güncelleme: 30/10/2024 - Çarşamba
+                                                    Son Güncelleme: 07/11/2024 - Perşembe
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -38331,7 +38331,7 @@ void exit_sys(const char *msg)
     kadar büyük olabilir. 
 
     - select fonksiyonunda fonksiyona verdiğimiz kümeler fonksiyon tarafından güncellendiği için fonksiyonun her çağrılmasında
-    eski kümeyi saklayarak yeniden kullanmamız gerekir. Halbuki poll fonksiyonunda yapının giriş ve çıkış elemanları biribirinden
+    eski kümeyi saklayarak yeniden kullanmamız gerekir. Halbuki poll fonksiyonunda yapının giriş ve çıkış elemanları birbirinden
     ayrılmıştır.
 
     - select fonksiyonundaki zaman aşımı duyarlılığı mikrosaniye, poll fonksiyonundaki zaman aşımı duyarlılığı milisaniye 
@@ -52906,7 +52906,7 @@ clean:
 
     Kernel modüller kernel'ın içerisine yerleştirildiği için kernel modüllerde biz user mode'daki kütüphaneleri kullanamayız. 
     Örneğin kernel mode içerisinde standart C fonksiyonlarını ve POSIX fonksiyonlarını kullanamayız. Çünkü standart C fonksiyonları
-    ve POSIX foksiyonları "user mode" programlar için oluşturulmuş kütüphanelerin içerisindedir. Biz kernel modüllerin içerisinde
+    ve POSIX fonksiyonları "user mode" programlar için oluşturulmuş kütüphanelerin içerisindedir. Biz kernel modüllerin içerisinde
     yalnızca "export edilmiş kernel fonksiyonlarını" kullanabiliriz.
 
     Kernel modüller içerisinde kullanılabilecek export edilmiş kernel fonksiyonları "Linux Kernel API" ismi altında "kernel.org"
@@ -54135,7 +54135,7 @@ void exit_sys(const char *msg)
     adresi belirtmektedir. Bu kaynak adres copy_to_user için kernel alanındaki adres, copy_from_user için user alanındaki 
     adrestir. Son parametre transfer edilecek byte sayısını belirtmektedir. Fonksiyonlar başarı durumunda 0 değerine, başarısızlık 
     durumunda transfer edilemeyen byte sayısına geri dönerler. Kernel mod programcılarının bu fonksiyonlar başarısızken bunu 
-    çağıran foksiyonlarını -EFAULT (Bad address) ile geri döndürmesi uygun olur. (Örneğin sys_read ve sys_write fonksiyonlarına 
+    çağıran fonksiyonlarını -EFAULT (Bad address) ile geri döndürmesi uygun olur. (Örneğin sys_read ve sys_write fonksiyonlarına 
     biz geçersiz bir user mode adresi verirsek bu sistem fonksiyonları da -EFAULT değeri ile geri dönmektedir. Bu hata kodunun 
     yazısal karşılığı "Bad address" biçimindedir.) Örneğin:
 
@@ -64092,56 +64092,56 @@ module_exit(generic_exit);
 
 /*--------------------------------------------------------------------------------------------------------------------------
     CPU ile RAM arasında veri transferi aslında tamamen elektriksel düzeyde 1'lerle 0'larla gerçekleşmektedir. CPU'nun adres 
-    uçları (address bus) RAM'in adres uçlarına bağlanır. Bu adres uçları RAM'den ransfer edilecek bilginin fiziksel adresini 
-    belirtmek için kullanılmaktadır CPU'nun veri uçları (data bus) uçları ise bilginin alınıp gönderilmesinde kullanılmaktadır. 
-    İşlemin okuma mı yazma mı olduğu genellikle R/W biçiminde isimlendirilen ayrı bir control ucuyla yapılmaktadır. Örneğin 
+    uçları (address bus) RAM'in adres uçlarına bağlanır. Bu adres uçları RAM'den transfer edilecek bilginin fiziksel adresini 
+    belirtmek için kullanılmaktadır. CPU'nun veri uçları (data bus) ise bilginin alınıp gönderilmesinde kullanılmaktadır. 
+    İşlemin okuma mı yazma mı olduğu genellikle R/W biçiminde isimlendirilen ayrı bir kontrol ucuyla yapılmaktadır. Örneğin 
     32 bit Intel işlemcilerinde MOV EAX, [XXXXXXXX] komutu RAM'deki XXXXXXXX adresinden başlayan 4 byte bilginin CPU içerisindeki 
     EAX yazmacına çekileceği anlamına gelmektedir. Bu makine komutu işletilirken CPU önce erişilecek adres olan XXXXXXXX adresini 
     adres uçlarına elektriksel işaret olarak kodlar. RAM bu adresi alır, bu adresten başlayan 4 byte'lık bilgiyi veri uçlarına 
-    elektirksel olarak kodlar. CPU'da bu uçlardan bilgiyi yine elektirksel olarak alır ve EAX yazmacına yerleştirir. CPU'nun adres 
+    elektriksel olarak kodlar. CPU'da bu uçlardan bilgiyi yine elektriksel olarak alır ve EAX yazmacına yerleştirir. CPU'nun adres 
     uçları RAM'in adres uçlarına, CPU'nun veri uçları ise RAM'in veri uçlarına bağlıdır. Tranfer yönü R/W ucuyla belirlenmektedir. 
     Tabii CPU'lar bugün DRAM belleklerden daha hızlıdır. Dolayısıyla CPU RAM'den yanıt gelene kadar beklemektedir (wait state).
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir bilisayar sisteminde yalnızca Merkezi İşlemci (CPU) değil aynı zamanda yerel birtakım olaylardan sorumlu yardımcı 
+    Bir bilgisayar sisteminde yalnızca Merkezi İşlemci (CPU) değil, aynı zamanda yerel birtakım olaylardan sorumlu yardımcı 
     işlemciler de vardır. Bu yardımcı işlemcilere genellikle "controller (denetleyici)" denilmektedir. Örneğin klasik PC 
-    mimarisinde "Kesme Denetleyicisi (Intel 8250-PIC)", "Klavye Denetleyicisi (Intel 8042-KC)", "UART denetleyicisi (Intel 
+    mimarisinde "Kesme Denetleyicisi (Intel 8250-PIC)", "Klavye Denetleyicisi (Intel 8042-KC)", "UART Denetleyicisi (Intel 
     8250/NS 16550-UART)" gibi pek çok işlemci vardır. Bu işlemcilere komutlar tıpkı CPU/RAM haberleşmesinde olduğu gibi elektriksel 
     düzeyde CPU'nun adres ve veri uçları yoluyla gönderilmekte ve bu işlemcilerden bilgiler yine tıpkı RAM'de olduğu gibi adres 
-    ve veri uçları yoluyla alınmaktadır. Yani CPU'nun adres ve veri uçları yalnızca RAM'e değil yardımcı işlemcilere de bağlıdır. 
-    Pekiyi bu durumda CPU RAM'e erişirken aynı zamanda yardımcı işlemcilere de erişmez mi? İşte CPU'ların genellikle IO/Mem 
+    ve veri uçları yoluyla alınmaktadır. Yani CPU'nun adres ve veri uçları yalnızca RAM'e değil, yardımcı işlemcilere de bağlıdır. 
+    Pekiyi bu durumda CPU, RAM'e erişirken aynı zamanda yardımcı işlemcilere de erişmez mi? İşte CPU'ların genellikle IO/Mem 
     biçiminde isimlendirilen bir uçları daha vardır. Bu ucun 5V ya da 0V olması erişimin RAM'e mi yoksa yardımcı işlemciye mi 
-    yapılacağını belirtir. Yardımcı işlemcileri tasarlayanlar bu uca bakarak bilginin RAM'e değil kendilerine geldiğini 
-    anlayabilirler. Nomral RAM erişimlerine ilişkin MOV ya da LOAD/STORE makine komutlarında bu IO/Mem ucu "mem" biçiminde 
+    yapılacağını belirtir. Yardımcı işlemcileri tasarlayanlar bu uca bakarak bilginin RAM'e değil, kendilerine geldiğini 
+    anlayabilirler. Normal RAM erişimlerine ilişkin MOV ya da LOAD/STORE makine komutlarında bu IO/Mem ucu "mem" biçiminde 
     aktive edilir. Ancak bazı IN, OUT gibi komutlarda bu uç "IO" biçiminde aktive edilmektedir. Bu durumda yardımcı işlemcilere
-    erişmek için MOV, LOAD/STORE komutları değil genellikle IN, OUT biçiminde isimlendirilen komutları kullanılmaktadır. Ancak 
+    erişmek için MOV, LOAD/STORE komutları değil, genellikle IN, OUT biçiminde isimlendirilen komutları kullanılmaktadır. Ancak 
     bazı yardımcı işlemciler bu "IO/Mem" ucu tam tersine "Mem" olarak aktive edildiğinde de işlevini yapacak biçimde konfigüre
-    edilmiş olabilir. Bu durumda bu işlemcilere biz IN, OUT komutlarıyla değil RAM'e erişiyormuş gibi MOV, LOAD/STORE komutlarıyla 
-    erişiriz. İşte bu tekniğe "Memory Mapped IO" denilmektedir. Memory Mapped IO yardımcı işlemcilere sanki RAM'miş gibi erişme 
+    edilmiş olabilir. Bu durumda bu işlemcilere biz IN, OUT komutlarıyla değil, RAM'e erişiyormuş gibi MOV, LOAD/STORE komutlarıyla 
+    erişiriz. İşte bu tekniğe "Memory Mapped IO" denilmektedir. "Memory Mapped IO" yardımcı işlemcilere sanki RAM'miş gibi erişme 
     anlamına gelir. Bunun da sistem programcısı için önemli avantajları vardır. Sistem programcısı bu sayede göstericileri kullanarak 
-    bu işlemcilere erişebilmektedir. Normal "IO/Mem" ucu "IO" biçiminde aktive edilerek erişimlere "Port-Mapped IO" da denilmektedir.
-    Bazı mimarilerde her iki teknik de yoğun kullanılmaktadır. Ancak bazı mimarilerde "memory mapped io" tekniği daha yoğun 
-    kullanılabilmektedir. Memory mapped IO tekniği kullanılırken artık RAM'in ilgili adresteki kısmına erişilemez ya da bu erişimin
-    bir anlamı kalmaz. Yani adeta bu teknikte sanki RAM'in bir bölümü çıkartılmış onun yerine ilgili işlemci oraya takılmış gibi 
-    bir etki oluşmaktadır. Örneğin memory mapped IO bilgisayar sistemlerinde grafik kartları tarafından yoğun olarak kullanılmaktadır. 
-    Grafik kartlarını tasarlayanlar kartın üzerindeki RAM'i,n (bu ana RAM değil) içeriğini belli periyotlarla ekrana göndermektedir. 
+    bu işlemcilere erişebilmektedir. Normal "IO/Mem" ucu "IO" biçiminde aktive edilerek yapılan erişimlere "Port Mapped IO" da 
+    denilmektedir. Bazı mimarilerde her iki teknik de yoğun kullanılmaktadır. Ancak bazı mimarilerde "Memory Mapped IO" tekniği daha 
+    yoğun kullanılabilmektedir. "Memory Mapped IO" tekniği kullanılırken artık RAM'in ilgili adresteki kısmına erişilemez ya da bu 
+    erişimin bir anlamı kalmaz. Yani adeta bu teknikte sanki RAM'in bir bölümü çıkartılmış onun yerine ilgili işlemci oraya takılmış 
+    gibi bir etki oluşmaktadır. Örneğin "Memory Mapped IO" bilgisayar sistemlerinde grafik kartları tarafından yoğun olarak kullanılmaktadır. 
+    Grafik kartlarını tasarlayanlar kartın üzerindeki RAM'in (bu ana RAM değil) içeriğini belli periyotlarla ekrana göndermektedir. 
     Programcı da C'de göstericileri kullanarak belli adrese yazma yapma yoluyla ekrana belirli şeylerin çıkmasını sağlayabilmektedir.
 
-    Pekiyi yardımcı işlemcileri biribirnden ayıran şey nedir? İşte CPU'nun adres uçları bu yardımcı işlemciler tarafından özel 
+    Pekiyi yardımcı işlemcileri birbirinden ayıran şey nedir? İşte CPU'nun adres uçları bu yardımcı işlemciler tarafından özel 
     bazı değerlerde ise dikkate alınmaktadır. Yani nasıl RAM'deki byte'ların adresleri varsa yardımcı işlemcilerin de birer 
     donanımsal adresleri vardır. Bu adreslere genellikle "port numaraları" da denilmektedir. Yardımcı işlemcilerin port numaraları
     donanım mimarisini tasarlayanlar tarafından donanımsal olarak önceden belirlenmiştir. Ancak modern sistemlerde programlama 
     yoluyla değiştirilebilen port adresleri de söz konusu olmaktadır. PC mimarisinde programlanabilen port numarasına sahip 
-    olan işlemcilere "plug and play (PnP)" işlemciler de denilmektedir.
+    olan işlemcilere "Plug and Play (PnP)" işlemciler de denilmektedir.
 
     O halde bizim bir yardımcı işlemciyi programlayabilmemiz için şu bilgileri edinmiş olmamız gerekmektedir:
 
-    1) Yardımcı işlemci "port mapped IO" mu yoksa "memory mapped IO" mu kullanmaktadır?
-    2) Yardımcı işlemcinin port numaraları (ya da memory mapped io söz konusu ise belek adresleri) nedir?
-    3) Bu yardımcı işlemcinin hangi portuna (memory mapped io söz konusu ise hangi adrese) hangi değerler gönderildiğinde 
+    1) Yardımcı işlemci "Port Mapped IO" mu yoksa "Memory Mapped IO" mu kullanmaktadır?
+    2) Yardımcı işlemcinin port numaraları (ya da "Memory Mapped IO" söz konusu ise bellek adresleri) nedir?
+    3) Bu yardımcı işlemcinin hangi portuna (ya da "Memory Mapped IO" söz konusu ise hangi adrese) hangi değerler gönderildiğinde 
     bu işlemci ne yapacaktır?
-    4) İşlemci bize bilgi verecekse hangi bunu portu okuyarak (memory mapped IO söz konusu ise hangi adresi okuyarak) vermektedir. 
+    4) İşlemci bize bilgi verecekse bunu hangi portu okuyarak (ya da "Memory Mapped IO" söz konusu ise hangi adresi okuyarak) vermektedir. 
     Verilen bilginin biçimi nedir?
 
     Yardımcı işlemciler yalnızca bilgisayar donanımın içerisinde donanımsal olarak çivilenmiş bir biçimde bulunmayabilirler. 
@@ -64164,8 +64164,8 @@ module_exit(generic_exit);
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi bir yardımcı işlemci kernel modda programlanabiliyorsa user mode programlar bu yardımcı işlemciyi nasıl kullanmaktadır?
     İşte tipik olarak user mode programlar ioctl işlemleriyle aygıt sürücünün kodlarını çalıştırırlar. Aygıt sürücüler de 
-    bu kodlarda ilgili yarmcı işlemciye komutlar yollayabilir. Bazen read/write işlemleri de bu amaçla kullanılabilmektedir.
-    Tabii karmaşık yardımcı işlemciler için aygıt sürücüleri yazanlar faydalaı işlemlerin daha kolay yapılabilmesi için 
+    bu kodlarda ilgili yardımcı işlemciye komutlar yollayabilir. Bazen read/write işlemleri de bu amaçla kullanılabilmektedir.
+    Tabii karmaşık yardımcı işlemciler için aygıt sürücüleri yazanlar faydalı işlemlerin daha kolay yapılabilmesi için 
     daha yüksek seviyeli fonksiyonları bir API kütüphanesi yoluyla sağlayabilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -64174,7 +64174,7 @@ module_exit(generic_exit);
     koruma mekanizması gereği bir içsel kesme oluşturur, işletim sistemi de bu kesme kodunda prosesi sonlandırır. Dolayısıyla 
     bu komutları kullanarak donanım aygıtlarıyla konuşabilmek için kernel mod aygıt sürücü yazmak gerekir.
 
-    Aygıtlara erişmekte kullanılan komutlar CPU mimarisine göre değişebildiğnden Linux çekirdeğinde bunlar için ortak arayüze 
+    Aygıtlara erişmekte kullanılan komutlar CPU mimarisine göre değişebildiğinden Linux çekirdeğinde bunlar için ortak arayüze 
     sahip inline fonksiyonlar bulundurulmuştur. Bu fonksiyonlar şunlardır:
 
     #include <asm/io.h>
@@ -64187,13 +64187,13 @@ module_exit(generic_exit);
     void outw(unsigned short b, int addr);
     void outl(unsigned int b, int addr);
 
-    inb portlarından 1 byte, inw 2 byte, inl 4 byte okumak için kullanılmaktadır. Benzer biçimde haaberleşme portlarına outb 1 
-    byte, outw 2 byte ve outl 4 byte göndermek için kullanılmaktadır.
+    inb haberleşme portlarından 1 byte, inw 2 byte, inl 4 byte okumak için kullanılmaktadır. Benzer biçimde haberleşme portlarına 
+    outb 1 byte, outw 2 byte ve outl 4 byte göndermek için kullanılmaktadır.
 
-    Bazı mimarilerde bir bellek adresinden başlayarak belli bir sayıda byte'ı belli bir porta gönderen ve belli bir prottan 
-    yapılan okumaları belli bir adresten itibaren belleğe yerleştiren özel makine makumtları vardır. Bu komutlara string komutları 
+    Bazı mimarilerde bir bellek adresinden başlayarak belli bir sayıda byte'ı belli bir porta gönderen ve belli bir porttan 
+    yapılan okumaları belli bir adresten itibaren belleğe yerleştiren özel makine komutları vardır. Bu komutlara string komutları 
     denilmektedir. (Intel'de string komutları yalnızca IO işlemleri ile ilgili değildir.) İşte bu komutlara sahip mimarilerde bu 
-    string komutlarıyla IN, OUT yapan çekirdek fonksiyonları da bulundurulmıştur:
+    string komutlarıyla IN, OUT yapan çekirdek fonksiyonları da bulundurulmuştur:
 
     #include <asm/io.h>
 
@@ -64205,13 +64205,13 @@ module_exit(generic_exit);
     void outsw(unsigned long addr, const void *buffer, unsigned int count);
     void outsl(unsigned long addr, const void *buffer, unsigned int count);
 
-    insb, insw ve insl sırasıyla 1 byte 2 byte ve 4 byte'lık sitring fonksiyonlarıdır. Bu fonksiyonlar birinci parametresiyle 
+    insb, insw ve insl sırasıyla 1 byte 2 byte ve 4 byte'lık string fonksiyonlarıdır. Bu fonksiyonlar birinci parametresiyle 
     belirtilen port numarasından 1, 2 ya da 4 byte'lık bilgileri ikinci parametresinde belirtilen adresten itibaren belleğe 
     yerleştirirler. Bu işlemi de count kere tekrar ederler. Yani bu fonksiyonlar porttan count defa okuma yapıp okunanları buffer
     ile belirtilen adresten itibaren belleğe yerleştirmektedir. outsb, outsw ve outsl fonksiyonları ise bu işlemin tam tersini 
     yapmaktadır. Yani bellekte bir adresten başlayarak count tane byte'ı birinci parametresiyle belirtilen port'a yerleştirmektedir.
 
-    Bazı sistemlerde aygıtlar yavaş kalabilmektedir. Yani bus çok hızlı aygıt yavaş ise o aygıt port'larına peşi sıra bilgiler 
+    Bazı sistemlerde aygıtlar yavaş kalabilmektedir. Yani bus çok hızlı, aygıt yavaş ise o aygıt port'larına peşi sıra bilgiler 
     gönderilip alınırken sorunlar oluşabilmektedir. Bunun için bilgiyi porta gönderdikten ya da bilgiyi port'tan aldıktan sonra 
     kısa bir süre bekleme yapmak gerekebilir. İşte bu nedenle yukarıdaki fonksiyonların bekleme yapan p'li (pause) versiyonları 
     da bulundurulmuştur.
@@ -64228,10 +64228,10 @@ module_exit(generic_exit);
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Linux'ta user moddan haberleşme portlarına IN ve OUT yapmak için basit bir aygıt sürücüsü de bulundurulmuştur. Bu aygıt 
-    sürücüsüne "/dev/port" aygıt dosyasıyla erişilebilir. Tabii user mod programların bu biçimde her defasında kernel moda
-    geçerek In/OUT yapması verimsiz bir yöntemdir. Ancak yine de basit uygulamalar için faydalı kullanımlar söz konusu 
-    olabilmektedir. Bu aygıt sürücü dosya gibi açıkdıktan sonra sanki her dosya offset'i bir haberleşme portuymuş gibi işlem 
+    Linux'ta user mode'dan haberleşme portlarına IN ve OUT yapmak için basit bir aygıt sürücüsü de bulundurulmuştur. Bu aygıt 
+    sürücüsüne "/dev/port" aygıt dosyasıyla erişilebilir. Tabii user mode programların bu biçimde her defasında kernel mode'a
+    geçerek IN/OUT yapması verimsiz bir yöntemdir. Ancak yine de basit uygulamalar için faydalı kullanımlar söz konusu 
+    olabilmektedir. Bu aygıt sürücü dosya gibi açıldıktan sonra sanki her dosya offset'i bir haberleşme portuymuş gibi işlem 
     görmektedir. Yine okuma yazma sırasında dosya göstericisi ilerletilmekte dolayısıyla başka porta konumlandırılmaktadır.
 
     Aşağıdaki örnekte 0x60 numaralı porttan "/dev/port" aygıt sürücüsü yoluyla 1 byte okunmaktadır.
@@ -64277,12 +64277,15 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												160. Ders 04/08/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Bir haberleşme portu ile çalışmadan önce o portun boşta olup olmadığını belirlemek gerekebilir. Çünkü başka aygıtların 
     kullandığı port'lara erişmek sorunlara yol açabilmektedir. Tabii eğer biz ilgili port'un kullanılmasının bir soruna yol 
-    açmayacağından emin isek başkalarının kullandığı kullandığı port'ları doğrudan kullanabiliriz. Çekirdek bu bakımdan 
-    bir kontrol yapmamaktadır. Kullanmadan önce bir portun başkaları tarafından kullanılıp kullanılmadığının sorgulanması 
-    için request_region isimli çekirdek fonksiyonu kullanılmaktadır.
-    Fonksiyonun prototipi şöyledir:
+    açmayacağından emin isek başkalarının kullandığı port'ları doğrudan kullanabiliriz. Çekirdek bu bakımdan bir kontrol 
+    yapmamaktadır. Kullanmadan önce bir portun başkaları tarafından kullanılıp kullanılmadığının sorgulanması için 
+    request_region isimli çekirdek fonksiyonu kullanılmaktadır. Fonksiyonun prototipi şöyledir:
 
     #include <linux/ioport.h>
 
@@ -64291,8 +64294,8 @@ void exit_sys(const char *msg)
     Fonksiyonun birinci parametresi kullanılmak istenen port numarasının başlangıç numarasını, ikinci parametresi ilgili port 
     numarasından itibaren ardışıl kaç port numarasının kullanılacağını, üçüncü parametresi ise "/proc/ioports" dosyasında 
     görüntülenecek ismi belirtmektedir. Fonksiyon başarı durumunda portları betimleyen resource isimli yapının başlangıç 
-    adresine başarısızlık durumunda NULL adrese geri dönmektedir. request_region fonksiyonu ile tahsis edilen port umaraları 
-    release_region foksiyonu ile serbest bırakılmalıdır:
+    adresine, başarısızlık durumunda NULL adrese geri dönmektedir. request_region fonksiyonu ile tahsis edilen port numaraları 
+    release_region fonksiyonu ile serbest bırakılmalıdır:
 
     #include <linux/ioport.h>
 
@@ -64304,18 +64307,18 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    PC'lerdeki klavye denetleyicisinin (klavye içerisindeki değil PC tarafındaki denetleyicinin (orijinali Intel 8042)) 
+    PC'lerdeki klavye denetleyicisinin (klavye içerisindeki değil, PC tarafındaki denetleyicinin (orijinali Intel 8042)) 
     60H ve 64H numaralı iki port'u vardır. 60H portu hem okunabilir hem de yazılabilir durumdadır. 60H portu 1 byte olarak 
-    okunduğunda son basılan ya da çekilen tuşun klavye scan kodu elde edilmektedir. Yukarıda dabelirttiğimiz gibi klavye 
-    terminolojisinde uşa basılırken oluşturulan scan koduna "make code", parmak tuştan çekildiğinde oluşturulan scan koduna 
+    okunduğunda son basılan ya da çekilen tuşun klavye scan kodu elde edilmektedir. Yukarıda da belirttiğimiz gibi klavye 
+    terminolojisinde tuşa basılırken oluşturulan scan koduna "make code", parmak tuştan çekildiğinde oluşturulan scan koduna 
     ise "break code" denilmektedir. Klavye içerisindeki işlemcinin (keyboard encoder) break code olarak önce bir F0 byte sonra 
     da make code byte'ını gönderdiğini belirtmiştik. İşte PC içerisindeki klavye denetleyicisi bu break kodu aldığında bunu iki
-    byte olarak değil yüksek anlamlı biti 1 olan byte olarak saklamaktadır. Böylece biz 60H port'unu okuduğumuzda onun yüksek 
+    byte olarak değil, yüksek anlamlı biti 1 olan byte olarak saklamaktadır. Böylece biz 60H port'unu okuduğumuzda onun yüksek 
     anlamlı bitine bakarak okuduğumuz scan kodunun make code mu yoksa break code mu olduğunu anlayabiliriz.
 
     Klavye denetleyicisinin 60H portuna gönderilen 1 byte değere "keyboard encoder command" denilmektedir. Bu 1 byte'lık komut 
     klavye denetleyicisi tarafından klavye içerisindeki işlemciye gönderilir. Ancak bu 1 byte'tan sonra bazı komutlar parametre 
-    almaktadır. Parametreler de komutton sonra 1 byte olarak aynı port yoluyla iletilmektedir.
+    almaktadır. Parametreler de komuttan sonra 1 byte olarak aynı port yoluyla iletilmektedir.
 
     Aşağıdaki örnekte klavyeden tuşlara basıldığında basılan ve çekilen tuşların make ve break code'ları yazdırılmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -64610,21 +64613,21 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Aşağıdaki örnekte IOC_SETLIGHTS ioctl komutu ile 8042 klavye denetleyicine komut gönderme yoluyla klavye ışıkları yakılıp 
-    söndürülmektedir. Klavyede üç ışıklı tuş vardır: Caps-Lock, Num-Lock ve Scroll_Lock. Bu ışıkları yakıp söndürebilmek için 
-    önce 60h portuna 0xED komutu gönderilir. Sonra yine 60h portuna ışıkların durumunu belirten 1 byte gönderilir. Bu byte'ın 
+    Aşağıdaki örnekte IOC_SETLIGHTS ioctl komutu ile 8042 klavye denetleyicisine komut gönderme yoluyla klavye ışıkları yakılıp 
+    söndürülmektedir. Klavyede üç ışıklı tuş vardır: Caps-Lock, Num-Lock ve Scroll-Lock. Bu ışıkları yakıp söndürebilmek için 
+    önce 60H portuna 0xED komutu gönderilir. Sonra yine 60H portuna ışıkların durumunu belirten 1 byte gönderilir. Bu byte'ın 
     düşük anlamlı 3 biti sırasıyla Scroll-Lock, Num-Lock ve Caps-Lock tuşlarının ışıklarını belirtmektedir:
 
     7 6 5 4 3 CL NL SL
     x x x x x x  x  x
 
-    60h portuna komut göndermeden önce 64h portundan elde edilen değerin 2 numaralı bitinin 0 olması gerekmektedir. Ayrıntılı 
+    60H portuna komut göndermeden önce 64H portundan elde edilen değerin 2 numaralı bitinin 0 olması gerekmektedir. Ayrıntılı 
     bilgi için http://www.brokenthorn.com/Resources/OSDev19.html sayfasını inceleyebilirsiniz.
 
     Aşağıdaki aygıt sürücüde IOC_SETLIGHTS IOCTK komutunda klavye ışıklarının yakılıp söndürülmesi sağlanmıştır. Burada
     "app.c" isimli user mode program bir komut satırı argümanı almış ve o komut satırı argümanınındaki sayıyı yukarıda 
-    alattığımız gibi klavye denetleyicisine göndermiştir. Artık pek çok klavyede Scroll Lock ve Num Lock tuşlarının ışıkları
-    bulunmamaktadır. Programın Caps Lock ışığını yakmasını istiyorsanız 4 argümanıyla (CL bitinin 2 numaralı bit olduğuna 
+    anlattığımız gibi klavye denetleyicisine göndermiştir. Artık pek çok klavyede Scroll-Lock ve Num-Lock tuşlarının ışıkları
+    bulunmamaktadır. Programın Caps-Lock ışığını yakmasını istiyorsanız 4 argümanıyla (CL bitinin 2 numaralı bit olduğuna 
     dikkat ediniz) söndürmek istiyorsanız 0 argümanıyla çalıştırabilirsiniz. Örneğin:
 
     $ ./app 4
@@ -64848,12 +64851,12 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Derleyiciler ve işlemciler tarafından yapılan önemli bir optimizasyon temasına "komutların yer değiştirilmesi (instruction 
     reordering)" denilmektedir. Bu optimizasyon derleyici tarafından da bizzat işlemcinin kendisi tarafından da yapılabilmektedir. 
-    Burada biribirlerini normal bir durumda etkilemeyecek iki ya da daha fazla ayrı makine komutunun yerleri daha hızlı çalışma 
-    sağlamak için değiştirilmektedir. Bu tür yer değiştirmeler normal user mod programlarda hiçbir davranış değişiklğine yol 
+    Burada birbirlerini normal bir durumda etkilemeyecek iki ya da daha fazla ayrı makine komutunun yerleri daha hızlı çalışma 
+    sağlamak için değiştirilmektedir. Bu tür yer değiştirmeler normal user mode programlarda hiçbir davranış değişikliğine yol 
     açmazlar. Ancak işletim sistemi ve aygıt sürücü kodlarında ve özellikle IO portlarına erişim söz konusu olduğunda bu 
     optimizasyon olumsuz yan etkilere yol açabilmektedir. Örneğin birbirleriyle alakasız iki adrese yazma yapılması durumunda 
     yazma komutlarının yer değiştirmesi işlemcinin bu işleri daha hızlı yapabilmesine yol açabilmektedir. Fakat IO portları ve 
-    memory mapped IO söz konusu olduğunda bu sıralama değişikliği istenmeyen olumsuz sonuçlar doğurabilmektedir. İşte bu yer 
+    Memory Mapped IO söz konusu olduğunda bu sıralama değişikliği istenmeyen olumsuz sonuçlar doğurabilmektedir. İşte bu yer 
     değiştirmeyi ortadan kaldırmak için "bariyer (barrier)" koyma yöntemi uygulanmaktadır. Derleyici ve işlemci bariyerin yukarısıyla
     aşağısını yer değiştirmemektedir. Bariyer fonksiyonları şunlardır:
 
@@ -64863,9 +64866,9 @@ void exit_sys(const char *msg)
     void wmb(void);
     void mb(oid);
 
-    rmb fonksiyonun aşağısındaki kodlar yukarısındaki okuma işlemleri yapıldıktan sonra yapılırlar. wmb fonksiyonun ise 
+    rmb fonksiyonunun aşağısındaki kodlar yukarısındaki okuma işlemleri yapıldıktan sonra yapılırlar. wmb fonksiyonunun ise 
     yukarısındaki yazma işlemleri yapıldıktan sonra aşağıdaki işlemler yapılırlar. mb fonksiyonu ise hem okuma hem yazma 
-    için yukarıdaki ve aşağıaki kodları birbirlerinden ayırmaktadır. Örneğin PORT1 portuna yazma yapıldıktan sonra PORT2 
+    için yukarıdaki ve aşağıdaki kodları birbirlerinden ayırmaktadır. Örneğin PORT1 portuna yazma yapıldıktan sonra PORT2 
     portuna yazma yapılacak olsun. Şöyle bir bariyer kullanmalıyız:
 
     outb(cmd1, port1);
@@ -64874,21 +64877,21 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Memory Mapped IO işlemi pek çok mimaride normal göstericilerle yapılabilmektedir. Yani aslında bu mimarilerde memory mapped
-    IO için özel kernel fonksiyonlarının kullanılmasına gerek yoktur. Ancak bazı mimarilerde memory mapped io işlemi için özel 
-    bazı işlemlerin de yapılması gerekebilmektedir. Bu nedenle bu işlemlerin taşınabilir yapılabilmesi için özel kernel 
-    fonksiyonlarının kullanılması tavsiye edilir.
+    Memory Mapped IO işlemi pek çok mimaride normal göstericilerle yapılabilmektedir. Yani aslında bu mimarilerde Memory Mapped IO 
+    için özel kernel fonksiyonlarının kullanılmasına gerek yoktur. Ancak bazı mimarilerde Memory Mapped IO işlemi için özel bazı 
+    işlemlerin de yapılması gerekebilmektedir. Bu nedenle bu işlemlerin taşınabilir yapılabilmesi için özel kernel fonksiyonlarının 
+    kullanılması tavsiye edilir.
 
-    Tıpkı normal IO işlemlerinde olduğu gibi memory mapped IO için de iki farklı aygıt aynı adres bölgesini kullanmasın diye bir 
+    Tıpkı normal IO işlemlerinde olduğu gibi Memory Mapped IO için de iki farklı aygıt aynı adres bölgesini kullanmasın diye bir 
     registration işlemi söz konusudur. Bu işlemler request_mem_region ve release_mem_region fonksiyonlarıyla yapılmaktadır:
 
     #include <linux/ioport.h>
 
     struct resource *request_mem_region(unsigned long start, unsigned long len, const char *name);
 
-    Fonksiyonun birinci parametresi başlangıç bellek adresini, ikinci parametresi alanın uzunluğunu belitmektedir. Üçüncü parametre 
+    Fonksiyonun birinci parametresi başlangıç bellek adresini, ikinci parametresi alanın uzunluğunu belirtmektedir. Üçüncü parametre 
     ise "/proc/iomem" dosyasında görüntülenecek isimdir. Fonksiyon başarı durumunda resource isimli bir yapı nesnesinin adresine, 
-    başarısızlık durumunda NULL adrese geri dönmektedir. Daha önce rgister ettirilmiş olan bellek bölgesini serbest bırakmak için 
+    başarısızlık durumunda NULL adrese geri dönmektedir. Daha önce register ettirilmiş olan bellek bölgesini serbest bırakmak için 
     (yani register ettirilmemiş hale getirmek için) release_mem_region fonksiyonu kullanılmaktadır. Fonksiyonun prototipi şöyledir:
 
     #include <linux/ioport.h>
@@ -64913,7 +64916,7 @@ void exit_sys(const char *msg)
     void iowrite16(u16 value, void *addr);
     void iowrite32(u32 value, void *addr);
 
-    Yukarıdaki fonksiyonların rep'li versiyonları da vardır:
+    Yukarıdaki fonksiyonların rep'li (repetition/tekrar) versiyonları da vardır:
 
     #include <asm/io.h>
 
@@ -64925,10 +64928,10 @@ void exit_sys(const char *msg)
     void iowrite16_rep(void *addr, const void *buf, unsigned long count);
     void iowrite32_rep(void *addr, const void *buf, unsigned long count);
 
-    Bu fonksiyonlar memmory mapped IO adresinden belli bir adrese belli miktarda (count parametresi) byte, word ya da dword transfer 
+    Bu fonksiyonlar Memory Mapped IO adresinden belli bir adrese belli miktarda (count parametresi) byte, word ya da dword transfer 
     etmektedir.
 
-    Tıpkı memcpy fonksiyonunda olduğu gibi memory mapped IO adresi ile bellek arasında blok kopyalaması yapan iki fonksiyon 
+    Tıpkı memcpy fonksiyonunda olduğu gibi Memory Mapped IO adresi ile bellek arasında blok kopyalaması yapan iki fonksiyon 
     bulunmaktadır:
 
     #include <asm/io.h>
@@ -64936,7 +64939,7 @@ void exit_sys(const char *msg)
     void memcpy_fromio(void *dest, const void *source, unsigned int count);
     void memcpy_toio(void *dest, const void *source, unsigned int count);
 
-    Belli bir memory mapped IP adresine belli bir byte'ı n defa dolduran fonksiyon da şöyledir:
+    Belli bir Memory Mapped IO adresine belli bir byte'ı n defa dolduran fonksiyon da şöyledir:
 
     #include <asm/io.h>
 
@@ -64946,7 +64949,7 @@ void exit_sys(const char *msg)
 
     Aygıtın kullandığı bellek adresi genellikle fiziksel adrestir. Örneğin aygıt 0xFFFF8000 gibi bir adresi kullanıyorsa bu 
     genellikle fiziksel anlamına gelir. Halbuki aygıt sürücünün bu fiziksel adrese erişebilmesi için bu dönüşümü yapacak sayfa 
-    tablosu girişlerin olması gerekir. İşte bu girişleri elde edebilmek için şu fonksiyonlar bulundurulmuştur:
+    tablosu girişlerinin olması gerekir. İşte bu girişleri elde edebilmek için şu fonksiyonlar bulundurulmuştur:
 
     #include <asm/io.h>
 
@@ -64960,6 +64963,10 @@ void exit_sys(const char *msg)
     #include <asm/io.h>
 
     void iounmap(void *addr);
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												162. Ders 11/08/2024 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -65011,7 +65018,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Bir blok aygıt sürücüsü oluşturmak için ilk yapılacak işlem tıpkı karakter aygıt sürücülerinde olduğu gibi blok aygıt 
-    sürücüsünün bir isim altında aygıt numarası belirtilerek register ettirilmesidir. Bu işlem register_blkdev fonkiyonuyla 
+    sürücüsünün bir isim altında aygıt numarası belirtilerek register ettirilmesidir. Bu işlem register_blkdev fonksiyonuyla 
     yapılmaktadır:
 
     #include <linux/blkdev.h>
@@ -65593,7 +65600,7 @@ void exit_sys(const char *msg)
     Eğer bu aygıt sürücü karakter aygıt sürücüsü olsaydı çekirdek doğrudan aygıt sürücünün read fonksiyonunu çağıracaktı. Aygıt 
     sürücü de istenen 10 byte'ı user mode'daki adrese transfer edecekti. Halbuki blok aygıt sürücüsü durumunda çekirdek aygıt 
     sürücüden 10 byte transfer istemeyecektir. İlgili 10 byte'ın blunduğu bloğun (block ardışıl n sektördür) transferini isteyecektir. 
-    User mod programa o bloğun içerisindeki 10 byte'ı vermek kernel'ın görevidir. Blok aygıt sürücülerinden transferler byte 
+    User mode programa o bloğun içerisindeki 10 byte'ı vermek kernel'ın görevidir. Blok aygıt sürücülerinden transferler byte 
     düzeyinde değil blok düzeyinde yapılmaktadır. Yani block aygıt sürücülerinden transfer edilecek en küçük birim 1 sektör 
     yani 512 byte'tır. Şüphesiz kernel 10 byte okuma isteğine konu olan yerin aygıttaki sektör numarasını hesap eder ve o sektörden 
     itibaren blok transferi ister.
@@ -66078,16 +66085,16 @@ rm -f $module
     sistemleri için artık flash bellekler (EEPROM bellekler) kullanılmaktadır. Yani SSD (Solid State Disk) diye isimlendirilen 
     bu disk sistemlerinin artık mekanik bir parçası yoktur. Bunlar tamamen yarı iletken teknolojisiyle üretilmiş entegre 
     devrelerdir. Disk sisteminin türü olursa olsun bu disk sistemini yöneten ondan sorumlu bir denetleyici birim bulunmaktadır. 
-    Buna "disk denetleyicisi (disk controller)" denilmektedir. Kernel mod aygıt sürücüler bu disk denetleyicisini programlayarak
+    Buna "disk denetleyicisi (disk controller)" denilmektedir. Kernel mode aygıt sürücüler bu disk denetleyicisini programlayarak
     transferleri gerçekleştirmektedir. Bugünkü disk sistemlerini şekilsel olarak aşağıdaki gibi düşünebiliriz:
 
-    DISK BIRIMI <======> DİSK DENETLEYİCİSİ <=======> Aygıt Sürücü <=======> User Mod
+    DISK BIRIMI <======> DİSK DENETLEYİCİSİ <=======> Aygıt Sürücü <=======> User Mode
                                                             |
                                                             |
                                                             |
                                                         Disk Cache
 
-    Örneğin biz user modda bir diskten bir sektör okumak istediğimizde bu işlemi yapan blok aygıt sürücüsünden istekte 
+    Örneğin biz user mode'da bir diskten bir sektör okumak istediğimizde bu işlemi yapan blok aygıt sürücüsünden istekte 
     bulunuruz. Blok aygıt sürücüleri disk denetleyicilerini programlar, disk denetleyicileri disk birimine erişir ve transfer
     gerçekleşir. Disk tarnsferleri CPU aracalığıyla değil "DMA (Direct Memory Access)" denilen özel denetleyicilerle sağlanmaktadır. 
     Yani aygıt sürücü disk denetleyicisini ve DMA'yı programlar transfer yapılana kadar bekler. Bu surada işletim sistemi 
@@ -66108,7 +66115,7 @@ rm -f $module
 
     Pekiyi aygıt sürücü bir sektörü yazmak isterse ne olmaktadır? İşte yazma işlemleri de doğrudan değil cache yoluyla 
     yapılmaktadır. Yani sektör önce disk cache'e yazılır. Sonra çizelgelenir ve işletim sisteminin bir kernel thread'i 
-    yoluyla belli periyotlarda diske transfer edilir. USer moddan çeşitli thread'lerin diskten okumalar yaptığını düşünelim.
+    yoluyla belli periyotlarda diske transfer edilir. User mode'dan çeşitli thread'lerin diskten okumalar yaptığını düşünelim.
     Önce bu talepler işletim sistemi tarafından kuyruklanır, çizelgelenir sonra etkin bir biçimde transfer gerçekleştirilir. 
     İşletim sistemlerinin bu kısmına "IO çizelgeleyeicisi (IO scheduler)" denilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -66134,7 +66141,7 @@ rm -f $module
     için harcanan zamandır. Nihayet en hızlı gerçekleşen işlem transfer işlemidir.
 
     İşletim sistemlerinin eski hard disklerde uyguladığı en önemli optimizasyon işlemi kafa hareketinin azaltılması üzerinedir. 
-    Eğer dosyayı oluşturan sektörler biribine yakınsa daha az kafa hareketi oluşur ve toplam transfer zamanı azaltılmış olur. 
+    Eğer dosyayı oluşturan sektörler birbirine yakınsa daha az kafa hareketi oluşur ve toplam transfer zamanı azaltılmış olur. 
     Tabii dosya sistemlerinde zamanla dosyanın parçaları zamanla birbirinden uzaklaşabilmektedir. Bunları birbirine yaklaştıran
     genellikle "defrag" biçiminde isimlendirilen yardımcı programlar vardır.
 
@@ -66376,7 +66383,7 @@ void exit_sys(const char *msg)
     Dosya sisteminin otomatik belirlenmesi mount sistem fonksiyonu tarafından yapılamaltadır. mount komutu e birtakım işlemlerle
     bunu sağlamaktadır.
 
-    Mount edilmiş olan bir blok aygıtının mount işlemi umount isimli sistem fonksiyonuyla kaldırıalbilir. Fonksiyonun prototipi 
+    Mount edilmiş olan bir blok aygıtının mount işlemi umount isimli sistem fonksiyonuyla kaldırılabilir. Fonksiyonun prototipi 
     şöyledir:
 
     #include <sys/mount.h>
@@ -66711,7 +66718,7 @@ void exit_sys(const char *msg)
 
     FAT Kopyalarının Sayısı: FAT bölümü izleyen paragraflarda da görüleceği gibi FAT dosya sisteminin önemli bir meta-data 
     alanıdır. Bu nedenle bu bölümün backup amaçlı birden fazla kopyasının bulundurulması uygun görülmüştür. Tipik olarak bu 
-    alanda 2 değeri bulunur. Yani FAT bölümünün toplamda iki kopyası vardır. FAT bölümünün kopyaları hemen biribbirinin 
+    alanda 2 değeri bulunur. Yani FAT bölümünün toplamda iki kopyası vardır. FAT bölümünün kopyaları hemen birbirinin 
     peşi sıra dizilmiştir. Yani bir kopyanın bittiği yerde diğeri başlamaktadır.
 
     Kök Dizinlerindeki Girişlerin Sayısı: FAT dosya sistemindeki bölümlerin dizilimin şöyle olduğunu belirtmiştik:
@@ -67545,7 +67552,7 @@ void exit_sys(const char *msg)
     }
 
     Bu fonksiyonda dosyanın cluster zinciri için uint16_t türünden dinamik büyütülen bir dizi oluşturulmuştur. Dizi eski 
-    uzunluğunun iki katı olacak biçimde büyütülmektedir. Fonkisyon bize cluster zincirini vermekte hem de bu zincirin 
+    uzunluğunun iki katı olacak biçimde büyütülmektedir. Fonksiyon bize cluster zincirini vermekte hem de bu zincirin 
     uzunluğunu vermektedir.
 
     Aşağıda tüm kodlar bütün olarak verilmiştir.
@@ -67926,7 +67933,7 @@ void exit_sys(const char *msg)
 
         if ((chain = (uint16_t *)malloc(sizeof(uint16_t) * CHAIN_DEF_CAPACITY)) == NULL)
             return NULL;
-        do  {
+        do {
             chain[n++] = clu;
             if (n == capacity) {
                 capacity *= 2;
@@ -68115,6 +68122,32 @@ void exit_sys(const char *msg)
     dosyanın son cluster'ındaki geçerli byte sayısını bu uzunluktan yararlanarak elde etmektedir. Örneğin yukarıdaki dizin 
     girişine ilişkin dosya uzunluğu 0x0000001B = 27'dir. Dizin dosyalarına ilişkin uzunluklar için işletim sistemi hep 0 
     değerini yazmaktadır.
+
+    Dizinler de bir dosya gibi ele alınmaktadır. Dolayısıyla dizinlerin de bir cluster zinciri vardır. Ancak FAT12 ve FAT16
+    sistemlerinde kök dizinin yeri ve uzunluğu baştan bellidir. Kök dizin için bir cluster zinciri yoktur. FAT32 dosya sisteminde
+    kök dizin de normal bir dizin gibi büyüyebilmektedir. Yani kök dizinin de bir cluster zinciri vardır.
+
+    32'lik bir dizin girişini aşağıdaki gibi bir yapıyla temsil edebiliriz:
+
+    #pragma pack(1)
+
+    typedef struct tagDIR_ENTRY {
+        unsigned char name[8];
+        unsigned char ext[3];
+        uint8_t attr;
+        char reserved1[1];
+        uint8_t crtime_ms;
+        uint16_t crdate;
+        uint16_t crtime;
+        uint16_t rdtime;
+        char reserved2[2];
+        uint16_t wrtime;
+        uint16_t wrdate;
+        uint16_t fclu;
+        uint32_t size;
+    } DIR_ENTRY;
+
+    #pragma pack()
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -68135,22 +68168,465 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
+												176. Ders 01/11/2024 - Cuma
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    FAT12 ve FAT16 sistemlerinin orijinali yalnızca 8+3'lük dosya isimlerini destekliyordu. Yani bir dosyanın ismi en fazla 
+    8 karakterden uzantısı da en fazla 3 karakterden oluşabiliyordu. 90'lı yılların ortalarına doğru Microsoft FAT dosya 
+    sisteminde uzun dosya isimlerinin de kullanılmasına olanak sağlamıştır. Microsoft bunu yaparken geçmişe doğru uyumu 
+    mümkün olduğunca korumaya da çalışmıştır. Microsoft'un bu yeni düzenlemesinde 8+3'ten daha uzun dosya izimleri birden fazla
+    32'lik girişle temsil edilmektedir. Ancak Microsoft geçmişe doğru uyumumu korumak için her uzun dosya isminin bir de 8+3'lük
+    kısa ismini oluşturmak istemiştir. Bu durumda uzun dosya isimlerinin kullanıldığı FAT sistemlerinde 8+3'lük alan sığmayan 
+    dosya isimleri aşağıdaki formata göre dizin girişlerinde bulundurulmaktadır:
 
+    <32'lik giriş>
+    <32'lik giiriş>
+    ...
+    <32'lik giriş>
+    <dosyanın 8+3'lük kısa ismi>
+
+    Tabii eğer istenirse (örneğin Linux böyle yapmaktadır) 8+3'lük sınıfı aşmayana dosyalar da sanki uzun isimli dosyalarmış gibi 
+    saklanabilmektedir. Burada dosyanın 8+3'lük kısa isminin dışındaki uzun ismi de 32'lik girişlerde ASCII olarak değil UNICODE
+    olarak tutulmaktadır.
+
+    Uzun dosya isimlerine ilişkin girişlerin sonunda 8+3'lük kısa bir girişin de bulundurulduğunu belirtmiştik. Peki bu uzun dosya 
+    isminden kısa giriş nasıl elde edilmektedir?
+
+    Uzun dosya isimlerinin tutulduğu 32'lik girişlerin ilk byte'ında önemli bilgiler vardır. Bu byte'a "sıra numarası (sequence 
+    number)" denilmektedir. Bu byte bit bit anlamlandırılmaktadır. Byte'ın bitlerinin anlamları şöyledir:
+
+    D L X X X X X X
+
+    Burada en yükske anlamlı bit olan D biti 32'lik girişin silinip silinmeidğini anlatmaktadır. Eğer bu giriş silinmişse bu
+    bit 1, silinmemişse 0 olacaktır. 7 numaralı bit (L biti) 32'lik girişlerin aşağıdan yukarıya doğru son giriş olup olmadığını 
+    belirtmektedir. Ger kalan 6 bit 32'lik girişlerin sıra numarasını belirtir. Yani her 32'lik girişin bir sıra numarası vardır. 
+    Her 32'lik giriş uzun dosya isminin 13 UNICODE karakterini tutmaktadır. Pekiyi biz 32'lik bir girişin eski kısa ilişkin 
+    32'lik bir giriş mi yoksa uzun ismin 32'lik girişlerinden biri mi olduğunu nasıl anlayabiliriz? İşte bunun için 32'lik 
+    girişin 0x0B offset'inde bulunan özellik byte'ının düşük anlamlı 4 bitine bakmak gerekir. Eğer bu 4 bitin hepsi 1 ise 
+    bu 32'lik giriş uzun dosya isminin 32'lik girişlerinden biridir.
+
+    Aşağıda uzun dosya isimlerine ilişkin 32'lik girişlerin genel formatı verilmiştir. Ayrıntılı format için Microsoft'un 
+    "FAT File System Specification" dokümanına başvurabilirsiniz.
+
+
+    Field name	    Offset	Size	Description
+    LDIR_Ord	    0	    1	    Sequence number (1-20) to identify where this entry is in the sequence of LFN entries to 
+                                    compose an LFN. One indicates the top part of the LFN and any value with LAST_LONG_ENTRY 
+                                    flag (0x40) indicates the last part of the LFN.
+    LDIR_Name1	    1	    10	    Part of LFN from 1st character to 5th character.
+    LDIR_Attr	    11	    1	    LFN attribute. Always ATTR_LONG_NAME and it indicates this is an LFN entry.
+    LDIR_Type	    12	    1	    Must be zero.
+    LDIR_Chksum	    13	    1	    Checksum of the SFN entry associated with this entry.
+    LDIR_Name2	    14	    12	    Part of LFN from 6th character to 11th character.
+    LDIR_FstClusLO	26	    2	    Must be zero to avoid any wrong repair by old disk utility.
+    LDIR_Name3	    28	    4	    Part of LFN from 12th character to 13th character.
+
+    Biz sonraki örneklerde uzun dosya isimlerini dikkate almayacağız. Onları geçeceğiz. Aşağıda kök uzun dosya isimlerinin 
+    ve silinmiş dosya isimlerinin geçilerek kök dosya sistemindeki dosyaların listesini elde eden bir fonksiyon verilmiştir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/* fatsys.h */
+
+#ifndef FATSYS_H_
+#define FATSYS_H_
+
+#include <stdint.h>
+
+#define FILE_INFO_LENGTH		32
+#define CHAIN_DEF_CAPACITY		8
+#define ROOT_DEF_CAPACITY		8
+#define DIR_ENTRY_SIZE			32
+
+/* Type Declarations */
+
+typedef struct tagBPB {
+	uint16_t fatlen;		/* number of sectors in FAT (A) */
+	uint16_t rootlen;		/* number of sectors in ROOT (NA) */
+	uint16_t nfats;			/* number of copies of FAT (A) */
+	uint32_t tsects;		/* total sector (A) */
+	uint16_t bps;			/* byte per sector(A) */
+	uint16_t spc;			/* printf("%lu\n", )sector per cluster(A) */
+	uint16_t rsects;		/* reserved sectors(A) */
+	uint8_t mdes;			/* media descriptor byte(A) */
+	uint16_t spt;			/* sector per track(A) */
+	uint16_t rootents;		/* root entry (A) */
+	uint16_t nheads;		/* number of heads (A) */
+	uint16_t hsects;		/* number of hidden sector( A) */
+	uint16_t tph;			/* track per head (NA) */
+	uint16_t fatloc;		/* fat directory location (NA) */
+	uint16_t rootloc;		/* root directory location (NA) */
+	uint16_t dataloc;		/* first data sector location (NA) */
+	uint32_t datalen;		/* number of sectors in Data (NA) */
+	uint32_t serial;		/* Volume Serial Number (A) */
+	char vname[12];			/* Volume Name (A) */
+} BPB;
+
+typedef struct tagFATSYS {
+	int fd;				/* Volprintf("%lu\n", )ume file descriptor */
+	BPB bpb;			/* BPB info */
+	uint32_t fatoff;	/* offset of FAT */
+	uint32_t rootoff;	/* offset of root directory */
+	uint32_t dataoff;	/* offset of DATA */
+	uint32_t clulen;	/* cluster length as bytes */
+	uint8_t *fat;		/* FAT sectors */
+	uint8_t *rootdir;	/* Root sectors */
+	/* ... */
+} FATSYS;
+
+#pragma pack(1)
+
+typedef struct tagDIR_ENTRY {
+	unsigned char name[8];
+	unsigned char ext[3];
+	uint8_t attr;
+	char reserved1[1];
+	uint8_t crtime_ms;
+	uint16_t crdate;
+	uint16_t crtime;
+	uint16_t rdtime;
+	char reserved2[2];
+	uint16_t wrtime;
+	uint16_t wrdate;
+	uint16_t fclu;
+	uint32_t size;
+} DIR_ENTRY;
+
+#pragma pack()
+
+/* Function prototypes */
+
+int read_bpb(int fd, BPB *bpb);
+FATSYS *open_fatsys(const char *path);
+int close_fatsys(FATSYS *fatsys);
+int read_cluster(FATSYS *fatsys, uint32_t clu, void *buf);
+int wite_cluster(FATSYS *fatsys, uint32_t clu, const void *buf);
+uint16_t *getclu_chain16(FATSYS *fatsys, uint32_t firstclu, uint16_t *count);
+uint16_t *getclu_chain12(FATSYS *fatsys, uint32_t firstclu, uint16_t *count);
+void freeclu_chain(uint16_t *chain);
+DIR_ENTRY *get_rootents(FATSYS *fatsys, uint16_t *count);
+
+#endif
+
+/* fatsys.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include "fatsys.h"
+
+int read_bpb(int fd, BPB *bpb)
+{
+	uint8_t bsec[512];
+
+	if (read(fd, bsec, 512) == -1)
+		return -1;
+
+	bpb->bps = *(uint16_t *)(bsec + 0x0B);
+	bpb->spc = *(uint8_t *)(bsec + 0x0D);
+	bpb->rsects = *(uint16_t *)(bsec + 0x0E);
+	bpb->fatlen = *(uint16_t *)(bsec + 0x16);
+	bpb->rootlen = *(uint16_t *)(bsec + 0x11) * FILE_INFO_LENGTH / bpb->bps;
+	bpb->nfats = *(uint8_t *)(bsec + 0x10);
+	if (*(uint16_t *)(bsec + 0x13))
+		bpb->tsects = *(uint16_t *)(bsec + 0x13);
+	else
+		bpb->tsects = *(uint32_t *)(bsec + 0x20);
+	bpb->mdes = *(bsec + 0x15);
+	bpb->spt = *(uint16_t *)(bsec + 0x18);
+	bpb->rootents = *(uint16_t *)(bsec + 0x11);
+	bpb->nheads = *(uint16_t *)(bsec + 0x1A);
+	bpb->hsects = *(uint16_t *)(bsec + 0x1C);
+	bpb->tph = (uint16_t)(bpb->tsects / bpb->spt / bpb->nheads);
+	bpb->fatloc = bpb->rsects;
+	bpb->rootloc = bpb->rsects + bpb->fatlen *bpb->nfats;
+	bpb->dataloc = bpb->rootloc + bpb->rootlen;
+	bpb->datalen = bpb->tsects - bpb->dataloc;
+	bpb->serial = *(uint32_t *)(bsec + 0x27);
+	memcpy(bpb->vname, bsec + 0x2B, 11);
+	bpb->vname[11] = '\0';
+
+	return 0;
+}
+
+FATSYS *open_fatsys(const char *path)
+{
+	FATSYS *fatsys;
+	int fd;
+
+	if ((fatsys = (FATSYS *)malloc(sizeof(FATSYS))) == NULL)
+		return NULL;
+
+	if ((fd = open(path, O_RDWR)) == -1)
+		goto EXIT1;
+
+	if (read_bpb(fd, &fatsys->bpb) == -1)
+		goto EXIT2;
+
+	fatsys->fd = fd;
+	fatsys->fatoff = fatsys->bpb.fatloc * fatsys->bpb.bps;
+	fatsys->rootoff = fatsys->bpb.rootloc * fatsys->bpb.bps;
+	fatsys->dataoff = fatsys->bpb.dataloc * fatsys->bpb.bps;
+	fatsys->clulen = fatsys->bpb.bps * fatsys->bpb.spc;
+
+	if ((fatsys->fat = (uint8_t *)malloc(fatsys->bpb.fatlen * fatsys->bpb.bps)) == NULL)
+		goto EXIT2;
+
+	if ((fatsys->rootdir = (uint8_t *)malloc(fatsys->bpb.rootlen * fatsys->bpb.bps)) == NULL)
+		goto EXIT3;
+
+	if (lseek(fatsys->fd, fatsys->fatoff, SEEK_SET) == -1)
+		goto EXIT4;
+
+	if (read(fd, fatsys->fat, fatsys->bpb.fatlen * fatsys->bpb.bps) == -1)
+		goto EXIT4;
+
+	if (lseek(fatsys->fd, fatsys->rootoff, SEEK_SET) == -1)
+		goto EXIT4;
+
+	if (read(fd, fatsys->rootdir, fatsys->bpb.rootlen * fatsys->bpb.bps) == -1)
+		goto EXIT4;
+
+	return fatsys;
+
+EXIT4:
+	free(fatsys->rootdir);
+EXIT3:
+	free(fatsys->fat);
+EXIT2:
+	close(fd);
+EXIT1:
+	free(fatsys);
+
+	return NULL;
+}
+
+int close_fatsys(FATSYS *fatsys)
+{
+	free(fatsys->fat);
+	if (close(fatsys->fd) == -1)
+		return -1;
+	free(fatsys);
+
+	return 0;
+}
+
+int read_cluster(FATSYS *fatsys, uint32_t clu, void *buf)
+{
+	if (lseek(fatsys->fd, fatsys->dataoff + (clu - 2) * fatsys->clulen, SEEK_SET) == -1)
+		return -1;
+
+	return read(fatsys->fd, buf, fatsys->clulen);
+}
+
+int write_cluster(FATSYS *fatsys, uint32_t clu, const void *buf)
+{
+	if (lseek(fatsys->fd, fatsys->dataoff + (clu - 2) * fatsys->clulen, SEEK_SET) == -1)
+		return -1;
+
+	return write(fatsys->fd, buf, fatsys->clulen);
+}
+
+uint16_t *getclu_chain16(FATSYS *fatsys, uint32_t firstclu, uint16_t *count)
+{
+	uint16_t clu, n;
+	uint16_t *chain, *temp;
+	uint32_t capacity;
+
+	clu = firstclu;
+	capacity = CHAIN_DEF_CAPACITY;
+	n = 0;
+
+	if ((chain = (uint16_t *)malloc(sizeof(uint16_t) * CHAIN_DEF_CAPACITY)) == NULL)
+		return NULL;
+	do {
+		chain[n++] = clu;
+		if (n == capacity) {
+			capacity *= 2;
+			if ((temp = realloc(chain, sizeof(uint16_t) * capacity )) == NULL) {
+				free(chain);
+				return NULL;
+			}
+			chain = temp;
+		}
+		clu = *(uint16_t *)(fatsys->fat + clu * 2);
+	} while (clu < 0xFFF8);
+	*count = n;
+
+	return chain;
+}
+
+uint16_t *getclu_chain12(FATSYS *fatsys, uint32_t firstclu, uint16_t *count)
+{
+	uint16_t clu, word, n;
+	uint16_t *chain, *temp;
+	uint32_t capacity;
+
+	clu = firstclu;
+	capacity = CHAIN_DEF_CAPACITY;
+	n = 0;
+
+	if ((chain = (uint16_t *)malloc(sizeof(uint16_t) * CHAIN_DEF_CAPACITY)) == NULL)
+		return NULL;
+	do {
+		chain[n++] = clu;
+		if (n == capacity) {
+			capacity *= 2;
+			if ((temp = realloc(chain, sizeof(uint16_t) * capacity )) == NULL) {
+				free(chain);
+				return NULL;
+			}
+			chain = temp;
+		}
+		word = *(uint16_t *)(fatsys->fat + clu * 3 / 2);
+		clu = clu % 2 == 0 ? word & 0x0FFF : word >> 4;
+	} while (clu < 0xFF8);
+	*count = n;
+
+	return chain;
+}
+
+void freeclu_chain(uint16_t *chain)
+{
+	free(chain);
+}
+
+DIR_ENTRY *get_rootents(FATSYS *fatsys, uint16_t *count)
+{
+	DIR_ENTRY *dent, *temp;
+	DIR_ENTRY *dents;
+	uint32_t capacity;
+	uint16_t n;
+
+	if ((dents = (DIR_ENTRY *)malloc(DIR_ENTRY_SIZE * ROOT_DEF_CAPACITY)) == NULL)
+		return NULL;
+
+	n = 0;
+	capacity = ROOT_DEF_CAPACITY;
+	dent = (DIR_ENTRY *)fatsys->rootdir;
+	for (uint16_t i = 0; i < fatsys->bpb.rootents; ++i) {
+		if (dent[i].name[0] == 0)
+			break;
+		if (dent[i].name[0] == 0xE5 || (dent[i].attr & 0XF) == 0x0F)
+			continue;
+
+		if (n == capacity) {
+			capacity *= 2;
+			if ((temp = realloc(dents, DIR_ENTRY_SIZE * capacity )) == NULL) {
+				free(dents);
+				return NULL;
+			}
+			dents = temp;
+		}
+		dents[n++] = dent[i];
+	}
+	*count = n;
+
+	return dents;
+}
+
+/* app.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <inttypes.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include "fatsys.h"
+
+void exit_sys(const char *msg);
+
+int main(int argc, char *argv[])
+{
+	FATSYS *fatsys;
+	unsigned char buf[8192];
+	uint16_t count;
+	uint16_t *chain;
+	DIR_ENTRY *dents;
+
+	if (argc != 2) {
+		fprintf(stderr, "wrong number of arguments!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if ((fatsys = open_fatsys(argv[1])) == NULL)
+		exit_sys("open_fatsys");
+
+	if ((dents = get_rootents(fatsys, &count)) == NULL) {
+		fprintf(stderr, "cannot get root entries!..\n");
+		exit(EXIT_FAILURE);
+	}
+
+	for (int i = 0; i < count; ++i) {
+		for (int k = 0; k < 8; ++k)
+			if (dents[i].name[k] != ' ')
+				putchar(dents[i].name[k]);
+
+		if (dents[i].ext[0] != ' ')
+				putchar('.');
+		for (int k = 0; k < 3; ++k)
+			if (dents[i].ext[k] != ' ')
+				putchar(dents[i].ext[k]);
+
+		putchar('\n');
+	}
+
+	close_fatsys(fatsys);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    İşletim sistemi bir dizin dosyası içerisindeki 32'lik girişlerini gözden geçirirken dosya isminin ilk karakterini '\0' 
+    karakter olarak gördüğünde (yani sayısal 0 değeri) işlemini sonlandırmaktadır. Yani dizin dosyası içerisindeki bütün 
+    girişlerin gözden geçirilmesine gerek yoktur. Yukarıda da belirttiğimiz gibi dosya isminin ilk karakteri 0xE5 ise işletim 
+    sistemi bu 32'lik girişi de silinmiş dosya olduğu gerekçesiyle geçmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    İşletim sistemlerinde bir yol ifadesi verildiğinde o yol ifadesinin hedefindeki dosya ya da dizine ilişkin dizin girişinin 
+    elde edilmesine "yol ifadelerinin çözümlenmesi (pathname resolution)" denilmektedir. Yol ifadelerinin çözümlenmesi eğer 
+    yol ifadesi mutlaksa kök dizinden itibaren, göreli ise prosesin çalışma dizininden itibaren yapılmaktadır. Örneğin FAT 
+    dosya sistemine ilişkin "\a\b\c\d.dat" biçiminde bir yol ifadesi verilmiş olsun. Burada hedeflenen "d.dat" dosyasına ilişkin
+    dizin girişi bilgileridir. Ancak bunun için önce kök dizinde "a" girişi, sonra "a" dizininde "b" girişi, sonra "b" dizininde
+    "c" girişi sonra da "c" girişinde "d.dat" girişi bulunmalıdır. Tabii biz burada Windows'taki bir yol ifadesini temel aldık.
+    UNIX/Linux sistemlerinde dosya sistemleri mount edildiği için bu yol ifadesi aslında mount noktasına görelidir.
 
+    İşletim sistemleri bir yol ifadesini çözümlerken yol ifadesindeki tüm yol bileşenlerine ilişkin dizin giriş bilgilerini de 
+    bir cache sisteminde saklamaktadır. İşletim sistemlerinin oluşturduğu bu cache sistemine "directory entry cache" ya da kısaca
+    "dentry cache" denilmektedir. Örneğin prgramcı aşağıdaki gibi bir yol ifadesi kullanmış olsun:
+
+    "\a\b\c\d.dat"
+
+    İşletim sisteni buaradaki "a", "b", "c" ve "d.dat" dosyaarına ilişkin dizin giriş bilgilerini bir cache sisteminde saklamaktadır. 
+    Böylece benzer yol ifadeleri için hiç disk okuması yapılmadan bu cache sisteminden bu bilgiler elde edilebilmektedir.
+ ---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												177. Ders 03/11/2024 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
+/*--------------------------------------------------------------------------------------------------------------------------
+    Pekiyi FAT dosya sistemi için yol ifadelerini çözen basit yalın bir kodu nasıl yazabiliriz? Bizim bir yol ifadesi verildiğinde
+    o yol ifadesini parse edip oradaki yol bileşenlerini elde edebilmemiz gerekir. Sonra dizinler bir dosya olduğuna göre dizinlere 
+    ilişkin cluster zincirinde diğer bileşenin aranması gerekir. İşlemler böyle devam ettirilir. FAT dosya sistemi için yol 
+    ifadesini çözümleyen bir fonksiyonun parametrik yapısı şöyle olabilir:
+
+    int resolve_path(FATSYS *fatsys, const char *path, DIRECTORY_ENTRY *de);
+
+    Biz mutlak yol ifadelerini çözümleyecek olalım. Her dizinin bir cluster zinciri vardır. Ancak FAT12 ve FAT16 sistemlerinde
+    kök dizinin bir cluster zinciri yoktur. Kök dizinin yeri ve uzunluğu baştan bellidir.
+---------------------------------------------------------------------------------------------------------------------------*/
+<BURADA KALDIK>
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Linux kernel istenirse kaynak kodlarından yeniden derlenip (yani build edilip) elde edilen yeni kernel ile sistem başlatılabilir. 
@@ -68263,7 +68739,7 @@ void exit_sys(const char *msg)
     isimli boot-loader programı yoğun kullanılıyordu. Sonra GRUB isimli boot-loader daha popüler oldu. Şimdiki Linux sistemleri genellikle 
     GRUB isimli boot-loader'ı kullanmaktadır. İşte make install aynı zamanda GRUB boot-loader konfigürasyon dosyasını da güncelleyerek yeni
     sistemin de GRUB menüsünde gözükmesini sağlamaktadır. make install işlemi ile eski kernel'ın yok edilmediğini yeni 
-    bir kenel'ın da /boot izininde bulundurulduğuna dikkat ediniz. Tabii artık programcı isterse eski kernel dosyalarını bu dizinden silebilir. 
+    bir kernel'ın da /boot izininde bulundurulduğuna dikkat ediniz. Tabii artık programcı isterse eski kernel dosyalarını bu dizinden silebilir. 
     GRUB boot loader ayarlarını kendisi manuel yolla ya da yardımcı programlarla yapabilir.
 
     GRUB boot-loader konfigürasyon dosyası normal olarak /boot/grub dizini içerisindedir. Yani boot-loader buradaki grub.cfg dosyası 
