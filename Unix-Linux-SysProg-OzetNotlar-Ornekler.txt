@@ -11,7 +11,7 @@
                         (Notları sabit genişlikli font kullanan programlama editörleri ile açınız.)
                             (Editörünüzün "Line Wrapping" özelliğini pasif hale getiriniz.)
 
-                                                    Son Güncelleme: 07/11/2024 - Perşembe
+                                                    Son Güncelleme: 22/11/2024 - Cuma
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -2528,7 +2528,7 @@ void exit_sys(const char *msg)
     Bu umask değeri "biz open fonksiyonu ile bir dosyayı yaratırken grup için ve diğerleri için "w" hakkı versek bile bu hak dosyaya 
     yanısıtılmayacak" anlamına gelmektedir. Eğer prosesin umask değeri 0 ise bu durumda maskelenecek bir şey yoktur dolayısıyla verilen 
     hakların hepsi dosyaya yansıtılır. Prosesin umask değerinin umask olduğunu varsayalım. Dosyaya vermek istediğimiz erişim haklarının da 
-    mode olduğunu varsayalım. (Yani mode S_IXXX gibi tek biti 1 olan değerlerin bit düzeyinde OR'lanması ile oluşturumuş değr olsun.)
+    mode olduğunu varsayalım. (Yani mode S_IXXX gibi tek biti 1 olan değerlerin bit düzeyinde OR'lanması ile oluşturumuş değer olsun.)
     Bu durumda dosyaya yansıtılacak erişim hakları mode & ~umask olacaktır. Yani prosesin umask değerindeki bitler maskelenecek erişim 
     haklarını belirtmektedir. 
 
@@ -3631,7 +3631,7 @@ void exit_sys(const char *msg)
     chmod 0 a.txt
     chmod ug+rw a.txt
 
-    Komutta octal sayı belirtilirse umask etkili olmaz. Ancak ocatl sayıyerine ugua ve rwx belirtilirse bu durumda 
+    Komutta octal sayı belirtilirse umask etkili olmaz. Ancak octal sayı yerine ugua ve rwx belirtilirse bu durumda 
     kabuğun umask değeri etkili olmaktadır. 
 
     Komutun başka ayrıntıları da vardır. Bunun için ilgili dokimanlara başvurabilirsiniz.
@@ -4303,7 +4303,7 @@ char *get_ls(struct stat *finfo, const char *name)
     Dizin dosyalarının gerçek formatları biraz daha detay içerebilmektedir. Kursumuzun sonlarında doğru Ext-2 dosya sisteminin disk organizasyonu
     üzerinde duracağız. 
 
-    Bir dizini erişim hakları yeterliyse open fonlsiyonuyla açabiliriz. Ancak POSIX standartlarında dizin dosyalarından okuma, 
+    Bir dizini erişim hakları yeterliyse open fonksiyonuyla açabiliriz. Ancak POSIX standartlarında dizin dosyalarından okuma, 
     yazma ve konumlandırma işlemlerinin yapılıp yapılamayacağı işletim sistemini yazanların isteğine bırakılmıştır. Linux, BSD, 
     macOS gibi sistemler dizin dosyalarından read ve write fonksiyonları ile okuma ve yazma yapmaya izin vermemektedir. Ancak bu 
     sistemler lseek fonksiyonuyla dizin dosyalarının dosya göstericilerinin konumlandırılmasına izin vermektedir. Pekiyi mademki 
@@ -6912,12 +6912,12 @@ int main(void)
 
     Burada kabuk bu yazıyı "|" karakterinden parse eder. "|" karakterinin solundaki ve sağındakileri birer program olarak ele alır. 
     Her iki programı da çalışırır. Yani burada "a" programı da "b" programı da çalıştırılacaktır. "a" programının "stdout" dosyasına
-    yazdıklarını "b" programı "stdin" dosyasından okuyacaktır. Başka bir deyişle "a" programının 1 numaralı betimeyiciyle yaptuığı write 
+    yazdıklarını "b" programı "stdin" dosyasından okuyacaktır. Başka bir deyişle "a" programının 1 numaralı betimleyiciyle yaptığı write 
     işlemlerini "b" programı 0 numaralı betimleyici ile read fonksiyonunu kullanarak okuyabilecektir. Kabuk boru işlemlerini
     "prosesler arası haberleşme yöntemlerinden biri olan boru haberleşmesi ile" gerçekleştirmektedir. Zaten ilerleyen bölümlerde 
     bu konu ele alınacaktır. 
 
-    Tabii boru işlemi yapılırken programların komut satırı arümanları da verilebilir. Örneğin:
+    Tabii boru işlemi yapılırken programların komut satırı argümanları da verilebilir. Örneğin:
 
     a b c | d e f
 
@@ -7011,7 +7011,7 @@ int main(void)
     bulunmaktadır. Tabii işletim sisteminin kendisi de RAM'de bulunur. Bir programın göstericiler yoluyla kendi bellek alanının 
     dışına çıkarak başka bir prosesin bellek alanına erişmesi mutlaka engellenmesi gereken bir durumdur. Çünkü eğer bu durum 
     engellenmezse bir program başka bir programın bellek alanını bozabilir. Bu bozulma da o programın hatalı çalışmasına ya da 
-    çökmesine yol açabilir. Program başka bir programın bellek alanını bozmasa bile oradaki programlar üzerinde casuslak faaliyeliteleri 
+    çökmesine yol açabilir. Program başka bir programın bellek alanını bozmasa bile oradaki programlar üzerinde casusluk faaliyetleri 
     yürütebilir. Buna ek olarak bazı makine komutları tamamen sistemin çökmesine yol açabilmektedir. Bir programın bu makine 
     komutlarını kullanmasının tüm sistemi çökertebileceği için önüne geçilmesi gerekir. İşte işlemcilerin koruma mekanizması bu 
     tür ihlallerin birinci elden işlemci tarafından tespit edilip engellenmesini sağlamaktadır.
@@ -10488,7 +10488,7 @@ int main(int argc, char *argv[])
     dosyanın "x" hakkına sahip olup olmadığına bakılmaktadır.) Ancak POSIX standartlarında da dosyanın O_RDONLY modunda
     açılabileceği belirtilmiştir. Yani dosya bu modlarda da açılmış olabilir. Linux sistemlerinde O_EXEC bayrağı olmasa da benzer 
     amaçlarla kullanılan standart olmayan O_PATH bayrağı bulunmaktadır. Linux sistemlerinde bu dosya O_PATH bayrağı ile de 
-    açılmış olabilir. O halde Linux sistemleri de göz önüne alndığında buradaki dosyanın taşınabilirlik bakımından O_RDONLY modda
+    açılmış olabilir. O halde Linux sistemleri de göz önüne alındığında buradaki dosyanın taşınabilirlik bakımından O_RDONLY modda
     açılması uygun olmaktadır. Programcı bu dosyayı fork işleminden sonra alt proseste exec işleminden önce açabilir. Bu durumda 
     dosyanın alt proseste kapatılması işlemi exec sırasında otomatik yapılmaktadır. Yani exec edilen kodda artık bu dosya açık 
     görülmeyecektir. 
@@ -11052,7 +11052,7 @@ for i in range(10):
 
     Burada system fork/exec ile "/bin/sh" programını -c seçeneği ile çalıştırmaktadır. Tabii kabuk programı da "ls" programını 
     fork/exec ile çalıştıracaktır. (Bazen kabuk programları interaktif modda eğer tek bir komut işletiliyorsa boşuna fork yapmayabilir).
-    Burada kabuk programı aslında "ls" programının waitpid fonlsiyonu ile elde edilen değeri ile (status) sonlanmaktadır. 
+    Burada kabuk programı aslında "ls" programının waitpid fonksiyonu ile elde edilen değeri ile (status) sonlanmaktadır. 
     Dolayısıyla biz aslında system fonksiyonun geri dönüş değeri olarak çalıştırdığımız "ls" programının waitpid fonksiyonu ile 
     elde edilen (status) değeri elde etmiş oluruz. UNIX/Linux sistemlerinde genel olarak kabuk komutları (yani programları) başarı 
     durumunda exit kod olarak 0 değerini oluşturmaktadır. 
@@ -12339,7 +12339,7 @@ void exit_sys(const char *msg)
     diğer kuyruklar daha boş hale gelirse (çünkü o sırada çeşitli prosesler ve thread'ler sonlanmış olabilir) işletim sistemi 
     başka bir CPU'nun çalıştırma kuyruğundaki thread'i kuyruğu daha boş olan CPU'nun çalıştırma kuyruğuna atayabilir. (Biz bir 
     süper markette işin başında boş bir kasanın kuyruğuna girmiş olabiliriz. Sonra başka bir kasadaki kuyruk çok azalmış duruma 
-    gelebilir. Biz de o kuyruğua geçmeyi tercih ederiz. İşletim sistemi de buna benzer davranmaktadır.) Linux işletim sistemi, 
+    gelebilir. Biz de o kuyruğa geçmeyi tercih ederiz. İşletim sistemi de buna benzer davranmaktadır.) Linux işletim sistemi, 
     Windows sistemleri ve macOS sistemleri buna benzer bir çizelgeleme algoritması kullanmaktadır. Bir ara Linux O(1) çizelgelemesi 
     denilen bir yöntem denemiştir. Bu yöntemde işletim sistemi tek bir çalıştırma kuyruğu kullanıyordu. Hangi CPU'daki parçalı 
     çalışma süresi biterse bu kuyruktan seçme yapılıyordu.
@@ -12543,14 +12543,14 @@ void exit_sys(const char *msg)
     ikiye ayırır (hex olarak konuşacağız):
 
     06F146      Sanal Sayfa No (hex)
-    678         Sayfa Offseti (hex)
+    678         Sayfa Offset'i (hex)
 
     Sonra sayfa tablosuna gider ve 06F146 sayfasının hangi fiziksel sayfaya yönlendirildiğini tespit eder. Bu fiziksel sayfanın 
     hex olarak 7C45 olduğuna düşünelim. O zaman işlemcinin erişeceği fiziksel adres 7C45000 + 678 hex adresi olacaktır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Buaraya kadar şunları anladık:
+    Buraya kadar şunları anladık:
 
     - Derleyici 32 bit bir sistemde sanki program 4 GB'lik bir RAM'de tek başına 4 MB'ye yüklenerek çalıştırılacakmış gibi bir kod
     üretmektedir. 
@@ -16725,7 +16725,7 @@ void exit_sys(const char *msg)
     "prog2" programı da mesaj kuyruğundan bu bilgileri alarak stdout dosyasında bunları görüntülemektedir. Burada öncelikteki 
     yüksek değerin gerçek yüksek öncelik anlamına geldiğine dikkat ediniz. (Halbuki klasik Sistem 5 mesaj kuyruklarında yüksek 
     öncelik düşük değerler temsil edilmektedir.) Bu programları çalıştırırken öncelik testini yapabilmek için önce "prog1" 
-    programını çalıştırıp kuyruğua çeşitli önceliklerde mesajlar gönderiniz. Sonra "prog2" programını çalıştırıp durumu gözleyiniz. 
+    programını çalıştırıp kuyruğa çeşitli önceliklerde mesajlar gönderiniz. Sonra "prog2" programını çalıştırıp durumu gözleyiniz. 
     Örnekteki prog2 programı önce mq_getattr fonksiyonu ile mesaj kuyruğundaki maksimum mesaj uzunluğunu elde etmiş ve o 
     uzunlukta dinamik bir alan tahsis etmiştir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -17877,7 +17877,7 @@ void exit_sys(const char *msg)
     varsayabilirsiniz.) Mapping işleminde genellikle shared mapping (MAP_SHARED) tercih edilir. Eğer private mapping (MAP_PRIVATE)
     yapılırsa mapping yapılan alana yazma yapıldığında yazma bu dosyaya yansıtılmaz, "copy on write" mekanizması devreye girer.
     mmap fonksiyonun son iki parametresi dosya betimleyicisi ve dosyada bir offset belirtmektedir. İşte dosya betimleyicisi olarak 
-    açmış olduğumuz dosyanın betimleyicisini verebiliriz. Offset olarak da dosyanın neresini map edeceksek oranın başlangıç offsetini 
+    açmış olduğumuz dosyanın betimleyicisini verebiliriz. Offset olarak da dosyanın neresini map edeceksek oranın başlangıç offset'ini 
     verebiliriz. Mapping sırasında dosya göstericisinin konumunun bir önemi yoktur. Örneğin:
 
     char *maddr;
@@ -20373,7 +20373,7 @@ void exit_sys_errno(const char *msg, int eno)
     değerine geri dönerler.
 
     Tabii kritik kodun tek bir yerde olması gerekmemektedir. Önemli olan aynı mutex nesnesinin kullanılıyor olmasıdır. Örneğin 
-    thread'lerden biri aşağıdaki gibi bir kritk kodla bir fonksiyonda karşılaşmış olabilir:
+    thread'lerden biri aşağıdaki gibi bir kritik kodla bir fonksiyonda karşılaşmış olabilir:
 
     if ((result = pthread_mutex_lock(&g_mutex)) != 0)
         exit_sys_errno("pthread_mutex_lock", result);
@@ -27582,14 +27582,14 @@ void exit_sys(const char *msg)
     - Eğer ps komtu hiç seçeneksiz çalıştırılırsa bulunulan terminale ve kullanıcıya ilişkin prosesler kısa biçimde listelenir.
     Örneğin:
 
-    $ps
+    $ ps
     PID TTY          TIME CMD
     5471 pts/2    00:00:00 bash
     5561 pts/2    00:00:00 ps
 
     - ps komutunda -l seçeneği daha fazla bilgi vermektedir. Bu bilgiler arasında nice değeri de vardır. Örneğin:
 
-    $ps -l
+    $ ps -l
     F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
     0 S  1000    5471    2108  0  80   0 -  3505 do_wai pts/2    00:00:00 bash
     4 R  1000    5564    5471  0  80   0 -  3857 -      pts/2    00:00:00 ps
@@ -27599,14 +27599,14 @@ void exit_sys(const char *msg)
     - ps default olarak o anki kullanıcının o anki terminaldeki proseslerini görüntüler. Eğer komutta -t ya da --tty belirtilirse
     spesifik bir terminalde çalışan prosesler görüntülenebilmektedir. Örneğin:
 
-    $ps -l -t pts/1
+    $ ps -l -t pts/1
     F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
     1 S     0    5456    5455  0  80   0 -  4718 -      pts/1    00:00:00 sudo
     4 S     0    5457    5456  0  79  -1 -   693 -      pts/1    00:00:00 sample
 
     - ps komutundaki -u seçeneği belli bir etkin kullanıcı id'sine ilişkin tüm prosesleri görüntülemektedir. Örneğin:
 
-    $ps -u
+    $ ps -u
     USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
     kaan        2133  0.0  0.1  14152  5624 pts/0    Ss   07:50   0:00 bash
     kaan        5471  0.0  0.1  14020  5316 pts/2    Ss   11:31   0:00 bash
@@ -27615,12 +27615,12 @@ void exit_sys(const char *msg)
     - Aslında ps komutundaki sütunlar istenildiği gibi ayarlanabilmektedir. Bunun için -o seçeneği kullanılmaktadır. Sütun 
     isimleri ps komutunun man sayfasında "OUTPUT FORMAT CONTROL" başlığında tek tek belirtilmiştir. Örneğin:
 
-    ps -t pts/1 -o pid,ni,cmd
+    $ ps -t pts/1 -o pid,ni,cmd
 
     - ps komutunda prosesin thread'leri de görülmek isteniyorsa bu durumda -T seçeneği kullanılmalıdır. Bu seçenek girildiğinde
     aynı zamanda thread'in "task struct id'leri" de SPID sütunu ile görüntülenmektedir. Örneğin:
 
-    $ps -l -T -t pts/1
+    $ ps -l -T -t pts/1
     F S   UID     PID    SPID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
     1 S     0    5681    5681    5680  0  80   0 -  4717 -      pts/1    00:00:00 sudo
     4 S     0    5682    5682    5681  0  79  -1 - 19126 -      pts/1    00:00:00 sample
@@ -27640,7 +27640,7 @@ void exit_sys(const char *msg)
 
     Diğer bir terminalden prosesin thread'lerine aşağıdaki gibi bakabilirsiniz:
 
-    $ps -t pts/1 -T -l
+    $ ps -t pts/1 -T -l
     F S   UID     PID    SPID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
     1 S     0    6191    6191    6190  0  80   0 -  4706 -      pts/1    00:00:00 sudo
     4 S     0    6192    6192    6191  0  79  -1 -  2742 -      pts/1    00:00:00 sample
@@ -27833,7 +27833,7 @@ void exit_sys_errno(const char *msg, int eno)
 
     Burada başka bir terminale geçip duruma bakalım:
 
-    $ps -t pts/0 -T -l
+    $ ps -t pts/0 -T -l
     F S   UID     PID    SPID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
     0 S  1000    2133    2133    2108  0  80   0 -  3538 do_wai pts/0    00:00:00 bash
     0 S  1000    6735    6735    2133  0  81   1 -  2742 futex_ pts/0    00:00:00 sample
@@ -28975,12 +28975,12 @@ void exit_sys_errno(const char *msg, int eno)
     Pekiyi biz işin başında makinemizde kaç CPU ya da çekirdek olduğunu anlayabilir miyiz? Bunu anlamının bir yolu komut 
     satırında nproc ya da lscpu komutlarını kullanmaktır. Örneğin:
 
-    $nproc
+    $ nproc
     3
 
     Örneğin:
 
-    $lscpu
+    $ lscpu
     Mimari:                           x86_64
     İşlemci işlem-kipi:             32-bit, 64-bit
     Address sizes:                  45 bits physical, 48 bits virtual
@@ -33154,7 +33154,7 @@ void exit_sys(const char *msg)
 
     Birinci Terminal
 
-    $./sample 34
+    $ ./sample 34
     Process id: 46528
     sleep 30 seconds...
     #34 signal handler: 17
@@ -33166,13 +33166,12 @@ void exit_sys(const char *msg)
 
     İkinci Terminal
 
-    $./sq 46528 34 17
-    $./sq 46528 34 18
-    $./sq 46528 34 100
-    $./sq 46528 34 120
-    $./sq 46528 34 60
-    $./sq 46528 34 10
-
+    $ ./sq 46528 34 17
+    $ ./sq 46528 34 18
+    $ ./sq 46528 34 100
+    $ ./sq 46528 34 120
+    $ ./sq 46528 34 60
+    $ ./sq 46528 34 10
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* sample.c */
@@ -33758,7 +33757,7 @@ void exit_sys(const char *msg)
     Aşağıdaki örnekte üst proses fork yaparak alt prosesi oluşturmuştur. Alt proseste de setpgid fonksiyonu ile yeni bir proses 
     grubu yaratılmıştır. Programın örnek çıktısı şöyledir:
 
-    $./sample
+    $ ./sample
     Parent process id: 49658
     Parent process id of the parent: 34667
     Parent process group id: 49658
@@ -33771,8 +33770,7 @@ void exit_sys(const char *msg)
     - Kabuk, sample programını çalıştırırken yeni bir proses grubu oluşturup sample programını bu proses grubunun grup lideri 
     yapmıştır.
 
-    - Alt proseste yeni bir proses grubu yaratılmış, alt proses de bu proses grubunun grup lideri olmuştur. 
-
+    - Alt proseste yeni bir proses grubu yaratılmış, alt proses de bu proses grubunun grup lideri olmuştur.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -33833,7 +33831,7 @@ void exit_sys(const char *msg)
 
     - Terminallerden birinde "sample" programı çalıştırılır:
 
-    $./sample
+    $ ./sample
     Parent process id: 49792
     Parent process id of the parent: 34667
     Parent process group id: 49792
@@ -33847,7 +33845,6 @@ void exit_sys(const char *msg)
     - Diğer bir terminalden proses grubuna SIGUSR1 sinyali gönderilir:
 
     $ kill -USR1 -49792
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -33936,14 +33933,14 @@ void exit_sys(const char *msg)
     ve SIGQUIT gibi sinyalleri oturumun ön plan proses grubuna göndermektedir. Örneğin biz mample programını sonunda & olacak biçimde 
     sample programını da normal bir biçimde aşağıdaki gibi çalıştırmış olalım:
 
-    $./mample &
+    $ ./mample &
     [1] 52630
     $./sample
 
     Her iki program da pause fonksiyonunda bekleyecek biçimde yazılmıştır. Şimdi diğer bir terminalden bu proseslerin id'lerini, 
     proses grup id'lerini, oturum id'lerini yazdıralım:
 
-    $ps -o pid,pgid,sid,cmd -t pts/0
+    $ ps -o pid,pgid,sid,cmd -t pts/0
     PID     PGID    SID CMD
     31684   31684   31684 bash
     52630   52630   31684 ./mample
@@ -34603,7 +34600,7 @@ void exit_sys(const char *msg)
     penceresi kapatıldığında oturumun öksüz proses gruplarına SIGHUP sinyali göndermemektedir. Ancak bir proses grubu öksüz 
     hale geldiğinde eğer o proses grubu içerisinde durdurulmuş olan (stop edilmiş olan) bir proses varsa terminal aygıt 
     sürücüsü öksüz hale gelmiş olan bu proses grubuna SIGHUP ve SIGCONT sinyalleri göndermektedir. Öksüz proses gruplarındaki 
-    proseslerin kabuk programı sonlansa bile yaşamaya devam edeceğine dikkat ediniz. 
+    proseslerin kabuk programı sonlansa bile yaşamaya devam edeceğine dikkat ediniz.
 
     Pekiyi öksüz proses grubundaki bir proses terminalden okuma yapmaya çalışırsa ya da terminale yazma yapmaya çalışırsa 
     ne olur? İşte bu durumda read fonksiyonu EIO errno değeri ile başarısız olmaktadır. write fonksiyonu ise terminal aygıt
@@ -34616,7 +34613,7 @@ void exit_sys(const char *msg)
 
     Öksüz proses grubundaki proseslere (arka planda çalıştırılsın ya da çalıştırılmasın) terminalden okuma yaptığında 
     SIGTTIN sinyalinin gönderilmediğine, terminalin TOSTOP ayarı ne olursa olsun terminale yazma yapıldığında da SIGTTOU 
-    sinyalinin gönderilmediğine dikkat ediniz. 
+    sinyalinin gönderilmediğine dikkat ediniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -34626,7 +34623,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Bir thread'in akışını belli bir süre bekletmek için işletim sistemlerinde sleep fonksiyonları bulundurulmaktadır. Bu fonksiyonlar
     thread'i bloke ederek çalışma kuyruğundan çıkartır ve özel sleep kuyruklarına yerleştirir. İstenen zaman dolduğunda yeniden 
-    thread çalışma kuyruğuna yerleştirilir. Böylece istenilen miktarda bekleme CPU zamanı harcanmadan sağlanmış olur. 
+    thread çalışma kuyruğuna yerleştirilir. Böylece istenilen miktarda bekleme CPU zamanı harcanmadan sağlanmış olur.
 
     UNIX türevi sistemlerde ilk zamanlardan beri sleep isimli bir bekleme fonksiyonu bulunmaktadır. Bu fonksiyon saniye 
     cinsinden bir duyarlılığa sahiptir. Günümüzde saniye düşük bir çözünürlük durumuna gelmiştir. sleep fonksiyonunun prototipi 
@@ -34720,17 +34717,16 @@ void exit_sys(const char *msg)
     olacaktır. İkinci durumda programı çalıştırdıktan sonra Ctrl+C tuşlarına basarak SIGINT sinyali oluşturunuz. Bu durumda 
     kalan zamanın sıfırdan büyük olduğunu göreceksiniz. Örnek iki denemenin sonuçları şöyledir:
 
-    $./mample
+    $ ./mample
     sleeping 10.5 second...
     Left second: 0
     Left nanosecond: 0
 
-    $./mample
+    $ ./mample
     sleeping 10.5 second...
     ^Csignt handler...
     Left second: 9
     Left nanosecond: 464386077
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -36974,7 +36970,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Aşağıda zorunlu kilitlemeyi test etmek için bir örnek hazırlanmıştır. Bu örnekte iki program vardır. "flock-test.c" 
-    programı yukarıdaki programın aynısıdır. "rw-test.c" programı ise belli bir dosyanın belli bir offsetinden belli miktarda
+    programı yukarıdaki programın aynısıdır. "rw-test.c" programı ise belli bir dosyanın belli bir offset'inden belli miktarda
     okuma ya da yazma yapan bir programdır. "flock-test.c" programını yukarıda açıklamıştık. "rw-test.c" programının komut 
     satırı argümanları şöyledir:
 
@@ -38418,7 +38414,7 @@ void exit_sys(const char *msg)
     boruyu kapattığında boruya yazma için yer varsa yazma yapan tarafta aynı zamanda EPOLLOUT bayrağı da set edilmektedir. 
     EPOLLERR bayrağı soketlerde kullanılmamaktadır.
 
-    EPOLLHUP: Boruya yazan tarafın boru betimeleyicisini kapattığında okuma yapan tarafta bu bayrak set edilmektedir. Bu bayrak 
+    EPOLLHUP: Boruya yazan tarafın boru betimleyicisini kapattığında okuma yapan tarafta bu bayrak set edilmektedir. Bu bayrak 
     epoll_ctl fonksiyonunda set edilmez, epoll_wait tarafından yapının set edilmektedir. (HUP, "hang up" anlamına gelmektedir.) 
     Eğer boruya yazma yapan taraf boruyu kapattığında hala boruda okunacak bilgi varsa okuma yapan tarafta aynı zamanda EPOLLIN 
     bayrağı da set edilmektedir. EPOLLHUP bayrağı soketlerde kullanılmamaktadır.
@@ -53834,7 +53830,7 @@ clean:
     struct cdev *g_cdev;
     ...
     if ((gcdev = cdev_alloc()) == NULL) {
-        printk(KERN_ERROR "Cannot allocate cdev!...\n");
+        printk(KERN_ERROR "cannot allocate cdev!...\n");
         return -ENOMEM;
     }
     g_cdev->owner = THIS_MODULE;
@@ -55188,8 +55184,7 @@ void exit_sys(const char *msg)
     /sbin/insmod ./$module.ko ${@:2} || exit 1
     major=$(awk "\$2 == \"$module\" {print \$1}" /proc/devices)
     rm -f $module
-    mknod $module c $major 0
-    chmod $mode $module
+    mknod -m $mode $module c $major 0
 
     Artık biz bu "load" script'i ile aygıt sürücümüzü yükleyip aygıt dosyamızı yaratacağız. Bu script'i "load" ismiyle yazıp 
     aşağıdaki gibi x hakkı vermelisiniz:
@@ -55272,12 +55267,12 @@ static int __init generic_init(void)
 	printk(KERN_INFO "generic-char-driver module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "generic-char-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		printk(KERN_INFO "cannot alloc char driver!...\n");
 		return result;
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!...\n");
+		printk(KERN_INFO "cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -55551,12 +55546,12 @@ static int __init generic_init(void)
 	printk(KERN_INFO "pipe-driver module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "pipe-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		printk(KERN_INFO "cannot alloc char driver!...\n");
 		return result;
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!...\n");
+		printk(KERN_INFO "cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -55565,7 +55560,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_ERR "Cannot add device!...\n");
+		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
 
@@ -55946,12 +55941,12 @@ static int __init generic_init(void)
 	printk(KERN_INFO "pipe-driver module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "pipe-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		printk(KERN_INFO "cannot alloc char driver!...\n");
 		return result;
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!...\n");
+		printk(KERN_INFO "cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -55960,7 +55955,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_ERR "Cannot add device!...\n");
+		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
 
@@ -56309,12 +56304,12 @@ static int __init generic_init(void)
 	printk(KERN_INFO "pipe-driver module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "pipe-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		printk(KERN_INFO "cannot alloc char driver!...\n");
 		return result;
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!...\n");
+		printk(KERN_INFO "cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -56323,7 +56318,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_ERR "Cannot add device!...\n");
+		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
 
@@ -56696,12 +56691,12 @@ static int __init generic_init(void)
 	printk(KERN_INFO "pipe-driver module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "pipe-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		printk(KERN_INFO "cannot alloc char driver!...\n");
 		return result;
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!...\n");
+		printk(KERN_INFO "cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -56710,7 +56705,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_ERR "Cannot add device!...\n");
+		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
 
@@ -57340,12 +57335,12 @@ static int __init generic_init(void)
 	printk(KERN_INFO "wait-driver module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "wait-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		printk(KERN_INFO "cannot alloc char driver!...\n");
 		return result;
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!...\n");
+		printk(KERN_INFO "cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -57354,7 +57349,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_ERR "Cannot add device!...\n");
+		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
 
@@ -57651,12 +57646,12 @@ static int __init generic_init(void)
 	printk(KERN_INFO "pipe-driver module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "pipe-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		printk(KERN_INFO "cannot alloc char driver!...\n");
 		return result;
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!...\n");
+		printk(KERN_INFO "cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -57665,7 +57660,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_ERR "Cannot add device!...\n");
+		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
 
@@ -58110,12 +58105,12 @@ static int __init generic_init(void)
 	printk(KERN_INFO "pipe-driver-manual-wait module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "pipe-driver-manual-wait")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		printk(KERN_INFO "cannot alloc char driver!...\n");
 		return result;
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!...\n");
+		printk(KERN_INFO "cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -58124,7 +58119,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_ERR "Cannot add device!...\n");
+		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
 
@@ -58580,12 +58575,12 @@ static int __init generic_init(void)
 	printk(KERN_INFO "pipe-driver module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "pipe-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		printk(KERN_INFO "cannot alloc char driver!...\n");
 		return result;
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!...\n");
+		printk(KERN_INFO "cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -58594,7 +58589,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_ERR "Cannot add device!...\n");
+		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
 
@@ -59078,12 +59073,12 @@ static int __init generic_init(void)
 	printk(KERN_INFO "pipe-driver module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "pipe-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		printk(KERN_INFO "cannot alloc char driver!...\n");
 		return result;
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!...\n");
+		printk(KERN_INFO "cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -59092,7 +59087,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_ERR "Cannot add device!...\n");
+		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
 
@@ -59514,12 +59509,12 @@ static int __init generic_init(void)
 	printk(KERN_INFO "pipe-driver module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "pipe-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		printk(KERN_INFO "cannot alloc char driver!...\n");
 		return result;
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!...\n");
+		printk(KERN_INFO "cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -59528,7 +59523,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_ERR "Cannot add device!...\n");
+		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
 
@@ -59953,7 +59948,7 @@ void exit_sys(const char *msg)
     numarayı da tahsis edebilmektedir. Örneğin:
 
     if ((result = alloc_chrdev_region(&g_dev, 0, ndevices, "pipe-driver")) < 0) {
-        printk(KERN_INFO "Cannot alloc char driver!...\n");
+        printk(KERN_INFO "cannot alloc char driver!...\n");
         return result;
     }
 
@@ -60001,7 +59996,7 @@ void exit_sys(const char *msg)
                 cdev_del(&g_pdevices[k].cdev);
             kfree(g_pdevices);
             unregister_chrdev_region(dev, ndevices);
-            printk(KERN_ERR "Cannot add device!...\n");
+            printk(KERN_ERR "cannot add device!...\n");
 
             return result;
         }
@@ -60160,7 +60155,7 @@ static int __init generic_init(void)
 	printk(KERN_INFO "pipe-driver module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, ndevices, "pipe-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		printk(KERN_INFO "cannot alloc char driver!...\n");
 		return result;
 	}
 
@@ -60182,7 +60177,7 @@ static int __init generic_init(void)
 				cdev_del(&g_pdevices[k].cdev);
 			kfree(g_pdevices);
 			unregister_chrdev_region(dev, ndevices);
-			printk(KERN_ERR "Cannot add device!...\n");
+			printk(KERN_ERR "cannot add device!...\n");
 			return result;
 		}
 	}
@@ -60821,7 +60816,7 @@ static int __init generic_init(void)
 	printk(KERN_INFO "pipe-driver module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, ndevices, "pipe-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		printk(KERN_INFO "cannot alloc char driver!...\n");
 		return result;
 	}
 
@@ -60852,7 +60847,7 @@ static int __init generic_init(void)
 
 			kfree(g_pdevices);
 			unregister_chrdev_region(dev, ndevices);
-			printk(KERN_ERR "Cannot add device!...\n");
+			printk(KERN_ERR "cannot add device!...\n");
 
 			return result;
 		}
@@ -61367,7 +61362,7 @@ void exit_sys(const char *msg)
     olarak oluşturmalısınız.
 
     Fonksiyon başarı durumunda yaratılan dosyanın bilgilerini içeren proc_dir_entry türünden bir yapı nesnesinin adresiyle, 
-    başarısızlık durumunda NULL adresle geri dönmektedir. Bu durumda çağıran fonksiyonun -NOMEM gibi bir hata değeriyle geri
+    başarısızlık durumunda NULL adresle geri dönmektedir. Bu durumda çağıran fonksiyonun -ENOMEM gibi bir hata değeriyle geri
     döndürülmesi yaygındır.
 
     proc dosya sisteminde yaratılan dosya remove_proc_entry fonksiyonuyla silinebilmektedir.
@@ -61436,12 +61431,12 @@ static int __init generic_init(void)
 	printk(KERN_INFO "procfs-driver module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "procfs-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		printk(KERN_INFO "cannot alloc char driver!...\n");
 		return result;
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!...\n");
+		printk(KERN_INFO "cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -61450,7 +61445,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_ERR "Cannot add device!...\n");
+		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
 
@@ -61621,12 +61616,12 @@ static int __init generic_init(void)
 	printk(KERN_INFO "procfs-driver module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "procfs-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		printk(KERN_INFO "cannot alloc char driver!...\n");
 		return result;
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!...\n");
+		printk(KERN_INFO "cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -61635,7 +61630,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_ERR "Cannot add device!...\n");
+		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
 
@@ -61877,12 +61872,12 @@ static int __init generic_init(void)
 	printk(KERN_INFO "procfs-driver module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "procfs-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		printk(KERN_INFO "cannot alloc char driver!...\n");
 		return result;
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!...\n");
+		printk(KERN_INFO "cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -61891,7 +61886,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_ERR "Cannot add device!...\n");
+		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
 
@@ -62257,7 +62252,7 @@ static int __init generic_init(void)
 	printk(KERN_INFO "pipe-driver module initialization...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, ndevices, "pipe-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		printk(KERN_INFO "cannot alloc char driver!...\n");
 		return result;
 	}
 
@@ -62301,7 +62296,7 @@ static int __init generic_init(void)
 
 			kfree(g_pdevices);
 			unregister_chrdev_region(dev, ndevices);
-			printk(KERN_ERR "Cannot add device!...\n");
+			printk(KERN_ERR "cannot add device!...\n");
 
 			return result;
 		}
@@ -63709,7 +63704,7 @@ static int __init generic_init(void)
 
 	g_ts = kthread_run(kernel_thread_proc, NULL, "kmythreadd");
 	if (IS_ERR(g_ts)) {
-		printk(KERN_ERR "cannot create kernel thread!..\n");
+		printk(KERN_ERR "cannot create kernel thread!...\n");
 		return PTR_ERR(g_ts);
 	}
 
@@ -64033,12 +64028,12 @@ static int __init generic_init(void)
 	int result;
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "irq-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		printk(KERN_INFO "cannot alloc char driver!...\n");
 		return result;
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!...\n");
+		printk(KERN_INFO "cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -64047,7 +64042,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add character device driver!...\n");
+		printk(KERN_INFO "cannot add character device driver!...\n");
 		return result;
 	}
 
@@ -64356,12 +64351,12 @@ static int __init generic_init(void)
 	int result;
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "irq-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		printk(KERN_INFO "cannot alloc char driver!...\n");
 		return result;
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!...\n");
+		printk(KERN_INFO "cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -64370,7 +64365,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add character device driver!...\n");
+		printk(KERN_INFO "cannot add character device driver!...\n");
 		return result;
 	}
 
@@ -64473,12 +64468,12 @@ static int __init generic_init(void)
 	int result;
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "irq-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		printk(KERN_INFO "cannot alloc char driver!...\n");
 		return result;
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!...\n");
+		printk(KERN_INFO "cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -64487,7 +64482,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add character device driver!...\n");
+		printk(KERN_INFO "cannot add character device driver!...\n");
 		return result;
 	}
 
@@ -64689,12 +64684,12 @@ static int __init generic_init(void)
 	int result;
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "irq-driver")) < 0) {
-		printk(KERN_INFO "Cannot alloc char driver!...\n");
+		printk(KERN_INFO "cannot alloc char driver!...\n");
 		return result;
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "Cannot allocate cdev!...\n");
+		printk(KERN_INFO "cannot allocate cdev!...\n");
 		return -ENOMEM;
 	}
 
@@ -64703,7 +64698,7 @@ static int __init generic_init(void)
 
 	if ((result = cdev_add(g_cdev, g_dev, 1)) != 0) {
 		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_INFO "Cannot add character device driver!...\n");
+		printk(KERN_INFO "cannot add character device driver!...\n");
 		return result;
 	}
 
@@ -64826,7 +64821,7 @@ int main(int argc, char *argv[])
 	int keycode;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -64974,11 +64969,11 @@ void exit_sys(const char *msg)
     özel aygıt sürücülerdir. Daha önceden de belirttiğimiz gibi disk benzeri birimlerden bir hamlede okunabilecek ya da 
     yazılabilecek bilgi miktarına "sektör" denilmektedir. İşte blok aygıt sürücüleri transferleri byte byte değil blok blok 
     (sektör sektör) yapmaktadır. Örneğin bir diskten 1 byte okuma diye bir şey yoktur. Ya da bir diske 1 yazma diye bir şey 
-    yoktur. Diskteki 1 byte değiştirilecekse önce onun bulunduğu sektör RAM' okunur, değişiklik RAM üzerinde yapılır. Sonra 
+    yoktur. Diskteki 1 byte değiştirilecekse önce onun bulunduğu sektör RAM'e okunur, değişiklik RAM üzerinde yapılır. Sonra 
     o sektör yeniden diske yazılır. Tipik transfer bu adımlardan geçilerek gerçekleştirilmektedir. Bir sektör değişebilse de 
     hemen her zaman 512 byte'tır.
 
-    Bir Linux sistemini kurduğumuzda "/dev" dizininin altında disklerle işlem yapan aygıt sürücülere yönelik aygıt dosyaşarı
+    Bir Linux sistemini kurduğumuzda "/dev" dizininin altında disklerle işlem yapan aygıt sürücülere yönelik aygıt dosyaları
     da oluşturulmuş durumdadır. Blok aygıt sürücülerine ilişkin aygıt dosyaları "ls -l" komutunda dosya türü olarak 'b' biçiminde 
     görüntülenmektedir. Örneğin:
 
@@ -64992,23 +64987,23 @@ void exit_sys(const char *msg)
     crw-rw----  1 root disk     21,   1 Ağu  7 13:57 sg1
     ...
 
-    Burada sda sygıt dosyası diske bir bütün olarak erişmek için sda1, sda2, sda3 aygıt dosyaları ise diskteki disk bölümlerine 
-    (partition) erişmek için kullanılmaktadır. Bu aygıt dosyalarının majör numaralarının aynı olduğuna ancak minör numaralarının 
-    farklı olduğuna dikkat ediniz. Biz bir flash belleği USB soketine taktığımızda burada flash belleğe erişmek için gerekli olan 
-    aygıt dosyaları otomatik biçimde oluşturulacaktır.
+    Burada sda aygıt dosyası diske bir bütün olarak erişmek için kullanılırken sda1, sda2, sda3 aygıt dosyaları ise diskteki disk 
+    bölümlerine (partition) erişmek için kullanılmaktadır. Bu aygıt dosyalarının majör numaralarının aynı olduğuna ancak minör 
+    numaralarının farklı olduğuna dikkat ediniz. Biz bir flash belleği USB soketine taktığımızda burada flash belleğe erişmek için 
+    gerekli olan aygıt dosyaları otomatik biçimde oluşturulacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     İşletim sistemleri bloklu çalışan aygıtlarda erişimi hızlandırmak için ismine "IO çizelgelemesi (IO Scheduling)" denilen 
     bir yöntem uygulamaktadır. Çeşitli prosesler diskten çeşitli sektörleri okumak istediğinde ya da yazmak istediğinde bunlar 
-    işletim sistemi tarafından birleşitirlerek disk erişimleri azaltılmaktadır. Yani bu tür transferlerde transfer talep edildiği
-    anda değil biraz bekletilerek (çık kısa bir zaman) gerçekleştirilebilmektedir. Bu tür durumlarda işletim sistemleri ilgi 
+    işletim sistemi tarafından birleştirilerek disk erişimleri azaltılmaktadır. Yani bu tür transferlerde transfer talep edildiği
+    anda değil, biraz bekletilerek (çok kısa bir zaman) gerçekleştirilebilmektedir. Bu tür durumlarda işletim sistemleri ilgili 
     thread'i bloke ederek transfer sonlanana kadar wait kuyruklarında bekletmektedir. Disk sistemi bilgisayar sistemlerinin 
     en yavaş kısmını oluşturmaktadır. SSD diskler bile yazma bakımından RAM'e göre binlerce kat yavaştır. İşte işletim sistemleri 
     aslında ayrık olan birtakım okuma yazma işlemlerini diskte mümkün olduğunca ardışıl hale getirerek disk erişiminden kaynaklanan 
     zaman kaybını minimize etmeye çalışır. Disk sistemlerinde ayrık işlemler yerine peşi sıra blokların tek hamlede okunup yazılması 
     ciddi hız kazancı sağlayabilmektedir. Farklı proseslerin sektör okuma istekleri aslında bazen birbirine yakın bölgelerde 
-    gerçekleşit. İşte onların yniden sıralanması gibi faaliyetler IO çizelgeleycisinin önemli görevlerindendir.
+    gerçekleşir. İşte onların yeniden sıralanması gibi faaliyetler IO çizelgeleyicisinin önemli görevlerindendir.
 
     Blok aygıt sürücüleri bazı bakımlardan karakter aygıt aygıt sürücülerine benzese de bu IO çizelgelemesi yüzünden tasarımsal 
     farklılıklara sahiptir. Karakter aygıt sürücülerinde her read ve write işlemi için bir IO çizelgelemesi yapılmadan aygıt 
@@ -65031,7 +65026,7 @@ void exit_sys(const char *msg)
     İkinci parametre aygıt sürücünün /proc/devices dosyasında görüntülenecek ismini belirtmektedir. Örneğin:
 
     if ((g_major = register_blkdev(0, "generic-blkdev")) < 0) {
-        printk(KERN_INFO "Cannot alloc char driver!...\n");
+        printk(KERN_INFO "cannot alloc block driver!...\n");
         return result;
     }
 
@@ -65045,10 +65040,12 @@ void exit_sys(const char *msg)
 
     unregister_blkdev(g_major, "generic-blkdev");
 
-    Bizim daha önce kullandığımız "load" script'i karakter aygıt aygıt dosyası yaratıyordu. Halbuki bizim artık blok aygıt 
-    dosyaları yaratmamız gerekir. Bunun için "load" ve "unload" script'lerini "loadblk" ve "unloadblk" ismiyle yeniden 
-    yazacağız. Tabii aslında "unload" script'inde değiştirilecek bir şey yoktur. Ancak isimsel uyumluluk bakımından biz 
-    her iki dosyayı da yeniden yeni isimlerle oluşturacağız:
+    Bizim daha önce kullandığımız "load" script'i karakter aygıt dosyası yaratıyordu. Halbuki bizim artık blok aygıt dosyaları 
+    yaratmamız gerekir. Bunun için "load" ve "unload" script'lerini "loadblk" ve "unloadblk" ismiyle yeniden yazacağız. Tabii 
+    aslında "unload" script'inde değiştirilecek bir şey yoktur. Ancak isimsel uyumluluk bakımından biz her iki dosyayı da yeniden 
+    yeni isimlerle oluşturacağız. Bu iki script'e de "executable" haklarının verilmesi gerektiğini anımsayınız.
+
+    $ sudo chmod +x loadblk unloadblk
 
     /* loadblk (bu satırı dosyaya kopyalamayınız) */
 
@@ -65060,7 +65057,7 @@ void exit_sys(const char *msg)
     /sbin/insmod ./$module.ko ${@:2} || exit 1
     major=$(awk "\$2 == \"$module\" {print \$1}" /proc/devices)
     rm -f $module
-    mknod -m $mode $module c $major 0
+    mknod -m $mode $module b $major 0
 
     /* unloadblk (bu satırı dosyaya kopyalamayınız) */
 
@@ -65090,7 +65087,7 @@ static int __init generic_init(void)
 	int result;
 
 	if ((g_major = register_blkdev(0, "generic-blkdev")) < 0) {
-		printk(KERN_INFO "cannot alloc block driver!..\n");
+		printk(KERN_INFO "cannot alloc block driver!...\n");
 		return result;
 	}
 
@@ -65128,7 +65125,7 @@ mode=666
 /sbin/insmod ./$module.ko ${@:2} || exit 1
 major=$(awk "\$2 == \"$module\" {print \$1}" /proc/devices)
 rm -f $module
-mknod -m $mode $module c $major 0
+mknod -m $mode $module b $major 0
 
 /* unloadblk (bu satırı dosyaya kopyalamayınız) */
 
@@ -65140,6 +65137,10 @@ module=$1
 rm -f $module
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												163. Ders 16/08/2024 - Cuma
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Blok aygıt sürücüleri için en önemli nesne gendisk isimli nesnesidir. Blok aygıt sürücü çekirdekte bu nesne ile temsil 
     edilmektedir. gendisk nesnesi alloc_disk isimli fonksiyonla (aslında bir makro olarak yazılmıştır) tahsis edilmektedir.
     Ancak 5'li çekirdeklerle birlikte fonksiyonun ismi blk_alloc_disk biçiminde değiştirilmiştir. Ayrıca aşağıdaki fonksiyonların 
@@ -65149,7 +65150,7 @@ rm -f $module
     #include <linux/genhd.h>
 
     struct gendisk *alloc_disk(int minors);			/* eski çekirdek versiyonları bu fonksiyonu kullanıyor */
-    struct gendisk *blk_alloc_disk(int minors);		/* yeni çekirdek versiyonlar bu fonksiyonu kullanıyor */
+    struct gendisk *blk_alloc_disk(int minors);		/* yeni çekirdek versiyonları bu fonksiyonu kullanıyor */
 
     Fonksiyonlar parametre olarak aygıt sürücünün destekleyeceği minör numara sayısını almaktadır. Geri dönüş değeri de diski 
     temsil eden gendisk isimli yapı nesnesinin adresidir. (Birden fazla minör numaranın söz konusu olduğu durumda geri döndürülen 
@@ -65160,7 +65161,7 @@ rm -f $module
 
     if ((g_gdisk = blk_alloc_disk(1)) == NULL) {
         ...
-        return -NOMEM;
+        return -ENOMEM;
     }
 
     alloc_disk ile elde edilen gendisk nesnesinin içinin doldurulması gerekmektedir. Bu yapının doldurulması gereken elemanları 
@@ -65174,14 +65175,14 @@ rm -f $module
 
     g_gdisk->first_minor = 0;
 
-    - Yapının flags elemanına duruma göre bazı bayraklar girilebilmektedir. Öreğin ramdisk için bu bayrak GENHD_FL_NO_PART_SCAN 
+    - Yapının flags elemanına duruma göre bazı bayraklar girilebilmektedir. Örneğin ramdisk için bu bayrak GENHD_FL_NO_PART_SCAN 
     biçiminde girilebilir. Örneğin:
 
     g_gdisk->flags = GENHD_FL_NO_PART_SCAN;
 
     - Yapının fops elemanına aygıt sürücü açıldığında, kapatıldığında, ioctl işlemi sırasında vs. çağrılacak fonksiyonların 
     bulunduğuğu block_device_operations isimli yapının adresi atanmalıdır. Bu yapı karakter aygıt sürücülerindeki file_operations 
-    yapısına benzetilebilir. Yapıının iki önemli elemanı open ve release elemanlarıdır. Burada belirtilen fonksiyonlar aygıt 
+    yapısına benzetilebilir. Yapının iki önemli elemanı open ve release elemanlarıdır. Burada belirtilen fonksiyonlar aygıt 
     sürücü açıldığında ve her kapatıldığında çağrılmaktadır. Örneğin:
 
     static struct block_device_operations g_bops = {
@@ -65195,9 +65196,9 @@ rm -f $module
     yerleştirileceği kuyruk sistemidir. Programcı ileride görüleceği üzere bu kuyruk sisteminden istekleri alarak yerine getirir. 
     Maalesef bu kuyruğun yaratılması ve işleme sokulması için gerekli kernel fonksiyonları kernel'ın çeşitli versiyonlarında 
     değiştirilmiştir. Eskiden 4'lü çekirdeklerde request_queue nesnesi oluşturmak için blk_init_queue isimli bir fonksiyon 
-    kullnılıyordu. Sonra 5'li çekirdeklerle birlikte request_queue işlemleri üzerinde değişiklikler yapıldı. Biz kursumuzda 
-    5'li çekirdekler kullanıyoruz. Ancak önceki çekirdeklerdeklerde kullanılan fonksiyonlar üzerinde de durmak istiyoruz. Burada 
-    önce eski çekirdeklerdeki request queue işlemlerini ele alıp sonra ayrı paragrafta yeni çekirdeklere ilişkin değişiklikler üzerinde
+    kullanılıyordu. Sonra 5'li çekirdeklerle birlikte request_queue işlemleri üzerinde değişiklikler yapıldı. Biz kursumuzda 
+    5'li çekirdekler kullanıyoruz. Ancak önceki çekirdeklerde kullanılan fonksiyonlar üzerinde de durmak istiyoruz. Burada önce 
+    eski çekirdeklerdeki request_queue işlemlerini ele alıp sonra ayrı paragrafta yeni çekirdeklere ilişkin değişiklikler üzerinde
     duracağız.
 
     Eski çekirdeklerde request_queue nesnesi oluşturmak için blk_init_queue isimli bir fonksiyon kullanılıyordu. Fonksiyonun 
@@ -65208,12 +65209,11 @@ rm -f $module
     typedef void (request_fn_proc) (struct request_queue *q);
     struct request_queue *blk_init_queue(request_fn_proc *rfn, spinlock_t *lock);
 
-    Fonksiyonun birinci parametresi kuyruktan gelen istekleri almakta kullanılan request_fn_proc türünden bir nesnenin 
-    adresini almaktadır. İkinci parametre kuyruğu korumak için kullanılan spinlock nesnesini belirtmektedir. Fonksiyonun 
-    birinci parametresine geri dönüş değeri void olan parametresi struct gendisk * türünden olan bir fonksiyonun adresi 
-    girilmelidir. Bu fonksiyon kuyruk işlemlerini yapmak için bulundurulur. blk_init_queue fonksiyonu başarı durumunda request_queue 
-    nesnesinin adresi ile, başarısızlık durumunda NULL adresle geri dönmektedir. Bu durumda çağıran fonksiyonu -ENOMEM değeri 
-    geri döndürebilirsiniz. Örneğin:
+    Fonksiyonun birinci parametresi kuyruktan gelen istekleri almakta kullanılan request_fn_proc türünden bir nesnenin adresini 
+    almaktadır. İkinci parametre kuyruğu korumak için kullanılan spinlock nesnesini belirtmektedir. Fonksiyonun birinci parametresine 
+    geri dönüş değeri void olan parametresi struct gendisk * türünden olan bir fonksiyonun adresi girilmelidir. Bu fonksiyon kuyruk 
+    işlemlerini yapmak için bulundurulur. blk_init_queue fonksiyonu başarı durumunda request_queue nesnesinin adresiyle, başarısızlık 
+    durumunda NULL adresle geri dönmektedir. Bu durumda çağıran fonksiyonu -ENOMEM değeri geri döndürebilirsiniz. Örneğin:
 
     static struct request_queue *g_rq;
     static spinlock_t g_sl;
@@ -65225,7 +65225,7 @@ rm -f $module
     ...
     if ((g_rq = blk_init_queue(request_proc, &g_sl)) == NULL) {
         ...
-        retur -ENOMEM;
+        return -ENOMEM;
     }
 
     Biz burada elde ettiğimiz request_queue nesnesinin adresini gendisk yapısının queue elemanına atamalıyız. Örneğin:
@@ -65239,19 +65239,19 @@ rm -f $module
 
     void blk_cleanup_queue(struct request_queue *rq);
 
-    Fonksiyon parametre olarak request_queue nesneesinin adresini almaktadır.
+    Fonksiyon parametre olarak request_queue nesnesinin adresini almaktadır.
 
     Yeni kuyruk fonksiyonları izleyen paragraflarda ele alınacaktır.
 
-    - gendik yapısının içerisine diskin (blok aygıt sürücüsünün temsil ettiği medyanın) kapasitesi set edilmelidir. Bu işlem 
-    set_capacity fonksiyonuyla yapılmaktadır. Fonksiyon prototipi şöyledir:
+    - gendisk yapısının içerisine diskin (blok aygıt sürücüsünün temsil ettiği medyanın) kapasitesi set edilmelidir. Bu işlem 
+    set_capacity fonksiyonuyla yapılmaktadır. Fonksiyonun prototipi şöyledir:
 
     #include <linux/genhd.h>
 
     void set_capacity(struct gendisk *disk, sector_t size);
 
     Fonksiyonun birinci parametresi gendisk yapısının adresini, ikinci parametresi aygıtın sektör uzunluğunu almaktadır. (Aslında 
-    bu fonksiyon gendisk yapısının ilgili elemanını set etmektedir.) Fonksşyonun ikinci parametresi aygıt sürücünün temsil 
+    bu fonksiyon gendisk yapısının ilgili elemanını set etmektedir.) Fonksiyonun ikinci parametresi aygıt sürücünün temsil 
     ettiği aygıtın sektör uzunluğunu almaktadır. Bir sektör 512 byte'tır. Örneğin:
 
     set_capacity(g_gdisk, 1000);
@@ -65262,7 +65262,7 @@ rm -f $module
     strcpy(g_gdisk->disk_name, "myblockdev");
 
     - Nihayet gendisk yapısının private_data elemanına programcı kendi yapı nesnesinin adresini yerleştirebilir. Örneğin 
-    daha önce karakter aygıt sürücülerinde yaptığımız gibi bu private_data elemanına gendisk nesnesinni içinde bulunduğu 
+    daha önce karakter aygıt sürücülerinde yaptığımız gibi bu private_data elemanına gendisk nesnesinin içinde bulunduğu 
     yapı nesnesinin adresini atayabiliriz.
 
     Aşağıdaki örnekte yukarıda anlatılan kısma kadar olan işlemleri içeren bir blok aygıt sürücü örneği verilmiştir. Örneğin:
@@ -65277,7 +65277,7 @@ rm -f $module
     ...
     g_gdisk->private_data = &g_bdev;
 
-    Tabii buradaki örnekte g_bdev zaten bir nesne oludğu için ona private_data yoluyla erişmeye gerek kalmamaktadır. Ancak 
+    Tabii buradaki örnekte g_bdev zaten bir nesne olduğu için ona private_data yoluyla erişmeye gerek kalmamaktadır. Ancak 
     aygıt sürücümüz birden fazla minör numarayı destekliyorsa her aygıtın ayrı bir BLOCKDEV yapısı olacağı için ilgili 
     aygıta bu private_data elemanı yoluyla erişebiliriz.
 
@@ -65291,7 +65291,7 @@ rm -f $module
 
     int add_disk(struct gendisk *disk);			/* yeni çekirdek versiyonlarındaki prototip */
 
-    Fonksiyon başarı durumunda 0 değrine başarısızlık durumunda negatif errno değerine geri dönmektedir. Örneğin:
+    Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda negatif errno değerine geri dönmektedir. Örneğin:
 
     if ((result = add_disk(g_gdisk)) != 0) {
         ...
@@ -65359,17 +65359,17 @@ static int __init generic_init(void)
 	int result;
 
 	if ((g_major = register_blkdev(0, "generic-blkdev")) < 0) {
-		printk(KERN_INFO "cannot block driver!..\n");
+		printk(KERN_INFO "cannot block driver!...\n");
 		return result;
 	}
 
 	if ((g_gdisk = blk_alloc_disk(1)) == NULL) {
-		printk(KERN_ERR "Cannot alloc disk!..\n");
+		printk(KERN_ERR "cannot alloc disk!...\n");
 		return -ENOMEM;
 	}
 	if ((result = add_disk(g_gdisk)) != 0) {
 		del_gendisk(g_gdisk);
-		printk(KERN_ERR "Cannot add disk!..\n");
+		printk(KERN_ERR "cannot add disk!...\n");
 		return result;
 	}
 	g_gdisk->major = g_major;
@@ -65450,12 +65450,12 @@ static int __init generic_init(void)
 	int result = 0;
 
 	if ((g_major = register_blkdev(g_major, "generic-bdriver")) < 0) {
-		printk(KERN_ERR "Cannot register block driver!...\n");
+		printk(KERN_ERR "cannot register block driver!...\n");
 		return g_major;
 	}
 
 	if ((g_bdev = kmalloc(sizeof(struct BLOCKDEV), GFP_KERNEL)) == NULL) {
-		printk(KERN_ERR "Cannot allocate memory!...\n");
+		printk(KERN_ERR "cannot allocate memory!...\n");
 		result = -ENOMEM;
 		goto EXIT1;
 	}
@@ -65464,7 +65464,7 @@ static int __init generic_init(void)
 
 	spin_lock_init(&g_bdev->sl);
 	if ((g_bdev->rq = blk_init_queue(request_proc, &g_bdev->sl)) == NULL) {
-		printk(KERN_ERR "Canno allocate queue!...\n");
+		printk(KERN_ERR "cannot allocate queue!...\n");
 		result = -ENOMEM;
 		goto EXIT2;
 	}
@@ -65589,27 +65589,31 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												164. Ders 18/08/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Blok aygıt sürücülerinde yukarıda belirtilen işlemlerden sonra artık transfer işleminin yapılması için bulundurulan fonksiyonun
     (örneğimizde request_proc) yazılması aşamasına geldik. User mode kodlar tarafından blok transferine yönelik bir istek oluştuğunda 
     (örneğin blok aygıt sürücüsünden bir sektör okunmak istediğinde) çekirdeğin IO çizelgeleyicisi bunları çizelgeleyerek uygun bir 
     zamanda transfer edilebilmesi için bizim belirttiğimiz ve yukarıdaki örnekte ismini request_proc olarak verdiğimiz fonksiyonu 
-    çağrımaktadır. Yani örneğimizdeki request_proc bizim tarafımızdan değil çekirdek tarafından callback fonksiyon olarak çağrılmaktadır. 
+    çağırmaktadır. Yani örneğimizdeki request_proc bizim tarafımızdan değil, çekirdek tarafından callback fonksiyon olarak çağrılmaktadır. 
     Bizim de bu fonksiyon içerisinde kuyruğa bırakılmış blok transfer isteklerini kuyruktan alarak gerçekleştirmemiz gerekir.
 
     Örneğin bir blok aygıt sürücüsünü user mode'da open fonksiyonuyla açıp içerisinden 10 byte'ı read fonksiyonuyla okumak isteyelim. 
     Eğer bu aygıt sürücü karakter aygıt sürücüsü olsaydı çekirdek doğrudan aygıt sürücünün read fonksiyonunu çağıracaktı. Aygıt 
     sürücü de istenen 10 byte'ı user mode'daki adrese transfer edecekti. Halbuki blok aygıt sürücüsü durumunda çekirdek aygıt 
-    sürücüden 10 byte transfer istemeyecektir. İlgili 10 byte'ın blunduğu bloğun (block ardışıl n sektördür) transferini isteyecektir. 
-    User mode programa o bloğun içerisindeki 10 byte'ı vermek kernel'ın görevidir. Blok aygıt sürücülerinden transferler byte 
-    düzeyinde değil blok düzeyinde yapılmaktadır. Yani block aygıt sürücülerinden transfer edilecek en küçük birim 1 sektör 
+    sürücüden 10 byte transfer istemeyecektir. İlgili 10 byte'ın bulunduğu bloğun (blok ardışıl n sektördür) transferini isteyecektir. 
+    User mode programa o bloğun içerisindeki 10 byte'ı vermek çekirdeğin görevidir. Blok aygıt sürücülerinden transferler byte 
+    düzeyinde değil, blok düzeyinde yapılmaktadır. Yani blok aygıt sürücülerinden transfer edilecek en küçük birim 1 sektör 
     yani 512 byte'tır. Şüphesiz kernel 10 byte okuma isteğine konu olan yerin aygıttaki sektör numarasını hesap eder ve o sektörden 
     itibaren blok transferi ister.
 
     Kernel aygıt sürücünün transfer edeceği blokları bir kuyruk sistemine yerleştirir. Bu kuyruk sistemi request_queue denilen 
     bir yapı ile temsil edilmiştir. Bu kuyruğun içerisindeki kuyruk elemanları request isimli yapı nesnelerinden oluşmaktadır. 
-    (Yani request_queue aslında request yapılarının oluşturduğu bir kuyruk sistenidir.)
+    (Yani request_queue aslında request yapılarının oluşturduğu bir kuyruk sistemidir.)
 
-    Her request nesnesi kendi içerisinde bio isimli yapı nesnelerinden oluşmaktadır. request nesnesinin içerisindeki bio nesnleri 
+    Her request nesnesi kendi içerisinde bio isimli yapı nesnelerinden oluşmaktadır. request nesnesinin içerisindeki bio nesneleri 
     bir bağlı liste biçiminde tutulmaktadır. Her bio yapısının sonunda ise değişken sayıda (yani n tane) bio_vec yapıları bulunmaktadır. 
     İşte transfer işini yapacak fonksiyon transfere ilişkin bilgileri bu bio_vec yapısından elde etmektedir.
 
@@ -65622,9 +65626,9 @@ void exit_sys(const char *msg)
 
     İşte transfer fonksiyonu kernel tarafından çağrıldığında "request_queue içerisindeki request nesnelerine elde edip, bu request 
     nesnelerinin içerisindeki bio nesnelerini elde edip, bio nesneleri içerisindeki bio_vec dizisinde belirtilen transfer bilgilerine 
-    ilişkin transfeleri" yapması gerekir. Şüphesiz bu işlem ancak açık ya da örtük iç içe 3 döngü ile yapılabilir. Yani bir döngü 
+    ilişkin transferleri" yapması gerekir. Şüphesiz bu işlem ancak açık ya da örtük iç içe 3 döngü ile yapılabilir. Yani bir döngü 
     request nesnelerini elde etmeli, onun içerisindeki bir döngü bio nesnelerini elde etmeli, onun içerisindeki bir döngü de bio_vec 
-    nesleerini elde etmelidir.
+    nesnelerini elde etmelidir.
 
     request_queue içerisindeki request nesnelerinin elde edilmesi birkaç biçimde yapılabilmektedir. Yöntemlerden tipik olanı şöyledir:
 
@@ -65648,13 +65652,13 @@ void exit_sys(const char *msg)
     }
 
     Burada blk_fetch_request fonksiyonu kuyruğun hemen başındaki request nesnesini alarak onu kuyruktan siler. Böylece döngü 
-    içerisinde tek tek request nesneleri elde dilmiştir. blk_rq_is_passthrough fonksiyonu dosya sistemi ile alakalı olmayan request 
+    içerisinde tek tek request nesneleri elde edilmiştir. blk_rq_is_passthrough fonksiyonu dosya sistemi ile alakalı olmayan request 
     nesnelerini geçmek için kullanılır. Bazı request nesneleri transferle ilgili değildir. Bunların geçilmesi gerekmektedir. Bir 
     request nesnesi kuyruktan alındıktan sonra akibeti konusunda çekirdeğe bilgi verilmesi gerekmektedir. İşte bu işlem 
     __blk_end_request_all fonksiyonuyla yapılmaktadır. Bu fonksiyonun ikinci parametresi -EIO girilirse bu durum bu işlemin 
-    yapılmadığını 0 girilirse bu da bu işlemin başarılı bir biçimde yapıldığını belirtmektedir.
+    yapılmadığını, 0 girilirse bu da bu işlemin başarılı bir biçimde yapıldığını belirtmektedir.
 
-    Pekiyi çekirdek ne zaman kuyruğa request nesnesi yerleştirmektedir? Şüphesiz çekirdeğin böyle bir nesneyi kuyruğua yerleştirmesi 
+    Pekiyi çekirdek ne zaman kuyruğa request nesnesi yerleştirmektedir? Şüphesiz çekirdeğin böyle bir nesneyi kuyruğa yerleştirmesi 
     için aygıt üzerinde bir okuma ya da yazma olayının gerçekleşmiş olması gerekir. Bunun tipik yolu aygıt dosyasının open fonksiyonuyla 
     açılıp read ya da write yapılmasıdır. Tabii blok aygıt sürücüsü bir dosya sistemi yani bir disk bölümü haline getirilmiş olabilir. 
     Bu durumda formatlama gibi, mount etme gibi eylemlerde de gizli bir okuma yazma işlemleri söz konusu olmaktadır.
@@ -65695,7 +65699,7 @@ void exit_sys(const char *msg)
     Şimdi biz request nesnesinin içerisinden bio nesnelerini, bio nesnelerinin içerisinden de bio_vec nesnelerini elde edelim. 
     Pekiyi çekirdek neden transfer bilgilerini doğrudan request nesnelerinin içerisine kodlamak yerine böylesi iç nesneler 
     oluşturmuştur? İşte aslında bir request nesnesi ardışıl sektör transferi ile ilgilidir. Ancak bu ardışıl sektörler read ya da 
-    write biçimde olabilir. İşte bu read ve write yönleri o request nesnesinin ayrı bio nesnelerinde kodlanmıştır. Read ve write 
+    write biçiminde olabilir. İşte bu read ve write yönleri o request nesnesinin ayrı bio nesnelerinde kodlanmıştır. Read ve write 
     işlemleri ise aslında birden fazla tampon ile (yani aktarılacak hedef adres ile) ilgili olabilir. Bu bilgiler de bio_vec 
     içerisine kodlanmıştır. Dolayısıyla aslında programcı tüm bio'lar içerisindeki bio_vec'leri dolaşmalıdır.
 
@@ -65711,16 +65715,16 @@ void exit_sys(const char *msg)
 
     for_each_bio makrosunun artık doğrudan yukarıdaki biçimde kullanılması önerilmemektedir. Artık bugünlerde bio nesnelerini 
     dolaşmak yerine zaten bio nesnelerini ve onların içerisindeki bio-vec'leri dolaşan (yani içteki iki döngünün işlevini tek 
-    başına yapan) rq_for_each_segment isimli makronun kullanılması tavsiye edilmektedir. Bu makro şöyle yzılmıştır:
+    başına yapan) rq_for_each_segment isimli makronun kullanılması tavsiye edilmektedir. Bu makro şöyle yazılmıştır:
 
     #define rq_for_each_segment(bvl, _rq, _iter)			\
 	__rq_for_each_bio(_iter.bio, _rq)			            \
 		bio_for_each_segment(bvl, _iter.bio, _iter.iter)
 
     Görüldüğü gibi aslında bu makro request nesnesi içerisindeki bio nesnelerini, bio nesneleri içerisindeki bio_vec nesnelerini 
-    dolaşmaktadır. rq_for_each_segment makrosunun birinci parametresi bio_vec tründen nesneyi almaktadır. Makronun ikinci parametresi 
+    dolaşmaktadır. rq_for_each_segment makrosunun birinci parametresi bio_vec türünden nesneyi almaktadır. Makronun ikinci parametresi 
     request nesnesinin adresini almaktadır. Üçüncü parametre ise dolaşım sırasında kullanılacak bir iteratör nesnesidir. Bu nesne 
-    req_iterator isimli bir yapı türünden olmalıdır. Bu durumda transfer fonksiyonun yeni durumu aşağıdaki gibi olacaktır:
+    req_iterator isimli bir yapı türünden olmalıdır. Bu durumda transfer fonksiyonunun yeni durumu aşağıdaki gibi olacaktır:
 
     static void request_proc(struct request_queue *rq)
     {
@@ -65750,6 +65754,8 @@ void exit_sys(const char *msg)
 
     Gerçek transfer bilgileri bio_vec yapılarının içerisinde olduğuna göre acaba bu yapı nasıldır? İşte bu yapı şöyle bildirilmiştir:
 
+    #include <linux/bvec.h>
+
     struct bio_vec {
         struct page	*bv_page;
         unsigned int bv_len;
@@ -65757,7 +65763,7 @@ void exit_sys(const char *msg)
     };
 
     Yapının bv_page elemanı transferin yapılacağı adresi belirtmektedir. Çekirdek ismine eskiden "buffer cache" denilen daha sonra 
-    "page cache" denilen bir cache veri yapısı kullanmaktadır. İşletim sistemi read/write işlemlerinde önce bu "page cache" e 
+    "page cache" denilen bir cache veri yapısı kullanmaktadır. İşletim sistemi read/write işlemlerinde önce bu "page cache"e 
     başvurmakta eğer ilgili blok cache'te varsa buradan almaktadır. Eğer ilgili blok cache'te yoksa blok aygıt sürücüsünden 
     transfer istemektedir. Blok aygıt sürücüleri karakter aygıt sürücülerinin yaptığı gibi transferleri user alanına kopyalamamaktadır. 
     Blok aygıt sürücüleri transferi çekirdek tarafından tahsis edilen cache'teki sayfalara yapar. Çekirdek o sayfalardaki bilgiyi
@@ -65784,12 +65790,12 @@ void exit_sys(const char *msg)
     ifadesiyle alınmıştır. Transfer adresi olan buf adresi biov.bv_page adresinden biov.bv_offset kadar ileridedir. Yine transferin 
     yönü doğrudan bio_vec yapısının içerisinde değildir. Bu yön bilgisinin bio_data_dir makrosuyla iterator yoluyla alındığına 
     dikkat ediniz. (Aslında yön bilgisi bio yapısının içerisindedir. Bu makro onu buradan almaktadır.) Örneğimizde transferin 
-    transfer_block isimli fonksiyonla yapldığını görüyorsunuz. Bu fonksiyon bizim tarafımızdan yazılan gerçek transferin yapıldığı 
+    transfer_block isimli fonksiyonla yapıldığını görüyorsunuz. Bu fonksiyon bizim tarafımızdan yazılan gerçek transferin yapıldığı 
     fonksiyondur. Aygıt sürücünün en önemli bilgilerinin bizim tarafımızdan oluşturulan BLOCKDEV isimli yapıda tutulduğunu 
-    anımsayınız. Her ne kadar bu yapı nesnesinin adresi global g_bdev göstericisinde tutuluyor olsa da örneğimizde requeat_queue 
+    anımsayınız. Her ne kadar bu yapı nesnesinin adresi global g_bdev göstericisinde tutuluyor olsa da örneğimizde request_queue 
     nesnesinin queuedata elemanından çekilerek alınıp transfer_block fonksiyonuna verilmiştir. Bu durum yukarıdaki örnek için 
-    gereksiz olsa da birden fazla minör numarayla çalışıldığı durumda aygıt bilgilerinin yerinin belirlebilmesi için genel bir 
-    çözüm oluşturmak amacıyla transfer_block fonksiyonuna aktarılmıştır. Aygıt bilgilerinin request_queue yapısının quedata 
+    gereksiz olsa da birden fazla minör numarayla çalışıldığı durumda aygıt bilgilerinin yerinin belirlenebilmesi için genel bir 
+    çözüm oluşturmak amacıyla transfer_block fonksiyonuna aktarılmıştır. Aygıt bilgilerinin request_queue yapısının queuedata 
     elemanına nesne tahsis edildikten sonra yerleştirildiğini anımsayınız. Buradaki bizim tarafımızdan yazılması gereken 
     transfer_block fonksiyonun parametrik yapısı şöyle olabilir:
 
@@ -65797,7 +65803,7 @@ void exit_sys(const char *msg)
 
     direction değeri READ (0) ve WRITE (1) sembolik sabitleriyle define edilmiştir. 
 
-    Aşağıda RAMDISK 5'li çekirdekler öncesinde kullabileceğiniz block aygıt sürücüsünün tüm kodlarını görüyorsunuz.
+    Aşağıda RAMDISK 5'li çekirdekler öncesinde kullabileceğiniz blok aygıt sürücüsünün tüm kodlarını görüyorsunuz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* ramdisk-driver.c */
@@ -65843,12 +65849,12 @@ static int __init generic_init(void)
 	int result = 0;
 
 	if ((g_major = register_blkdev(g_major, "generic-bdriver")) < 0) {
-		printk(KERN_ERR "Cannot register block driver!...\n");
+		printk(KERN_ERR "cannot register block driver!...\n");
 		return g_major;
 	}
 
 	if ((g_bdev = kmalloc(sizeof(struct BLOCKDEV), GFP_KERNEL)) == NULL) {
-		printk(KERN_ERR "Cannot allocate memory!...\n");
+		printk(KERN_ERR "cannot allocate memory!...\n");
 		result = -ENOMEM;
 		goto EXIT1;
 	}
@@ -65856,14 +65862,14 @@ static int __init generic_init(void)
 	g_bdev->capacity = CAPACITY;
 
 	if ((g_bdev->data = vmalloc(CAPACITY)) == NULL) {
-		printk(KERN_ERR "Cannot allocate memory!...\n");
+		printk(KERN_ERR "cannot allocate memory!...\n");
 		result = -ENOMEM;
 		goto EXIT2;
 	}
 
 	spin_lock_init(&g_bdev->sl);
 	if ((g_bdev->rq = blk_init_queue(request_proc, &g_bdev->sl)) == NULL) {
-		printk(KERN_ERR "Canno allocate queue!...\n");
+		printk(KERN_ERR "cannot allocate queue!...\n");
 		result = -ENOMEM;
 		goto EXIT3;
 	}
@@ -65999,7 +66005,7 @@ rm -f $module
     içsel yapısı birkaç kere değiştirilmiştir. Burada yeni çekirdeklerdeki request kuyruk yapısı üzerinde duracağız. Yeni 
     çekirdeklerde bu kuyruk yapısı şöyle kullanılmaktadır:
 
-    1) Programcı blk_mq_tag_set isimli yapı türünden bir yapı nesnesi oluşturur. Bu yapı nesnesi blok yagıt sürücüsünün 
+    1) Programcı blk_mq_tag_set isimli yapı türünden bir yapı nesnesi oluşturur. Bu yapı nesnesi blok aygıt sürücüsünün 
     bilgilerinin tutulacağı yapının bir elemanı olarak alınabilir. Ya da global bir değişken olarak alınabilir.
 
     #include <linux/blk-mq.h>
@@ -66030,7 +66036,7 @@ rm -f $module
 
     static blk_status_t request_proc(struct blk_mq_hw_ctx *ctx, const struct blk_mq_queue_data *data);
 
-    Yapının driver_data elemanına bu fonksiyon içerisinde eişilebilecek nesnenin adresi girilmelidir. Örneğimizde bu elemana 
+    Yapının driver_data elemanına bu fonksiyon içerisinde erişilebilecek nesnenin adresi girilmelidir. Örneğimizde bu elemana 
     g_bdev nesnesinin adresini girdik. Tabii aslında bu nesne global olduğu için zaten bu nesneye her yerden erişilebilmektedir. 
     Ancak birden fazla minör numaranın desteklendiği durumda buraya ilgili minör numaraya ilişkin aygıt bilgisi girilebilir.
 
@@ -66041,7 +66047,7 @@ rm -f $module
 
     int blk_mq_alloc_tag_set(struct blk_mq_tag_set *set);
 
-    Fonksiyon blk_mq_tag_set yapı nesnesinin adresini alır. Başarı durumunda 0 değerine başarısızlık durumunda negatif errno 
+    Fonksiyon blk_mq_tag_set yapı nesnesinin adresini alır. Başarı durumunda 0 değerine, başarısızlık durumunda negatif errno 
     değerine geri döner.
     <DEVAM EDECEK>
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -66057,13 +66063,13 @@ rm -f $module
     açıp onun bazı sektörlerine bazı bilgileri yazmaktadır.
 
     Formatlama işleminden sonra artık blok aygıt sürücüsünün mount edilmesi gerekmektedir. mount işlemi bir dosya sisteminin dizin 
-    ağacının belli bir dizinine monte edilmesi anlamına gelmektedir. Dolayısıyla mount komutunda kullanıcı block aygıt sürücüsünü 
+    ağacının belli bir dizinine monte edilmesi anlamına gelmektedir. Dolayısıyla mount komutunda kullanıcı blok aygıt sürücüsünü 
     ve mount edilecek dizini girmektedir. Örneğin:
 
     $ sudo mount generic-bdriver /mnt/myblock
 
     Burada mount noktası (mount point) /ment dizinin altında myblock isimli dizindir. Bu dizinin kullanıcı tarafından önceden 
-    mkdir komutu ile yaratılması gerekir. Tabii mount noktalarının /mnt dizinin altında bulndurulması gibi zorunluluk yoktur. Mount 
+    mkdir komutu ile yaratılması gerekir. Tabii mount noktalarının /mnt dizinin altında bulundurulması gibi zorunluluk yoktur. Mount 
     noktasına ilişkin dizinin içinin boş olması da gerekmez. Fakat mount işleminden sonra artık o dizinin altı görünmez. Dosya 
     sisteminin kök dizini o dizin olacak biçimde dosya sistemi ağaca monte edilmiş olur. mount komutu aslında mount isimli bir 
     sistem fonksiyonu çağrılarak gerçekleştirilmektedir. Yani aslında bu işlem programlama yoluyla da yapılabilmektedir.
@@ -66078,26 +66084,33 @@ rm -f $module
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												165. Ders 20/09/2024 - Cuma
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Kursumuzun bu bölümünde dosya sistemlerini belli bir derinlikte inceleyeceğiz. Dosya sistemlerini ele almadan önce bilgisayar
     sistemlerindeki disk sistemleri hakkında bazı temel bilgilerin edinilmesi gerekmektedir. Eskiden diskler yerine teyp bantları
     kullanılıyordu. Teyp bantları sıralı erişim sağlıyordu. Sonra manyetik diskler kullanılmaya başlandı. Kişisel bilgisayarlardaki
     manyetik disklere "hard disk" de deniyordu. Bugünlerde artık hard diskler de teknoloji dışı kalmaya başlamıştır. Bugün disk 
     sistemleri için artık flash bellekler (EEPROM bellekler) kullanılmaktadır. Yani SSD (Solid State Disk) diye isimlendirilen 
     bu disk sistemlerinin artık mekanik bir parçası yoktur. Bunlar tamamen yarı iletken teknolojisiyle üretilmiş entegre 
-    devrelerdir. Disk sisteminin türü olursa olsun bu disk sistemini yöneten ondan sorumlu bir denetleyici birim bulunmaktadır. 
+    devrelerdir. Disk sisteminin türü ne olursa olsun bu disk sistemini yöneten ondan sorumlu bir denetleyici birim bulunmaktadır. 
     Buna "disk denetleyicisi (disk controller)" denilmektedir. Kernel mode aygıt sürücüler bu disk denetleyicisini programlayarak
     transferleri gerçekleştirmektedir. Bugünkü disk sistemlerini şekilsel olarak aşağıdaki gibi düşünebiliriz:
 
-    DISK BIRIMI <======> DİSK DENETLEYİCİSİ <=======> Aygıt Sürücü <=======> User Mode
+    +-------------+       +------------------+       +--------------+       +-----------+
+    | Disk Birimi | <---> | Disk Denetleyici | <---> | Aygıt Sürücü | <---> | User Mode |
+    +-------------+       +------------------+       +--------------+       +-----------+
                                                             |
                                                             |
-                                                            |
-                                                        Disk Cache
+                                                     +------------+
+                                                     | Disk Cache |
+                                                     +------------+
 
     Örneğin biz user mode'da bir diskten bir sektör okumak istediğimizde bu işlemi yapan blok aygıt sürücüsünden istekte 
     bulunuruz. Blok aygıt sürücüleri disk denetleyicilerini programlar, disk denetleyicileri disk birimine erişir ve transfer
-    gerçekleşir. Disk tarnsferleri CPU aracalığıyla değil "DMA (Direct Memory Access)" denilen özel denetleyicilerle sağlanmaktadır. 
-    Yani aygıt sürücü disk denetleyicisini ve DMA'yı programlar transfer yapılana kadar bekler. Bu surada işletim sistemi 
+    gerçekleşir. Disk transferleri CPU aracılığıyla değil, "DMA (Direct Memory Access)" denilen özel denetleyicilerle sağlanmaktadır. 
+    Yani aygıt sürücü hem disk denetleyicisini hem de DMA'yı programlar ve transfer yapılana kadar bekler. Bu sırada işletim sistemi 
     zaman alacak bu işlemi meşgul bir döngüde beklemez. O anda istekte bulunan thread'i bekleme kuyruğuna yerleştirerek sıradaki
     thread'i çizelgeler.
 
@@ -66105,44 +66118,44 @@ rm -f $module
     "page cache" denilen bir cache sistemi kullanmaktadır. Tabii cache sistemi aslında çekirdek tarafından organize edilmiştir. 
     Blok aygıt sürücüsünden bir sektörlük bilgi okunmak istediğinde aygıt sürücü önce bu cache sistemine bakar. Eğer istenen 
     sektör bu cache sisteminde varsa hiç bekleme yapmadan oradan alıp talep eden thread'e verir. Eğer sektör cache'te yoksa
-    blok aygıt sürücüsü disk denetleyicisini ve DMA denetleyicisini programlayarak sektörü önce cache'e tarnsfer eder. Oradan
+    blok aygıt sürücüsü disk denetleyicisini ve DMA denetleyicisini programlayarak sektörü önce cache'e transfer eder. Oradan
     talep eden thread'e verir. Bu amaçla kullanılan cache'lerde cache algoritması (cache replacement algorithm) genel olarak 
-    LRU algoritmasıdır. Yani son zamanalrda erişilen yerler mümkün olduğunca cache'te tutulmaktadır. İşlerim sistemlerinin 
-    dosya sistemleri arka planda bu blok aygıt sürücülerini kullanmaktadır. Dolayısıyla tüm dosya işlemleri aslında bu cache
-    sistemi ile gerçekleşmektedir. Yani örneğin bugünkü modern işletim sistemlerinde ne zaman bir dosya işlemi yapılsa o dosyanın
-    okunan ya da yazılan kısmı disk cache içerisine çekilemektedir. Aynı dosya üzerinde bir işlem yapıldığında zaten o dosyanın 
-    diskteki blokları cache'te olduğu için gerçek anlamda bir disk işlemi yapılmayacaktır.
+    LRU(Least Recently Used) algoritmasıdır. Yani son zamanlarda erişilen yerler mümkün olduğunca cache'te tutulmaktadır. İşletim 
+    sistemlerinin dosya sistemleri arka planda bu blok aygıt sürücülerini kullanmaktadır. Dolayısıyla tüm dosya işlemleri aslında 
+    bu cache sistemi ile gerçekleşmektedir. Yani örneğin bugünkü modern işletim sistemlerinde ne zaman bir dosya işlemi yapılsa o 
+    dosyanın okunan ya da yazılan kısmı disk cache içerisine çekilmektedir. Aynı dosya üzerinde bir işlem yapıldığında zaten o 
+    dosyanın diskteki blokları cache'te olduğu için gerçek anlamda bir disk işlemi yapılmayacaktır.
 
     Pekiyi aygıt sürücü bir sektörü yazmak isterse ne olmaktadır? İşte yazma işlemleri de doğrudan değil cache yoluyla 
     yapılmaktadır. Yani sektör önce disk cache'e yazılır. Sonra çizelgelenir ve işletim sisteminin bir kernel thread'i 
     yoluyla belli periyotlarda diske transfer edilir. User mode'dan çeşitli thread'lerin diskten okumalar yaptığını düşünelim.
     Önce bu talepler işletim sistemi tarafından kuyruklanır, çizelgelenir sonra etkin bir biçimde transfer gerçekleştirilir. 
-    İşletim sistemlerinin bu kısmına "IO çizelgeleyeicisi (IO scheduler)" denilmektedir.
+    İşletim sistemlerinin bu kısmına "IO çizelgeleyicisi (IO scheduler)" denilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bugün artık SSD (yani elektornik devre biçiminde) diskler yaygın olarak kullanılıyorsa da bir dönem öncesine kadar 
+    Bugün artık SSD (yani elektronik devre biçiminde) diskler yaygın olarak kullanılıyorsa da bir dönem öncesine kadar 
     manyetik tabanlı "hard diskler" yoğun kullanılıyordu. Burada bu hard disklerin genel yapısı üzerinde bazı açıklamalar da
     yapmak istiyoruz.
 
     Hard disklerde bir eksene monte edilmiş birden fazla yüzey vardır. Bu yüzeylere "platter" denilmektedir. Bir platter'da 
     iki yüz bulunur. Her yüz bir disk kafası ile okunmaktadır. Örneğin bir hard diskte 4 platter varsa toplam 8 tane yüz
     ve 8 tane kafa bulunur. Bilgiler tıpkı eski plaklarda olduğu gibi yuvarlak yollara yazılıp okunmaktadır. Bunlara "track"
-    denilmektedir. Dolayısıyla bir tarck'e bilginin yazılıp okunması için öncelikle kafanın o track hizasına konumlandırılması 
+    denilmektedir. Dolayısıyla bir track'e bilginin yazılıp okunması için öncelikle kafanın o track hizasına konumlandırılması 
     gerekmektedir. Tabii okuma yazma işlemi disk dönerken yapılmaktadır. Bu durumda manyetik tabanlı bu hard disklerde bir 
-    sektörün tarnsfer edilmesi için üç zaman unsuru vardır:
+    sektörün transfer edilmesi için üç zaman unsuru vardır:
 
     1) Disk kafasının ilgili track hizasına konumlandırılması için gereken zaman (seek time).
     2) Diskin dönerek kafa hizasına gelmesi için gereken zaman (rotation delay).
     3) Transfer zamanı (transfer time)
 
-    Buradaki en önemli zaman kaybu disk kafasının konumlandırılması sırasındaki kayıptır. Ortalama bir disk 6000 RPM hızında 
+    Buradaki en önemli zaman kaybı disk kafasının konumlandırılması sırasındaki kayıptır. Ortalama bir disk 6000 RPM hızında 
     dönmektedir. Yani bir dakikada 6000 tur atmaktadır. İkinci önemli zaman kaybı ilgi sektörün track kafa hizasına gelmesi 
     için harcanan zamandır. Nihayet en hızlı gerçekleşen işlem transfer işlemidir.
 
     İşletim sistemlerinin eski hard disklerde uyguladığı en önemli optimizasyon işlemi kafa hareketinin azaltılması üzerinedir. 
     Eğer dosyayı oluşturan sektörler birbirine yakınsa daha az kafa hareketi oluşur ve toplam transfer zamanı azaltılmış olur. 
-    Tabii dosya sistemlerinde zamanla dosyanın parçaları zamanla birbirinden uzaklaşabilmektedir. Bunları birbirine yaklaştıran
+    Tabii dosya sistemlerinde dosyanın parçaları zamanla birbirinden uzaklaşabilmektedir. Bunları birbirine yaklaştıran
     genellikle "defrag" biçiminde isimlendirilen yardımcı programlar vardır.
 
     Tabii artık şimdilerde kullandığımız SSD disklerde hiçbir mekanik unsur yoktur. Bunlar tamamen flash EPROM teknolojisi ile
@@ -66152,19 +66165,19 @@ rm -f $module
 /*--------------------------------------------------------------------------------------------------------------------------
     Bir diskten transfer edilecek en küçük birime sektör denilmektedir. Bir sektör genel olarak 512 byte uzunluğundadır. 
     Örneğin biz bir diskteki 1 byte'ı değiştirmek istesek önce onun içinde bulunduğu sektörü belleğe okuyup değişikliği 
-    bellekte yapıp o sektörü yeniden diske yazarız. Disklere byte düzeyinde değil sektör düzeyinde erişilmektedir.
+    bellekte yapıp o sektörü yeniden diske yazarız. Disklere byte düzeyinde değil, sektör düzeyinde erişilmektedir.
 
     Diskteki her sektöre ilk sektör 0 olmak üzere bir numara verilmiştir. Disk denetleyicileri bu numarayla çalışmaktadır. 
-    Eskiden disklerdeki koordinat sistemi daha farklıydı. Daha sonra teknoloji geliştikçe sektörünü yerini belirlemek için 
+    Eskiden disklerdeki koordinat sistemi daha farklıydı. Daha sonra teknoloji geliştikçe sektörün yerini belirlemek için 
     tek bir sayı kullanılmaya başlandı. Bu geçiş sırasında kullanılan bu sisteme LBA (Logical Block Addressing) deniliyordu. 
     Artık ister hard diskler olsun isterse SSD'ler olsun tıpkı bellekte her byte'ın bir numarası olduğu gibi her sektörün de 
-    bir sektör numarası vardır. Transflerler bu sektör numarasayla yapılmaktadır.
+    bir sektör numarası vardır. Transferler bu sektör numarasıyla yapılmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Aslında "dosya (file)" kavramı mantıksal bir kavramdır. Diskteki fiziksel birimler sektör denilen birimlerdir. Yani diskler
     dosyalardan oluşmaz sektörlerden oluşur. Dosya bir isim altında bir grup sektörü organize etmek için uydurulmuş bir 
-    kavramdır. Aslında dosyanın içindekiler diskte ardışıl sektörlerde olmak zorunda -değildir. Kullanıcı için dosya sanki 
+    kavramdır. Aslında dosyanın içindekiler diskte ardışıl sektörlerde olmak zorunda değildir. Kullanıcı için dosya sanki 
     ardışıl byte'lardan oluşan bir topluluk gibidir. Ancak bu bir aldatmacadır. Dosyadaki byte'lar herhangi bir biçimde ardışıl 
     olmak zorunda değildir. Örneğin elimizde 100K'lık bir dosya olsun. Aslında bu 100K'lık dosya diskte 200 sektör içerisindedir. 
     Peki bu dosyanın parçaları hangi 200 sektör içerisindedir? İşte bir biçimde bu bilgiler de disk üzerinde tutulmaktadır.
@@ -66177,7 +66190,7 @@ rm -f $module
     bilmemiz gerekir. UNIX/Linux sistemlerinde bilindiği gibi tüm temel aygıt sürücülere ilişkin aygıt dosyaları "/dev" dizini 
     içerisindedir.
 
-    Bir Linux sisteminde lsblk" komutu ile disklere ilişkin blok aygıt sürücülerinin listesini elde edebilirsiniz. Örneğin:
+    Bir Linux sisteminde "lsblk" komutu ile disklere ilişkin blok aygıt sürücülerinin listesini elde edebilirsiniz. Örneğin:
 
     $ lsblk
     NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
@@ -66189,13 +66202,13 @@ rm -f $module
 
     Linux sistemlerinde disklere ilişkin blok aygıt sürücüleri diskin türüne göre farklı biçimlerde isimlendirilmektedir. 
     Örneğin hard diskler ve SSD diskler tipik olarak "sda", "sdb", "sdc" biçiminde isimlendirilmektedir. Micro SD kartlar
-    ise genellikle "mmcblk0", mmcblk1", "mmcblk2" gibi isimlendirilmektedir. Örneğin burada "sda" ismi har diski bir bütün 
-    olarak ele alan aygıt dosyasının ismidir. Disk disk bölümlerinden oluşmaktadır. Bu disk bölümlerini sanki ayrı disklermiş 
-    gibi ele alan aygıt dosyaları da "sda1", "sda2", "sda3" biçimindedir. Burada "disk bölümü (disk partition)" terimini 
-    biraz açmak istiyoruz.
+    ise genellikle "mmcblk0", mmcblk1", "mmcblk2" gibi isimlendirilmektedir. Örneğin burada "sda" (Solid Disk a) ismi hard
+    diski bir bütün olarak ele alan aygıt dosyasının ismidir. Disk, disk bölümlerinden oluşmaktadır. Bu disk bölümlerini sanki 
+    ayrı disklermiş gibi ele alan aygıt dosyaları da "sda1", "sda2", "sda3" biçimindedir. Burada "disk bölümü (disk partition)" 
+    terimini biraz açmak istiyoruz.
 
     Bir diskin bağımsız birden fazla diskmiş gibi kullanılabilmesi için disk mantıksal bölümlere ayrılmaktadır. Bu bölümlere
-    "disk bölümleri (disp partitions)" denilmektedir. Bir disk bölümü diskin belli bir sektöründen başlar belli bir sektör 
+    "disk bölümleri (disk partitions)" denilmektedir. Bir disk bölümü diskin belli bir sektöründen başlar belli bir sektör 
     uzunluğu kadar devam eder. Disk bölümlerinin hangi sektörden başladığı ve hangi uzunlukta olduğu diskin başındaki bir 
     tabloda tutulmaktadır. Bu tabloya "disk bölümleme tablosu (disk partition table)" denilmektedir. Disk bölümleme tablosu 
     eskiden diskin ilk sektöründe tutuluyordu. Sonra UEFI BIOS'larla birlikte eski sistemle uyumlu olacak biçimde yeni 
@@ -66203,13 +66216,13 @@ rm -f $module
     Örneğin 3 disk bölümüne sahip bir diskin mantıksal organizasyonu şöyledir:
 
     Disk Bölümleme Tablosu
-    Birnci Disk Bölümü
+    Birinci Disk Bölümü
     İkinci Disk Bölümü
     Üçüncü Disk Bölümü
 
-    İşte "lsblk" yaptığımız Linux sisteminde biz "/dev/sda" aygıt dosyaısnıürüsünü açarsak tüm diski tek parça olarak ele alırız. 
-    Eğer "/dev/sda" aygıt dosyasını açarsak sanki Birinci Disk Bölümü ayrı diskmiş gibi yalnızca o bölümü ele alabiliriz. 
-    Örneğin "/dev/sda" aygıt dosyasından okuyacağımız 0 numaralı sektör aslında İkinci Disk Bölümünün ilk sektörürüdr. 
+    İşte "lsblk" yaptığımız Linux sisteminde biz "/dev/sda" aygıt dosyasını açarsak tüm diski tek parça olarak ele alırız. 
+    Eğer "/dev/sda1" aygıt dosyasını açarsak sanki Birinci Disk Bölümü ayrı diskmiş gibi yalnızca o bölümü ele alabiliriz. 
+    Örneğin "/dev/sda2" aygıt dosyasından okuyacağımız 0 numaralı sektör aslında İkinci Disk Bölümünün ilk sektörüdür. 
     Tabii bu sektör "/dev/sda" aygıt dosyasındaki 0 numaralı sektör değildir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -66221,14 +66234,14 @@ rm -f $module
     blok yapmaktadır. Bir blok ardışıl n tane sektöre denilmektedir. Örneğin Linux işletim sisteminin disk cache sistemi 
     aslında 4K büyüklüğünde bloklara sahiptir. 4K'nın aynı zamanda sayfa büyüklüğü olduğunu anımsayınız. Dolayısıyla biz 
     Linux'ta aslında disk ile bellek arasında en az 4K'lık transferler yapmaktayız. O halde işletim sisteminin dosya sistemi
-    ve diske doğrudan erişen sistem programcıları Linux sistemlerinde diskten birer sektör okuyup yazmak yerine 4K'lık blokları 
+    ve diske doğrudan erişen sistem programcıları, Linux sistemlerinde diskten birer sektör okuyup yazmak yerine 4K'lık blokları 
     okuyup yazarsa sistemle daha uyumlu çalışmış olur.
 
     Pekiyi biz ilgili disk aygıt sürücüsünü açıp read fonksiyonu ile yalnızca 10 byte okumak istersek ne olur? İşte bu durumda 
     blok aygıt sürücüsü gerçek anlamda o 10 byte'ın içinde bulunduğu 4K'lık bir kısmı diskten okur onu cache'e yerleştirir 
     ve bize onun yalnızca 10 byte'ını verir. Aynı byte'ları ikinci kez okumak istersek gerçek anlamda bir disk okuması 
     yapılmayacak RAM'de saklanmış olan cache'in içerisindeki bilgiler bize verilecektir. Aşağıda diski bir bütün olarak gören 
-    "/dev/sda" aygıt sürücüsü açılıp onun ilk sektörü okunmuş ve içeriği HEX olarak ekrana (stdout dosyasına) yazıdırılmıştır. 
+    "/dev/sda" aygıt sürücüsü açılıp onun ilk sektörü okunmuş ve içeriği HEX olarak ekrana (stdout dosyasına) yazdırılmıştır. 
     Burada bir noktaya dikkatinizi çekmek istiyoruz. Bu aygıt sürücüyü temsil eden aygıt dosyasına ancak root kullanıcısı 
     erişebilmektedir. Bu dosyaların erişim haklarına dikkat ediniz:
 
@@ -66277,20 +66290,20 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Dosya sistemi (file system) denildiğinde ne anlaşılmaktadır? Bir dosya sisteminin iki yönü vardır: Bellek ve disk. 
     Dosya sisteminin bellek tarafı işletim sisteminin açık dosyalar için kernel alanında yaptığı organizasyonla (dosya betimleyici 
-    tablosu, dosya nesnesi vs) ilgilidir. Disk tarafı ise diskteki organizasyonla ilgilidir. Biz kursumuzda bellek tarafındaki
-    organizasyonun temellerini gördük. Şimdi bu bu bölümde disk üzerindeki organizasyonu ele alacağız.
+    tablosu, dosya nesnesi vs.) ilgilidir. Disk tarafı ise diskteki organizasyonla ilgilidir. Biz kursumuzda bellek tarafındaki
+    organizasyonun temellerini gördük. Şimdi bu bölümde disk üzerindeki organizasyonu ele alacağız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Dosya kavramını diskte oluşturmak için farklı dosya sistemleri tarafından farklı disk organizasyonları kullanılmaktadır. 
     Bugün kullanılan çok sayıda dosya sistemi vardır. Bu sistemlerin her birinin disk organizasyonu diğerinden az çok farklıdır. 
-    Ancak bazı dosya sistemlerinin birbirlerine organizasyonları birbirine çok benzemektedir. Bunlar adreta bir aile oluşturmaktadır. 
+    Ancak bazı dosya sistemlerinin disk organizasyonları birbirine çok benzemektedir. Bunlar adeta bir aile oluşturmaktadır. 
     Örneğin Microsoft'un FAT dosya sistemleri, Linux'un ext dosya sistemleri kendi aralarında birbirine oldukça benzemektedir.
 
-    Microsft'un dünyanın kişisel bilgisayarlarında kullandığı dosya sistemlerine aile olarak FAT (File Allocation Table) 
+    Microsoft'un dünyanın ilk kişisel bilgisayarlarında kullandığı dosya sistemlerine aile olarak FAT (File Allocation Table) 
     denilmektedir. Bu FAT dosya sistemlerinin kendi içerisinde FAT12, FAT16 ve FAT32 biçiminde varyasyonları vardır. Microsoft 
     daha sonra yine FAT tabanlı ancak çok daha gelişmiş NTFS denilen bir dosya sistemi gerçekleştirmiştir. Bugün Windows 
-    sistemlerinde genel olarak NTFS (New Technology File SYstems) dosya sistemleri kullanılmaktadır. Ancak Microsoft hala 
+    sistemlerinde genel olarak NTFS (New Technology File Systems) dosya sistemleri kullanılmaktadır. Ancak Microsoft hala 
     FAT tabanlı dosya sistemlerini de desteklemektedir. Linux sistemlerinde "EXT (Extended File System)" ismi verilen 
     "i-node tabanlı" dosya sistemleri kullanılmaktadır. Bu EXT dosya sistemlerinin EXT2, EXT3, EXT4 biçiminde varyasyonları 
     vardır. Bugünkü Linux sistemlerinde en çok EXT4 dosya sistemi kullanılmaktadır. Apple firması yine i-node tabanlı HFS 
@@ -66323,20 +66336,20 @@ void exit_sys(const char *msg)
     Fonksiyonun birinci parametresi blok aygıt dosyasının yol ifadesini, ikinci parametre mount dizinini (mount point)
     belirtmektedir. Üçüncü parametre dosya sisteminin türünü almaktadır. Dördüncü parametre mount bayraklarını belirtmektedir. 
     Bu parametre 0 geçilebilir. Son parametre ise dosya sistemi için gerekebilecek ekstra verileri belirtmektedir. Bu parametre 
-    de NULL adres geçilebilir. Fonksiyon başarı durumunda 0 değerine başarısızlık durumunda -1 değerine geri dönmektedir. Dosya
+    de NULL adres geçilebilir. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri dönmektedir. Dosya
     sisteminin türünün otomatik tespit eden bazı özel fonksiyonlar bulunmaktadır. Örneğin "libmount" kütüphanesi içerisindeki 
-    statfs fonksiyonu, "libblkid" kütüphanesi içerisindeki fonksiyonlarla bunu sağlayabilirsiniz.
+    statfs fonksiyonuyla ya da "libblkid" kütüphanesi içerisindeki fonksiyonlarla bunu sağlayabilirsiniz.
 
     Tabii bu fonksiyonu çağırabilmek için prosesimizin etkin kullanıcı id'sinin 0 olması ya da prosesimizin uygun önceliğe 
     (appropriate privilege) sahip olması gerekir. mount fonksiyonu POSIX standartlarında yoktur. Çünkü işletim sisteminin
-    gerçekleştirimine oldukça bağlı bir fonksiyondur. Tabii kullanıcılar mount işlemini bu sistem fonksiyonu yoluyla değil 
+    gerçekleştirimine oldukça bağlı bir fonksiyondur. Tabii kullanıcılar mount işlemini bu sistem fonksiyonu yoluyla değil, 
     "mount" isimli kabuk komutuyla yapmaktadır. mount işlemi için elimizde bir blok aygıt sürücüsüne ilişkin aygıt dosyasının
     bulunuyor olması gerekir. Ancak blok aygıt sürücüleri mount edilebilmektedir. Tabii ilgili blok aygıt sürücüsünün sektörleri 
     içerisinde bir dosya sisteminin bulunuyor olması gerekir. mount isimli kabuk komutunun tipik kullanımı şöyledir:
 
     sudo mount <blok_aygıt_dosyası> <mount_edilecek_dizin>
 
-    Nount edilecek dizine genel olarak İngilizce "mount point" de denilmektedir. Örneğin bilgisayarımıza bir SD kart okuyu 
+    Mount edilecek dizine genel olarak İngilizce "mount point" de denilmektedir. Örneğin bilgisayarımıza bir SD kart okuyucu 
     bağlamış olalım. lsblk yaptığımızda şöyle bir görüntüyle karşılaştığımızı varsayalım:
 
     $ lsblk
@@ -66354,16 +66367,16 @@ void exit_sys(const char *msg)
 
     Burada taktığımız SD kart "sdc" ismiyle gözükmektedir. "/dev/sdc" aygıt dosyası SD kartı bir bütün olarak görmektedir. 
     Bu SD kartın içerisinde iki farklı disk bölümünün oluşturulduğu görülmektedir. Bu disk bölümlerine ilişkin aygıt dosyaları 
-    da "/dev/sdc1" ve "/dev/sdc2" dosyalarıdır. Biz "/dev/sdc" aygıtını mount edemeyiz. Çünkü bu aygıt diski bir bütün olarak 
-    görmektedir. Oysa "/dev/sdc1" ve "/dev/sdc2" aygıtlarının içerisinde daha öncedne oluşturulmuş olan dosya sistemleri vardır. 
+    da "/dev/sdc1" ve "/dev/sdc2" dosyalarıdır. Biz "/dev/sdc" aygıtını mount edemeyiz. Çünkü bu aygıt, diski bir bütün olarak 
+    görmektedir. Oysa "/dev/sdc1" ve "/dev/sdc2" aygıtlarının içerisinde daha önceden oluşturulmuş olan dosya sistemleri vardır. 
     Biz bu aygıtları mount edebiliriz. Mount işlemi için sistem yöneticisinin bir dizin oluşturması gerekir. Mount işlemleri 
-    için Linux sistemlerinde kök dizinin altında bir "mnt" oluşturulmuş durumdadır. Yani mount edilecek dizini bu dizinin 
+    için Linux sistemlerinde kök dizinin altında bir "mnt" dizini oluşturulmuş durumdadır. Yani mount edilecek dizini bu dizinin 
     altında yaratabilirsiniz. Tabii böyle bir zorunluluk yoktur. Biz bulunduğumuz dizinde boş bir dizin yaratıp bu dizini 
     mount point olarak kullanabiliriz. Örneğin:
 
     $ sudo mount /dev/sdc1 mydisk
 
-    mount komutu ilgi blok aygıtındaki dosya sistemini otomatik olarak tespit etmeye çalışır. Genellikle bu tespit otomatik 
+    mount komutu ilgili blok aygıtındaki dosya sistemini otomatik olarak tespit etmeye çalışır. Genellikle bu tespit otomatik 
     yapılabilmektedir. Ancak bazı özel aygıtlar ve dosya sistemleri için bu belirlemenin açıkça yapılması gerekebilir. Bunun 
     için mount komutunda "-t <dosya_sisteminin_türü> seçeneği kullanılır. Örneğin:
 
@@ -66380,7 +66393,7 @@ void exit_sys(const char *msg)
     xfs
     ...
 
-    Dosya sisteminin otomatik belirlenmesi mount sistem fonksiyonu tarafından yapılamaltadır. mount komutu e birtakım işlemlerle
+    Dosya sisteminin otomatik belirlenmesi mount sistem fonksiyonu tarafından yapılmaktadır. mount komutu birtakım işlemlerle
     bunu sağlamaktadır.
 
     Mount edilmiş olan bir blok aygıtının mount işlemi umount isimli sistem fonksiyonuyla kaldırılabilir. Fonksiyonun prototipi 
@@ -66390,7 +66403,7 @@ void exit_sys(const char *msg)
 
     int umount(const char *target);
 
-    Fonlsiyon mount dizininin parametre olarak almaktadır. Başarı durumunda 0 değerine başarısızlık durumunda -1 değerine geri 
+    Fonksiyon mount dizinini parametre olarak almaktadır. Başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri 
     döner. Artık umount yapıldıktan sonra mount point dizinin içeriğine yeniden erişilebilmektedir. Unmount işlemi de yine komut 
     satırından "umount" komutuyla yapılabilmektedir. Komutun genel biçimi şöyledir:
 
@@ -66400,14 +66413,14 @@ void exit_sys(const char *msg)
 
     $ sudo umount mydisk
 
-    Pek çok UNIX türevi sistemde oluduğu gibi Linux sistemlerinde de "otomatik mount" mekanizması bulunmaktadır. Sistem boot
-    edildiğinde konfigürasyon dosyalarından hareketle otomatik mount işlemleri yapılabilmektedir. USB ygıtları genel olarak 
+    Pek çok UNIX türevi sistemde olduğu gibi Linux sistemlerinde de "otomatik mount" mekanizması bulunmaktadır. Sistem boot
+    edildiğinde konfigürasyon dosyalarından hareketle otomatik mount işlemleri yapılabilmektedir. USB aygıtları genel olarak 
     zaten otomatik mount işlemi oluşturmaktadır. "systemd" init sisteminde "mount unit" dosyaları ile otomatik mount işlemleri
-    yönetilebilmektedir. Klasik "system5" init sistemlerinde çekirdektek yüklendikten sonra "/etc/fstab" dosyasında otomatik 
+    yönetilebilmektedir. Klasik "system5" init sistemlerinde çekirdek yüklendikten sonra "/etc/fstab" dosyasında otomatik 
     mount edilecek blok aygıtları belirtilebilmektedir. "/etc/fstab" dosyasına "systemd" tarafından da açılış sırasında 
     bakılmaktadır.
 
-    Aşağıda mount sistem fonksiyonu çağrılarak mount işlemi yapan bir örnek verilmiştir. Programı aşağıdakine bzenzer biçimde 
+    Aşağıda mount sistem fonksiyonu çağrılarak mount işlemi yapan bir örnek verilmiştir. Programı aşağıdakine benzer biçimde 
     çalıştırabilirsiniz:
 
     $ sudo ./mymount /dev/sdc1 mydisk vfat
@@ -66426,7 +66439,7 @@ void exit_sys(const char *msg);
 int main(int argc, char *argv[])
 {
 	if (argc != 4) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -66468,14 +66481,14 @@ void exit_sys(const char *msg)
     Tabii bizim burada "mydisk.dat" isimli bir dosyaya sahip olmamız gerekir. İçi 0'larla dolu 100 MB'lik böyle bir dosyayı
     dd komutuyla aşağıdaki gibi oluşturabiliriz:
 
-    $ dd if=/dev/zero of=test.dat bs=512 count=100000
+    $ dd if=/dev/zero of=mydisk.dat bs=512 count=100000
 
     Burada artık "/dev/loop0" aygıt dosyası adeta bir disk gibi kullanılabilir hale gelmiştir. Biz bu "/dev/loop0" dosyasını 
     kullandığımızda bu işlemlerden aslında "mydisk.dat" dosyası etkilenecektir.
 
     Sıfırdan bir diske ya da bir disk bölümüne bir dosya sistemi yerleştirebilmek için onun formatlanması gerekir. UNIX/Linux
     sistemlerinde formatlama için "mkfs.xxx" isimli programlar bulundurulmuştur. Örneğin aygıtta FAT dosya sistemi oluşturmak 
-    için "mkfs.fat" programı, ext4 dosya sistemi oluşturmak için "mkfs.ext4" programu kullanılmaktadır. Örneğin biz yukarıda
+    için "mkfs.fat" programı, ext4 dosya sistemi oluşturmak için "mkfs.ext4" programı kullanılmaktadır. Örneğin biz yukarıda
     oluşturmuş olduğumuz "/dev/loop" aygıtını ext2 dosya sistemi ile aşağıdaki gibi formatlayabiliriz:
 
     $ sudo mkfs.ext2 /dev/loop0
@@ -66484,7 +66497,7 @@ void exit_sys(const char *msg)
     gibi mount edebiliriz:
 
     $ mkdir mydisk
-    # sudo mount /dev/loop0 mydisk
+    $ sudo mount /dev/loop0 mydisk
 
     Loop aygıtının dosya ile bağlantısını kesmek için "losetup" programı "-d" seçeneği ile çalıştırılır. Tabii önce aygıtın 
     kullanımdan düşürülmesi gerekir:
@@ -66503,7 +66516,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-												168. Ders 27/09/2024 - Cuma
+												167. Ders 27/09/2024 - Cuma
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -66513,41 +66526,41 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     FAT dosya sistemi Microsof tarafından DOS işletim sistemi için geliştirilmiştir. Ancak bu dosya sistemi hala kullanılmaktadır. 
-    FAT dosya sistemi o zamanlar teknolojisiyle tasarlanmıştır. Dolayısıyla moren dosya sistemlerinde bulunan bazı özellikler 
+    FAT dosya sistemi o zamanlar teknolojisiyle tasarlanmıştır. Dolayısıyla modern dosya sistemlerinde bulunan bazı özellikler 
     bu dosya sisteminde bulunmamaktadır. FAT dosya sistemi kendi aralarında FAT12, FAT16 ve FAT32 olmak üzere üç gruba ayrılmaktadır.
-    Bu sistemlerin arasındaki en önemli fark dosya sistemi içerisindeki FAT (File ALlocation Table) denilen tablodaki elemanların
-    uzunluklarıdır. FAT12'de FAT elemanları 12 bit, FAT16'da 16 bir ve ve FAT32'de 32 bittir. Microsoft Windows sistemlerine
+    Bu sistemlerin arasındaki en önemli fark dosya sistemi içerisindeki FAT (File Allocation Table) denilen tablodaki elemanların
+    uzunluklarıdır. FAT12'de FAT elemanları 12 bit, FAT16'da 16 bit ve ve FAT32'de 32 bittir. Microsoft, Windows sistemlerine
     geçtiğinde bu FAT sistemini biraz revize etmiştir. Buna da VFAT denilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir disk ya da disk bölümü (Disk Parititon) FAT dosya sistemiyle formatlandığında disk bölümünde dört mantıksal bölüm 
+    Bir disk ya da disk bölümü (Disk Partition) FAT dosya sistemiyle formatlandığında disk bölümünde dört mantıksal bölüm 
     oluşturulmaktadır:
 
     1) Boot Sektör
     2) FAT Bölümü
-    3) RootDir Bölümü
+    3) Root Dir Bölümü
     4) Data Bölümü
 
-    Bir dosya sisteminin içi boş bir biçimde kullanıma hazır hale getirilmesi sürecine formatlama denilmektedir. Formatşama 
+    Bir dosya sisteminin içi boş bir biçimde kullanıma hazır hale getirilmesi sürecine formatlama denilmektedir. Formatlama 
     sırasında ilgili disk ya da disk bölümünde ilgili dosya sistemi için meta data alanlar oluşturulmaktadır.
 
     Windows'ta ilgili disk ya da disk bölümünü FAT dosya sistemiyle formatlamak için "Bilgisayar Yönetimi / Disk Yönetimi" 
     kısmından ilgili disk bölümü seçilir ve farenin sağ tuşuna basılarak formatlama yapılır. Benzer biçimde formatlama 
-    "Bilgisayarım (My Computer)" açılarak orada ilgili dik bölümünü üzerinde sağa tıklanarak da yapılabilmektedir.
+    "Bilgisayarım (My Computer)" açılarak orada ilgili disk bölümünün üzerine sağa tıklanarak da yapılabilmektedir.
 
-    Linux sistemlerinde bir blok aygıt sürücüsü ya da doğrudan bir dosya "mkfs.fat" programıyle formatalanbilir. Biz yukarıda 
-    da belirtitğimiz gibi bir dosyayı sanki disk gibi kullanacağız. Örneğin "dd" programıyla 50MB'lik içi sıfırlarla dolu 
+    Linux sistemlerinde bir blok aygıt sürücüsü ya da doğrudan bir dosya "mkfs.fat" programıyla formatlanabilir. Biz yukarıda 
+    da belirttiğimiz gibi bir dosyayı sanki disk gibi kullanacağız. Örneğin "dd" programıyla 50MB'lik içi sıfırlarla dolu 
     bir dosya oluşturalım:
 
     $ dd if=/dev/zero of=mydisk.dat bs=512 count=100000
 
-    Burada 512 * 10000 byte'lık (yaklaışık 50 MB) içi sıfırlarla dolu bir dosya oluşturulmuştur. Bu dosyayı "/dev/loop0" 
-    blok aygıt aygıt sürücüsü biçiminde kullanılabilmesi şöyle sağlanabilir:
+    Burada 512 * 100000 byte'lık (yaklaşık 50 MB) içi sıfırlarla dolu bir dosya oluşturulmuştur. Bu dosyayı "/dev/loop0" 
+    blok aygıt sürücüsü biçiminde kullanılabilmesi şöyle sağlanabilir:
 
     $ sudo losetup /dev/loop0 mydisk.dat
 
-    Şimdi artık "mkfs.fat" programı ile formatlamayı yapabiliriz. Yukarıda FAT'in FAt12, FAT16 ve FAT32 olmak üzere üç 
+    Şimdi artık "mkfs.fat" programı ile formatlamayı yapabiliriz. Yukarıda FAT'in FAT12, FAT16 ve FAT32 olmak üzere üç 
     türünün olduğunu belirtmiştik. FAT türü "mkfs.fat" programında -F12, -F16 ya da -F32 seçenekleriyle belirtilmektedir. 
     Örneğin biz blok aygıtımızı FAT16 biçiminde şöyle formatlayabiliriz:
 
@@ -66565,19 +66578,21 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    FAT dosya sistemiyle formatlanmış olan bir diskin ya da disk bölümünün ilk sektörüne Boot sektör denilmektedir. Dolayısıyla 
+    FAT dosya sistemiyle formatlanmış olan bir diskin ya da disk bölümünün ilk sektörüne "Boot Sector" denilmektedir. Dolayısıyla 
     boot sektör ilgili diskin ya da disk bölümünün mantıksal 0 numaralı sektöründedir. Boot sektör isminden de anlaşılacağı 
     gibi 512 byte uzunluğundadır. Bu sektörün iç organizasyonu şöyledir:
 
     Jmp Kodu | BPB (BIOS Parameter Block) | DOS Yükleyici Programı | 55 AA
 
     Boot sektörün hemen başında Intel Mimarisinde BPB bölümünü atlayarak DOS işletim sistemini yükleyen yükleyici program 
-    için bir jmp komutu bulunmaktadır. Bugün artık DOS işletim sistemi kullanılmadığı için burakai Jmp kodun ve yükleyici 
+    için bir jmp komutu bulunmaktadır. Bugün artık DOS işletim sistemi kullanılmadığı için buradaki jmp kodun ve yükleyici 
     programın bir işlevi kalmamıştır. Ancak BPB alanı eskiden olduğu yerdedir ve dosya sistemi hakkında kritik bilgiler bu 
-    bölümde tutulmakttadır. Sektörün başındaki Jmp Code tipik olarak EB 3C 90 makine komutundan oluşmaktadır. Bazı kaynaklar 
+    bölümde tutulmaktadır. Sektörün başındaki Jmp Code tipik olarak "EB 3C 90" makine komutundan oluşmaktadır. Bazı kaynaklar 
     bu jmp kodu da BPB alanına dahil etmektedir. Eğer dosya sisteminde yüklenecek bir DOS işletim sistemi yoksa buradaki 
-    yükleyici program yerine format programı buraya ekrana mesaj çıkartan küçük program kodu yerleştirmektedir. 
-    Aşağıda "mkfs.fat" programı ile FAT16 biçiminde formatlanan FAT dosya sisteminin boot sektör içeriği görülmektedir:
+    yükleyici program yerine format programı buraya ekrana mesaj çıkartan küçük program kodu yerleştirmektedir. Aşağıda 
+    "mkfs.fat" programı ile FAT16 biçiminde formatlanan FAT dosya sisteminin boot sektör içeriği görülmektedir:
+
+    $ hexdump -C mydisk.dat -n 512 -v
 
     00000000  eb 3c 90 6d 6b 66 73 2e  66 61 74 00 02 04 04 00  |.<.mkfs.fat.....|
     00000010  02 00 02 00 00 f8 64 00  20 00 08 00 00 00 00 00  |......d. .......|
@@ -66622,9 +66637,9 @@ void exit_sys(const char *msg)
     sistemindeki diğer bölümleri inceleyerek bozulmuş olan BPB alanını onaran yardımcı araçlar da çeşitli kişiler ve kurumlar 
     tarafından geliştirilmiştir.
 
-    Boot sektörün sonunda 55 AA değeri bulunmaktadır. Bu bir sihirli sayı (magic number) olarak bulundurulmaktadır. Bazı 
-    programlar ve bazı boot loader'lar kontorlü boot sektöre bırakmadan önce bu sihirli sayıyı kontrol edebilmektedir. Böylece
-    rastgele bozulmalarda bu sihirli sayı da bozulacağı için yetersiz olsa da basit kontrol mekanizması oluşturulabilmektedir.
+    Boot sektörün sonunda "55 AA" değeri bulunmaktadır. Bu bir sihirli sayı (magic number) olarak bulundurulmaktadır. Bazı 
+    programlar ve bazı boot loader'lar kontrolü boot sektöre bırakmadan önce bu sihirli sayıyı kontrol edebilmektedir. Böylece
+    rastgele bozulmalarda bu sihirli sayı da bozulacağı için yetersiz olsa da basit bir kontrol mekanizması oluşturulabilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -66632,13 +66647,17 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												169. Ders 06/10/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     FAT dosya sisteminde en önemli kısım şüphesiz "BPB (BIOS Parameter Block)" denilen kısımdır. BPB hemen boot sektörün 
-    başındadır ve FAT dosya sisteminin diğer bölümleri hakkında kritk bilgiler içermektedir. Tabii BPB bölümü 1980'lerin 
+    başındadır ve FAT dosya sisteminin diğer bölümleri hakkında kritik bilgiler içermektedir. Tabii BPB bölümü 1980'lerin 
     anlayışıyla tasarlanmıştır. Bu tasarımda hatalar DOS'un çeşitli versiyonlarında geçmişe doğru uyumu koruyarak giderilmeye
     çalışılmıştır. Biz burada önce FAT12 ve FAT16 sistemlerinde kullanılan BPB bloğunun içeriğini tek tek ele alacağız. FAT32
     ile birlikte BPB bloğuna eklemeler de yapılmıştır. FAT32 BPB formatını daha sonra ele alacağız.
 
-    Aşağıda Fat12 ve FAT16 sistemlerindeki BPB bloğunun formatı açıklanmaktadır. Tablodaki Offset sütunu Hex olarak ilgili alanın
+    Aşağıda FAT12 ve FAT16 sistemlerindeki BPB bloğunun formatı açıklanmaktadır. Tablodaki Offset sütunu Hex olarak ilgili alanın
     Boot sektörün başından itibaren kaçıncı byte'tan başladığını belirtmektedir.
 
     Offset (Hex)        Uzunluk             Anlamı
@@ -66662,26 +66681,26 @@ void exit_sys(const char *msg)
 
     - Jump Kodu: Yukarıda da belirttiğimiz gibi BPB bloğunu geçerek yükleyici programa atlayan makine komutlarından oluşmaktadır. 
     Boot loader programlar akışı buradan boot sektöre devretmektedir. Dolayısıyla BPB alanının atlanması gerekmektedir. Burada
-    bazen Intel short jump bazen de near jump komutları bulunur. Tipik içerik EB 3C 90 biçimindedir.
+    bazen Intel short jump bazen de near jump komutları bulunur. Tipik içerik "EB 3C 90" biçimindedir.
 
     - OEM Yorum Alanı: Formatlama programının kendine özgü yazdığı 8 byte'lık küçük yazıdır. Buraya eskiden DOS işletim sisteminin 
     versiyon numarası yazılıyordu. Örneğin Windows bu BPB alanın yeni biçiminin tanındığı en eski sistem olan "MSDOS5.0" 
-    yazısını buraya yerleştişrmektedir. Ancak buraya yerleştirilen yazı herhangi bir biçimde kullanılmamaktadır.
+    yazısını buraya yerleştirmektedir. Ancak buraya yerleştirilen yazı herhangi bir biçimde kullanılmamaktadır.
 
     - Sektördeki Byte Sayısı: Bir sektörde kaç byte olduğu bilgisi burada tutulmaktadır. Tabii bu değer hemen her zaman 512'dir.
-    Yani Little Endian formatta hex olarak burada 00 02 değerlerini görmemiz gerekir.
+    Yani Little Endian formatta hex olarak burada "00 02" değerlerini görmemiz gerekir.
 
     - Cluster'daki Sektör Sayısı: Dosyaların parçaları disk üzerinde ardışıl bir biçimde konumlandırılmak zorunda değildir. 
     FAT dosya sisteminde bir dosyanın hangi parçasının diskte nerede konumlandırıldığı FAT (File Allocation Table) denilen 
     bir bölümde saklanmaktadır. Eğer bir dosya çok fazla parçaya ayrılırsa hem disk üzerinde daha çok yayılmış olur hem de FAT
-    bölümünde bu dosyanın parçalarının yerini turmak için gereken alan büyür. Bu nedenle dosyaların parçaları sektörlere değil
+    bölümünde bu dosyanın parçalarının yerini tutmak için gereken alan büyür. Bu nedenle dosyaların parçaları sektörlere değil,
     cluster denilen birimlere bölünmüştür. Bir cluster ardışıl n tane sektörün oluşturduğu topluluktur. Örneğin bir cluster'ın
     4 sektör olması demek 4 sektörden oluşması (yani 2K) demektir. Şimdi elimizde 10,000 byte uzunluğunda bir dosya olsun. Bir 
     cluster'ın 1 sektör olduğunu düşünelim. Bu durumda bu 10,000 byte'lık dosya toplamda 10000 / 512 = 19.53125 yani 20 cluster
-    yer kaplayacaktır. FAT bölümünde bu 20 cluster 20 elemanlık yer kaplayacaktır. Şimdi bir cluster'ın 4 sektörden oluşturğunu 
-    düşünelim. Bu duurmda 10,000 byte'lık dosya 10000 / 2048 = 4.8828125 yan, 5 cluster yer kaplayacaktır. Bu dosyanın yerini 
+    yer kaplayacaktır. FAT bölümünde bu 20 cluster 20 elemanlık yer kaplayacaktır. Şimdi bir cluster'ın 4 sektörden oluştuğunu 
+    düşünelim. Bu durumda 10,000 byte'lık dosya 10000 / 2048 = 4.8828125 yani 5 cluster yer kaplayacaktır. Bu dosyanın yerini 
     tutmak için FAT bölümünde 5 eleman yeterli olacaktır. Görüldüğü gibi cluster bir dosyanın bir parçasını tutabilen en düşük
-    tahsisat birimidir.Halbuki sektör diskten transfer edilecek en küçük birimdir. Sektör yerine dosya sisteminin cluster kavramını
+    tahsisat birimidir. Halbuki sektör diskten transfer edilecek en küçük birimdir. Sektör yerine dosya sisteminin cluster kavramını
     kullanmasının iki nedeni vardır. Birincisi cluster ardışıl sektörlerden oluştuğu için dosyanın parçaları diskte daha az
     yayılmış olur. İkincisi de dosyanın parçalarının yerlerini tutmak için daha az alan gerekmektedir.
 
@@ -66692,10 +66711,10 @@ void exit_sys(const char *msg)
     dosyanın diskte kapladığı alanla 1 tane 100 byte'lık dosyanın diskte kapladığı alan kıyaslandığında 100 tane 1 byte'lık 
     dosyanın diskte çok daha fazla yer kapladığı görülecektir. İşte UNIX/Linux sistemlerinde dosyaları tek bir dosyada peşi 
     sıra birleştiren ve bunların yerlerini dosyanın başındaki bir başlık kısmında tutan "tar" isimli bir yardımcı program 
-    bulunmaktadır. "tar" programının bir sıkıştırma yapmadığına diskteki kaplalan alanı azaltmak için yalnızca dosyaları 
+    bulunmaktadır. "tar" programının bir sıkıştırma yapmadığına diskteki kaplanan alanı azaltmak için yalnızca dosyaları 
     uç uca eklediğine dikkat ediniz. Tabii genellikle dosyalar tar'landıktan sonra ayrıca sıkıştırılabilir. Bu sistemlerdeki 
-    "tar.gz" gibi dosya uzantıları tar'landıktan sonra zip'lenmiş olan dosyaları belirtmektedir. Pkiyi o halde bir cluster'ın
-    kaç sektör olacağına nasıl karar verilmektedir? İşte sezgisel olarak disk hacmi büyüdükçe kaybedeilen alanların önemi 
+    "tar.gz" gibi dosya uzantıları tar'landıktan sonra zip'lenmiş olan dosyaları belirtmektedir. Pekiyi o halde bir cluster'ın
+    kaç sektör olacağına nasıl karar verilmektedir? İşte sezgisel olarak disk hacmi büyüdükçe kaybedilen alanların önemi 
     azalacağı için cluster'ın çok sektörden oluşturulması, disk hacmi azaldıkça az sektörden oluşturulması yoluna gidilmektedir. 
     Format programları bu değerin kullanıcı tarafından belirlenmesine olanak sağlamakla birlikte default değer de önermektedir. 
     Linux'taki "mkfs.fat" programında ise cluster boyutu "-s" seçeneği ile belirlenmektedir. Örneğin:
@@ -66704,7 +66723,7 @@ void exit_sys(const char *msg)
 
     Burada bir cluster 2 sektörden oluşturulmuştur.
 
-    İşte BPB bloğunun 0C offset'inde bir cluster'ın kaç sektörden oluştuğu bilgisi yer almaktadır. İşletim sistemi dosyaların 
+    İşte BPB bloğunun "0C" offset'inde bir cluster'ın kaç sektörden oluştuğu bilgisi yer almaktadır. İşletim sistemi dosyaların 
     parçalarına erişirken hep bu bilgiyi kullanmaktadır. (Burada değeri disk editörü ile değiştirsek dosya sistemi tamamen 
     saçmalayacaktır.) Yukarıdaki örnek boot sektörde bir cluster 4 sektörden (yani 4K = 2048 byte'tan) oluşmaktadır.
 
@@ -66713,13 +66732,13 @@ void exit_sys(const char *msg)
     başladığını belirtmektedir. Pekiyi neden boot sektör ile FAT arasında boşluk bırakmak gerekebilir? İşte hard disklerde 
     işletim sistemi FAT bölümünü ilk silindire hizalamak isteyebilir. Eğer özel uygulamalarda boot sektör yükleyici programı
     uzunsa yükleyicinin diğer parçaları da burada bulunabilmektedir. Yukarıdaki örnek FAT bölümünün boot sektöründe bu byte'lar
-    04 00 biçimindedir. Little Endian formatta bu bu değer 4'tür. O halde bu dosya sisteminde FAT bölümü 4'üncü sektörden 
+    "04 00" biçimindedir. Little Endian formatta bu değer 4'tür. O halde bu dosya sisteminde FAT bölümü 4'üncü sektörden 
     başlamaktadır.
 
     FAT Kopyalarının Sayısı: FAT bölümü izleyen paragraflarda da görüleceği gibi FAT dosya sisteminin önemli bir meta-data 
     alanıdır. Bu nedenle bu bölümün backup amaçlı birden fazla kopyasının bulundurulması uygun görülmüştür. Tipik olarak bu 
-    alanda 2 değeri bulunur. Yani FAT bölümünün toplamda iki kopyası vardır. FAT bölümünün kopyaları hemen birbirinin 
-    peşi sıra dizilmiştir. Yani bir kopyanın bittiği yerde diğeri başlamaktadır.
+    alanda 2 değeri bulunur. Yani FAT bölümünün toplamda iki kopyası vardır. FAT bölümünün kopyaları hemen birbirinin peşi 
+    sıra dizilmiştir. Yani bir kopyanın bittiği yerde diğeri başlamaktadır.
 
     Kök Dizinlerindeki Girişlerin Sayısı: FAT dosya sistemindeki bölümlerin dizilimin şöyle olduğunu belirtmiştik:
 
@@ -66728,10 +66747,10 @@ void exit_sys(const char *msg)
     Root Dir Bölümü
     Data Bölümü
 
-    İşletim sisteminin tüm bölümlerin hangi sektörden başladığını ve kaçş sektör uzunlukta olduğunu bilmesi gerekir. İşte 
+    İşletim sisteminin tüm bölümlerin hangi sektörden başladığını ve kaç sektör uzunlukta olduğunu bilmesi gerekir. İşte 
     "Root Dir" bölümü dizin girişlerinden oluşmaktadır. Bir dizin girişi 32 byte uzunluğundadır. Burada toplam kaç giriş 
-    olduğu belirtilmektedir. Dolayısıyla "Root Dir" bölümünün sektör duzunluğu buradaki sayının 32'ye bmlümü ile hesaplanır. 
-    Bizim oluşturduğumuz örnek FAT16 disk bölümünde burada 0x0200 (512) değeri bulunmaktadır. Bu durumda Root Dir bölümünün
+    olduğu belirtilmektedir. Dolayısıyla "Root Dir" bölümünün sektör uzunluğu buradaki sayının 32'ye bölümü ile hesaplanır. 
+    Bizim oluşturduğumuz örnek FAT16 disk bölümünde burada "0x0200" (512) değeri bulunmaktadır. Bu durumda Root Dir bölümünün
     sektör uzunluğu 512 / 32 = 16'dır.
 
     Toplam Sektör Sayısı (Eski): Bu alanda disk bölümündeki toplam sektör sayısı bulundurulmaktadır. Ancak BPB formatının 
@@ -66740,20 +66759,20 @@ void exit_sys(const char *msg)
     2 byte'lık yerde yazılabilecek maksimum değer 65535'tir. Bu değeri 512 ile çarparsak 33MB'lık bir alan söz konusu olur. 
     Gerçekten de o devirlerde diskler 33MB'den daha yukarıda formatlanamıyordu. DOS 4.01'e kadar 33MB bir üst sınırdı. Ancak 
     DOS 4.01 ile birlikte bu toplam sektör sayısı geçmişe doğru uyum korunarak 4 byte yükseltildi. Dolayısıyla DOS 4.01 ve 
-    sonrasında artık disk bölümünün toplam kapasitesi 2^32 * 2^9 = 2TB'ye yükselmiş oldu. 4 Byte'tan oluşsan yeni toplam sektör
-    sayısı alanı boot sektörün 0x20 offsetinde bulunmaktadır. Dosya sistemleri toplam sektör sayısı için önce 0x13 offset'inde 
-    bulunan bu alana başvurmaktadır. Eğer bu alanda 0 yoksa bu alandaki bilgiyi eğer bu alanda 0 varsa 0x20 offset'inden çekilen 
-    DWORD bilgili dikkate almaktadır.
+    sonrasında artık disk bölümünün toplam kapasitesi 2^32 * 2^9 = 2TB'ye yükselmiş oldu. 4 byte'tan oluşan yeni toplam sektör
+    sayısı alanı boot sektörün "0x20" offset'inde bulunmaktadır. Dosya sistemleri toplam sektör sayısı için önce "0x13" offset'inde 
+    bulunan bu alana başvurmaktadır. Eğer bu alanda 0 yoksa bu alandaki bilgiyi, eğer bu alanda 0 varsa "0x20" offset'inden çekilen 
+    DWORD bilgiyi dikkate almaktadır.
 
     - Ortam Belirleyicisi (Media Descriptor): Bu alanda dosya sisteminin konuşlandığı medyanın türünün ne olduğu bilgisi bulunmaktadır. 
     Aslında artık böyle bir bilgi işletim sistemleri tarafından kullanılmamaktadır. Buradaki 1 byte'ın yaygın değerleri şunlardır:
 
-    F0: 1.44 Floppy Disk
-    F8: Hard disk
+    0xF0: 1.44 Floppy Disk
+    0xF8: Hard disk
 
     Bu alanda artık hep F8 byte'ı bulunmaktadır.
 
-    FAT'in Bir Kopyasındaki Sektör Sayısı: Bu alanda FAT'in bir kopyasının kaç sektör uzunluğuğunda olduğu bilgisi bulunmaktadır.
+    FAT'in Bir Kopyasındaki Sektör Sayısı: Bu alanda FAT'in bir kopyasının kaç sektör uzunluğunda olduğu bilgisi bulunmaktadır.
     FAT'in default olarak 2 kopyasının olduğunu anımsayınız.
 
     Bir Yüzdeki Sektör Dilimlerinin Sayısı (Artık Kullanılmıyor): Bu alanda diskin bir yüzeyinde kaç sektör dilimi olduğu 
@@ -66767,12 +66786,12 @@ void exit_sys(const char *msg)
     almaktadır. Bu bilgi aynı zamanda Disk Bölümleme Tablosu (Disk Partition Table) içerisinde de yer almaktadır. İşletim 
     sistemleri bu iki değeri karşılaştırıp BPB bloğunun bozuk olup olmadığı konusunda bir karar da verebilmektedir.
 
-    Yeni Toplam Sektör Sayısı: 0x13 Offset'indeki WORD olarak bulundurulan eski "toplam sektör sayısı" bilgisinin DWORD olarak
+    Yeni Toplam Sektör Sayısı: "0x13" offset'indeki WORD olarak bulundurulan eski "toplam sektör sayısı" bilgisinin DWORD olarak
     yenilenmiş biçimi bu alanda tutulmaktadır.
 
-    Volüm Seri Numarası: Bir disk bölümü FAT dosya sistemi ile formatlandığında oraya rasgele üretilmiş olan bir "volüm seri 
+    Volüm Seri Numarası: Bir disk bölümü FAT dosya sistemi ile formatlandığında oraya rastgele üretilmiş olan bir "volüm seri 
     numarası" atanmaktadır. Bu volüm seri numarası eskiden floppy disket zamanlarında disketin değişip değişmediğini anlamak 
-    için kullanılıyordu. Bugünlerde artık bu alam herhangi bir amaçla kullanılmanaktadır. Ancak sistem programcısı bu seri 
+    için kullanılıyordu. Bugünlerde artık bu alan herhangi bir amaçla kullanılmamaktadır. Ancak sistem programcısı bu seri 
     numarasından başka amaçlar için faydalanabilir.
 
     Volüm İsmi: Her volüm formatlanırken ona bir isim verilmektedir. Bu isim o zamanki dosya isimlendirme kuralı gereği 
@@ -66780,41 +66799,45 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    FAT dosya sistemine ilişkin bir uygulama yazabilmek için yaılacak ilk şey boot sektörü okuyup buradaki BPB bilgilerini 
+												170. Ders 11/10/2024 - Cuma
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    FAT dosya sistemine ilişkin bir uygulama yazabilmek için yapılacak ilk şey boot sektörü okuyup buradaki BPB bilgilerini 
     bir yapı nesnesinin içerisine yerleştirmektir. Bu bilgilerden hareketle bizim FAT dosya sistemine ilişkin meta data 
     alanlarının ilgili disk bölümünün kaçıncı sektöründen başlayıp kaç sektör uzunluğunda olduğunu elde etmemiz gerekir. Çünkü
-    dosya sistemi ile ilgili işlemlerim hepsinde bu bilgilere gereksinim duyulacaktır. Bu bilgilerin yerleştirileceği yapı 
+    dosya sistemi ile ilgili işlemlerin hepsinde bu bilgilere gereksinim duyulacaktır. Bu bilgilerin yerleştirileceği yapı 
     şöyle olabilir:
 
     typedef struct tagBPB {
-        uint16_t fatlen;		/* number of sectors in FAT (A) */
-        uint16_t rootlen;		/* number of sectors in ROOT (NA) */
-        uint16_t nfats;	        /* number of copies of FAT (A) */
-        uint32_t tsects;		/* total sector (A) */
-        uint16_t bps;			/* byte per sector(A) */
-        uint16_t spc;			/* sector per cluster(A) */
-        uint16_t rsects;		/* reserved sectors(A) */
-        uint8_t mdes;			/* media descriptor byte(A) */
-        uint16_t spt;			/* sector per track(A) */
-        uint16_t rootents;		/* root entry (A) */
-        uint16_t nheads;		/* number of heads (A) */
-        uint16_t hsects;		/* number of hidden sector( A) */
-        uint16_t tph;			/* track per head (NA) */
-        uint16_t fatloc;		/* fat directory location (NA) */
-        uint16_t rootloc;		/* root directory location (NA) */
-        uint16_t dataloc;		/* first data sector location (NA) */
-        uint32_t datalen;       /* number of sectors in Data (NA) */
+        uint16_t fatlen;		/* Number of sectors in FAT (A) */
+        uint16_t rootlen;		/* Number of sectors in ROOT (NA) */
+        uint16_t nfats;			/* Number of copies of FAT (A) */
+        uint32_t tsects;		/* Total sector (A) */
+        uint16_t bps;			/* Byte per sector(A) */
+        uint16_t spc;			/* Sector per cluster(A) */
+        uint16_t rsects;		/* Reserved sectors(A) */
+        uint8_t mdes;			/* Media descriptor byte(A) */
+        uint16_t spt;			/* Sector per track(A) */
+        uint16_t rootents;		/* Root entry (A) */
+        uint16_t nheads;		/* Number of heads (A) */
+        uint16_t hsects;		/* Number of hidden sector( A) */
+        uint16_t tph;			/* Track per head (NA) */
+        uint16_t fatloc;		/* FAT directory location (NA) */
+        uint16_t rootloc;		/* Root directory location (NA) */
+        uint16_t dataloc;		/* First data sector location (NA) */
+        uint32_t datalen;		/* Number of sectors in Data (NA) */
         uint32_t serial;		/* Volume Serial Number (A) */
-        char vname[12];         /* Volume Name (A) */
+        char vname[12];			/* Volume Name (A) */
     } BPB;
 
-    Burada (A) ile belirtilen elemanlar zaten BPB içerisinde olan (avaliable) elemanlardır. NA (not available) ile belirtilen 
+    Burada (A) ile belirtilen elemanlar zaten BPB içerisinde olan (available) elemanlardır. NA (not available) ile belirtilen 
     elemanlar BPB içerisinde yoktur. Dört işlemle hesaplanarak değeri oluşturulacaktır. Linux'ta boot sektör'ü okuyarak oradaki
-    BPN bilgilerini yukarıdaki gibi bir yapıya yerleştiren örnek bir program aşağıda verilmiştir. Derlemeyi şöyle yapabilirsiniz:
+    BPB bilgilerini yukarıdaki gibi bir yapıya yerleştiren örnek bir program aşağıda verilmiştir. Derlemeyi şöyle yapabilirsiniz:
 
     $ gcc -o app fatsys.c app.c
 
-    Programı FAT dosya sistemine ilişkin blok aygıt dosyasının yol ifadesini vererek suo ile çalıştırabilirsiniz. Örneğin:
+    Programı FAT dosya sistemine ilişkin blok aygıt dosyasının yol ifadesini vererek sudo ile çalıştırabilirsiniz. Örneğin:
 
     $ sudo ./app /dev/loop0
 
@@ -66823,14 +66846,14 @@ void exit_sys(const char *msg)
     Byte per sector: 512
     Sector per cluster: 4
     Number of reserved sectors: 4
-    Number of fat copies: 100
+    Number of FAT copies: 100
     Number of sectors in Root Dir: 32
-    Number of fat copies: 2
+    Number of FAT copies: 2
     Number of sectors in volume: 100000
     Media Descriptor: F8
     Number of Root Dir entries: 200
     Number of hidden sectors: 0
-    Fat location: 4
+    FAT location: 4
     Root Dir location: 204
     Data location: 236
     Volume Serial Number: BC7B-4578
@@ -66849,23 +66872,23 @@ void exit_sys(const char *msg)
 /* Type Declarations */
 
 typedef struct tagBPB {
-	uint16_t fatlen;		/* number of sectors in FAT (A) */
-	uint16_t rootlen;		/* number of sectors in ROOT (NA) */
-	uint16_t nfats;			/* number of copies of FAT (A) */
-	uint32_t tsects;		/* total sector (A) */
-	uint16_t bps;			/* byte per sector(A) */
-	uint16_t spc;			/* sector per cluster(A) */
-	uint16_t rsects;		/* reserved sectors(A) */
-	uint8_t mdes;			/* media descriptor byte(A) */
-	uint16_t spt;			/* sector per track(A) */
-	uint16_t rootents;		/* root entry (A) */
-	uint16_t nheads;		/* number of heads (A) */
-	uint16_t hsects;		/* number of hidden sector( A) */
-	uint16_t tph;			/* track per head (NA) */
-	uint16_t fatloc;		/* fat directory location (NA) */
-	uint16_t rootloc;		/* root directory location (NA) */
-	uint16_t dataloc;		/* first data sector location (NA) */
-	uint32_t datalen;		/* number of sectors in Data (NA) */
+	uint16_t fatlen;		/* Number of sectors in FAT (A) */
+	uint16_t rootlen;		/* Number of sectors in ROOT (NA) */
+	uint16_t nfats;			/* Number of copies of FAT (A) */
+	uint32_t tsects;		/* Total sector (A) */
+	uint16_t bps;			/* Byte per sector(A) */
+	uint16_t spc;			/* Sector per cluster(A) */
+	uint16_t rsects;		/* Reserved sectors(A) */
+	uint8_t mdes;			/* Media descriptor byte(A) */
+	uint16_t spt;			/* Sector per track(A) */
+	uint16_t rootents;		/* Root entry (A) */
+	uint16_t nheads;		/* Number of heads (A) */
+	uint16_t hsects;		/* Number of hidden sector( A) */
+	uint16_t tph;			/* Track per head (NA) */
+	uint16_t fatloc;		/* FAT directory location (NA) */
+	uint16_t rootloc;		/* Root directory location (NA) */
+	uint16_t dataloc;		/* First data sector location (NA) */
+	uint32_t datalen;		/* Number of sectors in Data (NA) */
 	uint32_t serial;		/* Volume Serial Number (A) */
 	char vname[12];			/* Volume Name (A) */
 } BPB;
@@ -66935,7 +66958,7 @@ int main(int argc, char *argv[])
 	int fd;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -66948,14 +66971,14 @@ int main(int argc, char *argv[])
 	printf("Byte per sector: %d\n", bpb.bps);
 	printf("Sector per cluster: %d\n", bpb.spc);
 	printf("Number of reserved sectors: %d\n", bpb.rsects);
-	printf("Number of fat copies: %d\n", bpb.fatlen);
+	printf("Number of FAT copies: %d\n", bpb.fatlen);
 	printf("Number of sectors in Root Dir: %d\n", bpb.rootlen);
-	printf("Number of fat copies: %d\n", bpb.nfats);
+	printf("Number of FAT copies: %d\n", bpb.nfats);
 	printf("Number of sectors in volume: %u\n", bpb.tsects);
 	printf("Media Descriptor: %02X\n", bpb.mdes);
 	printf("Number of Root Dir entries: %02X\n", bpb.rootents);
 	printf("Number of hidden sectors: %d\n", bpb.hsects);
-	printf("Fat location: %d\n", bpb.fatloc);
+	printf("FAT location: %d\n", bpb.fatloc);
 	printf("Root Dir location: %d\n", bpb.rootloc);
 	printf("Data location: %d\n", bpb.dataloc);
 	printf("Number of sectors in Data: %d\n", bpb.datalen);
@@ -66984,15 +67007,19 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												171. Ders 13/10/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Şimdi yukarıdaki yapıp biraz daha geliştirelim. Bunun için dosya sistemini temsil eden aşağıdaki gibi bir yapı oluşturabiliriz:
 
     typedef struct tagFATSYS {
         int fd;             /* Volume file descriptor */
         BPB bpb;            /* BPB info */
-        uint32_t fatoff;    /* offset of FAT */
-        uint32_t rootoff;   /* offset of root directory */
-        uint32_t dataoff;   /* offset of DATA */
-        uint32_t clulen;    /* cluster length as bytes */
+        uint32_t fatoff;    /* Offset of FAT */
+        uint32_t rootoff;   /* Offset of root directory */
+        uint32_t dataoff;   /* Offset of DATA */
+        uint32_t clulen;    /* Cluster length as bytes */
         /* ... */
     } FATSYS;
 
@@ -67061,23 +67088,23 @@ void exit_sys(const char *msg)
 /* Type Declarations */
 
 typedef struct tagBPB {
-	uint16_t fatlen;		/* number of sectors in FAT (A) */
-	uint16_t rootlen;		/* number of sectors in ROOT (NA) */
-	uint16_t nfats;			/* number of copies of FAT (A) */
-	uint32_t tsects;		/* total sector (A) */
-	uint16_t bps;			/* byte per sector(A) */
-	uint16_t spc;			/* sector per cluster(A) */
-	uint16_t rsects;		/* reserved sectors(A) */
-	uint8_t mdes;			/* media descriptor byte(A) */
-	uint16_t spt;			/* sector per track(A) */
-	uint16_t rootents;		/* root entry (A) */
-	uint16_t nheads;		/* number of heads (A) */
-	uint16_t hsects;		/* number of hidden sector( A) */
-	uint16_t tph;			/* track per head (NA) */
-	uint16_t fatloc;		/* fat directory location (NA) */
-	uint16_t rootloc;		/* root directory location (NA) */
-	uint16_t dataloc;		/* first data sector location (NA) */
-	uint32_t datalen;		/* number of sectors in Data (NA) */
+	uint16_t fatlen;		/* Number of sectors in FAT (A) */
+	uint16_t rootlen;		/* Number of sectors in ROOT (NA) */
+	uint16_t nfats;			/* Number of copies of FAT (A) */
+	uint32_t tsects;		/* Total sector (A) */
+	uint16_t bps;			/* Byte per sector(A) */
+	uint16_t spc;			/* Sector per cluster(A) */
+	uint16_t rsects;		/* Reserved sectors(A) */
+	uint8_t mdes;			/* Media descriptor byte(A) */
+	uint16_t spt;			/* Sector per track(A) */
+	uint16_t rootents;		/* Root entry (A) */
+	uint16_t nheads;		/* Number of heads (A) */
+	uint16_t hsects;		/* Number of hidden sector( A) */
+	uint16_t tph;			/* Track per head (NA) */
+	uint16_t fatloc;		/* FAT directory location (NA) */
+	uint16_t rootloc;		/* Root directory location (NA) */
+	uint16_t dataloc;		/* First data sector location (NA) */
+	uint32_t datalen;		/* Number of sectors in Data (NA) */
 	uint32_t serial;		/* Volume Serial Number (A) */
 	char vname[12];			/* Volume Name (A) */
 } BPB;
@@ -67085,10 +67112,10 @@ typedef struct tagBPB {
 typedef struct tagFATSYS {
 	int fd;					/* Volume file descriptor */
 	BPB bpb;				/* BPB info */
-	uint32_t fatoff;		/* offset of FAT */
-	uint32_t rootoff;		/* offset of root directory */
-	uint32_t dataoff;		/* offset of DATA */
-	uint32_t clulen;		/* cluster length as bytes */
+	uint32_t fatoff;		/* Offset of FAT */
+	uint32_t rootoff;		/* Offset of root directory */
+	uint32_t dataoff;		/* Offset of DATA */
+	uint32_t clulen;		/* Cluster length as bytes */
 	/* ... */
 } FATSYS;
 
@@ -67218,23 +67245,23 @@ void exit_sys(const char *msg)
 /* Type Declarations */
 
 typedef struct tagBPB {
-	uint16_t fatlen;		/* number of sectors in FAT (A) */
-	uint16_t rootlen;		/* number of sectors in ROOT (NA) */
-	uint16_t nfats;			/* number of copies of FAT (A) */
-	uint32_t tsects;		/* total sector (A) */
-	uint16_t bps;			/* byte per sector(A) */
-	uint16_t spc;			/* sector per cluster(A) */
-	uint16_t rsects;		/* reserved sectors(A) */
-	uint8_t mdes;			/* media descriptor byte(A) */
-	uint16_t spt;			/* sector per track(A) */
-	uint16_t rootents;		/* root entry (A) */
-	uint16_t nheads;		/* number of heads (A) */
-	uint16_t hsects;		/* number of hidden sector( A) */
-	uint16_t tph;			/* track per head (NA) */
-	uint16_t fatloc;		/* fat directory location (NA) */
-	uint16_t rootloc;		/* root directory location (NA) */
-	uint16_t dataloc;		/* first data sector location (NA) */
-	uint32_t datalen;		/* number of sectors in Data (NA) */
+	uint16_t fatlen;		/* Number of sectors in FAT (A) */
+	uint16_t rootlen;		/* Number of sectors in ROOT (NA) */
+	uint16_t nfats;			/* Number of copies of FAT (A) */
+	uint32_t tsects;		/* Total sector (A) */
+	uint16_t bps;			/* Byte per sector(A) */
+	uint16_t spc;			/* Sector per cluster(A) */
+	uint16_t rsects;		/* Reserved sectors(A) */
+	uint8_t mdes;			/* Media descriptor byte(A) */
+	uint16_t spt;			/* Sector per track(A) */
+	uint16_t rootents;		/* Root entry (A) */
+	uint16_t nheads;		/* Number of heads (A) */
+	uint16_t hsects;		/* Number of hidden sector( A) */
+	uint16_t tph;			/* Track per head (NA) */
+	uint16_t fatloc;		/* FAT directory location (NA) */
+	uint16_t rootloc;		/* Root directory location (NA) */
+	uint16_t dataloc;		/* First data sector location (NA) */
+	uint32_t datalen;		/* Number of sectors in Data (NA) */
 	uint32_t serial;		/* Volume Serial Number (A) */
 	char vname[12];			/* Volume Name (A) */
 } BPB;
@@ -67242,10 +67269,10 @@ typedef struct tagBPB {
 typedef struct tagFATSYS {
 	int fd;					/* Volume file descriptor */
 	BPB bpb;				/* BPB info */
-	uint32_t fatoff;		/* offset of FAT */
-	uint32_t rootoff;		/* offset of root directory */
-	uint32_t dataoff;		/* offset of DATA */
-	uint32_t clulen;		/* cluster length as bytes */
+	uint32_t fatoff;		/* Offset of FAT */
+	uint32_t rootoff;		/* Offset of root directory */
+	uint32_t dataoff;		/* Offset of DATA */
+	uint32_t clulen;		/* Cluster length as bytes */
 	/* ... */
 } FATSYS;
 
@@ -67370,7 +67397,7 @@ int main(int argc, char *argv[])
 	unsigned char buf[8192];
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -67409,7 +67436,7 @@ void exit_sys(const char *msg)
     sonra artık dosyaların parçalarını birbirinden uzaklaşmaya başlayabilir. İşte FAT dosya sisteminde hangi dosyanın hangi 
     parçalarının Data bölümünün hangi cluster'larında olduğunun saklandığı meta data alana FAT (File Allocation Table) denilmektedir.
 
-    FAT bölümü FAT elemanlarındna oluşur. FAT'lar 12 bit 16 bit ve 32 bit olmak üzere üçe ayrılmaktadır. 12 bit FAT'lerde 
+    FAT bölümü FAT elemanlarından oluşur. FAT'lar 12 bit 16 bit ve 32 bit olmak üzere üçe ayrılmaktadır. 12 bit FAT'lerde 
     FAT elemanları 12 bit, 16 bit FAT'lerde FAT elemanları 16 bit ve 32 bit FAT'lerde FAT elemanları 32 bit uzunluğundadır. 
     İlk iki cluster kullanılmadığı için FAT'in ilk elemanı da kullanılmaktadır.
 
@@ -67476,8 +67503,8 @@ void exit_sys(const char *msg)
     FAT elemanları temelinde de bir cache sistemi de oluşturmaktadır. Böylece bir cluster değeri verildiğinde eğer daha önce o 
     cluster ile işlemler yapılmışsa o cluster'ın sonraki cluster'ı hızlı bir biçimde elde edilebilmektedir.
 
-    Biz burada volümü açtığımızda tğm FAT bölümünü okuyup FATSYS yapısının içerisine yerleştireceğiz. Sonra da ilk cluster 
-    numarası bilinen dosyaların cluster zincirini elde eden bir fonksiyon yazacağız. openfat_sys fonksiyonun yerni versiyonu 
+    Biz burada volümü açtığımızda tüm FAT bölümünü okuyup FATSYS yapısının içerisine yerleştireceğiz. Sonra da ilk cluster 
+    numarası bilinen dosyaların cluster zincirini elde eden bir fonksiyon yazacağız. openfat_sys fonksiyonunun yeni versiyonu 
     aşağıdaki gibi olabilir:
 
     FATSYS *open_fatsys(const char *path)
@@ -67571,23 +67598,23 @@ void exit_sys(const char *msg)
 /* Type Declarations */
 
 typedef struct tagBPB {
-	uint16_t fatlen;		/* number of sectors in FAT (A) */
-	uint16_t rootlen;		/* number of sectors in ROOT (NA) */
-	uint16_t nfats;			/* number of copies of FAT (A) */
-	uint32_t tsects;		/* total sector (A) */
-	uint16_t bps;			/* byte per sector(A) */
-	uint16_t spc;			/* sector per cluster(A) */
-	uint16_t rsects;		/* reserved sectors(A) */
-	uint8_t mdes;			/* media descriptor byte(A) */
-	uint16_t spt;			/* sector per track(A) */
-	uint16_t rootents;		/* root entry (A) */
-	uint16_t nheads;		/* number of heads (A) */
-	uint16_t hsects;		/* number of hidden sector( A) */
-	uint16_t tph;			/* track per head (NA) */
-	uint16_t fatloc;		/* fat directory location (NA) */
-	uint16_t rootloc;		/* root directory location (NA) */
-	uint16_t dataloc;		/* first data sector location (NA) */
-	uint32_t datalen;		/* number of sectors in Data (NA) */
+	uint16_t fatlen;		/* Number of sectors in FAT (A) */
+	uint16_t rootlen;		/* Number of sectors in ROOT (NA) */
+	uint16_t nfats;			/* Number of copies of FAT (A) */
+	uint32_t tsects;		/* Total sector (A) */
+	uint16_t bps;			/* Byte per sector(A) */
+	uint16_t spc;			/* Sector per cluster(A) */
+	uint16_t rsects;		/* Reserved sectors(A) */
+	uint8_t mdes;			/* Media descriptor byte(A) */
+	uint16_t spt;			/* Sector per track(A) */
+	uint16_t rootents;		/* Root entry (A) */
+	uint16_t nheads;		/* Number of heads (A) */
+	uint16_t hsects;		/* Number of hidden sector( A) */
+	uint16_t tph;			/* Track per head (NA) */
+	uint16_t fatloc;		/* FAT directory location (NA) */
+	uint16_t rootloc;		/* Root directory location (NA) */
+	uint16_t dataloc;		/* First data sector location (NA) */
+	uint32_t datalen;		/* Number of sectors in Data (NA) */
 	uint32_t serial;		/* Volume Serial Number (A) */
 	char vname[12];			/* Volume Name (A) */
 } BPB;
@@ -67595,10 +67622,10 @@ typedef struct tagBPB {
 typedef struct tagFATSYS {
 	int fd;					/* Volume file descriptor */
 	BPB bpb;				/* BPB info */
-	uint32_t fatoff;		/* offset of FAT */
-	uint32_t rootoff;		/* offset of root directory */
-	uint32_t dataoff;		/* offset of DATA */
-	uint32_t clulen;		/* cluster length as bytes */
+	uint32_t fatoff;		/* Offset of FAT */
+	uint32_t rootoff;		/* Offset of root directory */
+	uint32_t dataoff;		/* Offset of DATA */
+	uint32_t clulen;		/* Cluster length as bytes */
 	uint8_t *fat;			/* FAT sectors */
 	/* ... */
 } FATSYS;
@@ -67776,7 +67803,7 @@ int main(int argc, char *argv[])
 	uint16_t *chain;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -67784,7 +67811,7 @@ int main(int argc, char *argv[])
 		exit_sys("open_fatsys");
 
 	if ((chain = getclu_chain16(fatsys, 4, &count)) == NULL) {
-		fprintf(stderr, "cannot get cluster chain!..\n");
+		fprintf(stderr, "cannot get cluster chain!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -67835,7 +67862,7 @@ int main(int argc, char *argv[])
 	uint16_t *chain;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -67843,7 +67870,7 @@ int main(int argc, char *argv[])
 		exit_sys("open_fatsys");
 
 	if ((chain = getclu_chain16(fatsys, 4, &count)) == NULL) {
-		fprintf(stderr, "cannot get cluster chain!..\n");
+		fprintf(stderr, "cannot get cluster chain!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -67868,7 +67895,7 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    İşletim sisteminin dosya sistemi bize aslıdna cluster'larda olan dosya parçalarını "dosya" adı altında ardışıl byte 
+    İşletim sisteminin dosya sistemi bize aslında cluster'larda olan dosya parçalarını "dosya" adı altında ardışıl byte 
     topluluğu gibi göstermektedir. Biz işletim sisteminin sistem fonksiyonu ile dosyayı açarız ve read fonksiyonu ile okumayı
     yaparız. Bütün diğer işlemler işletim sisteminin çekirdek kodları tarafından yapılmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -68108,7 +68135,7 @@ void exit_sys(const char *msg)
 
     - İlk Cluster Numarası: Biz daha önce FAT bölümünü incelerken bir dosyanın cluster zincirini elde edebilmek için onun 
     ilk cluster numarasının bilinmesi gerektiğini belirtmiştik. (Bir bağlı listeyi dolaşabilmek için onun ilk düğümünün yerinin
-    bilinmesi gerektiğini anımsayınız.) İşte bir dosyanın ilk cluster numaarası dizin girişinde saklanmaktadır. Yani işletim 
+    bilinmesi gerektiğini anımsayınız.) İşte bir dosyanın ilk cluster numarası dizin girişinde saklanmaktadır. Yani işletim 
     sistemi önce dosyanın dizin girişini bulmakta sonra FAT'ten onun cluster zincirini elde etmektedir. Yukarıdaki dosyasının 
     dizin girişini yeniden veriyoruz:
 
@@ -68161,7 +68188,7 @@ void exit_sys(const char *msg)
     gözükecektir. Ancak işletim sistemi dosyanın Data bölümündeki cluster'ları üzerinde herhangi bir işlem yapmaz.
 
     Pekiyi FAT dosya sisteminde "undelete" yapan programlar nasıl çalışmaktadır? İşte bu programlar dosyanın dizin girişine 
-    bakıp onun ilk cluster'ının numarasını elde edip FAT bölümünde yersine bir algoritmayla onun cluster zincirini yenidne 
+    bakıp onun ilk cluster'ının numarasını elde edip FAT bölümünde yersine bir algoritmayla onun cluster zincirini yeniden 
     oluşturmaya çalışmaktadır. Ancak böyle bir kurtarmanın garantisi yoktur. Çünkü işletim sistemi boşaltılmış cluster'ları 
     başka bir dosya için tahsis etmiş olabilir. Ya da FAT'teki cluster zincirini tahmin eden programlar bu konuda yanılabilmektedir. 
     Ancak ne olursa olsun dosyanın ilk karakteri silindiği için bu karakter kurtarma sırasında kullanıcıya sorulmaktadır.
@@ -68241,36 +68268,36 @@ void exit_sys(const char *msg)
 /* Type Declarations */
 
 typedef struct tagBPB {
-	uint16_t fatlen;		/* number of sectors in FAT (A) */
-	uint16_t rootlen;		/* number of sectors in ROOT (NA) */
-	uint16_t nfats;			/* number of copies of FAT (A) */
-	uint32_t tsects;		/* total sector (A) */
-	uint16_t bps;			/* byte per sector(A) */
-	uint16_t spc;			/* printf("%lu\n", )sector per cluster(A) */
-	uint16_t rsects;		/* reserved sectors(A) */
-	uint8_t mdes;			/* media descriptor byte(A) */
-	uint16_t spt;			/* sector per track(A) */
-	uint16_t rootents;		/* root entry (A) */
-	uint16_t nheads;		/* number of heads (A) */
-	uint16_t hsects;		/* number of hidden sector( A) */
-	uint16_t tph;			/* track per head (NA) */
-	uint16_t fatloc;		/* fat directory location (NA) */
-	uint16_t rootloc;		/* root directory location (NA) */
-	uint16_t dataloc;		/* first data sector location (NA) */
-	uint32_t datalen;		/* number of sectors in Data (NA) */
+	uint16_t fatlen;		/* Number of sectors in FAT (A) */
+	uint16_t rootlen;		/* Number of sectors in ROOT (NA) */
+	uint16_t nfats;			/* Number of copies of FAT (A) */
+	uint32_t tsects;		/* Total sector (A) */
+	uint16_t bps;			/* Byte per sector(A) */
+	uint16_t spc;			/* Sector per cluster(A) */
+	uint16_t rsects;		/* Reserved sectors(A) */
+	uint8_t mdes;			/* Media descriptor byte(A) */
+	uint16_t spt;			/* Sector per track(A) */
+	uint16_t rootents;		/* Root entry (A) */
+	uint16_t nheads;		/* Number of heads (A) */
+	uint16_t hsects;		/* Number of hidden sector( A) */
+	uint16_t tph;			/* Track per head (NA) */
+	uint16_t fatloc;		/* FAT directory location (NA) */
+	uint16_t rootloc;		/* Root directory location (NA) */
+	uint16_t dataloc;		/* First data sector location (NA) */
+	uint32_t datalen;		/* Number of sectors in Data (NA) */
 	uint32_t serial;		/* Volume Serial Number (A) */
 	char vname[12];			/* Volume Name (A) */
 } BPB;
 
 typedef struct tagFATSYS {
-	int fd;				/* Volprintf("%lu\n", )ume file descriptor */
-	BPB bpb;			/* BPB info */
-	uint32_t fatoff;	/* offset of FAT */
-	uint32_t rootoff;	/* offset of root directory */
-	uint32_t dataoff;	/* offset of DATA */
-	uint32_t clulen;	/* cluster length as bytes */
-	uint8_t *fat;		/* FAT sectors */
-	uint8_t *rootdir;	/* Root sectors */
+	int fd;					/* Volume file descriptor */
+	BPB bpb;				/* BPB info */
+	uint32_t fatoff;		/* Offset of FAT */
+	uint32_t rootoff;		/* Offset of root directory */
+	uint32_t dataoff;		/* Offset of DATA */
+	uint32_t clulen;		/* Cluster length as bytes */
+	uint8_t *fat;			/* FAT sectors */
+	uint8_t *rootdir;		/* Root sectors */
 	/* ... */
 } FATSYS;
 
@@ -68547,7 +68574,7 @@ int main(int argc, char *argv[])
 	DIR_ENTRY *dents;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -68555,7 +68582,7 @@ int main(int argc, char *argv[])
 		exit_sys("open_fatsys");
 
 	if ((dents = get_rootents(fatsys, &count)) == NULL) {
-		fprintf(stderr, "cannot get root entries!..\n");
+		fprintf(stderr, "cannot get root entries!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -68607,7 +68634,7 @@ void exit_sys(const char *msg)
 
     "\a\b\c\d.dat"
 
-    İşletim sisteni buaradaki "a", "b", "c" ve "d.dat" dosyaarına ilişkin dizin giriş bilgilerini bir cache sisteminde saklamaktadır. 
+    İşletim sistemi buradaki "a", "b", "c" ve "d.dat" dosyalarına ilişkin dizin giriş bilgilerini bir cache sisteminde saklamaktadır. 
     Böylece benzer yol ifadeleri için hiç disk okuması yapılmadan bu cache sisteminden bu bilgiler elde edilebilmektedir.
  ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -68626,26 +68653,433 @@ void exit_sys(const char *msg)
     Biz mutlak yol ifadelerini çözümleyecek olalım. Her dizinin bir cluster zinciri vardır. Ancak FAT12 ve FAT16 sistemlerinde
     kök dizinin bir cluster zinciri yoktur. Kök dizinin yeri ve uzunluğu baştan bellidir.
 ---------------------------------------------------------------------------------------------------------------------------*/
-<BURADA KALDIK>
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												178. Ders 08/11/2024 - Cuma
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    UNIX/Linux sistemlerinde i-node tabanlı dosya sistemleri kullanılmaktadır. i-node tabanlı dosya sistemlerinin temel 
+    organizasyonu FAT dosya sistemlerinden oldukça farklıdır. i-node tabanlı dosya sistemlerinin çeşitli varyasyonu vardır. 
+    Linux sistemleri ve BSD sistemleri ağırlıklı olarak ext (extended file system) denilen dosya sistemini kullanmaktadır.
+    ext dosya sistemi ilk kez 1992 yılında tasarlanmıtır. Sonra zaman içerisinde bu dosya sisteminin ext2, ext3 ve ext4 biçiminde 
+    çeşitli varyasyonları oluşturulmuştur. Bugün artık genellikle bu ailenin son üyesi olan ext4 dosya sistemi kullanılmaktadır. 
+    Ancak yukarıda da belirttiğimiz gibi i-node tabanlı dosya sistemleri bir aile belirtmektedir. Bu ailenin FAT sistemlerinde 
+    olduğu gibi genel tasarımı birbirine benzerdir. Biz burada ext dosya sisteminin en uzun süre kullanılan versiyonu olan 
+    ext konusunda temel bilgiler vereceğiz. ext2 dosya sisteminin resmi dokümantasyonuna aşağıdaki bağlantıdan erişebilirsiniz:
+
+    https://cscie28.dce.harvard.edu/lectures/lect04/6_Extras/ext2-struct.html
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    ext2 dosya sistemi üzerinde incelemeler ve denemeler yapmak için yine loop aygıtlarından faydalanabilrisiniz. Bunun için 
+    yine önce içi sıfırlarla dolu bir dosya oluşturulur:
+
+    $ dd if=/dev/zero of=ext2.dat bs=512 count=400000
+
+    Sonra loop aygıt sürücüsü bu dosya için hazırlanır:
+
+    $ sudo losetup /dev/loop0 ext2.dat
+
+    Artık aygıt formatlanabilir:
+
+    $ mkfs.ext2 /dev/loop0
+
+    Mount işlemi aşağıdaki gibi yapılabilir:
+
+    $ mkdir ext2
+    $ sudo /dev/loop0 ext2
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    i-node tabanlı dosya sistemlerinde volüm kabaca aşağıdaki bölümlere ayrılmaktadır:
+
+    <boot block>>
+    <super block>
+    <i-node block>
+    <data block>
+
+    Boot blok (boot block) işletim sistemini boot eden kodların bulunduğu bloktur. Süper blok (super block) FAT dosya sistemlerindeki 
+    boot sektör BPB alanına benzemektedir. Yani burada dosya sistemine ilişkin meta data bilgiler bulunmaktadır. i-node blok 
+    i-node elemanlarından oluşmaktadır. Data block FAT dosya sistemindeki Data bölümü gibidir. FAT dosya sistemindeki "cluster" 
+    yerine i-node tabanlı dosya sistemlerinde "blok (block)" terimi kullanılmaktadır. Bir blok bir dosyanın parçası olabilecek 
+    en küçük birimdir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Süper blok hemen volümün 1024 byte offset'inde bulunmaktadır. (yani volümün başında boot sektör programları için 1024 
+    byte yer ayrılmıştır. Süper blok süper bloktta belirtilen blok uzunluğu kadar uzunluğa sahiptir. (Ayrıca izleyen paragraflarda 
+    da görüleceği gibi ext2 dosya sisteminde her blok grupta süper bloğun bir kopyası da bulunmaktadır.) Yukarıda da belirttiğimiz 
+    gibi burada volüm hakkında meta data bilgileri bulunmaktadır. Buradaki alanlar ext2 dokümantasyonunda ayrıntılarıyla açıklanmıştır. 
+    Süper blok içerisindeki alanlar aşağıdaki gibidir:
+
+    | Alan                 Boyut (Byte)                Açıklama
+    |-----------------------|----|-----------------------------------------------------------------------------------------
+    | s_inodes_count        | 4  | Dosya sistemindeki toplam inode sayısı.
+    | s_blocks_count        | 4  | Dosya sistemindeki toplam blok sayısı.
+    | s_r_blocks_count      | 4  | Rezerve edilmiş blok sayısı.
+    | s_free_blocks_count   | 4  | Boş blok sayısı.
+    | s_free_inodes_count   | 4  | Boş inode sayısı.
+    | s_first_data_block    | 4  | İlk veri bloğunun numarası (bu, kök dizinin bulunduğu blok).
+    | s_log_block_size      | 4  | Blok boyutunun logaritmasının değeri (örneğin, 1 KB için 10, 4 KB için 12, vs.).
+    | s_log_frag_size       | 4  | Parçacık boyutunun logaritması.
+    | s_blocks_per_group    | 4  | Her blok grubundaki blok sayısı.
+    | s_frags_per_group     | 4  | Her blok grubundaki fragman sayısı.
+    | s_inodes_per_group    | 4  | Her blok grubundaki inode sayısı.
+    | s_mtime               | 4  | Dosya sisteminin son değiştirilme zamanı (Unix zaman damgası).
+    | s_wtime               | 4  | Dosya sisteminin son yazılma zamanı (Unix zaman damgası).
+    | s_mnt_count           | 2  | Dosya sisteminin kaç kez bağlandığı (mount) sayısı.
+    | s_max_mnt_count       | 2  | Dosya sisteminin kaç kez daha bağlanabileceği (yani, montaj sayısı aşımı).
+    | s_magic               | 2  | Süper blok sihirli sayısı (bu, EXT2 dosya sistemini tanımlar ve genellikle `0xEF53`'tür).
+    | s_state               | 2  | Dosya sisteminin durumu (örneğin, temiz mi, hata mı).
+    | s_errors              | 2  | Hata durumunda yapılacak işlem (örneğin, “ignore”, “panic”, vb.).
+    | s_minor_rev_level     | 2  | Küçük revizyon seviyesi (EXT2’yi güncelleyen küçük değişiklikler için).
+    | s_lastcheck           | 4  | Dosya sisteminin son kontrol tarihi (Unix zaman damgası).
+    | s_checkinterval       | 4  | Dosya sisteminin kontrol edilmesi gereken süre (saniye cinsinden).
+    | s_creator_os          | 4  | Dosya sistemini oluşturan işletim sistemi türü (örneğin, Linux, Solaris, vb.).
+    | s_rev_level           | 4  | EXT2 dosya sistemi revizyon seviyesi.
+    | s_def_resuid          | 2  | Varsayılan rezerv kullanıcı ID'si (uid).
+    | s_def_resgid          | 2  | Varsayılan rezerv grup ID'si (gid).
+    | s_first_ino           | 4  | İlk inode numarası (genellikle kök dizini için).
+    | s_inode_size          | 2  | Inode boyutu (genellikle 128 veya 256 byte).
+    | s_block_group_nr      | 2  | Bu süper blok ile ilişkili blok grubu numarası.
+    | s_feature_compat      | 4  | Uyumluluk özelliklerinin bit maskesi.
+    | s_feature_incompat    | 4  | Uyumsuz özelliklerin bit maskesi.
+    | s_feature_ro_compat   | 4  | Okuma-yazma uyumsuz özelliklerinin bit maskesi.
+    | s_uuid                | 16 | Dosya sisteminin benzersiz tanımlayıcısı (UUID).
+    | s_volume_name         | 16 | Dosya sistemi adının (etiketinin) olduğu alan.
+    | s_last_mounted        | 64 | Dosya sisteminin son bağlandığı dizin yolu.
+    | s_algorithm_usage_bmp | 4  | Bloklar ve inode'lar için kullanılan algoritmaların bit maskesi.
+    | s_prealloc_blocks     | 1  | Önceden tahsis edilecek blok sayısı.
+    | s_prealloc_dir_blocks | 1  | Önceden tahsis edilecek dizin blokları sayısı.
+    | s_padding             | 118| Alanın sonundaki boşluk (süper bloğun uzunluğunu tamamlar).
+
+    Buradaki önemli alanlar hakkında kısa bazı açıklamalar yapmak istiyoruz:
+
+    s_inodes_count: Bu alanda dosya sistemindeki toplam i-node elemanlarının sayısı bulunmaktadır. Bir ext2 disk bölümünde en 
+    fazla buradaki i-node elemanlarının sayısı kadar farklı dosya bulunabilir.
+
+    s_blocks_count: Burada Data bölümündeki toplam blokların sayısı bulunmaktadır.
+
+    s_r_blocks_count: Burada ayrılmış (reserve edielmiş) blokların sayısı bulunmaktadır.
+
+    s_free_blocks_count: Burada Data bölümünde kullanımayan boş blokların sayısı tutulmaktadır.
+
+    s_log_block_size: Burada 1024 değerinin 2 üzeri kaçla çarpılacağını belirten değer tutulmaktadır. Yani blok uzunluğu 1024 << s_log_block_siz
+    biçiminde hesaplanmaktadır. Örneğin burada 2 değeri yazılıyorsa blok uzunluğu 2^2 * 1024 = 4096 byte'tır.
+
+    ext2 dosya sisteminin super block bilgisi ve bazı önemli alanlarına ilişkin bilgiler "dumpe2fs" isimli utility programla 
+    elde edilebilir. Örneğin:
+
+    $ dumpe2fs /dev/loop0
+
+    Aşağıda bir ext2 süper bloğunun örnek bir içeriği verilmektedir:
+
+    00004000  60 c3 00 00 50 c3 00 00  c4 09 00 00 f4 b6 00 00  |`...P...........|
+    00000410  55 c3 00 00 00 00 00 00  02 00 00 00 02 00 00 00  |U...............|
+    00000420  00 80 00 00 00 80 00 00  b0 61 00 00 51 5c 2e 67  |.........a..Q\.g|
+    00000430  51 5c 2e 67 01 00 ff ff  53 ef 00 00 01 00 00 00  |Q\.g....S.......|
+    00000440  42 5c 2e 67 00 00 00 00  00 00 00 00 01 00 00 00  |B\.g............|
+    00000450  00 00 00 00 0b 00 00 00  00 01 00 00 38 00 00 00  |............8...|
+    00000460  02 00 00 00 03 00 00 00  ec 89 02 3e a8 11 4c 01  |...........>..L.|
+    00000470  b0 b5 f5 48 1e 30 79 d6  00 00 00 00 00 00 00 00  |...H.0y.........|
+    00000480  00 00 00 00 00 00 00 00  2f 68 6f 6d 65 2f 6b 61  |......../home/ka|
+    00000490  61 6e 2f 53 74 75 64 79  2f 55 6e 69 78 4c 69 6e  |an/Study/UnixLin|
+    000004a0  75 78 2d 53 79 73 50 72  6f 67 2f 44 69 73 6b 49  |ux-SysProg/DiskI|
+    000004b0  4f 2d 46 69 6c 65 53 79  73 74 65 6d 73 2f 65 78  |O-FileSystems/ex|
+    000004c0  74 32 00 00 00 00 00 00  00 00 00 00 00 00 0c 00  |t2..............|
+    000004d0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    000004e0  00 00 00 00 00 00 00 00  00 00 00 00 6e 47 e8 bc  |............nG..|
+    000004f0  81 50 45 f3 bb 96 6c 7c  51 bc e3 8a 01 00 00 00  |.PE...l|Q.......|
+    00000500  0c 00 00 00 00 00 00 00  42 5c 2e 67 00 00 00 00  |........B\.g....|
+
+    Burada toplam i-node elemanlarının sayısı 0xC360 (50016) tanedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Disk bölümünün i-node bloğu i-node elemanlarından oluşmaktadır. Her i-node elemanının ilki 0 olmak üzere bir indeks numarası 
+    vardır. Örneğin:
+
+    0       i-node elemanı
+    1       i-node elemanı
+    2       i-node elemanı
+    3       i-node elemanı
+    4       i-node elemanı
+    ...
+    300     i-node elemanı
+    301     i-node elemanı
+    302     i-node elemanı
+    303     i-node elemanı
+    304     i-node elemanı
+    ...
+
+    Bir dosyanın ismi haricindeki bütün bilgileri dosyaya ilişkin i-node elemanında tutulmaktadır. Zaten stat fonksiyonları 
+    da aslında bilgileri bu i-node elemanından almaktadır. Her dosyanın diğerlerinden farklı bir i-node numarası olduğuna 
+    dikkat ediniz. Dolayısıyla dosyanın i-node numarası o dosyayı karakterize etmektedir. ("ls" komutunda dosyanın i-node 
+    numaralarının -i seçeneği ile elde edildiğini anımsayınız.) Burada hatırlatma yapmak amacıyla stat yapısını yeniden vermek 
+    istiyoruz:
+
+    struct stat {
+        dev_t     st_dev;     /* ID of device containing file */
+        ino_t     st_ino;     /* inode number */
+        mode_t    st_mode;    /* protection */
+        nlink_t   st_nlink;   /* number of hard links */
+        uid_t     st_uid;     /* user ID of owner */
+        gid_t     st_gid;     /* group ID of owner */
+        dev_t     st_rdev;    /* device ID (if special file) */
+        off_t     st_size;    /* total size, in bytes */
+        blksize_t st_blksize; /* blocksize for file system I/O */
+        blkcnt_t  st_blocks;  /* number of 512B blocks allocated */
+        time_t    st_atime;   /* time of last access */
+        time_t    st_mtime;   /* time of last modification */
+        time_t    st_ctime;   /* time of last status change */
+    };
+
+    ext2 dosya sisteminde bir i-node elemanın alanları aşağıdaki gibidir:
+
+    | Alan         Boyut (Byte)                         Açıklama
+    |--------------------------------------------------------------------------------------------------------------------
+    |i_mode       | 2          | Dosya türü ve izinler (örneğin, `S_IFREG` (normal dosya), `S_IFDIR` (dizin), vs.).
+    |i_uid        | 2          | Dosya sahibinin kullanıcı kimliği (UID).
+    |i_size_lo    | 4          | Dosyanın boyutunun alt 32 biti (byte cinsinden).
+    |i_atime      | 4          | Son erişim zamanı (Unix zaman damgası).
+    |i_ctime      | 4          | Son inode değişiklik zamanı (Unix zaman damgası).
+    |i_mtime      | 4          | Son değişiklik (modifikasyon) zamanı (Unix zaman damgası).
+    |i_dtime      | 4          | Dosyanın silinme zamanı (Unix zaman damgası), eğer geçerliyse.
+    |i_gid        | 2          | Dosya sahibinin grup kimliği (GID).
+    |i_links_count| 2          | Dosyaya bağlı olan hard link (bağlantı) sayısı.
+    |i_blocks     | 4          | Dosyanın disk üzerinde kullandığı blok sayısı (block, 512 byte'lık bloklar).
+    |i_flags      | 4          | Dosya bayrakları (örneğin, `i_dirty`, `i_reserved` gibi).
+    |i_osd1       | 4          | Linux spesifik alan (genellikle genişletilmiş özellikler için kullanılır).
+    |i_block[15]  | 4 × 15 = 60| Dosyanın bloklarına işaretçi
+    |i_generation | 4          | Dosyanın versiyon numarası (özellikle NFS gibi ağ dosya sistemlerinde kullanılır).
+    |i_file_acl   | 4          | Dosya için ACL (Access Control List) blok numarası.
+    |i_dir_acl    | 4          | Dizin için ACL blok numarası.
+    |i_faddr      | 4          | Dosyanın "fragman adresi" (bu, çoğu zaman sıfırdır ve eski EXT2 uygulamalarında kullanılır).
+
+    Biz bu alanların büyük çoğunluğunu aslında stat fonksiyonunda görmüştük. Ancak stat yapısında olmayan bazı elemanlar da 
+    burada bulunmaktadır. Biz stat yapısında olmayan bazı önemli elemanlar üzerinde durmak istiyoruz:
+
+    i_dtime: Bu alanda eğer dosya silinmişse dosyanın ne zaman silindiğine yönelik tarih zaman bilgisi tutulmaktadır. Buradaki
+    değer 01/01/1970'ten geçen saniye sayısı cinsindedir.
+
+    i_block ve i_blocks: Bu elemanlar izleyen paragraflarda adaha ayrıntılı bir biçimde ele alınacaktır.
+
+    i_flags: Bu alanda ilgili dosyaya ilişkin bazı bayraklar tutulmaktadır.
+
+    i_file_acl: Dosyaya ilişkin "erişim kontrol listesi (access control list)" ile ilgili bilgiler tutulmaktadır.
+
+    i-node elemanında dosyanın isminin tutulmadığına dikkat ediniz. ext2 dosya sisteminde bir i-node elemanının uzunluğu 128 
+    byte uzunluktadır.
+
+    Pekiyi dosyanın ismi nerededir ve dosyanın i-node numarası nereden elde edilmektedir? Bunu izleyen paragraflarda göreceğiz.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Biz yukarıda i-node tabanlı bir disk bölümünün kaba organizasyonunun aşağıdaki gibi olduğunu belirtmiştik:
+
+    <boot block>                    (1024 byte)
+    <super block>
+    <i-node block>
+    <data block>
+
+    Burada sanki süper bloktan hemen sonra i-node blok geliyormuş gibi biz organizasyon resmedilmiştir. Halbuki süper bloktan
+    hemen sonra i-node blok gelmemektedir. ext2 dosya sisteminin gerçek yerleşimi aşağıdaki gibidir:
+
+    <boot block>                      (1024 byte)
+    <block group>
+    <block group>
+    <block group>
+
+    Bir disk bölümü aslında blok gruplarından (block groups) oluşmaktadır. Her block grubu disk bölümüne ilişkin bir bölümü belirtir. 
+    Bir block grubu aşağıdaki gibi bir yapıya sahiptir:
+
+    <super block>
+    <block group descriptor table>
+    <block bitmap>
+    <i-node bitmap>
+    <i-node table>
+    <data block>
+
+    İşte "blok grup betimleyici tablosu (block group descriptor table)" block group'ları hakkında bilgi veren bir bölümdür. Bir 
+    kaç blok bilginin yer aldığı super block'un "s_blocks_per_group" elemanında saklanmaktadır. Her blok grupta belli sayıda 
+    i-node elemanı vardır. Bir blok gruptaki i-node elemanlarının sayısı super block'taki s_inodes_per_group elemanıyla 
+    belirtilmektedir. Yani aslında ext2 dosya sisteminde aşağıdaki gibi bir oragnizasyon söz konusudur:
+
+    <boot block>
+
+    <super block>
+    <block group desciptor table>     (1024 byte)
+    <block bitmap>                    (1024 byte)
+    <i-node bitmap>                   (1024 byte)
+    <i-node table>
+    <data block>
+
+    <super block>
+    <block group desciptor table>     (1024 byte)
+    <block bitmap>                    (1024 byte)
+    <i-node bitmap >                  (1024 byte)
+    <i-node table>
+    <data block>
+
+    <super block>
+    <block group desciptor table>     (1024 byte)
+    <block bitmap>                    (1024 byte)
+    <i-node bitmap >                  (1024 byte)
+    <i-node table>
+    <data block>
+    ...
+
+    Görüldüğü gibi ext2 dosya sisteminde super bloğun tek bir kopyası yoktur. Her block grupta super blok yeniden yer 
+    almaktadır. Bir blok grupta ayrı bir i-node tablosunun ve data bölümünün olduğuna dikkat ediniz.
+
+    Pekiyi neden ext2 dosya sisteminde disk bölümü birden fazla blok gruplara ayrılmıştır? İşte bunun nedenlerinden biri 
+    güvenliktir. Yani i-node bloklardan biri bozulduğunda diğeri bozulmamış biçimde kalabilir.
+
+    Blok gruplarındaki "blok grup betimelyici tablosu (block group descriptor table)" blok grupları hakkında bazı meta data 
+    bilgileri tutmaktadır. Ancak blok grup betimleyicilerinde yalnızca o blok grubuna ilişkin bilgiler değil tüm blok gruplarına 
+    ilişkin bilgiler tutulmaktadır. Yani her blok grubunda yeniden tüm blok gruplarına ilişkin bilgiler tutulmaktadır. 
+    Block grup betimleyici tablosu blok grup betimleyicilerindne oluşan bir dizi gibidir:
+
+    Block Grup Betimleyici Tablosu
+
+    <block group descriptor>
+    <block group descriptor>
+    <block group descriptor>
+    ...
+    <block group descriptor>
+    <block group descriptor>
+
+    Bir blok grup betimleyicisinin alanları şöyledir:
+
+    | Eleman                | Açıklama                                                                                Boyut
+    |------------------------|-------------------------------------------------------------------------------------|---------|
+    | bg_inode_bitmap        | Blok bitmap'in bulunduğu blok numarası                                              | 4 Bayt  |
+    | bg_free_blocks_count   | Blok bitmap'in bulunduğu blok numarası                                              | 4 Bayt  |
+    | bg_inode_table         | Blok bitmap'in bulunduğu blok numarası                                              | 4 Bayt  |
+    | bg_free_blocks_count   | Blok grubunda kullanılmayan veri bloklarının sayısını belirtir.                     | 2 Bayt  |
+    | bg_free_inodes_count   | Blok grubunda kullanılmayan inode'ların sayısını belirtir.                          | 2 Bayt  |
+    | bg_used_dirs_count     | Blok grubunda bulunan kullanılan dizinlerin sayısını belirtir.                      | 2 Bayt  |
+    | bg_pad                 | Padding                                                                             | 2 Bayt  |
+    | bg_reserved            | Yapıların hizalanabilmesi için ayrılmış boş alan. Genellikle sıfırlarla doldurulur. | 12 Bayt |
+
+    Blok grup betimleyicisi toplamda 32 byte yer kaplamaktadır. Her blok grubunda blok bitmap'in, i-node bitmap'in ve i-node 
+    tablosunun yerinin blok numarası tutulmaktadır. Buradaki blok uzunlukları disk bölümünün başından itibaren yer belirtir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Disk bölümü içerisindeki blokların numaralandırılması ile ilgili ince bir nokta vardır. Eğer disk bölümündeki blok uzunluğu
+    1K yani 1024 byte ise boot block 0'ıncı bloktadır. Dolayısıyla ilk blok grubundaki süper blok 1'inci bloktadır. Ancak 
+    blok büyüklüğü 1024'ten (yani 1K'dan) fazla ise bu durumda boot blok ile süper blok tek blok kabul edilmektedir. Boot blok 
+    ile süper bloğun bulunduğu ilk bloğun numarası 0'dır.
+
+    İlk blok grup betimleyici tablosunun yeri de blok grubundaki super block'tan hemen sonradır. Örneğin dosya sistemindeki 
+    blok uzunluğu 4K (4096 byte) ise ilk blok betimleyici tablosunun yeri 4096'ıncı = 0x1000 offset'indedir. (Bu durumda boot blok
+    ile süper bloğun 0 numaralı blok biçiminde tek blok olarak ele alındığını anımsayınız.) Bir blok grubunun toplam kapladığı 
+    blok sayısı süper block içerisindeki s_blocks_per_group elemanında tutulmaktadır. Örneğin biz k numaralı blok grubun blok 
+    numarasını k * s_blocks_per_group işlemiyle elde edebiliriz.
+
+    Aşağıda örnek bir blok grup betimleyici tablosu verilmiştir:
+
+    00001000  0e 00 00 00 0f 00 00 00  10 00 00 00 c7 79 a4 61  |.............y.a|
+    00001010  02 00 04 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00001020  0e 80 00 00 0f 80 00 00  10 80 00 00 25 3d b0 61  |............%=.a|
+    00001030  00 00 04 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00001040  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    ....
+
+    Bir blok grup betimleyicisi 32 byte uzunluktadır. Burada toplam iki blok grup betimleyicisi yani disk bölümünde toplam 
+    iki blok grubu bulunmaktadır.Bu iki blok grup betimleyicisini ayrı ayrı aşağıda veriyoruz:
+
+    00001000  0e 00 00 00 0f 00 00 00  10 00 00 00 c7 79 a4 61  |.............y.a|
+    00001010  02 00 04 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+
+    00001020  0e 80 00 00 0f 80 00 00  10 80 00 00 25 3d b0 61  |............%=.a|
+    00001030  00 00 04 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+
+    Disk bölümünde toplam kaç blok grubu olduğu süper bloktaki s_blocks_count elemanında yazmaktadır.
+
+    Bir blok grubundaki blok grup betimleyici tablosunun uzunluğu 1 blok kadardır. Blok bitmap'in ve I-node bitmap'in 
+    uzunlukları doğrudan süper blokta yazmamaktadır. Bu uzunluklar dolaylı bir biçimde hesaplanmaktadır. Dolayısıyla bir 
+    blok gruptaki data alanın başlangıç bloğu da dolaylı bir biçimde hesaplanmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Pekiyi bir dosyanın i-node numarası biliniyorsa onun disk bölümündeki yerini nasıl hesaplarız? Burada bizim bu i-node 
+    numaralı i-node elemanının hangi blok grubunda ve o blok grubunun i-node tablosunda nerede olduğunu belirlememiz gerekir. 
+    Her blok grupta eşit sayıda i-node elemanı bulunmaktadır. Bir blok gruptaki i-node elemanlarının sayısı doğrudan süper 
+    bloktaki s_inodes_per_group elemanında belirtilmektedir. Bu durumda ilgili i-node numarasına ilişkin i-node elemanı i-node
+    numarası n olmak üzere n / s_inodes_per_group işlemiyle elde edilebilir. Tabii bu durumda n % s_inodes_per_group ifadesi 
+    de i-node elemanının o blok gruptaki i-node tablosunun kaçıncı elemanında olduğunu verecektir. Anımsanacağı gibi her blok
+    grubunun i-node tablosunun yeri blok grup betimleyicisinin bg_inode_table elemanında belirtiliyordu.
+
+    Bir blok grubunun toplam kaç tane bloktan oluştuğu süper bloktaki s_blocks_per_group elemanında tutulmaktadır. Dolayısıyla 
+    k'ıncı blok grubunun yeri k * s_blocks_per_group değeri ile tespit edilir. Blok numaralarına boot block dahil değildir. Yani
+    ilk blok grubunun süper bloğunun blok numarası 0'dır.
+
+    Bu durumda manuel olarak n numaaralı bir tablosuna ilişkin i-node elemanına şöyle erişilebilir:
+
+    1) Önce n / s_inodes_per_group ile ilgili i-node elemanının hangi blok grubununda olduğu tespit edilir. Bu değer k olsun.
+
+    2) Bu blok grubunun yeri k * s_blocks_per_group değeri ile elde edilir ve bu bloğa gidilir. Her bloğun başında 1 blokluk 
+    süper blok vardır. Süper bloğu blok grup betimleyici tablosu izler. Blok grup betimleyici tablosu blok grup betimleyicilerinden 
+    oluşmaktadır. Her blok grup betimleyicisi 32 byte yer kaplamaktadır. Dolayısıyla biz k numaralı blok grubuna ilişkin blok 
+    betimleyicisinin yerini k * 32 ile tespit edebiliriz. (Aslında tüm blok gruplarındaki blok grup betimleyici tablolarının 
+    birbirinin aynısı olduğunu anımsayınız.)
+
+    3) İlgili blok grubunun i-node tablosunun yeri blok grup betimleyicisinin bg_inode_table elemanında belirtilmektedir. 
+    Artık biz i-node elemanını burada belirtilen bloktan itibaren n % s_inodes_per_group kadar ilerideki i-node elemanı olarak 
+    elde edebiliriz. Bir i-node elemanının uzunluğunun 128 byte olduğunu belirtmiştik.
+
+    Şimdi 12'inci i-node elemanın yerini bu adımlardan geçerek bulmaya çalışalım. Elimizdeki disk bölümünde bir blok grupta 
+    toplam 25008 tane i-node elemanı vardır. O halde 12 numaralı i-node elemanı 0'ıncı blok grubun 12'inci i-node elemanındadır. 
+    0'ınci blok grubu eğer blok uzunluğu 1K'dan fazla ise diskin 0'ıncı bloğundan başlamaktadır. (Tabii 0'sıncı bloğın hemen 
+    başında boot blok ondan 1024 byte sonra da 0'ın blok grubunun süper bloğu bulunmaktadır.) O halde elimizdeki disk bölümünün 
+    0'ıncı blok grubunun blok betimleyici tablosu 1'inci bloktadır. Bunun yeri de bir blok 4096 byte olduğuna göre 0x1000 
+    offset'indedir. Buradan elde edilen blok grup betimleyici tablosu şöyledir:
+
+    00001000  0e 00 00 00 0f 00 00 00  10 00 00 00 c7 79 a4 61  |.............y.a|
+    00001010  02 00 04 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00001020  0e 80 00 00 0f 80 00 00  10 80 00 00 25 3d b0 61  |............%=.a|
+    00001030  00 00 04 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00001040  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    00001050  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+    ...
+
+    Her blok grup betimleyicisinin 32 byte olduğunu anımsayınız. Bu duurmda 0'ıncı blok grup betimleyicisi şöyledir:
+
+    00001000  0e 00 00 00 0f 00 00 00  10 00 00 00 c7 79 a4 61  |.............y.a|
+    00001010  02 00 04 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+
+    Bu blok grubundaki i-node tablosunun blok numarası blok grup betimleyicisinin 8'inci offset'inde bulunan bg_inode_table
+    elemanındadır. Bu elemandaki değer 0x00000010 (16)'dır. O halde bizim 16 numaralı bloğa gitmemiz gerekir. 16 numaralı 
+    blok disk bölümünün 16 * 4096 = 65536 (0x10000) offset'indedir. Artık bu offset'te ilgili blok grubundaki i-node elemanları 
+    bulunmaktadır. Bir i-node elemanı 128 byte olduğuna göre 12'inci elemanının yeri 12 * 128 = 1536 (0x600) byte ileridedir. 
+    O halde bu tablonun disk bölümünün başından itibarenki yeri 65536 + 1536 = 67072 (0x10600) offset'indedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Linux kernel istenirse kaynak kodlarından yeniden derlenip (yani build edilip) elde edilen yeni kernel ile sistem başlatılabilir. 
     Pekiyi bu işlem neden yapılmak istenebilir? Tipik nedenleri şunlar olabilir:
 
     - Kernel'ın yükseltilmesi istenebilir. Yani örneğin kernel'ın yeni bir versiyonu çıkmış olabilir. Biz de bu yeni versiyonun kaynak 
-    kodlarını indirip onu derleyerek kullanmak isteyebiliriz. 
+    kodlarını indirip onu derleyerek kullanmak isteyebiliriz.
 
     - Kernel kodlarının çeşitli yerleri çeşitli amaçlarla (deneysel olabilir, başka amaçlarla olabilir) değiştirilmek istenebilir. 
     Örneğin çizelgeleyici alt sistem değiştirilerek yeni sistem denenmek istenebilir. Dosya sisteminde değişiklikler yapılmak istenebilir. 
     Ya da mevcut kernel'daki çeşitli bug'lar düzeltilmek istenebilir (patch işlemi).
 
-    - Kernel'dan çeşitli öğeler de çıkartılmak istenebilir. 
+    - Kernel'dan çeşitli öğeler de çıkartılmak istenebilir.
 
     - Kernel'a yeni kodlar ve dolayısıyla işlevsellikler eklenmek istenebilir. (Örneğin kernel'a yeni bir sistem fonksiyonu eklenmek istenebilir.) Ya da 
-    bir kernel modül veya aygıt sürücü kernel'ınbir parçası haline getirilmek istenebilir. 
+    bir kernel modül veya aygıt sürücü kernel'ınbir parçası haline getirilmek istenebilir.
 
     Şüphesiz yukarıdaki amaçlar için kernel yeniden derlenecekse öncelikle onun kaynak kodlarının indirilmesi ve o kodlar üzerinde istenen 
-    değişikliklerin yapılması gerekir. Sonra da bu yeni kodlar derlenmelidir. Derlendikten sonra da boot işleminde bu yeni kernel'ın devreye girmesi sağlanmalıdır. 
+    değişikliklerin yapılması gerekir. Sonra da bu yeni kodlar derlenmelidir. Derlendikten sonra da boot işleminde bu yeni kernel'ın devreye girmesi sağlanmalıdır.
 
     Linux çekirdekleri resmi olarak kernel.org sitesinde tutulmaktadır. İndirme için ana dizin kernel.org/pub dizinidir. Bu dizinin 
     içerisinde linux/kernel dizinleri bulunmaktadır. Kernel versiyonları bu dizinin altında dizinler biçiminde bulunur. Genellikle kaynak 
@@ -68660,7 +69094,7 @@ void exit_sys(const char *msg)
 
     $ sudo tar -xvf linux-5.0.10.tar.gz -C /usr/src
 
-    Bu komutla artık kaynak kodlar /usr/src dizinin altına açılmıştır. 
+    Bu komutla artık kaynak kodlar /usr/src dizinin altına açılmıştır.
 
     Artık /usr/src dizinin altında linux-5.0.10 biçiminde (tabii bunun ismi indirdiğimiz kernel versiyonuna göre değişecektir) bir dizin oluşturulmuştur. 
     Bu dizine cd komutuyla geçmek gerekir. Bu ana dizindeki Makefile dosyası ana make dosyasıdır. Bu dosya yüzlerce dizindeki make dosyalarını 
@@ -68714,7 +69148,7 @@ void exit_sys(const char *msg)
 
     $ sudo make -j 4
 
-    Burada 4 çekirdek birlikte build işlemine katılacaktır. 
+    Burada 4 çekirdek birlikte build işlemine katılacaktır.
 
     Build işlemi bittikten sonra artık yeni sistem için son iki işlem yapılmalıdır. Bunlardan birincisi oluşturulan ama kernel image 
     içerisinde olmayan bazı aygıt sürücülerin uygun dizinlere çekilmesidir. Bu işlem aşağıdaki komutla yapılır:
@@ -68722,7 +69156,7 @@ void exit_sys(const char *msg)
     $ sudo make modules_install
 
     Böylece biz aygıt sürücüleri de yenilemiş olmaktayız. Burada söz konusu modüller kernel image içerisinde olmayan fakat çeşitli aşamalarda 
-    yüklenen aygıt sürücü modülleridir. 
+    yüklenen aygıt sürücü modülleridir.
 
     Nihayet ikinci olarak gerçek kernel image dosyasının ve yardımcı birkaç dosyann /boot dizinine çekilip boot-loader'ın güncellenmesidir.
     Bu da şu komutla yapılmaktadır:
