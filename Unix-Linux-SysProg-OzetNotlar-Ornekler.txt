@@ -11,7 +11,7 @@
                         (Notları sabit genişlikli font kullanan programlama editörleri ile açınız.)
                             (Editörünüzün "Line Wrapping" özelliğini pasif hale getiriniz.)
 
-                                                    Son Güncelleme: 16/12/2024 - Pazartesi
+                                                    Son Güncelleme: 07/01/2025 - Salı
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -103,7 +103,7 @@ int main(void)
     $ gcc sample.c -o sample
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-/*---------------------------------------------------------------------------------------------------------------------------
+/*--------------------------------------------------------------------------------------------------------------------------
     Eskiden yalnızca tek karakterden oluşan kısa seçenekler kullanılıyordu. Ancak daha sonraları bu kısa seçeneklerin yetersiz 
     kaldığı ve okunabilirliği bozduğu gerekçesiyle uzun seçenekler de kullanılmaya başlanmıştır. POSIX standartları uzun seçenekleri 
     desteklememektedir. Ancak UNIX/Linux dünyasında yaygın biçimde kullanılmaktadır. Uzun seçenekler "--" öneki ile başlatılmaktadır. 
@@ -252,11 +252,11 @@ int main(void)
     döngüsünden çıktıktan sonra) optind indeksinden argc indeksine kadar ilerleyerek tüm seçeneksiz argümanları elde edebilmektedir. 
     Örneğin:
 
-    ./sample -a ali -b veli selami -c
+    $ ./sample -a ali -b veli selami -c
 
     Burada "ali" ve "selami" seçeneksiz argümanlardır. getopt bu argv dizisini şu halde getirmektedir:
 
-    ./sample -a -b veli -c ali selami
+    $ ./sample -a -b veli -c ali selami
 
     Şimdi burada optind indeksi artık "ali" argümanının başladığı indeksi belirtecektir. Onun ötesindeki tüm argümanlar seçeneksiz 
     argümanlardır. Bu argümanları while döngüsünün dışında şöyle yazdırabiliriz:
@@ -535,7 +535,6 @@ int check_number(const char *str)
     -d: Bölme işlemi
     -s: Çıkartma işlemi
     -D msg: Çıktının başında "msg: " kısmını ekler
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* mycalc.c */
@@ -805,7 +804,6 @@ int main(int argc, char *argv[])
     -h ya da --help
     --count <arg>
     --line[=<arg>]
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -912,7 +910,6 @@ int main(int argc, char *argv[])
     --all: argümansız uzun seçenek
     --length: argümanlı uzun seçenek
     --number: isteğe bağlı argümanlı uzun seçenek
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -1096,7 +1093,6 @@ int main(int argc, char *argv[])
     myshell isimli program olsun ve onu /bin dizinine kopyalamış olalım. /etc/passwd dosyasının içeriğini şöyle değiştirebiliriz:
 
     ali:x:1002:1001::/home/ali:/bin/myshell
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* myshell.c */
@@ -1232,7 +1228,6 @@ int main(void)
 		fprintf(stderr, "cannot set locale!...\n");
 		exit(EXIT_FAILURE);
 	}
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -1268,7 +1263,6 @@ int main(void)
 	{
 		fprintf(stderr, "%s: %s\n", str, strerror(errno));
 	}
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -1299,7 +1293,6 @@ int main(void)
 
 		exit(EXIT_FAILURE);
 	}
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -1345,7 +1338,6 @@ void exit_sys(const char *msg)
 
 		exit(EXIT_FAILURE);
 	}
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -1405,7 +1397,6 @@ void exit_sys(const char *format, ...)
 		fprintf(stderr, "cannot open file!...\n");
 		exit(EXIT_FAILURE);
 	}
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -2086,7 +2077,6 @@ void exit_sys(const char *msg)
 	{
 		return open(path, O_WRONLY|O_CREAT|O_TRUNC, mode);
 	}
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -2545,13 +2535,13 @@ void exit_sys(const char *msg)
     Kabuk üzerinde umask komutuyla aynı zamanda kabuğun umask değeri de değiştirilebilir. Bu durumda yine değiştirme değerleri octal digitler 
     biçiminde verilmelidir. Örneğin:
 
-    umask 022
+    $ umask 022
 
     Burada en yüksek anlamlı octal verilmediğine göre 0 kabul edilir. O halde burada belirtilern umask değeri grup için ve diğerleri için
     "w" hakkını maskeleyecektir. (Zaten pek çok kabulta umask değerin default durumu böyledir.) Bazen programcı umask değerini tamamen sıfırlamak da isteyebilir. 
     Bu işlem şöyle yapılabilir:
 
-    umask 0
+    $ umask 0
 
     Burada yüksek anlamlı üç octal digit de 0 kabul edilmektedir. Bu durumda artık çalıştırdığımız programda open fonksiyonun tüm erişim hakları 
     dosyalara yansıtılacaktır.
@@ -3349,7 +3339,6 @@ char *get_ls(struct stat *finfo, const char *name)
     Access: 2022-12-10 10:59:52.700330245 +0300
     Modify: 2022-12-10 10:59:46.620211508 +0300
     Change: 2022-12-10 11:41:11.151049064 +0300
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -3602,7 +3591,6 @@ void exit_sys(const char *msg)
     #include <sys/stat.h>
 
     int fchmod(int fd, mode_t mode);
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -3610,26 +3598,26 @@ void exit_sys(const char *msg)
     fonksiyonu kullanılarak yazılmıştır. Bu kabuk komutunun kullanımının birkaç biçimi vardır. Tipik olarak komutta erişim hakları 
     octal digitlerle belirtilmektedir. Örneğin:
 
-    chmod 664 a.txt b.txt
+    $ chmod 664 a.txt b.txt
 
     Burada 664'ün bit karşılığı şöyledir: 110 110 100. Bu erişim hakları olarak şu anlama gelmektedir: rw-rw-r--. Komutun ikinci kullanımı 
     + ve -'li kullanımıdır. Örneğin:
 
-    chmod +w a.txt
+    $ chmod +w a.txt
 
     Burada "a.txt" dosyasının "owner", "group" ve "other" "w" hakkı eklemektedir. Komutta "-" ilgili hakkın çıkartılacağınıbelirtmektedir. 
     Bunların önüne u, g, o ya da a harfleri getirilebilir. Örneğin:
 
-    chmod o+w a.txt
+    $ chmod o+w a.txt
 
     Burada yalnızca "other" için "w" hakkı eklenmiştir. a hepsine anlamına gelir. Örneğin:
 
-    chmod a-w a.txt
+    $ chmod a-w a.txt
 
     Burada owner, group ve other için "w" hakları silinmiştir. Tabii birden fazlası kombine edilebilir. Örneğin:
 
-    chmod 0 a.txt
-    chmod ug+rw a.txt
+    $ chmod 0 a.txt
+    $ chmod ug+rw a.txt
 
     Komutta octal sayı belirtilirse umask etkili olmaz. Ancak octal sayı yerine ugua ve rwx belirtilirse bu durumda 
     kabuğun umask değeri etkili olmaktadır.
@@ -3721,7 +3709,6 @@ void exit_sys(const char *msg)
     $ sudo chwon kaan:study test.txt
     $ sudo chown kaan test.txt
     $ sudo chown :study test.txt
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -3856,8 +3843,8 @@ void exit_sys(const char *msg)
     kullanılarak yazılmıştır. Komut default durumda umask değerinden etkilenir. Ancak -m ya da --mode seçeneği ile biz erişim 
     haklarını octal basamaklar biçiminde belirtebilmekteyiz. Örneğin:
 
-    mkdir xxx
-    mkdir -m 777 yyy
+    $ mkdir xxx
+    $ mkdir -m 777 yyy
 
     Dizinler için de hard link çıkartılabilmektedir. Ancak bu durum dizin ağacını dolaşan kodların sonsuz döngüye girmesine 
     yol açabilmektedir. Bu nedenle dizinler için hard link çıkartmak yerine soft link (sembolik bağlantı) çıkartmak tercih 
@@ -3889,8 +3876,7 @@ void exit_sys(const char *msg)
     fonksiyonu kullanılarak yazılmıştır. rmdir komutuyla dizin silmek için yine dizinin boş olması gerekir. İçi dolu dizinleri 
     tek hamlede silmek için "rm" komutu "-r" seçeneği ile kullanılabilir. Örneğin:
 
-    rm -r xxx
-
+    $ rm -r xxx
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -4110,7 +4096,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Bilindiği gibi pek çok UNIX türevi sistemde grup bilgileri /etc/group isimli bir dosyada tutulmaktadır. (POSIX standartları 
     grup bilgilerinin böyle bir dosyada tutulacağına yönelik bir bilgi içermemektedir.) İşte grup bilgilerinin bu dosyadan alınması 
-    için de benzer bir mekanizma oluşturulmuştur. Aşağıda grup /etc/group dosyasından birkaç satır görüyprsunuz:
+    için de benzer bir mekanizma oluşturulmuştur. Aşağıda grup /etc/group dosyasından birkaç satır görüyorsunuz:
 
     ...
     nm-openvpn:x:133:
@@ -4947,21 +4933,26 @@ void exit_sys(const char *msg)
     dizin girişlerini tek tek elde eder. Eğer söz konusu dizin girişi bir dizine ilişkinse o dizinin yol ifadesiyle kendini çağırır.
     Bu algoritmada dikkat edilmesi gereken birkaç nokta vardır:
 
-    1) Dizin girişleri dolaşılırken "." ve ".." dizinleri continue ile geçilmelidir. Aksi takdirde sonsuz döngü oluşabilir. 
+    1) Dizin girişleri dolaşılırken "." ve ".." dizinleri continue ile geçilmelidir. Aksi takdirde sonsuz döngü oluşabilir.
+
     2) stat fonksiyonu yerine lstat fonksiyonu kullanılmalıdır. Çünkü dizin ağacı dolaşılırken sembolik bağlantı bir dizine ilişkinse
-    sembolik bağlantının hedefine gidilmesi özyinelemeyi bozup sonsuz döngülere yol açabilir. 
+    sembolik bağlantının hedefine gidilmesi özyinelemeyi bozup sonsuz döngülere yol açabilir.
+
     3) readdir fonksiyonu dizin girişini okuduğunda bize yalnız girişin ismini vermektedir. Dolayısıyla lstat fonksiyonu uygulanırken 
-    prosesin çalışma dizinin uygun olması gerekir. Bunu sağlayabilmek için her dizine geçişte chdir fonksiyonu ile prosesin çalışma dizinini değiştebiliriz. 
-    Ya da alternatif olarak mutlak bir yol ifadesi sürekli güncellenebilir. Aslında burada seçeneklerden biri de fonksiyonların at'li 
-    biçimlerini kullanmak olabilir. 
-    4) Her özyineleme bittiğinde opendir ile açılan dizin closedir ile kapatılmalıdır. 
+    prosesin çalışma dizinin uygun olması gerekir. Bunu sağlayabilmek için her dizine geçişte chdir fonksiyonu ile prosesin çalışma dizinini 
+    değiştebiliriz. Ya da alternatif olarak mutlak bir yol ifadesi sürekli güncellenebilir. Aslında burada seçeneklerden biri de fonksiyonların 
+    at'li biçimlerini kullanmak olabilir.
+
+    4) Her özyineleme bittiğinde opendir ile açılan dizin closedir ile kapatılmalıdır.
+
     5) Genellikle böylesi fonksiyonlar bir fatal error ile programı sonlandırmamalıdır. chdir fonksiyonu ile prosesin çalışma dizini 
     değiştirilemeyebilir. Ya da örneğin opendir ile biz bir dizini açamayabiliriz. Bu tür durumlarda hata stderr dosyasına rapor edilip işlemin 
-    devem ettirilmesi uygun olabilir. 
+    devem ettirilmesi uygun olabilir.
+
     6) Özyinelemeli dolaşım bittikten sonra prosesin çalışma dizini orijinal halde bırakılmalıdır.
 
     Aşağıda tipik bir özyinelemeli "depth-first" dolaşım örneği verilmiştir. Ancak burada prosesin çalışma dizini özyineleme bittikten sonra
-    orijinal dizin ile yeniden set edilmemiştir. 
+    orijinal dizin ile yeniden set edilmemiştir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -5037,7 +5028,7 @@ void exit_sys(const char *msg)
     Özyineleme çağırmada hangi kademede bulunulduğunu belirten bir bilginin de özyinelemeli fonksiyona parametre yoluyla aktarılması
     faydaları olabilmektedir. Örneğin bu sayede biz ağacı kademeli bir biçimde görüntüleyebiliriz.
 
-    Aşağıdaki örnekte walkdir fonksiyonuna bir kademe bilgisi de eklenmiştir. 
+    Aşağıdaki örnekte walkdir fonksiyonuna bir kademe bilgisi de eklenmiştir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -5742,9 +5733,9 @@ void exit_sys(const char *msg)
     hard link'leri artık çıkartılamamaktadır.
 
     Daha önceden de belirtildiği gibi bir dosyanın hard link'i komut satırından ln komutuyla oluşturulabilmektedir. Tabii aslında bu program
-    link fonksiyonu çağrılarak yazılmıştır. Örneğin
+    link fonksiyonu çağrılarak yazılmıştır. Örneğin:
 
-    ln a b
+    $ ln a b
 
     Aşağıdaki örnekte komut satırından verilen bir dosyanın hard link'i çıkartılmıştır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -5823,7 +5814,7 @@ void exit_sys(const char *msg)
 
     Daha önceden de belirtildiği gibi bir dosyanın sembolik bağlantısı ln -s kabuk komutuyla oluşturulabilmektedir. Örneğin:
 
-    ln -s a b
+    $ ln -s a b
 
     Burada b sembolik bağlantı dosyası a dosyasını göstermektedir.
 
@@ -6636,7 +6627,6 @@ void exit_sys(const char *msg)
     50
     60
     70
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -6731,7 +6721,7 @@ int main(void)
     Aslında kabukta genel olarak yönlendirme için "n>" ve "n<" sembolleri de kullanılabilmektedir. Buradaki n betimleyicinin 
     numarasını belirtir. Bu sayede biz herhangi bir betimleyiciyi okuma ve yazma amaçlı bir dosyaya yönlendirebiliriz. Örneğin:
 
-    ./sample 2> test.txt
+    $ ./sample 2> test.txt
 
     Burada "test.txt" dosyası açılıp ./sample programının "stderr" olarak isimlendirilen 2 numaralı betimleyicisi bu dosyaya 
     yönlendirilecektir.
@@ -6743,7 +6733,7 @@ int main(void)
 /*--------------------------------------------------------------------------------------------------------------------------
     Tabii hem stdout dosyasını hem de stdin dosyasını kabuk üzerinden birlikte de yönlendirebiliriz. Örneğin:
 
-    ./sample > out.txt < in.txt
+    $ ./sample > out.txt < in.txt
 
     Burada 1 numaralı betimleyici "out.txt" dosyasına, 0 numaralı betimleyici "in.txt" dosyasına yönlendirilmiştir.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -6813,18 +6803,18 @@ int main(void)
 
     Örneğin biz find programı ile "sample.c" dosyasını dizin ağacında aramak isteyelim:
 
-    find / -name "sample.c"
+    $ find / -name "sample.c"
 
     Burada erişilemeyen dizinler için find programı bir sürü hata mesajını stderr dosyasına yazdırcaktır. Dolayısıyla kafamız
     karışacaktır. Şimdi programı şöyle çalıştıralım:
 
-    find / -name "sample.c" 2> test.txt
+    $ find / -name "sample.c" 2> test.txt
 
     Artık hata mnesajları ekranda görünmeyecektir. Bu tür durumlar için /dev/null isimli bir aygıt sürücü bulundurulmuştur. Bu 
     aygıt sürücü açılırsa ve ona yazma yapılırsa yazılanlar atılmaktadır. O halde programın yazdığı hata mesajları gereksiz yer 
     kaplamasın diye biz yönlendirmeyi /dev/null aygıt sürücüsüne yapabiliriz. Örneğin:
 
-    find / -name "sample.c" 2> /dev/null
+    $ find / -name "sample.c" 2> /dev/null
 
     /dev/null aygıt sürücüsünden okuma yapılmaya çalışılırsa sanki dosya sonuna gelinmiş (yani EOF durumuna gelinmiş) gibi bir 
     durum oluşur.
@@ -6926,7 +6916,7 @@ int main(void)
     Aşağıdaki örnekte "a" programı ekrana (stdout dosyasına) 0'dan 10'a kadar sayıları yazdırmaktadır. "b" programı ise
     döngü içerisinde klavyeden (stdin dosyasından) değer okuyup ekrana yazdırmaktadır. Bu iki programı aşağıdaki gibi çalıştıralım:
 
-    ./a | ./b
+    $ ./a | ./b
 
     Burada artık a'nın ekrana yazdıklarını sanki b klavyeden okuyormuş gibi bir etki oluşacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -6961,14 +6951,14 @@ int main(void)
     UNIX/Linux sistemlerindeki dosya yol ifadesi alan POSIX kabuk komutları eğer doys yol ifadesi verilmezse genellikle "stdin" 
     dosyasından okuma yapacak biçimde yazılmışlardır. Örneğin "cat" komutu bir dosyanın içeriğini stdout dosyasına yazdırır:
 
-    cat test.txt
+    $ cat test.txt
 
     Ancak bu "cat" komutu argümansız kullanılırsa okumayı "stdin" dosyasından yapar. Örneğin "wc" isimli kabuk komutu normal olarak
     bir dosyayı argüman olarak alır ve o dosyadaki satır sayısını, sözcük sayısını ve byte sayısını stdout dosyasına yazdırır. 
     Ancak bu program komut satırı argümanı verilmeden kullanılırsa klavyeden (stdin dosyasından) okuma yapacaktır. Bu biçimdeki 
     tasarımın nedeni bu komutların "boru" eşliğinde kullanımını sağlamaktır. Örneğin:
 
-    ps -e | wc
+    $ ps -e | wc
 
     Burada "ps -e" komutu satır satır sistemdeki prosesleri "stdout" dosyasına yazmaktadır. "wc" komutuna argüman verilmediğinde 
     göre bu komut "stdin" dosyasından okuma yapacaktır. O halde bu durumda aslında "ps -e" komutunun ekrana yazdıklarını "wc" 
@@ -6978,13 +6968,13 @@ int main(void)
     argüman olarak alır. Ancak eğer dosya verilmezse bu durumda "more" stdin dosyasından okunanları sayfa sayfa görüntüler. 
     Biz de bu sayede aşağıdaki gibi faydalı işlemler yapabiliriz:
 
-    ps -e | more
+    $ ps -e | more
 
     Burada "ps -e" komutunun ekrana yazdırdıkları sayfa sayfa görüntülenecektir.
 
     Pekiyi "|" karakterinin sağındaki program tdin dosyasından okuma yapmıyorsa ne olur? Örneğin:
 
-    ps -e | wc sample.c
+    $ ps -e | wc sample.c
 
     Burada "wc" komutu artık stdin dosyasından okuma yapmayacaktır. Bu durumda yine "ps -e" komutunun çıktısı boruya yönlendirilir. 
     Ancak "sample.c" stdin dosyasından okuma yapmadığı için "ps e" komutunun ekrana yazdıklarını işleme sokmayacaktır.
@@ -6999,10 +6989,9 @@ int main(void)
     Eğer boru mekanizması olmasaydı yukarıdaki işlemler yine yapılabilirdi. Ancak bu durumda geçici dosyaların oluşturulması gerekirdi. 
     Örneğin:
 
-    ps -e > temp.txt
-    wc temp.txt
-    rm temp.txt
-
+    $ ps -e > temp.txt
+    $ wc temp.txt
+    $ rm temp.txt
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -7910,7 +7899,6 @@ int main(void)
 	fgets(buf, 64, stdin);
 	if ((str = strchr(buf, '\n')) != NULL)
 		*str = '\0';
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -8005,7 +7993,6 @@ EXIT:
     #include <stdio.h>
 
     int getc(FILE *stream);
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -8098,18 +8085,20 @@ int main(void)
     Linux sistemlerinde "proses id'lerin yeniden başa geçmeden alabileceği maksimum değer de "/proc/sys/kernel/max_pid" dosyasında
     belirtilmektedir. Aşağıdaki bir Ubuntu makinede bu limitler gösterilmiştir. Ancak bu limitler makineden makineye değişebilmektedir.
 
-    parallels@ubuntu-linux-20-04-desktop:~$ cat /proc/sys/kernel/threads-max
+    $ cat /proc/sys/kernel/threads-max
     15071
-    parallels@ubuntu-linux-20-04-desktop:~$ cat /proc/sys/kernel/pid_max
+
+    $ cat /proc/sys/kernel/pid_max
     4194304
-    parallels@ubuntu-linux-20-04-desktop:~$ ulimit -u
+
+    $ ulimit -u
     7535
 
     Bu değerler aslında o anda ya da kalıcı olarak değiştirilebilmektedir. Bu değerlerin boot edilene kadar değiştirilmesi bu 
     dosyalara yeni değerlerin yazılmasıyla yapılabilir. Ya da sysctl kabuk komutu ile yapılabilir. Kalıcı değişiklik için sistem 
     boot edilirken başvurulan bazı konfigürasyon dosyalarından faydalanılmaktadır. Örneğin /etc/sysctl.conf dosyasına yeni 
     limitler girilirse sistem her açıldığında bu limitlerle açılacaktır. Aslında bu limitler "kernel parametreleri" yoluyla 
-    da değiştirilebilmektedir. 
+    da değiştirilebilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -8175,7 +8164,6 @@ int main(void)
     Child pid: 549377
     Child's parent pid: 549376
     Common code...
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -8822,10 +8810,9 @@ void exit_sys(const char *msg)
     kodunu da üst proses olan kabuk almaktadır. İşte biz $? ile kabuk üzerinde son çalıştırılan programın exit kodunu 
     elde edebiliriz. Örneğin:
 
-    ./sample
-    echo $?
+    $ ./sample
+    $ echo $?
     100
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -9043,7 +9030,7 @@ int main(int argc, char *argv[])
     Aşağıdaki örnekte komut satırı argümanı ile verilen çevre değişkenleri setenv fonksiyonu ile prosesin çevre değişken listesine 
     eklenmiş ve sonra getenv fonksiyonu ile onların değerleri elde edilmiştir. Girişin aşağıdaki gibi yapılması gerekir:
 
-    ./sample ali=100 veli=200 selami=300
+    $ ./sample ali=100 veli=200 selami=300
 
     Program '=' karakterini strchr fonksiyonu ile aramış eğer onu bulursa '=' karakteri yerine '\0' karakterini yerleştirmiştir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -9099,7 +9086,7 @@ int main(int argc, char *argv[])
 
     Aşağıdaki örnekte yine program aşağıdakine benzer çalıştırılmalıdır:
 
-    ./sample ali=100 veli=200
+    $ ./sample ali=100 veli=200
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -9330,7 +9317,7 @@ void exit_sys(const char *msg)
     oluruz. Bu kabuk değişkeninin aynı zamanda kabuğun çevre değişkeni yapılması için export komutu kullanılmaktadır. Tabii bu iki 
     komut tek hamlede de verilebilmektedir:
 
-    export CITY=Eskisehir
+    $ export CITY=Eskisehir
 
     Çevre değişkenini kabuktan silmek için de unset komutu kullanılmaktadır. Örneğin:
 
@@ -9350,12 +9337,12 @@ void exit_sys(const char *msg)
     gibi yaratmış olalım. Şimdi de bu çevre değişkeninden hareketle bu çevre değişkeninin değerine yapışık olarak "CENTER" sözcüğünü 
     de eklemek isteyelim:
 
-    export OTHER=$CITYCENTER
+    $ export OTHER=$CITYCENTER
 
     Bu durumda kabuk sanki bizim CITYCENTER isimli bir çevre değişkeninin değerini yazdırmak istediğimizi sanacaktır. Bu durumda 
     mecburen küme parantezleri kullanılmalıdır. Örneğin:
 
-    export OTHER=${CITY}CENTER
+    $ export OTHER=${CITY}CENTER
 
     Aslında pek çok kabuk programında hiç kabuk programının çevre değişkenlerini set etmeden, doğrudan çalıştırılacak program 
     için çevre değişkenleri belirlenebilmektedir. Bunun için önce "değişken=değer" çiftleri yazılarak program dosyası belirtilir. 
@@ -9386,9 +9373,9 @@ void exit_sys(const char *msg)
     Eğer bash "interactive login shell" biçiminde çalıştırılmışsa önce "/etc/profile" dosyasını çalıştırır, sonra sırasıyla aşağıdaki 
     dosyalardan hangisini ilk bulursa yalnız onun içerisindeki komutları çalıştırmaktadır:
 
-    ~/.bash_profile
-    ~/.bash_login
-    ~/.profile
+    $ ~/.bash_profile
+    $ ~/.bash_login
+    $ ~/.profile
 
     Eğer bash "interactive non-login shell" olarak çalıştırılırsa (örneğin masaüstünden) bu durumda bash "~/.bashrc" dosyasındaki 
     komutları çalıştırmaktadır. Yani biz "~/.bashrc" dosyasına export ile çevre değişkeni eklersek masaüstünden terminali açtığımızda 
@@ -9437,7 +9424,7 @@ void exit_sys(const char *msg)
     belirtilen dizinlere de bakmaktadır. Tabii birden fazla dizin belirtilebilir bu durumda ':' ile onları ayırmak gerekir.
      Örneğin:
 
-    export C_INCLUDE_PATH=/home/kaan:/home/kaan/Study
+    $ export C_INCLUDE_PATH=/home/kaan:/home/kaan/Study
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -9585,7 +9572,6 @@ int main(int argc, char *argv[])
 
     if (exec(...) == -1)
         exit_sys("exec");
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -10174,7 +10160,7 @@ void exit_sys(const char *msg)
     fonksiyonu ile çalıştırmaktadır. execve için çevre değişken listesi bir gösterici dizisi biçiminde oluşturulmuştur. mample 
     programı içerisinde hem komut satırı argümanları hem de prosesin çevre değişkenleri yazdırılmıştır. Testi şöyle yapabilirsiniz:
 
-    ./sample mample ali veli selami
+    $ ./sample mample ali veli selami
 
     Şöyle bir çıktı elde edeceksiniz:
 
@@ -10189,12 +10175,11 @@ void exit_sys(const char *msg)
     veli
     selami
 
-    Envirionment variables:
+    Environment variables:
 
     city=eskisehir
     PATH=/bin:/usr/bin
     name=ali
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* sample.c */
@@ -10831,11 +10816,12 @@ void exit_sys(const char *msg)
 
     Şimdi bunu kabuk üzerinden çalıştıralım:
 
-    ./test.txt ali veli selami
+    $ ./test.txt ali veli selami
     mample running...
     /home/kaan/Study/Unix-Linux-SysProg/mample
     ankara
-    ./test.txt
+
+    $ ./test.txt
     ali
     veli
     selami
@@ -10915,18 +10901,18 @@ int main(int argc, char *argv[])
 
     Bu program 1'den 10'a kadar sayıları ekrana yazdırmaktadır. Normalolarakbir bash programı aşağıdaki gibi çalıştırılabilir:
 
-    /bin/bash sample.sh
+    $ /bin/bash sample.sh
 
     Burada "sample.sh" dosyasının "x" hakkına sahip olması gerekmez. Ancak biz dosyası doğrudan aşağıdaki gibi çalıştırmak isteyebiliriz:
 
-    ./sample.sh
+    $ ./sample.sh
 
     Bu durumda dosyanın "x" hakkına sahip olması gerekir. Dosyayı böyle çalıştırmak istediğimizde kabuk program exec işlemi uygulayıp
     "sample.sh" programını çalıştırmak isteyecektir. Sistem fonksiyonu da "sample.sh" programının çalıştırılabilir bir dosya formatına
     sahip olmadığını anladığında shebang satırına bakıp orada belirtilen "/bin/bash" programını çalıştıracaktır. Ancak bu programa 
     scipt dosyasının kendisini argüman olarak geçircektir. Yani program adeta şöyle çalıştırılmış olacaktır:
 
-    /bin/bash sample.sh
+    $ /bin/bash sample.sh
 
     Pekiyi /bin/bash programı buradaki "sample.sh" programını çalıştırırken onun başında shebang satırı bir soruna yol açmayacak mı?
     İşte script dillerinin hemen hepsinde # özellikle bu shebang kullanımını desteklemek içn yorum satırı biçiminde ele alınmaktadır. 
@@ -10940,12 +10926,12 @@ int main(int argc, char *argv[])
 
     Bu dosyaya "x" vererek biz artık onu komut satırından çalıştırabiliriz:
 
-    ./sample.py
+    $ ./sample.py
 
     Aşağıdaki örnekte ekrana 1'den 10'a kadar sayıları yazan "sample.py" isimli bir python programı verilmiştir. Bu program 
     shebang içerdiğinden dolayı komut satırında "x" verilmişse doğrudan aşağıdaki gibi çalıştırılabilmektedir:
 
-    ./sample.py
+    $ ./sample.py
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #!/usr/bin/python3
@@ -10972,11 +10958,11 @@ for i in range(10):
     Burada dosyanın "sample.mak" isminde olduğunu düşünelim. Bu dosyaya "x" hakkını verdikten sonra onu aşağıdaki gibi çalıştırmış 
     olalım:
 
-    ./sample.mak
+    $ ./sample.mak
 
     Bu çalıştırma aslında aşağıdakiyle eşdeğer olacaktır:
 
-    /bin/make -f sample.mak
+    $ /bin/make -f sample.mak
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -11109,7 +11095,6 @@ void exit_sys(const char *msg)
 
     - waitpid fonksiyonu sinyalle kesilirse yeniden çalıştırılması gerekir.
     - Üst prosesin işlemler sırasında SIGCHLD sinyalini, SIGINT ve SIGQUIT sinyallerini bloke etmesi gerekmektedir.
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -11262,7 +11247,6 @@ int main(void)
 
 	if (chmod("sample", (finfo.st_mode & ~S_IFMT) | S_ISUID) == -1)		/* ~S_IMT maskelemesi yapılmasa da genel olarak bir sorun oluşmaz */
 		exit_sys("chmod");
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -11621,7 +11605,7 @@ void exit_sys(const char *msg)
     Etkin kullanıcı id'si: root
     Saklı kullanıcı id'si: root
 
-    Şimdi biz sonraki paragrafta göreceğimiz seteuid fonksiyonu ile geri dönüp prosesin yetkisini azaltarak onun etikin kullanıcı
+    Şimdi biz sonraki paragrafta göreceğimiz seteuid fonksiyonu ile geri dönüp prosesin yeteneğini azaltarak onun etikin kullanıcı
     id'sinin kaan olmasını sağlayalım. Bu durumdaki id'ler şöyle olacaktır:
 
     Gerçek kullanıcı id'si: kaan
@@ -12153,14 +12137,14 @@ void exit_sys(const char *msg)
     $ ls -l sample
     -rwsr-xr-x 1 root study 17400 Şub 26 12:18 sample
 
-    Burada önce dosyanın modunun değiştirildiğine daha sonra set-user-id bayrağının set edildiğine dikkat ediniz. Çünkü
-    chown POSIX fonksiyonu dosyanın set-user-id ve set-group-id bayraklarını reset etmektedir. chown fonksiyonun dokümantasyonunu
+    Burada önce dosyanın modunun değiştirildiğine daha sonra set-user-id bayrağının set edildiğine dikkat ediniz. Çünkü chown 
+    POSIX fonksiyonu dosyanın set-user-id ve set-group-id bayraklarını reset etmektedir. chown fonksiyonunun dokümantasyonunu
     dikkatlice bir kez daha okuyunuz.
 
     Aşağıdaki programda önce prosesin ek grupları elde edilmiş sonra ek gruplara bir grup dahil edilip setgroups fonksiyonuyla 
     prosesin ek grupları set edilmiştir. setgroups işleminde prosesin ekin kullanıcı id'si 0 olduğu için başarılı olmaktadır. 
     En sonunda program setuid fonksiyonu ile asıl kullanıcının gerçeki etkin ve saklı kullanıcı id'leriyle çalışmaya devam 
-    ettirilmiştir. 
+    ettirilmiştir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -12259,7 +12243,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     fork işlemi sırasında üst prosesin tüm ek grupları alt prosese aktarılmaktadır. Yani örneğin biz kabuk üzerinden bir program 
     çalıştırdığımızda kabuk prosesinin ek grupları bizim prosesimize kabuğun uyguladığı fork neticesinde aktarılmış olacaktır. 
-    Tabii kabuk prosesinin de ek grupları aslında login programı tarafından "/etc/group" dosyasına başvurularak set edilmektedir. 
+    Tabii kabuk prosesinin de ek grupları aslında login programı tarafından "/etc/group" dosyasına başvurularak set edilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -13467,11 +13451,11 @@ void exit_sys(const char *msg)
 
     Boru dosyaları manuel olarak da mkfifo isimli kabuk komutuyla yaratılabilmektedir. Örneğin:
 
-    mkfifo myfifo
+    $ mkfifo myfifo
 
     Erişim hakları -m seçeneği ile verilebilir. Örneğin:
 
-    mkfifo -m 666 myfifo
+    $ mkfifo -m 666 myfifo
 
     Tabii komut uygulanırken kabuğun umask değeri etkili olmamaktadır.
 
@@ -16363,11 +16347,11 @@ void exit_sys(const char *msg)
     yapabilmektedir. Örneğin mesaj kuyruklarının ipcrm ile silinmesi anahtar belirtilerek -Q seçeneği ile id belirtilerek -q 
     seçeneği ile yapılabilmektedir. Tabii bu komut aslında msgctl fonksiyonunu kullanarak yazılmıştır. Örneğin:
 
-    ipcrm -Q 0x7b050002
+    $ ipcrm -Q 0x7b050002
 
     ya da örneğin:
 
-    ipcrm -q 3
+    $ ipcrm -q 3
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -16483,14 +16467,14 @@ void exit_sys(const char *msg)
 
     Örneğin:
 
-	mqd_t mqdes;
-	struct mq_attr attr;
+    mqd_t mqdes;
+    struct mq_attr attr;
 
-	attr.mq_maxmsg = 10;
-	attr.mq_msgsize = 32;
+    attr.mq_maxmsg = 10;
+    attr.mq_msgsize = 32;
 
-	if ((mqdes = mq_open(MSGQUEUE_NAME, O_WRONLY|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH, &attr)) == -1)
-		exit_sys("mq_open");
+    if ((mqdes = mq_open(MSGQUEUE_NAME, O_WRONLY|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH, &attr)) == -1)
+        exit_sys("mq_open");
 
     2) POSIX mesaj kuyruğuna mesaj yollamak için mq_send fonksiyonu kullanılmaktadır. Fonksiyonun prototipi şöyledir:
 
@@ -16943,7 +16927,7 @@ void exit_sys(const char *msg)
     Sonra o değere belli bir değer toplanıp zaman aşımı göreli biçimde oluşturulabilir. clock_gettime fonksiyonu aynı zamanda standart
     bir C fonksiyonudur. Bu fonksiyondaki saat türünün CLOCK_REALTIME alınması uygun olur. clock_gettime fonksiyonunun prototipi şöyledir:
 
-	#include <time.h>
+    #include <time.h>
 
     int clock_gettime(clockid_t clock_id, struct timespec *tp);
 
@@ -16970,7 +16954,7 @@ void exit_sys(const char *msg)
 
     Aşağıdaki örnekte bir mesaj kuyruğu okuma amaçlı yaratılmış sonra mq_timedreceive fonksiyonu ile şimdiki zamandan 10 saniye 
     kadar blokeli beklenmiştir. Bu programı çalıştırdığınızda 10 saniye sonra "timeout" yazısının basıldığını göreceksiniz. 
-  ---------------------------------------------------------------------------------------------------------------------------*/
+---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -17158,13 +17142,13 @@ void exit_sys(const char *msg)
     (Yani 4096'lık sayfaların kullanıldığı sistemlerde verilen sanal adreslerin düşük anlamlı 3 hex digit'i 0 olacaktır.) Örneğin:
 
     int shmid;
-	char *shmaddr;
+    char *shmaddr;
 
-	if ((shmid = shmget(SHM_KEY, 4096, 0)) == -1)
-		exit_sys("shmget");
+    if ((shmid = shmget(SHM_KEY, 4096, 0)) == -1)
+        exit_sys("shmget");
 
-	if ((shmaddr = (char *)shmat(shmid, NULL, 0)) == (void *)-1)
-		exit_sys("shmat");
+    if ((shmaddr = (char *)shmat(shmid, NULL, 0)) == (void *)-1)
+        exit_sys("shmat");
 
     3) Artık iki proses de muhtemelen farklı sanal adresler yoluyla aynı fiziksel sayfaya erişmektedir. Proseslerden biri o bölgeye
     bir şeyler yazarsa diğeri onu görür ve elde edebilir. Tabii burada bir senkronizasyonun sağlanması gerekmektedir. Daha önce 
@@ -17187,19 +17171,19 @@ void exit_sys(const char *msg)
     Eğer programcı bu shmdt işlemini yapmazsa proses sonlanırken bu işlem zaten yapılmaktadır. Örneğin:
 
     int shmid;
-	char *shmaddr;
+    char *shmaddr;
     ...
 
-	if ((shmid = shmget(SHM_KEY, 4096, 0)) == -1)
-		exit_sys("shmget");
+    if ((shmid = shmget(SHM_KEY, 4096, 0)) == -1)
+        exit_sys("shmget");
 
-	if ((shmaddr = (char *)shmat(shmid, NULL, 0)) == (void *)-1)
-		exit_sys("shmat");
+    if ((shmaddr = (char *)shmat(shmid, NULL, 0)) == (void *)-1)
+        exit_sys("shmat");
 
     ...
 
     if (shmdt(shmaddr) == -1)
-		exit_sys("shmdt");
+        exit_sys("shmdt");
 
     5) Paylaşılan bellek alanlarının "detach" edilmesi ilgili nesnenin yok edileceği anlamına gelmemektedir. Programcı "detach" işlemi 
     sonrasında yeniden attach işlemi yapabilir. Paylaşılan bellek alanları nesnesi, diğer IPC nesnelerinde olduğu gibi açıkça silinene kadar 
@@ -17442,14 +17426,14 @@ void exit_sys(const char *msg)
 
     int fdshm;
 
-	if ((fdshm = shm_open(SHM_NAME, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)) == -1)
-		exit_sys("shm_open");
+    if ((fdshm = shm_open(SHM_NAME, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)) == -1)
+        exit_sys("shm_open");
 
     2) Paylaşılan bellek alanı yaratıldığında 0 uzunluktadır. Ona ftruncate fonksiyonu ile ona bir büyüklük vermek gerekir. 
     truncate ve ftruncate fonksiyonlarının bir dosyayı büyütmek ya da küçültmek amacıyla kullanıldığını anımsayınız. Örneğin:
 
     if (ftruncate(fdshm, SHM_SIZE) == -1)
-		exit_sys("ftruncate");
+        exit_sys("ftruncate");
 
     Tabii paylaşılan bellek alanı zaten yaratılmışsa ve biz onu açıyorsak ftruncate fonksiyonunu aynı uzunlukta çağırdığımızda 
     aslında fonksiyon herhangi bir şey yapmayacaktır. Yani aslında ftruncate fonksiyonu paylaşılan bellek alanı ilk kez yaratılırken 
@@ -17570,8 +17554,8 @@ void exit_sys(const char *msg)
     mmap fonksiyonunun başarı kontrolü şöyle yapılabilir:
 
     shmaddr = mmap(NULL, SHM_SIZE, PROT_WRITE, MAP_SHARED, fdshm, 0);
-	if (shmaddr == MAP_FAILED)
-		exit_sys("mmap");
+    if (shmaddr == MAP_FAILED)
+        exit_sys("mmap");
 
     Paylaşılan bellek alanı betimleyicisi mapping işleminden sonra close fonksiyonuyla kapatılabilir. Bu durum mapping'i 
     etkilememektedir.
@@ -17970,11 +17954,11 @@ void exit_sys(const char *msg)
     Bellek tabanlı dosyaları (memory mapped files) açarken ve kullanırken bazı ayrıntılara dikkat edilmesi gerekir. Burada 
     bu ayrıntılar üzerinde duracağız. 
 
-   - Dosyayı bizim mmap fonksiyonundaki sayfa koruma özelliklerine uygun açmamız gerekmektedir. Örneğin biz dosyayı O_RDONLY 
-   modunda açıp buna ilişkin sayfaları mmap fonksiyonunda PROT_READ|PROT_WRITE olarak belirlersek mmap başarısız olacak ve errno 
-   EACCESS değeri ile set edilecektir. Eğer biz dosyayı O_RDWR modunda açtığımız halde mmap fonksiyonunda yalnızca PROT_READ 
-   kullanırsak bu durumda dosyaya yazma hakkımız olsa da sayfa özellikleri "read only" olduğu için o bellek bölgesine yazma 
-   yapılırken program SIGSEGV sinyali ile çökecektir.
+    - Dosyayı bizim mmap fonksiyonundaki sayfa koruma özelliklerine uygun açmamız gerekmektedir. Örneğin biz dosyayı O_RDONLY 
+    modunda açıp buna ilişkin sayfaları mmap fonksiyonunda PROT_READ|PROT_WRITE olarak belirlersek mmap başarısız olacak ve errno 
+    EACCESS değeri ile set edilecektir. Eğer biz dosyayı O_RDWR modunda açtığımız halde mmap fonksiyonunda yalnızca PROT_READ 
+    kullanırsak bu durumda dosyaya yazma hakkımız olsa da sayfa özellikleri "read only" olduğu için o bellek bölgesine yazma 
+    yapılırken program SIGSEGV sinyali ile çökecektir.
 
     - Bellek tabanlı dosyaların O_WRONLY modunda açılması probleme yol açabilmektedir. Çünkü böyle açılmış olan bir dosyanın mmap 
     fonksiyonunda PROT_WRITE olarak map edilmesi gerekir. Halbuki Intel gibi bazı işlemcilerde PROT_WRITE zaten aynı zamanda okuma
@@ -18056,8 +18040,8 @@ void exit_sys(const char *msg)
     çağrılmadan "mample.c" programının yazdığı şeyler "sample.c" programı tarafından görülecektir. Bu testi yaparken önce içi dolu 
     olan bir dosya yaratınız. Bu dosyanın "test.txt" olduğunu varsayalım. Farklı terminallerden programları aşağıdaki gibi çalıştırınız:
 
-    ./sample test.txt
-    ./mample test.txt
+    $ ./sample test.txt
+    $ ./mample test.txt
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* sample.c */
@@ -18366,7 +18350,7 @@ void exit_sys(const char *msg)
 
     Daha önceden de "çalıştırılabilir dosyaların exec fonksiyonları tarafından bölüm bölüm (section section) belleğe mmap 
     mekanizmasıyla map edildiğini belirtmiştik. İşte ilk değer verilmemiş global değişkenlerin bulunduğu ".bss" alanı da 
-    zaten mapping işlemi yapılırken sıfırlanmaktadır. 
+    zaten mapping işlemi yapılırken sıfırlanmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -18379,7 +18363,7 @@ void exit_sys(const char *msg)
     edilmesinin iki avantajı olabilmektedir:
 
     1) Bu sayede swap out yapılmayacağı için göreli bir hız kazancı sağlanır. Özellikle gerçek zamanlı uygulamalarda bu tür hız 
-    kazançları  önemli olabilmektedir.
+    kazançları önemli olabilmektedir.
     2) Bu sayede swap dosyalarından bilgi çalmaya çalışan kişiler engellenmiş olur. Tabii swap dosyalarından bilgi çalmak da 
     aslında kolay bir şey değildir.
 
@@ -19871,7 +19855,6 @@ void exit_sys_errno(const char *msg, int eno)
 
     if ((result = pthread_attr_destroy(&tattr)) != 0)
         exit_sys_errno("pthread_attr_destroy", result);
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -20103,24 +20086,24 @@ void exit_sys_errno(const char *msg, int eno)
     bu kaynakları bozmadan işleme sokması kritik önemdedir. Thread senkronizasyonunun önemini anlatmak için basit bir örnek 
     verebiliriz. İki thread aynı global değişkeni aşağıdaki gibi artırıyor olsun:
 
-	int g_count = 0;
-	...
+    int g_count = 0;
+    ...
 
-	void *thread_proc1(void *param)
-	{
-		for (int i = 0; i < 1000000; ++i)
-			++g_count;
+    void *thread_proc1(void *param)
+    {
+        for (int i = 0; i < 1000000; ++i)
+            ++g_count;
 
-		return NULL;
-	}
+        return NULL;
+    }
 
-	void *thread_proc2(void *param)
-	{
-		for (int i = 0; i < 1000000; ++i)
-			++g_count;
+    void *thread_proc2(void *param)
+    {
+        for (int i = 0; i < 1000000; ++i)
+            ++g_count;
 
-		return NULL;
-	}
+        return NULL;
+    }
 
     Bu thread'lerin çalışması bittikten sonra bu global değişkenin 2000000 değerinde olması beklenir. Ancak gerçekte bu durum sağlanamayacaktır. 
     Çünkü artırım tek bir C deyimi ile yapılmış olsa bile bunun için birkaç makine komutu gerekebilmektedir. Örneğin:
@@ -20468,14 +20451,14 @@ void exit_sys_errno(const char *msg, int eno)
     errno değerine geri dönmektedir. Eğer mutex nesnesi zaten başka bir thread tarafından kilitlenmişse fonksiyon bloke olmaz ve 
     EBUSY errno değeri ile geri döner. Örneğin:
 
-	result = pthread_mutex_trylock(&g_mutex);
+    result = pthread_mutex_trylock(&g_mutex);
 
-	if (result != 0)
-		if (result == EBUSY) {
-			<başka bir şeyler yap>
-		}
-		else
-			exit_sys_errno("pthread_mutex_trylock", result);
+    if (result != 0)
+        if (result == EBUSY) {
+            <başka bir şeyler yap>
+        }
+        else
+            exit_sys_errno("pthread_mutex_trylock", result);
 
     Bu örnekte pthread_mutex_trylock fonksiyonu başarısız olduğunda errno değeri EBUSY ise başka birtakım işlemler yapılmaktadır.
 
@@ -20490,22 +20473,22 @@ void exit_sys_errno(const char *msg, int eno)
     adresini almaktadır. Burada zaman aşımı mutlak zamana ilişkindir. Yani biz örneğin 5 saniyelik bir zaman aşımı vereceksek önce
     01/01/1970'ten geçen saniye sayısını elde edip onun üzerine 5 saniye katarak bu fonksiyona vermeliyiz. Örneğin:
 
-	struct timespec ts;
-	...
-	if (clock_gettime(CLOCK_REALTIME, &ts) == -1)
-		exit_sys("clock_gettime");
+    struct timespec ts;
+    ...
+    if (clock_gettime(CLOCK_REALTIME, &ts) == -1)
+        exit_sys("clock_gettime");
 
-	ts.tv_sec += 5;
+    ts.tv_sec += 5;
 
-	result = pthread_mutex_timedlock(&g_mutex, &ts);
+    result = pthread_mutex_timedlock(&g_mutex, &ts);
 
-	if (result != 0) {
-		if (result == ETIMEDOUT) {
-			<fonksiyon zaman aşımından dolayı sonlandı>
-		}
-		else
-			exit_sys_errno("pthread_timedlock", result);
-	}
+    if (result != 0) {
+        if (result == ETIMEDOUT) {
+            <fonksiyon zaman aşımından dolayı sonlandı>
+        }
+        else
+            exit_sys_errno("pthread_timedlock", result);
+    }
     ...
 
     Bazı algoritmalarda "kilitlenme (deadlock)" problemlerinin çözümü zor olabilmektedir. Bu tür durumlarda son çare olarak 
@@ -21038,7 +21021,6 @@ void exit_sys_errno(const char *msg, int eno)
 
     if ((result = pthread_mutexattr_destroy(&mattr)) != 0)
         exit_sys_errno("pthread_mutexattr_destroy", result);
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -22084,7 +22066,6 @@ void exit_sys_errno(const char *msg, int eno)
     Thread1 continues...
     Thread2 unlocked mutex
     Thread2 continues...
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -23187,8 +23168,8 @@ void exit_sys_errno(const char *msg, int eno)
     sem_t g_sem;
     ...
 
-	if (sem_init(&g_sem, 0, 3) == -1)
-		exit_sys("sem_init");
+    if (sem_init(&g_sem, 0, 3) == -1)
+        exit_sys("sem_init");
 
     2) Kritik kod aşağıdaki gibi oluşturulabilir (kontroller yapılmamıştır):
 
@@ -23673,7 +23654,6 @@ void exit_sys_errno(const char *msg, int eno)
 
     sem_init(&g_sem_producer, 0, QUEUE_SIZE);
     sem_init(&g_sem_consumer, 0, 0);
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -24185,9 +24165,9 @@ void exit_sys_errno(const char *msg, int eno)
 
 #include <stddef.h>
 
-#define SHM_PATH	        "/sample_shared_memory"
-#define SEM_PATH_PRODUCER   "/sample_producer_semaphore"
-#define SEM_PATH_CONSUMER   "/sample_consumer_semaphore"
+#define SHM_PATH			"/sample_shared_memory"
+#define SEM_PATH_PRODUCER	"/sample_producer_semaphore"
+#define SEM_PATH_CONSUMER	"/sample_consumer_semaphore"
 
 #define QUEUE_SIZE		10
 
@@ -24424,7 +24404,7 @@ void exit_sys(const char *msg)
     Örneğin:
 
     if ((key = ftok(KEY_NAME, KEY_ID)) == -1)
-		exit_sys("ftok");
+        exit_sys("ftok");
 
     if ((semid = semget(key, 2, IPC_CREAT|S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)) == -1)
         exit_sys("semget");
@@ -24617,16 +24597,16 @@ void exit_sys(const char *msg)
     Pekiyi Sistem 5 semaphore'ları ile kritik kod nasıl oluşturulmaktadır? İşte bunun tipik senaryosu şöyledir: Başlangıçta semaphore 
     sayacı semctl fonksiyonu ile ayarlanır. Sonra kritik kod aşağıdaki gibi oluşturulur (kontroller yapılmamıştır):
 
-	struct sembuf sbuf;
+    struct sembuf sbuf;
     ...
 
-	sbuf.sem_num = 0;
-	sbuf.sem_op = -1;
-	sbuf.sem_flags = 0;
+    sbuf.sem_num = 0;
+    sbuf.sem_op = -1;
+    sbuf.sem_flags = 0;
 
-	semop(semid, &sbuf, 1);
+    semop(semid, &sbuf, 1);
 
-	...
+    ...
     ...		<KRİTİK KOD>
     ...
 
@@ -24642,7 +24622,6 @@ void exit_sys(const char *msg)
 
     if (semctl(semid, 0, IPC_RMID) == -1)
         exit_sys("semctl");
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -25730,7 +25709,6 @@ int check(const int *nums)
 
     if ((result = pthread_spin_destroy(&g_spinlock)) != 0)
         exit_sys_errno("pthread_spin_destroy", result);
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -26060,7 +26038,6 @@ void exit_sys_errno(const char *msg, int eno)
     int pthread_rwlockattr_destroy(pthread_rwlockattr_t *attr);
     int pthread_rwlockattr_setpshared(pthread_rwlockattr_t *attr, int pshared);
     int pthread_rwlockattr_getpshared(const pthread_rwlockattr_t *attr, int *pshared);
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -26420,7 +26397,6 @@ void *thread_proc4(void *param)
 
     void __atomic_load_n (type *ptr, int memmodel);
     void __atomic_load (type *ptr, type *ret, int memmodel);
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -27738,9 +27714,9 @@ void exit_sys_errno(const char *msg, int eno)
     yeni nice değerine geri döner. nice fonksiyonu başarısızlık durumunda -1 değerine geri döner. Ancak programcı yine bu -1 değerinin 
     başarıdan dolayı mı başarısızlıktan dolayı mı oluştuğunu errno değişkeni yoluyla belirlemelidir. Örneğin:
 
-	errno = 0;
-	if (nice(-1) == -1 && errno != 0)
-		exit_sys("nice");
+    errno = 0;
+    if (nice(-1) == -1 && errno != 0)
+        exit_sys("nice");
 
     Aşağıdaki örnekte prosesin nice değeri, nice fonksiyonuyla iki kez üst üste değiştirilmiştir. Programı aşağıdaki gibi 
     çalıştırabilirsiniz:
@@ -27856,7 +27832,6 @@ void exit_sys_errno(const char *msg, int eno)
     1 S     0    6777    6777    6776  0  80   0 -  4707 -      pts/1    00:00:00 sudo
     4 S     0    6778    6778    6777  0  79  -1 -  2742 -      pts/1    00:00:00 sample
     1 S     0    6778    6779    6777  0  79  -1 -  2742 -      pts/1    00:00:00 sample
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -27920,7 +27895,7 @@ void exit_sys_errno(const char *msg, int eno)
 
     Örneğin:
 
-    renice -1 -p 6827
+    $ renice -1 -p 6827
 
     Tabii burada Linux sistemlerinde yalnızca prosesin ana thread'inin nice değeri değişecektir. nice ve renice komutları aslında 
     POSIX standartlarında belirtilmiş olan standart komutlardandır. Ancak POSIX standartlarında renice fonksiyonu prosesin tüm 
@@ -27985,7 +27960,7 @@ void exit_sys_errno(const char *msg, int eno)
 
     Programdan çıkmak için Ctrl+C tuşlarına basınız. Başka bir terminalden durumu ps komutuyla aşağıdaki gibi gözleyebilirsiniz:
 
-    ps -t pts/0 -T -l
+    $ ps -t pts/0 -T -l
 
     Burada programı çalıştırdığınız terminalin hangi terminal olduğunu tty komutu ile belirleyebilirsiniz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -28359,9 +28334,9 @@ void exit_sys(const char *msg)
     Her ne kadar fonksiyonlar böyle bir yapı kullansalar da mevcut durumda bu yapının tek bir elemanı vardır. İleriye doğru 
     uyumu korumak için burada böyle bir yapı kullanılmıştır. Yapının mevcut durumu şöyledir:
 
-	struct sched_param {
-		int sched_priority;
-	};
+    struct sched_param {
+        int sched_priority;
+    };
 
     Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri döner ve errno değişkeni uygun biçimde 
     set edilir.
@@ -28616,7 +28591,7 @@ void exit_sys_errno(const char *msg, int eno)
     statik önceliği de 10 olacak biçimde pthread_setschedparam fonksiyonu ile değiştirilmiştir. Yine değişikliği başka bir 
     terminalden ps komutu ile görebilirsiniz:
 
-    $ ps  -T --tty pts/2 -o pid,pri,policy,cmd,tid
+    $ ps -T --tty pts/2 -o pid,pri,policy,cmd,tid
     PID PRI POL CMD                             TID
     9909  19 TS  sudo ./sample                  9909
     9910  19 TS  ./sample                       9910
@@ -28785,9 +28760,9 @@ void exit_sys_errno(const char *msg, int eno)
     Fonksiyonların üçüncü parametresi cpu_set_t türündedir. Bu tür aslında default olarak 1024 bite sahip olan bir veri yapısıdır. 
     Bu veri yapısı muhtemelen aşağıdakine benzer biçimde typedef edilmiştir:
 
-	typedef struct {
-		unsigned long bitarray[16];
-	} cpu_set_t;
+    typedef struct {
+        unsigned long bitarray[16];
+    } cpu_set_t;
 
     Bu türden bir nesnenin bitlerini set ya da reset etmek için çeşitli makrolar bulundurulmuştur. Bu makroların önemli olanları 
     şunlardır:
@@ -29100,23 +29075,23 @@ int main(void)
     olarak alır ve onu ayrıştırarak statik bir time_t yapı nesnesinin içerisine yerleştirir ve o nesnenin adresini bize verir. 
     Örneğin:
 
-	time_t t;
-	struct tm *ptm;
-	...
+    time_t t;
+    struct tm *ptm;
+    ...
 
-	t = time(NULL);
-	ptm = localtime(&t);
+    t = time(NULL);
+    ptm = localtime(&t);
 
     Burada localtime fonksiyonu şöyle yazılmıştır:
 
-	struct tm *localtime(time_t *pt)
-	{
-		static struct tm result;
+    struct tm *localtime(time_t *pt)
+    {
+        static struct tm result;
 
-		<result'ın içi dolduruluyor>
+        <result'ın içi dolduruluyor>
 
-		return &result;
-	}
+        return &result;
+    }
 
     Burada result değişkeninin toplamda tek bir kopyası olduğuna göre farklı thread'ler aslında aynı nesne üzerinde işlem yapmaktadır. 
     Bu da fonksiyonun iki farklı thread tarafından aynı anda çağrıldığında soruna yol açacağı anlamına gelir.
@@ -29160,19 +29135,19 @@ int main(void)
     eder. Her rand çağrıldığında bu global değişkenin değeri güncellenmektedir. D. Ritchie ve B. Kernighan'ın "The C Programming 
     Language" kitabında rand fonksiyonun olası bir gerçekleştirimi şöyle verilmiştir (değişken isimleri değiştirilmiştir):
 
-	unsigned long int g_seed = 1;
+    unsigned long int g_seed = 1;
 
-	void srand(unsigned int seed)
-	{
-		g_seed = seed;
-	}
+    void srand(unsigned int seed)
+    {
+        g_seed = seed;
+    }
 
-	int rand(void)
-	{
-		g_seed = g_seed * 1103515245 + 12345;
+    int rand(void)
+    {
+        g_seed = g_seed * 1103515245 + 12345;
 
-		return (unsigned int)(g_seed / 65536) % 32768;
-	}
+        return (unsigned int)(g_seed / 65536) % 32768;
+    }
 
     Statik veri kullandığı için UNIX/Linux sistemlerinde iki thread'in bu rand ve srand fonksiyonlarını kullanması uygun değildir. 
     İşte rand fonksiyonunun thread güvenli biçimi rand_r ismiyle oluşturulmuştur. rand_r fonksiyonunun prototipi şöyledir:
@@ -29268,25 +29243,24 @@ void exit_sys_errno(const char *msg, int eno)
 
     Burada localtime_r fonksiyonu kendi struct tm nesnesini alarak onun adresine geri dönmektedir. Yani kullanım şöyle olmalıdır:
 
-	time_t t;
-	struct tm tmval, *ptm;
+    time_t t;
+    struct tm tmval, *ptm;
 
-	t = time(NULL);
+    t = time(NULL);
 
-	ptm = localtime_r(&t, &tmval);
-	printf("%02d:%02d:%02d\n", ptm->tm_hour, ptm->tm_min, ptm->tm_sec);
+    ptm = localtime_r(&t, &tmval);
+    printf("%02d:%02d:%02d\n", ptm->tm_hour, ptm->tm_min, ptm->tm_sec);
 
     Tabii aslında localtime_r fonksiyonunun geri dönüş değerini kullanmak zorunda değiliz. Zaten bu geri dönüş değeri bizim 
     verdiğimiz nesnenin adresidir. Yani kullanım şöyle de olabilirdi:
 
-	time_t t;
-	struct tm tmval;
+    time_t t;
+    struct tm tmval;
 
-	t = time(NULL);
+    t = time(NULL);
 
-	localtime_r(&t, &tmval);
-	printf("%02d:%02d:%02d\n", tmval.tm_hour, tmval.tm_min, tmval.tm_sec);
-
+    localtime_r(&t, &tmval);
+    printf("%02d:%02d:%02d\n", tmval.tm_hour, tmval.tm_min, tmval.tm_sec);
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -29412,7 +29386,7 @@ int main(void)
     pthread_key_t g_key;
     ...
     if ((result = pthread_key_create(&g_key, NULL) != 0)) != 0)
-           exit_sys_errno("pthread_key_create", result);
+        exit_sys_errno("pthread_key_create", result);
 
     Artık biz her thread'te geçerli olan bir slot tahsis etmiş olduk. Bu slot numarasını da g_key değişkenine yerleştirmiş olduk.
 
@@ -30512,7 +30486,7 @@ int thread_proc2(void *param)
     Aşağıda C++'ta bir thread yaratımı örneği verilmiştir. Yine derleme işlemi sırasında Linux sistemlerinde -pthread seçeneğinin 
     bulundurulması gerekmektedir. Programın testi için derlemeyi şöyle yapabilirsiniz:
 
-    g++ -o sample sample.cpp -pthread
+    $ g++ -o sample sample.cpp -pthread
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -30752,10 +30726,10 @@ void thread_proc2()
     geri döner ve errno değişkeni EINTR değeriyle set edilir. Bu tür durumlarda biz fonksiyonun sinyal dolayısıyla başarısız 
     olduğunu anlayıp onu yeniden çağırmamız gerekir. Örneğin:
 
-	while ((result = read(...)) == -1 && errno == EINTR)
-		;
-	if (result == -1)
-		exit_sys("read");
+    while ((result = read(...)) == -1 && errno == EINTR)
+        ;
+    if (result == -1)
+        exit_sys("read");
 
     Ancak programcı isterse bu tür POSIX fonksiyonlarınının "otomatik biçimde yeniden çağrılmasını (automatic restart)" da 
     sağlayabilmektedir. Eğer programcı bunu sağlamışsa bu durumda fonksiyon hiç geri dönmez, ancak sinyal fonksiyonu çalıştırılır. 
@@ -30807,7 +30781,7 @@ void thread_proc2()
 
     ...
     if (signal(SIGINT, sigint_handler) == SIG_ERR)
-		exit_sys("signal");
+        exit_sys("signal");
     ...
 
     void sigint_handler(int sno)
@@ -31300,7 +31274,7 @@ void exit_sys(const char *msg)
     programının proses id'sini bilmeniz gerekir. Bunun için terminalde "ps -u" komutunu kullanabilirsiniz. Programın örnek 
     bir kullanımı şöyle olabilir:
 
-    ./ssender TERM 12404
+    $ ./ssender TERM 12404
 
     Örneğimizde sinyal isimlerinde "SIG" önekinin kullanılmadığına dikkat ediniz. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -31418,7 +31392,7 @@ void exit_sys(const char *msg)
     Aşağıda bu fonksiyonlarının kullanımına yönelik bir örnek verilmiştir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-#define  _GNU_SOURCE
+#define _GNU_SOURCE
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31448,23 +31422,23 @@ void exit_sys(const char *msg)
     zaten kill fonksiyonu kullanılarak yukarıda bizim yaptığımıza benzer biçimde kullanılmaktadır. kill komutu ile prosese 
     sinyal gönderirken sinyal ismi -TERM, -INT, _USR1 gibi başında "SIG" öneki olmadan belirtilmelidir. Örneğin:
 
-    kill -TERM 12767        (SIGTERM sinyali gönderiliyor)
-    kill -USR1 12767        (SIGUSR1 sinyali gönderiliyor)
+    $ kill -TERM 12767        (SIGTERM sinyali gönderiliyor)
+    $ kill -USR1 12767        (SIGUSR1 sinyali gönderiliyor)
 
     kill komutunda sinyalin ismi değil numarası da belirtilebilmektedir. Ancak sinyal numaralarının UNIX sistemleri genelinde 
     taşınabilir olmadığına dikkat ediniz. Örneğin:
 
-    kill -15 12801        (Linux sistemlerinde SIGTERM sinyali gönderiliyor)
-    kill -10 12801        (Linux sistemlerinde SIGUSR1 sinyali gönderiliyor)
+    $ kill -15 12801        (Linux sistemlerinde SIGTERM sinyali gönderiliyor)
+    $ kill -10 12801        (Linux sistemlerinde SIGUSR1 sinyali gönderiliyor)
 
     kill komutu hiç sinyal ismi ya da numarası belirtilmeden kullanılırsa default olarak SIGTERM sinyalini göndermektedir. 
     Örneğin:
 
-    kill 12801
+    $ kill 12801
 
     Bu durumda prosese SIGTERM sinyali gönderilmektedir. Ancak örneğin:
 
-    kill -KILL 12801
+    $ kill -KILL 12801
 
     Bu durumda prosese SIGKILL sinyali gönderilmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -31482,12 +31456,11 @@ void exit_sys(const char *msg)
     başarısız olur ve errno değeri EINVAL ile set edilir.) Bu durumda bir prosesi garantili sonlandırmak için SIGTERM sinyali 
     değil, SIGKILL sinyali gönderilmelidir. Örneğin:
 
-    kill -KILL 12801
+    $ kill -KILL 12801
 
     SIGTERM sinyalinin Linux sistemlerindeki numarası 15, SIGKILL sinyalinin ise 9'dur. Örneğin:
 
-    kill -9 12801
-
+    $ kill -9 12801
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -31642,23 +31615,23 @@ void exit_sys(const char *msg)
     sigset_t sset, osset;
     ...
 
-	sigemptyset(&sset);
-	sigaddset(&sset, SIGTERM);
+    sigemptyset(&sset);
+    sigaddset(&sset, SIGTERM);
 
-	if (sigprocmask(SIG_BLOCK, &sset, &osset) == -1)
-		exit_sys("sigprocmask");
+    if (sigprocmask(SIG_BLOCK, &sset, &osset) == -1)
+        exit_sys("sigprocmask");
 
     Burada sigprocmask fonksiyonunun birinci parametresi SIG_BLOCK biçiminde geçilmiştir. Bu durumda ikinci parametrede belirtilen
     sinyal kümesindeki sinyaller prosesin sinyal bloke kümesine (yani signal mask kümesine) dahil edilecektir. Böylece proses
     bu sinyale bloke edilmiş olacaktır. Pekiyi bu blokeyi nasıl kaldırabiliriz? Bunun için iki yöntem kullanabiliriz. Örneğin:
 
-	if (sigprocmask(SIG_UNBLOCK, &sset, NULL) == -1)
-		exit_sys("sigprocmask");
+    if (sigprocmask(SIG_UNBLOCK, &sset, NULL) == -1)
+        exit_sys("sigprocmask");
 
     Bunun diğer bir yolu eski sinyal mask kümesini yeniden set etmektir:
 
-	if (sigprocmask(SIG_SETMASK, &osset, NULL) == -1)
-		exit_sys("sigprocmask");
+    if (sigprocmask(SIG_SETMASK, &osset, NULL) == -1)
+        exit_sys("sigprocmask");
 
     Burada biz eski signal mask kümesini yeniden set ettik. Böylece daha önce yapmış olduğumuz SIG_BLOCK işlemi de devre dışı 
     kalmış oldu.
@@ -31985,7 +31958,7 @@ void exit_sys_errno(const char *msg, int eno)
     için kullanılmaktadır.
 
     YANIT: Bunun çeşitli nedenleri olabilir. Ancak başka bir prosesten sinyal beklerken birtakım başka şeylerin yapılması 
-    gerekebilmektedir.  Bu durumda diğer proses sinyal gönderirse sinyalin boşa gitmemesi için programcı en azından ilgili sinyali 
+    gerekebilmektedir. Bu durumda diğer proses sinyal gönderirse sinyalin boşa gitmemesi için programcı en azından ilgili sinyali 
     bloke ederek sinyal gelmişse bile onun pending durumda kalmasını sağlayabilir.
 
     SORU: Zaten bir prosesin, bir işi yapmasını beklemek için senkronizasyon nesneleri kullanılmıyor mu? Neden ayrıca bir sinyal 
@@ -32126,10 +32099,10 @@ void exit_sys(const char *msg)
     sinyal fonksiyonu çalıştırıldığında sinyal fonksiyonu da errno değişkenini değiştirirse sorun ortaya çıkacaktır. Biz örneğimizde
     raise fonksiyonu ile bu durumu yapay bir biçimde sağlamaya çalıştık:
 
-	if ((fd = open("file_not_found", O_RDONLY)) == -1) {
-		raise(SIGUSR1);		// only for example
-		exit_sys("open");
-	}
+    if ((fd = open("file_not_found", O_RDONLY)) == -1) {
+        raise(SIGUSR1);		// only for example
+        exit_sys("open");
+    }
 
     Sinyal fonksiyonun aşağıdaki gibi olduğunu varsayalım:
 
@@ -32275,7 +32248,6 @@ int main(void)
     kaan       31684  0.0  0.1  14292  5776 pts/0    Ss   10:45   0:00 bash
     kaan       32827  0.0  0.0   2772   944 pts/2    T    12:57   0:00 ./mample
     kaan       32831  0.0  0.0  15428  1568 pts/0    R+   12:58   0:00 ps -u
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -32295,7 +32267,7 @@ int main(void)
     ^Z
     [3]+  Durdu                   ./mample
     $ fg 3
-    ./mample
+    $ ./mample
     5
     6
     7
@@ -32535,8 +32507,8 @@ void exit_sys(const char *msg)
     SIGCHLD sinyal fonksiyonunda wait işlemi bir kez değil, bir döngü içerisinde uygulanmalıdır. Tabii wait işleminin blokeye 
     yol açmaması için waitpid fonksiyonu son parametresinde WNOHANG değeriyle çağrılmalıdır. Örneğin:
 
-	while (waitpid(-1, NULL, WNOHANG) > 0)
-		;
+    while (waitpid(-1, NULL, WNOHANG) > 0)
+        ;
 
     Anımsanacağı gibi waitpid fonksiyonu eğer beklenecek herhangi bir alt proses yoksa -1 değerine, WNOHANG değeri geçildiğinde ancak 
     henüz bir alt proses sonlanmamışsa 0 değerine geri dönmektedir. Yukarıdaki döngüde sonlanan bütün altprosesler beklenmiş 
@@ -32741,11 +32713,11 @@ void exit_sys(const char *msg)
     eklenmelidir. (Yani başka bir deyişle fonksiyon sa_flags parametresinde SA_SIGINFO değerini gördüğünde artık sinyal 
     fonksiyonu için yapının sa_sigaction elemanına bakar.) Örneğin:
 
-	struct sigaction sa;
-	...
-	sa.sa_sigaction = signal_handler;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = SA_RESTART|SA_SIGINFO;
+    struct sigaction sa;
+    ...
+    sa.sa_sigaction = signal_handler;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = SA_RESTART|SA_SIGINFO;
 
     sigaction yapısının sa_sigaction elemanına girilecek fonksiyonun parametrik yapısı aşağıdaki gibi olmak zorundadır:
 
@@ -32972,7 +32944,7 @@ void exit_sys(const char *msg)
     Aşağıda bir prosese sigqueue fonksiyonu ile sinyal gönderen bir örnek program verilmiştir. Program üç komut satırı argümanı
     almaktadır. Kullanımı şöyledir:
 
-    ./sq <process id> <sig> <value> 
+    $ ./sq <process id> <sig> <value> 
 
     Linux'ta ilk gerçek zamanlı sinyalin 34 numara olduğunu anımsayınız. Normal olarak gerçek zamanlı sinyaller sigqueue 
     fonksiyonu ile gönderilirken numara SIGRTMIN + n biçiminde belirtilmektedir. Örneğin:
@@ -33070,12 +33042,12 @@ void exit_sys(const char *msg)
     fonksiyonunu set edeceğini belirten bir komut satırı argümanı almaktadır. Program sonsuz bir döngüde pause çağrılarıyla 
     beklemektedir. Dolayısıyla programı Ctrl+C tuşları ile sonlandırabilirsiniz. Programın kullanımı şöyledir:
 
-    ./sample 34
+    $ ./sample 34
 
     Bu örnekte 34 Linux'taki ilk gerçek zamanlı sinyal numarasıdır. Bu programa yukarıdaki programı kullanarak sigqueue fonksiyonu 
     ile sinyal gönderebilirsiniz. Örneğin:
 
-    ./sq 34183 34 123
+    $ ./sq 34183 34 123
 
     sample programı ona iliştirilen int bilgiyi de sinyal geldiğinde ekrana yazdırmaktadır. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -33579,7 +33551,6 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-
     Linux sistemlerinde sinyal yoluyla core dosyası oluşturulması için sistem limitlerinin uygun olması gerekmektedir. 
     "ulimit -a" komutu ile sistem limitlerine bakılabilir. Eğer burada "core file size" 0 ise bunun artırılması gerekir. 
     "ulimit -c" ile yalnızca "core file size" bilgisi de görüntülenebilmektedir. Bu sınırın "unlimited" hale getirilmesi 
@@ -34033,7 +34004,6 @@ void exit_sys(const char *msg)
     Parent process id of the child: 52812
     Child process group id: 52812
     Child process session id: 31684
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -34456,7 +34426,7 @@ void exit_sys(const char *msg)
     Bunlardan birisi "Ctrl+F+N" tuşlarına basılarak açılan terminallerdir. Bu terminallere genellikle "sanal terminaller 
     (virtual terminals)" denilmektedir. Diğeri ise GUI ortamında pencere yöneticilerinden açılan terminal pencereleridir. 
     Bunlara ise "sahte terminaller (pseudo terminals)" denilmektedir.
-   ---------------------------------------------------------------------------------------------------------------------------*/
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Terminal bağlantısı koptuğunda ya da sahte terminal penceresi kapatıldığında terminal aygıt sürücüsü o terminalin ilişkin 
@@ -34619,7 +34589,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-                                                82. Ders 17/09/2023 - Pazar
+												82. Ders 17/09/2023 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -35000,8 +34970,8 @@ void exit_sys(const char *msg)
     durumunda -1 değerine geri dönmektedir. timespec yapısını yeniden anımsatmak istiyoruz:
 
     struct timespec {
-        time_t   tv_sec;        /* seconds */
-        long     tv_nsec;       /* nanoseconds */
+        time_t   tv_sec;		/* seconds */
+        long     tv_nsec;		/* nanoseconds */
     };
 
     Aşağıda clock_gettime ile programın iki noktası arasındaki zaman ölçümüne bir örnek verilmiştir.
@@ -35172,10 +35142,10 @@ void exit_sys(const char *msg)
     tms yapısı şöyledir:
 
     struct tms {
-        clock_t tms_utime;  /* user time */
-        clock_t tms_stime;  /* system time */
-        clock_t tms_cutime; /* user time of children */
-        clock_t tms_cstime; /* system time of children */
+        clock_t tms_utime;	/* user time */
+        clock_t tms_stime;	/* system time */
+        clock_t tms_cutime;	/* user time of children */
+        clock_t tms_cstime;	/* system time of children */
     };
 
     Yapının tms_utime elemanı prosesin user mode'da harcadığı zamanı, tms_stime elemanı kernel mode'da harcadığı zamanı vermektedir. 
@@ -35272,15 +35242,15 @@ void exit_sys(const char *msg)
     Fonksiyonun ikinci parametresi itimerval isimli bir yapı türündendir. Bu yapı şöyle bildirilmiştir:
 
     struct itimerval {
-        struct timeval it_interval;     /* next value */
-        struct timeval it_value;        /* current value */
+        struct timeval it_interval;		/* next value */
+        struct timeval it_value;		/* current value */
     };
 
     Yapının elemanlarının struct timeval türünden olduğuna dikkat ediniz. Bu yapı da şöyle bildirilmiştir:
 
     struct timeval {
-        time_t      tv_sec;         /* seconds */
-        suseconds_t tv_usec;        /* microseconds */
+        time_t      tv_sec;			/* seconds */
+        suseconds_t tv_usec;		/* microseconds */
     };
 
     itimerval yapısının it_value elemanı ilk periyoda kadar geçen zamanı, it_interval elemanı da periyodik zamanı belirtmektedir. 
@@ -35459,8 +35429,8 @@ void exit_sys(const char *msg)
     #include <time.h>
 
     struct itimerspec {
-        struct timespec  it_interval;	/* Interval for periodic timer */
-        struct timespec  it_value;		/* Initial expiration */
+        struct timespec it_interval;	/* Interval for periodic timer */
+        struct timespec it_value;		/* Initial expiration */
     };
 
     Yapının it_value elemanı ilk haberdar edilmeye kadar geçecek zamanı, it_interval elemanı haberdar edilme periyodunu 
@@ -35797,7 +35767,6 @@ void exit_sys(const char *msg)
             exit_sys("sysconf");
     else
         printf("%ld\n", result);
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -36023,8 +35992,8 @@ void exit_sys(const char *msg)
     nesnesinin adresini almaktadır. rlimit yapısı şöyle bildirilmiştir:
 
     struct rlimit {
-        rlim_t rlim_cur;    /* Soft limit */
-        rlim_t rlim_max;    /* Hard limit (ceiling for rlim_cur) */
+        rlim_t rlim_cur;		/* Soft limit */
+        rlim_t rlim_max;		/* Hard limit (ceiling for rlim_cur) */
     };
 
     Buradaki rlimit tür ismi işaretsiz bir tamsayı biçiminde typedef edilmek zorundadır. Fonksiyon başarı durumunda 0 değerine,
@@ -36055,7 +36024,6 @@ void exit_sys(const char *msg)
         printf("hard limit unrepresentable...\n");
     else
         printf("hard limit: %ju\n", (uintmax_t)rl.rlim_max);
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -36636,7 +36604,7 @@ void exit_sys(const char *msg)
     Aşağıda kilitleme işlemlerini test etmek için "flock-test.c" isimli örnek bir program verilmektedir. Bu programı çalıştırırken
     komut satırı argümanı olarak kilitlemeye konu olacak dosyanın yol ifadesi verilmelidir. Örneğin:
 
-    ./flock-test test.txt
+    $ ./flock-test test.txt
 
     Program aşağıdaki gibi bir prompt'a düşmektedir:
 
@@ -36837,7 +36805,6 @@ void exit_sys(const char *msg)
     write(fd, buf, elem_size);
 
     fcntl(fd, F_SETLKW, &region);		/* F_UNLCK */
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -36976,7 +36943,7 @@ void exit_sys(const char *msg)
     okuma ya da yazma yapan bir programdır. "flock-test.c" programını yukarıda açıklamıştık. "rw-test.c" programının komut 
     satırı argümanları şöyledir:
 
-    ./rw-test <dosya ismi> <r|w> <offset> <uzunluk>
+    $ ./rw-test <dosya ismi> <r|w> <offset> <uzunluk>
 
     Burada "r" okuma, "w" ise yazma yapma anlamına gelmektedir. Örneğin:
 
@@ -37228,7 +37195,7 @@ void exit_sys(const char *msg)
     numarasını elde edebiliriz. Ancak bunun tersini yapan bir mekanizma yoktur. Bu işlem ancak find utility'si ile arama 
     yöntemiyle yapılabilir. Örneğin:
 
-    find / -inum 1207498 2> /dev/null
+    $ find / -inum 1207498 2> /dev/null
 
     Burada find utility'sine biz i-node numarası 1207498 olan dizin girişlerini kökten itibaren özyinelemeli biçimde aratmaktayız. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -37702,12 +37669,12 @@ void exit_sys(const char *msg)
     open fonksiyonunun blokeye yol açtığını anımsayınız. Bu programı kullanırken önce mkfifo komutuyla isimli boruları yaratmalısınız. 
     Örneğin:
 
-    mkfifo x y Z
+    $ mkfifo x y Z
 
     Burada x, y ve z isimli boruları yaratılacaktır. Daha sonra programı bu isimli boruların yol ifadeleriyle çalıştırmalısınız. 
     Örneğin:
 
-    ./sample x y z
+    $ ./sample x y z
 
     Artık bu isimli borular açıldığında program bir döngü içerisinde select fonksiyonunda bekleyecektir. Bu borulardan herhangi 
     birine yazma yapıldığında select blokesi çözülecek ve artık program o borudan okuma yapacaktır. Bütün borular kapatıldığında
@@ -37716,7 +37683,7 @@ void exit_sys(const char *msg)
     Aşağıdaki programı test etmek için en pratik yöntem başka terminaller açarak cat programını borulara yönlendirerek çalıştırmaktır. 
     Örneğin:
 
-    cat > x
+    $ cat > x
 
     Artık klavyeden bir şeyler yazıp ENTER tuşuna bastığımızda cat onu boruya yazacaktır. cat programından Ctrl+D tuşu ile 
     çıkabilirsiniz. Tabii aslında cat programı Ctrl+C ile sinyal yoluyla sonlandırılsa da bir sorun oluşmayacaktır. Bir 
@@ -37841,8 +37808,8 @@ void exit_sys(const char *msg)
     işlem yapamamaktadır. timeval yapısını yeniden anımsatmak istiyoruz:
 
     struct timeval {
-        time_t      tv_sec;         /* seconds */
-        suseconds_t tv_usec;        /* microseconds */
+        time_t      tv_sec;			/* seconds */
+        suseconds_t tv_usec;		/* microseconds */
     };
 
     Eskiden UNIX türevi sistemlerde yüksek çözünürlüklü bekleme yapan nanosleep ve clock_nanosleep fonksiyonları yoktu. 
@@ -37934,9 +37901,9 @@ void exit_sys(const char *msg)
     betimleyicilerin durumuna bakıp hemen geri döner. pollfd yapısı şöyle bildirilmiştir:
 
     struct pollfd {
-        int fd;           /* file descriptor */
-        short events;     /* requested events */
-        short revents;    /* returned events */
+        int fd;				/* file descriptor */
+        short events;		/* requested events */
+        short revents;		/* returned events */
     };
 
     Yapının fd elemanı izlenecek betimleyiciyi, events elemanı izleme biçimini belirtmektedir. Eğer bu betimleyici değeri negatif 
@@ -38088,7 +38055,7 @@ void exit_sys(const char *msg)
     Aşağıdaki örnek daha önce select fonksiyonuyla yaptığımız örneğin poll versiyonudur. Yani bu örnekteki program yine bir 
     grup isimli boru, komut satırı argümanı yapılarak çalıştırılmalıdır. Örneğin:
 
-    ./sample x y z
+    $ ./sample x y z
 
     Örneğimizde önce borular açılıp pfds dizisi oluşturulmuştur:
 
@@ -38340,7 +38307,7 @@ void exit_sys(const char *msg)
     - poll fonksiyonunu kullanabilmek için pollfd türünden bir yapı dizisinin oluşturulması gerekmektedir. Halbuki select 
     fonksiyonunda fd_set veri yapısı bitsel düzeyde olduğu için az yer kaplamaktadır.
 
-    poll fonksiyonun select fonksiyonuna göre en önemli avantajı betimleyici sayısının istenildiği kadar çok olabilmesidir. 
+    poll fonksiyonunun select fonksiyonuna göre en önemli avantajı betimleyici sayısının istenildiği kadar çok olabilmesidir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -38576,7 +38543,7 @@ void exit_sys(const char *msg)
     Şimdi de daha vermiş olduğumuz borulardan okuma örneğini aşağıda epoll fonksiyonu ile gerçekleştirelim. Örneğimizde yine program 
     isimli boruları komut satırı argümanı olarak almaktadır. Örneğin:
 
-    ./sample x y z
+    $ ./sample x y z
 
     Bu borular üzerinde okuma olayları izlenmektedir. Borular kapatıldığında EPOLLHUP olayı gerçekleşmektedir. 
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -39612,7 +39579,6 @@ void exit_sys(const char *msg)
     1) epoll modeli
     2) sinyal tabanlı IO modeli ve asenkron IO modeli
     3) select ve poll modeli
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -39816,7 +39782,6 @@ void exit_sys(const char *msg)
     biçimde kullanılmıştır.
     3) systemd: 2010 yılında oluşturulmuştur ve son yıllarda pek çok Linux dağıtımında kullanılmaya başlanmıştır. Bugün en 
     yaygın kullanılan init paketi durumundadır.
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -39836,7 +39801,7 @@ void exit_sys(const char *msg)
     umask(0);
 
     2) Bir prosesin daemon etkisi yaratması için terminalle bir bağlantısının kalmaması gerekir. Bu da basit bir biçimde maalesef
-    0, 1, 2    numaralı terminal betimleyicilerinin kapatılmasıyla sağlanamaz. Bunu sağlamanın en temel yolu setsid fonksiyonunu 
+    0, 1, 2 numaralı terminal betimleyicilerinin kapatılmasıyla sağlanamaz. Bunu sağlamanın en temel yolu setsid fonksiyonunu 
     çağırmaktır. Anımsanacağı gibi setsid fonksiyonu yeni bir oturum (session) ve yeni bir proses grubu oluşturup ilgili prosesi 
     bu proses grubunun ve oturumun lideri yapmaktadır. Ayrıca setsid fonksiyonu prosesin terminal ilişkisini (controlling terminal) 
     de ortadan kaldırmaktadır. Ancak setsid uygulayabilmek için prosesin herhangi bir proses grup lideri olmaması gerekir. Aksi 
@@ -39862,7 +39827,7 @@ void exit_sys(const char *msg)
     4) Daemon programların çalışma dizinlerinin (current working directory) sağlam bir dizin olması tavsiye edilir. Aksi takdirde 
     o dizin silinirse arka plan programların çalışmaları bozulabilir. Bu nedenle daemon programlar çoğu kök dizini (silinemeyeceği 
     için) çalışma dizini yapmaktadır. Tabii bu zorunlu değildir. Bunun yerine varlığı garanti edilmiş olan herhangi bir dizin de 
-    çalışma  dizini yapılabilir. Örneğin:
+    çalışma dizini yapılabilir. Örneğin:
 
     if (chdir("/") == -1)
         _exit(EXIT_FAILURE);
@@ -39936,7 +39901,7 @@ void exit_sys(const char *msg)
 #include <sys/stat.h>
 #include <unistd.h>
 
-#define DEF_FDT_SIZE      4096
+#define DEF_FDT_SIZE		4096
 
 void exit_sys(const char *msg);
 
@@ -41184,7 +41149,7 @@ void exit_daemon(const char *msg)
     vardır. Paketler belli bir IP adresinden diğerine gönderilmektedir. IP protokolünün iki önemli versiyonu vardır: IPv4 ve 
     IPv6. Bugün her iki versiyon da aynı anda kullanılmaktadır. IPv4'te IP adresleri 4 byte uzunluktadır. (Protokolün tasarlandığı 
     70'li yıllarda 4 byte adres alanı çok geniş sanılmaktaydı). IPv6'da ise IP adresleri 16 byte uzunluğundadır.
- ---------------------------------------------------------------------------------------------------------------------------*/
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     TCP bağlantılı (connection-oriented), UDP bağlantısız (connectionless) bir protokoldür. Buradaki bağlantı IP paketleriyle yapılan
@@ -41466,7 +41431,6 @@ void exit_daemon(const char *msg)
 
     if (bind(server_sock, (struct sockaddr *)&sin_server, sizeof(sin_server)) == -1)
         exit_sys("bind");
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -42807,7 +42771,6 @@ void exit_sys(const char *msg)
     if (inet_pton(AF_INET, server_name, &sin_server.sin_addr.s_addr) == 0) {
         ...
     }
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -45625,7 +45588,6 @@ void exit_sys(const char *msg)
     de özetleyebiliriz:
 
     socket (SOCK_DGRAM) ---> bind ---> recfrom/sendto ---> close
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -45644,7 +45606,6 @@ void exit_sys(const char *msg)
     Bu adımları fonksiyon isimleriyle şöyle özetleyebiliriz:
 
     socket (SOCK_DGRAM) ---> bind (isteğe bağlı) ---> gethostbyname/getaddrinfo (isteğe bağlı) ---> sendto/recvfrom ---> close
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -46143,7 +46104,6 @@ void exit_sys(const char *msg)
 
     result = send(sock, buf, len, flags);
     result = sendto(sock, buf, len, flags, any_value, any_value);
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -46169,7 +46129,7 @@ void exit_sys(const char *msg)
     da bu yapı nesnesini alarak işlemini yapar. Ancak farklı mesajlarda farklı yapılar kullanılacağı için mesajın başında mesajın 
     türünü ve uzunluğunu belirten ortak bir başlık kısmı bulundurulur. Bunun için tipik olarak şöyle bir yol izlenir: Mesajı 
     gönderecek taraf önce mesajın uzunluğunu sonra da mesajın ne mesajı olduğunu belirten mesaj kodunu (numarasını) sonra da 
-    mesajın  içeriğini karşı tarafa yollar. Bu işlemi "pseudo code" olarak aşağıdaki gibi ifade edebiliriz:
+    mesajın içeriğini karşı tarafa yollar. Bu işlemi "pseudo code" olarak aşağıdaki gibi ifade edebiliriz:
 
     typedef struct tagMSG_HEADER {
         int len;
@@ -47516,7 +47476,6 @@ void exit_sys(const char *msg)
     adresten erişebilirsiniz:
 
     http://www.hypothetic.org/docs/msn/
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -47558,7 +47517,6 @@ void exit_sys(const char *msg)
 
     - Üst proses alt prosesin yazdıklarını okuyabilmek için biraz gecikme uygulamıştır. Ancak alt proses bu gecikmeden uzun süre 
     çalışıyorsa program hatalı çalışır.
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -48364,9 +48322,8 @@ void exit_sys(const char *msg)
     yalnızca port numarasını komut satırı argümanı olarak almaktadır. Programları farklı terminallerde aşağıdaki gibi 
     çalıştırabilirsiniz:
 
-    ./server 55555
-    ./client localhost 555555
-
+    $ ./server 55555
+    $ ./client localhost 555555
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* server.c */
@@ -49017,9 +48974,8 @@ void exit_sys(const char *msg)
     socket dosyasının yol ifadesi ile çalıştırılmalıdır. Client program da hem server soketin hem de client soketin yol ifadesi ile 
     çalıştırılmalıdır. Örneğin:
 
-    ./uds-server serversock
-    ./uds-client serversock clientsock
-
+    $ ./uds-server serversock
+    $ ./uds-client serversock clientsock
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* uds-server.c */
@@ -49701,9 +49657,8 @@ void exit_sys(const char *msg)
     olarak almaktadır. Client program da hem server soketin yol ifadesini hem de client soketin yol ifadesini komut satırı 
     argümanı olarak almaktadır. Programları şöyle çalıştırabilirsiniz:
 
-    ./uds-dg-server serversock
-    ./uds-dg-client serversock clientsock
-
+    $ ./uds-dg-server serversock
+    $ ./uds-dg-client serversock clientsock
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* uds-dg-server.c */
@@ -50571,9 +50526,8 @@ void exit_sys(const char *msg)
     dolacak dolayısıyla send fonksiyonu da bir süre sonra blokede bekleyecektir. Bu programları farklı terminallerden aşağıdaki 
     gibi çalıştırabilirsiniz:
 
-    ./server 55555
-    ./client localhost 55555
-
+    $ ./server 55555
+    $ ./client localhost 55555
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* server.c */
@@ -51177,7 +51131,6 @@ void exit_sys(const char *msg)
     void bar(void);
 
     #endif
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -51234,9 +51187,9 @@ void exit_sys(const char *msg)
     Bir programın kullandığı dinamik kütüphaneler ldd isimli utility program ile basit bir biçimde görüntülenebilir. Örneğin:
 
     $ ldd sample
-	linux-vdso.so.1 (0x00007fff38162000)
-	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f7ec0b5c000)
-	/lib64/ld-linux-x86-64.so.2 (0x00007f7ec114f000
+    linux-vdso.so.1 (0x00007fff38162000)
+    libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f7ec0b5c000)
+    /lib64/ld-linux-x86-64.so.2 (0x00007f7ec114f000
 
     ldd programı dinamik kütüphanelerin kullandığı dinamik kütüphaneleri de görüntülemektedir. Programın doğrudan kullandığı 
     dinamik kütüphanelerin listesi readelf komutuyla aşağıdaki gibi de elde edilebilir:
@@ -51303,7 +51256,6 @@ void exit_sys(const char *msg)
 
     5) Nihayet dinamik bağlayıcı dinamik kütüphaneleri sırasıyla "/lib", /usr/lib" dizinlerinde de aramaktadır. 64 bit Linux 
     sistemlerininin bir bölümünde 64 bit dinamik kütüphaneler için "/lib64" ve "/usr/lib64" dizinlerine de bakılabilmektedir.
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -51669,7 +51621,6 @@ void exit_sys(const char *msg)
     2) Programın sanal bellek alanı gereksiz bir biçimde doldurulmayabilir. Örneğin nadiren çalışacak bir fonksiyon dinamik 
     kütüphanede olabilir. Bu durumda o dinamik kütüphanenin işin başında yüklenmesi gereksiz bir yükleme zamanı ve bellek 
     israfına yol açabilmektedir.
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -51755,11 +51706,11 @@ void exit_sys(const char *msg)
     sembolün dinamik kütüphanedeki dekore edilmiş isminin kullanılması gerekmektedir. Sembollerin dekore edilmiş isimlerini 
     elde edebilmek için "nm" utility'sini kullanabilirsiniz. Örneğin:
 
-    nm libmyutil.so.1.0.0
+    $ nm libmyutil.so.1.0.0
 
     nm utility'si ELF formatının string tablosunu görüntülemektedir. Aynı işlem readelf programında -s ile de yapılabilir:
 
-    readelf -s libmyutil.so.1.0.0
+    $ readelf -s libmyutil.so.1.0.0
 
     Aşağıda bir dinamik kütüphane dinamik olarak yüklenmiş ve oradan bir fonksiyon ve data adresi alınarak kullanılmıştır. 
     Buradaki dinamik kütüphaneyi daha önce yaptığımız gibi derleyebilirsiniz:
@@ -52014,7 +51965,6 @@ int main(void)
 
         bar();
     }
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -52075,7 +52025,6 @@ int main(void)
     Programı çalıştırmadan önce LD_LIBRARY_PATH çevre değişkenini de ayarlayınız:
 
     $ export LD_LIBRARY_PATH=.
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* libmyutil.c */
@@ -52126,8 +52075,7 @@ int main(void)
 
     Sembolik bağlantı yoksa aşağıdaki gibi yaratabilirsiniz:
 
-    ln -s libmyutil.so.1.0.0 libmyutil.so.1
-
+    $ ln -s libmyutil.so.1.0.0 libmyutil.so.1
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* util.h */
@@ -52538,38 +52486,38 @@ int main()
 
 ssize_t my_write(int fd, const void *buf, size_t size)
 {
-    register int64_t rax __asm__ ("rax") = 1;
-    register int rdi __asm__ ("rdi") = fd;
-    register const void *rsi __asm__ ("rsi") = buf;
-    register size_t rdx __asm__ ("rdx") = size;
+	register int64_t rax __asm__ ("rax") = 1;
+	register int rdi __asm__ ("rdi") = fd;
+	register const void *rsi __asm__ ("rsi") = buf;
+	register size_t rdx __asm__ ("rdx") = size;
 
-    __asm__ __volatile__ (
-        "syscall"
-        : "+r" (rax)
-        : "r" (rdi), "r" (rsi), "r" (rdx)
-        : "rcx", "r11", "memory"
-    );
+	__asm__ __volatile__ (
+		"syscall"
+		: "+r" (rax)
+		: "r" (rdi), "r" (rsi), "r" (rdx)
+		: "rcx", "r11", "memory"
+	);
 
-    return rax;
+	return rax;
 }
 
 void my_exit(int status)
 {
-    __asm__ __volatile__
-     (
-        "movl $60, %%eax\n\t"
-        "movl %0, %%edi\n\t"
-        "syscall"
-        :
-        : "g" (status)
-        : "eax", "edi", "cc"
-     );
+	__asm__ __volatile__
+	 (
+		"movl $60, %%eax\n\t"
+		"movl %0, %%edi\n\t"
+		"syscall"
+		:
+		: "g" (status)
+		: "eax", "edi", "cc"
+	 );
 }
 
 void foo()
 {
-    my_write(1, "this is a test\n", 15);
-    my_exit(0);
+	my_write(1, "this is a test\n", 15);
+	my_exit(0);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -52578,7 +52526,6 @@ void foo()
 
     $ uname -r
     4.15.0-20-generic
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -52687,7 +52634,7 @@ void foo()
 
     Bizim oluşturduğumuz Makefile dosyasındaki "all" hedefine dikkat ediniz:
 
-    make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
+    $ make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
 
     make programının -C seçeneği Makefile dosyasını aramadan önce bu seçeneğin argümanında belirtilen dizine geçiş yapmaktadır.
     Dolayısıyla aslında yukarıdaki satırla /lib/modules/$(shell uname -r)/build dizinindeki Makefile dosyası çalıştırılacaktır.
@@ -52707,7 +52654,7 @@ clean:
     Tabii aslında make dosyası parametrik biçimde de oluşturabilmektedir. Bu durumda make programı çalıştırılırken bu parametrenin 
     değeri de belirtilmelidir. Örneğin:
 
-    make file=hellomodule
+    $ make file=hellomodule
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 # Makefile
@@ -52898,7 +52845,7 @@ clean:
 
     printk fonksiyonunun yazdıklarını "/var/log/syslog" dosyasına bakarak görebiliriz. Örneğin:
 
-    tail /var/log/syslog
+    $ tail /var/log/syslog
 
     Ya da "dmesg" programı ile de aynı bilgi elde edilebilir.
 
@@ -52911,7 +52858,6 @@ clean:
     tarafından dokümante edilmiştir. Örneğin bu fonksiyonların dokümantasyonuna aşağıdaki bağlantıdan erişebilirsiniz:
 
     https://docs.kernel.org/core-api/kernel-api.html
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -53351,7 +53297,7 @@ clean:
     sürücümüzdeki belli fonksiyonlar çalıştırılmaktadır. Böylece aygıt sürücü ile user mode arasında veri transferleri yine 
     dosyalarda olduğu gibi dosya fonksiyonlarıyla yapılabilmektedir. Ayrıca user mode'dan aygıt sürücümüzdeki herhangi bir 
     fonksiyonu da çağırabiliriz. Bunun için ioctl isimli bir POSIX fonksiyonu (tabii bu POSIX fonksiyonu sys_ioctl isimli sistem 
-    fonksiyonunu çağırmaktadır) kullanılmaktadır.  Aygıt sürücü içerisinde fonksiyonlara birer kod numarası atanır. Sonra ioctl 
+    fonksiyonunu çağırmaktadır) kullanılmaktadır. Aygıt sürücü içerisinde fonksiyonlara birer kod numarası atanır. Sonra ioctl 
     fonksiyonunda bu kod numarası belirtilir. Böylece akış user mode'dan kernel mode'a geçerek belirlenen fonksiyonu kernel mode'da 
     çalıştıracaktır.
 
@@ -53378,11 +53324,11 @@ clean:
     Bu makrolar global alanda herhangi bir yere yerleştirilebilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-/*-------------------------------------------------------------------------------------------------------------------------- 
+/*--------------------------------------------------------------------------------------------------------------------------
 												131. Ders 29/03/2024 - Cuma
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-/*-------------------------------------------------------------------------------------------------------------------------- 
+/*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi aygıt sürücüleri açmak için open fonksiyonunda yol ifadesi olarak (yani dosya ismi olarak) ne verilecektir? İşte 
     aygıt sürücüler dosya sisteminde bir dizin girişiyle temsil edilmektedir. O dizin girişi open ile açıldığında aslında o 
     dizin girişinin temsil ettiği aygıt sürücü açılmış olur. Bu biçimdeki aygıt sürücüleri temsil eden dizin girişlerine 
@@ -55168,10 +55114,10 @@ void exit_sys(const char *msg)
     dev_t g_dev;
     ...
 
-	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "generic-char-driver")) != 0) {
-		printk(KERN_ERR "cannot register device!...\n");
-		return result;
-	}
+    if ((result = alloc_chrdev_region(&g_dev, 0, 1, "generic-char-driver")) != 0) {
+        printk(KERN_ERR "cannot register device!...\n");
+        return result;
+    }
 
     Aygıt sürücümüzde alloc_chrdev_region fonksiyonu ile boş bir majör numara numaranın bulunup aygıt sürücümüzün register 
     ettirildiğini düşünelim. Pekiyi biz bu numarayı nasıl bilip bu numaraya uygun aygıt dosyası yaratacağız? İşte bunun için genellikle 
@@ -55225,7 +55171,6 @@ void exit_sys(const char *msg)
     $ sudo ./load generic-char-driver
     ...
     $ sudo ./unload generic-char-driver
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* generic-char-driver.c */
@@ -56003,15 +55948,15 @@ static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *o
 	size2 = esize - size1;
 
 	if (copy_to_user(buf, g_pipebuf + g_head, size1) != 0) {
-        mutex_unlock(&g_mutex);
+		mutex_unlock(&g_mutex);
 		return -EFAULT;
-    }
+	}
 
 	if (size2 != 0)
 		if (copy_to_user(buf + size1, g_pipebuf, size2) != 0) {
-            mutex_unlock(&g_mutex);
-		    return -EFAULT;
-        }
+			mutex_unlock(&g_mutex);
+			return -EFAULT;
+		}
 
 	g_head = (g_head + esize) % PIPE_BUFSIZE;
 	g_count -= esize;
@@ -56645,7 +56590,7 @@ void exit_sys(const char *msg)
 
     Her ne kadar yukarıdaki boru sürücüsündeki read ve write fonksiyonlarında kuyruğu korumak için spinlock kullanımı uygun değilse 
     de biz yine kullanım biçimini göstermek için aşağıdaki örneği veriyoruz.
-----------------------------------------------------------------------------------------------------------------------------*/
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /* pipe-driver.c */
 
@@ -56978,14 +56923,14 @@ void exit_sys(const char *msg)
 
     Nesne read amaçlı lock edilmişse read amaçlı unlock işlemi, write amaçlı lock edilmişse write amaçlı unlock işlemi 
     uygulanmalıdır. Fonksiyonların diğer işlevleri normal spinlock nesnelerinde olduğu gibidir.
-----------------------------------------------------------------------------------------------------------------------------*/
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     User mode'daki senkronizasyon nesnelerinin benzerlerinin çekirdek içerisinde de bulunduğunu görüyorsunuz. Ancak user mode'daki
     her senkronizasyon nesnesinin bir kernel mod karşılığı yoktur. Örneğin user mode'daki "koşul değişkenlerinin (condition 
     variables)" bir kernel mod karşılığı bulunmamaktadır. Ayrıca burada ele almadığımız (belki ileride ele alacağımız) yalnızca
     çekirdek içerisinde kullanılan birkaç senkronizasyon nesnesi daha bulunmaktadır.
-----------------------------------------------------------------------------------------------------------------------------*/
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Tıpkı user mode'da olduğu gibi aygıt sürücülerde de basit atama, artırma, eksiltme gibi işlemlerin atomic yapılmasını sağlayan
@@ -57026,11 +56971,11 @@ void exit_sys(const char *msg)
     int test_and_clear_bit(nr, void *addr);
     int test_and_change_bit(nr, void *addr);
 
-----------------------------------------------------------------------------------------------------------------------------*/
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
 												139. Ders 05/05/2024 - Pazar
-----------------------------------------------------------------------------------------------------------------------------*/
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Biz user mode'da çeşitli fonksiyonların çeşitli koşullar altında blokeye yol açtığını belirtmiştik. Bir thread bloke olduğunda
@@ -57054,11 +56999,11 @@ void exit_sys(const char *msg)
     dolayısıyla bloke olan thread'ler ayrı bir bekleme kuyruğuna yerleştirilmektedir. Aygıt sürücüleri yazanlar da kendi olayları
     için kendi bekleme kuyruklarını yaratmaktadır. Tabii kernel'daki mutex ve semaphore fonksiyonları da aslında kendi içerisinde 
     bir bekleme kuyruğu kullanmaktadır. Çünkü bu fonksiyonlar da blokeye yol açmaktadır.
-----------------------------------------------------------------------------------------------------------------------------*/
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
 												140. Ders 10/05/2024 - Cuma
-----------------------------------------------------------------------------------------------------------------------------*/
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Yukarıda da belirttiğimiz gibi her aygıt sürücü kendi bloke olayları için kendinin kullanacağı bekleme kuyrukları 
@@ -57227,16 +57172,16 @@ void exit_sys(const char *msg)
     Bu durumda tıpkı user moddaki koşul değişkenlerinde yaptığımız gibi bir kalıbı kullanabilirsiniz:
 
     if (mutex_lock_interruptible(&g_mutex) < 0)
-		return -ERESTARTSYS;
+        return -ERESTARTSYS;
 
-	while (koşul_sağlanmadığı_sürece) {
-		mutex_unlock(&g_mutex);
-		if (wait_event_interruptible(g_wq, uyanık_kalma_koşulu) != 0) {
-			mutex_unlock(&g_mutex);
-			return -ERESTARTSYS;
-		}
-		mutex_lock(&g_mutex);
-	}
+    while (koşul_sağlanmadığı_sürece) {
+        mutex_unlock(&g_mutex);
+        if (wait_event_interruptible(g_wq, uyanık_kalma_koşulu) != 0) {
+            mutex_unlock(&g_mutex);
+            return -ERESTARTSYS;
+        }
+        mutex_lock(&g_mutex);
+    }
 
     /* Kritik kod */
 
@@ -57535,19 +57480,19 @@ void exit_sys(const char *msg)
     tipik çatısı şöyle olmalıdır:
 
     ...
-	if (down_interruptible(&g_sem))
-		return -ERESTARTSYS;
-	while (g_count == 0) {
-		up(&g_sem);
-		if (wait_event_interruptible(g_wqread, g_count > 0))
-			return -ERESTARTSYS;
-		if (down_interruptible(&g_sem))
-			return -ERESTARTSYS;
-	}
+    if (down_interruptible(&g_sem))
+        return -ERESTARTSYS;
+    while (g_count == 0) {
+        up(&g_sem);
+        if (wait_event_interruptible(g_wqread, g_count > 0))
+            return -ERESTARTSYS;
+        if (down_interruptible(&g_sem))
+            return -ERESTARTSYS;
+    }
 
     // kuyruktan okuma işlemleri
 
-	up(&g_sem);
+    up(&g_sem);
 
     Burada önce down_interruptible fonksiyonu ile semaphore kilitlenmeye çalışılmıştır. Eğer semaphore zaten kilitliyse 
     semaphore'un kendi bekleme kuyruğunda thread uykuya dalacaktır. Daha sonra g_count değerine bakılmıştır. Eğer g_count 
@@ -57561,20 +57506,20 @@ void exit_sys(const char *msg)
     Benzer biçimde write işleminin de çatısı aşağıdaki gibidir:
 
     if (down_interruptible(&g_sem))
-		return -ERESTARTSYS;
+        return -ERESTARTSYS;
 
-	while (PIPE_BUFSIZE - g_count < size) {
-		up(&g_sem);
-		if (wait_event_interruptible(g_wqwrite, PIPE_BUFSIZE - g_count >= size))
-			return -ERESTARTSYS;
+    while (PIPE_BUFSIZE - g_count < size) {
+        up(&g_sem);
+        if (wait_event_interruptible(g_wqwrite, PIPE_BUFSIZE - g_count >= size))
+            return -ERESTARTSYS;
 
-		if (down_interruptible(&g_sem))
-			return -ERESTARTSYS;
-	}
+        if (down_interruptible(&g_sem))
+            return -ERESTARTSYS;
+    }
 
     // kuyruğa yazma işlemleri
 
-	up(&g_sem);
+    up(&g_sem);
 
     Burada benzer işlemler uygulanmıştır. Eğer kuyrukta yazma yapılmak istenen kadar boş alan varsa akış while döngüsünün
     içerisine girmeyecektir. (Buradaki while koşulunun "PIPE_BUFSIZE - g_count < size" biçiminde olduğuna dikkat ediniz.)
@@ -58484,42 +58429,42 @@ void exit_sys(const char *msg)
     geri döndürmeliyiz. Örneğin:
 
     ...
-	if (down_interruptible(&g_sem))
-		return -ERESTARTSYS;
+    if (down_interruptible(&g_sem))
+        return -ERESTARTSYS;
 
-	while (PIPE_BUFSIZE - g_count < size) {
-		up(&g_sem);
+    while (PIPE_BUFSIZE - g_count < size) {
+        up(&g_sem);
 
-		if (filp->f_flags & O_NONBLOCK)
-			return -EAGAIN;
+        if (filp->f_flags & O_NONBLOCK)
+            return -EAGAIN;
 
-		if (wait_event_interruptible(g_wqwrite, PIPE_BUFSIZE - g_count >= size))
-			return -ERESTARTSYS;
+        if (wait_event_interruptible(g_wqwrite, PIPE_BUFSIZE - g_count >= size))
+            return -ERESTARTSYS;
 
-		if (down_interruptible(&g_sem))
-			return -ERESTARTSYS;
-	}
+        if (down_interruptible(&g_sem))
+            return -ERESTARTSYS;
+    }
     ...
 
     2) Okuma yapıldığı zaman eğer boruda hiç bilgi yoksa aygıt sürücümüzün read fonksiyonunu -EAGAIN değeriyle geri döndürmeliyiz.
     Örneğin:
 
     ...
-	if (down_interruptible(&g_sem))
-		return -ERESTARTSYS;
+    if (down_interruptible(&g_sem))
+        return -ERESTARTSYS;
 
-	while (g_count == 0) {
-		up(&g_sem);
+    while (g_count == 0) {
+        up(&g_sem);
 
-		if (filp->f_flags & O_NONBLOCK)
-			return -EAGAIN;
+        if (filp->f_flags & O_NONBLOCK)
+            return -EAGAIN;
 
-		if (wait_event_interruptible(g_wqread, g_count > 0))
-			return -ERESTARTSYS;
+        if (wait_event_interruptible(g_wqread, g_count > 0))
+            return -ERESTARTSYS;
 
-		if (down_interruptible(&g_sem))
-			return -ERESTARTSYS;
-	}
+        if (down_interruptible(&g_sem))
+            return -ERESTARTSYS;
+    }
     ...
 
     read ve write fonksiyonlarının -EAGAIN değeriyle geri döndürülmeden önce aygıt dosyasının blokesiz modda açılıp açılmadığının
@@ -63050,7 +62995,7 @@ clean:
 
     Aşağıdaki örnekte proc dosya sisteminde "jiffy-module" dizini içerisinde ayrıca "difference" isimli bir dosya da yaratılmıştır. 
     Bu dosya her okunduğunda önceki okumayla aradaki jiffy farkı yazdırılmaktadır.
- ---------------------------------------------------------------------------------------------------------------------------*/
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /* jiffy-module.c */
 
@@ -63902,7 +63847,7 @@ clean:
 
     typedef enum irqreturn irqreturn_t;
 
-    request_irt fonksiyonunun üçüncü parametresi bazı bayraklardan oluşur. Bu bayrak 0 geçilebilir ya da örneğin IRQF_SHARED 
+    request_irq fonksiyonunun üçüncü parametresi bazı bayraklardan oluşur. Bu bayrak 0 geçilebilir ya da örneğin IRQF_SHARED 
     geçilebilir. Diğer seçenekler için dokümanlara başvurabilirsiniz. IRQF_SHARED aynı kesmenin birden fazla aygıt sürücü tarafından 
     kullanılabileceği anlamına gelmektedir. (Tabii biz ilk register ettiren değilsek daha önce register ettirenlerin bu bayrağı 
     kullanmış olması gerekir. Aksi halde biz de bu bayrağı kullanamayız.) Fonksiyonun dördüncü parametresi "/proc/interrupts" 
@@ -64987,7 +64932,7 @@ void exit_sys(const char *msg)
     crw-rw----  1 root disk     21,   1 Ağu  7 13:57 sg1
     ...
 
-    Burada sda aygıt dosyası diske bir bütün olarak erişmek için kullanılırken sda1, sda2, sda3 aygıt dosyaları ise diskteki disk 
+    Burada "sda" aygıt dosyası diske bir bütün olarak erişmek için kullanılırken sda1, sda2, sda3 aygıt dosyaları ise diskteki disk 
     bölümlerine (partition) erişmek için kullanılmaktadır. Bu aygıt dosyalarının majör numaralarının aynı olduğuna ancak minör 
     numaralarının farklı olduğuna dikkat ediniz. Biz bir flash belleği USB soketine taktığımızda burada flash belleğe erişmek için 
     gerekli olan aygıt dosyaları otomatik biçimde oluşturulacaktır.
@@ -68655,7 +68600,7 @@ void exit_sys(const char *msg)
 
     İşletim sistemi buradaki "a", "b", "c" ve "d.dat" dosyalarına ilişkin dizin giriş bilgilerini bir cache sisteminde saklamaktadır. 
     Böylece benzer yol ifadeleri için hiç disk okuması yapılmadan bu cache sisteminden bu bilgiler elde edilebilmektedir.
- ---------------------------------------------------------------------------------------------------------------------------*/
+---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi FAT dosya sistemi için yol ifadelerini çözen basit yalın bir kodu nasıl yazabiliriz? Bizim bir yol ifadesi verildiğinde 
@@ -68716,8 +68661,8 @@ void exit_sys(const char *msg)
 
     Boot blok (boot block) işletim sistemini boot eden kodların bulunduğu bloktur. Süper blok (super block) FAT dosya sistemlerindeki 
     boot sektör BPB alanına benzemektedir. Yani burada dosya sistemine ilişkin meta data bilgiler bulunmaktadır. i-node blok 
-    i-node elemanlarından oluşmaktadır. Data block FAT dosya sistemindeki Data bölümü gibidir. FAT dosya sistemindeki "cluster" 
-    yerine i-node tabanlı dosya sistemlerinde "blok (block)" terimi kullanılmaktadır. Bir blok bir dosyanın parçası olabilecek 
+    i-node elemanlarından oluşmaktadır. Data blok (data block= FAT dosya sistemindeki Data bölümü gibidir. FAT dosya sistemindeki 
+    "cluster" yerine i-node tabanlı dosya sistemlerinde "blok (block)" terimi kullanılmaktadır. Bir blok bir dosyanın parçası olabilecek 
     en küçük birimdir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -68789,7 +68734,7 @@ void exit_sys(const char *msg)
     s_inode_size: Burada bir i-node elemanının kaç byte olduğu bilgisi yer almaktadır. Örnek dosya sistemimizde i-node elemanları 
     256 byte uzunluğundadır.
 
-    ext2 dosya sisteminin super block bilgisi ve bazı önemli alanlarına ilişkin bilgiler "dumpe2fs" isimli utility programla 
+    ext2 dosya sisteminin süper blok bilgisi ve bazı önemli alanlarına ilişkin bilgiler "dumpe2fs" isimli utility programla 
     elde edilebilir. Örneğin:
 
     $ dumpe2fs /dev/loop0
@@ -68929,8 +68874,8 @@ void exit_sys(const char *msg)
     <data block>
 
     İşte "blok grup betimleyici tablosu (block group descriptor table)" blok grupları hakkında bilgi veren bir bölümdür. Bir 
-    kaç blok bilginin yer aldığı super block'un "s_blocks_per_group" elemanında saklanmaktadır. Her blok grupta belli sayıda 
-    i-node elemanı vardır. Bir blok gruptaki i-node elemanlarının sayısı super block'taki s_inodes_per_group elemanıyla 
+    kaç blok bilginin yer aldığı süper bloğun "s_blocks_per_group" elemanında saklanmaktadır. Her blok grupta belli sayıda 
+    i-node elemanı vardır. Bir blok gruptaki i-node elemanlarının sayısı süper bloktaki s_inodes_per_group elemanıyla 
     belirtilmektedir. Yani aslında ext2 dosya sisteminde aşağıdaki gibi bir organizasyon söz konusudur:
 
     <boot block>
@@ -68957,16 +68902,16 @@ void exit_sys(const char *msg)
     <data block>
     ...
 
-    Görüldüğü gibi ext2 dosya sisteminde super bloğun tek bir kopyası yoktur. Her blok grupta super blok yeniden yer 
+    Görüldüğü gibi ext2 dosya sisteminde süper bloğun tek bir kopyası yoktur. Her blok grupta süper blok yeniden yer 
     almaktadır. Bir blok grupta ayrı bir i-node tablosunun ve data bölümünün olduğuna dikkat ediniz.
 
     Pekiyi neden ext2 dosya sisteminde disk bölümü birden fazla blok gruplara ayrılmıştır? İşte bunun nedenlerinden biri 
     güvenliktir. Yani i-node bloklardan biri bozulduğunda diğeri bozulmamış biçimde kalabilir.
 
-    Blok gruplarındaki "blok grup betimelyici tablosu (block group descriptor table)" blok grupları hakkında bazı meta data 
-    bilgileri tutmaktadır. Ancak blok grup betimleyicilerinde yalnızca o blok grubuna ilişkin bilgiler değil tüm blok gruplarına 
+    Blok gruplarındaki "blok grup betimleyici tablosu (block group descriptor table)" blok grupları hakkında bazı meta data 
+    bilgileri tutmaktadır. Ancak blok grup betimleyicilerinde yalnızca o blok grubuna ilişkin bilgiler değil, tüm blok gruplarına 
     ilişkin bilgiler tutulmaktadır. Yani her blok grubunda yeniden tüm blok gruplarına ilişkin bilgiler tutulmaktadır. 
-    Blok grup betimleyici tablosu blok grup betimleyicilerindne oluşan bir dizi gibidir:
+    Blok grup betimleyici tablosu blok grup betimleyicilerinden oluşan bir dizi gibidir:
 
     Blok Grup Betimleyici Tablosu
 
@@ -68989,7 +68934,7 @@ void exit_sys(const char *msg)
     | bg_free_inodes_count |      2      | Blok grubunda serbest inode sayısı      |
     | bg_used_dirs_count   |      2      | Blok grubundaki kullanılan dizin sayısı |
     | bg_flags             |      2      | Blok grubunun bayrakları (flags)        |
-    | bg_reserved          |      12     | Rezerv alan (genellikle sıfırdır)       |
+    | bg_reserved          |     12      | Rezerv alan (genellikle sıfırdır)       |
     +----------------------+-------------+-----------------------------------------+
 
     Blok grup betimleyicisi toplamda 32 byte yer kaplamaktadır. Her blok grubunda blok bitmap'in, i-node bitmap'in ve i-node 
@@ -68998,14 +68943,14 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Disk bölümü içerisindeki blokların numaralandırılması ile ilgili ince bir nokta vardır. Eğer disk bölümündeki blok uzunluğu
-    1K yani 1024 byte ise boot block 0'ıncı bloktadır. Dolayısıyla ilk blok grubundaki süper blok 1'inci bloktadır. Ancak 
+    1K yani 1024 byte ise boot blok 0'ıncı bloktadır. Dolayısıyla ilk blok grubundaki süper blok 1'inci bloktadır. Ancak 
     blok büyüklüğü 1024'ten (yani 1K'dan) fazla ise bu durumda boot blok ile süper blok tek blok kabul edilmektedir. Boot blok 
     ile süper bloğun bulunduğu ilk bloğun numarası 0'dır.
 
-    İlk blok grup betimleyici tablosunun yeri de blok grubundaki super block'tan hemen sonradır. Örneğin dosya sistemindeki 
+    İlk blok grup betimleyici tablosunun yeri de blok grubundaki süper bloktan hemen sonradır. Örneğin dosya sistemindeki 
     blok uzunluğu 4K (4096 byte) ise ilk blok betimleyici tablosunun yeri 4096'ıncı = 0x1000 offset'indedir. (Bu durumda boot blok
     ile süper bloğun 0 numaralı blok biçiminde tek blok olarak ele alındığını anımsayınız.) Bir blok grubunun toplam kapladığı 
-    blok sayısı süper block içerisindeki s_blocks_per_group elemanında tutulmaktadır. Örneğin biz k numaralı blok grubun blok 
+    blok sayısı süper blok içerisindeki s_blocks_per_group elemanında tutulmaktadır. Örneğin biz k numaralı blok grubun blok 
     numarasını k * s_blocks_per_group işlemiyle elde edebiliriz.
 
     Aşağıda örnek bir blok grup betimleyici tablosu verilmiştir:
@@ -69018,7 +68963,7 @@ void exit_sys(const char *msg)
     ....
 
     Bir blok grup betimleyicisi 32 byte uzunluktadır. Burada toplam iki blok grup betimleyicisi yani disk bölümünde toplam 
-    iki blok grubu bulunmaktadır.Bu iki blok grup betimleyicisini ayrı ayrı aşağıda veriyoruz:
+    iki blok grubu bulunmaktadır. Bu iki blok grup betimleyicisini ayrı ayrı aşağıda veriyoruz:
 
     00001000  0e 00 00 00 0f 00 00 00  10 00 00 00 c7 79 a4 61  |.............y.a|
     00001010  02 00 04 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
@@ -69030,14 +68975,22 @@ void exit_sys(const char *msg)
 
     Bir blok grubundaki blok grup betimleyici tablosunun uzunluğu 1 blok kadardır. Blok bitmap'in ve i-node bitmap'in 
     uzunlukları doğrudan süper blokta yazmamaktadır. Bu uzunluklar dolaylı bir biçimde hesaplanmaktadır. Dolayısıyla bir 
-    blok gruptaki data alanın başlangıç bloğu da dolaylı bir biçimde hesaplanmaktadır.
+    blok gruptaki data alanının başlangıç bloğu da dolaylı bir biçimde hesaplanmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												180. Ders 17/11/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												181. Ders 22/11/2024 - Cuma
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi bir dosyanın i-node numarası biliniyorsa onun disk bölümündeki yerini nasıl hesaplarız? Burada bizim bu i-node 
     elemanının hangi blok grubunda ve o blok grubunun i-node tablosunda nerede olduğunu belirlememiz gerekir. i-node tablosundaki
     i-node elemanları 1'den başlatılmıştır. Yani bizim elimizde i-node numarası n olan bir dosya varsa aslında bu dosya i-node
-    tablosunun n - 1'inci i-node elemanındadır. Çünkü i-node tablosunun ilk i-node elemanının numrası 0 değil 1'dir.
+    tablosunun n - 1'inci i-node elemanındadır. Çünkü i-node tablosunun ilk i-node elemanının numarası 0 değil, 1'dir.
 
     Her blok grupta eşit sayıda i-node elemanı bulunmaktadır. Bir blok gruptaki i-node elemanlarının sayısı doğrudan süper 
     bloktaki s_inodes_per_group elemanında belirtilmektedir. Bu durumda ilgili i-node numarasına ilişkin i-node elemanı i-node
@@ -69046,7 +68999,7 @@ void exit_sys(const char *msg)
     blok grubunun i-node tablosunun yeri blok grup betimleyicisinin bg_inode_table elemanında belirtiliyordu.
 
     Bir blok grubunun toplam kaç tane bloktan oluştuğu süper bloktaki s_blocks_per_group elemanında tutulmaktadır. Dolayısıyla 
-    k'ıncı blok grubunun yeri k * s_blocks_per_group değeri ile tespit edilir. Blok numaralarına boot block dahil değildir. Yani
+    k'ıncı blok grubunun yeri k * s_blocks_per_group değeri ile tespit edilir. Blok numaralarına boot blok dahil değildir. Yani
     ilk blok grubunun süper bloğunun blok numarası 0'dır.
 
     Bu durumda manuel olarak n numaralı i-node numarasına sahip bir dosyanın i-node elemanına şöyle erişilebilir:
@@ -69065,7 +69018,7 @@ void exit_sys(const char *msg)
 
     Şimdi 12'inci i-node elemanın yerini bu adımlardan geçerek bulmaya çalışalım. Elimizdeki disk bölümünde bir blok grupta 
     toplam 25008 tane i-node elemanı vardır. O halde 12 numaralı i-node elemanı 0'ıncı blok grubunun 11'inci i-node elemanındadır. 
-    0'ınci blok grubu eğer blok uzunluğu 1K'dan fazla ise diskin 0'ıncı bloğundan başlamaktadır. (Tabii 0'sıncı bloğın hemen 
+    0'ıncı blok grubu eğer blok uzunluğu 1K'dan fazla ise diskin 0'ıncı bloğundan başlamaktadır. (Tabii 0'ıncı bloğun hemen 
     başında boot blok, ondan 1024 byte sonra da 0'ın blok grubunun süper bloğu bulunmaktadır.) O halde elimizdeki disk bölümünün 
     0'ıncı blok grubunun blok betimleyici tablosu 1'inci bloktadır. Bunun yeri de bir blok 4096 byte olduğuna göre 0x1000 
     offset'indedir. Buradan elde edilen blok grup betimleyici tablosu şöyledir:
@@ -69078,7 +69031,7 @@ void exit_sys(const char *msg)
     00001050  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
     ...
 
-    Her blok grup betimleyicisinin 32 byte olduğunu anımsayınız. Bu duurmda 0'ıncı blok grup betimleyicisi şöyledir:
+    Her blok grup betimleyicisinin 32 byte olduğunu anımsayınız. Bu durumda 0'ıncı blok grup betimleyicisi şöyledir:
 
     00001000  0e 00 00 00 0f 00 00 00  10 00 00 00 c7 79 a4 61  |.............y.a|
     00001010  02 00 04 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
@@ -69086,7 +69039,7 @@ void exit_sys(const char *msg)
     Bu blok grubundaki i-node tablosunun blok numarası blok grup betimleyicisinin 8'inci offset'inde bulunan bg_inode_table
     elemanındadır. Bu elemandaki değer 0x00000010 (16)'dır. O halde bizim 16 numaralı bloğa gitmemiz gerekir. 16 numaralı 
     blok disk bölümünün 16 * 4096 = 65536 (0x10000) offset'indedir. Artık bu offset'te ilgili blok grubundaki i-node elemanları 
-    bulunmaktadır. Bir i-node elemanı 128 byte olduğuna göre 11'inci elemanının yeri 11 * 256 = 2816 (0xB00) byte ileridedir. 
+    bulunmaktadır. Bir i-node elemanı 256 byte olduğuna göre 11'inci elemanının yeri 11 * 256 = 2816 (0xB00) byte ileridedir. 
     O halde bu tablonun disk bölümünün başından itibarenki yeri 65536 + 2816 = 68352 (0x10B00) offset'indedir. Aşağıda ilgili
     i-node elemanının 256 byte'lık içeriği görülmektedir:
 
@@ -69111,7 +69064,7 @@ void exit_sys(const char *msg)
     Sonraki DWORD bilgi (0x000079C8) de dosyanın uzunluğunu belirtmektedir. Diğer elemanların anlamlarına i-node yapısından 
     erişebilirsiniz.
 
-    i-node tablosundaki ilk n tane i-node elemanı reserved biçimde tutulmaktadır. Bunaların sayısı süper bloktaki s_first_ino 
+    i-node tablosundaki ilk n tane i-node elemanı reserved biçimde tutulmaktadır. Bunların sayısı süper bloktaki s_first_ino 
     elemanında belirtilmektedir. Üzerinde çalıştığımız dosya sisteminde s_first_ino değeri 11'dir. Yani ilk 10 i-node elemanı 
     reserve edilmiştir. İlk i-node elemanının numarası 11'dir. Örnek dosya sistemimizdeki durum şöyledir:
 
@@ -69122,17 +69075,22 @@ void exit_sys(const char *msg)
     <3 numaralı i-node elemanı>
     ...
     <10 numaralı i-node elemanı>
-    <11 numaralı i-node elemanı (ilk reserved olmaayan eleman)>
+    <11 numaralı i-node elemanı (ilk reserved olmayan eleman)>
     ...
 
     Reserve edilmiş ilk i-node elemanlarının anlamları şöyledir:
 
-    XT2_BAD_INO	            1	bad blocks inode
-    EXT2_ROOT_INO	        2	root directory inode
-    EXT2_ACL_IDX_INO	    3	ACL index inode (deprecated?)
-    EXT2_ACL_DATA_INO	    4	ACL data inode (deprecated?)
-    EXT2_BOOT_LOADER_INO	5	boot loader inode
-    EXT2_UNDEL_DIR_INO	    6	undelete directory inode
+    +----------------------+-------+-------------------------------+
+    |         İsim         | Değer |             Anlamı            |
+    +----------------------+-------+-------------------------------+
+    | EXT2_BAD_INO         |   1   | Bad blocks i-node             |
+    | EXT2_ROOT_INO        |   2   | Root directory i-node         |
+    | EXT2_ACL_IDX_INO     |   3   | ACL index inode (deprecated?) |
+    | EXT2_ACL_DATA_INO    |   4   | ACL data i-node (deprecated?) |
+    | EXT2_BOOT_LOADER_INO |   5   | Boot loader i-node            |
+    | EXT2_UNDEL_DIR_INO   |   6   | Undelete directory i-node     |
+    +----------------------+-------+-------------------------------+
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -69140,21 +69098,25 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												183. Ders 01/12/2024 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi ext2 dosya sisteminde bir dosyanın parçalarının (yani bloklarının) nerelerde olduğu bilgisi nerede tutulmaktadır?
     Anımsanacağı gibi FAT dosya sisteminde dosyanın parçalarının (orada block yerine cluster teriminin kullanıldığını anımsayınız)
-    diskin hangi cluster'larında olduğu FAT bölümünde saklanıyordu. İşte yalnızca ext2 dosya sisteminde değil i-node tabanlı 
-    dosya sistemlerinde bir dosyanın diskte hangi bloklarda bulunduğu i-node eelemanın içerisinde tutulmaktadır.i-node elemanlarının
-    genel olarak 1228 byte ya da 256 byte uzunlukta olduğunu anımsayınız. Büyük bir dosyanın blok numaralarının bu kadar alana 
+    diskin hangi cluster'larında olduğu FAT bölümünde saklanıyordu. İşte yalnızca ext2 dosya sisteminde değil, i-node tabanlı 
+    dosya sistemlerinde bir dosyanın diskte hangi bloklarda bulunduğu i-node elemanının içerisinde tutulmaktadır. i-node elemanlarının
+    genel olarak 128 byte ya da 256 byte uzunlukta olduğunu anımsayınız. Büyük bir dosyanın blok numaralarının bu kadar alana 
     sığmayacağı açıktır. Pekiyi o zaman dosyanın blok numaraları i-node elemanında nasıl tutulmaktadır?
 
-    İşte i-node elemanında dosyanın hangi bloklerda olduğu "doğrudan (direct)", "dolaylı (indriect)", "çift dolaylı (double 
-    indirect)" ve "üç dolaylı (triple indirect)"" bloklarda tutulmaktadır. i-node elemanının demimal 40'ncı offset'inde (i-node 
-    elemanın 0x28 offset'indek, "i_blocks" isimli elemanında) 15 elemanlık her biri DWORD değerlerden oluşan bir dizi vardır. 
+    İşte i-node elemanında dosyanın hangi bloklarda olduğu "doğrudan (direct)", "dolaylı (indirect)", "çift dolaylı (double 
+    indirect)" ve "üç dolaylı (triple indirect)"" bloklarda tutulmaktadır. i-node elemanının decimal 40'ıncı offset'inde (i-node 
+    elemanının 0x28 offset'indeki "i_blocks" isimli elemanında) 15 elemanlık her biri DWORD değerlerden oluşan bir dizi vardır. 
     Bu diziyi şöyle gösterebiliriz:
 
     0 <dosyanın 0'ıncı bloğunun numarası>
     1 <dosyanın 1'inci bloğunun numarası>
-    2 <dosyanın 2'inci bloğunun numarası>
+    2 <dosyanın 2'nci bloğunun numarası>
     3 <dosyanın 3'üncü bloğunun numarası>
     4 <dosyanın 4'üncü bloğunun numarası>
     5 <dosyanın 5'inci bloğunun numarası>
@@ -69168,15 +69130,15 @@ void exit_sys(const char *msg)
     13 <çift dolaylı blok numarası>
     14 <üç dolaylı blok numarası>
 
-    Bu durumda eğer dosya 12 blok ya da ondan daha küçükse zaten dosyanın parçalarının blok numaraları bu diznini ilk 12 
-    elemanından doğrudan elde edilmektedir. Eğer dosya 12 bloktan büyükse bu durumda bu dizinin 12'indeksindeki elemanda 
-    yazan blok numarası dosyanın diğer bloklarının blok numaralarını tutan bloğun numarasıdır. Yani dizinin 12'inci elemanında 
-    belirtilen bloğa gidildiğinde bu bloğun içerisinde blok numaraları vardır. Bu blok numaraları da dosyanın 12'inci bloğundan 
+    Bu durumda eğer dosya 12 blok ya da ondan daha küçükse zaten dosyanın parçalarının blok numaraları bu dizinin ilk 12 
+    elemanından doğrudan elde edilmektedir. Eğer dosya 12 bloktan büyükse bu durumda bu dizinin 12'nci indeksindeki elemanda 
+    yazan blok numarası dosyanın diğer bloklarının blok numaralarını tutan bloğun numarasıdır. Yani dizinin 12'nci elemanında 
+    belirtilen bloğa gidildiğinde bu bloğun içerisinde blok numaraları vardır. Bu blok numaraları da dosyanın 12'nci bloğundan 
     itibaren bloklarının numaralarını belirtmektedir. Örneğin bir blok 4096 byte olsun. Bu durumda bir blokta 1024 tane blok 
     numarası olabilir. 12 blok numarası doğrudan olduğuna göre dolaylı blokla toplam dosyanın 1024 + 12 = 1036 tane bloğunun 
-    yeri tutulmuş olacaktır. Pekiyi ya bu sistemde dosya 1026 bloktan daha büyükse? İşte bu durumda çift dolaylı blok numarasına 
+    yeri tutulmuş olacaktır. Pekiyi ya bu sistemde dosya 1036 bloktan daha büyükse? İşte bu durumda çift dolaylı blok numarasına 
     başvurulmaktadır. Çift dolaylı blok numarasına ilişkin bloğa gidildiğinde oradaki blok numaraları dosyanın blok numaraları 
-    değil dosyanın blok numaralarının turulduğu blok numaralarıdır. Eğer dosya çift dolaylı bloklara sığmıyorsa üç dolaylı 
+    değil, dosyanın blok numaralarının tutulduğu blok numaralarıdır. Eğer dosya çift dolaylı bloklara da sığmıyorsa üç dolaylı 
     bloğa başvurulmaktadır. Üç dolaylı blokta belirtilen blok numarasında çift dolaylı blokların numaraları vardır. Çift dolaylı
     blokların içerisinde dolaylı blokların numaraları vardır. Nihayet dolaylı blokların içerisinde de asıl blokların numaraları 
     vardır.
@@ -69228,14 +69190,10 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-												183. Ders 01/12/2024 - Pazar
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
     Şimdi de ext2 dosya sisteminde dizin organizasyonu üzerinde duralım. Tıpkı FAT dosya sistemlerinde olduğu gibi ext2 
     dosya sisteminde de dizinler birer dosya gibi organize edilmiştir. (Anımsanacağı gibi dizin dosyalarından biz opendir, 
-    readdir, closedir fonksiyonlarrıyla okuma yaapabiliyorduk.) Yani dizinler aslında birer dosya gibidir. Dizin dosyaları 
-    "dizin girişleri (directory entries)" denilen girişlerdne oluşmaktadır.
+    readdir, closedir fonksiyonlarıyla okuma yapabiliyorduk.) Yani dizinler aslında birer dosya gibidir. Dizin dosyaları 
+    "dizin girişleri (directory entries)" denilen girişlerden oluşmaktadır.
 
     <dizin_girişi>
     <dizin_girişi>
@@ -69249,13 +69207,12 @@ void exit_sys(const char *msg)
     +----------------+--------------+-------------------------+
     | Offset (bytes) | Size (bytes) |        Açıklama         |
     +----------------+--------------+-------------------------+
-    |       0        |     DWORD    | Inode numarası          |
+    |       0        |     DWORD    | i-node numarası         |
     |       4        |     WORD     | Girişin toplam uzunluğu |
     |       6        |     BYTE     | Dosya isminin uzunluğu  |
     |       7        |     BYTE     | Dosyanın türü           |
     |       8        | 0-255 Bytes  | Dosya ismi              |
     +----------------+--------------+-------------------------+
-
 
     Aslında buradaki bilgiler Linux'taki readdir POSIX fonksiyonu ile de alınabilmektedir. readdir fonksiyonu POSIX standartlarına
     göre en az iki elemana sahip olmak zorundadır. Bunlar d_ino ve d_name elemanlarıdır. Ancak Linux'taki read bize daha fazla
@@ -69270,10 +69227,10 @@ void exit_sys(const char *msg)
     };
 
     Dizin girişleri FAT dosya sistemindeki gibi eşit uzunlukta girişlerden oluşmamaktadır. Bunun nedeni dosya isimlerinin 
-    0 ile 255 karakter arasında değişebilmesidir. Dizin girişlerinin hemen başında DWORD bir alanda dosyaanın i-node numarası
-    belirtilmektedir. Dizinler değişken uzulukta olduğu için ilgili girişin toplam kaç byte uzunlukta olduğu sonraki WORD 
-    elemandaa tutulmaktadır. Girişteki dosya isminin uzunluğu ise sonrakişş BYTE elemanında tutulmaktadır. Dosyanın türü 
-    hiç i-node elemanına erişmeden elde edilebilsin diye dizin girişlerinde de tutulmaktadır. Dosya türülerini belirten değerler
+    0 ile 255 karakter arasında değişebilmesidir. Dizin girişlerinin hemen başında DWORD bir alanda dosyanın i-node numarası
+    belirtilmektedir. Dizinler değişken uzunlukta olduğu için ilgili girişin toplam kaç byte uzunlukta olduğu sonraki WORD 
+    elemanda tutulmaktadır. Girişteki dosya isminin uzunluğu ise sonraki BYTE elemanında tutulmaktadır. Dosyanın türü 
+    hiç i-node elemanına erişmeden elde edilebilsin diye dizin girişlerinde de tutulmaktadır. Dosya türlerini belirten değerler
     şöyledir:
 
     +------------------+-------+-------------------+
@@ -69296,16 +69253,16 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Pekiyi ext2 dosya sisteminde işletim sistemi bit yol ifadesini nasıl çzöümlemektedir* Örneğin "/a/b/c.txt" gibi bir yol
-    ifadesinde "c.txt" dosyasının i-node elemanına naısl erişmektedir? İşte kök dizin dosyasının bilgileri 2 numaralı i-node 
+    Pekiyi ext2 dosya sisteminde işletim sistemi bir yol ifadesini nasıl çözümlemektedir? Örneğin "/a/b/c.txt" gibi bir yol
+    ifadesinde "c.txt" dosyasının i-node elemanına nasıl erişmektedir? İşte kök dizin dosyasının bilgileri 2 numaralı i-node 
     elemanındadır. İşletim sistemi önce kök dizinin i-node elemanını elde eder. Oradan kök dizinin bloklarına erişir. O bloklar 
     içerisinde ilgili girişi arar. İşlemlerini bu biçimde devam ettirir. Örneğin "/a/b/c.txt" dosyasının i-node elemanına 
-    erişmek için öncek kök dizinde "a" girişini arar. Sonra "a" girişin dizin olduğunu doğrular. Sonra "a" dizininde "b" 
+    erişmek için önce kök dizinde "a" girişini arar. Sonra "a" girişinin dizin olduğunu doğrular. Sonra "a" dizininde "b" 
     girişini arar. "b" girişinin de dosya olduğunu doğrular. Sonra "b" girişinin içerisinde "c.txt" arar ve hedef dosyanın 
     i-node bilgilerine erişir.
 
     Şimdi adım adım elimizdeki disk bölümünde "/a/b/c.txt" dosyasının yerini bulmaya çalışalım. Tabii buradaki kök dizin 
-    aslında mount edilmiş dosya sisteminin köküdür Biz bu dosya sistemini kursumuzda aşağıdaki noktaya mount ettik:
+    aslında mount edilmiş dosya sisteminin köküdür. Biz bu dosya sistemini kursumuzda aşağıdaki noktaya mount ettik:
 
     "/home/kaan/Study/UnixLinux-SysProg/DiskIO-FileSystems"
 
@@ -69328,7 +69285,7 @@ void exit_sys(const char *msg)
     000101e0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
     000101f0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 
-    Burada 0x28'inci offsetteki i_blocks elemanın yalnızca ilkinin dolu olduğunu görüyoruz. Demek ki kök dizin tek bir 
+    Burada 0x28'inci offset'teki i_blocks elemanının yalnızca ilkinin dolu olduğunu görüyoruz. Demek ki kök dizin tek bir 
     bloktan oluşmaktadır. Kök dizinin blok numarası 0x62B'dir. Şimdi 0x62b bloğunun offset'ini hesaplayalım. Bunun için 
     bu değeri 0x1000 (4096) ile çarpmamız gerekir:
 
@@ -69351,30 +69308,33 @@ void exit_sys(const char *msg)
 
     Buradaki dizin girişlerini çözelim. Dizin giriş formatını aşağıda yeniden veriyoruz:
 
-    Offset (bytes)        Size (bytes)         Açıklama
-    0                       DWORD           inode numarası
-    4                       WORD            girişin toplam uzunluğu
-    6                       BYTE            dosya isminin uzunluğu
-    7                       BYTE            dosyanın türü
-    8                       0-255 Bytes     dosya ismi
+    +----------------+--------------+-------------------------+
+    | Offset (bytes) | Size (bytes) |        Açıklama         |
+    +----------------+--------------+-------------------------+
+    |       0        |     DWORD    | i-node numarası         |
+    |       4        |     WORD     | Girişin toplam uzunluğu |
+    |       6        |     BYTE     | Dosya isminin uzunluğu  |
+    |       7        |     BYTE     | Dosyanın türü           |
+    |       8        | 0-255 Bytes  | Dosya ismi              |
+    +----------------+--------------+-------------------------+
 
     İlk dizin girişinin i-node numarası 2'dir. Bu girişin uzunluğu 0x0C = 12'dir. O halde bu dizin girişi şöyledir:
 
     0062b000  02 00 00 00 0c 00 01 02  2e 00 00 00 02
 
-    Burada dosya ismi 1 karakter uzunluktadır. Dosya ismi yalnızca 0x2E karakterinde oluşmaktadır. Bu karalter de "." karakteridir.
+    Burada dosya ismi 1 karakter uzunluktadır. Dosya ismi yalnızca 0x2E karakterinde oluşmaktadır. Bu karakter de "." karakteridir.
     Sonraki dizin girişinin i-node numarası yine 2'dir. Girişin uzunluğu yine 0xC = 12'dir. O halde giriş şöyledir:
 
     0062b000                                       02 00 00 00  |................|
     0062b010  0c 00 02 02 2e 2e 00 00                           |................|
 
-    Buradaki dosya uzunlupunun 2 olduğu görülmektedir. Dosya ismi de 0x2E 0x2E karakterinden oluşmaktadır. Bu da ".." ismidir. 
+    Buradaki dosya uzunluğunun 2 olduğu görülmektedir. Dosya ismi de 0x2E 0x2E karakterinden oluşmaktadır. Bu da ".." ismidir. 
     Her dizinin ilk iki elemanının bu biçimde olduğunu anımsayınız. Sonraki giriş ise şöyledir:
 
     0062b010                           0b 00 00 00 14 00 0a 02  |................|
     0062b020  6c 6f 73 74 2b 66 6f 75  6e 64 00 00              |lost+found......|
 
-    Burada dosya i-node numarası 0x0b = 11'dir. Dizin girişimin uzunluğu 0x14 = 20'dir. Dosya isminin uzunluğu 0xA = 10'dur. 
+    Burada dosya i-node numarası 0x0b = 11'dir. Dizin girişinin uzunluğu 0x14 = 20'dir. Dosya isminin uzunluğu 0xA = 10'dur. 
     Dosya ismi "lost+found" biçimindedir. Sonraki giriş ise şöyledir:
 
     0062b020                                       0c 00 00 00  |lost+found......|
@@ -69386,11 +69346,11 @@ void exit_sys(const char *msg)
     0062b030                                       b2 61 00 00  |....stdio.h..a..|
     0062b040  c4 0f 01 02 61 00 00 00  00 00 00 00 00 00 00 00  |....a...........|
 
-    Burada dosyanın i-node numarası 0x61B2 = 25010'dur. Girişin uzunlu 0xC4 = 196'dır. (Bu değerin çok uzun olması önemli değildir. 
-    Çünkü bu dizindeki son dosyadır.) Dosya isminin uzunluğu 1'dir. Doısya türü 0x02'dir. Yani bu giriş bir dizin belirtmektedir. 
+    Burada dosyanın i-node numarası 0x61B2 = 25010'dur. Girişin uzunluğu 0xC4 = 196'dır. (Bu değerin çok uzun olması önemli değildir. 
+    Çünkü bu dizindeki son dosyadır.) Dosya isminin uzunluğu 1'dir. Dosya türü 0x02'dir. Yani bu giriş bir dizin belirtmektedir. 
     Dosya ismi "a" biçimindedir.
 
-    İşte işletim sistemi 0x61B2 = 25010'inci i-node elemanında bu dizinin bilgilerinin olduğunu tespit eder ve o i-node elemanını
+    İşte işletim sistemi 0x61B2 = 25010'ıncı i-node elemanında bu dizinin bilgilerinin olduğunu tespit eder ve o i-node elemanını
     okur. Bu i-node elemanı aşağıdaki gibidir:
 
     08010100  ed 41 00 00 00 10 00 00  f8 2b 53 67 a7 69 4c 67  |.A.......+Sg.iLg|
@@ -69411,7 +69371,7 @@ void exit_sys(const char *msg)
     080101f0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 
     "a" dizinine ilişkin i-node elemanının 0x28'inci offset'teki blokları bir tanedir ve blok numarası 0x862B = 34547'dir. 
-    Bu bloğun offseti'de 34547 * 4096 = 140685312'dir. Dizine ilişkin dizin bloğunun içeriği şöyledir:
+    Bu bloğun offset'i de 34547 * 4096 = 140685312'dir. Dizine ilişkin dizin bloğunun içeriği şöyledir:
 
     0862b000  b2 61 00 00 0c 00 01 02  2e 00 00 00 02 00 00 00  |.a..............|
     0862b010  0c 00 02 02 2e 2e 00 00  b3 61 00 00 e8 0f 01 02  |.........a......|
@@ -69458,9 +69418,9 @@ void exit_sys(const char *msg)
     Buradaki FF byte'larına dikkat ediniz. FF byte'ı aslında ikilik sistemde 1111 1111 bitlerine karşılık gelmektedir. Yani
     bu bloklar tamamen tahsis edilmiştir. 00 olan byte'lara ilişkin bloklar tahsis edilmemiş durumdadır.
 
-    I-node elemanlarının tahsis edilip edilmediğine yönelik de benzer bir tablo tutulmaktadır. Buna "i-node bitmap" tablosu 
-    denilmektedir. Herr blok grubunda bir i-node bitmap tablosu bulunur. Bu tablo da bitlerden oluşmaktadır. Her bit ilgili 
-    i-node elemanın boş mu dolu mu olduğunu bvelirtir. I-node bitmap tablosunun yeri de yine blok grup betimleyicinde tutulmaktadır.
+    i-node elemanlarının tahsis edilip edilmediğine yönelik de benzer bir tablo tutulmaktadır. Buna "i-node bitmap" tablosu 
+    denilmektedir. Her blok grubunda bir i-node bitmap tablosu bulunur. Bu tablo da bitlerden oluşmaktadır. Her bit ilgili 
+    i-node elemanın boş mu dolu mu olduğunu belirtir. i-node bitmap tablosunun yeri de yine blok grup betimleyicisinde tutulmaktadır.
     Bu tablonun uzunluğu da yine süper bloktaki "bir grup bloğundaki i-node elemanlarının sayısı" dikkate alınarak tespit 
     edilmektedir. Aşağıda örnek bir i-node bitmap talosunun bir kısmını görüyorsunuz:
 
@@ -69478,14 +69438,14 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Biz yukarıdaki örneklerde dosya sistemini tanıyabilmek için manuel işlemler yaptık. Pekiyi bu işlemleri prgramlama yoluyla 
-    nasıl yapabiliriz? Yukarıda eçıkladığımız dosya sistemi alanlarına ilişkin yapılar çeşitli kütüphanelerin içerisinde hazır
+    Biz yukarıdaki örneklerde dosya sistemini tanıyabilmek için manuel işlemler yaptık. Pekiyi bu işlemleri programlama yoluyla 
+    nasıl yapabiliriz? Yukarıda açıkladığımız dosya sistemi alanlarına ilişkin yapılar çeşitli kütüphanelerin içerisinde hazır
     bir biçimde bulunmaktadır. Örneğin "libext2fs" kütüphanesi kurulduğunda <extfs/ext2_fs.h> dosyasında tüm yapı bildirimleri
-    bulunacaktır. Kütüphanenin kurulumunu şöyle yapabilrisiniz:
+    bulunacaktır. Kütüphanenin kurulumunu şöyle yapabilirsiniz:
 
     $ sudo apt-get install libext2fs-dev
 
-    Aslında bu kütüphane ve ve <extfs/ext2_fs.h> başlık dosyası yalnızca ext2 dosya sistemine ilişkin değil ext2 ve ext4 dosya 
+    Aslında bu kütüphane ve ve <extfs/ext2_fs.h> başlık dosyası yalnızca ext2 dosya sistemine ilişkin değil, ext2 ve ext4 dosya 
     sistemine ilişkin de yapıları ve fonksiyonları bulundurmaktadır.
 
     Örneğin <extfs/ext2_fs.h> başlık dosyası içerisindeki süper blok yapısı aşağıdaki gibi bildirilmiştir:
@@ -69617,14 +69577,14 @@ void exit_sys(const char *msg)
         /*3fc*/	__u32	s_checksum;		/* crc32c(superblock) */
     };
 
-    Kütüphane aşağıdaki bağlantıdan indireceğiniz pdf dosyasında dokümante edilmiştir:
+    Kütüphane aşağıdaki bağlantıdan indirebileceğiniz pdf dosyasında dokümante edilmiştir:
 
     https://www.dubeyko.com/development/FileSystems/ext2fs/libext2fs.pdf
 
     Ayrıca "e2fsprogs" isimli pakette de ext2, ext3 ve ext4 dosya sistemlerine ilişkin pek çok yardımcı program bulunmaktadır.
     Örneğin bizim daha önce kullandığımız "dumpe2fs" programı bu paketin bir parçasıdır. Buradaki programlar "libext2fs" 
-    kütüphanesi kulanılarak yazılmıştır. Paket pek çok bazı Linux dağıtımlarında default biçimde kurulu durumdadır. Eğer 
-    dağıtımınızda kurulu değilse bu paketi aşağıdaki gibi kurabilirsiniz:
+    kütüphanesi kulanılarak yazılmıştır. Paket pek çok Linux dağıtımında default biçimde kurulu durumdadır. Eğer dağıtımınızda 
+    kurulu değilse bu paketi aşağıdaki gibi kurabilirsiniz:
 
     $ sudo apt-get install e2fsprogs
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -69736,7 +69696,7 @@ int main(void)
 		exit(EXIT_FAILURE);
 	}
 
-	printf("Number of Inode: %lu\n", (unsigned long)fs->super->s_inodes_count);
+	printf("Number of i-node: %lu\n", (unsigned long)fs->super->s_inodes_count);
 	printf("Total Block: %lu\n", (unsigned long)fs->super->s_blocks_count);
 	/* ... */
 
@@ -70148,7 +70108,422 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    Biz modern Linux sistemlerinde yetki gerektiren programları "sudo" komutuyla ("sudo" bir programdır) çalıştırmaktayız. 
+    Bir programı "sudo" ile çelıştırdığımızda yaratılan prosesin ekin kullanıcı id'si 0 ve etkin ghrup id'si, gerçek kullanıcı 
+    id'si ve gerçek grup id'si 0 olur. Kullanıcı id'si sıfır olan kullanıcı genellikle "root" ismiyle bulundurulmaktadır. Pek 
+    çok UNIX türevi sistemde aynı zamanda 0 numaralı bir grup da bulunmaktadır. Bu da genellikle "root" biçiminde isimlendirilmektedir. 
+    Yani "root" isminde hem bir kullanıcı hem de bir grup bulunmaktadır. Anımsanacağı gibi prosesin etkin grup id'sinin 0 olması 
+    hiçbir erişim ayrıcalığı oluşturmamaktadır. Asıl olan "etkin kullanıcı id'sinin" 0 olmasıdır. Anımsanacağı gibi Linux sistemleri 
+    install edilirken kurulm sırasında kullanıcının girdiği isimle aynı olan bir kullanıcı ismi ve grup ismi oluşturulmaktadır. 
+    Kullanıcı ve grup id'lerinin farklı isim alanlarında olduğunu anımsayınız. Örneğin 1000 numaralı bir kullanıcı id'si de olabilir 
+    bir grup id'si de olabilir. Ancak aynı id'ye sakip birden fazla kullanıcı ya da grup olmamalıdır. (Tabii bu durum aslında 
+    yasak değildir. Yani bir örneğin etkin kullanıcı id'si 0 olan başka bir kullanıcı da yaratabiliriz. Çekirdek isimleri 
+    değil numaraları işleme sokmaktadır.)
+---------------------------------------------------------------------------------------------------------------------------*/
 
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir programı "sudo" ile çalıştırdığımızda çalıştırılan programa ilişkin prosesin etkin ve gerçek kullanıcıid'sinin ve grup
+    id'sinin 0 olduğunı belirtmiştik. Yani "sudo" ile bir programı çalıştırdığımızda adeta program "root" kullanıcısı tarafından 
+    çalıştırılıyormuş gibi bir etki oluşmaktadır. Linux dağıtımlarının bir bölümünde "root" kullanıcısı ile "login" olma güvenlik
+    gerekçesiyle engellenmiştir. Ancak bu dağıtımlarda "root" olarak "bash" komut satırına düşmek istiyorsanız "sudo" ile "bash" 
+    programını çalıştırabilirsiniz. Örneğin:
+
+    $ sudo bash
+
+    Bir programı "sudo" ile çalıştırmak istediğimizde bizden önce kendi kullanıcımıza ilişkin parola istenmektedir. Ancak bir 
+    süre içerisinde artık "sudo" yapıldığında parola istenmeyecektir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Her kullanıcı "sudo" yapamamaktadır. "sudo" yapabilen kullanııclara "sudoer" denilmektedir. Sistem kurulurken kurulum
+    programı tarafından yaratılan kullanıcı "sudoer" durumundadır. Bir kullanıcıyı "sudoer" yapabilmek için en basit yol o 
+    kullanıcıyı "/etc/group" dosyasında "sudo" grubuna eklemektir. Örneğin kursun yapıldığı makinedeki "/etc/group" dosyasıın 
+    "sudo" grup satırı şöyledir:
+
+    sudo:x:27:kaan
+
+    Baradan "sudo" grubunun grup id'sinin 27 olduğu ve "kaan" kullanıcısının bu gruba ek grup (supplemantary group) biçiminde 
+    dahil olduğu görülmektedir. Şimdi biz "ali" kullancısının da "sudo" yapabilmesini istiyorsak "ali" kullanıcı ismini de aşağıdaki 
+    gibi satıra eklemeliyiz:
+
+    sudo:x:27:kaan,ali
+
+    Aslında bu işlem komut satırında "usermod" komutu ile "-a" ve "-G" seçenekleri kullanılarak da yapılabilmektedir. Örneğin:
+
+    $ sudo usermod -a -G sudo student
+
+    Tabii bu komutu şöyle de uygulayabilirdik:
+
+    $ sudo usermod -aG sudo student
+
+    Kullanıcıya "sudo" yeteneği verebilmenim diğer bir yolu da "/etc/sudoers" dosyasına yeni bir giriş eklemektir. Biz burada 
+    bu yöntem üzerinde durmayacağız.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir programı "sudo" ile çalıştırdığımızda üst prosesin çevre değişkenleri default durumda çalıştırılan programa aktarılmamaktadır.
+    Örneğin biz kabukta bazı çevre değişkenleri tanıomlamış olalım. "sudo" ile bir program çalıştırdığımızda bu çevre değişkenleri 
+    default durumda yaratılan prosese aktarılmayacaktır. Bunu basit bir biçimde deneyimleyebiliriz. Bunun için önce komut 
+    satırında aşağıdaki gibi çevre değişkenleri oluşturabiliriz:
+
+    $ export XXX=100
+    $ export YYY=100
+
+    Şimdi "env" komutunu uygularsak bu çevre değişkenlerinin yaratılmış olduğunu görürüz. Ancak "sudo env" komutunu uyguladığımızda
+    bu çevre değişkenleri alt prosese aktarılmayacağı için onları göremeyeceğiz. Ancak kabuğun çevre değişkenleri çalıştırılan 
+    programa ilişkin prosese "-E" seçeneği kullanılarak aktarılabilmektedir. Örneğin:
+
+    $ sudo -E env
+
+    Ancak "-E" seçeneği de güvenlik gerekçesiyle PATH çevre değişkenini yaratılan prosese geçirmemektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												188. Ders 27/12/2024 - Cuma
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    sudo işlemi konusunda "/etc/sudoers" dosya da etkilidir. Bu dosyaya girişler eklenerek belli bir proses sudoer yapılabilmektedir. 
+    Bu dosyanın başındaki aşağıdaki satırlar önemlidir:
+
+    Defaults        env_reset
+    Defaults        mail_badpass
+    Defaults        secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+    Defaults        use_pty
+
+    Buradaki "env_reset" satırında "env_reset" yerine "env_keep" getirilirse defaut olarak burada belirtilen çevre değişkenleri 
+    sudo ile çalıştırılan proseslere aktarılmaktadır. Örneğin:
+
+    Defaults    env_keep += "XX YY"
+
+    Burada sudo ile bir program çalıştırıldığında alt prosese XX ve YY çevre değişkenleri aktarılacaktır. env_keep += "*"
+    tüm çevre değişkenlerinin aktarılacağı anlamına gelir. Ancak yine PATH çevre değişkeni bunun dışındadır. Örneğin:
+
+    Defaults    env_keep += "*"
+
+    Eğer PATH çevre değişkeninin de yaratılan prosese aktarılması isteniyorsa secure_path satırı kaldırılmalı ya da # ile 
+    yorum satırı içerisie alınmalıdır. Örneğin:
+
+    Defaults        env_reset
+    Defaults        mail_badpass
+    # Defaults      secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+    Defaults        use_pty
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Klasik UNIX tasarımında erişim bakımından "ya hep ya hiç" sistemi uygulanmaktadır. Yani sıradan kullanıcılar sistemle 
+    ilgili önemli dosyalara erişemezler ve sistemde davranış değişikliklerine yol açabilecek sistem fonksiyonlarını çağıramazlar. 
+    Ancak prosesin kullanıcı id'si 0 ise (yani proses "root" hakkına sahipse) her şeyi yapabilirler. Bazı UNIX türevi sistemlerde 
+    bu "ya hep ya hiç" sistemi "yeteneklilik (capability)" denilen kavramla yumuşatılmıştır. Bu sistemlerde çeşitli yetenekler 
+    vardır. Bir proses root hakkına sahip olmasa bile bu yeteneklerden bazılarına sahip olabilir. Bu durumda bu yetenekleri 
+    gerektiren bazı işlemleri yapabilir.
+
+    Yeteneklilik (capability) konusu POSIX standartlarına sokulmamıştır. POSIX standartları genel olarak "uygun öncelik 
+    (appropriate priveledge)" terimini kullanmaktadır. Burada uygun öncelik prosesin root önceliğinde olması ya da ilgili 
+    işlemi yapacak yeteneğe sahip olması anlamına gelmektedir.
+
+    Yetenelilik konusu POSIX tarafından standardize edilmiş bir konu olmadığı için farklı UNIX türevi sistemlerde farklı 
+    biçimlerde gerçekleştirilmiştir. Ancak bunlar arasında en geniş tasarıma sahip olan Linux sistemleridir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir thread'in sahip olabileceği yetenekler proses kontrol bloğunda bitsel bir biçimde tutulmaktadır. Linux'taki yetenekler
+    şunlardır:
+
+    CAP_CHOWN: Dosya sahibi ve grup değiştirme yeteneği.
+    CAP_DAC_OVERRIDE: Dosya erişim kontrollerini geçme yeteneği (okuma/yazma/çalıştırma).
+    CAP_DAC_READ_SEARCH: Dosya okuma ve dizin arama izinlerini geçme yeteneği.
+    CAP_FOWNER: Dosya üzerinde, sahibi tarafından yapılan işlemleri yapma yeteneği (örneğin, dosya silme).
+    CAP_FSETID: Dosyanın UID veya GID’sini değiştirme yeteneği.
+    CAP_KILL: Diğer proseslere sinyal gönderme yeteneği.
+    CAP_SETGID: Kullanıcı grubunu değiştirme yeteneği.
+    CAP_SETUID: Kullanıcı kimliğini değiştirme yeteneği.
+    CAP_SETPCAP: Process yetenekliliğini değiştirme yeteneği.
+    CAP_LINUX_IMMUTABLE: Bir dosyanın değiştirilemez (immutable) hale getirilmesini sağlama yeteneği.
+    CAP_NET_BIND_SERVICE: Düşük numaralı portlara (1024'ten küçük) bağlanma yeteneği.
+    CAP_NET_BROADCAST: Ağda broadcast (yayın) yapma yeteneği.
+    CAP_NET_ADMIN: Ağ ayarlarını yönetme, ağ arayüzlerini yapılandırma yeteneği.
+    CAP_NET_RAW: Düşük seviyeli ağ işlemleri yapabilme yeteneği.
+    CAP_IPC_LOCK: Bellek üzerinde kilit (lock) işlemleri yapma yeteneği.
+    CAP_IPC_OWNER: IPC (Inter-process communication) kaynaklarının sahipliğini değiştirme yeteneği.
+    CAP_SYS_MODULE: Linux modüllerini yükleme ve kaldırma yeteneği.
+    CAP_SYS_RAWIO: Donanımsal I/O portlarına erişme yeteneği
+    CAP_SYS_CHROOT: chroot (root dosya sistemi değiştirme) işlemi yapma yeteneği.
+    CAP_SYS_PTRACE: Diğer süreçleri izleme ve kontrol etme yeteneği (örneğin, hata ayıklama).
+    CAP_SYS_PACCT: Process accounting verilerini okuma veya yazma yeteneği.
+    CAP_SYS_ADMIN: Sistem yöneticisi yetkileri (modül yükleme, dosya sistemi değiştirme vb.).
+    CAP_SYS_BOOT: Sistemi yeniden başlatma veya açma yeteneği.
+    CAP_SYS_NICE: Diğer proseslerin nice değerini değiştirme yeteneği.
+    CAP_SYS_RESOURCE: Sistem kaynaklarını yönetme ve limitlerini ayarlama yeteneği.
+    CAP_SYS_TIME: Sistemin saatini değiştirme yeteneği.
+    CAP_SYS_TTY_CONFIG: TTY (terminal) ayarlarını değiştirme yeteneği.
+    CAP_MKNOD: Aygıt dosyaları oluşturma yeteneği.
+    CAP_LEASE: Dosya kiralama (lease) mekanizmasını kullanma yeteneği.
+    CAP_AUDIT_WRITE: Audit (denetim) sistemine yazma yeteneği.
+    CAP_AUDIT_CONTROL: Audit sistemi yapılandırmalarını değiştirme yeteneği.
+    CAP_SETFCAP: Dosya yetenekiliğini (capabilities) ayarlama yeteneği.
+    CAP_MAC_OVERRIDE: MAC (Mandatory Access Control) politikalarını geçme yeteneği.
+    CAP_MAC_ADMIN: MAC politikalarını yönetme yeteneği.
+    CAP_SYSLOG: Sistem günlüklerini (log) okuma veya yazma yeteneği.
+    CAP_WAKE_ALARM: Sistemi uyanma alarmıyla uyandırma yeteneği.
+    CAP_BLOCK_SUSPEND: Sistemin uykuya geçmesini engelleme yeteneği.
+    CAP_AUDIT_READ: Audit verilerini okuma yeteneği.
+    CAP_PERFMON: Performans izleme (profiling) yeteneği.
+    CAP_BPF: BPF (Berkeley Packet Filter) programlarını yükleme ve çalıştırma yeteneği.
+    CAP_CHECKPOINT_RESTORE: Bir süreç için checkpoint alma ve geri yükleme yeteneği.
+
+    Örneğin biz kill fonksiyonu kabaca yalnızca kendimizin oluşturduğu proseslere sinyal gönderebiliriz. Ancak eğer prosesimizin
+    CAP_KILL yetenekliliği varsa bu durumda tıpkı root prosesi gibi başka proseslere de sinyal gönderebiliriz.
+
+    Linux sistemlerindeki yeteneklilik (capability) konusu maalesef biraz karmaşık bir konudur. İzleyen paragraflarda konunun
+    ayrıntılarına gireceğiz.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Aslında Linux sistemlerinde yeteneklilik proses temelinde değil thread temelinde uygulanmaktadır. Yani prosesin farklı 
+    thread'leri farklı yeteneklere sahip olabilmektedir. Ancak pratikte prosesin tüm thread'leri genellikle aynı yeteneklere 
+    sahip olur. Yetenekler proses kontrol bloğunda bitsel düzeyde tutulmaktadır. Yani yukarıdaki listedeki CAP_XXXX sembolik 
+    sabitleri aslında tüm bitleri 0 olan yalnızca tek biti 1 olan sembolik sabitlerdir. Eskiden proses kontrol bloğunda yetenekleri 
+    tutan nesneler 32 bitlik nesnelerdi. Sonra çeşitli yetenekler de sisteme eklenince bunlar 64 bite yükseltildiler. Bugünkü
+    Linux çekirdeklerinde therad'e ilişkin yetenekler task_struct yapısının cred isimli elemanının gösterdiği struct cred
+    yapısında tutulmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir thread'in dört grup yetenekleri vardır: Etkin yetenekler (Effective capabilities), İzin verilen yetenekler (permitted 
+    capabilities), aktarılan yetenekler (inheriable capabilities) ve aarmalayan yetenekler (bounding capabilities). Test 
+    işlemlerine etkin yetenekler sokulmaktadır. Örneğin thread'imizin başka bir prosese sinyal gönderebilmesi için thread'imizin 
+    etkin yetenekleri arasında CAP_KILL bulunuyor olması gerekir. İzin verilen yetenekler (permitted capabilities) etkin yetenekler 
+    için bir üst küme oluşturmaktadır. Yani bir thread'in kendisinin etkin yetenekleri ancak izin verilen yetenekleri kadar olabilir. 
+    Thread'in bir etkin yetenek kümesinde bir yetenek yoksa ancak izin verilen kümesinde varsa proses izin verilen kümesi içerisindeki 
+    o yeteneği etkin kümesine taşıyabilir. Ancak izin verilen kümesini genişletemez. Başka bir deyişle thread'in etkin yetenek 
+    kümesi izin verilen yetenek kümesinin bir alt kümesi biçimindedir. Aktarılabilen yetenek kümesi thread bir programı çalıştırdığında 
+    onun izin verilen kümesine dahil edilebilecek yenekleri belirtmektedir. Benzer biçimde thread'in sarmalayan yetenekleri 
+    de izin verilen yeteneklerin belirlenmesi sırasında etki göstermektedir. Bu konu izleyen paragraflarda ele alınacaktır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Biz yukarıda Linux çekirdeğinin yetenekleri thread temelinde işleme soktuğunu belirttik. Yetenekler fork işlemi sırasında
+    ya da pthread_create işlemi sırasında (bu da bir çeşit fork işlemi gibidir) üst thread'ten alt thread'e aktarılmaktadır. 
+    Yani aslında default durumda bir prosesin tüm thread'leri aynı yeteneklere sahiptir. Fakat biz istersek prosesin belli bir 
+    thread'inin yeteneklerini diğer thread'lere dokunmadan değiştirebiliriz. Üst proses fork uyguladığında onun "etkin", "izin 
+    verilen", ve "aktarılan" yeteneklerinin hepsi alt prosese aktarılmaktadır.
+
+    Herhangi bir önceliğe sahip olmayan sıradan proseslerin etkin, izin verilen ve aktarılan yetenek kümesinde hiçbir yetenek 
+    yoktur. Örneğin biz bir teminal açıp orada çalışan kabuk programının (bash) yetenek kğmelerine baksak bu üç yetenek kümesinin
+    de boş küme olduğunu görürüz.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Linux sistemlerinde thread'in yeteneklerini elde etmek için ve onu set etmek için sys_getcap ve sys_setcap isimli iki 
+    sistem fonksiyonu bulundurulmuştur. Ancak libc kütüphanesinde bu sistem fonksiyonlarını çağıran fonksiyonlar bulunmamaktadır. 
+    Eğer bu sistem fonksiyonlarını çağıracaksanız bunların numaralarını belirterek syscall isimli fonksiyonla çağırabilirsiniz. 
+    Ancak bu sistem fonksiyonlarının kullanımı biraz zahmetlidir. Bu fonksiyonlar yerine bu sistem fonksiyonları çağrılarak 
+    yazılmış olan "libcap" isimli bir kütüphane de bulunmaktadır. Sistem programcıları genellikle sys_getcap ve sys_setcap 
+    fonksiyonlarını kullanmak yerine zaten bunları kullanan "libcap" kütüphanesini kullanmayı tercih etmektedir. Ancak bu "libcap"
+    kütüphanesi default durumda genellikle yüklü olmaz. Bu kütüphaneyi Debain türevi sistemlerde aşağıdaki gibi yükleyebilirsiniz.
+
+    $ sudo apt install libcap2 libcap-dev
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir prosesin yetenek kümeleri "/proc/<pid>/status" dosyasından elde edilebilir. Buradaki yeteneklere ilişkin bilgiler 
+    aşağıdaki gibi gözükecektir:
+
+    CapInh:	0000000000000000
+    CapPrm:	0000000000000000
+    CapEff:	0000000000000000
+    CapBnd:	000001ffffffffff
+
+    Bu örnekte prosesin bütün yetenek kümesi boştur. Yani proses hiçbir yeteneğe sahip değildir. Anımsanacağı gibi aslında 
+    "proc" dosya sisteminde her için bir dizin yaratılmaktadır. Yani "/proc/<pid>/status" yol ifadesindeki pid aslında ilgili
+    thread'in gettid fonksiyonu ile elde edilen pid numarasıdır. (POSIX standartlarında thread'lerin pid değerinin olmadığını 
+    ancak Linux sistemlerinde Linux çekirdeğinin thread'leri prosesler gibi oluşturduğu için thread'lerin de pid değerlerinin 
+    olduğunu anımsayınız. Yine anımsanacağı gibi proc disya sisteminde ana thread'e ilişkin "task" dizininde prosesin thread'lerinin
+    pid numaraları bulunmaktadır.)
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir thread'in yetenekleri programlama yoluyla "libcap" kütüphanesindeki cap_get_proc fonksiyonu ile elde edilebilir. Fonksiyon 
+    kendisini çağıran thread'in yetenek bilgilerini temsil eden cap_t türünden bir handle değeri ile geri döner.
+
+    #include <sys/capability.h>
+
+    cap_t cap_get_proc(void);
+
+    cap_t türü aşağıdaki gibi bildirilmiştir:
+
+    typedef struct __user_cap_header_struct {
+        unsigned int version;		// Yapı versiyonu
+        pid_t pid;					// İlgili işlem ID'si
+    } __user_cap_header_t;
+
+    typedef struct __user_cap_data_struct {
+        unsigned int effective;		// Etkin yetenekler
+        unsigned int permitted;		// İzin verilen yetenekler
+        unsigned int inheritable;	// Miras alınan yetenekler
+    } __user_cap_data_t;
+
+    typedef struct __user_cap_struct {
+        __user_cap_header_t header;	// Başlık bilgisi
+        __user_cap_data_t data[2];	// Yetenek verisi (genellikle iki set)
+    } *cap_t;
+
+    Örneğin:
+
+    cap_t caps;
+
+    if ((caps = cap_get_proc()) == NULL)
+        exit_sys("get_cap_proc");
+
+    cap_get_pid fonksiyonu ise pid değeri verilen prosesin (ya da thread'in) yeteneklerini elde etmektedir. Fonksiyonun prototipi
+    şöyledir:
+
+    cap_t cap_get_pid(pid_t pid);
+
+    cap_t türünün bir yapı adresini belirttiğine dikkat ediniz. Bu fonksiyonlar kendi içerisinde cap_t türünden bir yapı nesnesini 
+    dinamik olarak tahsis edip onun adresiyle geri dönemktedir. Bu dinamik alaın boşaltımı cap_free fonksiyonu ile yapılmalıdır:
+
+    #include <sys/capability.h>
+
+    int cap_free(void *obj_d);
+
+    Aslında cap_free fonksiyonu yalnızca free fonksiyonunu çağırmaktadır.
+
+    Örneğin:
+
+    if ((caps = cap_get_proc()) == NULL)
+        exit_sys("get_cap_proc");
+
+    /* ... */
+
+    cap_free(caps);
+
+    Her ne kadar cap_get_pid fonksiyonu sanki proses id alıyor gibiyse de yukarıda da belirttiğimiz gibi yetenekler aslında
+    prosese değil thread'e özgüdür. Biz bu fonksiyona bir prosesin pid değerini geçirdiğimizde o prosesin ana thread'ine ilişkin
+    yetenekleri elde etmiş oluruz. Belli bir thread'in bilgileri elde edilecekse doğrudan gettid fonksiyonu ile thread'in 
+    pid değeri elde edilebilir. cap_get_proc fonksiyonu ise o anda çalışmakta olan thread'in yeteneklerini elde etmekte 
+    kullanılmaktadır.
+
+    Thread'in yetenekleri elde edildiğinde onların yazdırılmaıs da bir sorundur. Bu nedenle "libcap" kütüphanesinde cap_to_text
+    isimli bir fonksiyon bulundurulmuştur. Fonksiyonun prototipi şöyledir:
+
+    #include <sys/capability.h>
+
+    char *cap_to_text(cap_t caps, ssize_t *length_p);
+
+    Fonksiyonun birinci parametresi cap_t türünden handle değerini, ikinci parametresi verilen yazının uzunluğunun yerleştirileceği
+    nesnenin adresini belirtir. İkinci parametre NULL adres geçilebilir. Bu durumda fonksiyon böyle bir yerleştirme yapmaz. 
+    Fonksiyon oluşturulan yazının adresine geri dönmektedir. Yine bu adresin de cap_free kullanımdan sonra boşaltılması gerekir. 
+    Eğer cap_to_text fonksiyonunda yalnızca "=" biçiminde bir yazı elde ediliyorsa bu durum thread'in herhangi bir yeteneğe 
+    sahip olmadığı anlamına gelmektedir.
+
+    Aşağıda o anda çalışmakta olan thread'in yetenekleri ekrana yazdırılmıştır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/capability.h>
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	cap_t caps;
+	char *captext;
+
+	if ((caps = cap_get_proc()) == NULL)
+		exit_sys("cap_get_proc");
+
+	if ((captext = cap_to_text(caps, NULL)) == NULL)
+		exit_sys("cap_to_text");
+
+	printf("%s\n", captext);
+
+	cap_free(captext);
+	cap_free(caps);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir thread'in yetenekleri onu yaratan thread'ten aktarılmaktadır. Yani genel olarak bir proses bir threda yarattığında 
+    ya da fork işlemi yaptığında yaratılan thread ya da proses bu işlemi uygulayan threda ile aynı yeteneklere sahip olur. 
+    Sıradna bir prosesin ya da onun thread2lerinin yeteneklerine baktığımızda tipik olarak şöyle olduğunu görürüz:
+
+    CapInh:	0000000000000000
+    CapPrm:	0000000000000000
+    CapEff:	0000000000000000
+    CapBnd:	000001ffffffffff
+
+    Buradan çıkan sonuç şudur: Sıradamn bir prosesin ya da thread'in aktarılan, izin verilen ve etkin yetenek kümesi boş 
+    kümedir. Yani bu küme hiçbir yeteneği kapsamamaktadır. Ancak sarmalayan yeneklerin (bounding capabilities) bütün bitlerinin
+    1 olduğunu görüyorsunuz. (Her ne kadar burada yüksek anlamlı bitlerin bazılarını 0 görüyor olsanız da zaten Linux o bitleri 
+    kullanmamaktadır.)
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Etkin kullanıc id'si 0 olan proseslerin hiçbir engele takılmadığını anımsayınız. Linux çekirdeği önce prosesin etkin 
+    kullanıcı id'sini kontrol etmektedir. Eğer prosesin etkin kullanıcı id'si 0 ise zaten herhangi bir yetenek kontrolü 
+    yapmasına gerek kalmamaktadır. Yani tenekler ancak etkin kullanıcı id'si 0 olmayan prosesler için anlamlı bir özelliktir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Pekiyi sıradna bir prosesin tüm thread'lerinin yetenekleri boş küme olduğuna göre bu prosesler ve thread'ler nasıl yetenek 
+    kazanmaktadır? İşte bunun iki yolu olabilir:
+
+    1) Yetenek kazandırabilecek yeteneğe sahip ya da etkin kullanıcı id'si 0 olan bir proses bir alt proses yaratıp onun 
+    yeteneklerini oluşturup sonra kullanıcı is'sini 0 olmaktan çıkartabilir.
+
+    2) Aslında Linux sistemlerinde çalıştırılabilen dosyalara da yetenekler atanabilmektedir. Bir çalıştırılabilen dosya exec
+    fonksiyonlarıyla çalıştırıldığında izleyen paragraflarda açıklanacağı gibi otomatik olarak proses bazı yeneklere sahip
+    olabilmektedir. Bu durum aslında daha önce gördüğümüz çalıştırılabilen dosyaların "set-user-id" ve "set-grup-id" bayraklarına
+    benzemektedir. Örneğin thread'imizin yenek kümeleri boş küme olsun. Ama biz "xxx" isimli programı exec fonksiyonlarıyla
+    çalıştımak isteyelim. Bir kez fork yaypı alt proseste exec yaptığımızda artık alt prosesimizin yetenekleri bu "xxx" 
+    dosyasında belirtilen yeteneklere sahip olabilmektedir. Yani prosesleirn ve thread'lerin yetenekleri aslında genellikle 
+    exec işlemi sırasında boş küme olmaktan çıkmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Pekiyi thread'imize belli bir yeteneği nasıl kazandırabiliriz? Bir thread etkin yeteneklerini ancak izin verilen yetenekler 
+    kadar artırabilir. O halde önce izin verilen verilen yeteneklerini artırması gerekir. Bunun için sırasıyla şu işlemler
+    yapılmalıdır:
+
+    1) Önce içi boş bir yetenek nesnesi cap_init fonksiyonuyla oluşturulur. cap_init fonksiyonunun prototipi şöyledir:
+
+    #include <sys/capability.h>
+
+    cap_t cap_init(void);
+
+    Örneğin:
+
+    cap_t newcaps;
+
+    newcaps = cap_init();
+
+    2) Bu yenek nesnesine cap_set_flag fonksiyonu ile çeşitli bayraklar eklenir. Fonksiyonun prototipi şöyledir:
+
+    #include <sys/capability.h>
+
+    int cap_set_flag(cap_t cap_p, cap_flag_t flag, int ncap, const cap_value_t *caps, cap_flag_value_t value);
+
+    Fonksiyonun birinci parametresi yeteneklerin set edileceği nesneyi belirtmektedir. İkinci parametre hangi yetenekler 
+    üzerinde işlem yapılacağını belirtir. Bu parametre aşağıdaki sembolik sabitlerden birini ya da birden fazlasını içerebilir:
+
+    CAP_EFFECTIVE
+    CAP_INHERITABLE
+    CAP_PERMITTED
+
+    <BURADA KALDIK> 3'üncü parametreyle devam edeceğiz.
+
+    3) cap_set_proc ile oluşturulan yetenek nesnesi o andaki thread'e aktarılır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -70156,7 +70531,19 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    getcap <file>
 
+    setcap capability=ep <yol_ifadesi>
+
+    Birden fazla için komut satırı argümanı tırnak içerisine alınmalı. Örneğin:
+
+    $ sudo setcap "cap_net_bind_service=pei cap_net_raw=ep" /usr/bin/rootlesskit
+
+    getpcaps <proses_id>
+
+    Tüm yenenekleri silmek için:
+
+    sudo setcap = <yol_ifadesi>
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
