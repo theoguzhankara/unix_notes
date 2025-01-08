@@ -69420,9 +69420,9 @@ void exit_sys(const char *msg)
 
     i-node elemanlarının tahsis edilip edilmediğine yönelik de benzer bir tablo tutulmaktadır. Buna "i-node bitmap" tablosu 
     denilmektedir. Her blok grubunda bir i-node bitmap tablosu bulunur. Bu tablo da bitlerden oluşmaktadır. Her bit ilgili 
-    i-node elemanın boş mu dolu mu olduğunu belirtir. i-node bitmap tablosunun yeri de yine blok grup betimleyicisinde tutulmaktadır.
-    Bu tablonun uzunluğu da yine süper bloktaki "bir grup bloğundaki i-node elemanlarının sayısı" dikkate alınarak tespit 
-    edilmektedir. Aşağıda örnek bir i-node bitmap talosunun bir kısmını görüyorsunuz:
+    i-node elemanının boş mu dolu mu olduğunu belirtir. i-node bitmap tablosunun yeri de yine blok grup betimleyicisinde 
+    tutulmaktadır. Bu tablonun uzunluğu da yine süper bloktaki "bir grup bloğundaki i-node elemanlarının sayısı" dikkate 
+    alınarak tespit edilmektedir. Aşağıda örnek bir i-node bitmap tablosunun bir kısmını görüyorsunuz:
 
     0000f000  ff 0f 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
     0000f010  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
@@ -69445,7 +69445,7 @@ void exit_sys(const char *msg)
 
     $ sudo apt-get install libext2fs-dev
 
-    Aslında bu kütüphane ve ve <extfs/ext2_fs.h> başlık dosyası yalnızca ext2 dosya sistemine ilişkin değil, ext2 ve ext4 dosya 
+    Aslında bu kütüphane ve <extfs/ext2_fs.h> başlık dosyası yalnızca ext2 dosya sistemine ilişkin değil, ext2 ve ext4 dosya 
     sistemine ilişkin de yapıları ve fonksiyonları bulundurmaktadır.
 
     Örneğin <extfs/ext2_fs.h> başlık dosyası içerisindeki süper blok yapısı aşağıdaki gibi bildirilmiştir:
@@ -69595,7 +69595,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Şimdi "libext2fs" kütüphanesinin basit bir kullanımı üzerinde duracağız. Kütüphanenin temel başlık dosyası <extefs/extfs.h> 
-    isimli dosyadır. Bu dosyanın include edilmesi gerekir:
+    isimli dosyadır. Bu dosyanın include edilmesi gerekir.
 
     #include <ext2fs/ext2fs.h>
 
@@ -69603,10 +69603,10 @@ void exit_sys(const char *msg)
 
     $ gcc -o sample sample.c -lext2fs
 
-    Kütüphane içerisindeki fonksiyonların çooğunun geri dönüş değerleri errcode_t türündendir. errcode_t türü long biçimde 
-    typedef edilmiştir. Fonksiyonlar başarı durumunda 0 değerine başarısızlık durumunda hata ile ilgili bir değere geri 
+    Kütüphane içerisindeki fonksiyonların çoğunun geri dönüş değerleri errcode_t türündendir. errcode_t türü long biçimde 
+    typedef edilmiştir. Fonksiyonlar başarı durumunda 0 değerine, başarısızlık durumunda hata ile ilgili bir değere geri 
     dönmektedir. Hatayı yazdırmak için error_message isimli fonksiyon bulunmaktadır. Bu fonksiyona errcode_t değeri parametre
-    olarak verilir, fonksiyon da hata yazısna ilişkin static bir dizinin başlangıç adresine geri döner. Örneğin:
+    olarak verilir, fonksiyon da hata yazısına ilişkin static bir dizinin başlangıç adresine geri döner. Örneğin:
 
     ext2_filsys fs;
     errcode_t err;
@@ -69624,11 +69624,10 @@ void exit_sys(const char *msg)
     Kütüphanenin kullanılması için ilk yapılacak işlem dosya sisteminin ext2fs_open fonksiyonu ile açılmasıdır. Fonksiyonun 
     prototipi şöyledir:
 
-    errcode_t ext2fs open (const char *name, int args, int superblock, int block size, 
-            io_manager manager, ext2_filsys *ret fs);
+    errcode_t ext2fs open (const char *name, int args, int superblock, int block size, io_manager manager, ext2_filsys *ret fs);
 
     Fonksiyonun birinci parametresi dosya sisteminin bulunduğu dosyanın ya da aygıt dosyasının yol ifadesini almaktadır. 
-    Parametrelerin çoğu default 0 geçilebilir. Ancak io_manager parametresi için unix_io_manager argümanın girilmesi 
+    Parametrelerin çoğu default 0 geçilebilir. Ancak io_manager parametresi için unix_io_manager argümanının girilmesi 
     gerekmektedir. Fonksiyon ext2fil_sys türünden handle belirten bir nesne vermektedir. Bu tür şöyle typedef edilmiştir:
 
     typedef struct struct_ext2_filsys *ext2_filsys;
@@ -69649,10 +69648,11 @@ void exit_sys(const char *msg)
         unsigned int			inode_blocks_per_group;
         ext2fs_inode_bitmap		inode_map;
         ext2fs_block_bitmap		block_map;
-        ....
+        ...
     };
 
-    Örneğin bu yapının super elemanı süper blok bilgilerinin bulunduğu ext2_super_block isimli yapı nesnesinin adresi vermektedir.
+    Örneğin bu yapının super elemanı süper blok bilgilerinin bulunduğu ext2_super_block isimli yapı nesnesinin adresini 
+    vermektedir.
 
     Örneğin:
 
@@ -69726,31 +69726,32 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir diske birden fazla bağımısız dosya sisteminin (ve belki de işletm sisteminin) yüklenebilmesi için diskin mantıksal 
+    Bir diske birden fazla bağımsız dosya sisteminin (ve belki de işletim sisteminin) yüklenebilmesi için diskin mantıksal 
     bakımdan parçalara ayrılması gerekmektedir. Diskin mantıksal bakımdan parçalara ayrılmasına ise "disk bölümlemesi" 
-    denilmektedir. Disk bölümlemesi aslında disk bölümlerinin hangi sektörden başlayıp kaç sektör uzunluğunda olduğunun belirlenmesi
-    anlamına gelmektedir. Böylece her dosya sistemi başkasının alanına müdahale etmeden yalnızca o disk bölümünü kullanmaktadır.
+    denilmektedir. Disk bölümlemesi aslında disk bölümlerinin hangi sektörden başlayıp kaç sektör uzunluğunda olduğunun 
+    belirlenmesi anlamına gelmektedir. Böylece her dosya sistemi başkasının alanına müdahale etmeden yalnızca o disk bölümünü 
+    kullanmaktadır.
 
     Diskteki disk bölümleri hakkında bilgileri barındıran tabloya "disk bölümleme tablosu (disk partition table)" denilmektedir. 
     Bugün için iki disk bölümleme tablo formatı kullanılmaktadır:
 
     1) Klasik (legacy) MBR Disk Bölümleme Tablo Formatı
-    2) Modern UEFI BIOS Sistemlerinin Kullandığı GPT (Guid Partiton Table) Formatı
+    2) Modern UEFI BIOS Sistemlerinin Kullandığı GPT (Guid Partition Table) Formatı
 
-    UEFI BIOS'lar GPT disk bölümleme tablosu kullanırken eski sistemler ve gömülü sistemler genel olarak klasik MBR disk bölümleme
-    tablosunu kullanmaktadır. Gömülü sistemler için oluşturduğumuz SD kartlar'daki disk bölümleme tablosu klasik (legacy) 
-    disk bölümleme tablosudur. Ancak bugünkü büyük çaplı UEFI BIOS'lar önce GPT disk bölümleme tablosuna bakmakta eğer onu 
-    bulamazsa klasik disk bölümleme tablosunu aramaktadır. Yani geçmişe doğru uyum korunmaya çalışılmıştır.
+    UEFI BIOS'lar GPT disk bölümleme tablosu kullanırken eski sistemler ve gömülü sistemler genel olarak klasik MBR disk 
+    bölümleme tablosunu kullanmaktadır. Gömülü sistemler için oluşturduğumuz SD kartlar'daki disk bölümleme tablosu klasik 
+    (legacy) disk bölümleme tablosudur. Ancak bugünkü büyük çaplı UEFI BIOS'lar önce GPT disk bölümleme tablosuna bakmakta 
+    eğer onu bulamazsa klasik disk bölümleme tablosunu aramaktadır. Yani geçmişe doğru uyum korunmaya çalışılmıştır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Daha önceden de belirtitğimiz gibi disk sistemlerine okuma ve yazma işlemleri blok aygıt sürücüleri tarafından yapılmaktadır. 
-    Dolayısıyla bir bir UNIX türevi sistemde her disk için "/dev" dizinin altında bir blok aygıt dosyası bulunmaktadır. Aynı 
-    zamanda her disk bölümü için de bir blok aygıt dosyası bulunur. Böylece bir diskin bütünü üzerinde de yalnızca onun belli 
-    bir bölümü üzerinde de çalışılabilir. Daha önceden de kullanmış olduğumuz "lsblk" komutu bize sistemimizdeki diskler ve 
-    onların bölümleri hakkında bilgiler vermektedir. Örneğin çalıştığımız sistemde "lsblk"komutunu uyguladığımızda şöyle 
-    bir çıktı ile karşılaşmaktayız:
+    Daha önceden de belirttiğimiz gibi disk sistemlerine okuma ve yazma işlemleri blok aygıt sürücüleri tarafından yapılmaktadır. 
+    Dolayısıyla bir UNIX türevi sistemde her disk için "/dev" dizininin altında bir blok aygıt dosyası bulunmaktadır. Aynı zamanda 
+    her disk bölümü için de bir blok aygıt dosyası bulunur. Böylece bir diskin bütünü üzerinde de yalnızca onun belli bir bölümü 
+    üzerinde de çalışılabilir. Daha önceden de kullanmış olduğumuz "lsblk" komutu bize sistemimizdeki diskler ve onların bölümleri 
+    hakkında bilgiler vermektedir. Örneğin çalıştığımız sistemde "lsblk" komutunu uyguladığımızda şöyle bir çıktı ile karşılaşmaktayız:
 
+    $ lsblk
     NAME MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
     loop0
         7:0    0 195,3M  0 loop /home/kaan/Study/UnixLinux-SysProg/DiskIO-FileSystems/ext2
@@ -69775,17 +69776,18 @@ int main(void)
 
     Diskleri temsil eden isimler o diskin türüne göre değişebilmektedir. Normal hard diskler için isimlendirme "sda", "sdb", 
     "sdc" biçiminde yapılmaktadır. Bunların bölümleri de "sda1", "sda2", "sdb1, "sdb2" biçiminde yapılır. MicroSD kartlar 
-    "mmcblk0", "mmcblk1", "mmcblk2" biçiminde isimlendirilmektedir. Bunların bölümleri de "mmcblk0p1", "mmcblk0p2", 
-    mmcblk1p1", "mmcblk1p2" biçiminde yapılmaktadır. Eğer disk bir loop aygıtı biçimind oluşturulmuşsa disk bölümleri "loop0p1", 
-    "loop0p2", "loop1p1", "loop1p2" biçiminde isimlendirilmektedir.
+    "mmcblk0", "mmcblk1", "mmcblk2" biçiminde isimlendirilmektedir. Bunların bölümleri de "mmcblk0p1", "mmcblk0p2", "mmcblk1p1", 
+    "mmcblk1p2" biçiminde yapılmaktadır. Eğer disk bir loop aygıtı biçiminde oluşturulmuşsa disk bölümleri "loop0p1", "loop0p2", 
+    "loop1p1", "loop1p2" biçiminde isimlendirilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Klasik MBR (legacy) disk bölümlendirmesinde diskin ilk sektörüne (0 numaralı sektörüne) MBR (Master Boot Record) sektörü 
     denilmektedir. MBR sektörünün sonundaki 2 byte MBR'nin bilinçli olarak oluşturulduğunu belirten sihirli bir sayıdan (magic 
-    number) oluşmaktadır. Bu sihirli sayı hex olarak 55 AA biçimindedir. Aşağıda "loop0" aygıtı üzerinde oluştutulmuş bir MBR
+    number) oluşmaktadır. Bu sihirli sayı hex olarak 55 AA biçimindedir. Aşağıda "loop0" aygıtı üzerinde oluşturulmuş bir MBR
     sektörü görülmektedir:
 
+    $ sudo hexdump /dev/loop0 -C -v -n 512
     00000000  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
     00000010  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
     00000020  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
@@ -69821,7 +69823,7 @@ int main(void)
 
     Sektörün sonunun 55 AA ile bittiğine dikkat ediniz.
 
-    Klasik MBR Disk Bölümlemesinde MBR sektörünün sonundaki 64 byte'a "Disk Bölümleme Tablosu (Disk Partition Table)" denilmektedir. 
+    Klasik MBR Disk Bölümlemesi'nde MBR sektörünün sonundaki 64 byte'a "Disk Bölümleme Tablosu (Disk Partition Table)" denilmektedir. 
     Tabii sektörün sonunda hex olarak 55 AA bulunduğu için disk bölümleme tablosu da bu 55 AA byte'larının hemen gerisindeki 
     64 byte'tadır. O halde MBR sektörünün sonu aşağıdaki gibidir:
 
@@ -69836,28 +69838,30 @@ int main(void)
     000001f0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 55 aa  |..............U.|
 
     Başka bir deyişle Disk Bölümleme Tablosu MBR sektörünün 0x1BE (446) offset'inden başlayıp 64 byte sürmektedir. Disk Bölümleme 
-    Tablosundaki her disk bölümü 16 byte ile betimlenmektedir. Dolayısıyla klasik Disk Bölümleme Tablosu 4 disk bölümünü barındırmaktadır. 
+    Tablosu'ndaki her disk bölümü 16 byte ile betimlenmektedir. Dolayısıyla klasik Disk Bölümleme Tablosu 4 disk bölümünü barındırmaktadır. 
     Pekiyi bu durumda 4'ten fazla disk bölümü oluşturulamaz mı? İşte "Genişletilmiş Disk Bölümü (Extended Disk Partition)" kavramı 
-    ile bu durum mümkün hale getirilmiştir. Yukarıdaki Disk Bölümle Tablosunun 16 byte'lık disk bölümleri aşağıda verilmiştir:
+    ile bu durum mümkün hale getirilmiştir. Yukarıdaki Disk Bölümleme Tablosu'nun 16 byte'lık disk bölümleri aşağıda verilmiştir:
 
     80 01 01 00 83 20 0d 13  3f 00 00 00 01 b0 04 00
     00 20 0e 13 83 3e 18 26  40 b0 04 00 c0 af 04 00
     00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
     00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
 
-    Disk Bölümleme Tablosundaki 16 byte'lık disk bölümünün içeriği şöyledir:
+    Disk Bölümleme Tablosu'ndaki 16 byte'lık disk bölümünün içeriği şöyledir:
 
-    Offset (Hex)    uzunluk         Anlamı
-    -------------------------------------------------------------------------------------------------
-    0               1 BYTE          Disk Bölümünün Aktif Olup Olmadığı Bilgisi
-    1               3 BYTE          Disk Bölümünün Eski Sistemdeki (CHS Sistemindeki) Başlangıç Sektörü
-    4               1 BYTE          Sistem ID Değeri
-    5               3 Byte          Disk Bölümünün Eski Sistemdeki (CHS Sistemindeki) Bitiş Sektörü
-    8               4 BYTE (DWORD)  Disk Bölümünün LBA Sistemindeki Başlangıç Sektörü
-    C               4 BYTE (DWORD)  Disk Bölümündeki Sektör Sayısı (Disk Bölümünün Uzunluğu)
+    +--------------+----------------+---------------------------------------------------------------------+
+    | Offset (Hex) |     Uzunluk    |                               Anlamı                                |
+    +--------------+----------------+---------------------------------------------------------------------+
+    |       0      |     1 BYTE     | Disk Bölümünün Aktif Olup Olmadığı Bilgisi                          |
+    |       1      |     3 BYTE     | Disk Bölümünün Eski Sistemdeki (CHS Sistemindeki) Başlangıç Sektörü |
+    |       4      |     1 BYTE     | Sistem ID Değeri                                                    |
+    |       5      |     3 BYTE     | Disk Bölümünün Eski Sistemdeki (CHS Sistemindeki) Bitiş Sektörü     |
+    |       8      | 4 BYTE (DWORD) | Disk Bölümünün LBA Sistemindeki Başlangıç Sektörü                   |
+    |       C      | 4 BYTE (DWORD) | Disk Bölümündeki Sektör Sayısı (Disk Bölümünün Uzunluğu)            |
+    +--------------+----------------+---------------------------------------------------------------------+
 
     - 4 disk bölümünden yalnızca bir tanesi aktif olabilmektedir. Sistem aktif disk bölümünden boot edilmektedir. Aktif disk 
-    bölümü için 0x80 değeri aktif olmayan disk bölümü için 0x00 değeri kullanılmaktadır.
+    bölümü için 0x80 değeri, aktif olmayan disk bölümü için 0x00 değeri kullanılmaktadır.
 
     - Eskiden diskteki bir sektörün yeri "hangi yüzde (her yüzü bir kafa okuduğu için, hangi kafada), hangi track'te (track'e 
     silindir (cylinder) de denilmektedir) ve hangi sektör diliminde olduğu bilgisiyle ifade ediliyordu. Bu koordinat sistemine
@@ -69865,7 +69869,7 @@ int main(void)
     0 olmak üzere tek bir sayıyla temsil edilmeye başlandı.
 
     - Her disk bölümünde farklı bir işletim sisteminin kullandığı dosya sistemi bulunuyor olabilir. "Sistem ID Değeri" o disk 
-    bölümünde hangi işletim sistemine ilişkin bir dosya sisteminin bulunduğunu belirtmektedir. Böylece Disk Bölümleme Tablosunu 
+    bölümünde hangi işletim sistemine ilişkin bir dosya sisteminin bulunduğunu belirtmektedir. Böylece Disk Bölümleme Tablosu'nu 
     inceleyen kişiler disk bölümlerinin hangi işletim sistemi için oluşturulduğunu anlayabilmektedir. Tüm Sistem ID Değerleri 
     için bunların listelendiği dokümanlara başvurabilirsiniz. Biz burada birkaç System ID değerini verelim:
 
@@ -69879,10 +69883,10 @@ int main(void)
     bölümünün başlangıç sektör numarası ve toplam sektör sayısıdır. İşletim sistemleri böylece kendileri için belirlenmiş olan 
     disk bölümlerinin dışına erişmezler. Yani disk bölümleri adeta disk içerisindeki disklerin yerlerini belirtmektedir.
 
-    - 90'larla birlikte diskteki sektörlerin adreslenmesi için CHS sistemi yavaş yavaş bırakılmaya başlanmış LBA (Logical Block 
-    Address) denilen sisteme geçilmiştir. Bu sistemde diskin ilk sektörü 0 olmak üzere her sektöre artan sırada bir tamsayı karşılık 
-    düşürülmüştür. İşte bu koordinat sistemine LBA denilmektedir. Artık MBR Disk Bölümlerinde disk bölümünün başlangıç sektörü 
-    LBA sistemine göre belirtilmektedir.
+    - 90'lı yıllarla birlikte diskteki sektörlerin adreslenmesi için CHS sistemi yavaş yavaş bırakılmaya başlanmış LBA (Logical 
+    Block Address) denilen sisteme geçilmiştir. Bu sistemde diskin ilk sektörü 0 olmak üzere her sektöre artan sırada bir tamsayı 
+    karşılık düşürülmüştür. İşte bu koordinat sistemine LBA denilmektedir. Artık MBR Disk Bölümleri'nde disk bölümünün başlangıç 
+    sektörü LBA sistemine göre belirtilmektedir.
 
     - LBA sisteminde bir disk bölümünde en fazla 2^32 tane sektör bulunabilir. Bir sektör 2^9 (512) byte olduğuna göre MBR
     Disk Bölümleme Tablosu en fazla 2^41 = 2TB diskleri destekleyebilmektedir. Gömülü sistemlerde henüz bu büyüklükte diskler 
@@ -69901,8 +69905,12 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												187. Ders 22/12/2024 - Cuma
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Bu noktada Linux sistemlerindeki fdisk programının kullanımı üzerinde duracağız. Bu tür denemeleri loop aygıtları üzerinde 
-    yapmalısınız. fdisk kullanımını mnaddeler halinde açıklayalım.
+    yapmalısınız. fdisk kullanımını maddeler halinde açıklayalım.
 
     1) Hangi disk üzerinde işlem yapılacaksa o diske ilişkin aygıt dosyası fdisk programına komut satırı argümanı olarak 
     verilmelidir. Tabii disk aygıt dosyaları "root" kullanıcısına ilişkin olduğu için fdisk programı da genellikle "sudo" 
@@ -69919,8 +69927,8 @@ int main(void)
     ******************************************************
 
     Burada "sda" diski bir bütün olarak gösteren aygıt sürücüsüdür. Bu aygıt sürücüye ilişkin aygıt dosyası "/dev/sda" biçimindedir. 
-    "sda1", "sda2" ve "sda5" disk üzerindeki disk bölümleridir. Bizim bölümlendirme için diski bir bütün olarak ele almamız 
-    gerekir. Bu nedenle "sda" diski için fdisk programı şöyle çalıştırılmalıdır:
+    "sda1", "sda2" ve "sda5" disk üzerindeki disk bölümleridir. Bizim bölümlendirme için diski bir bütün olarak ele almamız gerekir. 
+    Bu nedenle "sda" diski için fdisk programı şöyle çalıştırılmalıdır:
 
     $ sudo fdisk /dev/sda
 
@@ -70068,7 +70076,7 @@ int main(void)
     /dev/loop0p2           104448 614399 509952  249M 83 Linux
     **************************************************************************************
 
-    - fdisk önce yazılacakları kendi içerisinde biriktirmekte sonra bunları diske yazmaktadır. Biriktilenlerin diske yazılması 
+    - fdisk önce yazılacakları kendi içerisinde biriktirmekte sonra bunları diske yazmaktadır. Biriktirilenlerin diske yazılması 
     için "w" (write) komutu kullanılmaktadır. Örneğin:
 
     **************************************************************************************
@@ -70100,7 +70108,7 @@ int main(void)
     sr0        11:0    1 1024M  0 rom
     **************************************************************************************
 
-    Aslında yukarıda yapılan işlemlerin soucu olarak Disk Bölümleme Tablosundaki iki giriş (32 byte) güncellenmiştir.
+    Aslında yukarıda yapılan işlemlerin sonucu olarak Disk Bölümleme Tablosu'ndaki iki giriş (32 byte) güncellenmiştir.
 
     5) fdisk programının başka komutları da vardır. Örneğin disk bölümlendirmesi yapıldıktan sonra bu bölümlendirme bilgileri 
     "O" komutu ile bir dosyaya aktarılabilir. Sonra "I" komutu ile bu dosyadan yükleme yapılabilir. Böylece farklı diskler için
@@ -70135,15 +70143,15 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Her kullanıcı "sudo" yapamamaktadır. "sudo" yapabilen kullanııclara "sudoer" denilmektedir. Sistem kurulurken kurulum
+    Her kullanıcı "sudo" yapamamaktadır. "sudo" yapabilen kullanıcılara "sudoer" denilmektedir. Sistem kurulurken kurulum
     programı tarafından yaratılan kullanıcı "sudoer" durumundadır. Bir kullanıcıyı "sudoer" yapabilmek için en basit yol o 
-    kullanıcıyı "/etc/group" dosyasında "sudo" grubuna eklemektir. Örneğin kursun yapıldığı makinedeki "/etc/group" dosyasıın 
+    kullanıcıyı "/etc/group" dosyasında "sudo" grubuna eklemektir. Örneğin kursun yapıldığı makinedeki "/etc/group" dosyasının 
     "sudo" grup satırı şöyledir:
 
     sudo:x:27:kaan
 
     Baradan "sudo" grubunun grup id'sinin 27 olduğu ve "kaan" kullanıcısının bu gruba ek grup (supplemantary group) biçiminde 
-    dahil olduğu görülmektedir. Şimdi biz "ali" kullancısının da "sudo" yapabilmesini istiyorsak "ali" kullanıcı ismini de aşağıdaki 
+    dahil olduğu görülmektedir. Şimdi biz "ali" kullanıcısının da "sudo" yapabilmesini istiyorsak "ali" kullanıcı ismini de aşağıdaki 
     gibi satıra eklemeliyiz:
 
     sudo:x:27:kaan,ali
@@ -70202,7 +70210,7 @@ int main(void)
     Defaults    env_keep += "*"
 
     Eğer PATH çevre değişkeninin de yaratılan prosese aktarılması isteniyorsa secure_path satırı kaldırılmalı ya da # ile 
-    yorum satırı içerisie alınmalıdır. Örneğin:
+    yorum satırı içerisine alınmalıdır. Örneğin:
 
     Defaults        env_reset
     Defaults        mail_badpass
@@ -70219,7 +70227,7 @@ int main(void)
     gerektiren bazı işlemleri yapabilir.
 
     Yeteneklilik (capability) konusu POSIX standartlarına sokulmamıştır. POSIX standartları genel olarak "uygun öncelik 
-    (appropriate priveledge)" terimini kullanmaktadır. Burada uygun öncelik prosesin root önceliğinde olması ya da ilgili 
+    (appropriate priviledge)" terimini kullanmaktadır. Burada uygun öncelik prosesin root önceliğinde olması ya da ilgili 
     işlemi yapacak yeteneğe sahip olması anlamına gelmektedir.
 
     Yetenelilik konusu POSIX tarafından standardize edilmiş bir konu olmadığı için farklı UNIX türevi sistemlerde farklı 
@@ -70310,7 +70318,7 @@ int main(void)
     verilen", ve "aktarılan" yeteneklerinin hepsi alt prosese aktarılmaktadır.
 
     Herhangi bir önceliğe sahip olmayan sıradan proseslerin etkin, izin verilen ve aktarılan yetenek kümesinde hiçbir yetenek 
-    yoktur. Örneğin biz bir teminal açıp orada çalışan kabuk programının (bash) yetenek kğmelerine baksak bu üç yetenek kümesinin
+    yoktur. Örneğin biz bir teminal açıp orada çalışan kabuk programının (bash) yetenek kümelerine baksak bu üç yetenek kümesinin
     de boş küme olduğunu görürüz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -70321,7 +70329,7 @@ int main(void)
     Ancak bu sistem fonksiyonlarının kullanımı biraz zahmetlidir. Bu fonksiyonlar yerine bu sistem fonksiyonları çağrılarak 
     yazılmış olan "libcap" isimli bir kütüphane de bulunmaktadır. Sistem programcıları genellikle sys_getcap ve sys_setcap 
     fonksiyonlarını kullanmak yerine zaten bunları kullanan "libcap" kütüphanesini kullanmayı tercih etmektedir. Ancak bu "libcap"
-    kütüphanesi default durumda genellikle yüklü olmaz. Bu kütüphaneyi Debain türevi sistemlerde aşağıdaki gibi yükleyebilirsiniz.
+    kütüphanesi default durumda genellikle yüklü olmaz. Bu kütüphaneyi Debian türevi sistemlerde aşağıdaki gibi yükleyebilirsiniz.
 
     $ sudo apt install libcap2 libcap-dev
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -70454,17 +70462,17 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir thread'in yetenekleri onu yaratan thread'ten aktarılmaktadır. Yani genel olarak bir proses bir threda yarattığında 
-    ya da fork işlemi yaptığında yaratılan thread ya da proses bu işlemi uygulayan threda ile aynı yeteneklere sahip olur. 
-    Sıradna bir prosesin ya da onun thread2lerinin yeteneklerine baktığımızda tipik olarak şöyle olduğunu görürüz:
+    Bir thread'in yetenekleri onu yaratan thread'ten aktarılmaktadır. Yani genel olarak bir proses bir thread yarattığında 
+    ya da fork işlemi yaptığında yaratılan thread ya da proses bu işlemi uygulayan thread ile aynı yeteneklere sahip olur. 
+    Sıradna bir prosesin ya da onun thread'lerinin yeteneklerine baktığımızda tipik olarak şöyle olduğunu görürüz:
 
     CapInh:	0000000000000000
     CapPrm:	0000000000000000
     CapEff:	0000000000000000
     CapBnd:	000001ffffffffff
 
-    Buradan çıkan sonuç şudur: Sıradamn bir prosesin ya da thread'in aktarılan, izin verilen ve etkin yetenek kümesi boş 
-    kümedir. Yani bu küme hiçbir yeteneği kapsamamaktadır. Ancak sarmalayan yeneklerin (bounding capabilities) bütün bitlerinin
+    Buradan çıkan sonuç şudur: Sıradan bir prosesin ya da thread'in aktarılan, izin verilen ve etkin yetenek kümesi boş 
+    kümedir. Yani bu küme hiçbir yeteneği kapsamamaktadır. Ancak sarmalayan yeteneklerin (bounding capabilities) bütün bitlerinin
     1 olduğunu görüyorsunuz. (Her ne kadar burada yüksek anlamlı bitlerin bazılarını 0 görüyor olsanız da zaten Linux o bitleri 
     kullanmamaktadır.)
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -70480,13 +70488,13 @@ void exit_sys(const char *msg)
     kazanmaktadır? İşte bunun iki yolu olabilir:
 
     1) Yetenek kazandırabilecek yeteneğe sahip ya da etkin kullanıcı id'si 0 olan bir proses bir alt proses yaratıp onun 
-    yeteneklerini oluşturup sonra kullanıcı is'sini 0 olmaktan çıkartabilir.
+    yeteneklerini oluşturup sonra kullanıcı id'sini 0 olmaktan çıkartabilir.
 
     2) Aslında Linux sistemlerinde çalıştırılabilen dosyalara da yetenekler atanabilmektedir. Bir çalıştırılabilen dosya exec
     fonksiyonlarıyla çalıştırıldığında izleyen paragraflarda açıklanacağı gibi otomatik olarak proses bazı yeneklere sahip
     olabilmektedir. Bu durum aslında daha önce gördüğümüz çalıştırılabilen dosyaların "set-user-id" ve "set-grup-id" bayraklarına
     benzemektedir. Örneğin thread'imizin yenek kümeleri boş küme olsun. Ama biz "xxx" isimli programı exec fonksiyonlarıyla
-    çalıştımak isteyelim. Bir kez fork yaypı alt proseste exec yaptığımızda artık alt prosesimizin yetenekleri bu "xxx" 
+    çalıştırmak isteyelim. Bir kez fork yaypı alt proseste exec yaptığımızda artık alt prosesimizin yetenekleri bu "xxx" 
     dosyasında belirtilen yeteneklere sahip olabilmektedir. Yani prosesleirn ve thread'lerin yetenekleri aslında genellikle 
     exec işlemi sırasında boş küme olmaktan çıkmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
