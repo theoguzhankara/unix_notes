@@ -5952,7 +5952,7 @@ void exit_sys(const char *msg)
     F_OK: Dosya var mı?
 
     access fonksiyonuyla ilgili iki önemli nokta vardır. Birincisi access fonksiyonu test işleminde prosesin etkin kullanıcı id'sini ve
-    grup id'sini değil gerçek kullanıcı id'sini ve grup id'sini işleme sokar. Her ne kadar prosesin gerçek kullanıcı ve grup id'leri çoğu kez 
+    grup id'sini değil, gerçek kullanıcı id'sini ve grup id'sini işleme sokar. Her ne kadar prosesin gerçek kullanıcı ve grup id'leri çoğu kez 
     etkin kullanıcı id'leri ve grup id'leri ile aynı olsa da bazen farklılaşabilmektedir. İkinci durum ise, access ile bir test yapıldıktan sonra 
     bu teste dayalı olarak dosya üzerinde işlem yapılmak istendiğinde bu işlemin başarılı olması garanti değildir. Çünkü o arada
     sistemdeki başka bir proses dosyanın erişim hakları üzerinde değişiklik yapmış olabilir.
@@ -70117,21 +70117,21 @@ int main(void)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Biz modern Linux sistemlerinde yetki gerektiren programları "sudo" komutuyla ("sudo" bir programdır) çalıştırmaktayız. 
-    Bir programı "sudo" ile çelıştırdığımızda yaratılan prosesin ekin kullanıcı id'si 0 ve etkin ghrup id'si, gerçek kullanıcı 
+    Bir programı "sudo" ile çalıştırdığımızda yaratılan prosesin etkin kullanıcı id'si 0 ve etkin grup id'si, gerçek kullanıcı 
     id'si ve gerçek grup id'si 0 olur. Kullanıcı id'si sıfır olan kullanıcı genellikle "root" ismiyle bulundurulmaktadır. Pek 
     çok UNIX türevi sistemde aynı zamanda 0 numaralı bir grup da bulunmaktadır. Bu da genellikle "root" biçiminde isimlendirilmektedir. 
     Yani "root" isminde hem bir kullanıcı hem de bir grup bulunmaktadır. Anımsanacağı gibi prosesin etkin grup id'sinin 0 olması 
     hiçbir erişim ayrıcalığı oluşturmamaktadır. Asıl olan "etkin kullanıcı id'sinin" 0 olmasıdır. Anımsanacağı gibi Linux sistemleri 
-    install edilirken kurulm sırasında kullanıcının girdiği isimle aynı olan bir kullanıcı ismi ve grup ismi oluşturulmaktadır. 
-    Kullanıcı ve grup id'lerinin farklı isim alanlarında olduğunu anımsayınız. Örneğin 1000 numaralı bir kullanıcı id'si de olabilir 
-    bir grup id'si de olabilir. Ancak aynı id'ye sakip birden fazla kullanıcı ya da grup olmamalıdır. (Tabii bu durum aslında 
-    yasak değildir. Yani bir örneğin etkin kullanıcı id'si 0 olan başka bir kullanıcı da yaratabiliriz. Çekirdek isimleri 
+    install edilirken kurulum sırasında kullanıcının girdiği isimle aynı olan bir kullanıcı ismi ve grup ismi oluşturulmaktadır. 
+    Kullanıcı ve grup id'lerinin farklı isim alanlarında olduğunu anımsayınız. Örneğin 1000 numaralı bir kullanıcı id'si de olabilir, 
+    bir grup id'si de olabilir. Ancak aynı id'ye sahip birden fazla kullanıcı ya da grup olmamalıdır. (Tabii bu durum aslında 
+    yasak değildir. Yani biz örneğin etkin kullanıcı id'si 0 olan başka bir kullanıcı da yaratabiliriz. Çekirdek, isimleri 
     değil numaraları işleme sokmaktadır.)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir programı "sudo" ile çalıştırdığımızda çalıştırılan programa ilişkin prosesin etkin ve gerçek kullanıcıid'sinin ve grup
-    id'sinin 0 olduğunı belirtmiştik. Yani "sudo" ile bir programı çalıştırdığımızda adeta program "root" kullanıcısı tarafından 
+    Bir programı "sudo" ile çalıştırdığımızda çalıştırılan programa ilişkin prosesin etkin ve gerçek kullanıcı id'sinin ve grup
+    id'sinin 0 olduğunu belirtmiştik. Yani "sudo" ile bir programı çalıştırdığımızda adeta program "root" kullanıcısı tarafından 
     çalıştırılıyormuş gibi bir etki oluşmaktadır. Linux dağıtımlarının bir bölümünde "root" kullanıcısı ile "login" olma güvenlik
     gerekçesiyle engellenmiştir. Ancak bu dağıtımlarda "root" olarak "bash" komut satırına düşmek istiyorsanız "sudo" ile "bash" 
     programını çalıştırabilirsiniz. Örneğin:
@@ -70150,9 +70150,9 @@ int main(void)
 
     sudo:x:27:kaan
 
-    Baradan "sudo" grubunun grup id'sinin 27 olduğu ve "kaan" kullanıcısının bu gruba ek grup (supplemantary group) biçiminde 
-    dahil olduğu görülmektedir. Şimdi biz "ali" kullanıcısının da "sudo" yapabilmesini istiyorsak "ali" kullanıcı ismini de aşağıdaki 
-    gibi satıra eklemeliyiz:
+    Buradan "sudo" grubunun grup id'sinin 27 olduğu ve "kaan" kullanıcısının bu gruba ek grup (supplemantary group) biçiminde 
+    dahil olduğu görülmektedir. Şimdi biz "ali" kullanıcısının da "sudo" yapabilmesini istiyorsak "ali" kullanıcı ismini de 
+    aşağıdaki gibi satıra eklemeliyiz:
 
     sudo:x:27:kaan,ali
 
@@ -70164,13 +70164,13 @@ int main(void)
 
     $ sudo usermod -aG sudo student
 
-    Kullanıcıya "sudo" yeteneği verebilmenim diğer bir yolu da "/etc/sudoers" dosyasına yeni bir giriş eklemektir. Biz burada 
+    Kullanıcıya "sudo" yeteneği verebilmenin diğer bir yolu da "/etc/sudoers" dosyasına yeni bir giriş eklemektir. Biz burada 
     bu yöntem üzerinde durmayacağız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Bir programı "sudo" ile çalıştırdığımızda üst prosesin çevre değişkenleri default durumda çalıştırılan programa aktarılmamaktadır.
-    Örneğin biz kabukta bazı çevre değişkenleri tanıomlamış olalım. "sudo" ile bir program çalıştırdığımızda bu çevre değişkenleri 
+    Örneğin biz kabukta bazı çevre değişkenleri tanımlamış olalım. "sudo" ile bir program çalıştırdığımızda bu çevre değişkenleri 
     default durumda yaratılan prosese aktarılmayacaktır. Bunu basit bir biçimde deneyimleyebiliriz. Bunun için önce komut 
     satırında aşağıdaki gibi çevre değişkenleri oluşturabiliriz:
 
@@ -70230,7 +70230,7 @@ int main(void)
     (appropriate priviledge)" terimini kullanmaktadır. Burada uygun öncelik prosesin root önceliğinde olması ya da ilgili 
     işlemi yapacak yeteneğe sahip olması anlamına gelmektedir.
 
-    Yetenelilik konusu POSIX tarafından standardize edilmiş bir konu olmadığı için farklı UNIX türevi sistemlerde farklı 
+    Yeteneklilik konusu POSIX tarafından standardize edilmiş bir konu olmadığı için farklı UNIX türevi sistemlerde farklı 
     biçimlerde gerçekleştirilmiştir. Ancak bunlar arasında en geniş tasarıma sahip olan Linux sistemleridir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -70298,15 +70298,15 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir thread'in dört grup yetenekleri vardır: Etkin yetenekler (Effective capabilities), İzin verilen yetenekler (permitted 
-    capabilities), aktarılan yetenekler (inheriable capabilities) ve aarmalayan yetenekler (bounding capabilities). Test 
+    Bir thread'in dört grup yetenekleri vardır: Etkin yetenekler (effective capabilities), İzin verilen yetenekler (permitted 
+    capabilities), aktarılan yetenekler (inheritable capabilities) ve aarmalayan yetenekler (bounding capabilities). Test 
     işlemlerine etkin yetenekler sokulmaktadır. Örneğin thread'imizin başka bir prosese sinyal gönderebilmesi için thread'imizin 
     etkin yetenekleri arasında CAP_KILL bulunuyor olması gerekir. İzin verilen yetenekler (permitted capabilities) etkin yetenekler 
     için bir üst küme oluşturmaktadır. Yani bir thread'in kendisinin etkin yetenekleri ancak izin verilen yetenekleri kadar olabilir. 
     Thread'in bir etkin yetenek kümesinde bir yetenek yoksa ancak izin verilen kümesinde varsa proses izin verilen kümesi içerisindeki 
     o yeteneği etkin kümesine taşıyabilir. Ancak izin verilen kümesini genişletemez. Başka bir deyişle thread'in etkin yetenek 
     kümesi izin verilen yetenek kümesinin bir alt kümesi biçimindedir. Aktarılabilen yetenek kümesi thread bir programı çalıştırdığında 
-    onun izin verilen kümesine dahil edilebilecek yenekleri belirtmektedir. Benzer biçimde thread'in sarmalayan yetenekleri 
+    onun izin verilen kümesine dahil edilebilecek yetenekleri belirtmektedir. Benzer biçimde thread'in sarmalayan yetenekleri 
     de izin verilen yeteneklerin belirlenmesi sırasında etki göstermektedir. Bu konu izleyen paragraflarda ele alınacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -70315,10 +70315,10 @@ int main(void)
     ya da pthread_create işlemi sırasında (bu da bir çeşit fork işlemi gibidir) üst thread'ten alt thread'e aktarılmaktadır. 
     Yani aslında default durumda bir prosesin tüm thread'leri aynı yeteneklere sahiptir. Fakat biz istersek prosesin belli bir 
     thread'inin yeteneklerini diğer thread'lere dokunmadan değiştirebiliriz. Üst proses fork uyguladığında onun "etkin", "izin 
-    verilen", ve "aktarılan" yeteneklerinin hepsi alt prosese aktarılmaktadır.
+    verilen" ve "aktarılan" yeteneklerinin hepsi alt prosese aktarılmaktadır.
 
     Herhangi bir önceliğe sahip olmayan sıradan proseslerin etkin, izin verilen ve aktarılan yetenek kümesinde hiçbir yetenek 
-    yoktur. Örneğin biz bir teminal açıp orada çalışan kabuk programının (bash) yetenek kümelerine baksak bu üç yetenek kümesinin
+    yoktur. Örneğin biz bir terminal açıp orada çalışan kabuk programının (bash) yetenek kümelerine baksak bu üç yetenek kümesinin
     de boş küme olduğunu görürüz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -70347,7 +70347,7 @@ int main(void)
     "proc" dosya sisteminde her için bir dizin yaratılmaktadır. Yani "/proc/<pid>/status" yol ifadesindeki pid aslında ilgili
     thread'in gettid fonksiyonu ile elde edilen pid numarasıdır. (POSIX standartlarında thread'lerin pid değerinin olmadığını 
     ancak Linux sistemlerinde Linux çekirdeğinin thread'leri prosesler gibi oluşturduğu için thread'lerin de pid değerlerinin 
-    olduğunu anımsayınız. Yine anımsanacağı gibi proc disya sisteminde ana thread'e ilişkin "task" dizininde prosesin thread'lerinin
+    olduğunu anımsayınız. Yine anımsanacağı gibi proc dosya sisteminde ana thread'e ilişkin "task" dizininde prosesin thread'lerinin
     pid numaraları bulunmaktadır.)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -70413,7 +70413,7 @@ int main(void)
     pid değeri elde edilebilir. cap_get_proc fonksiyonu ise o anda çalışmakta olan thread'in yeteneklerini elde etmekte 
     kullanılmaktadır.
 
-    Thread'in yetenekleri elde edildiğinde onların yazdırılmaıs da bir sorundur. Bu nedenle "libcap" kütüphanesinde cap_to_text
+    Thread'in yetenekleri elde edildiğinde onların yazdırılması da bir sorundur. Bu nedenle "libcap" kütüphanesinde cap_to_text
     isimli bir fonksiyon bulundurulmuştur. Fonksiyonun prototipi şöyledir:
 
     #include <sys/capability.h>
@@ -70464,7 +70464,7 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Bir thread'in yetenekleri onu yaratan thread'ten aktarılmaktadır. Yani genel olarak bir proses bir thread yarattığında 
     ya da fork işlemi yaptığında yaratılan thread ya da proses bu işlemi uygulayan thread ile aynı yeteneklere sahip olur. 
-    Sıradna bir prosesin ya da onun thread'lerinin yeteneklerine baktığımızda tipik olarak şöyle olduğunu görürüz:
+    Sıradan bir prosesin ya da onun thread'lerinin yeteneklerine baktığımızda tipik olarak şöyle olduğunu görürüz:
 
     CapInh:	0000000000000000
     CapPrm:	0000000000000000
@@ -70478,23 +70478,23 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Etkin kullanıc id'si 0 olan proseslerin hiçbir engele takılmadığını anımsayınız. Linux çekirdeği önce prosesin etkin 
+    Etkin kullanıcı id'si 0 olan proseslerin hiçbir engele takılmadığını anımsayınız. Linux çekirdeği önce prosesin etkin 
     kullanıcı id'sini kontrol etmektedir. Eğer prosesin etkin kullanıcı id'si 0 ise zaten herhangi bir yetenek kontrolü 
-    yapmasına gerek kalmamaktadır. Yani tenekler ancak etkin kullanıcı id'si 0 olmayan prosesler için anlamlı bir özelliktir.
+    yapmasına gerek kalmamaktadır. Yani yetenekler ancak etkin kullanıcı id'si 0 olmayan prosesler için anlamlı bir özelliktir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Pekiyi sıradna bir prosesin tüm thread'lerinin yetenekleri boş küme olduğuna göre bu prosesler ve thread'ler nasıl yetenek 
+    Pekiyi sıradan bir prosesin tüm thread'lerinin yetenekleri boş küme olduğuna göre bu prosesler ve thread'ler nasıl yetenek 
     kazanmaktadır? İşte bunun iki yolu olabilir:
 
     1) Yetenek kazandırabilecek yeteneğe sahip ya da etkin kullanıcı id'si 0 olan bir proses bir alt proses yaratıp onun 
     yeteneklerini oluşturup sonra kullanıcı id'sini 0 olmaktan çıkartabilir.
 
     2) Aslında Linux sistemlerinde çalıştırılabilen dosyalara da yetenekler atanabilmektedir. Bir çalıştırılabilen dosya exec
-    fonksiyonlarıyla çalıştırıldığında izleyen paragraflarda açıklanacağı gibi otomatik olarak proses bazı yeneklere sahip
+    fonksiyonlarıyla çalıştırıldığında izleyen paragraflarda açıklanacağı gibi otomatik olarak proses bazı yeteneklere sahip
     olabilmektedir. Bu durum aslında daha önce gördüğümüz çalıştırılabilen dosyaların "set-user-id" ve "set-grup-id" bayraklarına
-    benzemektedir. Örneğin thread'imizin yenek kümeleri boş küme olsun. Ama biz "xxx" isimli programı exec fonksiyonlarıyla
-    çalıştırmak isteyelim. Bir kez fork yaypı alt proseste exec yaptığımızda artık alt prosesimizin yetenekleri bu "xxx" 
+    benzemektedir. Örneğin thread'imizin yetenek kümeleri boş küme olsun. Ama biz "xxx" isimli programı exec fonksiyonlarıyla
+    çalıştırmak isteyelim. Bir kez fork yapıp alt proseste exec yaptığımızda artık alt prosesimizin yetenekleri bu "xxx" 
     dosyasında belirtilen yeteneklere sahip olabilmektedir. Yani prosesleirn ve thread'lerin yetenekleri aslında genellikle 
     exec işlemi sırasında boş küme olmaktan çıkmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -70516,7 +70516,7 @@ void exit_sys(const char *msg)
 
     newcaps = cap_init();
 
-    2) Bu yenek nesnesine cap_set_flag fonksiyonu ile çeşitli bayraklar eklenir. Fonksiyonun prototipi şöyledir:
+    2) Bu yetenek nesnesine cap_set_flag fonksiyonu ile çeşitli bayraklar eklenir. Fonksiyonun prototipi şöyledir:
 
     #include <sys/capability.h>
 
