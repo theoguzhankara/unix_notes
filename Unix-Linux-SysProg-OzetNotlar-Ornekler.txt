@@ -58832,7 +58832,7 @@ void exit_sys(const char *msg)
     tüm proseslerin sayfa tablosunda aynı yerde bulunmaktadır. Başka bir deyişle her prosesin sayfa tablosunda çekirdek hep aynı sanal 
     adreslerde bulunmaktadır. Örneğin sys_open sistem fonksiyonuna girildiğinde bu fonksiyonun sanal adresi her proseste aynıdır.
 
-    32 bit linux sistemlerinde proseslerin sanal bellek alanları 3 GB user, 1 GB kernel olmak üzere 2 bölüme ayrılmıştır. 64 bit Linux
+    32 bit Linux sistemlerinde proseslerin sanal bellek alanları 3 GB user, 1 GB kernel olmak üzere 2 bölüme ayrılmıştır. 64 bit Linux
     sistemlerinde ise yalnızca sanal bellek alanının 256 TB'si kullanılmaktadır. Bu sistemlerde user alanı için 128 TB, kernel alanı için de
     128 TB yer ayrılmıştır. 32 bit Linux sistemlerindeki prosesin sanal bellek alanı şöyle gösterilebilir:
 
@@ -69660,7 +69660,7 @@ void exit_sys(const char *msg)
     errcode_t err;
 
     if ((err = ext2fs_open("/dev/loop0", 0 /* EXT2_FLAG_RW */, 0, 0, unix_io_manager, &fs)) != 0) {
-        fprintf(stderr, "cannot open file system!..\n");
+        fprintf(stderr, "cannot open file system!...\n");
         exit(EXIT_FAILURE);
     }
 
@@ -69674,7 +69674,7 @@ void exit_sys(const char *msg)
     errcode_t err;
 
     if ((err = ext2fs_open("/dev/loop0", 0 /* EXT2_FLAG_RW */, 0, 0, unix_io_manager, &fs)) != 0) {
-        fprintf(stderr, "cannot open file system!..\n");
+        fprintf(stderr, "cannot open file system!...\n");
         exit(EXIT_FAILURE);
     }
 
@@ -69692,7 +69692,7 @@ int main(void)
 	errcode_t err;
 
 	if ((err = ext2fs_open("/dev/loop0", 0 /* EXT2_FLAG_RW */, 0, 0, unix_io_manager, &fs)) != 0) {
-		fprintf(stderr, "cannot open file system!..\n");
+		fprintf(stderr, "cannot open file system!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -69716,7 +69716,7 @@ int main(void)
     Örneğin:
 
     if ((err = ext2fs_read_inode(fs, 13, &inode)) != 0) {
-        fprintf(stderr, "cannot read inode!..\n");
+        fprintf(stderr, "cannot read inode!...\n");
         exit(EXIT_FAILURE);
     }
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -70354,6 +70354,10 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												189. Ders 01/05/2025 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Bir thread'in yetenekleri programlama yoluyla "libcap" kütüphanesindeki cap_get_proc fonksiyonu ile elde edilebilir. Fonksiyon 
     kendisini çağıran thread'in yetenek bilgilerini temsil eden cap_t türünden bir handle değeri ile geri döner.
 
@@ -70424,7 +70428,7 @@ int main(void)
 
     Fonksiyonun birinci parametresi cap_t türünden handle değerini, ikinci parametresi verilen yazının uzunluğunun yerleştirileceği
     nesnenin adresini belirtir. İkinci parametre NULL adres geçilebilir. Bu durumda fonksiyon böyle bir yerleştirme yapmaz. 
-    Fonksiyon oluşturulan yazının adresine geri dönmektedir. Yine bu adresin de cap_free kullanımdan sonra boşaltılması gerekir. 
+    Fonksiyon oluşturulan yazının adresine geri dönmektedir. Yine bu adresin de kullanımdan sonra cap_free ile boşaltılması gerekir. 
     Eğer cap_to_text fonksiyonunda yalnızca "=" biçiminde bir yazı elde ediliyorsa bu durum thread'in herhangi bir yeteneğe 
     sahip olmadığı anlamına gelmektedir.
 
@@ -70464,10 +70468,6 @@ void exit_sys(const char *msg)
 
 	exit(EXIT_FAILURE);
 }
-
-/*--------------------------------------------------------------------------------------------------------------------------
-												189. Ders 01/05/2025 - Pazar
----------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Bir thread'in yetenekleri onu yaratan thread'ten aktarılmaktadır. Yani genel olarak bir proses bir thread yarattığında 
@@ -70542,12 +70542,12 @@ void exit_sys(const char *msg)
 
     Fonksiyon tarafından set edilecek yetenekler dördüncü parametresi ile belirtilen dizinden elde edilmektedir. Yani programcı 
     cap_value_t türünden bir dizi oluşturup bu dizinin içerisine yetenekleri yerleştirir. Fonksiyonun üçüncü parametresine de
-    bu dizinin uzunluğunu geçirir. Fonksiyonun son parametresi aşağıdaki iki değerdne biri olarak girilir:
+    bu dizinin uzunluğunu geçirir. Fonksiyonun son parametresi aşağıdaki iki değerden biri olarak girilir:
 
     CAP_CLEAR
     CAP_SET
 
-    Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri dönemtedir. Örneğin:
+    Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda -1 değerine geri dönmektedir. Örneğin:
 
     cap_value_t caparray[] = {CAP_CHOWN, CAP_KILL};
     ...
@@ -70557,12 +70557,12 @@ void exit_sys(const char *msg)
         exit_sys("cap_set_flag");
     }
 
-    if (cap_set_flag(newcaps, CAP_EFEFCTIVE, 2, caparray, CAP_SET) == -1) {
+    if (cap_set_flag(newcaps, CAP_EFFECTIVE, 2, caparray, CAP_SET) == -1) {
         cap_free(newcaps);
         exit_sys("cap_set_flag");
     }
 
-    3) Oluşturulan yetenekler cap_set_proc fonksiyonu ile o anda çalışan thread'e aktarılır. cap_set_proc fonksiyonun 
+    3) Oluşturulan yetenekler cap_set_proc fonksiyonu ile o anda çalışan thread'e aktarılır. cap_set_proc fonksiyonunun 
     prototipi şöyledir:
 
     #include <sys/capability.h>
@@ -70583,7 +70583,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Aşağıda bir thread'in yeteneklerini değiştiren örnek bir program verilmiştir. Tabii cap_set_proc fonksiyonun da kullanılması
+    Aşağıda bir thread'in yeteneklerini değiştiren örnek bir program verilmiştir. Tabii cap_set_proc fonksiyonunun da kullanılması
     için prosesin uygun önceliğe sahip olması gerekir. (Yani prosesin etkin kullanıcı id'si 0 olmalı ya da ilgili thread yetenek
     değiştirme yeteneği olan CAP_SYS_ADMIN yeteneğine sahip olmalıdır.)
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -70636,7 +70636,7 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Aşağıda önce thread'in izin verilen ve etkin yetenekleri değiştirilmiş sonra da bu yetenekler elde edilip yazdırılmıştır. 
-    Programın çalıştırılması sonucunda aşağdıaki gibi bir çıktı elde edilecektir:
+    Programın çalıştırılması sonucunda aşağıdaki gibi bir çıktı elde edilecektir:
 
     cap_chown,cap_kill=ep
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -70766,7 +70766,7 @@ int main(void)
 	disp_capability();
 
 	if (seteuid(1000) == -1)
-		exit_sys("setuid");
+		exit_sys("seteuid");
 
 	disp_capability();
 
@@ -70781,8 +70781,8 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Linux çekirdek kendi içerisinde aslında hep yetenek kontrolü yapmaktadır. Yani bir prosesin root önceliğinde olması 
-    (yani etkin kullanıcı id'sinin 0 olması) aslında izimn verilen ve etkin yeteneklerin hepsinin set edildiği anlamına 
+    Linux çekirdeği kendi içerisinde aslında hep yetenek kontrolü yapmaktadır. Yani bir prosesin root önceliğinde olması 
+    (yani etkin kullanıcı id'sinin 0 olması) aslında izin verilen ve etkin yeteneklerin hepsinin set edildiği anlamına 
     gelmektedir. Dolayısıyla biz bir programı sudo ile çalıştırdıktan sonra onun etkin yeteneklerini değiştirirsek artık 
     proses'in etkin kullanıcı id'si 0 olsa bile proses yetenek kaybedecektir.
 
@@ -70791,11 +70791,11 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Linux sistemlerinde yalnızca thread'lerin değil çalıştırılabilen dosyaların da yetenekleri vardır. Biz daha önce çalıştırılabilen
+    Linux sistemlerinde yalnızca thread'lerin değil, çalıştırılabilen dosyaların da yetenekleri vardır. Biz daha önce çalıştırılabilen
     bir dosyanın "set-user-id" ve "set-group-id" biçiminde isimlendirilen bayraklarının işlevlerini incelemiştik. Çalıştırılabilen
     bir dosyanın "set-user-id" bayrağı set edilmişse o programı exec yapan prosesin etkin kullanıcı id'si dosyanın kullanıcı
     id'si haline getiriliyordu. Aynı durum "set-group-id" bayrağı için de benzer biçimde işletiliyordu. Çalıştırılabilen bir 
-    dosyanın "set-group-id" bayrağı set edilmişse bu dosya exe yapıldığında prosesin etkin grup id'si dosyanın grup id'si 
+    dosyanın "set-group-id" bayrağı set edilmişse bu dosya exec yapıldığında prosesin etkin grup id'si dosyanın grup id'si 
     oluyordu. İşte bu mekanizmanın benzeri yetenek temelinde de oluşturulmuştur. Çalıştırılabilen dosyaların da yetenekleri 
     set edilmiş olabilir. Bu durumda bu dosyalar exec yapıldığında proses otomatik olarak o yeteneğe sahip hale gelmektedir. 
     Örneğin bir program dosyasının CAP_KILL yeteneğinin set edilmiş olduğunu varsayalım. Ancak bu dosyanın etkin kullanıcı id'si 
@@ -70847,12 +70847,11 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Tabii aslında dosyaların yeteneklerini elde etmek için ve onlara yetenek iliştirmek için Linux çekirdeğinde sistem 
-    fonksiyonları bulunmaktadır. "getcap" ve "setcap" programları libcap kütüphanesindeki cap_set_file ve cap_get_file 
-    fonksiyonları kullanılarak yazılmıştır. Bu fonksiyonlar da sys_setxattr, sys_fsetxattr, sys_lsetxattr ve sys_getxattr, 
-    sys_fgetxattr ve sys_lgetxattr sistem fonksiyonları çağrılarak yazılmıştır. Bu sistem fonksiyonları için "libc" kütüphanesinde 
-    sarma fonksiyonlar bulunmaktadır. Ancak biz burada bu işlemleri "libcap" kütüphanesindeki cap_set_file ve cap_get_file
-    fonksiyonlarını kullanarak yapacağız.
+    Tabii aslında dosyaların yeteneklerini elde etmek ve onlara yetenek iliştirmek için Linux çekirdeğinde sistem fonksiyonları 
+    bulunmaktadır. "getcap" ve "setcap" programları libcap kütüphanesindeki cap_set_file ve cap_get_file fonksiyonları kullanılarak 
+    yazılmıştır. Bu fonksiyonlar da sys_setxattr, sys_fsetxattr, sys_lsetxattr ve sys_getxattr, sys_fgetxattr, sys_lgetxattr sistem 
+    fonksiyonları çağrılarak yazılmıştır. Bu sistem fonksiyonları için "libc" kütüphanesinde sarma fonksiyonlar bulunmaktadır. Ancak 
+    biz burada bu işlemleri "libcap" kütüphanesindeki cap_set_file ve cap_get_file fonksiyonlarını kullanarak yapacağız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -70863,7 +70862,7 @@ void exit_sys(const char *msg)
     cap_t cap_get_file(const char *path_p);
 
     Fonksiyon dosyanın yol ifadesini alır ve başarı durumunda dosyanın yetenek bilgilerine ilişkin cap_t nesnesine geri döner. 
-    Bu nesnenin kullanım bittikten sonra cap_free fonksiyonu ile boşaltılması gerekmektedir. Fonksiyon başarısızlık durumunda 
+    Bu nesnenin kullanımı bittikten sonra cap_free fonksiyonu ile boşaltılması gerekmektedir. Fonksiyon başarısızlık durumunda 
     NULL adrese geri dönmektedir. Örneğin:
 
     cap_t caps;
@@ -70899,7 +70898,7 @@ int main(int argc, char *argv[])
 	cap_t caps;
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -70919,7 +70918,7 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    cap_set_file fonksiyonun prototipi de şöyledir:
+    cap_set_file fonksiyonunun prototipi de şöyledir:
 
     #include <sys/capability.h>
 
@@ -70934,7 +70933,7 @@ void exit_sys(const char *msg)
     cap_value_t caparray[] = {CAP_CHOWN, CAP_KILL, CAP_SETUID};
 
     if (argc != 2) {
-        fprintf(stderr, "wrong number of arguments!..\n");
+        fprintf(stderr, "wrong number of arguments!...\n");
         exit(EXIT_FAILURE);
     }
 
@@ -70953,7 +70952,7 @@ void exit_sys(const char *msg)
 
     if (cap_set_file(argv[1], newcaps) == -1) {
         cap_free(newcaps);
-        exit_sys("cap_set_proc");
+        exit_sys("cap_set_file");
     }
 
     cap_free(newcaps);
@@ -70987,7 +70986,7 @@ int main(int argc, char *argv[])
 	cap_value_t caparray[] = {CAP_CHOWN, CAP_KILL, CAP_SETUID};
 
 	if (argc != 2) {
-		fprintf(stderr, "wrong number of arguments!..\n");
+		fprintf(stderr, "wrong number of arguments!...\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -71006,7 +71005,7 @@ int main(int argc, char *argv[])
 
 	if (cap_set_file(argv[1], newcaps) == -1) {
 		cap_free(newcaps);
-		exit_sys("cap_set_proc");
+		exit_sys("cap_set_file");
 	}
 
 	cap_free(newcaps);
@@ -71041,7 +71040,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Pekiyi çeşitli yeteneklere sahip bir program dosyası exec yapıldığında ne olur? Bu süreç biraz karşıktır. Normal olarak 
+    Pekiyi çeşitli yeteneklere sahip bir program dosyası exec yapıldığında ne olur? Bu süreç biraz karmaşıktır. Normal olarak 
     set-user-id ve set-group-id bayraklarında olduğu gibi prosesin o yeteneklere sahip olması gerekir. Ancak sürecin aşağıda 
     açıklayacağımız bazı ayrıntıları vardır.
 
@@ -71058,8 +71057,8 @@ void exit_sys(const char *msg)
     ./date: tarih ayarlanamadı: İşleme izin verilmedi
     Paz 12 Oca 2025 00:00:00 +03
 
-    Görüldüğü gibi bu işlem için "sudo" gerekmektedir. Şimdi de dosyaya sistem tarihini değiştirmek için gereken cap_sys_time yeteneğini 
-    iliştirelim:
+    Görüldüğü gibi bu işlem için "sudo" gerekmektedir. Şimdi de dosyaya sistem tarihini değiştirmek için gereken cap_sys_time 
+    yeteneğini iliştirelim:
 
     $ sudo setcap cap_sys_time=pe date
 
