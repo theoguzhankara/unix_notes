@@ -11,7 +11,7 @@
                         (Notları sabit genişlikli font kullanan programlama editörleri ile açınız.)
                             (Editörünüzün "Line Wrapping" özelliğini pasif hale getiriniz.)
 
-                                                    Son Güncelleme: 04/02/2025 - Salı
+                                          Son Güncelleme: 16/03/2025 - Pazar
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -721,12 +721,12 @@ int main(int argc, char *argv[])
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-	Aşağıdaki örnekteki komut satırı argümanları şunlardır:
+    Aşağıdaki örnekteki komut satırı argümanları şunlardır:
 
-	-a
-	-b
-	-c <arg> ya da --count <arg>
-	--verbose
+    -a
+    -b
+    -c <arg> ya da --count <arg>
+    --verbose
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -2893,7 +2893,7 @@ void exit_sys(const char *msg)
     Yapının st_blksize elemanı dosyanın içinde bulunduğu dosya sisteminin kullandığı blok uzunluğunu belirtmektedir. Dosyaların parçaları 
     diskte "block" denilen ardışıl byte topluluklarında tutulmaktadır. İşte bir bloğun kaç byte olduğu bilgisi bu elemanla belirtilmektedir. 
     Aynı zamanda programcılar dosya kopyalama gibi işlemlerde bu büyüklüğü tampon büyüklüğü (buffer size) olarak da kullanmaktadır.
-    blksize_t işaretli bir tamsayı türüolarak typedef edilmek zorundadır.
+    blksize_t işaretli bir tamsayı türü olarak typedef edilmek zorundadır.
 
     Yapının st_blocks elemanı dosyanın diskte kapladığı blok sayısını belirtmektedir. (Ancak buradaki sayı 512 byte'lık blokların sayısıdır. 
     Yani dosya sistemindeki dosyanın parçaları olan bloklara ilişkin sayı değildir.) blkcnt_t işaretli bir tamsayı türü olarak typedef 
@@ -2919,7 +2919,7 @@ void exit_sys(const char *msg)
         long    tv_nsec;
     };
 
-    Yapının tv_sec elemanı yine 01/01/1970'ten geçen saniye saniye sayısını tv_nsec elemanı ise o saniyeden sonraki nano saniye sayısını tutmaktadır. 
+    Yapının tv_sec elemanı yine 01/01/1970'ten geçen saniye sayısını tv_nsec elemanı ise o saniyeden sonraki nano saniye sayısını tutmaktadır. 
     Sistemlerin çoğu POSIX standartlarında bu konuda değişiklik yapılmış olsa da eski doğru uyumu şöyle korumuştur:
 
     struct stat {
@@ -52547,70 +52547,92 @@ void foo()
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Kernel modüllerinde ve aygıt sürücülerde her türlü fonksiyon kullanılamaz. Bunları yazabilmek için özel başlık dosyalarına 
-    ve kütüphanelere gereksinim duyulmaktadır. Bu nedenle ilk yapılacak şey bu başlık dosyalarının ve kütüphanelerin ilgili 
+    Çekirdek modüllerinde ve aygıt sürücülerde her türlü fonksiyon kullanılamaz. Bunları yazabilmek için özel başlık dosyalarına 
+    ve ve amaç dosyalara gereksinim duyulmaktadır. Bu nedenle ilk yapılacak şey bu başlık dosyalarının ve kütüphanelerin ilgili 
     sisteme yüklenmesidir.
 
-    Genellikle bir Linux sistemini yüklediğimizde zaten kernel modüllerini ve aygıt sürücüleri oluşturabilmek için gereken 
-    kütüphaneler ve başlık dosyaları zaten yüklü biçimde bulunmaktadır. Tabii programcı kernel kodlarını da kendi makinesine 
-    indirmek isteyebilir. Bunun için aşağıdaki komut kullanılabilir:
+    Genellikle bir Linux sistemini yüklediğimizde zaten çekirdek modüllerini ve aygıt sürücüleri oluşturabilmek için gereken 
+    başlık dosyaları ve diğer gerekli öğeler zaten "/usr/src" dizini içerisindeki "linux-headers-$(uname -r)" dizininde yüklü 
+    biçimde bulunmaktadır. Ancak bunlar yüklü değilse Debian tabanlı sistemlerde bunları şöyle yükleyebilirsiniz:
+
+    $ sudo apt install linux-headers-$(uname -r)
+
+    Tabii programcı o anda çalışılan çekirdeğin kodlarının hepsini de kendi makinesine indirmek isteyebilir. Bunun için aşağıdaki 
+    komut kullanılabilir:
 
     $ sudo apt-get install linux-source
 
-    Eğer sisteminizde Linux'un kaynak kodları yüklü ise bu kaynak kodlar "/usr/src" dizininde bulunmaktadır. Bu dizindeki 
-    "linux-headers-$(uname -r)" dizini kaynak kodlar yüklü olmasa bile bulunan bir dizindir ve bu dizin çekirdek modülleri 
-    ve aygıt sürücülerin "build edilmeleri" için gereken başlık dosyalarını barındırmaktadır. Benzer biçimde "/lib/modules"
-    isimli dizinde $(uname -r) isimli bir dizin vardır. Bu dizin kernel modüllerinin build edilmesi için gereken bazı kodları
-    ve kütüphaneleri bulundurmaktadır. Özetle kernel modülleri ve aygıt sürücüleri yazmak için gerekli olan dizinler şunlardır:
+    Bu indirmeler "/usr/src" dizinine yapılmaktadır.
 
-    1) linux-headers-$(uname -r) dizini. Bu dizinde başlık dosyaları bulunmaktadır.
-    2) /lib/modules/$(uname -r) dizini. Burada da kernel modülün build edilmesi için gerekli olan dosyalar ve kütüphaneler 
-    bulunmaktadır.
+    Ayrıca "/lib/modules/$(uname -r)" isimli dizindeki "build" isimli dizin de çekirdek kaynak kodlarının bulunduğu dizine ya da 
+    aygıt sürücülerin derlenmesi için gereken öğelerin bulunduğu dizine (tipik olarak "linux-headers-$(uname -r)" dizinine) 
+    sembolik link yapılmış durumdadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir kernel modülünde biz user mod için yazılmış kodları kullanamayız. Çünkü orası ayrı bir dünyadır. Ayrıca biz kernel 
-    modüllerinde kernel içerisindeki her fonksiyonu kullanamayız. Yalnızca bazı fonksiyonları kullanabiliriz. Bunlara "kernel 
-    tarafından export edilmiş fonksiyonlar" denilmektedir. "Kernel tarafından export edilmiş fonksiyon" kavramıyla "sistem 
-    fonksiyonu" kavramının bir ilgisi yoktur. Sistem fonksiyonları user mode'dan çağrılmak üzere tasarlanmış ayrı bir grup 
-    fonksiyondur. Oysa kernel tarafından export edilmiş fonksiyonlar user mode'dan çağrılamazlar. Yalnızca kernel modüllerinden
-    çağrılabilirler. Buradan çıkan sonuç şudur: Bir kernel modül yazılırken ancak kernel'ın export ettiği fonksiyon ve datalar 
-    kullanılabilmektedir. Tabii kernel'ın kaynak kodları çok büyüktür ancak buradaki kısıtlı sayıda fonksiyon export edilmiştir. 
-    Benzer biçimde programcının oluşturduğu bir kernel modül içerisindeki belli fonksiyonları da programcı export edebilir. 
-    Bu durumda bu fonksiyonlar da başka kernel modüllerinden kullanılabilirler. O halde özetle:
+    Bir çekirdek modülünde biz user mod için yazılmış kodları kullanamayız. Çünkü orası ayrı bir dünyadır. Ayrıca biz çekirdek 
+    modüllerinde çekirdek içerisindeki her fonksiyonu da kullanamayız. Yalnızca bazı fonksiyonları kullanabiliriz. Bunlara 
+    "çekirdek tarafından export edilmiş fonksiyonlar" denilmektedir. "Çekirdek tarafından export edilmiş fonksiyon" kavramıyla 
+    "sistem fonksiyonu" kavramının bir ilgisi yoktur. Sistem fonksiyonları kullanıcı modundan (user mode) çağrılmak üzere tasarlanmış 
+    ayrı bir grup fonksiyondur. Oysa çekirdek tarafından export edilmiş fonksiyonlar kullanıcı modundan çağrılamazlar. Yalnızca 
+    çekirdek modüllerinden çağrılabilirler. Buradan çıkan sonuç şudur: Bir çekirdek modülü yazılırken ancak çekirdeğin export 
+    ettiği fonksiyonlar ve nesneler kullanılabilmektedir. Tabii çekirdeğin kaynak kodları çok büyüktür ancak buradaki kısıtlı 
+    sayıda fonksiyon export edilmiştir. Benzer biçimde programcının oluşturduğu bir çekirdek modül içerisindeki belli fonksiyonları 
+    da programcı export edebilir. Bu durumda bu fonksiyonlar da başka çekirdek modüllerinden kullanılabilirler. O halde özetle:
 
-    1) Kernel modülleri yalnızca kernel içerisindeki export edilmiş fonksiyonları kullanabilirler. 
-    2) Kendi kernel modülümüzde biz de istediğimiz fonksiyonu export edebiliriz. Bu durumda bizim kernel modülümüz kernel'ın 
-    bir parçası haline geldiğine göre başka kernel modüller de bizim export ettiğimiz fonksiyonları kullanabilir.
+    1) Çekirdek modülleri yalnızca çekirdek içerisindeki export edilmiş fonksiyonları kullanabilir.
+    2) Kendi çekirdek modülümüzde biz de istediğimiz fonksiyonu export edebiliriz. Bu durumda bizim çekirdek modülümüz çekirdeğin
+    bir parçası haline geldiğine göre başka çekirdek modülleri de bizim export ettiğimiz bu fonksiyonları kullanabilir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Mademki kernel modüller işletim sisteminin kernel kodlarındaki fonksiyon ve dataları kullanabiliyorlar o zaman kernel 
-    modüller o anda çalışılan kernel'ın yapısına da bağlı durumdadırlar. Yukarıda da ifade ettiğimiz gibi işletim sistemlerinde 
-    "kernel modül yazmak" ya da "aygıt sürücü yazmak" biçiminde genel bir konu yoktur. Her işletim sisteminin kernel modül ve 
-    aygıt sürücü mimarisi diğerlerinden farklıdır. Dolayısıyla bu konu spesifik bir işletim sistemi için geçerli olabilecek
-    oldukça platform bağımlı bir konudur. Hatta işletim sistemlerinde bazı versiyonlarda genel aygıt sürücü mimarisi bile 
-    değiştirilebilmektedir. Dolayısıyla eski aygıt sürücüler yeni versiyonlarda, yenileri de eski versiyonlarda çalışamamaktadır.
+    Mademki çekirdek modülleri işletim sisteminin çekirdek kodlarındaki fonksiyonları ve nesneleri kullanabiliyor o zaman 
+    çekirdek modülleri o anda çalışılan çekirdeğin yapısına da bağlı durumdadır. Bu nedenle işletim sistemlerinde "çekirdek 
+    modülü yazmak" ya da "aygıt sürücü yazmak" biçiminde genel bir konu yoktur. Her işletim sisteminin çekirdek modül ve aygıt 
+    sürücü mimarisi diğerlerinden farklıdır. Dolayısıyla çekirdek modüllerinin ve aygıt sürücülerinin yazılması spesifik bir 
+    işletim sistemi için geçerli olabilecek platform oldukça bağımlı bir konudur. Hatta işletim sistemlerinde bazı versiyonlarda 
+    genel aygıt sürücü mimarisi bile değiştirilebilmektedir. Dolayısıyla bu tür durumlarda eski aygıt sürücüler yeni versiyonlarda, 
+    yenileri de eski versiyonlarda çalışamamaktadır. Örneğin Linux'ta çekirdek versiyonları arasında çekirdekteki export edilmiş 
+    bazı fonksiyonlar isim ya da parametrik yapı olarak değiştirilmiş durumdadır. Bu nedenle Linux çekirdeğinin belli bir 
+    versiyonu için yazılmış olan aygıt sürücüler başka bir versiyonunda geçersiz hale gelebilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Kernel modüllerinin ve aygıt sürücülerin yazımı için programcının genel olarak kernel yapısını bilmesi gerekmektedir. 
-    Çünkü bunları yazarken kernel'ın içerisindeki export edilmiş fonksiyonlar kullanılmaktadır. Linux kernel modüller ve aygıt
-    sürücüler hakkında yazılmış birkaç kitap vardır. Bunların en klasik olanı "Linux Device Drivers (3. Edition)" kitabıdır. 
-    Bu konudaki resmi dokümanlar kernel.org sitesindeki "documentation" kısmında bulunmaktadır.
+    Çekirdek modüllerinin ve aygıt sürücülerin yazımı için programcının çekirdek yapısını ana hatlarıyla bilmesi gerekmektedir. 
+    Çünkü bunları yazarken çekirdeğin içerisindeki çeşitli veri yapıları ve export edilmiş fonksiyonlar kullanılmaktadır. 
+
+    Linux çekirdek modülleri ve aygıt sürücüleri hakkında yazılmış birkaç kitap vardır. Bunların en klasik olanı "Linux Device 
+    Drivers (3. Edition)" kitabıdır. Ancak bu kitaptaki bazı içerikler güncel çekirdeklerle uyumsuz hale gelmiştir. Bu konudaki 
+    resmi dokümanlar ise "kernel.org" sitesindeki "documentation" kısmında bulunmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir kernel modülünü derlemek ve link etmek maalesef sanıldığından daha zordur. Her ne kadar kernel modüller ELF object 
+    Bir çekirdek modülünü derlemek ve link etmek maalesef sanıldığından daha zordur. Her ne kadar çekirdek modülleri ELF object 
     dosyaları biçimindeyse de bunlarda özel bazı "bölümler (sections)" bulunmaktadır. Dolayısıyla bu modüllerin derlenmesinde 
-    özel gcc seçenekleri devreye sokulur. Kernel modüllerin link edilmeleri de bazı kütüphane dosyalarının devreye sokulmasıyla 
-    yapılmaktadır. Dolayısıyla bir kernel modülün manuel biçimde "build edilmesi" için bazı ayrıntılı bilgilere gereksinim 
-    duyulmaktadır. İşte kernel tasarımcıları bu sıkıcı işlemleri kolaylaştırmak için özel "make dosyaları" düzenlemişlerdir. 
-    Programcı bu make dosyalarından faydalanarak build işlemini çok daha kolay yapabilmektedir.
+    özel "gcc" seçenekleri devreye sokulmaktadır. Çekirdek modüllerinin link edilmeleri de bazı kütüphane dosyalarının devreye 
+    sokulmasıyla yapılmaktadır. Dolayısıyla bir çekirdek modülünün manuel biçimde "build edilmesi" için bazı ayrıntılı bilgilere 
+    gereksinim duyulmaktadır. İşte çekirdek modüllerinin build edilmesinde çekirdeğin KBuild sistemi devreye sokulmaktadır. Bu 
+    nedenle çekirdek modüllerinin build edilmesi için çekirdek kaynak kodlarındaki birtakım başlık dosyalarının ve Make dosyalarının 
+    build işleminin yapılacağı makinede bulunması gerekir. Biz yukarıda bu dosyalara "/lib/modules/$(uname -r)/build" dizini 
+    yoluyla erişilebileceğini belirtmiştik. Bu dizin aslında Linux kaynak kod ağacının bulunduğu dizini belirtmektedir. Ancak
+    yukarıda da belirttiğimiz gibi çekidek modüllerinin ve aygıt sürücülerin derlenmesi için Linux'un tüm kaynak kodlarına
+    gerek yoktur. Yalnızca başlık dosyaları ve make dosyalarının bulunması yeterlidir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Kernel modüller için build işlemini yapan örnek bir Makefile aşağıdaki gibi olabilir:
+    Çekirdek modülleri o anda çalışılan host sistem için derlenebileceği gibi gömülü bir sistem için de derlenebilir. Eğer 
+    derleme gömülü sistem için yapılacaksa şüphesiz çapraz derleyicilerin de ilgili sistemde kurulu olması gerekir. Yukarıda 
+    da belirttiğimiz gibi çekirdek modüllerinin derlenmesi için ilgili çekirdeğe yönelik başlık dosyaları ve çeşitli make 
+    dosyaları gibi bazı öğelerin de bulunuyor olması gerekir. Eğer derleme bir gömülü sistem için yapılacaksa o gömülü sistemdeki 
+    çekirdeğe ilişkin bu dosyalar da host makinede bulunuyor olmalıdır. Örneğin biz masaüstü bilgisayardaki Mint dağıtımında 
+    çalışıyor olalım. Bu sistemin kendisi için çekirdek modülü derleyeceksek zaten tüm gerekli öğeler hazır durumdadır.
+    Ancak biz bu makinede BeagleBone Black için çekirdek modülü ve aygıt sürücü derlemesi yapacaksak çapraz derleyicimizin ve 
+    BeagleBone Black'teki çekirdeğe yönelik temel başlık dosyalarının ve Make dosyalarının bulunuyor olması gerekecektir. Tabii 
+    BeagleBone Black'teki çekirdek sürümüne ilişkin çekirdek kaynak kodları bu makineye çekerek bu gereksinimi karşılayabiliriz.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Masaüstü bir sistem için çekirdek modül derlemesinde kullanılabilecek minimal bir Makefile dosyası aşağıdaki gibi olabilir:
 
     obj-m += generic.o
 
@@ -52619,13 +52641,25 @@ void foo()
     clean:
         make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
-    Burada önce /lib/modules/$(uname -r)/build dizinindeki "Makefile" çalıştırılmış ondan sonra çalışma bu yazdığımız make 
-    dosyasından devam ettirilmiştir. Özetle bu make dosyası "generic.c" isimli dosyanın derlenerek kernel modül biçiminde 
-    link edilmesini sağlamaktadır. Kernel modül birden fazla kaynak dosyadan oluşturulabilir. Bu durumda ilk satır şöyle oluşturulabilir:
+    Burada önce "/lib/modules/$(uname -r)/build" dizinindeki "Makefile" dosyası çalıştırılmış ondan sonra çalışma bu yazdığımız 
+    make dosyasından devam ettirilmiştir. Özetle bu make dosyası aslında çekirdeğin build sistemini kullanarak "generic.c" isimli 
+    dosyanın derlenmesini ve çekirdek modülü biçiminde link edilmesini sağlamaktadır. Bu make dosyasını şöyle de düzenleyebilirdik:
+
+    obj-m += generic.o
+
+    KDIR := /lib/modules/$(shell uname -r)/build
+    PWD := $(shell pwd)
+
+    all:
+        make -C ${KDIR} M=${PWD} modules
+    clean:
+        make -C ${KDIR} M=${PWD} clean
+
+    Çekirdek modül birden fazla kaynak dosyadan oluşturulabilir. Bu durumda ilk satır şöyle oluşturulabilir:
 
     obj-m += a.o b.o c.o...
 
-    Ya da bu belirtme işlemi ayrı satır halinde de yapılabilir:
+    Eğer bu dosyaları birden fazla satırda ayrı ayrı belirtirsek bu durumda birden fazla modül dosyası oluşturulacaktır:
 
     obj-m += a.o
     obj-m += b.o
@@ -52637,8 +52671,13 @@ void foo()
     $ make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
 
     make programının -C seçeneği Makefile dosyasını aramadan önce bu seçeneğin argümanında belirtilen dizine geçiş yapmaktadır.
-    Dolayısıyla aslında yukarıdaki satırla /lib/modules/$(shell uname -r)/build dizinindeki Makefile dosyası çalıştırılacaktır.
-    Make dosyasının başındaki kısım aslında standart bir make yönergesi değildir. Ana make dosyası bu dosyayı ele almaktadır.
+    Dolayısıyla aslında yukarıdaki satırla "/lib/modules/$(shell uname -r)/build" dizinindeki Makefile dosyası çalıştırılacaktır.
+    Buradaki M=${PWD} derlenecek kaynak dosyaların o anda çalışılan dizinde aranacağını belirtmektedir. Böylece çekirdeğin 
+    KBuild sistemi yalnızca bizim dosyalarımızı derleyecektir.
+
+    Makefile oluştururken bir noktaya dikkat ediniz. Make dilinde hedeflerin aşağısındaki yapılacak işlemler bir tab içerden 
+    yazılmaktadır.  Bazı text editörler TAB tuşuna basıldığında dosyaya TAB karakter yerine belli miktar (tipik olarak 4) SPACE
+    karakteri basmaktadır. TAB yerine n tane SPACE karakterinin basılması make dosyalarında bir derleme sorununa yol açacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 # Makefile
@@ -52651,10 +52690,37 @@ clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Tabii aslında make dosyası parametrik biçimde de oluşturabilmektedir. Bu durumda make programı çalıştırılırken bu parametrenin 
-    değeri de belirtilmelidir. Örneğin:
+    Çekirdek modüllerini va aygıt sürücüleri derlerken iki noktaya dikkat etmelisiniz:
 
-    $ make file=hellomodule
+    1) Kullandığınız çekirdek kodları hedef makinenin çekirdek sürümüne uygun olmalıdır. Eğer bu koşul sağlanmazsa çekirdekler
+    arasında farklılıklar söz konusu olabileceği için derlenmiş olan çekirdek modül dosyası hedef sisteme başarılı bir biçimde
+    yüklenemeyebilir. Tabii Linux çekirdeğindeki değişiklikler daha önce yazılmış olan her çekirdek modülünü ve aygıt sürücüyü
+    geçersiz hale getirmemektedir. Örneğin minör numara değişikliklerinde genellikle bir sorun oluşmamaktadır. Ancak ne olursa 
+    olsun derleme yapılırken hedef sistemdeki çekirdeğe uygun kaynak dosyaların kullanılması şiddetle tavsiye edilmektedir. 
+    Örneğin biz 6.9.2 çekirdeğinde çalışan makine için aygıt sürücüsü yazacaksak derleme yaptığımız makinede kullanacağımız 
+    çekirdek kaynak kodlarının da bu 6.9.2 çekirdeğine ilişkin olması gerekir. Biz eski bir çekirdeğin kaynak kodlarıyla yeni 
+    bir çekirdek için aygıt sürücü derlemeye çalışmamalıyız. Tabii eski bir versiyon kullanılarak derleme yapılırsa çoğu 
+    durumda bir sorun ortaya çıkmayabilecektir. Ancak sorunun ortaya çıkma olasılığı da vardır.
+
+    2) Kullanılan araç zincirinin de (yani derleyici, linker gibi programların da) çekirdeğin derlenmiş olduğu sistemle uyumlu
+    olmasına dikkat ediniz. Eğer bu temel araçların versiyonlarında geçmişe doğru uyumu bozabilecek değişiklikler söz konusuysa
+    yine derleme işlemi başarısız olabilir ya da çekirdek modülü yüklenirken sorun oluşabilir. Aslında çekirdeğin KBuild sistemi 
+    çekirdek konfigürasyon dosyası yoluyla bu kontrolü yapabilmektedir. Ancak bu kontrol bypass da edilebilmektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Tabii aslında make dosyası parametrik biçimde de oluşturabilmektedir:
+
+    obj-m += $(file).o
+
+    all:
+        make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
+    clean:
+        make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
+
+    Bu durumda make programı çalıştırılırken bu parametrenin değeri de belirtilmelidir. Örneğin:
+
+    $ make file=helloworld
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 # Makefile
@@ -52669,6 +52735,8 @@ clean:
 /*--------------------------------------------------------------------------------------------------------------------------
     Şimdi en basit bir kernel modülü oluşturup bunu bir başlangıç noktası olarak kullanalım. Bu modülümüze "helloworld" ismini
     verelim:
+
+    /* helloworld.c */
 
     #include <linux/module.h>
     #include <linux/kernel.h>
@@ -52691,22 +52759,27 @@ clean:
 
     $ make file=helloworld
 
-    Build işlemi bittiğinde kernel modül "helloworld.ko" dosyası biçiminde oluşturulacaktır. Burada "ko" uzantısı "kernel object"
-    sözcüklerinden kısaltılmıştır.
+    Build işlemi bittiğinde kernel modül "helloworld.ko" dosyası biçiminde oluşturulacaktır. Burada "ko" uzantısı "kernel 
+    object" sözcüklerinden kısaltılmıştır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir kernel modül, kernel'ın içerisine "insmod" isimli programla yerleştirilmektedir. Tabii bu programın sudo ile "root" 
+    Bir çekirdek modülü, çekirdeğin içerisine "insmod" isimli programla yerleştirilmektedir. Tabii bu programın sudo ile "root" 
     önceliğinde çalıştırılması gerekmektedir. Örneğin:
 
     $ sudo insmod helloworld.ko
 
-    Artık kernel modülümüz kernel'ın içerisine yerleştirilmiştir. Yani modülümüz adeta kernel'ın bir parçası gibi işlev görecektir.
+    Artık çekirdek modülümüz çekirdeğin içerisine yerleştirilmiştir. Yani modülümüz adeta çekirdeğin bir parçası gibi işlev 
+    görecektir.
 
-    Kernel modüller istenildiği zaman "rmmod" isimli programla kernel'dan çıkartılabilirler. Bu programın da yine sudo ile 
-    "root" önceliğinde çalıştırılması gerekir. Örneğin:
+    Çekirdek modülleri istenildiği zaman "rmmod" isimli programla çekirdekten çıkartılabilirler. Bu programın da yine sudo 
+    ile "root" önceliğinde çalıştırılması gerekir. Örneğin:
 
     $ sudo rmmod helloworld.ko
+
+    rmmod komutu kullanılırken ".ko" dosya uzantısı da belirtilmeyebilir. Örneğin:
+
+    $ sudo rmmod generic
 
     Aşağıda örnek için gerekli olan dosyalar verilmiştir. make işlemi şöyle yapılabilir:
 
@@ -52742,34 +52815,97 @@ clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    Modüller "modprobe" isimli programla da yüklenebilir. Ancak modprobe programı yüklenecek modülleri "/lib/modules/$(uname -r)"
+    dizininde aramaktadır. Dolayısıyla biz kendi derlediğimiz modülleri bu dizine yerleştirmemişsek yüklemeyi modprobe ile 
+    yapamayız. Ancak çekirdek derlenirken oluşturulmuş olan modüller bu dizinde olduğu için bunları modprobe ile yükleyebiliriz. 
+    modprobe programı yüklenecek aygıt sürücünün yalnızca ismini almaktadır. Çünkü zaten arama işlemini kendisi yapmaktadır. 
+    Örneğin:
+
+    $ modprobe g_ether
+
+    insmod programının yüklenecek aygıt sürücü dosyasının tüm yol ifadesini aldığına dikkat ediniz. modprobe programında dosyanın 
+    ".ko" uzantısı da belirtilmemektedir. Halbuki insmod programında bu uzantının da belirtilmesi gerekmektedir. modprobe aslında 
+    "modules.dep" isimli bir dosyaya başvurmaktadır. Bu dosya çekirdek kaynak kodlarının kök dizininde çekirdek modülleri derlenirken 
+    oluşturulmaktadır. Bu dosya içerisinde bağımlılık bilgileri vardır. Bir çekirdek modülü yazılırken başka bir çekirdek modülünün 
+    içerisindeki fonksiyonlar kullanılmış olabilir. Bu durumda kullanan modülün yüklenmesi için önce onun kullandığı modülün 
+    yüklenmesi gerekir. İşte bu biçimde durum karmaşık bir hal alabilmektedir. "modules.dep" dosyası içerisinde bir modülün 
+    yüklenebilmesi için hangi modüllerin de yüklenmesi gerektiği bilgileri bulunmaktadır. Eğer biz kendi çekirdek modülümüzün de 
+    modprobe ile yüklenmesini istiyorsak önce onu "/lib/modules/$(uname -r)/kernel" dizininin içerisindeki dizinlerden birine 
+    yerleştirip sonra bu "modules.dep" dosyasının güncellenmesini sağlamamız gerekir. Bu işlem "depmod" programıyla "-a" seçeneği 
+    kullanılarak yapılmaktadır:
+
+    $ sudo depmod -a
+
+    Kendi çekirdek modülünüzü ya da aygıt sürücünüzü örneğin "/lib/modules/$(uname -r)/kernel/drivers/misc" dizinine yerleştirebilirsiniz.
+    Tabii aygıt sürücü geliştirirken ikide bir modülü buraya yerleştirmenin bir anlamı yoktur. Bu nedenle geliştirme aşamasında 
+    genellikle "insmod" programı kullanılmaktadır.
+
+    modprobe ile yüklenen aygıt sürücü "modeprobe -r" ile boşaltılabilir. Örneğin:
+
+    $ modprobe -r g_ether
+
+    Tabii boşaltım sırasında yine eğer aygıt sürücünün bağımlı olduğu çekirdek modülleri başka modüller tarafından kullanılmıyorsa
+    onlar da çekirdekten çıkartılacaktır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Sistem açılır açılmaz otomatik olarak bir çekirdek modülünün ya da aygıt sürücünün yüklenmesi için birkaç yöntem kullanılabilmektedir. 
+    "/etc/modules" dosyası "klasik sysvinit" ve "systemd" init tarafından işletilmektedir. Dolayısıyla bu dosyanın içerisine bir 
+    satıra çekirdek modülünüzün ismini (yalnızca ismini) yazarsanız sistem açıldığında çekirdek modülü de otomatik yüklenmiş olur. 
+    Ancak init programları bu dosyada belirtilen çekirdek modüllerini modprobe ile yüklemektedir. Dolayısıyla sizin de çekirdek 
+    modülünüzü "/lib/modules/$(uname -r)/kernel" içerisindeki bir dizine (örneğin "/lib/modules/$(uname -r)/kernel/drivers/misc"
+    dizinine) yerleştirip "sudo depmod -a" komutunu uygulamanız gerekir. Eğer systemd init sistemi ile çalışıyorsanız yüklemeyi 
+    yapacak bir "servis birim dosyası" oluşturabilirsiniz. Örneğin.
+
+    [Unit]
+    Description=Modül Yükleme Servisi
+    After=network.target
+
+    [Service]
+    Type=oneshot
+    ExecStart=/sbin/modprobe <modül_adı>
+    RemainAfterExit=true
+
+    [Install]
+    WantedBy=multi-user.target
+
+    Diğer bir yöntem de klasik systemvinit ve systemd tarafından bakılan "/etc/rc.local" dosyasının içerisine yükleme komutunu 
+    yazmaktır. Örneğin:
+
+    "sudo insmod /path/hellowold.ko"
+
+    Tabii burada modprobe da kullanılabilir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
 												128. Ders 17/03/2024 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    En basit bir kernel modülde aşağıdaki iki temel dosya include edilmelidir:
+    En basit bir çekirdek modülünde aşağıdaki iki temel dosya include edilmelidir:
 
     #include <linux/module.h>
     #include <linux/kernel.h>
 
-    Bu iki dosya "/lib/modules/$(uname -r)/build/include" dizini içerisindedir. (Yani libc ve POSIX kütüphanelerinin başlık 
-    dosyalarının bulunduğu "/usr/include" içerisinde değildir.) Yukarıda kullandığımız make dosyası include dosyalarının bu 
-    dizinde aranmasını sağlamaktadır.
+    Bu iki dosya "/lib/modules/$(uname -r)/build/include" dizini içerisindedir. (Bu dizinin çekirdek kaynak kodlarındaki "include"
+    dizini olduğuna dikkat ediniz. Bu iki başlık dosyası "libc" ve POSIX kütüphanelerinin başlık dosyalarının bulunduğu "/usr/include" 
+    içerisinde değildir.) Yukarıda kullandığımız make dosyası include dosyalarının bu dizinde aranmasını sağlamaktadır.
 
-    Eskiden kernel modüllerine modül lisansının eklenmesi zorunlu değildi. Ancak belli bir süreden sonra bu zorunlu hale
+    Eskiden çekirdek modüllerine modül lisansının eklenmesi zorunlu değildi. Ancak belli bir zamandan sonra bu zorunlu hale
     getirilmiştir. Modül lisansı MODULE_LICENSE isimli makro ile belirtilmektedir. Bu makro <linux/module.h> dosyası içerisinde
     bildirilmiştir. Tipik modül lisansı aşağıdaki gibi "GPL" biçiminde oluşturulabilir:
 
     MODULE_LICENSE("GPL");
 
-    Bir kernel modül yüklendiğinde kernel modül içerisinde belirlenmiş olan bir fonksiyon çağrılır (bu fonksiyon C++'taki 
+    Bir çekirdek modülü yüklendiğinde çekirdek modülü içerisinde belirlenmiş olan bir fonksiyon çağrılır (bu fonksiyon C++'taki 
     "constructor" gibi düşünülebilir.) Default çağrılacak fonksiyonun ismi init_module biçimindedir. Bu fonksiyonun geri 
     dönüş değeri int türdendir ve parametresi yoktur. Fonksiyon başarı durumunda 0 değerine, başarısızlık durumunda negatif 
-    hata koduna geri dönmelidir. Bu fonksiyon başarısızlıkla geri dönerse modülün yüklenmesinden vazgeçilmektedir. Benzer 
-    biçimde bir modül kernel alanından boşaltılırken de yine bir fonksiyon çağrılmaktadır. (Bu fonksiyon da C++'taki "destructor" 
-    gibi düşünülebilir.) Default çağrılacak fonksiyonun ismi cleanup_module biçimindedir. Bu fonksiyonun geri dönüş değeri ve 
-    parametresi void biçimdedir.
+    hata koduna (negatif errno değerine) geri dönmelidir. Bu fonksiyon başarısızlıkla geri dönerse modülün yüklenmesinden 
+    vazgeçilmektedir. Benzer biçimde bir modül çekirdek alanından boşaltılırken de yine bir fonksiyon çağrılmaktadır. (Bu 
+    fonksiyon da C++'taki "destructor" gibi düşünülebilir.) Default çağrılacak fonksiyonun ismi cleanup_module biçimindedir. 
+    Bu fonksiyonun geri dönüş değeri ve parametresi void biçimdedir.
 
-    Kernel modüller tıpkı daha önce görmüş olduğumuz daemon'lar gibi ekrana değil log dosyalarına yazarlar. Bunun için kernel 
+    Çekirdek modülleri tıpkı daha önce görmüş olduğumuz daemon'lar gibi ekrana değil log dosyalarına yazarlar. Bunun için çekirdek 
     içindeki printk isimli fonksiyon kullanılmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -52778,10 +52914,10 @@ clean:
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    helloworld modülünde kullanmış olduğumuz printk fonksiyonu "kernel'ın printf fonksiyonu" gibi düşünülebilir. printk 
-    fonksiyonunun genel kullanımı printf fonksiyonu gibidir. Default durumda bu fonksiyon mesajların "/var/log/syslog" dosyasına 
-    yazdırılması sağlamaktadır. printk fonksiyonunun prototipi <linux/kernel.h> dosyası içerisindedir. printk fonksiyonunun 
-    örnek kullanımı şöyledir:
+    helloworld modülünde kullanmış olduğumuz printk fonksiyonu "çekirdeğin printf fonksiyonu" gibi düşünülebilir. printk fonksiyonunun 
+    genel kullanımı printf fonksiyonu gibidir. Default durumda bu fonksiyon mesajların "/var/log/syslog" dosyasına yazdırılmasını 
+    sağlamaktadır. printk fonksiyonunun prototipi <linux/kernel.h> dosyası içerisindedir. printk fonksiyonunun örnek kullanımı 
+    şöyledir:
 
     printk(KERN_INFO "This is test\n");
 
@@ -52812,8 +52948,8 @@ clean:
     #define KERN_INFO	    KERN_SOH "6"	    /* informational */
     #define KERN_DEBUG	    KERN_SOH "7"	    /* debug-level messages */
 
-    Ancak bu makrolarda çeşitli kernel versiyonlarında değişiklikler yapılabilmektedir. C'de aralarında hiçbir operatör bulunmayan
-    iki string'in derleyici tarafından birleştirildiğini anımsayınız.Bu durumda aslında örneğin:
+    Ancak bu makrolarda çeşitli çekirdek versiyonlarında değişiklikler yapılabilmektedir. C'de aralarında hiçbir operatör 
+    bulunmayan iki string'in derleyici tarafından birleştirildiğini anımsayınız. Bu durumda aslında örneğin:
 
     printk(KERN_INFO "Hello World...\n");
 
@@ -52849,20 +52985,28 @@ clean:
 
     Ya da "dmesg" programı ile de aynı bilgi elde edilebilir.
 
-    Kernel modüller kernel'ın içerisine yerleştirildiği için kernel modüllerde biz user mode'daki kütüphaneleri kullanamayız. 
-    Örneğin kernel mode içerisinde standart C fonksiyonlarını ve POSIX fonksiyonlarını kullanamayız. Çünkü standart C fonksiyonları
-    ve POSIX fonksiyonları "user mode" programlar için oluşturulmuş kütüphanelerin içerisindedir. Biz kernel modüllerin içerisinde
-    yalnızca "export edilmiş kernel fonksiyonlarını" kullanabiliriz.
+    En çok kullanılan log düzeyini belirten makrolar KERN_INFO, KERN_ERR ve KERN_WARNING makrolarıdır. Çekirdek modülü ya da 
+    aygıt sürücü içerisinde bazı durumlara yönelik bilgi vermek için KERN_INFO, hatalı bir durumlar karşılaştığında KERN_ERR 
+    ve bir uyarı oluşturulacağı zaman KERN_WARNING kullanılmaktadır. Diğer makrolar geliştiriciler tarafından çok seyrek 
+    kullanılmaktadır.
 
-    Kernel modüller içerisinde kullanılabilecek export edilmiş kernel fonksiyonları "Linux Kernel API" ismi altında "kernel.org"
-    tarafından dokümante edilmiştir. Örneğin bu fonksiyonların dokümantasyonuna aşağıdaki bağlantıdan erişebilirsiniz:
+    Çekirdek modülleri çekirdeğin içerisine yerleştirildiği için çekirdek modüllerinde biz kullanıcı modundaki (user mode'daki) 
+    kütüphaneleri kullanamayız. (Örneğin çekirdek modunda standart C fonksiyonlarını ve POSIX fonksiyonlarını kullanamayız.) 
+    Çünkü standart C fonksiyonları ve POSIX fonksiyonları "kullanıcı modundaki (user mode)" programlar için oluşturulmuş kütüphanelerin 
+    içerisindedir. Biz çekirdek modüllerinin içerisinde yalnızca "export edilmiş çekirdek fonksiyonlarını" kullanabiliriz.
+
+    Çekirdek modülleri içerisinde kullanılabilecek export edilmiş çekirdek fonksiyonları "Linux Kernel API" ismi altında 
+    "kernel.org" tarafından dokümante edilmiştir. Örneğin bu fonksiyonların dokümantasyonuna aşağıdaki bağlantıdan erişebilirsiniz:
 
     https://docs.kernel.org/core-api/kernel-api.html
+
+    Ancak maalesef bu export edilmiş fonksiyonlar hakkında ayrıntılı açıklamalar bulmak zordur. Bu nedenle bazen çekirdek 
+    kaynak kodlarına başvurmak da gerekebilir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Belli bir anda yüklenmiş olan modüller "/proc/modules" dosyasından elde edilebilir. Bu dosya bir text dosyadır. Dosyanın 
-    her satırında bir kernel modülün bilgisi vardır. Örneğin:
+   Belli bir anda yüklenmiş olan çekirdek modülleri "/proc/modules" dosyasından elde edilebilir. "/proc/modules" bir text 
+    dosyadır. Dosyanın her satırında bir çekirdek modülünün bilgisi vardır. Örneğin:
 
     $ cat /proc/modules
     helloworld 16384 0 - Live 0x0000000000000000 (OE)
@@ -52876,8 +53020,22 @@ clean:
     intel_rapl_msr 20480 0 - Live 0x0000000000000000
     ...
 
-    Aslında yüklü modüllerin bilgileri "lsmod" isimli bir yardımcı programla da görüntülenebilmektedir. Tabii "lsmod" aslında 
-    "/proc/modules" dosyasını okuyup onu daha anlaşılır biçimde görüntülemektedir.
+    Yüklü modüllerin bilgileri "lsmod" isimli bir yardımcı programla da görüntülenebilmektedir. Tabii aslında "lsmod" 
+    "/proc/modules" dosyasını okuyup onu daha anlaşılır biçimde görüntülemektedir. Örneğin:
+
+    $ lsmod
+    Module                  Size  Used by
+    helloworld             16384  0
+    btrfs                1564672  0
+    blake2b_generic        20480  0
+    xor                    24576  1 btrfs
+    zstd_compress         229376  1 btrfs
+    raid6_pq              122880  1 btrfs
+    ufs                   106496  0
+    qnx4                   16384  0
+    hfsplus               118784  0
+    hfs                    65536  0
+    ...
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -52939,8 +53097,9 @@ clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Genellikle kernel modül içerisindeki global değişkenlerin ve fonksiyonların "internal linkage" yapılması tercih edilmektedir.
-    Bu durum birtakım isim çakışmalarını da engelleyecektir.
+    Genellikle çekirdek modülü içerisindeki global değişkenlerin ve fonksiyonların "içsel bağlamaya (internal linkage)" sahip 
+    olması tercih edilmektedir. Bu durum birtakım isim çakışmalarını da engelleyecektir. Biz de genel olarak örneklerimizde 
+    zorunlu olmadıkça fonksiyonları hep static biçimde tanımlayacağız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* helloworld.c */
@@ -52973,10 +53132,10 @@ clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Kernel modüllerde init ve cleanup fonksiyonlarında fonksiyon isimlerinin soluna __init ve __exit makroları getirilebilmektedir. 
+    Çekirdek modüllerinin init ve cleanup fonksiyonlarında fonksiyon isimlerinin soluna __init ve __exit makroları getirilebilmektedir. 
     Bu makrolar <linux/init.h> dosyası içerisindedir. Bu dosya da <linux/module.h> dosyası içerisinde include edilmiştir. 
     __init makrosu ilgili fonksiyonu ELF dosyasının özel bir bölümüne (section) yerleştirir. Modül yüklendikten sonra bu bölüm 
-    kernel alanından atılmaktadır. __exit makrosu ise kernel'ın içine gömülmüş modüllerde fonksiyonun dikkate alınmayacağını 
+    çekirdek alanından atılmaktadır. __exit makrosu ise çekirdeğin içine gömülmüş modüllerde fonksiyonun dikkate alınmayacağını 
     (dolayısıyla hiç yüklenmeyeceğini) belirtir. Ancak sonradan yüklemelerde bu makronun bir etkisi yoktur.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -53010,12 +53169,19 @@ clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    Linux sistemlerine 2003 yılında 2.6 çekirdekleriyle birlikte "sysfs (kısaca sys)" isimli bellek tabanlı yeni bir dosya sistemi
+    daha eklenmiştir. Bu dosya sistemi de tıpkı proc dosya sistemi gibi çekirdeğin içinde bulunduğu durumu dış dünyaya bildirmek 
+    ve çekirdek davranışının dışarıdan değiştirilmesine olanak sağlamak amacıyla oluşturulmuştur. Ancak "sysfs" dosya sistemi 
+    daha "nesne yönelimli" bir tasarıma sahiptir. Yani birtakım olgular dizinlerle onların özellikleri de o dizinler içerisindeki 
+    dosyalarla temsil edilmektedir. Bu bakımdan "sysfs" dosya sistemi "proc" dosya sisteminin bazı eksikliklerini tamamlamaktadır. 
+    sysfs dosya sistemine "/sys" dizini yoluyla erişilmektedir.
+
     insmod ile yüklediğimiz her modül için "/sys/module" dizinin içerisinde ismi modül ismiyle aynı olan bir dizin yaratılmaktadır. 
     "/proc/modules" dosyası ile bu dizini karıştırmayınız. "/proc/modules" dosyasının satırları yüklü olan modüllerin isimlerini 
-    ve bazı temel bilgilerini tutmaktadır. Modüllere ilişkin asıl önemli bilgiler kernel tarafından "/sys/module" dizininde 
-    tutulmaktadır. sys dosya sistemi de proc dosya sistemi gibi kernel tarafından bellek üzerinde oluşturulan ve içeriği kernel 
-    tarafından güncellenen bir dosya sistemidir. Örneğin "helloworld.ko" modülünü yükledikten sonra bu dizinin içeriği şöyle 
-    görüntülenmektedir:
+    ve bazı temel bilgilerini tutmaktadır. Modüllere ilişkin asıl önemli bilgiler ise çekirdek tarafından "/sys/module" dizininde 
+    tutulmaktadır. sysfs dosya sistemi de proc dosya sistemi gibi çekirdek tarafından bellek üzerinde oluşturulan ve içeriği çekirdek
+    tarafından güncellenen bir dosya sistemidir. Örneğin "helloworld.ko" modülünü yükledikten sonra bu dizin aşağıdaki gibi bir 
+    içeriğe sahip olacaktır:
 
     $ ls /sys/module/helloworld -l
     toplam 0
@@ -53032,19 +53198,20 @@ clean:
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Nasıl user mode programlarda main fonksiyonuna komut satırı argümanları geçirilebiliyorsa benzer biçimde kernel modüllere 
-    de argüman (ya da parametre diyebiliriz) geçirilebilmektedir. Bu konuya genel olarak "kernel modül parametreleri" denilmektedir.
+    Nasıl kullanıcı modu programlarında main fonksiyonuna komut satırı argümanları geçirilebiliyorsa benzer biçimde çekirdek 
+    modüllerine de argüman (ya da parametre diyebiliriz) geçirilebilmektedir. Bu konuya genel olarak "çekirdek modül parametreleri" 
+    denilmektedir.
 
-    Kernel modüllere parametre geçirme işlemi insmod ile modül yüklenirken komut satırında modül isminden sonra "değişken=değer" 
-    çiftleriyle yapılmaktadır. Örneğin:
+    Çekirdek modüllerine parametre geçirme işlemi insmod komutu ile modül yüklenirken komut satırında modül isminden sonra 
+    "değişken=değer" çiftleriyle yapılmaktadır. Örneğin:
 
     $ sudo insmod helloworld.ko number=10 msg="\"This is a test\"" values=10,20,30,40,50
 
-    Bu örnekte number parametresi int bir değerden, msg parametresi ise bir yazıdan oluşmaktadır. values parametresi birden fazla
-    int değerden oluşmaktadır. Bu tür parametrelere modülün dizi parametreleri denilmektedir.
+    Bu örnekte number parametresi int bir değerden, msg parametresi bir yazıdan values parametresi ise birden fazla int değerden 
+    oluşmaktadır. Bu tür parametrelere modülün dizi parametreleri denilmektedir.
 
-    Kernel modüllere geçirilen parametreleri modül içerisinde almak için module_param ve module_param_array isimli makrolar kullanılır. 
-    module_param makrosunun üç parametresi vardır:
+    Çekirdek modüllerine geçirilen parametreleri modül içerisinde almak için module_param ve module_param_array isimli makrolar 
+    kullanılır. module_param makrosunun üç parametresi vardır:
 
     module_param(name, type, perm);
 
@@ -53063,7 +53230,7 @@ clean:
     invbool
 
     Buradaki charp char türden adresi, invbool ise geçirilen argümanın bool bakımdan tersini temsil etmektedir. module_param
-    makrosunun perm parametresi "/sys/modules/<modül ismi>" dizininde yaratılacak olan parameters dizininin erişim haklarını 
+    makrosunun perm parametresi "/sys/modules/<modül ismi>" dizininde yaratılacak olan "parameters" dizininin erişim haklarını 
     belirtir. Bu makrolar global alanda herhangi bir yere yerleştirilebilir.
 
     Örneğin kernel modülümüzde count ve msg isimli iki parametre olsun. Bunlara ilişkin module_param makroları şöyle oluşturulmalıdır:
@@ -53076,8 +53243,8 @@ clean:
 
     char * türünden modül parametresi için makrodaki türün "charp" biçiminde olduğuna dikkat ediniz. Buradaki gösterici const 
     olamamaktadır. Bizim bir parametre için module_param makrosunu kullanmış olmamız modül yüklenirken bu parametrenin belirtilmesini 
-    zorunlu hale getirmemektedir. Bu durumda bu parametreler default değerlerde kalacaktır. Yukarıdaki parametreleri helloworld modülüne
-    aşağıdaki gibi geçirebiliriz:
+    zorunlu hale getirmemektedir. Bu durumda bu parametreler default değerlerde kalacaktır. Yukarıdaki parametreleri helloworld 
+    modülüne aşağıdaki gibi geçirebiliriz:
 
     $ sudo insmod helloworld.ko count=100 msg="\"this is a test\""
 
@@ -53110,22 +53277,76 @@ clean:
 
     $ sudo echo 200 > /sys/module/helloworld/parameters/count
 
-    Çünkü burada her ne kadar echo programı root önceliğinde çalıştırılıyorsa da dosyayı açan kullanıcı root değildir.
+    Çünkü burada her ne kadar echo programı root önceliğinde çalıştırılıyorsa da dosyayı açan kullanıcı root değildir. Çünkü 
+    > işareti ve onun sağının sudo ile bir ilgisi yoktur.
+
+    Bu denemeyi aşağıdaki modülle yapabilirsiniz. Modülü önce insmod ile aşağıdaki gibi yükleyiniz:
+
+    $ sudo insmod helloworld.ko count=200 msg="\"this is a generic module\""
+
+    Sonra "/sys/module/helloworld/parameters" dizinine geçip aşağıdaki komutları uygulayınız:
+
+    $ echo 500 | sudo tee count
+    $ echo "this is a new message" | sudo tee msg
+
+    Modülü "rmmod" ile çekirdek alanından çıkarttıktan sonra yeniden "dmesg" yapınız. Artık modül içerisindeki parametrelerin
+    aşağıdaki gibi değiştiğini göreceksiniz:
+
+   [ 7668.582978] count = 500, msg=this is a new message
 ---------------------------------------------------------------------------------------------------------------------------*/
+
+/* helloworld.c */
+
+#include <linux/module.h>
+#include <linux/kernel.h>
+
+MODULE_LICENSE("GPL");
+
+static int count = 0;
+static char *msg = "Ok";
+
+module_param(count, int, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+module_param(msg, charp, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+
+static int __init helloworld_init(void)
+{
+	printk(KERN_INFO "Hello World...\n");
+
+	return 0;
+}
+
+static void __exit helloworld_exit(void)
+{
+	printk(KERN_INFO "Goodbye World...\n");
+    printk(KERN_INFO "count = %d, msg=%s\n", count, msg);
+}
+
+module_init(helloworld_init);
+module_exit(helloworld_exit);
+
+# Makefile
+
+obj-m += $(file).o
+
+all:
+	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
+clean:
+	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
 /*--------------------------------------------------------------------------------------------------------------------------
 												130. Ders 24/03/2024 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------------------------------------------------------------
-    Kernel modüle birden fazla değer de bir dizi gibi aktarılabilir. Bunun için module_param_array makrosu kullanılmaktadır. 
+//*-----------------------------------------------------------------------------------------------------------------------------
+    Çekirdek modülene birden fazla değer de bir dizi gibi aktarılabilir. Bunun için module_param_array makrosu kullanılmaktadır. 
     module_param_array makrosu da şöyledir:
 
     module_param_array(name, type, nump, perm)
 
-    Makronun birinci ve ikinci parametreleri yine değişken ismi ve türünü belirtir. Tabii buradaki değişken isminin bir dizi ismi 
-    olarak girilmesi gerekmektedir. Üçüncü parametre toplam kaç değerin modüle dizi biçiminde aktarıldığını belirten int bir nesnenin 
-    adresini (ismini değil) alır. Son parametre yine oluşturulacak dosyanın erişim haklarını belirtmektedir. Örneğin:
+    Makronun birinci ve ikinci parametreleri yine değişken ismi ve türünü belirtir. Tabii buradaki değişken isminin bir dizi 
+    ismi olarak, türün de bu dizinin eleman türü olarak girilmesi gerekmektedir. Üçüncü parametre toplam kaç değerin modüle dizi 
+    biçiminde aktarıldığını belirten int bir nesnenin adresini (ismini değil) alır. Son parametre yine oluşturulacak dosyanın 
+    erişim haklarını belirtmektedir. Örneğin:
 
     static int values[5];
     static int size;
@@ -53137,19 +53358,20 @@ clean:
 
     $ sudo insmod helloworld.ko values=1,2,3,4,5
 
-    Burada eğer verilen değerler dizinin uzunluğundan fazla olursa zaten modül yüklenmemektedir. Bu örnekte biz girilen değerlerin 
-    sayısını "size" nesnesinden alabiliriz.
+    Burada eğer verilen değerler dizinin uzunluğundan fazla olursa zaten modül yüklemesi başarısız olmaktadır. Yani "insmod" 
+    bir hata mesajı ile işlemini sonlandıracaktır. Tabii verilen değerlerin dizinin uzunluğundan daha az olabilir. Girilen değerlerin
+    sayısı zaten örneğimizde size nesnesine yerleştirilecektir.
 
-    Aşağıdaki örnekte üç parametre komut satırından kernel modüle geçirilmiştir. Komut satırındaki isimlerle programın içerisindeki 
-    değişken isimlerinin aynı olması gerektiğine dikkat ediniz. Yazıların geçirilmesinde iki tırnaklar kullanılır. Dizi geçirirken 
-    yanlışlıkla virgüllerin arasına boşluk karakterleri yerleştirmeyiniz. Programı şöyle make yapabilirsiniz:
+    Aşağıdaki örnekte üç parametre komut satırından çekirdek modülüne geçirilmiştir. Komut satırındaki isimlerle programın içerisindeki 
+    değişken isimlerinin aynı olması gerektiğini anımsayınız. Dizi elemanlarını virgüllerle belirtirken yanlışlıkla virgüllerin 
+    arasına boşluk karakterleri yerleştirmeyiniz. Programı şöyle make yapabilirsiniz:
 
     $ make file=helloworld
 
     Yüklemeyi şöyle yapabilirsiniz:
 
-    $ sudo insmod helloworld.ko count=100 msg="\"this is a test\"" values=1,2,3,4,5
----------------------------------------------------------------------------------------------------------------------------*/
+    $ sudo insmod helloworld.ko count=200 msg="\"this is a generic module\"" values=10,20,30,40,50
+-----------------------------------------------------------------------------------------------------------------------------*/
 
 /* helloworld.c */
 
@@ -53172,12 +53394,13 @@ static int __init helloworld_init(void)
 	int i;
 
 	printk(KERN_INFO "Hello World...\n");
+
 	printk(KERN_INFO "count = %d\n", count);
 	printk(KERN_INFO "msg = %s\n", msg);
-
-	for (i = 0; i < size; ++i) {
-		printk(KERN_INFO "%d\n", values[i]);
-	}
+	printk(KERN_INFO "Values:\n");
+	for (i = 0; i < size; ++i)
+		printk(KERN_INFO "%d ", values[i]);
+	printk(KERN_INFO "\n");
 
 	return 0;
 }
@@ -53190,102 +53413,16 @@ static void __exit helloworld_exit(void)
 module_init(helloworld_init);
 module_exit(helloworld_exit);
 
-# Makefile
-
-obj-m += $(file).o
-
-all:
-	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
-clean:
-	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
-
 /*--------------------------------------------------------------------------------------------------------------------------
-    errno değişkeni aslında libc kütüphanesinin (standart C ve POSIX kütüphanesi) içerisinde tanımlanmış bir değişkendir. 
-    Kernel mode'da yani kernel'ın içerisinde errno isimli bir değişken yoktur. Bu nedenle kernel'daki fonksiyonlar POSIX 
-    fonksiyonları gibi başarısızlık durumunda -1 ile geri dönüp errno değişkenini set etmezler. Kernel içerisindeki fonksiyonlar 
-    başarısızlık durumunda negatif errno değeri ile geri dönerler. Örneğin "open" POSIX fonksiyonu "sys_open" isimli kernel 
-    içerisinde bulunan sistem fonksiyonunu çağırdığında onun negatif bir değerle geri dönüp dönmediğine bakar. Eğer "sys_open" 
+    errno değişkeni aslında "libc" kütüphanesinin (libc standart C ve POSIX kütüphanesidir) içerisinde tanımlanmış bir değişkendir. 
+    Çekirdek modunda yani çekirdeğin içerisinde errno isimli bir değişken yoktur. Bu nedenle çekirdekteki fonksiyonlar pek çok 
+    POSIX fonksiyonunda olduğu gibi başarısızlık durumunda -1 ile geri dönüp errno değişkenini set etmezler. Çekirdek içerisindeki 
+    fonksiyonlar başarısızlık durumunda negatif errno değeri ile geri dönerler. Örneğin "open" POSIX fonksiyonu "sys_open" isimli 
+    çekirdek içerisinde bulunan sistem fonksiyonunu çağırdığında onun negatif bir değerle geri dönüp dönmediğine bakar. Eğer "sys_open" 
     fonksiyonu negatif değerle geri dönerse bu durumda bu değerin pozitiflisini errno değişkenine yerleştirip -1 ile geri dönmektedir. 
     Başka bir deyişle aslında bizim çağırdığımız int geri dönüş değerine sahip POSIX fonksiyonları sistem fonksiyonlarını çağırıp 
     o fonksiyonlar negatif bir değerle geri dönmüş ise bir hata oluştuğunu düşünerek o negatif değerin pozitiflisini errno değişkenine 
     yerleştirip -1 ile geri dönmektedir.
-
-    Kernel modül yazan programcıların da bu geleneğe uyması iyi bir tekniktir. Örneğin:
-
-    if (some_control_failed)		// burada kontrol yapılıyor
-        return -EXXX;				// fonksiyon başarısız ise negatif errno değeriyle geri döndürülüyor
-
-    Özetle biz kernel içerisindeki geri dönüş değeri int olan bir fonksiyonu çağırdığımızda onun başarılı olup olmadığını geri dönüş 
-    değerinin negatif olup olmadığı ile kontrol ederiz. Eğer çağırdığımız fonksiyonun geri dönüş değeri negatif ise onun pozitif hali
-    başarısızlığa ilişkin errno numarasını vermektedir.
-
-    POSIX arayüzünde adrese geri dönen fonksiyonlar genel olarak başarısızlık durumunda NULL adrese geri dönmektedir. Oysa kernel 
-    kodlarında adrese geri dönen fonksiyonlar başarısız olduklarında yine sanki bir adresmiş gibi negatif errno değerine geri 
-    dönerler. Örneğin şöyle bir kernel fonksiyonu olsun:
-
-    void *foo(void);
-
-    Biz bu fonksiyonu kernel modülümüz içerisinde çağırdığımızda eğer fonksiyon başarısızsa negatif errno değerini bir adres gibi
-    geri döndürmektedir. Negatif küçük değerlerin 2'ye tümleyen aritmetiğinde başı 1'lerle dolu olan bir sayı olacağına dikkat 
-    ediniz. Örneğin bu foo fonksiyonu EPERM değeri ile geri dönüyor olsun. EPERM değeri 1'dir. 64 bit sistemdeki -1 değeri ise 
-    şöyledir:
-
-    FF FF FF FF FF FF FF FF
-
-    Bu değer ise çok yüksek bir adres gibidir. O zaman eğer fonksiyon çok yüksek bir adres geri döndürdüyse başarısız olduğu 
-    sonucunu çıkartabiliriz. Tabi bu işlemler için makrolar bulundurulmuştur.
-
-    Kernel kodlarındaki ERR_PTR isimli makro ya da inline fonksiyon bir tamsayı değeri alıp onu adres türüne dönüştürmektedir. 
-    Bu nedenle adrese geri dönen fonksiyonlarda aşağıdaki gibi kodlar görebilirsiniz:
-
-    void *foo(void)
-    {
-        ...
-        if (expression)
-            return ERR_PTR(-EXXX);
-        ...
-    }
-
-    ERR_PTR aşağıdaki gibi tanımlanmıştır:
-
-    static inline void *ERR_PTR(long error)
-    {
-        return (void *) error;
-    }
-
-    Bu işlemin tersi de PTR_ERR makrosu ya da inline fonksiyonu ile yapılmaktadır. Yani PTR_ERR bir adresi alıp onu tamsayıya 
-    dönüştürmektedir. Bu fonksiyon da şöyle tanımlanmıştır:
-
-    static inline long PTR_ERR(const void *ptr)
-    {
-        return (long) ptr;
-    }
-
-    Yani PTR_ERR makrosu bize aslında adres olarak kodlanmış olan negatif errno değerini geri döndürmektedir.
-
-    Pekiyi bir adres değerinin içerisinde errno hata kodunun olduğunu nasıl anlarız? İşte negatif errno değerleri bir adres 
-    gibi ele alındığında adeta adres alanının sonundaki adresler gibi bir görünümde olacaktır. errno değerleri için toplamda 
-    ayrılan sayılar da sınırlı olduğu için kontrol kolaylıkla yapılabilir. Ancak bu kontrol için IS_ERR isimli bir makro ya da 
-    inline fonksiyon da bulundurulmuştur:
-
-    static inline long IS_ERR(const void *ptr)
-    {
-        return (unsigned long)ptr > (unsigned long)-4095;
-    }
-
-    Burada fonksiyon, adresin adres alanının son 4095 adresinden biri içerisinde mi kontrolünü yapmaktadır. Negatif errno 
-    değerlerinin hepsi bu aralıktadır. Tabii 4095 errno değeri yoktur. Burada geleceğe uyumu korumak için 4095'lik bir 
-    alan ayrılmıştır. Bu durumda kernel kodlarında adrese geri dönen fonksiyonların başarısızlığı aşağıdaki gibi kontrol 
-    edilebilmektedir.
-
-    void *ptr;
-
-    ptr = foo();
-    if (IS_ERR(ptr))
-        return PTR_ERR(ptr)
-
-    Kernel modül programcılarının da buradaki konvansiyona uygun kod yazması iyi bir tekniktir. Linux çekirdeğindeki EXXX 
-    sembolik sabitleri POSIX arayüzündeki EXXX sabitleriyle aynı değerdedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -53310,7 +53447,23 @@ clean:
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir kernel modülü yazarken o modül ile ilgili önemli bazı belirlemeler "modül makroları" denilen MODULE_XXX biçimindeki 
+    Yukarıda ele aldığımız konuyu şöyle özetleyebiliriz:
+
+    1) Bir çekirdek fonksiyonu tamsayı türlerine ilişkin bir değere geri dönüyorsa geri dönüş değerinin negatif olması 
+    fonksiyonun başarısız olduğunu gösterir. Bu negatif değerin pozitiflisi errno değerini vermektedir.
+
+    2) Bir çekirdek fonksiyonu bir adrese geri dönüyorsa fonksiyonun başarısı verilen adresin değerine bağlıdır. Eğer verilen 
+    adres çok bir büyük bir adresse fonksiyon başarısız olmuştur. Bu kontrol IS_ERR inline fonksiyonuyla yapılmaktadır.
+
+    3) Adrese geri dönen çekirdek fonksiyonu eğer başarısızsa negatif errno değeri PTR_ERR inline fonksiyonuyla elde edilir.
+
+    4) Biz negatif bir errno değerini bir adres gibi geri döndüreceksek bunun için ERR_PTR inline fonksiyonunu kullanmalıyız.
+
+    5) Biz de çekirdek modüllerini ve aygıt sürücülerini yazarken çekirdekte uygulanan bu biçime (convention) uymalıyız.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir çekirdek modülünü yazarken o modül ile ilgili önemli bazı belirlemeler "modül makroları" denilen MODULE_XXX biçimindeki 
     makrolarla yapılmaktadır. Her ne kadar bu modül makrolarının bulundurulması zorunlu değilse de şiddetle tavsiye edilmektedir. 
     En önemli üç makronun tipik kullanımı şöyledir:
 
@@ -53318,8 +53471,8 @@ clean:
     MODULE_AUTHOR("Kaan Aslan");
     MODULE_DESCRIPTION("General Character Device Driver");
 
-    Modül lisansı herhangi bir open source lisans olabilir. Tipik olarak "GPL" tercih edilmektedir. MODULE_AUTHOR makrosu ile modülün yazarı belirtilir. 
-    MODULE_DESCRPTION modülün ne iş yapacağına yönelik kısa bir başlık yazısı içermektedir.
+    Modül lisansı herhangi bir açık kaynak kod lisansı olabilir. Tipik olarak "GPL" tercih edilmektedir. MODULE_AUTHOR makrosu 
+    ile modülün yazarı belirtilir. MODULE_DESCRPTION modülün ne iş yapacağına yönelik kısa bir başlık yazısı içermektedir.
 
     Bu makrolar global alanda herhangi bir yere yerleştirilebilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -53329,27 +53482,35 @@ clean:
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Pekiyi aygıt sürücüleri açmak için open fonksiyonunda yol ifadesi olarak (yani dosya ismi olarak) ne verilecektir? İşte 
-    aygıt sürücüler dosya sisteminde bir dizin girişiyle temsil edilmektedir. O dizin girişi open ile açıldığında aslında o 
-    dizin girişinin temsil ettiği aygıt sürücü açılmış olur. Bu biçimdeki aygıt sürücüleri temsil eden dizin girişlerine 
-    "aygıt dosyaları (device files)" denilmektedir. Aygıt dosyaları diskte bir dosya belirtmemektedir. Kernel içerisindeki aygıt
-    sürücüyü temsil eden bir dizin girişi belirtmektedir. Aygıt dosyalarının i-node tablosunda bir i-node elemanı vardır ancak 
-    bu i-node elemanı diskte bir yer değil kernel'da bir aygıt sürücü belirtmektedir.
+    Daha önceden de belirttiğimiz gibi kullanıcı modundaki programlar aygıt sürücülerle dosya sistemi yoluyla iletişim kurmaktadır. 
+    Aygıt sürücüler sanki birer dosyaymış gibi açılırlar ve birer dosyaymış gibi işleme sokulurlar. Pekiyi aygıt sürücüleri açmak 
+    için yol ifadesi olarak (yani dosya ismi olarak) ne kullanılmaktadır? İşte aygıt sürücüler dosya sisteminde bir dizin girişiyle 
+    temsil edilmektedir. O dizin girişi open fonksiyonuyla ile açıldığında aslında o dizin girişinin temsil ettiği aygıt sürücü 
+    açılmış olur. Bu biçimdeki aygıt sürücüleri temsil eden dizin girişlerine "aygıt dosyaları (device files)" denilmektedir. 
+    Aygıt dosyaları diskte bir dosya belirtmemektedir. Çekirdek içerisindeki aygıt sürücüyü temsil eden bir dizin girişi belirtmektedir. 
+    Aygıt dosyalarının i-node tablosunda bir i-node elemanı vardır ancak bu i-node elemanı diskte bir yer değil çekirdekte bir 
+    aygıt sürücü belirtmektedir.
 
     Pekiyi bir aygıt dosyası nasıl yaratılmaktadır ve nasıl bir aygıt sürücüyü temsil eder hale getirilmektedir? İşte her aygıt 
-    sürücünün majör ve minör numaraları vardır. Aynı zamanda aygıt dosyalarının da majör ve minör numaraları vardır. Bir aygıt 
-    sürücünün majör ve minör numarası bir aygıt dosyasının majör ve minör numarasıyla aynıysa bu durumda o aygıt dosyası o aygıt 
-    sürücüyü temsil eder.
+    sürücünün majör ve minör numarası vardır. Bu majör ve minör numarayı aygıt sürücüye erişmek için kullanılan bir adres gibi 
+    düşünebilirsiniz. Aynı zamanda aygıt dosyalarının da majör ve minör numaraları vardır. Bir aygıt sürücünün majör ve minör 
+    numarası bir aygıt dosyasının majör ve minör numarasıyla aynıysa bu durumda o aygıt dosyası o aygıt sürücüyü temsil eder.
+    Yani o aygıt dosyası açıldığında o aygıt sürücüyle iletişim kurulacaktır.
 
     Aygıt dosyaları özel dosyalardır. Bir dosyanın aygıt dosyası olup olmadığı "ls -l" komutunda dosya türü olarak 'c' (karakter 
     aygıt sürücüsü) ya da 'b' (blok aygıt sürücüsü) ile temsil edilmektedir. Anımsanacağı gibi dosya bilgileri stat, fstat, lstat 
-    fonksiyonlarıyla elde ediliyordu. İşte struct stat yapısının dev_t türünden st_rdev elemanı eğer dosya bir aygıt dosyasıysa 
+    POSIX fonksiyonlarıyla elde ediliyordu. İşte struct stat yapısının dev_t türünden st_rdev elemanı eğer dosya bir aygıt dosyasıysa 
     dosyanın majör ve minör numaralarını belirtir. Biz de <sys/stat.h> dosyasındaki S_ISCHR ve S_ISBLK makrolarıyla ilgili dosyanın 
     bir aygıt dosyası olup olmadığını öğrenebiliriz.
 
     Yukarıda da belirttiğimiz gibi aygıt sürücüler "karakter aygıt sürücüleri (character device driver)" ve "blok aygıt sürücüleri
     (block device driver)" olmak üzere ikiye ayrılmaktadır. Karakter aygıt sürücüleri daha yaygın kullanılmaktadır. Biz kursumuzda
-    önce karakter aygıt sürücülerini sonra blok aygıt sürücülerini ele alacağız.
+    önce karakter aygıt sürücülerini sonra blok aygıt sürücülerini ele alacağız. Blok aygıt sürücüleri tipik olarak disk gibi 
+    medyalara erişmek amacıyla kullanılan aygıt sürücülerdir. Bunlar aktarım işlemini blok blok yaparlar. Bu işlemlerin daha 
+    etkin gerçekleştirilmesi için çekirdeğin "buffer cache" (ya da yeni ismiyle "page cache") alt sistemleri devreye sokulmaktadır. 
+    Karakter aygıt sürücüleri blok blok aktarım yapmayan aygıtlarla iletişim kuran aygıt sürücülerdir. Örneğin seri porttan bilgi 
+    okuyan seri porta bilgi yazan aygıt sürücüler karakter aygıt sürücüleridir. Fakat RAM Disk oluşturan aygıt sürücüleri blok
+    aygıt sürücüleridir. Karakter aygıt sürücülerinin yazımı blok aygıt sürücülerinden daha kolaydır.
 
     O halde şimdi bizim bir aygıt dosyasını nasıl oluşturacağımızı ve aygıt sürücüye nasıl majör ve minör numara atayacağımızı 
     bilmemiz gerekir.
@@ -53379,7 +53540,7 @@ clean:
     Yani aslında majör ve minör numaralar dev_t türünden bir değerin belli bitlerinde bulunmaktadır. Ancak bu numaraların dev_t 
     türünden değerin hangi bitlerinde bulunduğu sistemden sisteme değişebileceği için bu makrolar kullanılmaktadır.
 
-    Ancak kernel mode'da bu makrolar yerine aşağıdakiler kullanılmaktadır:
+    Ancak çekirdek dev_t nesnesini oluşturmak için büyük harflerle isimlendirilmniş aşağıdaki makrolar kullanılmaktadır:
 
     #include <linux/fs.h>
 
@@ -53394,8 +53555,8 @@ clean:
     mknod fonksiyonunun ikinci parametresindeki erişim haklarına aygıt dosyasının türünü belirten aşağıdaki sembolik sabitlerden 
     biri de bit OR operatörü ile eklenmelidir:
 
-    S_IFCHR (Karakter aygıt sürücüsü)
-    S_IFBLK (Blok aygıt sürücüsü)
+    S_IFCHR (Karakter Aygıt Sürücüsü)
+    S_IFBLK (Blok Aygıt Sürücüsü)
 
     Aslında mknod fonksiyonu ile Linux sistemlerinde isimli boru dosyaları, UNIX domain soket dosyaları ve hatta normal dosyalar 
     da yaratılabilmektedir. Bu durumda fonksiyonun aygıt numarasını belirten üçüncü parametresi fonksiyon tarafından dikkate 
@@ -53562,9 +53723,9 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir kernel modülün karakter aygıt sürücüsü haline getirilebilmesi için öncelikle bir aygıt numarasıyla (majör ve minör 
+    Bir çekirdek modülünün karakter aygıt sürücüsü haline getirilebilmesi için öncelikle bir aygıt numarasıyla (majör ve minör 
     numara ile) temsil edilip çekirdeğe kaydettirilmesi (register ettirilmesi) gerekmektedir. Bu işlem tipik olarak 
-    register_chrdev_region isimli fonksiyonla yapılır. Fonksiyonun prototipi şöyledir:
+    register_chrdev_region isimli çekirdek fonksiyonuyla yapılır. Fonksiyonun prototipi şöyledir:
 
     #include <linux/fs.h>
 
@@ -53572,37 +53733,93 @@ void exit_sys(const char *msg)
 
     Fonksiyonun birinci parametresi aygıt sürücünün majör ve minör numaralarına ilişkin dev_t türünden değeri almaktadır. Bu 
     parametre için argüman genellikle MKDEV makrosuyla oluşturulmaktadır. MKDEV makrosu majör ve minör numarayı argüman olarak alıp 
-    bundan dev_t türünden aygıt numarası oluşturmaktadır. Fonksiyonun ikinci parametresi ilk parametrede belirtilen minör numaradan 
-    itibaren kaç minör numaranın kaydettirileceğini belirtmektedir. Örneğin biz majör=20, minör=0'dan itibaren 5 minör numarayı 
-    kaydettirebiliriz. Fonksiyonun son parametresi proc ve sys dosya sistemlerindeki görüntülenecek olan aygıt sürücünün ismini 
-    belirtmektedir. Kernel modüllerin isimleri kernel modül dosyasından gelmektedir. Ancak karakter aygıt sürücülerinin isimlerini 
-    biz istediğimiz gibi veririz. Tabii her aygıt sürücü bir kernel modül biçiminde yazılmak zorundadır.
+    bunlardan dev_t türünden aygıt numarası oluşturmaktadır. Fonksiyonun ikinci parametresi ilk parametrede belirtilen minör numaradan 
+    itibaren kaç minör numaranın kaydettirileceğini belirtmektedir. Örneğin biz majör = 20, minör = 0'dan itibaren 5 minör numarayı 
+    kaydettirebiliriz. Fonksiyonun son parametresi proc ve sys dosya sistemlerinde görüntülenecek olan aygıt sürücünün ismini 
+    belirtmektedir. Çekirdek modüllerinin isimleri çekirdek modül dosyasından gelmektedir. Ancak karakter aygıt sürücülerinin isimlerini 
+    biz istediğimiz gibi verebiliriz. Tabii her aygıt sürücü bir çekirdek modülü biçiminde yazılmak zorundadır.
 
-    register_chrdev_region fonksiyonu başarı durumunda 0 değerine, başarısızlık durumunda negatif errno değerine geri döner.
+    register_chrdev_region fonksiyonu başarı durumunda 0 değerine, başarısızlık durumunda negatif errno değerine geri dönmektedir. 
+    Fonksiyon tipik olarak çekirdek modülünün "init" fonksiyonunda çağrılır. Eğer fonksiyon başarısız olursa init fonksiyonu da 
+    bu fonksiyonun geri döndürdüğü değerle geri döndürülür. Örneğin:
 
-    register_chrdev_region fonksiyonu ile register ettirilen majör ve minör numaralar unregister_chrdev_region fonksiyonuyla 
-    geri bırakılmalıdır. Aksi halde modül kernel alanından rmmod komutuyla atılsa bile bu aygıt numaraları tahsis edilmiş bir biçimde 
-    kalmaya devam etmektedir. unregister_chrdev_region fonksiyonunun prototipi şöyledir:
+    static int __init generic_init(void)
+    {
+        int result;
+
+        printk(KERN_INFO "generic-char-driver module initialization...\n");
+
+        if ((result = register_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1, "generic-char-driver")) < 0) {
+            printk(KERN_ERR "cannot register device!...\n");
+            return result;
+        }
+
+        return 0;
+    }
+
+    Sistemde zaten yüklü olan aynı mjör numaraya ilişkin bir aygıt sürücü varsa ya da fonksiyona girilen aygıt numarası geçersiz
+    ise fonksiyon başarısız olabilir.
+
+    register_chrdev_region fonksiyonu ile register ettirilmiş olan majör ve minör numaralar unregister_chrdev_region fonksiyonuyla 
+    geri bırakılmalıdır. Aksi halde modül çekirdek alanından "rmmod" komutuyla atılsa bile bu aygıt numaraları tahsis edilmiş bir 
+    biçimde kalmaya devam edecektir. Bu da önemli sorunlar doğurabilir. unregister_chrdev_region fonksiyonunun prototipi şöyledir:
 
     #include <linux/fs.h>
 
     void unregister_chrdev_region (dev_t from, unsigned count);
 
     Fonksiyonun birinci parametresi aygıt sürücünün register ettirilmiş olan majör ve minör numarasını, ikinci parametresi ise yine 
-    o noktadan başlayan kaç minör numaranın unregister ettirileceğidir.
+    o noktadan başlayan kaç minör numaranın unregister ettirileceğini belirtmektedir. Bu fonksiyon da tipik olarak aygıt sürücünün
+    cleanup fonksiyonunda (exit fonksiyonunda) çağrılmalıdır. Örneğin:
+
+    static void __exit helloworld_exit(void)
+    {
+        printk(KERN_INFO "generic-char-driver exit...\n");
+
+        unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
+    }
 
     Bir aygıt sürücü register_chrdev_region fonksiyonuyla majör ve minör numarayı register ettirdiğinde artık "/proc/devices" 
-    dosyasında bu aygıt sürücü için bir satır yaratılmaktadır. Aygıt sürücü unregister_chrdev_region fonksiyonuyla yok edildiğinde 
-    "/proc/devices" dosyasındaki satır silinmektedir.
+    dosyasında bu aygıt sürücü için bir satır yaratılır. Aygıt sürücü unregister_chrdev_region fonksiyonuyla yok edildiğinde 
+    "/proc/devices" dosyasındaki satır silinir. Örneğin aygıt sürücümüzü yükledikten sonra "/proc/devices" dosyasının içeriği 
+    aşağıdakine benzer görüntülenecektir:
 
-    Aşağıdaki örnekte kernel modülün init fonksiyonunda register_chrdev_region fonksiyonu ile Majör: 25, Minor:1 olacak biçimde 
-    bir aygıt numarası kernel'a kaydettirilmiştir. Bu kayıt modülün exit fonksiyonunda unregister_chrdev_region fonksiyonu 
-    ile silinmiştir. Kernel modülü aşağıdaki gibi derleyebilirsiniz:
+    Character devices:
+    1 mem
+    4 /dev/vc/0
+    4 tty
+    4 ttyS
+    5 /dev/tty
+    5 /dev/console
+    5 /dev/ptmx
+    5 ttyprintk
+    6 lp
+    7 vcs
+    10 misc
+    13 input
+    14 sound/midi
+    14 sound/dmmidi
+    21 sg
+    29 fb
+    89 i2c
+    99 ppdev
+    108 ppp
+    116 alsa
+    128 ptm
+    130 generic-char-driver
+    136 pts
+    ...
+
+    Buradan da görüldüğü gibi aygıt sürücümüz "generic-char-driver" ismiyle 130 majör numaraya sahip olacak biçimde yüklenmiştir.
+
+    Aşağıdaki örnekte çekirdek modülünün init fonksiyonunda register_chrdev_region fonksiyonu Majör = 139, Minor = 1 olacak 
+    biçimde bir aygıt numarası çekirdeğe kaydettirilmiştir. Bu kayıt modülün exit fonksiyonunda unregister_chrdev_region fonksiyonu 
+    ile silinmiştir. çekirdek modülünü aşağıdaki gibi derleyebilirsiniz:
 
     $ make file=generic-char-driver
 
     Modülü install ettikten sonra "/proc/modules" ve "/proc/devices" dosyalarına bakınız. "proc/devices" dosyasında aygıt
-    sürücünün belirlediğimiz isimle kaydettirildiğini göreceksiniz.
+    sürücünün belirlediğimiz isimle ve majör numarayla kaydettirildiğini göreceksiniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* generic-char-driver.c */
@@ -53611,8 +53828,8 @@ void exit_sys(const char *msg)
 #include <linux/kernel.h>
 #include <linux/fs.h>
 
-#define DEV_MAJOR		25
-#define DEV_MINOR		0
+#define DEV_MAJOR	130
+#define DEV_MINOR	0
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Kaan Aslan");
@@ -53622,10 +53839,10 @@ static int __init generic_init(void)
 {
 	int result;
 
-	printk(KERN_INFO "generic-char-driver module initialization...\n");
+	printk(KERN_INFO "generic-char-driver init...\n");
 
 	if ((result = register_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1, "generic-char-driver")) < 0) {
-		printk(KERN_ERR "cannot register device!...\n");
+		printk(KERN_ERR "Cannot load generic-char-driver!...\n");
 		return result;
 	}
 
@@ -53634,9 +53851,9 @@ static int __init generic_init(void)
 
 static void __exit generic_exit(void)
 {
-	unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
+	printk(KERN_INFO "generic-char-driver exit...\n");
 
-	printk(KERN_INFO "generic-char-driver module exit...\n");
+	unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
 }
 
 module_init(generic_init);
@@ -53656,13 +53873,44 @@ clean:
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Bir çekirdek modülü bir aygıt numarasıyla ilişkilendirdikten sonra artık ona gerçek anlamda bir karakter aygıt sürücü kimliği 
-    kazandırmak gerekmektedir. Bu işlem struct cdev isimli bir yapının için doldurularak sisteme eklenmesi (yerleştirilmesi) 
-    ile yapılır. Linux çekirdeği tüm çekirdek modülleri ve aygıt sürücüleri çeşitli veri yapılarıyla tutmaktadır. Aygıt sürücü 
-    yazan programcılar çekirdeğin bu organizasyonunu bilmek zorunda değillerdir. Ancak bazı işlemleri tam gerektiği gibi yapmak 
-    zorundadırlar. (Linux çekirdeğinin aygıt sürücü mimarisi oldukça karmaşıktır. Bu konu "Linux Kernel" kursunda ele alınmaktadır.)
+    Pekiyi aygıt sürücümüzü belli bir majör ve minör numarayla sisteme register ettirdikten sonra ne yapacağız? İşte aygıt 
+    sürücüleri kabaca bir grup fonksiyondan oluşan modüller biçiminde düşünebiliriz. Aygıt sürücü içerisindeki fonksiyonlar 
+    kullanıcı modunda bazı işlemler sonucunda çekirdek tarafından çağrılmaktadır. Örneğin:
 
-    cdev yapısı aşağıdaki gibi bir yapıdır:
+    - Programcı aygıt sürücüye ilişkin aygıt dosyasını open fonksiyonu ile açtığı zaman aygıt sürücü içerisindeki "open" 
+    fonksiyonu çağrılır.
+
+    - Programcı aygıt dosyasından elde ettiği dosya betimleyicisi ile read işlemi yaptığında aygıt sürücü içerisindeki "read" 
+    fonksiyonu çağrılır.
+
+    - Programcı aygıt dosyasından elde ettiği dosya betimleyicisi ile write işlemi yaptığında aygıt sürücü içerisindeki "write" 
+    fonksiyonu çağrılır.
+
+    - Programcı aygıt dosyasından elde ettiği dosya betimleyicisi ile close işlemi yaptığında aygıt sürücü içerisindeki "close" 
+    fonksiyonu çağrılır.
+
+    Buradaki aygıt sürücü içerisindeki open, read, write, close fonksiyonlarına aygıt sürücüyü yazanlar istedikleri ismi verebilmektedir.
+    Tabii yukarıda belirtmediğimiz ancak konular içerisinde göreceğimiz başka işlemler sonucunda yine aygıt sürücünün o işlemlere
+    ilişkin fonksiyonları çağrılmaktadır. Aynı zamanda aygıt sürücüleri yazanlar dosya işlemleriyle doğrudan ilgili olmayan 
+    aygıt sürücü fonksiyonlarına numaralar atayarak onların kullanıcı modundan ioctl isimli POSIX fonksiyonuyla (tabii bu POSIX 
+    fonksiyonu da sys_ioctl isimli sistem fonksiyonunu çağırmaktadır) çağrılmasını sağlayabilmektedir. Tabii şüphesiz aygıt sürücü 
+    içerisindeki bu fonksiyonlar çekirdek modunda çalıştırılmaktadır. Zaten aygıt sürücü yazmanın ana nedenlerinden biri kullanıcı
+    modunda yapılamayan işlemlerin çekirdek modunda yapılmasını sağlamak içindir.
+
+    Ancak aygıt sürücüleri yalnızca kullanıcı modundan çekirdek modunda çalışacak fonksiyon çağırma mekanizması olarak düşünmemek 
+    gerekir. Aygıt sürücüler birtakım kesmelere o anda yanıt verebilmektedir. Dolayısıyla aynı zamanda onları çekirdek modunda 
+    çalışan birer program gibi de düşünebiliriz.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir çekirdek modülü bir aygıt numarasıyla ilişkilendirdikten sonra artık ona gerçek anlamda bir karakter aygıt sürücü kimliğinin 
+    kazandırılması gerekir. Bu işlem struct cdev isimli bir yapının içinin doldurularak sisteme eklenmesi (yerleştirilmesi) 
+    ile yapılmaktadır. Linux çekirdeği tüm çekirdek modüllerini ve aygıt sürücülerini çeşitli veri yapılarıyla tutmaktadır. 
+    Aygıt sürücü yazan programcılar çekirdeğin bu organizasyonunu bilmek zorunda değillerdir. Ancak bazı işlemleri tam gerektiği 
+    gibi yapmak zorundadırlar. (Linux çekirdeğinin aygıt sürücü mimarisi oldukça karmaşıktır. Bu konu "Linux Kernel" kursunda ele 
+    alınmaktadır.)
+
+    cdev aşağıdaki gibi bir yapıdır:
 
     #include <linux/fs.h>
 
@@ -53677,21 +53925,25 @@ clean:
 
     Bu türden bir yapı nesnesi programcı tarafından global olarak (statik ömürlü olarak) tanımlanabilir ya da alloc_cdev isimli 
     çekirdek fonksiyonuyla çekirdeğin heap sistemi (slab allocator) kullanılarak dinamik bir biçimde tahsis edilebilir. (İşletim 
-    sistemlerinin çekirdeğinin ayrı bir heap sistemi vardır. Linux çekirdeğinde spesifik türden nesnelerin hızlı tahsis edilmesi 
-    için "slab allocator" denilen bir heap sistemi kullanılmaktadır.) Eğer bu yapı nesnesi programcı tarafından global bir biçimde 
-    tanımlanacaksa yapının elemanlarına ilk değer vermek için cdev_init fonksiyonu çağrılmalıdır. Eğer cdev yapısı cdev_alloc fonksiyonuyla 
-    dinamik bir biçimde tahsis edilecekse bu işlem cdev_init ile yapılmaz, çünkü zaten cdev_alloc bu işlemi de yapmaktadır. Fakat yine 
-    de programcının bu kez manuel olarak bu yapının bazı elemanlarına değer ataması gerekir. Bu iki yoldan biriyle oluşturulmuş 
-    olan cdev yapısının en sonunda cdev_add isimli fonksiyonla çekirdek veri yapılarına yerleştirilmeleri gerekir. Tabii aygıt 
-    sürücü boşaltılırken bu yerleştirme işlemi cdev_del fonksiyonuyla geri alınmalıdır. cdev_del fonksiyonu, struct cdev yapısı 
-    cdev_alloc ile tahsis edilmişse aynı zamanda onu free hale de getirmektedir. Özetle çekirdek modülümüzün tam bir karakter aygıt 
-    sürücüsü haline getirilmesi için şunlar yapılmalıdır:
+    sistemlerinin çekirdeklerinin ayrı bir heap sistemi vardır. Linux çekirdeğinde spesifik türden nesnelerin hızlı tahsis edilmesi 
+    için "slab allocator" denilen bir heap sistemi kullanılmaktadır.) Bu yapı nesnesini yerel bir nesne biçiminde oluşturmayınız. 
+    Çünkü yerel değişkenler fonksiyon sonlandığında yok edilirler. Halbuki bu yapı nesnesinin aygıt sürücü yüklü olduğu sürece 
+    bellekte bulunuyor olması gerekir.
 
-    1) struct cdev isimli bir yapı türünden nesne global olarak (statik ömürlü olarak) tanımlanmalı ya da cdev_alloc fonksiyonu ile
-    çekirdeğin heap sistemi içerisinde tahsis edilmelidir. Eğer bu nesne global olarak tanımlanacaksa nesneye cdev_init fonksiyonu 
-    ile ilk değerleri verilmelidir. Eğer nesne cdev_alloc fonksiyonu ile çekirdeğin heap alanında tahsis edilecekse bu durumda ilk 
-    değer verme işlemi bu fonksiyon tarafından yapılmaktadır. Ancak programcının yine yapının bazı elemanlarını manuel olarak doldurması 
-    gerekmektedir.
+    Eğer cdev türünden bu yapı nesnesi programcı tarafından global bir biçimde tanımlanacaksa yapının elemanlarına ilk değer 
+    vermek için cdev_init fonksiyonu çağrılmalıdır. Eğer cdev yapısı cdev_alloc fonksiyonuyla dinamik bir biçimde tahsis edilecekse 
+    artık yapı elemanlarına ilkdeğerlerin verilmesi işlemi cdev_init fonksiyonuyla yapılmaz. Çünkü zaten cdev_alloc bu işlemi 
+    kendi içerisinde yapmaktadır. Fakat yine de programcının bu durumda manuel olarak yapının bazı elemanlarına değer ataması 
+    da gerekmektedir. Bu iki yoldan biriyle oluşturulmuş olan cdev yapı nesnesi cdev_add isimli fonksiyonla çekirdeğin veri 
+    yapılarına erleştirilmelidir. Tabii aygıt sürücü boşaltılırken bu yerleştirme işlemi cdev_del fonksiyonuyla geri alınmalıdır. 
+    cdev_del fonksiyonu, struct cdev yapısı cdev_alloc ile tahsis edilmişse aynı zamanda onu free hale de getirmektedir. Özetle 
+    çekirdek modülümüzün tam bir karakter aygıt sürücüsü haline getirilmesi için şunlar yapılmalıdır:
+
+    1) struct cdev isimli bir yapı türünden nesne global olarak (statik ömürlü olarak) tanımlanmalı ya da cdev_alloc fonksiyonu 
+    ile çekirdeğin heap sistemi içerisinde tahsis edilmelidir. Eğer bu nesne global olarak tanımlanacaksa nesneye cdev_init 
+    fonksiyonu ile ilkdeğerleri verilmelidir. Eğer nesne cdev_alloc fonksiyonu ile çekirdeğin heap alanında tahsis edilecekse 
+    bu durumda ilkdeğer verme işlemi bu fonksiyon tarafından yapılmaktadır. Ancak programcının yine yapının bazı elemanlarını 
+    manuel olarak doldurması gerekmektedir.
 
     2) Oluşturulan bu struct cdev nesnesi cdev_add çekirdek fonksiyonu ile çekirdeğe eklenmelidir.
 
@@ -53706,9 +53958,9 @@ clean:
 
     Fonksiyonun birinci parametresi ilk değer verilecek global cdev nesnesinin adresini alır. İkinci parametre ise file_operations 
     türünden bir yapı nesnesinin adresi almaktadır. file_operations isimli yapı birtakım fonksiyon adreslerinden oluşmaktadır. 
-    Yani yapının tüm elemanları birer fonksiyon göstericisidir. Bu yapı user mode'daki program tarafından ilgili aygıt dosyası 
-    açılıp çeşitli işlemler yapıldığında çağrılacak fonksiyonların adreslerini tutmaktadır. Örneğin user mode'daki program open, 
-    close, read, write yaptığında çağrılacak fonksiyonlarımızı burada belirtiriz. file_operations yapısı büyük bir yapıdır:
+    Yani yapının tüm elemanları birer fonksiyon göstericisidir. Bu yapı kullanıcı modundaki program tarafından ilgili aygıt 
+    dosyası açılıp çeşitli işlemler yapıldığında çağrılacak fonksiyonların adreslerini tutmaktadır. Örneğin kullanıcı modundaki 
+    program open, close, read, write yaptığında çağrılacak fonksiyonlarımızı burada belirtiriz. file_operations büyük bir yapıdır:
 
     struct file_operations {
         struct module *owner;
@@ -53749,8 +54001,8 @@ clean:
         int (*fadvise)(struct file *, loff_t, loff_t, int);
     };
 
-    Bu yapının bazı elemanlarına atama yapabiliriz. Bunun için gcc eklentileri kullanılabilir. (Bu eklentiler C99 ile birlikte 
-    C'ye eklenmiştir.) Örneğin:
+    Bu yapının yalnızca bazı elemanlarına atama yapabiliriz. Bunun için gcc eklentilerinden faydalanılabilir. (Bu eklentiler 
+    C99 ile birlikte C'ye eklenmiştir.) Örneğin:
 
     static int generic_open(struct inode *inodep, struct file *filp);
     static int generic_release(struct inode *inodep, struct file *filp);
@@ -53765,15 +54017,16 @@ clean:
     açıldığında generic_open isimli fonksiyon çağrılsın", aygıt sürücümüz close fonksiyonu ile kapatıldığında "generic_release 
     isimli fonksiyonumuz çağrılsın" demiş olmaktayız.
 
-    Yukarıda da belirttiğimiz gibi cdev yapısı cdev_alloc fonksiyonuyla dinamik bir biçimde de tahsis edilebilir:
+    Yukarıda da belirttiğimiz gibi cdev yapısı cdev_alloc fonksiyonuyla dinamik bir biçimde de tahsis edilebilir. cdev_alloc 
+    fonksiyonunun prototipi şöyledir:
 
     #include <linux/cdev.h>
 
     struct cdev *cdev_alloc(void);
 
     Fonksiyon başarı durumunda cdev yapısının adresine, başarısızlık durumunda NULL adrese geri dönmektedir. Yukarıda da belirttiğimiz
-    gibi cdev yapısı cdev_alloc ile tahsis edilmişse cdev_init yapılmasına gerek yoktur. Ancak bu durumda programcının manuel olarak 
-    yapının owner ve ops elemanlarına değer ataması gerekir. Örneğin:
+    gibi cdev yapısı cdev_alloc fonksiyonu ile tahsis edilmişse cdev_init yapılmasına gerek yoktur. Ancak bu durumda programcının 
+    manuel olarak yapının owner ve ops elemanlarına değer ataması gerekir. Örneğin:
 
     struct cdev *g_cdev;
     ...
@@ -53784,15 +54037,17 @@ clean:
     g_cdev->owner = THIS_MODULE;
     g_cdev->ops = &g_file_ops;
 
-    cdev yapı nesnesi başarılı bir biçimde oluşturulduktan sonra artık bu yapının çekirdek modülü içerisine yerleştirilmesi 
-    gerekir. Bu da cdev_add fonksiyonuyla yapılmaktadır:
+    cdev_alloc fonksiyonu başarısız olduğunda bunu çağıran fonksiyonun -ENOMEM değeri ile geri döndürülmesi uygun olur. ENOMEM 
+    errno değeri bellek yetersizliği nedeniyle başarısızlık oluştuğunu belirtmektedir. cdev yapı nesnesi başarılı bir biçimde 
+    oluşturulduktan sonra artık bu yapının çekirdek modülü içerisine yerleştirilmesi gerekir. Bu da cdev_add fonksiyonuyla 
+    yapılmaktadır. cdev_add fonksiyonunun prototipi de şöyledir:
 
     #include <linux/cdev.h>
 
     int cdev_add(struct cdev *devp, dev_t dev, unsigned count);
 
-    Fonksiyonun birinci parametresi cdev türünden yapı nesnesinin adresini almaktadır. İkinci parametre aygıt sürücünün majör ve 
-    minör numarasını belirtmektedir. Üçüncü parametresi ise ilgili minör numaradan itibaren kaç minör numaranın kullanılacağı belirtir. 
+    Fonksiyonun birinci parametresi cdev türünden yapı nesnesinin adresini almaktadır. Fonksiyonun ikinci parametresi aygıt sürücünün 
+    majör ve minör numaralarını, üçüncü parametresi ise ilgili minör numaradan itibaren kaç minör numaranın kullanılacağı belirtmektedir.
     Fonksiyon başarı durumunda sıfır değerine, başarısızlık durumunda negatif errno değerine geri döner. Örneğin:
 
     if ((result = cdev_add(&g_cdev, MKDEV(DEV_MAJOR, DEV_MINOR), 1)) < 0) {
@@ -53801,8 +54056,8 @@ clean:
     }
 
     Aygıt sürücü boşaltılırken cdev_add ile yapılan işlemin geri alınması gerekir. Bu da cdev_del fonksiyonuyla yapılmaktadır. 
-    (cdev_alloc işlemi için bunu free hale getiren ayrı bir fonksiyon yoktur. cdev_alloc ile tahsis edilen alan çekirdek tarafından
-    otomatik olarak free hale getirilmektedir.)
+    (cdev_alloc işlemi için bunu free hale getiren ayrı bir fonksiyon yoktur. cdev_alloc ile tahsis edilen alan cdev_del fonksiyonu 
+    tarafından otomatik olarak free hale getirilmektedir.)
 
     #include <linux/cdev.h>
 
@@ -53811,16 +54066,16 @@ clean:
     Fonksiyon parametre olarak cdev yapısının adresini almaktadır.
 
     Buradaki önemli bir nokta şudur: cdev_add fonksiyonu cdev nesnesinin içini çekirdekteki uygun veri yapısına kopyalamamaktadır. 
-    Bizzat bu nesnenin adresini kullanmaktadır. Yani çekirdek modülü var olduğu sürece bu cdev nesnesinin de yaşıyor olması gerekmektedir.
+    Bizzat bu nesnenin adresini kullanmaktadır. Yani çekirdek modülü var olduğu sürece bu cdev nesnesinin de yaşıyor olması gerekir.
     Bu da cdev nesnesinin ve file_operations nesnesinin global biçimde (ya da statik ömürlü biçimde) tanımlanmasını gerektirmektedir.
 
-    Aşağıda bu işlemlerin yapıldığı örnek bir karakter aygıt sürücüsü verilmiştir. Bu aygıt sürücü majör=25, minör=0 aygıtını 
+    Aşağıda bu işlemlerin yapıldığı örnek bir karakter aygıt sürücüsü verilmiştir. Bu aygıt sürücü majör=130, minör=0 aygıtını 
     kullanmaktadır. Dolayısıyla aşağıdaki programın testi için şöyle bir aygıt dosyasının yaratılmış olması gerekir. Yaratımı
     aşağıdaki gibi yapabilirsiniz:
 
-    $ sudo mknod mydriver -m 666 c 25 0
+    $ sudo mknod mydriver -m 666 c 130 0
 
-    Bu aygıt sürücü insmod ile yüklendiğinde artık biz user mode'da "mydriver" dosyasını açıp kapattığımızda file_operations
+    Bu aygıt sürücü insmod ile yüklendiğinde artık biz kullanıcı modunda "mydriver" dosyasını açıp kapattığımızda file_operations
     yapısına yerleştirdiğimiz generic_open ve generic_release fonksiyonları çağrılacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -53831,8 +54086,8 @@ clean:
 #include <linux/fs.h>
 #include <linux/cdev.h>
 
-#define DEV_MAJOR		25
-#define DEV_MINOR		0
+#define DEV_MAJOR	130
+#define DEV_MINOR	0
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Kaan Aslan");
@@ -53842,7 +54097,7 @@ static int generic_open(struct inode *inodep, struct file *filp);
 static int generic_release(struct inode *inodep, struct file *filp);
 
 static struct cdev g_cdev;
-static struct file_operations g_fops = {
+struct file_operations g_fops = {
 	.owner = THIS_MODULE,
 	.open = generic_open,
 	.release = generic_release
@@ -53852,17 +54107,17 @@ static int __init generic_init(void)
 {
 	int result;
 
-	printk(KERN_INFO "generic-char-driver module initialization...\n");
+	printk(KERN_INFO "generic-char-driver init...\n");
 
 	if ((result = register_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1, "generic-char-driver")) < 0) {
-		printk(KERN_ERR "cannot register device!...\n");
+		printk(KERN_ERR "Cannot load generic-char-driver!..\n");
 		return result;
 	}
 
 	cdev_init(&g_cdev, &g_fops);
 	if ((result = cdev_add(&g_cdev, MKDEV(DEV_MAJOR, DEV_MINOR), 1)) < 0) {
+		printk(KERN_ERR "Cannot add device...\n");
 		unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
-		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
 
@@ -53871,22 +54126,22 @@ static int __init generic_init(void)
 
 static void __exit generic_exit(void)
 {
+	printk(KERN_INFO "generic-char-driver exit...\n");
+
 	cdev_del(&g_cdev);
 	unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
-
-	printk(KERN_INFO "generic-char-driver module exit...\n");
 }
 
 static int generic_open(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "generic-char-driver opened...\n");
+	printk(KERN_INFO "generic_open called...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "generic-char-driver closed...\n");
+	printk(KERN_INFO "generic_release called...\n");
 
 	return 0;
 }
@@ -53932,8 +54187,12 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Yukarıdaki programda biz cdev nesnesini global olarak tanımladık. Aşağıda nesnenin cdev_alloc fonksiyonu ile dinamik
-    biçimde tahsis edilmesine bir örnek verilmiştir.
+    Yukarıdaki programda biz cdev nesnesini global olarak tanımladık. Aşağıda ise cdev nesnesinin cdev_alloc fonksiyonu ile 
+    dinamik biçimde tahsis edilmesine bir örnek veriyoruz. cdev_alloc fonksiyonu ile tahsis edilmiş alanların zaten cdev_del 
+    fonksiyonu ile geri bırakıldığını belirtmiştik. Ancak cdev_add fonksiyonu başarısız olursa cdev_del fonksiyonunun çağrılması
+    anlamsız olacağı için cdev_alloc fonksiyonu ile tahsis edilmiş olan alan kfree fonksiyonuyla serbest bırakılmıştır. kfree
+    fonksiyonu çekirdek heap sistemine ilişkin genel bir bir fonksiyondur. Çekirdek heap sistemine "dilimli tahsisat sistemi 
+    (slab allocator)" denilmektedir. Bu konu ileride ele alınacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* generic-char-driver.c */
@@ -53943,8 +54202,8 @@ void exit_sys(const char *msg)
 #include <linux/fs.h>
 #include <linux/cdev.h>
 
-#define DEV_MAJOR		25
-#define DEV_MINOR		0
+#define DEV_MAJOR	130
+#define DEV_MINOR	0
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Kaan Aslan");
@@ -53954,7 +54213,7 @@ static int generic_open(struct inode *inodep, struct file *filp);
 static int generic_release(struct inode *inodep, struct file *filp);
 
 static struct cdev *g_cdev;
-static struct file_operations g_fops = {
+struct file_operations g_fops = {
 	.owner = THIS_MODULE,
 	.open = generic_open,
 	.release = generic_release
@@ -53964,24 +54223,25 @@ static int __init generic_init(void)
 {
 	int result;
 
-	printk(KERN_INFO "generic-char-driver module initialization...\n");
+	printk(KERN_INFO "generic-char-driver init...\n");
 
 	if ((result = register_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1, "generic-char-driver")) < 0) {
-		printk(KERN_ERR "cannot register device!...\n");
+		printk(KERN_ERR "Cannot load generic-char-driver!...\n");
 		return result;
 	}
 
 	if ((g_cdev = cdev_alloc()) == NULL) {
+		printk(KERN_ERR "cannot allocate cdev!..\n");
 		unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
-		printk(KERN_ERR "cannot alloc cdev!...\n");
-		return result;
+		return -ENOMEM;
 	}
 	g_cdev->owner = THIS_MODULE;
 	g_cdev->ops = &g_fops;
 
 	if ((result = cdev_add(g_cdev, MKDEV(DEV_MAJOR, DEV_MINOR), 1)) < 0) {
+		printk(KERN_ERR "Cannot add device..\n");
+		kfree(g_cdev);
 		unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
-		printk(KERN_ERR "cannot add device!...\n");
 		return result;
 	}
 
@@ -53990,22 +54250,22 @@ static int __init generic_init(void)
 
 static void __exit generic_exit(void)
 {
+	printk(KERN_INFO "generic-char-driver exit...\n");
+
 	cdev_del(g_cdev);
 	unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
-
-	printk(KERN_INFO "generic-char-driver module exit...\n");
 }
 
 static int generic_open(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "generic-char-driver opened...\n");
+	printk(KERN_INFO "generic_open called...\n");
 
 	return 0;
 }
 
 static int generic_release(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "generic-char-driver closed...\n");
+	printk(KERN_INFO "generic_release called...\n");
 
 	return 0;
 }
@@ -54055,19 +54315,27 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Çekirdek kodları ya da aygıt sürücü kodları çoğu zaman çekirdek alanı ile user alanı arasında veri transfer yapmak isterler. 
-    Örneğin sys_read sistem fonksiyonu çekirdek alanında elde ettiği bilgileri user alanındaki programcının verdiği adrese kopyalar. 
-    Benzer biçimde sys_write fonksiyonu da bunun tersini yapmaktadır. Çekirdek alanı ile user alanı arasında memcpy fonksiyonu 
-    ile transfer yapmaya çalışmak uygun değildir. Bunun birkaç nedeni vardır. Bu tür transferlerde kernel mod programcılarının 
-    user alanındaki adresin geçerliliğini kontrol etmesi gerekir. Aksi takdirde kernel mode'da geçersiz bir alana kopyalama yapmak 
-    sistemin çökmesine yol açabilmektedir. Ayrıca user alanına ilişkin prosesin sayfa tablosunun bazı bölümleri o anda bellekte 
-    olmayabilir (yani swap out yapılmış olabilir). Böyle bir durumda işleme devam etmek çekirdek tasarımı açısından sorun olmaktadır. 
+    Çekirdek kodlarının ve aygıt sürücü kodlarının çekirdek modunda (kernel mode) çalıştığını belirtmiştik. Çekirdeğin bulunduğu
+    bellek alanı ile kullancı proseslerinin bulunduğu bellek alanı birbirlerinden izole edilmiştir. Daha önceden de belirttiğimiz 
+    gibi kullanıcı modunda çalışan prosesler çekirdek alanına erişemezler. Çünkü çekirdek kendisini sayfa tabanlı koruma mekanizması 
+    yoluyla sıradan proseslerden korumaktadır. Fakat bazı durumlarda çekirdek alanı alanı kullanıcı proseslerinin bulunduğu kullanıcı 
+    alanı arasında veri transferlerinin yapılması gerekebilmektedir. Örneğin sys_read sistem fonksiyonu çekirdek tarafından okunan 
+    bilgileri kendisini çağıran prosesin kullanıcı alanına aktarmaktadır. sys_write fonksiyonu ise bunun tersini yapmaktadır.
+
+    Çekirdek alanı ile kullanıcı alanı arasında memcpy fonksiyonu ile transfer yapmaya çalışmak uygun değildir. Bunun birkaç 
+    nedeni vardır. Bu tür transferlerde çekirdek modunda çalışan kodların kullanıcı alanındaki adresin geçerliliğini kontrol 
+    etmesi gerekir. Aksi takdirde çekirdek modunda geçersiz bir alana kopyalama yapmak sistemin çökmesine yol açabilmektedir. 
+    Örneğin biz sys_read sistem fonksiyonu ile dosyadan belirttiğimiz adrese aktarım yapmak isteyelim. Eğer biz kendi prosesimize 
+    ilişkin bir adres vermek yerine çekirdeğin çalıştığı alana ilişkin bir adres verirsek tüm sistem çökebilir. İşte sys_read 
+    fonksiyonu aktarımı yapmadan önce verilen adresin gerçekten prosesin adres alanı içerisindeki bir adres olup olmadığını 
+    kontrol etmektedir. Ayrıca kullanıcı alanına lişkin prosesin sayfa tablosunun bazı bölümleri o anda RAM'de olmayabilir 
+    (yani swap out yapılmış olabilir). Böyle bir durumda işleme devam etmek çekirdek tasarımı bakımından sorun oluşturmaktadır. 
     Eğer böyle bir durum varsa çekirdek kodlarının önce sayfa tablosunu RAM'e geri yükleyip işlemine devam etmesi gerekmektedir.
 
-    İşte yukarıda açıklanan bazı nedenlerden dolayı çekirdek alanı ile user alanı arasında kopyalama işlemi için özel çekirdek 
-    fonksiyonları kullanılmaktadır. Yani biz user mod programları ile kernel modülümüz arasında transferleri özel bazı kernel
-    fonksiyonlarıyla yapmalıyız. Bu amaçla kullanılan çeşitli kernel fonksiyonları ve makroları bulunmaktadır. En temel iki 
-    fonksiyon copy_to_user ve copy_from_user fonksiyonlarıdır. Bu fonksiyonların prototipleri şöyledir:
+    İşte yukarıda açıklanan bazı nedenlerden dolayı çekirdek alanı ile kullanıcı alanı arasında aktarım işlemi için özel çekirdek 
+    fonksiyonları kullanılmaktadır. Yani biz kullanıcı modunda çalışan programlar ile çekirdek modülümüz arasında aktarımları 
+    özel bazı çekirdek fonksiyonlarıyla yapmalıyız. Bu amaçla kullanılan çeşitli çekirdek fonksiyonları ve makroları bulunmaktadır. 
+    En temel iki fonksiyon copy_to_user ve copy_from_user fonksiyonlarıdır. Bu fonksiyonların prototipleri şöyledir:
 
     #include <linux/uaccess.h>
 
@@ -54075,20 +54343,21 @@ void exit_sys(const char *msg)
     unsigned long copy_from_user(void *to, const void *from, unsigned len);
 
     Fonksiyonların birinci parametreleri kopyalamanın yapılacağı hedef adresi belirtmektedir. Yani copy_to_user için birinci 
-    parametre user alanındaki adres, copy_from_user için birinci parametre kernel alanındaki adrestir. İkinci parametre kaynak 
-    adresi belirtmektedir. Bu kaynak adres copy_to_user için kernel alanındaki adres, copy_from_user için user alanındaki 
-    adrestir. Son parametre transfer edilecek byte sayısını belirtmektedir. Fonksiyonlar başarı durumunda 0 değerine, başarısızlık 
-    durumunda transfer edilemeyen byte sayısına geri dönerler. Kernel mod programcılarının bu fonksiyonlar başarısızken bunu 
-    çağıran fonksiyonlarını -EFAULT (Bad address) ile geri döndürmesi uygun olur. (Örneğin sys_read ve sys_write fonksiyonlarına 
+    parametre user alanındaki adres, copy_from_user için birinci parametre çekirdek alanındaki adrestir. İkinci parametre kaynak 
+    adresi belirtmektedir. Bu kaynak adres copy_to_user için çekirdek alanındaki adres, copy_from_user için kullanıcı alanındaki 
+    adrestir. Son parametre aktarılacak byte sayısını belirtmektedir. Fonksiyonlar başarı durumunda 0 değerine, başarısızlık 
+    durumunda aktarılamayan byte sayısına geri dönerler. Çekirdek mod programcılarının bu fonksiyonlar başarısız olursa kendi
+    fonksiyonlarını -EFAULT (Bad address) ile geri döndürmesi uygun olur. (Örneğin sys_read ve sys_write fonksiyonlarına 
     biz geçersiz bir user mode adresi verirsek bu sistem fonksiyonları da -EFAULT değeri ile geri dönmektedir. Bu hata kodunun 
     yazısal karşılığı "Bad address" biçimindedir.) Örneğin:
 
     if (copy_to_user(...) != 0)
         return -EFAULT;
 
-    Bazen user alanındaki adresin zaten geçerliliği sınanmıştır. Bu durumda yeniden geçerlilik sınaması yapmadan yukarıdaki 
-    işlemleri yapan __copy_to_user ve __copy_from_user fonksiyonları kullanılabilir. Bu fonksiyonların parametrik yapıları aynıdır.
-    Bu fonksiyonların yukarıdakilerden tek farkı adres geçerliliğine ilişkin sınama yapmamalarıdır:
+    Bazen kullanıcı alanındaki adresin geçerliliği zaten daha önceden sınanmıştır. Bu durumda yeniden geçerlilik sınaması yapmadan 
+    yukarıdaki işlemleri yapan __copy_to_user ve __copy_from_user fonksiyonları kullanılabilir. Bu fonksiyonların parametrik 
+    yapıları copy_to_user ve copy_from_user fonksiyonları ile aynıdır. Aralarındaki tek fark ise bu fonksiyonların adres geçerliliğine 
+    ilişkin sınama yapmamalarıdır:
 
     #include <linux/uaccess.h>
 
@@ -54096,7 +54365,8 @@ void exit_sys(const char *msg)
     unsigned long __copy_from_user(void *to, const void *from, unsigned len);
 
     Bazı durumlarda programcı 1 byte, 2 byte, 4 byte, 8 byte'lık verileri transfer etmek isteyebilir. Bu küçük miktardaki verilerin 
-    transfer edilmesi için daha hızlı çalışan özel iki makro vardır: put_user ve get_user. Bu makroların parametrik yapısı şöyledir:
+    transfer edilmesi için daha hızlı çalışan özel iki makro bulundurulmuştur: put_user ve get_user. Bu makroların parametrik 
+    yapısı şöyledir:
 
     #include <linux/uaccess.h>
 
@@ -54104,10 +54374,10 @@ void exit_sys(const char *msg)
     get_user(x, ptr);
 
     Burada x aktarılacak nesneyi belirtir. (Bu nesnenin adresini programcı almaz, makro içinde bu işlem yapılmaktadır.) ptr 
-    ise transfer adresini belirtmektedir. Aktarım ikinci parametrede belirtilen adresin türünün uzunluğu kadar yapılmaktadır. 
-    Başka bir deyişle biz makroya hangi türden nesne verirsek zaten makro o uzunlukta tranfer yapmaktadır.
+    ise aktarım adresini belirtmektedir. Aktarım ikinci parametrede belirtilen adresin türünün uzunluğu kadar yapılmaktadır. 
+    Başka bir deyişle biz makroya hangi türden nesne verirsek zaten makro o uzunlukta aktarım yapmaktadır.
 
-    Makrolar başarı durumunda 0, başarısızlık durumunda negatif hata koduna geri dönmektedir. Kullanım şöyle olabilir:
+    Makrolar başarı durumunda 0, başarısızlık durumunda negatif hata koduna geri dönerler. Kullanımları şöyle olabilir:
 
     if (put_user(...) != 0)
         return -EFAULT;
@@ -54119,26 +54389,27 @@ void exit_sys(const char *msg)
     __put_user(x, ptr);
     __get_user(x, ptr);
 
-    Örneğin biz çekirdek modülümüzdeki 4 byte'lık int bir x nesnesinin içerisindeki bilgiyi puser ile temsil edilen user adresine 
-    kopyalamak isteyelim. Bu işlemi şöyle yaparız:
+    Örneğin biz çekirdek modülümüzdeki 4 byte'lık int bir x nesnesinin içerisindeki bilgiyi puser ile temsil edilen kullanıcı 
+    alanındaki adrese kopyalamak isteyelim. Bu işlemi şöyle yaparız:
 
     int x;
     int *puser;
     ...
-    put_user(x, puser);
+    if (put_user(x, puser) != 0)
+        return -EFAULT;
 
-    Nihayet user alanındaki adresin geçerliliği de access_ok isimli makroyla sorgulanabilmektedir. Makro şöyledir:
+    Nihayet kullanıcı alanındaki adresin geçerliliği de access_ok isimli makroyla sorgulanabilmektedir. Makro şöyledir:
 
     #include <linux/uaccess.h>
 
     access_ok(type, addr, size);
 
-    Buradaki type sınanacak geçerliliğin türünü anlatmaktadır. Okuma geçerliliği için bu parametre VERIFY_READ, yazma geçerliliği 
-    için VERIFY_WRITE ve hem okuma hem de yazma geçerliliği için VERIFY_READ|VERIFY_WRITE biçiminde girilmelidir. İkinci parametre
-    geçerliliği sınanacak adresi ve üçüncü parametre de o adresten başlayan alanın uzunluğunu belirtmektedir. Fonksiyon başarı 
-    durumunda sıfır dışı bir değere, başarısızlık durumunda sıfır değerine geri dönmektedir. Örneğin biz user alanında puser
-    adresiyle başlayan 100 byte'lık alanın yazma bakımından geçerli bir alan olup olmadığını sınamak isteyelim. Bu sınamayı
-    çekirdek modülümüzde şöyle yapabiliriz:
+    Buradaki type sınama geçerliliğinin türünü belirtmektedir. Okuma geçerliliği için bu parametre VERIFY_READ, yazma geçerliliği 
+    için VERIFY_WRITE ve hem okuma hem de yazma geçerliliği için VERIFY_READ|VERIFY_WRITE biçiminde girilmelidir. İkinci 
+    parametre geçerliliği sınanacak adresi ve üçüncü parametre de o adresten başlayan alanın uzunluğunu belirtmektedir. 
+    Fonksiyon başarı durumunda sıfır dışı bir değere, başarısızlık durumunda sıfır değerine geri dönmektedir. Örneğin biz 
+    kullanıcı alanında puser adresiyle başlayan 100 byte'lık alanın yazma bakımından geçerli bir alan olup olmadığını sınamak 
+    isteyelim. Bu sınamayı çekirdek modülümüzde şöyle yapabiliriz:
 
     if (access_ok(VERIFY_WRITE, puser, 100)) {		// adres geçerli
         ...
@@ -69899,7 +70170,7 @@ int main(void)
     araçlar da vardır. Linux sistemlerinde en yaygın kullanılan iki araç "fdisk" ve "gparted" isimli araçlardır. fdisk komut 
     satırından kullanılabilen basit bir programdır. "gparted" ise GUI arayüzü ile görsel bir biçimde aynı işlemleri yapmaktadır. 
     "fdisk" temel bir araçtır. Dolayısıyla Linux sistemleri kurulduğunda büyük olasılıkla zaten kurulmuş olarak sisteminizde 
-    bulunuyor olacaktır. Ancak "gparted" programını aşağıdaki gibi siz kurmalısınız:
+    bulunuyor olacaktır. Ancak "gparted" programını Debian tabanlı sistemlerde aşağıdaki gibi siz kurmalısınız:
 
     $ sudo apt-get install gparted
 ---------------------------------------------------------------------------------------------------------------------------*/
@@ -69910,7 +70181,7 @@ int main(void)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Bu noktada Linux sistemlerindeki fdisk programının kullanımı üzerinde duracağız. Bu tür denemeleri loop aygıtları üzerinde 
-    yapmalısınız. fdisk kullanımını maddeler halinde açıklayalım.
+    yapmalısınız. fdisk kullanımını maddeler halinde açıklayalım:
 
     1) Hangi disk üzerinde işlem yapılacaksa o diske ilişkin aygıt dosyası fdisk programına komut satırı argümanı olarak 
     verilmelidir. Tabii disk aygıt dosyaları "root" kullanıcısına ilişkin olduğu için fdisk programı da genellikle "sudo" 
@@ -70085,8 +70356,8 @@ int main(void)
     Disk bölüm tablosunu yeniden okumak için ioctl() çağrılıyor.
     Disk bölümü tablosu yeniden okunamadı.: Geçersiz bağımsız değişken
 
-    Çekirdek hala eski tabloyu kullanıyor. Yeni tablo bir sonraki yeniden başlatma işleminden sonra ya da partprobe(8) veya kpartx(8)'i 
-    çalıştırdığınızda kullanılacak.
+    Çekirdek hala eski tabloyu kullanıyor. Yeni tablo bir sonraki yeniden başlatma işleminden sonra ya da partprobe(8) veya 
+    kpartx(8)'i çalıştırdığınızda kullanılacak.
     **************************************************************************************
 
     - Bir disk bölümünü silmek için "d" komutu kullanılmaktadır. Disk bölümlerini silerken dikkat ediniz.
@@ -70111,8 +70382,8 @@ int main(void)
     Aslında yukarıda yapılan işlemlerin sonucu olarak Disk Bölümleme Tablosu'ndaki iki giriş (32 byte) güncellenmiştir.
 
     5) fdisk programının başka komutları da vardır. Örneğin disk bölümlendirmesi yapıldıktan sonra bu bölümlendirme bilgileri 
-    "O" komutu ile bir dosyaya aktarılabilir. Sonra "I" komutu ile bu dosyadan yükleme yapılabilir. Böylece farklı diskler için
-    aynı işlemlerin daha kolay yapılması sağlanabilmektedir.
+    "O" komutu ile bir dosyaya aktarılabilir. Sonra "I" komutu ile bu dosyadan yükleme yapılabilir. Böylece farklı diskler 
+    için aynı işlemlerin daha kolay yapılması sağlanabilmektedir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -71156,6 +71427,92 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+    Bu bölümde Linux'taki sistem fonksiyonlarının nasıl çağrılacağı üzerinde duracağız.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Linux'ta her sistem fonksiyonunun bir numarası vardır. Linux çekirdeği sistem fonksiyonlarının başlangıç adreslerini 
+    bir gösterici dizisinde tutar. Bir sistem fonksiyonu çağrıldığında bu dizinin ilgili numaralı indeksindeki fonksiyonu 
+    çağırır. Tabii akış sistem fonksiyonuna geçirilmeden thread'in akışı da user moddan kernel moda geçirilmektedir. Intel 
+    sisteminde user moddan kernel moda geçiş 80H kesmesi yoluyla yapılmaktadır. Değişik sistemlerde bu işlemler değişik makine
+    komutlarıyla yapıldığı için "libc" kütüphanesi syscall isimli bir sarma fonksiyon bulundurmuştur. Bu fonksiyona programcı 
+    sistem fonksiyonunun numarasını ve parametrelerini girer. Fonksiyon sembolik makine dilinde yazılmış makine komutlarından 
+    oluşmaktadır. Böylece ilgili sistemde çağrım için gereken işlemler taşınabilir bir biçimde yapılabilmektedir. syscall
+    fonksiyonunun prototipi şöyledir:
+
+    #include <unistd.h>
+
+    long syscall(long number, ...);
+
+    Fonksiyonun birinci parametresi sistem fonksiyonunun numarasını almaktadır. Diğer parametreler ilgili sistem fonksiyonuna 
+    geçirilecek argümanları almaktadır. Fonksiyonun geri dönüş değeri sistem fonksiyonuna bağlı olarak değişebilmektedir. 
+    Pek çok sistem fonksiyonunda 0 başarı için kullanılmaktadır. Sistem fonksiyonlarının numaralarını Internet'te pek çok 
+    yerde bulabilirsiniz. Aynı zamanda bu numaralar <sys/syscall.h> başlık dosyasında SYS_xxx biçiminde define edilmiştir. 
+    Örneğin prosesi sonlandıran sys_exit isimli sistem fonksiyonunun numarası 60'tır. Ancak biz bu numarayı kullanmak yerine 
+    SYS_exit ismini de kullanabiliriz. SYS_exit aşağıdaki gibi define edilmiştir:
+
+    #define SYS_exit	60
+
+    Aşağıda sys_exit sistem fonksiyonunun syscall fonksiyonuyla çağrılmasına bir örnek verilmiştir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <sys/syscall.h>
+#include <unistd.h>
+
+int main(void)
+{
+	printf("running...\n");
+
+	syscall(SYS_exit, 0);
+
+	return 0;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Daha önceden de belirttiğimiz gibi bazı POSIX fonksiyonları Linux'ta doğrudan belli bir sistem fonksiyonunu çağırmaktadır.
+    Örneğin open POSIX fonksiyonu Linux'ta doğrudan sys_open isimli sistem fonksiyonunu; read, write ve close POSIX fonksiyonları 
+    doğrudan sys_read, sys_write ve sys_close sistem fonksiyonlarını; exit POSIX fonksiyonu sys_exit sistem fonksiyonunu çağırmaktadır. 
+    GNU "libc" kütüphanesinde bazı sistem fonksiyonları için POSIX standartlarında olmayan sarma fonksiyonlar da bulundurulmuştur. 
+    Ancak bazı sistem fonksiyonlarını çağıran POSIX fonksiyonları da sarma fonksiyonlar da yoktur. Bu tür durumlarda ilgili 
+    sistem fonksiyonu numara belirtilerek syscall fonksiyonuyla çağrılabilir.
+
+    Aşağıdaki örnekte open, read ve close POSIX fonksiyonları yerine doğrudan Linux'taki sistem fonksiyonları çağrılmıştır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/syscall.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+int main(void)
+{
+	int fd;
+	char buf[10];
+	long result;
+
+	if ((fd = syscall(SYS_open, "sample.c", O_RDONLY)) == -1) {
+		perror("SYS_open");
+		exit(EXIT_FAILURE);
+	}
+
+	if ((result = syscall(SYS_read, fd, buf, 10)) == -1) {
+		perror("SYS_read");
+		exit(EXIT_FAILURE);
+	}
+	buf[result] = '\0';
+	puts(buf);
+
+	if ((result = syscall(SYS_close, fd)) == -1) {
+		perror("SYS_close");
+		exit(EXIT_FAILURE);
+	}
+
+	return 0;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
 												193. Ders 26/01/2025 - Pazar
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -71196,25 +71553,26 @@ void exit_sys(const char *msg)
     boot işlemini yapabilmektedir. Diskte birden fazla işletim sisteminin bulunduğu durumlarda sistemin istenilen bir işletim 
     sistemi tarafından boot edilmesini sağlayabilmektedir. Örneğin makinemizde hem Windows hem de Linux aynı anda bulunuyor 
     olabilir. Önyükleyicimiz bize bir menü çıkartıp hangi işletim sistemi ile boot işlemini yapmak istediğimizi sorabilir. 
-    Eskiden basit boot prosedürleri zamanla daha karmaşık hale gelmiştir. Önyükleyici programlara gereksinim duyulmaya başlanmıştır.
+    Eskiden nispeten basit olan boot prosedürleri zamanla daha karmaşık hale gelmiştir. Önyükleyici programlara gereksinim 
+    duyulmaya başlanmıştır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Pekiyi neden biz Linux çekirdeğini kaynak kodlardan yeniden derlemek isteyebiliriz? İşte bunun tipik nedenleri şunlar olabilir:
 
-    - Bazı çekirdek modüllerinin ve aygıt sürücülerin çekirdek imajından çıkartılması ve dolayısıyla çekirdeğin küçültülmesi için.
+    - Bazı çekirdek modüllerinin ve aygıt sürücülerinin çekirdek imajından çıkartılması ve dolayısıyla çekirdeğin küçültülmesi için.
     - Yeni birtakım modüllerin ve aygıt sürücülerin çekirdek imajına eklenmesi için.
     - Çekirdeğe tamamen başka özelliklerin eklenmesi için.
     - Çekirdek üzerinde çekirdek parametreleriyle sağlanamayacak bazı konfigürasyon değişikliklerinin yapılabilmesi için.
     - Çekirdek kodlarında yapılan değişikliklerin etkin hale getirilmesi için.
-    - Çekirdeğe yama yapılması için.
+    - Çekirdeğe yama (patch) yapılması için.
     - Yeni çıkan çekirdek kodlarının kullanılabilir hale getirilmesi için.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Çekirdeğin derlenmesi için öncelikle çekirdek kaynak kodlarının derleme yapılacak bilgisayara indirilmesi gerekir. Pek 
+    Çekirdeğin derlenmesi için öncelikle çekirdek kaynak kodlarının derlemenin yapılacağı bilgisayara indirilmesi gerekir. Pek 
     çok dağıtım default durumda çekirdeğin kaynak kodlarını kurulum sırasında makineye çekmemektedir. Çekirdek kodları "kernel.org"
-    sitesinde bulundurulmaktadır. Tarayıcıdan "kernel.org" sitesine girilip "pub/linux/kernel" dizinine geçildiğinde tüm yayınlanmış
+    sitesinde bulundurulmaktadır. Tarayıcdan "kernel.org" sitesine girerek "pub/linux/kernel" dizinine geçtiğinizde tüm yayınlanmış
     çekirdek kodlarını göreceksiniz. İndirmeyi tarayıcıdan doğrudan yapabilirsiniz. Eğer indirmeyi komut satırından "wget" 
     programıyla yapmak istiyorsanız aşağıdaki URL'yi kullanabilirsiniz:
 
@@ -71229,12 +71587,12 @@ void exit_sys(const char *msg)
 
     $ wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.8.1.tar.xz
 
-    Çekirdek kodları indirildikten sonra onun açılması gerekir. Açma işlemi tar komutuyla aşağıdaki gibi yapılabilir:
+    Çekirdek kodları indirildikten sonra onun açılması gerekir. Açma işlemi "tar" komutuyla aşağıdaki gibi yapılabilir:
 
     $ tar -xvJf linux-5.15.12.tar.xz
 
     Debian tabanlı sistemlerde o anda makinede yüklü olan mevcut çekirdeğin kaynak kodlarını indirmek için aşağıdaki komutu 
-    kullanabilirisiniz:
+    kullanabilirsiniz:
 
     $ sudo apt-get install linux-source
 
@@ -71412,6 +71770,8 @@ void exit_sys(const char *msg)
     make dtbs: Kaynak kod ağacında "/arch/platform/boot/dts" dizininideki aygıt ağacı kaynak dosyalarını derler ve "dtb" 
     dosyalarını elde eder. Gömülü sistemlerde bu işlemin yapılması ve her çekirdek versiyonuyla o versiyonun "dtb" dosyasının 
     kullanılması tavsiye edilir.
+    make headers_install: Aygıt sürücüler için gereken başlık dosyalarının kurulumu sağlanır. Default kurulum yeri "/usr/include/linux"
+    dizinidir. Ancak INSTALL_HDR_PATH çevre değişkeni ile değiştirilebilir.
 
     Yukarıda da belirttiğimiz gibi aslında pek çok dağıtım o anda yüklü olan çekirdeğe ilişkin konfigürasyon dosyasını "/boot" 
     dizini içerisinde "config-$(uname -r)" ismiyle bulundurmaktadır. Örneğin kursun yapılmakta olduğu Mint dağıtımında "/boot" 
@@ -71891,7 +72251,7 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Örneğin biz kaynak kod ağacında "drivers" dizinin altında "mydriver" isimli dizin yaratıp onun içerisine "mydrive.c" 
+    Örneğin biz kaynak kod ağacında "drivers" dizininin altında "mydriver" isimli dizin yaratıp onun içerisine "mydrive.c" 
     dosyasını yerleştirmek isteyelim. Sırasıyla şunları yapmamız gerekir:
 
     1) "drivers" dizini altında "mydriver" dizini yaratırız.
@@ -71920,11 +72280,11 @@ void exit_sys(const char *msg)
     module_init(helloworld_init);
     module_exit(helloworld_exit);
 
-    4) "drivers/mydriver" dizini içerisinde "Makefile" isimli dosya oluştururuz ve içine aşağıdaki satır ekleriz:
+    4) "drivers/mydriver" dizini içerisinde "Makefile" isimli dosya oluştururuz ve içine aşağıdaki satırı ekleriz:
 
     obj-y += mydriver.o
 
-    5) Çekirdek kod dizinin kök dizinine gelip ve sırasıyla aşağıdaki komutları uygularız:
+    5) Çekirdek kod dizininin kök dizinine gelip ve sırasıyla aşağıdaki komutları uygularız:
 
     make -j$(nproc)
     make modules_install
@@ -71938,6 +72298,1064 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												196. Ders 07/02/2025 - Cuma
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Şimdi de yeni bir sistem fonksiyonunu çekirdeğe eklemek isteyelim. Linux çekirdeğinde sistem fonksiyonlarının adresleri 
+    bir fonksiyon gösterici dizisinde tutulmaktadır. Bu gösterici dizisinin her elemanı bir sistem fonksiyonunun adresini içerir. 
+    O halde çekirdeğe bir sistem fonksiyonu ekleyebilmek için sistem fonksiyonunu bir dosya içerisine yazmak ve bu tabloya 
+    o fonksiyonu gösteren bir giriş eklemek gerekir. Bunun yapılış biçimi Linux'un çeşitli versiyonlarında değiştirilmiştir. 
+    Aşağıda güncel bir versiyonda bu işlemin nasıl yapıldığına ilişkin bir örnek vereceğiz:
+
+    1) Sistem fonksiyonumuzu "mysyscall" biçiminde isimlendirmiş olalım. Önce yine çekirdek kaynak kod ağacında uygun bir dizine
+    yeni bir dosya eklemek gerekir. Bunun için en uygun dizin "kernel" dizinidir. Bu durumda sistem fonksiyonumuzu "kernel" 
+    dizini içerisinde "mysyscall.c" ismiyle yazabiliriz:
+
+    /* mysyscall.c */
+
+    #include <linux/kernel.h>
+    #include <linux/syscalls.h>
+    #include <linux/uaccess.h>
+
+    SYSCALL_DEFINE0(mysyscall)
+    {
+        printk(KERN_INFO "My system call\n");
+
+        return 0;
+    }
+
+    Bundan sonra kernel dizini içerisindeki "Makefile" dosyasına aşağıdaki satırı ekleriz:
+
+    obj-y += mysyscall.o
+
+    2) Sistem fonksiyon tablosuna ilgili sistem fonksiyonu bir eleman olarak girilir. Sistem fonksiyon tablosu 
+    "arch/<platform>/syscalls/xxx.tbl" dosyasında belirtilmektedir. 64 bit Linux sistemleri için bu dosya 
+    "arch/x86/entry/syscalls/syscall_64.tbl" biçimindedir. Ekleme bu dosyanın sonuna aşağıdaki gibi yapılabilir:
+
+    ...
+    544	x32	io_submit		compat_sys_io_submit
+    545	x32	execveat		compat_sys_execveat
+    546	x32	preadv2			compat_sys_preadv64v2
+    547	x32	pwritev2		compat_sys_pwritev64v2
+    # This is the end of the legacy x32 range. Numbers 548 and above are
+    # not special and are not to be used for x32-specific syscalls.
+    548    common   mysyscall    sys_mysyscall
+
+    3) Artık çekirdek aşağıdaki gibi derlenebilir:
+
+    $ sudo make -j$(nproc)
+
+    4) Çekirdek modüllerini aşağıdaki gibi install edebiliriz:
+
+    $ sudo make modules_install
+
+    5) Çekirdeğin kendisini de şöyle install edebiliriz:
+
+    $ sudo make install
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Sistem fonksiyonunu çekirdeğe yerleştirip yeni çekirdekle makinemizi açtıktan sonra fonksiyonun testini aşağıdaki gibi 
+    yapabiliriz:
+
+    #include <stdio.h>
+    #include <sys/syscall.h>
+    #include <unistd.h>
+
+    #define SYS_mysyscall		548
+
+    int main(void)
+    {
+        printf("running...\n");
+
+        syscall(SYS_mysyscall);
+
+        return 0;
+    }
+
+    Bu programı derleyip çalıştırdıktan sonra "dmesg" yaptığımızda aşağıdaki gibi bir çıktı elde etmeliyiz:
+
+    ...
+    file uses a different sequence number ID, rotating.
+    [  144.816248] warning: `ThreadPoolForeg' uses wireless extensions which will stop working for Wi-Fi 7 hardware; use nl80211
+    [  487.365691] My system call
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Her ne kadar sistem programlamanın doğrudan veritabanlarıyla bir ilgisi yoksa da sistem programcıların bazı durumlarda 
+    veritabanları oluşturup onları kullanması gerekebilmektedir. Bu bölümde C'den SQL kullanarak veritabanlarıyla nasıl işlem 
+    yapılacağı üzerinde duracağız.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Eskiden veritabanı işlemleri kütüphanelerle yapılıyordu. Daha sonra veritabanı işlemleri için özel programlar geliştirildi. 
+    Veritabanı işlemlerini ayrıntılı ve etkin bir biçimde gerçekleştiren yazılımlara "Veritabanı Yönetim Sistemleri (VTYS/DBMS)"
+    denilmektedir. Günümüzde çeşitli firmalar ve kurumlar tarafından geliştirilmiş pek çok VTYS vardır. Bunların bazıları 
+    kapalı ve ücretli yazılımlardır. Bazıları ise açık kaynak kodlu ve ücretsiz yazılımlardır. En çok kullanılan VTYS yazılımları 
+    şunlardır:
+
+    - IBM DB2 (Dünyanın ilk VTYS'sidir.)
+    - Oracle (Oracle firmasının en önemli ürünü.)
+    - SQL Server (Microsoft firmasının VTYS'si.)
+    - MySQL (Açık kaynak kodlu, ancak Oracle firması satın aldı ve gelecekteki durumu tartışmalı.)
+    - MariaDB (Açık kaynak kodlu, MySQL Oracle tarafından satın alınınca kapatılma tehlikesine karşı MySQL varyantı olarak 
+    devam ettirilmektedir.)
+    - PostgreSQL (Açık kaynak kodlu, son yıllarda geniş kesim tarafından kullanılan VTYS.)
+    - SQLite (Gerçek anlamda bir VTYS değil, VTYS'yi taklit eden mini bir kütüphane gibi. Bu tür yazılımlara "gömülü VTYS" de
+    denilmektedir.)
+    - Microsoft Access Jet Motoru (Bu da Microsoft'un gömülü bir VTYS sistemidir. Microsoft Access tarafından da kullanılmaktadır.)
+
+    Bir yazılımın VTYS olabilmesi için onun bazı gelişmiş özelliklere sahip olması gerekir:
+
+    1) VTYS'ler kullanıcılarına yüksek seviyeli bir çalışma modeli sunmaktadır.
+
+    2) VTYS'ler genellikle dış dünyadan istekleri "SQL (Structured Query Language)" denilen dekleratif bir dille almaktadır. 
+    Yani programcı VTYS'ye iş yaptırmak için SQL denilen bir yüksek seviyeli dekleratif bir dil kullanmaktadır. VTYS SQL 
+    komutlarını alıp onları parse eder ve C ve C++ gibi dillerde yazılmış olan motor kısmı (engine) tarafından işlemler yapılır. 
+    SQL, veritabanı işlemlerini yapan bir dil değildir. Programcı ile VTYS arasında yüksek seviyeli iletişim için kullanılan 
+    bir dildir. VTYS'lerin motor kısımları genellikle C ve C++ gibi sistem programlama dilleriyle yazılmaktadır.
+
+    3) VTYS'ler pek çok yüksek seviyeli araçlara da sahiptir. Örneğin backup ve restore işlemlerini yapan araçlar her VTYS'de 
+    bulunmaktadır.
+
+    4) VTYS'ler genellikle birden fazla kullanıcıya aynı anda hizmet verecek biçimde client-server mimarisine uygun biçimde
+    yazılmaktadır. Bunlara uzaktan erişilebilmekte ve aynı anda pek çok kullanıcı bunlara iş yaptırabilmektedir.
+
+    5) VTYS'ler ileri derece güvenlik sunmaktadır. Bir kullanıcı başka bir kullanıcının bilgilerine erişememektedir.
+
+    6) VTYS'ler yüksek miktarda kayıtlardan oluşan veritabanları üzerinde etkin bir biçimde işlemler yapabilmektedir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Sistem programlama uygulamalarında bazen küçük veritabanlarının oluşturulması gerekebilmektedir. Bu tür durumlarda kapasiteli
+    VTYS'ler yerine tek bir dosyadan oluşan adeta bir kütüphane biçiminde yazılmış olan gömülü VTYS'lerden (embedded DBMS)
+    faydalanılmaktadır. Bunların en çok kullanılanı SQLite denilen gömülü VTYS'dir. Örneğin bir tarayıcı yazdığımızı düşünelim. 
+    Son ziyaret edilen Web sayfalarının bir biçimde tarayıcıdan çıkıldıktan sonra saklanması gerekir. İşte bu tür durumlarda 
+    SQLite gibi basit yapıda VTYS'ler tercih edilebilmektedir. Internet bağlantısı olmayan mobil cihazlarda da SQLite gibi 
+    gömülü VTYS'ler çokça kullanılmaktadır. Örneğin biz bir soket uygulaması yazmış olalım. Bu uygulama bir log tutacak olsun. 
+    Burada SQLServer, MySQL gibi büyük çaplı VTYS'ler yerine SQLite gibi bir gömülü VTYS'yi tercih edebiliriz. Gömülü VTYS'ler
+    büyük çaplı veritabanlarında iyi bir performans gösterememektedir. Bunlar daha çok küçük ve orta çaplı veritabanlarında 
+    kullanılmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Veritabanı işlemleri için C'den ziyade yüksek seviyeli diller tercih edilmektedir. Örneğin Java, C#, Python gibi diller 
+    veritabanı işlemlerinde oldukça yaygın kullanılmaktadır. Benzer biçimde JavaScript de Web uygulamalarında veritabanları
+    üzerinde işlem yapmak için kullanılan dillerdendir. Günümüzde veritabanlarının en çok kullanıldığı uygulamalar Web 
+    uygulamalarıdır. Bir Web mağazasına girdiğinizde oradaki bütün ürünler veritabanlarında tutulmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    VTYS'lerin client-server mimarisine uygun bir biçimde yazıldığını belirtmiştik. VTYS'lerle tipik çalışma şu biçimdedir:
+
+    1) Programcı "kullanıcı ismi" ve "parola" ile VTYS'ye bağlanır. Bu durumda programcı client durumunda VTYS ise server 
+    durumundadır.
+
+    2) Programcı VTYS'ye yaptırmak istediği şeyleri SQL dilinde oluşturur ve VTYS'ye SQL komutlarını gönderir.
+
+    3) VTYS bu SQL komutlarını parse eder ve istenilen işlemleri yapar, programcıya işlemin sonuçlarını iletir.
+
+    4) Programcı işi bittiğinde bağlantıyı kapatır.
+
+    Her ne kadar SQLite ve Microsoft Access Jet Motoru gibi VTYS'ler aslında client-server çalışmıyor olsa da bunlar çalışma 
+    biçimi olarak geniş kapasiteli VTYS'leri taklit etmektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Veritabanları tasarım bakımından birkaç gruba ayrılmaktadır. Günümüzde en çok kullanılan veritabanı mimarisine "İlişkisel
+    Veritabanı (Relational Database) Mimarisi" denilmektedir. İlişkisel veritabanları "tablolardan (tables)" tablolar da 
+    sütun ve satırlardan oluşmaktadır. Örneğin biz öğrencilerin bilgilerini tutmak için bir veritabanı tablosu oluşturalım. 
+    Bu tablo aşağıdaki görünümde olsun:
+
+    Adı Soyadı      Numarası        Sınıfı
+    ---------------------------------------
+    Ali Serçe       1234            3B
+    Güray Sönmez    6745            2C
+    Ayşe Er         6234            2B
+    ...
+
+    Tablolardaki sütunlara "alan (field)", satırlara ise "satır (row)" ya da "kayıt (record)" denilmektedir. MySQL, SQLServer, 
+    Oracle, SQLite gibi VTYS'ler ilişkisel veritabanı mimarisini kullanmaktadır.
+
+    Hiyerarşik bilgileri (örneğin bir ağaç yapısını) tutmak için hiyerarşik veritabanı mimarileri kullanılabilmektedir. Son 15
+    senedir ismine "nosql" denilen ilişkisel olmayan ve özellikle metin tabanlı bilgiler üzerinde işlem yapan veritabanı 
+    mimarileri sıkça kullanılır hale gelmiştir. Ancak en yaygın kullanılan mimari ilişkisel veritabanı mimarisidir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    MySQL'i kurmak için tek yapılacak şey server programı http://dev.mysql.com/downloads/ sitesnden indirip yüklemektir. Kurulum 
+    oldukça basittir. Birtakım sorular default değerlerle geçilebilir. Ancak kurulum sırasında MySQL kurulum programı bizden 
+    “root” isimli yetkili kullanıcının parolasını istenecektir. Bu parola yetkili olarak VTYS'ye bağlanmak için gerekir. Server 
+    programın yanı sıra bir yönetim ekranı elde etmek için ayrıca "MySql Workbench" programı da kurulabilir.
+
+    MySQL Linux sistemlerinde Debian paket yöneticisi ile aşağıdaki gibi basit bir biçimde kurulabilir:
+
+    $ sudo apt-get install mysql-server
+
+    Kütüphane dosyaları da şöyle indirilebilir:
+
+    $ sudo apt-get install libmysqlclient21
+
+    MySQL Workbench ise komut satırı yerine Web Sayfasından indirilerek kurululabilir.
+
+    Yukarıda da belirttiğimiz gibi MySQL kısmen paralı hale getirilince bunun MariaDB isimli bir klonu oluşturuldu. MariaDB'nin
+    uzun vadede açık kaynak kod güvencesi olduğu için tercih edebilirsiniz.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    SQL paralı bir üründür. Fakat bunun da "Express Edition" isminde bedava bir sürümü vardır. Bu sürüm Microsoft'un sayfasından 
+    indirilip kurulabilir. Tıpkı MySQL'de olduğu gibi SQL Server'da da yönetim konsol programı da vardır. Buna "SQL Server 
+    Management Studio" denilmektedir. Bunun da indirilip kurulması tavsiye edilir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    SQLite zaten tek bir DLL'den oluşmaktadır. Dolayısıyla aslında kurulumu diye bir durum söz konusu değildir. Fakat biz 
+    burada C için örnekler yaparken SQLite başlık dosyalarına ve SQLite DLL’inin import kütüphanesine sahip olmak zorundayız. 
+    Bunların nasıl elde edileceği sonraki konularda ele alınacaktır. SQLite yönetim konsolu olarak pek çok alternatif vardır. 
+    Bunlardan biri "FireFox Add On" olarak çalışmaktadır. Diğer seçenekler ise “SQLite Studio” ve "SQLite Browser" programlarıdır. 
+    Cross Platform olan bu araç ilgili web sayfasından indirilerek kurulabilir. Ya da daha genel "DBeaver" da tercih edilebilir.
+
+    SQLite'ı Windows için aşağıdaki bağlantıdan indirebilirsiniz:
+
+    https://www.sqlite.org/download.html
+
+    Buradan indirilen zip dosyasının içerisinde bir tane ".DLL" dosyası bir ".DEF" dosyası bulunacaktır. Bu DLL'i PATH dizinlerinin
+    içerisine ya da uygulama dizininin içerisine çekebilirsiniz. Linux'ta SQLite şöyle indirilebilir:
+
+    $ sudo apt-get install sqlite
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    İlişkisel veritabanları tablolardan tablolar da sütunlardan (fields) oluşmaktadır. Tabii sütunların da veri türleri vardır. 
+    SQL Standratlarında standart bazı veri türleri belirtilmiştir. Ancak SQL VTYS'den VTYS'ye değişiklik gösterebilmektedir. 
+    Dolayısıyla her VTYS'nin SQL komutlarında bazı farklılıklar bulunabilmektedir. Biz burada bazı standart sütun türleri
+    üzerinde duracağız. Çalıştığınız VTYS'nin dokümanlarından onlara özgü ayrıntıları elde edebilirsiniz.
+
+    INTEGER: Tamsayısal bilgileri tutan bir türdür. İstenirse kaç digitlik sayıların tutulacağı da belirtilebilir.
+
+    INT: Tipik olarak 4 byte uzunluğunda işaretli tamsayı türüdür. (Örneğin bu tür C’deki int türü ile temsil edilebilir.)
+
+    SMALLINT: Tipik olarak 2 byte'lık işaretli tamsayı türüdür. (Örneğin bu tür C’deki short türü ile temsil edilebilir.)
+
+    BIGINT: Tipik olarak 8 byte uzunluğunda işaretli tamsayı türüdür. (Örneğin bu tür C’deki long long türü ile temsil 
+    edilebilir.)
+
+    FLOAT: Tipik olarak 4 byte'lık gerçek sayı türüdür. (Örneğin bu tür C’deki float türü ile temsil edilebilir.)
+
+    DOUBLE: Tipik olarak 8 byte'lık gerçek sayı türüdür. (Örneğin bu tür C’deki double türü ile temsil edilebilir.)
+
+    TIME: Zaman bilgisini saklamak için kullanılan türdür.
+
+    DATE: Tarih bilgisini saklamak için kullanılan türdür.
+
+    CHAR(n): n karakterli yazıyı tutmak için kullanılan türdür.
+
+    VARCHAR(n): En fazla n karakterli bir yazıyı tutmak için kullanılan türdür.
+
+    TINYTEXT: Yazısal bilgileri tutmak için kullanılan türdür. (Tipik olarak 256 byte'a kadar)
+
+    TEXT: Yazısal bilgileri tutmak için kullanılan türdür. (Tipik olarak 64K'ya kadar)
+
+    LONGTEXT: (Tipik olarak 4GB'ye byte'a kadar)
+
+    TINYBLOB: Binary bilgileri tutmak için kullanılan türdür. (Tipik olarak 256 byte'a kadar)
+
+    BLOB: Binary bilgileri tutmak için kullanılan türdür. (Tipik olarak 64K'ya kadar)
+
+    LONGBLOB: Binary bilgileri tutmak için kullanılan türdür. (Tipik olarak 4GB'ye byte'a kadar)
+
+    Tablo sütunlarının türleri tablo yaratılırken belirlenmektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Şimdi de temel SQL komutlarını görelim. SQL bazı ayrıntıları olan dekleratif bir programlama dilidir. Komutlardan oluşmaktadır.
+    Biz burada temel SQL komutlarını ayrıntılarına girmeden ele alacağız.
+
+    SQL büyük jarf küçük harf duyarlılığı olmayan (case insensitive) bir dildir. Ancak geleneksel olarak anahtar sözcüklerin
+    büyük harflerle yazılması tercih edilmektedir. SQL komutlarının sonunda sonlandırıcı olarak ';' karakteri bulundurulmaktadır.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    CREATE DATABASE Komutu: İlişkisel veritabanlarında “veritabanı” tablolardan oluşmaktadır. Bu nedenle önce bir veritabanının 
+    yaratılması, sonra da onun içerisinde tabloların yaratılması gerekir. Veritabanlarını yaratmak için CREATE DATABASE komutu 
+    kullanılır. Komutun genel biçimi şöyledir:
+
+    CREATE DATABASE <isim>;
+
+    Örneğin:
+
+    CREATE DATABASE student;
+
+    USE Komutu: Belli bir veritabanı üzerinde işlemler yapmak için öncelikle onun seçilmesi gerekir. Bu işlem USE komutuyla 
+    yapılır. Komutun genel biçimi şöyledir:
+
+    USE <isim>;
+
+    SHOW DATABASES Komutu: Bu komut VTYS'de yaratılmış olarak bulunan veritabanlarını gösterir. Komutun genel biçimi şöyledir:
+
+    SHOW DATABASES;
+
+    CREATE TABLE Komutu: Bu komut veritabanı için bir tablo yaratmak amacıyla kullanılır. Komutun basit genel biçimi şöyledir:
+
+    CREATE TABLE <isim> (<isim> <tür>, <isim> <tür>, <isim> <tür>... );
+
+    Aslında bu komutun bazı ayrıntıları vardır. Bu ayrıntılar ilgili dokümanlardan öğrenilebilir.
+
+    Örneğin:
+
+    CREATE TABLE student_info(student_id PRIMARY KEY AUTO_INCREMENT, student_name VARCHAR(45), student_no INTEGER);
+
+    Bir tabloda tekrarlanması yasaklanmış olan sütunlara “birincil anahtar (primary key)” denilmektedir. Tablodaki kayıtların 
+    hepsinin birincil anahtar sütunları farklı olmak zorundadır. Başka bir deyişle biz birtablya orada zaten var olan birincil 
+    anahtar değerine ilişkin bir kayıt ekleyemeyiz. Her tabloda bir tane birincil anahtarın olması tavsiye edilmektedir. 
+    Birincil anahtarın tablo yaratılırken CREATE TABLE komutunda belirtilme biçimi çeşitli VTYS’lerde farklı olabilmektedir.
+
+    DROP TABLE Komutu: Bu komut tabloyu silmek için kullanılır. Genel biçimi şöyledir:
+
+    DROP TABLE <isim>;
+
+    Örneğin:
+
+    DROP TABLE person;
+
+    INSERT INTO Komutu: Bu komut bir tabloya bir satır eklemek için kullanılır. Komutun temel genel biçimi şöyledir:
+
+    INSERT INTO <tablo ismi> (sütun1, sütun2, sütun3,...) VALUES (değer1, değer2, değer3,...);
+
+    Tabloya satır eklerken aslında her sütun bilgisinin belirtilmesi gerekmez. Bu durumda o sütun için tablo yaratılırken 
+    (CREATE TABLE komutunda) belirlenmiş olan default değerler kullanılır. Komutun ayrıntılı genel biçimi için ilgili 
+    dokümanlara başvurabilirsiniz. Örneğin:
+
+    INSERT INTO student_info(student_name, student_no) VALUES('Güray Sönmez', 754);
+
+    Değerler girilirken yazılar ve tarihler tek tırnak içerisinde belirtilmelidir.
+
+    WHERE Cümleciği: Pek çok komut bir WHERE kısmı içermektedir. Where cümleciği koşul belirtmek için kullanılır. Koşullar 
+    karşılaştırma operatörleriyle oluşturulur. Mantıksal operatörlerle birleştirilebilir. Örneğin:
+
+    WHERE age > 20 AND birth_place = 'Eskişehir'
+
+    LIKE operatörü joker karakterleri kullanılarak belli bir kalıba uyan yazı koşulu oluşturur. Örneğin:
+
+    WHERE student_name LIKE 'A%'
+
+    Burada student_name için 'a' ile başlayanlar koşulu verilmiştir. % karakteri "geri kalanı herhangi biçimde olabilir" 
+    anlamına gelir. Örneğin:
+
+    WHERE student_name LIKE '%an'
+
+    Burada sonu 'an' ile bitenler koşulu verilmiştir.
+
+    WHERE cümleciğinin bazı detayları vardır. Bu detaylar ilgili dokümanlardan öğrenilebilir.
+
+    DELETE FROM Komutu: Bu komut bir tablodan satır silmek için kullanılır. Komutun Genel biçimi şöyledir:
+
+    DELETE FROM <tablo ismi> <WHERE cümleciği>;
+
+    UPDATE Komutu: Update komutu belli kayıtların alan bilgilerini değiştirmek amacıyla kullanılır. Örneğin ismi "Kağan" 
+    olan bir kaydı "Kaan" olarak değiştirmek isteyebiliriz. Ya da bir müşterinin bakiyesini değiştirmek isteyebiliriz. Komutun 
+    genel biçimi şöyledir:
+
+    UPDATE <tablo ismi> SET alan1 = değer1, alan2 = değer2, ... WHERE <koşul>;
+
+    Örneğin:
+
+    UPDATE student_info SET student_name = 'Kaan Kaplan' WHERE student_name = 'Kaan Aslan'
+
+    DELETE ve UPDATE komutlarını kullanrıken dikkat ediniz. Çünkü eğer koşul belirtmezseniz ya da koşulu yanlış belirtirseniz
+    yaptıpınız işlemden birden fazla kayıt etkilenir. Örneğin:
+
+    UPDATE student_info SET student_name = 'Ali Ballı' WHERE student_name = 'Veli Ballı';
+
+    Burada koşul zayıf oluşturulmuştur. Bu durumda bütün "Veli Ballı" isimleri "Ali Ballı" olarak değiştirilir. Örneğin:
+
+    UPDATE student_info SET student_name = 'Ali Ballı' WHERE student_name = 'Veli Ballı' AND student_no = 754;
+
+    Artık burada ismi "Veli Ballı" olan ve numarası 754 olan satırın ismi "Ali Ballı" olarak değiştirilecektir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												199. Ders 21/02/2025 - Cuma
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    SELECT Komutu: Koşulu sağlayan kayıtların elde edilmesi SELECT komutuyla yapılmaktadır. SELECT komutunun genel biçimi 
+    oldukça ayrıntılıdır. Çünkü komuta çeşitli cümlecikler monte edilebilmektedir. Komutun temel biçimi şöyledir:
+
+    SELECT <sütun_listesi> FROM <tablo_ismi> [WHERE <koşul];
+
+    Eğer WHERE cümleciği kullanılmazsa tablodaki tüm kayıtlar elde edilir. Sütun listesi sütunların isimlerinden oluşmaktadır. 
+    Uygulamacı yalnızca bazı sütun bilgilerini elde edebilir. Sütun istesi yerine * kullanılırsa "tüm sütunlar" anlamına gelmektedir. 
+    Örneğin:
+
+    SELECT * FROM student WHERE student_no > 600;
+
+    Burada öğrenci numarası 600'den büyük olan öğrencilerin tüm sütun bilgileri elde edilmiştir.
+
+    Eğer SELECT edilen kayıtlar belli bir sütuna göre sıralı biçimde elde edilmek istenirse ORDER BY cümleciği komuta eklenir. 
+    Örneğin:
+
+    SELECT * FROM student WHERE student_id > 600 ORDER BY stdent_name;
+
+     Burada öğrenci numarası 600'den büyük olan öğrencilerin tüm sütun bilgileri elde edilmiştir.
+
+    Eğer SELECT edilen kayıtlar belli bir sütuna göre sıralı biçimde elde edilmek istenirse ORDER BY cümleciği komuta eklenir. 
+    Örneğin:
+
+    SELECT * FROM student WHERE student_id > 600 ORDER BY stdent_name;
+
+    ORDER BY default olarak kayıtları küçükten büyüğe (ASC) vermektedir. Ancak DESC ile büyükten küçüğe de sıralama yapılabilir. 
+    Örneğin:
+
+    SELECT * FROM student WHERE student_no > 600 ORDER BY student_name DESC;
+
+    ORDER BY cümleciğinde birden fazla sütun belirtilebilir. Bu durumda ilk sütun değerleri aynıysa diğer sütunlar dikkate alınır. 
+    Örneğin:
+
+    SELECT * FROM student WHERE student_no > 600 ORDER BY student_name DESC, student_no ASC;
+
+    Burada ismi aynı olanlar numaralarına göre küçükten büyüğe elde edilecektir.
+
+    LIMIT cümleceği de SELECT cümlesiyle kullanılabilir. LIMIT anahtar sözcüğnün yanında bir sayı bulunur. Koşulu sağlayan 
+    kayıtların belli sayıda miktarını elde etmek için kullanılır. Örneğin:
+
+    SELECT * FROM student WHERE student_no > 600 ORDER BY student_name DESC, student_no ASC LIMIT 10;
+
+    WHERE cümleciğinde built-in fonksiyonlar kullanılabilir. Örneğin:
+
+    SELECT * FROM city WHERE char_length(city) = 6;
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    İlişkisel veritabanlarında tablolarda veri tekrarı istenmez. Örneğin bir öğrenci veritabanı oluşturacak olalım. Bir öğrencinin 
+    çeşitli bilgilerinin yanı sıra onun okulu hakkında da bilgileri tutmak isteyelim. Aşağıdaki gibi bir tablo tasarımı uygun 
+    değildir:
+
+    Adı Soyadı  No      Okul Adı                Okulun Bulunduğu Şehir      Okulun Türü
+   --------------------------------------------------------------------------------------
+    Ali Serçe   123     Tarsus Amerikan Lisesi      Mersin                  Devlet Lisesi
+    Kaan Aslan  745     Eskişehir Atatürk Lisesi    Eskişehir               Devlet Lisesi
+    Hasan Bulur 734     Tarsus Amerikan Lisesi      Mersin                  Devlet Lisesi
+    ...                 ...                         ...                     ...
+
+    Burada Okul bilgileri gereksiz bir biçimde tekrarlanmaktadır. Bu tekrarı engellemek için iki tablo oluşturabiliriz.
+
+    Öğrenci Tablosu
+
+    Adı Soyadı     No      Okul ID'si
+    ----------------------------------
+    Ali Serçe      123     100
+    Kaan Aslan     745     235
+    Hasan Bulur    734     100
+    ...             ...     ...
+
+    Okul Tablosu
+
+    Okul Id'si       Okul Adı                   Okulun Bulunduğu Şehir      Okulun Türü
+    ------------------------------------------------------------------------------------
+    ...              ...                        ...                         ...
+    100              Tarsus Amerikan Lisesi     Mersin                      Devlet Lisesi
+    150              Eskişehir Atatürk Lisesi   Eskişehir                   Devlet Lisesi
+    ...              ...                        ...                         ...
+
+    Burada veri tekrarı oratadan kaldırılmıştır. Tabii bu tablolarda da Okul ID'si ortak bir sütundur. Bu ortak sütun tablolar 
+    arasında ilişki kurmak için gerekmektedir. Bu tür sütunlara "foreign key" de denilmektedir. Ancak yukarıdaki gibi tekrarlar 
+    engellendiğinde gerekli bilgiler artık tek bir tablodan değil çeşitli tabolardan çekilip alınacaktır. İşe çeşitli tabolardan 
+    bilgilerin çekilip alınması işlemine "JOIN" işlemi denilmektedir. JOIN işleminin birkaç biçimi vardır (INNER JOIN, OUTER JOIN, 
+    LEFT JOIN, RIGHT JOIN gibi). Ancak en fazla kullanılan JOIN işlemi "INNER JOIN" denilen işlemdir. JOIN denildiğinde zaten 
+    default olarak INNER JOIN anlaşılır. INNER JOIN işleminde eğer iki tablo söz konusu ise önce iki tablonun kartezyen çarpımları 
+    elde edilir. Her kaztezyen çarpım iki tablonun birleştirilmesi biçiminde ("join" ismi oradan geliyor) elde edilmektedir. 
+    Sonra kartezyen çarpımlarda yalnızca belli koşulu sağlayan satırlar elde edilir. Böylece tablolar "ilişkisel (relational)" 
+    biçimde birleştirilmiş olur.
+
+    INNER JOIN sentaksı iki biçimde oluşturulabilmektedir. Birinci sentaks klasik eski tip sentakstır. İkinci sentaks daha modern 
+    biçimdir. Klasik eski tip sentaks şöyledir:
+
+    SELECT <iki tablodaki istenen sütunların listesi> FROM <birinci tablo ismi> INNER JOIN <ikinci tablo ismi> ON <koşul>;
+
+    Örneğin:
+
+    SELECT student.student_name, student.student_no, school.school_name FROM student INNER JOIN school ON 
+    student.school_id = school.school_id WHERE stduent.student_no > 600;
+
+    Sütun isimleri belirtilirken eğer çakışma yoksa yalnızca isimler yazılabilir. Ancak çakışma varsa tablo ismi ve nokta 
+    operatörü ile sütunun hangi tabloya ilişkin olduğu belirtilmelidir. Bazı uygulamacılar çakışma olsa da olmasa da 
+    niteliklendirme yaparlar. Bazı uygulamacılar yalnızca çakışan sütunlarda niteliklendirme yaparlar. Yukarıdaki örnekte 
+    tüm sütunlar niteliklendirilerek belirtilmiştir. Bu örnek şöyle de yapılabilirdi:
+
+    SELECT student_name, student_no, school_name FROM student INNER JOIN school ON student.school_id = school.school_id 
+    WHERE student_no > 600;
+
+    Modern INNER JOIN sentaksında SELECT komutunun FROM kısmında birden fazla tablo ismi belirtilir. Koşul da yine WHERE 
+    cümleciğine taşınır. Örneğin:
+
+    SELECT student_name, student_no, school_name FROM student, school WHERE student.school_id = school.school_id AND 
+    student_no > 600;
+
+    Daha çok bu modern biçim tercih edilmektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    İşlemlere başlamadan önce SQLite’ın programalama kurulumunu yapmamız gerekir. SQLite yukarıda da belirtitğimiz gibi 
+    çok küçük (tek bir dinamik kütüphaneden oluşan) bir VTYS’dir. Dolayısıyla onun kurulması Windows’ta bildiğimiz anlamda 
+    bir setup işlemi ile yapılmaz. Tabii bizim C’den SQLite kütüphanesini kullanabilmemiz için ona ilişkin başlık ve kütüphane 
+    dosyalarını elde etmemiz gerekir. Windows'ta SQLite'ın resmi indirme sitesi şöyledir:
+
+    https://sqlite.org/download.html
+
+    Buradan aşağıdaki iki indirme yapılır:
+
+    1) Precompiled Binaries for Windows (32 bit ya da 64 bit)
+    2) SQLite Amalgamation
+
+    Birinci indirmede tek bir DLL elde edilecektir. İkinci indirmede de "sqlite3.h" başlık dosyası ve kaynak dosyası elde 
+    edilecektir.
+
+    Ayrıca SQlite için "sqlite3" isminde komut satırından kullanılan bir program da bulundurulmuştur. Bu programın kullanımına 
+    ilişkin bilgileri aşağıdaki bağlantıdan edinebilirsiniz:
+
+    https://www.sqlite.org/cli.html
+
+    Birinci indirmede Windows için gereken sqlite3.dll ve sqlite3.def dosyaları elde edilir. Buradaki “.def” dosyasına 
+    “module definition file” denilmektedir. Bu dosya “DLL’in import kütüphanesi” gibi link aşamasına dahil edilebilir. 
+    Ya da istenirse aşağıdaki komutla bu “.def” dosyasından “.lib” uzantılı “import kütüphanesi de oluşturulabilmektedir:
+
+    LIB /DEF:sqlite3.def /machine:x86
+
+    Buradaki machine argümanı hedef sistemi belirtmektedir. Burada 32 bit Windows sistemleri için x86, 64 bit Windows 
+    sistemleri için "x64" kullanılmalıdır. Örneğin:
+
+    LIB /DEF:sqlite3.def /machine:x64
+
+    İkinci indirmeden biz SQLite’ın kaynak dosyalarını elde ederiz. Buradaki “sqlite3.h” dosyası SQLite fonksiyonları için 
+    başlık dosyası niteliğindedir.
+
+    Mac OS X için kurulum Windows’takine benzemektedir. Yine ilgili “.zip” dosyaları indirilip kurulum yapılabilir. Bu 
+    sistemlerde derleme yaparken link aşamasında "-lsqlite3" lie kütüphane dosyasını belirtmeyi unutmayınız.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+												200. Ders 23/02/2025 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Kurulum sonrası her şeyin hazır oladuğunu anlamak için SQLite kütüphanesinin versiyon numarasını yazdıran aşağıdaki 
+    gibi bir programla test işlemi yapabilirsiniz:
+
+    #include <stdio.h>
+    #include "sqlite3.h"
+
+    int main(void)
+    {
+        printf("%s\n", sqlite3_libversion());
+
+        return 0;
+    }
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    C’de SQLite veritabanı ile işlem yapmak için önce o veritabanının sqlite3_open fonksiyonuyla açılması gerekir. Bu işlemden 
+    sqlite3 türünden bir handle elde edilir. sqlite3_open fonksiyonun prototipi şöyledir:
+
+    int sqlite3_open(
+        const char *filename,   /* Database filename (UTF-8) */
+        sqlite3 **ppDb          /* OUT: SQLite db handle */
+    );
+
+    Fonksiyonun birinci parametresi bizden sqlite dosyasının yol ifadesini alır. İkinci parametresi sqlite3 isimli yapı türünden 
+    bir göstricinin adresini almaktadır. Fonksiyon handle alanını (yani sqlite yapı nesnesini) oluşturur. Onun adresini bu 
+    göstericinin içerisine yerleştirir. Fonksiyonun geri dönüş değeri işlemin başarısını belirtmektedir. Fonksiyon başarılıysa 
+    SQLITE_OK değerine geri döner. Fonksiyon başarısız olduğunda yine dosyanın sqlite3_close fonksiyonuyla kapatılması gerekir. 
+    Hata nedeni de sqlite3_errmsg fonksiyonuyla yazdırılabilir. Bu durumda sqlite dosyasının açılması tipik olarak şöyle 
+    yapılabilir:
+
+    if (sqlite3_open("student.db", &db) != SQLITE_OK) {
+        fprintf(stderr, "sqlite3_open failed: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        exit(EXIT_FAILURE);
+    }
+
+    sqlite3_open fonksiyonu dosya varsa olanı açar, yoksa yeni bir SQLite DB dosyası yaratır.
+
+    sqlite3_errmsg fonksiyonunun parametrik yapısı şöyledir:
+
+    const char *sqlite3_errmsg(sqlite3 *db);
+
+    sqlite3_close fonksiyonun prototipi ise şöyledir:
+
+    int sqlite3_close(sqlite3*);
+
+    Dosya kapatılırken başarı kontrolü yapmaya gerek yoktur. Başarısızlık durumlarında hata mesajını stderr dosyasına yazdırıp
+    programı sonlandıran bir sarma fonksiyon şöyle yazılabilir:
+
+    void sqlite3_exit(const char *msg, sqlite3 *db)
+    {
+        fprintf(stderr, "%s failed => %s\n", msg, sqlite3_errmsg(db));
+        sqlite3_close(db);
+
+        exit(EXIT_FAILURE);
+    }
+
+    Böylece biz hata durumlarını aşağıdaki gibi ele alabiliriz:
+
+    if (sqlite3_open("studentxxx.db", &db) != SQLITE_OK)
+        sqlite3_exit("sqlite3_open", db);
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "sqlite3.h"
+
+void sqlite3_exit(const char *msg, sqlite3 *db);
+
+int main(void)
+{
+	sqlite3 *db;
+
+	if (sqlite3_open("student.db", &db) != SQLITE_OK)
+		sqlite3_exit("sqlite3_open", db);
+
+	printf("succes...\n");
+
+	sqlite3_close(db);
+
+	return 0;
+}
+
+void sqlite3_exit(const char *msg, sqlite3 *db)
+{
+	fprintf(stderr, "%s failed => %s\n", msg, sqlite3_errmsg(db));
+	sqlite3_close(db);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+   SQLite'a bir SQL cümlesi göndermek için sqlite3_exec fonksiyonu kullanılmaktadır. Fonksiyonun prototipi şöyledir:
+
+    int sqlite3_exec(
+        sqlite3 *db,                               /* An open database */
+        const char *sql,                           /* SQL to be evaluated */
+        int (*callback)(void*,int,char**,char**),  /* Callback function */
+        void *param,                               /* 1st argument to callback */
+        char **errmsg                              /* Error msg written here */
+    );
+
+    Fonskiyonun birinci parametresi sqlite3_open fonksiyonundan elde edilen handle değeridir. İkinci parametre sql cümlesinin 
+    yazısını alır. Üçüncü parametre işlemden sonra çağrılacak “callback” fonksiyonun adresini almaktadır. Bu parametre NULL 
+    geçilebilir. Dördüncü parametre bu “callback” fonksiyona geçirilecek argümanı belirtir. Bu parametre de NULL geçilebilir. 
+    Son parametre ise char * türünden bir göstericinin adresini almaktadır. Hata drumunda hata mesajının adresi bu göstericiye 
+    yerleştirilir. Bu parametre NULL olarak da geçilebilir. Fonksiyonun geri dönüş değeri işlemin başarısını belirtir. Fonksiyon 
+    başarılıysa SQLITE_OK değerine geri dönmektedir. Bu durumda biz hata mesajını yazdırdıktan sonra sqlite3_free fonksiyonu 
+    ile tahsis edilen alanı serbest bırakabiliriz. Örneğin:
+
+    if (sqlite3_exec(db, "INSERT INTO student_info(student_name, student_no) VALUES('Rasim Öztekin', 367)", 
+                NULL, NULL, NULL) != SQLITE_OK)
+        sqlite3_exit("sqlite3_exec", db);
+
+    Aşağıdaki örnekte student_info veri tabanına sqlite3_exec fonksiyonu ile bir kayıt eklenmiştir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "sqlite3.h"
+
+void sqlite3_exit(const char *msg, sqlite3 *db);
+
+int main(void)
+{
+	sqlite3 *db;
+
+	if (sqlite3_open("student.db", &db) != SQLITE_OK)
+		sqlite3_exit("sqlite3_open", db);
+
+	if (sqlite3_exec(db, "INSERT INTO student_info(student_name, student_no) VALUES('Rasim Öztekin', 367)", NULL, NULL, NULL) != SQLITE_OK) 
+		sqlite3_exit("sqlite3_exec", db);
+
+	printf("Success...\n");
+
+	sqlite3_close(db);
+
+	return 0;
+}
+
+void sqlite3_exit(const char *msg, sqlite3 *db)
+{
+	fprintf(stderr, "%s failed => %s\n", msg, sqlite3_errmsg(db));
+	sqlite3_close(db);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Veritabanından kayıtların elde edilmesi biraz daha ayrıntılı bir konudur. İstenilen kayıtların elde edilmesi için iki 
+    yol vardır. Birincisinde önce sqlite3_prepare fonksiyonu ile SQL SELECT cümlesi VTYS’ye gönderilir. Sonra her bir kayıt 
+    tek tek sqlite3_step fonksiyonu çağrılarak elde edilir. sqlite3_prepare fonksiyonundan elde edilen kayıtların bir liste 
+    oluşturduğunu sqlite3_step fonksiyonunun da listede sonraki kayıta geçtiğini düşünebilirsiniz. Yani adeta sqlite3_step 
+    fonksiyonu imleci bir sonraki kayda konumlandırıyormuş gibidir. O andaki kayıtın sütun elemanları sqlite3_column_xxx 
+    fonksiyonlarıyla elde edilebilir. Burada xxx o sütunun türünü belirtmektedir. sqlite3_prepare fonksiyonunun prototipi 
+    şöyledir:
+
+    int sqlite3_prepare(
+        sqlite3 *db,            /* Database handle */
+        const char *zSql,       /* SQL statement, UTF-8 encoded */
+        int nByte,              /* Maximum length of zSql in bytes. */
+        sqlite3_stmt **ppStmt,  /* OUT: Statement handle */
+        const char **pzTail     /* OUT: Pointer to unused portion of zSql */
+    );
+
+    Fonksiyonun birinci parametresi sqlite3_open fonksiyonundan elde edilen handle değeridir. İkinci parametre SELECT 
+    cümlesini belirtir. Üçüncü parametre ikinci parametredeki SELECT cümlesine ilişkin yazının uzunluğunu belirtir. Bu 
+    parametre negatif değer geçilirse (örneğin -1) bu yazı null karaktere kadar ele alınır. Fonksiyonun dördüncü parametresi 
+    sqlite3_stmt türünden bir yapı göstericisinin adresini almaktadır. Bu da bir handle değeri gibidir. Kayıtlar elde edilirken 
+    bu handle değeri kullanılmaktadır. Son parametre NULL geçilebilir. Fonksiyon başarı durumunda SQLITE_OK değerine geri 
+    dönmektedir. Fonksiyon başarılı olduğunda imleç ilk kayıdın bir gerisini göstermektedir. Yani işleme önce bir kez 
+    sqlite3_step çağrısı yaparak başlamak gerekir. Her sqlite3_step çağrısı select edilen kayıtlardan bir sonrasına konumlanma 
+    sağlar. sqlite3_step fonksiyonunun prototipi şöyledir:
+
+    int sqlite3_step(sqlite3_stmt*);
+
+    Fonksiyonun parametresi sqlite3_prepare fonksiyonundan alınan handle değeridir. Son kayda erişildikten sonra sqlite3_step 
+    fonksiyonu SQLITE_DONE değerine geri dönmektedir. O halde bu yöntemde önce bir kez sqlite3_prepare fonksiyonu çağrılır. 
+    Sonra bir döngü içerisinde sqlite2_step çağrıları yapılır. İmleç konumlandırıldıktan sonra sütun değerleri sqlite3_column_xxx 
+    fonksiyonlarıyla elde edilmektedir. Her sütun türü için ayrı bir fonksiyon vardır. Bu fonksiyonlardan bazılarının 
+    prototipleri aşağıda verilmiştir:
+
+    const void *sqlite3_column_blob(sqlite3_stmt*, int iCol);
+    int sqlite3_column_bytes(sqlite3_stmt*, int iCol);
+    int sqlite3_column_bytes16(sqlite3_stmt*, int iCol);
+    double sqlite3_column_double(sqlite3_stmt*, int iCol);
+    int sqlite3_column_int(sqlite3_stmt*, int iCol);
+    sqlite3_int64 sqlite3_column_int64(sqlite3_stmt*, int iCol);
+    const unsigned char *sqlite3_column_text(sqlite3_stmt*, int iCol);
+    const void *sqlite3_column_text16(sqlite3_stmt*, int iCol);
+    int sqlite3_column_type(sqlite3_stmt*, int iCol);
+    sqlite3_value *sqlite3_column_value(sqlite3_stmt*, int iCol);
+
+    Bu işlemler bittikten sonra sqlite3_finalize fonksiyonu çağrılmalıdır. Fonksiyonun prototipi şöyledir:
+
+    int sqlite3_finalize(sqlite3_stmt *pStmt);
+
+    Fonksiyon başarı durumunda SQLITE_OK değeri ile geri dönmektedir.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki örnekte komut satırında bir menü çıkartılmış ve seçilen seçeneğe göre uygun işlemler yapılmıştır. Menü 
+    aşağıdaki gibidir:
+
+    1) Kayıt Ekle
+    2) Kayıt Sil
+    3) Kayıt Bul
+    4) Çıkış
+    Seçiminiz:
+
+    Örnekteki "student.db" veritabanı yoksa yaratılmaktadır varsa olan veritabanı açılmaktadır. Eğer veritabanı yoksa aşağıdaki
+    SQL komutuyla tablo yaratılmıştır:
+
+     "CREATE TABLE IF NOT EXISTS student_info(student_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        student_name VARCHAR(64), 
+        student_no INTEGER
+    );"
+
+    Görüldüğü gibi student_infıo tablosunda üç sütun vardır. Sütunlardan biri otomatik artırımlı PRIMARY KEY sütunudur.
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <locale.h>
+#include "sqlite3.h"
+
+int disp_menu(void);
+void clear_stdin(void);
+void add_record(sqlite3 *db);
+void del_record(sqlite3 *db);
+void find_record(sqlite3 *db);
+void sqlite3_exit(const char *msg, sqlite3 *db);
+
+int main(void)
+{
+	sqlite3 *db;
+	int option;
+
+	setlocale(LC_ALL, "tr_TR.UTF-8");
+
+	if (sqlite3_open("student.db", &db) != SQLITE_OK)
+		sqlite3_exit("sqlite3_open", db);
+
+	if (sqlite3_exec(db,
+			"CREATE TABLE IF NOT EXISTS student_info("
+			"student_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+			"student_name VARCHAR(64), "
+			"student_no INTEGER);", NULL, NULL, NULL != SQLITE_OK))
+		sqlite3_exit("sqlite3_exec", db);
+
+	for (;;) {
+		if ((option = disp_menu()) == -1) {
+			printf("Geçersiz seçenek!..\n");
+			clear_stdin();
+			continue;
+		}
+		switch (option) {
+			case 1:
+				add_record(db);
+				break;
+			case 2:
+				del_record(db);
+				break;
+			case 3:
+				find_record(db);
+				break;
+			case 4:
+				goto EXIT;
+			default:
+				printf("Geçersiz seçenek!..\n");
+		}
+	}
+
+EXIT:
+	sqlite3_close(db);
+
+	return 0;
+}
+
+int disp_menu(void)
+{
+	int option;
+
+	printf("1) Kayıt Ekle\n");
+	printf("2) Kayıt Sil\n");
+	printf("3) Kayıt Bul\n");
+	printf("4) Çıkış\n");
+
+	printf("Seçiminiz: ");
+	fflush(stdout);
+	if (scanf("%d", &option) != 1)
+		return -1;
+	clear_stdin();
+
+	return option;
+}
+
+void clear_stdin(void)
+{
+	while (getchar() != '\n')
+		;
+}
+
+void add_record(sqlite3 *db)
+{
+	char name[64];
+	char sql[1024];
+	char *str;
+	int no;
+
+	printf("Adı Soyadı:");
+	fflush(stdout);
+	fgets(name, 64, stdin);
+	if ((str = strchr(name, '\n')) != NULL)
+		*str = '\0';
+	printf("No:");
+	fflush(stdout);
+	scanf("%d", &no);
+	clear_stdin();
+
+	sprintf(sql, "INSERT INTO student_info(student_name, student_no) VALUES('%s', %d);", name, no);
+
+	if (sqlite3_exec(db, sql, NULL, NULL, NULL) != SQLITE_OK)
+		fprintf(stderr, "cannot add record!..\n");
+}
+
+void del_record(sqlite3 *db)
+{
+	char condition[1024];
+	char sql[4096];
+	char *str;
+	int no;
+
+	printf("Koşul:");
+	fflush(stdout);
+	fgets(condition, 1024, stdin);
+	if ((str = strchr(condition, '\n')) != NULL)
+		*str = '\0';
+	sprintf(sql, "DELETE FROM student_info WHERE %s;", condition);
+	if (sqlite3_exec(db, sql, NULL, NULL, NULL) != SQLITE_OK)
+		fprintf(stderr, "cannot delete record!..\n");
+}
+
+void find_record(sqlite3 *db)
+{
+	char condition[1024];
+	char sql[4096];
+	char *str;
+	int no;
+	sqlite3_stmt *stmt;
+	unsigned char *name;
+
+	printf("Koşul:");
+	fflush(stdout);
+	fgets(condition, 1024, stdin);
+	if ((str = strchr(condition, '\n')) != NULL)
+		*str = '\0';
+
+	printf("\n");
+	if (*str == '\0')
+		strcpy(sql, "SELECT student_name, student_no FROM student_info");
+	else
+		sprintf(sql, "SELECT student_name, student_no FROM student_info WHERE %s;", condition);
+
+	if (sqlite3_prepare(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
+		fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
+		return;
+	}
+
+	while (sqlite3_step(stmt) != SQLITE_DONE) {
+		name = sqlite3_column_text(stmt, 0);
+		no = sqlite3_column_int(stmt, 1);
+		printf("%s, %d\n", name, no);
+	}
+
+	sqlite3_finalize(stmt);
+
+	printf("\n");
+}
+
+void sqlite3_exit(const char *msg, sqlite3 *db)
+{
+	fprintf(stderr, "%s failed => %s\n", msg, sqlite3_errmsg(db));
+	sqlite3_close(db);
+
+	exit(EXIT_FAILURE);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Şimdi de yukarıdaki işlemlerin benzerlerinin MySQL'de nasıl yapılacağını görelim. MySQL'in de C için API'leri vardır. 
+    MySQL VTYS’si ile işlemler MySQL’in gerekli kütüphanelerinin client tarafta kurulması gerekir. Bunun için Windows’ta, 
+    macOS sistemlerinde ve Linux’ta “MySQL C++ Connector” denilen kurulum yapılabilir. Bu paket aşağıdaki bağlantıdan
+    indirilebilir:
+
+    https://downloads.mysql.com/archives/c-c/
+
+    Bu kurulum yapıldığında tipik olarak gerekli olan kütüphaneler ve include dosyaları "C:\Program Files\MySQL\MySQL Connector C 6.1"
+    gibi bir dizine kurulacaktır.
+
+    Debian türevi (Ubuntu, Mint vs.) sistemlerde aşağıdaki apt-get komutu bu paketin indirilerek kurulmasını sağlamaktadır:
+
+    $ sudo apt-get install libmysqlclient-dev
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Windows ortamında VisualStudio IDE'sinde çalışıyorsanız projenizde "Additional Include Drectories" elemanında MySQL 
+    Connector'ü kurduğunuz dizindeki include dizinini burada belirtmelisiniz. Ayrıca Windows'ta link işlemi için "libmysql.lib"
+    import kütüphanesinin de projede belirtilmesi gerekmektedir. Ancak programın çalışabilmesi için "libmysql.dll" dosyasının 
+    ya sistem tarafından bakılan dizinlerin birinde olması ya da PATH çevre değişkeni ile belirtilen dizinlerden birinde olması 
+    gerekmektedir.
+
+    Linux'ta MySQL include dosyaları "/usr/include/mysql" dizini içerisindedir. Dolayısıyla include işlemi <mysql/mysql.h>
+    biçiminde yapılmalıdır. Linux'ta ayrıca "libmysqlclient" kütüphanesinin de bağlama işlemine dahil edilmesi gerekmektedir. 
+    Derleme işlemini şöyle yapmalısınız:
+
+    $ gcc -o sample sample.c -lmysqlclient
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Bir MYSQL C programda ilk yapılacak şey mysql_init fonksiyonu çağırarak bir handle elde etmektir:
+
+    MYSQL *MySQL_init(MYSQL *MySQL);
+
+    Bu fonksiyon parametre olarak bizden MYSQL türünden bir nesnenin adresini ister onun içini doldurur. Eğer parametre NULL 
+    girilirse fonksiyon bu nesneyi kendisi tahsis edip bize aresini verecektir. Fonksiyon başarısız olabilir. Başarısızlık 
+    durumunda NULL adrese geri döner. Örneğin:
+
+    MYSQL *db;
+
+    if ((db = mysql_init(NULL)) == NULL) {
+        fprintf(stderr, "MySQL_init failed\n");
+        exit(EXIT_FAILURE);
+    }
+---------------------------------------------------------------------------------------------------------------------------*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <mysql.h>
+
+int main(void)
+{
+	MYSQL *db;
+
+	if ((db = mysql_init(NULL)) == NULL) {
+		fprintf(stderr, "mysqlL_init failed\n");
+		exit(EXIT_FAILURE);
+	}
+
+	printf("OK");
+
+	return 0;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    MYSQL * türünden handle elde ediltiktan sonra artık "ip adresi", "port numarası", "kullanıcı adı", "parola" ve bağlanılacak
+    veritabını velirtilerek bağlantı mysl_real_connect fonksiyonuyla sağlanır. Fonksiyonun prototipi şöyledir:
+
+    MYSQL *mysql_real_connect(MYSQL *MySQL, const char *host, const char *user, const char *passwd, const char *db, 
+            unsigned int port, const char *unix_socket, unsigned long client_flag);
+
+    Fonksiyonun birinci parametresi mysql_init fonksiyonundan elde edilmiş olan handle değeridir. İkinci parametre host'un
+    IP adresini üçüncü parametre MySQL'deki kullanıcı ismini almaktadır. MySQL'i ilk kurduğunuzda tüm yetkilere sahip bir 
+    "root" kullanıcısı bulunmaktadır. Bu kullanıcı tüm veritabanlarına erişebilmektedir. Tabii siz isterseniz kısıtlı 
+    kullanılarda yaratabilirsiniz. Fonksiyonun dördüncü parametresi kullanıcıya ilişkin parolayı belirtmektedir. "root" 
+    kullanıcısının parolası kurulum sırasında belirlenmektedir. Beşinci parametre kullanılacak veritabaınının ismini almaktadır. 
+    Altıncı parametre port numarasını belirtmektedir. MySQL Server programlarının kullandığı default port numarası 3306'dır. 
+    Son iki parametre NULL ve 0 biçiminde geçilebilir. Örneğin:
+
+    MYSQL *db;
+
+    if ((db = mysql_init(NULL)) == NULL) {
+        fprintf(stderr, "mysql_init failed!..\n");
+        exit(EXIT_FAILURE);
+    }
+
+    if (mysql_real_connect(db, "localhost", "root", "maviay", "student_info", 3306, NULL, 0) == NULL)
+        exit_err("mysql_real_connect failed", NULL);
+
+    MySQL ile çlışırken hata durumlarında bağlantıyı kapatıp prosesi sonlandırmak için aşağıdaki gibi bir fonksiyondan 
+    faydalanabiliriz:
+
+    void exit_err(const char *msg, MYSQL *db)
+    {
+        fprintf(stderr, "%s: %s\n", msg, mysql_error(db));
+        mysql_close(db);
+        exit(EXIT_FAILURE);
+    }
+
+    mysql_close fonksiyonuna NULL adres geçilirse close işlemi yapılmaz ama mysql_init fonkisyonuyla tahsis edilmiş olan handle 
+    alanu boşaltılır.
+
+    Server'a bağlanırken birkaç problem ortaya çıkabilir. Server default SSL kullanayor olabilir. Bu durumda SSL konfigürasyonunu
+    yapmadıysanız bağlantıda sorun çıkabilir. Bağlanırken SSL'i disable etmek için iki yöntem kullanılabilir. Birincisi "mysql.ini"
+    ya da "my.cnf" dosyasına aşağıdkai satırlar girilerek SSL kullanımı devra dışı bırakılabilir:
+
+    [mysqld]
+    ssl=0
+    skip_ssl
+
+    Windows sistemlerinde "mysql.ini" dosyası "C:\ProgramData\MySQL\MySQL Server 8.0" dizin içerisinde bulunmaktadır. Linux 
+    sistemlerinde "my.cnf" dosyası "/etc/mysql" dizini içerisindedir. Bu dosyaları edit etmek için editörünüzü "Administrator" 
+    ya da "sudo" hakkıya açmalısınız. İkinci yöntem programa özgü bir biçimde SSL'i mysql_options fonksiyonu ile disable etmektir. 
+    Bu işlem şöyle yapıabilir:
+
+    int ssl_mode = SSL_MODE_DISABLED;
+
+    if (mysql_options(db, MYSQL_OPT_SSL_MODE, &ssl_mode))
+        exit_err("mysql_options failed", db);
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    Eskiden MySQL server programı default olarak uzak bağlantıları kabul ediyordu. Sonra default durumda uzak bağlantılara
+    izin verilmemeye başlandı. Yani siz yerel ağınızda bile olsa başka bir makinedeki MySQL Server programa IP adresi ve 
+    port numarası belirterek bağlanamayabilirsiniz. Uzak bağlantılara izin vermek için konfügrasyonda bazı ayarlamaların 
+    yapılması gerekmektedir.
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -71949,30 +73367,3 @@ void exit_sys(const char *msg)
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------------------------------*/
