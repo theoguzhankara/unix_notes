@@ -54201,6 +54201,7 @@ void exit_sys(const char *msg)
 #include <linux/kernel.h>
 #include <linux/fs.h>
 #include <linux/cdev.h>
+#include <linux/slab.h>
 
 #define DEV_MAJOR	130
 #define DEV_MINOR	0
@@ -54417,15 +54418,20 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Biz şimdiye kadar aygıt dosyası open ile açıldığında ve close ile kapatıldığında aygıt sürücümüz içerisindeki 
-    fonksiyonlarımızın çağrılmasını sağladık. Şimdi de aygıt dosyası üzerinde read ve write fonksiyonları uygulandığında 
-    aygıt sürücümüzdeki ilgili fonksiyonların çağrılması üzerinde duracağız.
+    Biz şimdiye kadar aygıt dosyası open ile açıldığında ve close ile kapatıldığında aygıt sürücümüz içerisindeki fopen ve release 
+    fonksiyonlarımızın çağrılmasını sağladık. Şimdi de aygıt dosyası üzerinde read ve write fonksiyonları uygulandığında aygıt 
+    sürücümüzdeki read ve write fonksiyonlarının çağrılması üzerinde duracağız.
 
-    Aygıt sürücümüz için read ve write fonksiyonları aşağıdaki parametrik yapıya uygun olacak biçiminde file_operations yapısına 
-    yerleştirilmelidir:
+    Aygıt dosyası open POSIX ile açılıp read POSIX fonksiyonu ile okunduğunda aygıt sürücümüz içerisinde belirlediğimiz "read" 
+    fonksiyonumuz, write POSIX fonksiyonu çağrıldığında da aygıt sürücümüz içerisinde belirlediğimiz write fonksiyonumuz çağrılmaktadır. 
+    Bunu sağlamak için file_operations yapısının read ve write elemanlarına çağrılacak fonksiyonların adreslerini girmeliyiz. 
+    Karakter aygıt sürücülerinin read ve write fonksiyonlarının prototipleri aşağıdaki gibi olmak zorundadır:
 
     static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off);
     static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off);
+
+    Aygıt sürücüsü için read ve write fonksiyonları yukarıdaki prototipe uygun bir biçimde tanımlandıktan sonra bunların adresleri 
+    aşağıdaki gibi file_operations türünden yapı nesnesinin read ve write elemanlarına atanmalıdır:
 
     static struct file_operations g_file_ops = {
         .owner = THIS_MODULE,
@@ -54435,16 +54441,30 @@ void exit_sys(const char *msg)
         .write = generic_write,
     };
 
-    Artık aygıt dosyası üzerinde read POSIX fonksiyonu çağrıldığında aygıt sürücümüzdeki generic_read fonksiyonu write POSIX 
-    fonksiyonu çağrıldığında aygıt sürücümüzdeki generic_write POSIX fonksiyonu çağrılacaktır.
+    Artık aygıt dosyası üzerinde read POSIX fonksiyonu çağrıldığında aygıt sürücümüzdeki generic_read fonksiyonu, write POSIX 
+    fonksiyonu çağrıldığında da aygıt sürücümüzdeki generic_write POSIX fonksiyonu çağrılacaktır.
 
-    read ve write fonksiyonlarının birinci parametresi açılmış dosyaya ilişkin struct file nesnesinin adresini belirtir. 
-    Anımsanacağı gibi bir dosya açıldığında kernel sys_open fonksiyonunda bir dosya nesnesi (struct file) tahsis edip bu 
-    dosya nesnesinin adresini dosya betimleyici tablosunda bir slota yerleştirip onun indeksini dosya betimleyicisi olarak geri 
-    döndürüyordu. İşte bu read ve write fonksiyonlarının birinci parametreleri bu dosya nesnesinin adresini belirtmektedir. Daha 
-    önceden de belirttiğimiz gibi file yapısı içerisinde dosya göstericisinin konumu, dosyanın erişim hakları, referans sayacının 
-    değeri, dosyanın açış modu ve açış bayrakları ve başka birtakım bilgiler bulunmaktadır. Linux kernel 2.4.30'daki file yapısı 
-    şöyledir:
+    Aygıt sürücümüzdeki read ve write fonksiyonlarının birinci parametresi açılmış dosyaya ilişkin struct file nesnesinin adresini 
+    belirtir. Bu nesneye "dosya nesnesi (file object)" de denilmektedir.
+
+    Anımsanacağı gibi bir dosya açıldığında çekirdek sys_open fonksiyonunda bir dosya nesnesi (struct file) tahsis edip bu dosya 
+    nesnesinin adresini dosya betimleyici tablosundaki bir slota yerleştirip onun indeksini dosya betimleyicisi olarak geri 
+    döndürüyordu. İşte bu read ve write fonksiyonlarının birinci parametreleri bu dosya nesnesinin adresini belirtmektedir. 
+    Çekirdek açık dosya ilgili her türlü işlemi bu dosya nesnesindeki bilgilerden hareketle yapmaktadır.
+
+    Dosya Betimleyici Tablosu
+
+    0   ---------> Dosya Nesnesi
+    1   ---------> Dosya Nesnesi
+    2   ---------> Dosya Nesnesi
+    3   ---------> Dosya Nesnesi
+    4   ---------> Dosya Nesnesi
+    5   ---------> Dosya Nesnesi
+    ...
+
+    Daha önceden de belirttiğimiz gibi file yapısı içerisinde dosya göstericisinin konumu, dosyanın erişim hakları, referans sayacının 
+    değeri, dosyanın açış modu ve açış bayrakları ve başka birtakım bilgiler bulunmaktadır. Linux çekirdeğinin 2.4.30'daki 
+    sürümündeki file yapısı şöyledir:
 
     struct file {
         struct list_head		f_list;
@@ -54471,45 +54491,51 @@ void exit_sys(const char *msg)
         long					f_iobuf_lock;
     };
 
-    Biz burada bilerek sadelik yüzünden eski bir çekirdeğin file yapısını verdik. Yeni çekirdeklerde buna birkaç eleman daha 
-    eklenmiştir. Ancak temel elemanlar yine aynıdır.
+    Biz burada bilerek sadelik sağlamak için eski bir çekirdeğin file yapısını verdik. Yeni çekirdeklerde buna birkaç eleman daha 
+    eklenmiştir. Ancak temel elemanlar yine aynıdır. Biz aygıt sürücümüzün read ve write fonksiyonlarında söz konusu aygıt 
+    dosyasının birtakım özelliklerine erişmek istediğimizde bu yapıyı kullanırız.
 
-    read ve write fonksiyonlarının ikinci parametresi user alanındaki transfer adresini belirtir. Üçüncü parametreler okunacak 
-    ya da yazılacak byte miktarını belirtmektedir. Son parametre dosya göstericisinin konumunu belirtir. Ancak bu parametre 
-    file yapısı içerisindeki f_pos elemanının adresi değildir. Çekirdek tarafından read ve write fonksiyonları çağrılmadan 
-    önce file yapısı içerisindeki f_pos elemanının değeri başka bir nesneye atanıp o nesnenin adresi read ve write fonksiyonlarına
-    geçirilmektedir. read ve write fonksiyonları sonlandığında çekirdek adresini geçirdiği nesnenin değerini file yapısının 
-    f_pos elemanına kendisi yerleştirmektedir.
+    Aygıt sürücüdeki read ve write fonksiyonlarının ikinci parametresi kullanıcı alanındaki transfer adresini belirtir. Kullanıcı 
+    modunda read POSIX fonksiyonu çağrıldığında aygıt sürücüdeki read fonksiyonunun copy_to_user gibi bir fonksiyonla bu adrese
+    transfer yapması gerekir. Benzer biçimde kullanıcı modunda write POSIX fonksiyonu çağrıldığında da aygıt sürücü içerisindeki 
+    write fonksiyonunun kullanıcı modundaki bu adresten copy_from_user gibi bir fonksiyonla transfer yapması gerekir. Aygıt 
+    sürücüdeki read ve write fonksiyonlarının üçüncü parametreleri okunacak ya da yazılacak byte miktarını belirtmektedir. Son 
+    parametre ise dosya göstericisinin konumunu belirtir. Ancak bu parametre file yapısı içerisindeki f_pos elemanının adresi 
+    değildir. Çekirdek tarafından aygıt sürücünün read ve write fonksiyonları çağrılmadan önce file yapısı içerisindeki f_pos 
+    elemanının değeri başka bir nesneye atanıp o nesnenin adresi read ve write fonksiyonlarına geçirilmektedir. read ve write 
+    fonksiyonları sonlandığında çekirdek adresini geçirdiği nesnenin değerini file yapısının f_pos elemanına kendisi yerleştirmektedir.
+    Yani aygıt sürücümüzdeki read ve write fonksiyonları içerisinde biz her zaman dosya göstericisinin konumunu bu parametrenin
+    gösterdiği nesneden alıp bu parametrenin gösterdiği yerdeki nesneyi güncellemeliyiz.
 
-    Fonksiyon başarı durumunda transfer edilen byte sayısına, başarısızlık durumunda negatif errno değerine geri dönmelidir.
+    Aygıt sürücü içerisindeki read ve write fonksiyonları başarı durumunda transfer edilen byte sayısına, başarısızlık durumunda 
+    negatif errno değerine geri dönmelidir.
 
-    Biz aygıt sürücümüz için read ve write fonksiyonlarını yazarken transfer edilen byte miktarı kadar dosya göstericisini 
-    kendimizin ilerletmesi gerekir. Bu işlem fonksiyonların son parametresi olan off göstericisinin gösterdiği yerin güncellenmesi
-    ile yapılır. Örneğin n byte transfer edilmiş olsun. Bu durumda dosya göstericisinin konumu aşağıdaki gibi güncellenebilir:
+    Biz aygıt sürücümüz için read ve write fonksiyonlarını yazarken read ve write fonksiyonları içerisinde transfer edilen byte 
+    miktarı kadar dosya göstericisini ilerletmemiz gerekir. Bu işlem yukarıda da belirttiğimiz gibi fonksiyonların son parametresi 
+    olan off göstericisinin gösterdiği yerin güncellenmesi ile yapılmalıdır. Örneğin n byte transfer edilmiş olsun. Bu durumda 
+    dosya göstericisinin konumu aşağıdaki gibi güncellenebilir:
 
     static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
     {
         ...
-
         *off += n;
+        ...
 
         return n;
     }
 
-    Aygıt sürücüsünüzün read ve write fonksiyonlarında dosya göstericisini konumlandırmak için file yapısının f_pos elemanını
-    güncellemeyiniz. Dosya göstericisinin konumlandırılması her zaman read ve write fonksiyonlarının son parametresi yoluyla 
-    yapılmaktadır. Çekirdeğin dosya göstericisini nasıl güncellediğine ilişkin aşağıdaki gibi bir temsili kod örneği verebiliriz:
+    Yukarıda da belirttiğimiz gibi aygıt sürücünüzün read ve write fonksiyonlarında dosya göstericisini konumlandırmak için 
+    file yapısının f_pos elemanını güncellemeyiniz. Dosya göstericisinin konumlandırılması her zaman read ve write fonksiyonlarının 
+    son parametresi yoluyla yapılmaktadır. Çekirdeğin dosya göstericisini nasıl güncellediğine ilişkin aşağıdaki gibi bir 
+    temsili kod örneği verebiliriz:
 
     loff_t off;
     ...
     off = filp->f_pos;
     read(filp, buf, size, &off);
-    filp_f_pos = off;
+    filp->f_pos = off;
 
-    Aşağıdaki örnekte aygıt sürücü için read fonksiyonu yazılmıştır. Bu fonksiyon aslında g_buf isimli dizinin içini dosya 
-    gibi vermektedir.
-
-    Aşağıda aygıt sürücüye read ve write fonksiyonları içi boş bir biçimde yerleştirilmiştir. User mode'dan read ve 
+    Aşağıda aygıt sürücüye read ve write fonksiyonları içi boş bir biçimde yerleştirilmiştir. Kullanıcı mode'undan read ve 
     write yapıldığında aygıt sürücümüzün içerisindeki bu fonksiyonların çalıştığını gözlemleyiniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -54647,10 +54673,10 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Şimdi de aygıt sürücümüzün read fonksiyonunun gerçekten bir dosyadan okuma yapıyormuş gibi davranmasını sağlayalım. 
-    Bunun için dosyamızı temsil eden aşağıdaki gibi global bir dizi kullanacağız:
+    Şimdi de aygıt sürücümüzün read fonksiyonunun gerçekten bir dosyadan okuma yapıyormuş gibi davranmasını sağlayalım. Bunun 
+    için dosyamızı temsil eden aşağıdaki gibi global bir dizi kullanacağız:
 
-    static char g_buf[] = "01234567890ABCDEFGH";
+    static char g_file_buf[] = "01234567890ABCDEFGH";
 
     Buradaki diziyi sanki bir dosya gibi ele alacağız. Aygıt sürücümüzün read fonksiyonu aşağıdaki gibi olacaktır:
 
@@ -54675,10 +54701,10 @@ void exit_sys(const char *msg)
     okunmuştur. Aygıt sürücülerin read ve write fonksiyonlarında dosya göstericisinin ilerletilmesi programcının sorumluluğundadır.
     Bu nedenle okuma işlemi yapıldığında dosya göstericisinin konumu aşağıdaki gibi artırılmıştır:
 
-    *off += size;
+    *off += esize;
 
     read fonksiyonunun okunabilen byte sayısına geri döndürüldüğüne dikkat ediniz. copy_to_user fonksiyonu ile tüm byte'lar
-    user alanına kopyalanamamışsa fonksiyon -EFAULT değeri ile geri döndürülmüştür.
+    kullanıcı alanına kopyalanamamışsa fonksiyon -EFAULT değeri ile geri döndürülmüştür.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* generic-char-driver.c */
@@ -54688,7 +54714,7 @@ void exit_sys(const char *msg)
 #include <linux/fs.h>
 #include <linux/cdev.h>
 
-#define DEV_MAJOR		25
+#define DEV_MAJOR		130
 #define DEV_MINOR		0
 
 MODULE_LICENSE("GPL");
@@ -54708,7 +54734,7 @@ static struct file_operations g_fops = {
 	.write = generic_write,
 	.release = generic_release
 };
-static char g_buf[] = "01234567890ABCDEFGH";
+static char g_file_buf[] = "01234567890ABCDEFGH";
 
 static int __init generic_init(void)
 {
@@ -54736,7 +54762,7 @@ static void __exit generic_exit(void)
 	cdev_del(&g_cdev);
 	unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
 
-	printk(KERN_INFO "generic-char-driver module exit...\n");
+	printk(KERN_INFO "generic-char-driver exit...\n");
 }
 
 static int generic_open(struct inode *inodep, struct file *filp)
@@ -54758,10 +54784,10 @@ static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *o
 	size_t esize;
 	size_t slen;
 
-	slen = strlen(g_buf);
-	esize = *off + size > slen ? slen - *off : size;
+	slen = strlen(g_file_buf);
+	esize = size > slen - *off ? slen - *off : size;
 
-	if (copy_to_user(buf, g_buf + *off, esize) != 0)
+	if (copy_to_user(buf, g_file_buf + *off, esize) != 0)
 		return -EFAULT;
 
 	*off += esize;
@@ -54792,7 +54818,6 @@ clean:
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -54801,35 +54826,24 @@ void exit_sys(const char *msg);
 int main(void)
 {
 	int fd;
-	char buf[1024];
+	char buf[4096];
 	ssize_t result;
+	unsigned n;
 
 	if ((fd = open("mydriver", O_RDONLY)) == -1)
-		exit_sys("open");
+	exit_sys("open");
 
-	if ((result = read(fd, buf, 3)) == -1)
-		exit_sys("read");
-	buf[result] = '\0';
+	for (;;) {
+		printf("number of bytes to read? ");
+		scanf("%u", &n);
 
-	printf("%jd bytes read: \"%s\"\n", (intmax_t)result, buf);
-
-	if ((result = read(fd, buf, 5)) == -1)
-		exit_sys("read");
-	buf[result] = '\0';
-
-	printf("%jd bytes read: \"%s\"\n", (intmax_t)result, buf);
-
-	if ((result = read(fd, buf, 30)) == -1)
-		exit_sys("read");
-	buf[result] = '\0';
-
-	printf("%jd bytes read: \"%s\"\n", (intmax_t)result, buf);
-
-	if ((result = read(fd, buf, 30)) == -1)
-		exit_sys("read");
-	buf[result] = '\0';
-
-	printf("%jd bytes read: \"%s\"\n", (intmax_t)result, buf);
+		if ((result = read(fd, buf, n)) == -1)
+			exit_sys("read");
+		if (result == 0)
+			break;
+		buf[result] = '\0';
+		puts(buf);
+	}
 
 	close(fd);
 
@@ -54845,59 +54859,66 @@ void exit_sys(const char *msg)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Aygıt sürücü için write fonksiyonu da tamamen read fonksiyonuna benzer biçimde yazılmaktadır. write fonksiyonu içerisinde
-    biz user mode'daki bilgiyi copy_from_user ya da get_user fonksiyonlarıyla alırız. Yine write fonksiyonu da bir sorun çıktığında
-    -EFAULT değeri ile, başarılı sonlanmada ise yazılan (kernel alanına yazılan) byte miktarı ile geri dönmelidir.
+    biz kullanıcı modundaki bilgiyi copy_from_user ya da get_user fonksiyonlarıyla alırız. Yine write fonksiyonu da istenilen 
+    kadar byte'ın transfer edilememesi durumunda -EFAULT değeri ile, başarılı sonlanmada ise yazılan (çekirdek alanına yazılan) 
+    byte miktarı ile geri dönmelidir.
 
     Aşağıdaki örnekte aygıt sürücü bellekte oluşturulmuş bir dosya gibi davranmaktadır. Aygıt sürücünün taklit ettiği dosya
     en fazla 4096 byte olabilmektedir:
 
-    #define FILE_MEMORY_MAX_SIZE	4096
+    #define FILE_BUF_SIZE		4096
     ...
-    static char g_fmem[FILE_MEMORY_MAX_SIZE];
+    static char g_file_buf[FILE_BUF_SIZE];
 
-    Ancak buradaki FILE_MEMORY_MAX_SIZE bellek dosyasının maksimum uzunluğunu belirtmektedir. Bellek dosyasının gerçek 
-    uzunluğu g_fmem_size nesnesinde tutulmaktadır. Aygıt sürücünün write fonksiyonu aşağıdaki gibi yazılmıştır:
+    Ancak buradaki FILE_BUF_SIZE bellek dosyasının maksimum uzunluğunu belirtmektedir. Bellek dosyasının gerçek uzunluğu 
+    g_fsize nesnesinde tutulmaktadır. Aygıt sürücünün write fonksiyonu aşağıdaki gibi yazılmıştır:
 
     static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
     {
         size_t esize;
 
-        esize = *off + size > FILE_MEMORY_MAX_SIZE ? FILE_MEMORY_MAX_SIZE - *off : size;
-        if (copy_from_user(g_fmem + *off, buf, esize) != 0)
-            return -EFAULT;
+        esize = size > FILE_BUF_SIZE - *off ? FILE_BUF_SIZE - *off : size;
 
-        *off += esize;
-        if (*off > g_fmem_size)
-            g_fmem_size = *off;
+        if (esize  > 0) {
+            if (copy_from_user(g_file_buf + *off, buf, esize) != 0)
+                return -EFAULT;
+            *off += esize;
+
+            if (*off > g_fsize)
+                g_fsize = *off;
+        }
 
         return esize;
     }
 
-    Burada yine dosya göstericisinin gösterdiği yerden itibaren yazılmak istenen byte sayısı FILE_MEMORY_MAX_SIZE değerini 
-    aşıyorsa geri kalan miktar kadar yazma yapılmıştır. Burada yine dosya göstericisinin ilerletildiğine dikkat ediniz. 
-    Dosya göstericisinin ilerletilmesi her zaman programcının sorumluluğundadır. Aygıt sürücümüzün read fonksiyonu da 
-    şöyledir:
+    Burada yine dosya göstericisinin gösterdiği yerden itibaren yazılmak istenen byte sayısı FILE_BUF_SIZE değerini aşıyorsa 
+    geri kalan miktar kadar yazma yapılmıştır. Dosya göstericisinin yine ilerletildiğine dikkat ediniz. Dosya göstericisinin 
+    ilerletilmesi her zaman programcının sorumluluğundadır. Aygıt sürücümüzün read fonksiyonu da şöyledir:
 
     static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
     {
         size_t esize;
 
-        esize = *off + size > g_fmem_size ? g_fmem_size - *off : size;
+        esize = size > g_fsize - *off ? g_fsize - *off : size;
 
-        if (copy_to_user(buf, g_fmem + *off, esize) != 0)
-            return -EFAULT;
-
-        *off += esize;
+        if (esize > 0) {
+            if (copy_to_user(buf, g_file_buf + *off, esize) != 0)
+                return -EFAULT;
+            *off += esize;
+        }
 
         return esize;
     }
 
-    Burada da dosya göstericisinin gösterdiği yerden itibaren okunmak istenen byte sayısının g_fmem_size değerinden büyük
-    olup olmadığına bakılmıştır. Yine göstericisi fonksiyon tarafından güncellenmiştir.
+    Burada da dosya göstericisinin gösterdiği yerden itibaren okunmak istenen byte sayısının g_fsize değerinden büyük olup 
+    olmadığına bakılmıştır. Yine dosya göstericisi fonksiyon tarafından güncellenmiştir.
 
-    Buradaki aygıt sürücüyü test etmek için "app-write.c" ve "app-read.c" isimli iki ayrı programdan faydalanılmıştır. 
-    "app-write.c" bellek dosyasına yazma yapmakta, "app-read.c" ise bellek dosyasından okuma yapmaktadır. Bu örnekte bellek 
-    dosyasına yazılanların aygıt sürücü çekirdekte bulunduğu sürece kalıcı olduğuna dikkat ediniz.
+    Programın testi için önce aygıt sürücüye aşağıdaki gibi birtakım byte'ları aktarabilirsiniz:
+
+    $ echo -n "0123456789" | sudo tee mydriver
+
+    Burada -n parametresi \n karakterinin dosyaya yazılmasını engellemektedir. Bundan sonra artık yukarıdaki "app.c" programı
+    ile testi yapabilirsiniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* generic-char-driver.c */
@@ -54907,10 +54928,10 @@ void exit_sys(const char *msg)
 #include <linux/fs.h>
 #include <linux/cdev.h>
 
-#define DEV_MAJOR				25
-#define DEV_MINOR				0
+#define DEV_MAJOR		130
+#define DEV_MINOR		0
 
-#define FILE_MEMORY_MAX_SIZE	4096
+#define FILE_BUF_SIZE		4096
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Kaan Aslan");
@@ -54929,8 +54950,8 @@ static struct file_operations g_fops = {
 	.write = generic_write,
 	.release = generic_release
 };
-static char g_fmem[FILE_MEMORY_MAX_SIZE];
-static size_t g_fmem_size;
+static char g_file_buf[FILE_BUF_SIZE];
+static size_t g_fsize = 0;
 
 static int __init generic_init(void)
 {
@@ -54958,7 +54979,7 @@ static void __exit generic_exit(void)
 	cdev_del(&g_cdev);
 	unregister_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1);
 
-	printk(KERN_INFO "generic-char-driver module exit...\n");
+	printk(KERN_INFO "generic-char-driver exit...\n");
 }
 
 static int generic_open(struct inode *inodep, struct file *filp)
@@ -54979,12 +55000,13 @@ static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *o
 {
 	size_t esize;
 
-	esize = *off + size > g_fmem_size ? g_fmem_size - *off : size;
+	esize = size > g_fsize - *off ? g_fsize - *off : size;
 
-	if (copy_to_user(buf, g_fmem + *off, esize) != 0)
-		return -EFAULT;
-
-	*off += esize;
+	if (esize > 0) {
+		if (copy_to_user(buf, g_file_buf + *off, esize) != 0)
+			return -EFAULT;
+		*off += esize;
+	}
 
 	return esize;
 }
@@ -54993,13 +55015,16 @@ static ssize_t generic_write(struct file *filp, const char *buf, size_t size, lo
 {
 	size_t esize;
 
-	esize = *off + size > FILE_MEMORY_MAX_SIZE ? FILE_MEMORY_MAX_SIZE - *off : size;
-	if (copy_from_user(g_fmem + *off, buf, esize) != 0)
-		return -EFAULT;
+	esize = size > FILE_BUF_SIZE - *off ? FILE_BUF_SIZE - *off : size;
 
-	*off += esize;
-	if (*off > g_fmem_size)
-		g_fmem_size = *off;
+	if (esize  > 0) {
+		if (copy_from_user(g_file_buf + *off, buf, esize) != 0)
+			return -EFAULT;
+		*off += esize;
+
+		if (*off > g_fsize)
+			g_fsize = *off;
+	}
 
 	return esize;
 }
@@ -55016,12 +55041,10 @@ all:
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
 
-/* app-write.c */
+/* app.c */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <stdint.h>
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -55030,68 +55053,26 @@ void exit_sys(const char *msg);
 int main(void)
 {
 	int fd;
+	char buf[4096];
 	ssize_t result;
-	char buf[5000];
-
-	if ((fd = open("mydriver", O_WRONLY)) == -1)
-		exit_sys("open");
-
-	if ((result = write(fd, "ankara", 6)) == -1)
-		exit_sys("write");
-	printf("%jd bytes written\n", (intmax_t)result);
-
-	if ((result = write(fd, "izmir", 5)) == -1)
-		exit_sys("write");
-	printf("%jd bytes written\n", (intmax_t)result);
-
-	memset(buf, 'x', 5000);
-
-	if ((result = write(fd, buf, 5000)) == -1)
-		exit_sys("write");
-	printf("%jd bytes written\n", (intmax_t)result);
-
-	close(fd);
-
-	return 0;
-}
-
-void exit_sys(const char *msg)
-{
-	perror(msg);
-
-	exit(EXIT_FAILURE);
-}
-
-/* app-read.c */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <fcntl.h>
-#include <unistd.h>
-
-#define BUFFER_SIZE		5
-
-void exit_sys(const char *msg);
-
-int main(void)
-{
-	int fd;
-	ssize_t result;
-	char buf[BUFFER_SIZE + 1];
+	unsigned n;
 
 	if ((fd = open("mydriver", O_RDONLY)) == -1)
 		exit_sys("open");
 
-	while ((result = read(fd, buf, BUFFER_SIZE)) > 0) {
-		buf[result] = '\0';
-		printf("%s", buf);
-		fflush(stdout);
-	}
-	putchar('\n');
+	for (;;) {
+		printf("number of bytes to read? ");
+		scanf("%u", &n);
 
-	if (result == -1)
-		exit_sys("read");
+		if ((result = read(fd, buf, n)) == -1)
+			exit_sys("read");
+		if (result == 0)
+			break;
+		buf[result] = '\0';
+		puts(buf);
+	}
+
+	close(fd);
 
 	return 0;
 }
@@ -72449,7 +72430,7 @@ int main(void)
 /*--------------------------------------------------------------------------------------------------------------------------
     VTYS'lerin client-server mimarisine uygun bir biçimde yazıldığını belirtmiştik. VTYS'lerle tipik çalışma şu biçimdedir:
 
-    1) Programcı "kullanıcı ismi" ve "parola" ile VTYS'ye bağlanır. Bu durumda programcı client durumunda VTYS ise server 
+    1) Programcı "kullanıcı ismi" ve "parola" ile VTYS'ye bağlanır. Bu durumda programcı client durumunda, VTYS ise server 
     durumundadır.
 
     2) Programcı VTYS'ye yaptırmak istediği şeyleri SQL dilinde oluşturur ve VTYS'ye SQL komutlarını gönderir.
@@ -72464,7 +72445,7 @@ int main(void)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Veritabanları tasarım bakımından birkaç gruba ayrılmaktadır. Günümüzde en çok kullanılan veritabanı mimarisine "İlişkisel
-    Veritabanı (Relational Database) Mimarisi" denilmektedir. İlişkisel veritabanları "tablolardan (tables)" tablolar da 
+    Veritabanı (Relational Database) Mimarisi" denilmektedir. İlişkisel veritabanları "tablolardan (tables)", tablolar da 
     sütun ve satırlardan oluşmaktadır. Örneğin biz öğrencilerin bilgilerini tutmak için bir veritabanı tablosu oluşturalım. 
     Bu tablo aşağıdaki görünümde olsun:
 
@@ -72484,7 +72465,11 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    MySQL'i kurmak için tek yapılacak şey server programı http://dev.mysql.com/downloads/ sitesnden indirip yüklemektir. Kurulum 
+												197. Ders 09/02/2025 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
+    MySQL'i kurmak için tek yapılacak şey server programı http://dev.mysql.com/downloads/ sitesinden indirip yüklemektir. Kurulum 
     oldukça basittir. Birtakım sorular default değerlerle geçilebilir. Ancak kurulum sırasında MySQL kurulum programı bizden 
     “root” isimli yetkili kullanıcının parolasını istenecektir. Bu parola yetkili olarak VTYS'ye bağlanmak için gerekir. Server 
     programın yanı sıra bir yönetim ekranı elde etmek için ayrıca "MySql Workbench" programı da kurulabilir.
@@ -73289,13 +73274,13 @@ int main(void)
 		exit(EXIT_FAILURE);
 	}
 
-	printf("OK");
+	printf("Ok\n");
 
 	return 0;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    MYSQL * türünden handle elde ediltiktan sonra artık "ip adresi", "port numarası", "kullanıcı adı", "parola" ve bağlanılacak
+    MYSQL * türünden handle elde ediltiktan sonra artık "IP adresi", "port numarası", "kullanıcı adı", "parola" ve bağlanılacak
     veritabını velirtilerek bağlantı mysl_real_connect fonksiyonuyla sağlanır. Fonksiyonun prototipi şöyledir:
 
     MYSQL *mysql_real_connect(MYSQL *MySQL, const char *host, const char *user, const char *passwd, const char *db, 
@@ -73332,9 +73317,9 @@ int main(void)
     mysql_close fonksiyonuna NULL adres geçilirse close işlemi yapılmaz ama mysql_init fonkisyonuyla tahsis edilmiş olan handle 
     alanu boşaltılır.
 
-    Server'a bağlanırken birkaç problem ortaya çıkabilir. Server default SSL kullanayor olabilir. Bu durumda SSL konfigürasyonunu
-    yapmadıysanız bağlantıda sorun çıkabilir. Bağlanırken SSL'i disable etmek için iki yöntem kullanılabilir. Birincisi "mysql.ini"
-    ya da "my.cnf" dosyasına aşağıdkai satırlar girilerek SSL kullanımı devra dışı bırakılabilir:
+    Server'a bağlanırken birkaç problem ortaya çıkabilir. Server default SSL kullanıyor olabilir. Bu durumda SSL konfigürasyonunu
+    yapmadıysanız bağlantı sırasında sorun oluşabilir. Bağlanırken SSL'i pasif hale getirmek için (disable etmek için) iki yöntem 
+    kullanılabilir. Birincisi "mysql.ini" ya da "my.cnf" dosyasına aşağıdaki satırlar girilerek SSL kullanımı devra dışı bırakılabilir:
 
     [mysqld]
     ssl=0
@@ -73342,8 +73327,8 @@ int main(void)
 
     Windows sistemlerinde "mysql.ini" dosyası "C:\ProgramData\MySQL\MySQL Server 8.0" dizin içerisinde bulunmaktadır. Linux 
     sistemlerinde "my.cnf" dosyası "/etc/mysql" dizini içerisindedir. Bu dosyaları edit etmek için editörünüzü "Administrator" 
-    ya da "sudo" hakkıya açmalısınız. İkinci yöntem programa özgü bir biçimde SSL'i mysql_options fonksiyonu ile disable etmektir. 
-    Bu işlem şöyle yapıabilir:
+    ya da "sudo" hakkıya açmalısınız. İkinci yöntem programa özgü bir biçimde SSL'i mysql_options fonksiyonu ile devre dışı 
+    bırakmaktır. Bu işlem şöyle yapıabilir:
 
     int ssl_mode = SSL_MODE_DISABLED;
 
