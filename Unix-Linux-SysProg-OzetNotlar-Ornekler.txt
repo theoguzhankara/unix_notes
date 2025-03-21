@@ -11,7 +11,7 @@
                         (Notları sabit genişlikli font kullanan programlama editörleri ile açınız.)
                             (Editörünüzün "Line Wrapping" özelliğini pasif hale getiriniz.)
 
-                                          Son Güncelleme: 16/03/2025 - Pazar
+                                          Son Güncelleme: 21/03/2025 - Cuma
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -52676,7 +52676,7 @@ void foo()
     KBuild sistemi yalnızca bizim dosyalarımızı derleyecektir.
 
     Makefile oluştururken bir noktaya dikkat ediniz. Make dilinde hedeflerin aşağısındaki yapılacak işlemler bir tab içerden 
-    yazılmaktadır.  Bazı text editörler TAB tuşuna basıldığında dosyaya TAB karakter yerine belli miktar (tipik olarak 4) SPACE
+    yazılmaktadır. Bazı text editörler TAB tuşuna basıldığında dosyaya TAB karakter yerine belli miktar (tipik olarak 4) SPACE
     karakteri basmaktadır. TAB yerine n tane SPACE karakterinin basılması make dosyalarında bir derleme sorununa yol açacaktır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -53005,7 +53005,7 @@ clean:
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-   Belli bir anda yüklenmiş olan çekirdek modülleri "/proc/modules" dosyasından elde edilebilir. "/proc/modules" bir text 
+    Belli bir anda yüklenmiş olan çekirdek modülleri "/proc/modules" dosyasından elde edilebilir. "/proc/modules" bir text 
     dosyadır. Dosyanın her satırında bir çekirdek modülünün bilgisi vardır. Örneğin:
 
     $ cat /proc/modules
@@ -54740,7 +54740,7 @@ static int __init generic_init(void)
 {
 	int result;
 
-	printk(KERN_INFO "generic-char-driver module initialization...\n");
+	printk(KERN_INFO "generic-char-driver init...\n");
 
 	if ((result = register_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1, "generic-char-driver")) < 0) {
 		printk(KERN_ERR "cannot register device!...\n");
@@ -54826,7 +54826,7 @@ void exit_sys(const char *msg);
 int main(void)
 {
 	int fd;
-	char buf[4096];
+	char buf[4096 + 1];
 	ssize_t result;
 	unsigned n;
 
@@ -54879,7 +54879,7 @@ void exit_sys(const char *msg)
 
         esize = size > FILE_BUF_SIZE - *off ? FILE_BUF_SIZE - *off : size;
 
-        if (esize  > 0) {
+        if (esize > 0) {
             if (copy_from_user(g_file_buf + *off, buf, esize) != 0)
                 return -EFAULT;
             *off += esize;
@@ -54917,7 +54917,7 @@ void exit_sys(const char *msg)
 
     $ echo -n "0123456789" | sudo tee mydriver
 
-    Burada -n parametresi \n karakterinin dosyaya yazılmasını engellemektedir. Bundan sonra artık yukarıdaki "app.c" programı
+    Burada -n parametresi '\n' karakterinin dosyaya yazılmasını engellemektedir. Bundan sonra artık yukarıdaki "app.c" programı
     ile testi yapabilirsiniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -54957,7 +54957,7 @@ static int __init generic_init(void)
 {
 	int result;
 
-	printk(KERN_INFO "generic-char-driver module initialization...\n");
+	printk(KERN_INFO "generic-char-driver init...\n");
 
 	if ((result = register_chrdev_region(MKDEV(DEV_MAJOR, DEV_MINOR), 1, "generic-char-driver")) < 0) {
 		printk(KERN_ERR "cannot register device!...\n");
@@ -55017,7 +55017,7 @@ static ssize_t generic_write(struct file *filp, const char *buf, size_t size, lo
 
 	esize = size > FILE_BUF_SIZE - *off ? FILE_BUF_SIZE - *off : size;
 
-	if (esize  > 0) {
+	if (esize > 0) {
 		if (copy_from_user(g_file_buf + *off, buf, esize) != 0)
 			return -EFAULT;
 		*off += esize;
@@ -55053,7 +55053,7 @@ void exit_sys(const char *msg);
 int main(void)
 {
 	int fd;
-	char buf[4096];
+	char buf[4096 + 1];
 	ssize_t result;
 	unsigned n;
 
@@ -55085,14 +55085,16 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    User mode'dan aygıt dosyası betimleyicisi ile lseek işlemi yapıldığında aygıt sürücünün file_operations yapısı içerisine 
-    yerleştirilen llseek fonksiyonu çağrılmaktadır. Fonksiyonun parametrik yapısı şöyledir:
+    Kullanıcı modundan aygıt dosyası betimleyicisi ile lseek POSIX fonksiyonu çağrıldığında (bu fonksiyon da sys_lseek sistem 
+    fonksiyonunu çağırmaktadır) karakter aygıt sürücüsünün file_operations yapısı içerisine yerleştirilen llseek fonksiyonu 
+    çağrılmaktadır. llseek fonksiyonunun parametrik yapısı şöyledir:
 
     static loff_t generic_llseek(struct file *filp, loff_t off, int whence);
 
     Fonksiyonun birinci parametresi dosya nesnesini, ikinci parametresi konumlandırılmak istenen offset'i, üçüncü parametresi 
     ise konumlandırmanın nereye göre yapılacağını belirtmektedir. Bu fonksiyonu gerçekleştirirken programcı file yapısı 
-    içerisindeki f_pos elemanını güncellemelidir. Tipik olarak programcı whence parametresini switch içerisine alır. Hedeflenen 
+    içerisindeki f_pos elemanını güncellemelidir. whence parametresi lseek fonksiyonundaki (ya da C'nin fseek fonksiyonundaki)
+    orijini belirten parametreyle aynı anlamdadır. Tipik olarak programcı whence parametresini switch içerisine alır. Hedeflenen 
     offset'i hesaplar ve en sonunda file yapısının f_pos elemanına bu hedeflenen offset'i yerleştirir. Hedeflenen offset uygun 
     değilse fonksiyon tipik olarak -EINVAL değeriyle geri döndürülür. Eğer konumlandırma offset'i başarılı ise fonksiyon 
     dosya göstericisinin yeni değerine geri dönmelidir.
@@ -55127,7 +55129,16 @@ void exit_sys(const char *msg)
     }
 
     Burada önce whence parametresine bakılarak dosya göstericisinin konumlandırılacağı offset belirlenmiştir. Sonra dosya 
-    nesnesinin f_pos elemanı güncellenmiştir.
+    nesnesinin f_pos elemanı güncellenmiştir. Çekirdek kodlarında da kullanıcı modunda kullandığımız SEEK_SET (0), SEEK_CUR (1)
+    ve SEEK_END (2) sembolik sabitleri tanımlanmış durumdadır.
+
+    Aşağıdaki örnekte aygıt sürücüyü yükledikten sonra yine onun içerisinde oluşturduğumuz dosyaya komut satırından birşeyler
+    yazabilirsiniz:
+
+    $ echo -n "0123456789" | sudo tee mydriver
+
+    Test programında lseek ile konumlandırma yapıp sonra okuma yaptık. Test kodunu değiştirerek lseek fonksiyonunun 
+    çalışıp çalışmadığını kontrol edebilirsiniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /* generic-char-driver.c */
@@ -55290,7 +55301,7 @@ int main(void)
 {
 	int fd;
 	ssize_t result;
-	char buf[4096];
+	char buf[4096 + 1];
 
 	if ((fd = open("mydriver", O_RDWR)) == -1)
 		exit_sys("open");
@@ -55349,17 +55360,17 @@ void exit_sys(const char *msg)
 /*--------------------------------------------------------------------------------------------------------------------------
     Biz şimdiye kadarki örneklerimizde aygıt sürücümüzün majör ve minör numarasını baştan belirledik. Bunun en önemli sakıncası 
     zaten o numaralı bir aygıt sürücünün yüklü olarak bulunuyor olmasıdır. Bu durumda aygıt sürücümüz yüklenemeyecektir. Aslında 
-    daha doğru bir strateji tersten gitmektir. Yani önce aygıt sürücümüz içerisinde biz boş bir aygıt numarasını bulup onu 
-    kullanabiliriz. Tabii sonra user mode'dan bu aygıt numarasına ilişkin bir aygıt dosyasını da yaratmamız gerekir.
+    daha doğru bir strateji tersten gitmektir. Yani önce aygıt sürücümüz içerisinde biz boş bir majör ve minör numara bulup onu 
+    kullanabiliriz. Tabii sonra kullanıcı modundan bu aygıt numarasına ilişkin bir aygıt dosyasını da yaratmamız gerekir.
 
-    Boş bir aygıt numarasını bize veren alloc_chrdev_region isimli bir kernel fonksiyonu vardır. Fonksiyonun parametrik yapısı 
+    Boş bir aygıt numarasını bize veren alloc_chrdev_region isimli bir çekirdek fonksiyonu vardır. Fonksiyonun parametrik yapısı 
     şöyledir:
 
     int alloc_chrdev_region(dev_t *dev, unsigned baseminor, unsigned count, const char *name);
 
     Fonksiyonun birinci parametresi boş aygıt numarasının yerleştirileceği dev_t nesnesinin adresini alır. İkinci ve üçüncü 
     parametreler başlangıç minör numarası ve onun sayısını belirtir. Son parametre ise aygıt sürücüsünün "/proc/devices" dosyasında 
-    ve "/sys/dev" dizininde görüntülenecek olan ismini belirtmektedir. alloc_chrdev_region fonksiyonu zaten register_chrdev_region 
+    ve "/sys/module" dizininde görüntülenecek olan ismini belirtmektedir. alloc_chrdev_region fonksiyonu zaten register_chrdev_region 
     fonksiyonunun yaptığını da yapmaktadır. Dolayısıyla bu iki fonksiyondan yalnızca biri kullanılmalıdır. Fonksiyon başarı durumunda 
     0 değerine, başarısızlık durumunda negatif errno değerine geri döner. Örneğin:
 
@@ -55371,23 +55382,27 @@ void exit_sys(const char *msg)
         return result;
     }
 
+    Aygıt sürücülerin majör numaraları birbirinden farklı olmak zorundadır. Biz kullanılan bir majör numaraya ilişkin kullanılmayan 
+    bir numara eşliğinde aygıt sürücümüzü register ettiremeyiz.
+
     Aygıt sürücümüzde alloc_chrdev_region fonksiyonu ile boş bir majör numara numaranın bulunup aygıt sürücümüzün register 
-    ettirildiğini düşünelim. Pekiyi biz bu numarayı nasıl bilip bu numaraya uygun aygıt dosyası yaratacağız? İşte bunun için genellikle 
-    izlenen yöntem "/proc/devices" dosyasına bakıp oradan majör numarayı alıp aygıt dosyasını yaratmaktır. Tabii bu manuel olarak 
-    yapılabilir ancak bir shell script ile otomatize de edilebilir. Aşağıdaki "load" isimli script bu işlemi yapmaktadır:
+    ettirildiğini düşünelim. Pekiyi biz bu numarayı nasıl bilip de komut satırından bu numaraya uygun aygıt dosyası yaratacağız? 
+    İşte bunun için genellikle izlenen yöntem "/proc/devices" dosyasına bakıp oradan majör numarayı alıp aygıt dosyasını yaratmaktır. 
+    Tabii bu manuel olarak yapılabilir ancak bir "shell script" ile otomatize de edilebilir. Aşağıdaki bu işlemi yapan "load" 
+    isimli bir "shell script" verilmiştir:
 
     #!/bin/bash
 
     module=$1
     mode=666
 
-    /sbin/insmod ./$module.ko ${@:2} || exit 1
+    /sbin/insmod ./${module}.ko ${@:2} || exit 1
     major=$(awk "\$2 == \"$module\" {print \$1}" /proc/devices)
     rm -f $module
     mknod -m $mode $module c $major 0
 
-    Artık biz bu "load" script'i ile aygıt sürücümüzü yükleyip aygıt dosyamızı yaratacağız. Bu script'i "load" ismiyle yazıp 
-    aşağıdaki gibi x hakkı vermelisiniz:
+    Artık biz bu "load" script'i ile aygıt sürücümüzü yükleyip aygıt dosyamızı yaratabileceğiz. Bu script'i "load" ismiyle yazıp 
+    aşağıdaki gibi dosyaya "x" hakkı vermelisiniz:
 
     $ chmod +x load
 
@@ -55396,10 +55411,11 @@ void exit_sys(const char *msg)
     $ sudo ./load generic-char-driver
 
     Burada "load" script'i çalıştırıldığında hem aygıt sürücü çekirdek alanına yüklenmekte hem de yüklenen aygıt sürücünün 
-    majör numarasıyla minör numarası 1 olacak biçimde "generic-char-driver" isimli aygıt dosyası yaratılmaktadır. Aygıt sürücünün 
-    çekirdek alanından atılması manuel bir biçimde "rmmod" komutuyla yapılabilir. Tabii aynı zamanda bu aygıt sürücü için 
-    yaratılan aygıt dosyasının da silinmesi gerekir. Yukarıdaki script'te aygıt dosyası zaten varsa aynı zamanda o silinmektedir. 
-    Tabii aygıt dosyasını çekirdek alanından atarak silen ayrı bir "unload" isimli script'i de aşağıdaki gibi yazabiliriz:
+    majör numarasıyla (minör numarası da 0 olacak biçimde) "generic-char-driver" isimli aygıt dosyası yaratılmaktadır. Aygıt 
+    sürücünün çekirdek alanından atılması manuel bir biçimde "rmmod" komutuyla yapılabilir. Tabii aynı zamanda bu aygıt sürücü 
+    için yaratılan aygıt dosyasının da silinmesi uygun olabilir. Yukarıdaki script'te aygıt dosyası zaten varsa aynı zamanda o 
+    dosya silinmektedir. Tabii aygıt dosyasını çekirdek alanından atarak silen ayrı bir "unload" isimli script'i de aşağıdaki 
+    gibi yazabiliriz:
 
     #!/bin/bash
 
@@ -55416,9 +55432,9 @@ void exit_sys(const char *msg)
 
     $ sudo ./unload generic-char-driver
 
-    Aşağıdaki örnekte alloc_chrdev_region fonksiyonuyla hem boş aygıt numarası elde edilip hem de bu aygıt numarası register 
-    ettirilmiştir. Yükleme işlemi yukarıdaki "load" script'i ile yapılmalıdır. Kernel modülün boşaltılması işlemi manuel olarak
-    ya da "unload" script'i ile yapılabilir. Örneğin:
+    Aşağıdaki örnekte alloc_chrdev_region fonksiyonuyla hem boş bir aygıt numarası elde edilip hem de bu aygıt numarası register 
+    ettirilmiştir. Yükleme işlemi yukarıdaki "load" script'i ile yapılmalıdır. çekirdek modülünün boşaltılması işlemi manuel 
+    olarak ya da "unload" script'i ile yapılabilir. Örneğin:
 
     $ sudo ./load generic-char-driver
     ...
@@ -55431,9 +55447,8 @@ void exit_sys(const char *msg)
 #include <linux/kernel.h>
 #include <linux/fs.h>
 #include <linux/cdev.h>
-#include <linux/uaccess.h>
 
-#define FILE_MEMORY_MAX_SIZE	4096
+#define FILE_BUF_SIZE		4096
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Kaan Aslan");
@@ -55446,7 +55461,7 @@ static ssize_t generic_write(struct file *filp, const char *buf, size_t size, lo
 static loff_t generic_llseek(struct file *filp, loff_t off, int whence);
 
 static dev_t g_dev;
-static struct cdev *g_cdev;
+static struct cdev g_cdev;
 static struct file_operations g_fops = {
 	.owner = THIS_MODULE,
 	.open = generic_open,
@@ -55456,31 +55471,25 @@ static struct file_operations g_fops = {
 	.release = generic_release
 };
 
-static char g_fmem[FILE_MEMORY_MAX_SIZE];
-static size_t g_fmem_size;
+static char g_file_buf[FILE_BUF_SIZE];
+static size_t g_fsize = 0;
 
 static int __init generic_init(void)
 {
 	int result;
 
-	printk(KERN_INFO "generic-char-driver module initialization...\n");
+	printk(KERN_INFO "generic-char-driver init...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "generic-char-driver")) < 0) {
-		printk(KERN_INFO "cannot alloc char driver!...\n");
+		printk(KERN_ERR "cannot register device!...\n");
 		return result;
 	}
 
-	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "cannot allocate cdev!...\n");
-		return -ENOMEM;
-	}
-
-	g_cdev->owner = THIS_MODULE;
-	g_cdev->ops = &g_fops;
-
-	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
+	cdev_init(&g_cdev, &g_fops);
+	if ((result = cdev_add(&g_cdev, g_dev, 1)) < 0) {
 		unregister_chrdev_region(g_dev, 1);
 		printk(KERN_ERR "cannot add device!...\n");
+
 		return result;
 	}
 
@@ -55489,10 +55498,10 @@ static int __init generic_init(void)
 
 static void __exit generic_exit(void)
 {
-	cdev_del(g_cdev);
+	cdev_del(&g_cdev);
 	unregister_chrdev_region(g_dev, 1);
 
-	printk(KERN_INFO "generic-char-driver module exit...\n");
+	printk(KERN_INFO "generic-char-driver exit...\n");
 }
 
 static int generic_open(struct inode *inodep, struct file *filp)
@@ -55513,12 +55522,13 @@ static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *o
 {
 	size_t esize;
 
-	esize = *off + size > g_fmem_size ? g_fmem_size - *off : size;
+	esize = size > g_fsize - *off ? g_fsize - *off : size;
 
-	if (copy_to_user(buf, g_fmem + *off, esize) != 0)
-		return -EFAULT;
-
-	*off += esize;
+	if (esize > 0) {
+		if (copy_to_user(buf, g_file_buf + *off, esize) != 0)
+			return -EFAULT;
+		*off += esize;
+	}
 
 	return esize;
 }
@@ -55527,15 +55537,16 @@ static ssize_t generic_write(struct file *filp, const char *buf, size_t size, lo
 {
 	size_t esize;
 
-	esize = *off + size > FILE_MEMORY_MAX_SIZE ? FILE_MEMORY_MAX_SIZE - *off : size;
+	esize = size > FILE_BUF_SIZE - *off ? FILE_BUF_SIZE - *off : size;
 
-	if (copy_from_user(g_fmem + *off, buf, esize) != 0)
-		return -EFAULT;
+	if (esize  > 0) {
+		if (copy_from_user(g_file_buf + *off, buf, esize) != 0)
+			return -EFAULT;
+		*off += esize;
 
-	*off += esize;
-
-	if (*off > g_fmem_size)
-		g_fmem_size = *off;
+		if (*off > g_fsize)
+			g_fsize = *off;
+	}
 
 	return esize;
 }
@@ -55545,20 +55556,19 @@ static loff_t generic_llseek(struct file *filp, loff_t off, int whence)
 	loff_t newpos;
 
 	switch (whence) {
-		case 0:
-			newpos = off;
-			break;
-		case 1:
-			newpos = filp->f_pos + off;
-			break;
-		case 2:
-			newpos = g_fmem_size + off;
-			break;
-		default:
-			return -EINVAL;
+	case 0:
+		newpos = off;
+		break;
+	case 1:
+		newpos = filp->f_pos + off;
+		break;
+	case 2:
+		newpos = g_fsize + off;
+		break;
+	default:
+		return -EINVAL;
 	}
-
-	if (newpos < 0 || newpos > g_fmem_size)
+	if (newpos < 0 || newpos >= g_fsize)
 		return -EINVAL;
 
 	filp->f_pos = newpos;
@@ -55585,7 +55595,7 @@ clean:
 module=$1
 mode=666
 
-/sbin/insmod ./$module.ko ${@:2} || exit 1
+/sbin/insmod ./${module}.ko ${@:2} || exit 1
 major=$(awk "\$2 == \"$module\" {print \$1}" /proc/devices)
 rm -f $module
 mknod -m $mode $module c $major 0
@@ -55596,14 +55606,13 @@ mknod -m $mode $module c $major 0
 
 module=$1
 
-/sbin/rmmod ./$module.ko || exit 1
+/sbin/rmmod ./${module}.ko || exit 1
 rm -f $module
 
 /* app.c */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -55612,46 +55621,27 @@ void exit_sys(const char *msg);
 int main(void)
 {
 	int fd;
+	char buf[4096 + 1];
 	ssize_t result;
-	char buf[4096];
+	unsigned n;
 
-	if ((fd = open("generic-char-driver", O_RDWR)) == -1)
+	if ((fd = open("generic-char-driver", O_RDONLY)) == -1)
 		exit_sys("open");
 
-	if ((result = write(fd, "ankara", 6)) == -1)
-		exit_sys("write");
-
-	printf("%jd bytes written\n", (intmax_t)result);
-
-	if ((result = write(fd, "izmir", 5)) == -1)
-		exit_sys("write");
-
-	printf("%jd bytes written\n", (intmax_t)result);
-
-	if (lseek(fd, 0, 0) == -1)
+	if (lseek(fd, 5, 0) == -1)
 		exit_sys("lseek");
 
-	if ((result = read(fd, buf, 8)) == -1)
-		exit_sys("read");
-	buf[result] = '\0';
+	for (;;) {
+		printf("number of bytes to read? ");
+		scanf("%u", &n);
 
-	printf("%s\n", buf);
-
-	if (lseek(fd, -2, 1) == -1)
-		exit_sys("lseek");
-
-	if ((result = read(fd, buf, 8)) == -1)
-		exit_sys("read");
-	buf[result] = '\0';
-
-	if (lseek(fd, -2, 2) == -1)
-		exit_sys("lseek");
-
-	if ((result = read(fd, buf, 8)) == -1)
-		exit_sys("read");
-	buf[result] = '\0';
-
-	printf("%s\n", buf);
+		if ((result = read(fd, buf, n)) == -1)
+			exit_sys("read");
+		if (result == 0)
+			break;
+		buf[result] = '\0';
+		puts(buf);
+	}
 
 	close(fd);
 
@@ -57222,7 +57212,6 @@ void exit_sys(const char *msg)
     int test_and_set_bit(nr, void *addr);
     int test_and_clear_bit(nr, void *addr);
     int test_and_change_bit(nr, void *addr);
-
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -72490,8 +72479,8 @@ int main(void)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     SQL paralı bir üründür. Fakat bunun da "Express Edition" isminde bedava bir sürümü vardır. Bu sürüm Microsoft'un sayfasından 
-    indirilip kurulabilir. Tıpkı MySQL'de olduğu gibi SQL Server'da da yönetim konsol programı da vardır. Buna "SQL Server 
-    Management Studio" denilmektedir. Bunun da indirilip kurulması tavsiye edilir.
+    indirilip kurulabilir. Tıpkı MySQL'de olduğu gibi SQL Server'da da yönetim konsol programı vardır. Buna "SQL Server Management 
+    Studio" denilmektedir. Bunun da indirilip kurulması tavsiye edilir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -72512,8 +72501,8 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    İlişkisel veritabanları tablolardan tablolar da sütunlardan (fields) oluşmaktadır. Tabii sütunların da veri türleri vardır. 
-    SQL Standratlarında standart bazı veri türleri belirtilmiştir. Ancak SQL VTYS'den VTYS'ye değişiklik gösterebilmektedir. 
+    İlişkisel veritabanları tablolardan, tablolar da sütunlardan (fields) oluşmaktadır. Tabii sütunların da veri türleri vardır. 
+    SQL Standartları'nda standart bazı veri türleri belirtilmiştir. Ancak SQL VTYS'den VTYS'ye değişiklik gösterebilmektedir. 
     Dolayısıyla her VTYS'nin SQL komutlarında bazı farklılıklar bulunabilmektedir. Biz burada bazı standart sütun türleri
     üzerinde duracağız. Çalıştığınız VTYS'nin dokümanlarından onlara özgü ayrıntıları elde edebilirsiniz.
 
@@ -72554,10 +72543,14 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
+												198. Ders 16/02/2025 - Pazar
+---------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------
     Şimdi de temel SQL komutlarını görelim. SQL bazı ayrıntıları olan dekleratif bir programlama dilidir. Komutlardan oluşmaktadır.
     Biz burada temel SQL komutlarını ayrıntılarına girmeden ele alacağız.
 
-    SQL büyük jarf küçük harf duyarlılığı olmayan (case insensitive) bir dildir. Ancak geleneksel olarak anahtar sözcüklerin
+    SQL büyük harf küçük harf duyarlılığı olmayan (case insensitive) bir dildir. Ancak geleneksel olarak anahtar sözcüklerin
     büyük harflerle yazılması tercih edilmektedir. SQL komutlarının sonunda sonlandırıcı olarak ';' karakteri bulundurulmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -72581,7 +72574,7 @@ int main(void)
 
     SHOW DATABASES;
 
-    CREATE TABLE Komutu: Bu komut veritabanı için bir tablo yaratmak amacıyla kullanılır. Komutun basit genel biçimi şöyledir:
+    CREATE TABLE Komutu: Bu komut veritabanı için bir tablo yaratmak amacıyla kullanılır. Komutun genel biçimi şöyledir:
 
     CREATE TABLE <isim> (<isim> <tür>, <isim> <tür>, <isim> <tür>... );
 
@@ -72592,11 +72585,11 @@ int main(void)
     CREATE TABLE student_info(student_id PRIMARY KEY AUTO_INCREMENT, student_name VARCHAR(45), student_no INTEGER);
 
     Bir tabloda tekrarlanması yasaklanmış olan sütunlara “birincil anahtar (primary key)” denilmektedir. Tablodaki kayıtların 
-    hepsinin birincil anahtar sütunları farklı olmak zorundadır. Başka bir deyişle biz birtablya orada zaten var olan birincil 
+    hepsinin birincil anahtar sütunları farklı olmak zorundadır. Başka bir deyişle biz bir tabloya orada zaten var olan birincil 
     anahtar değerine ilişkin bir kayıt ekleyemeyiz. Her tabloda bir tane birincil anahtarın olması tavsiye edilmektedir. 
     Birincil anahtarın tablo yaratılırken CREATE TABLE komutunda belirtilme biçimi çeşitli VTYS’lerde farklı olabilmektedir.
 
-    DROP TABLE Komutu: Bu komut tabloyu silmek için kullanılır. Genel biçimi şöyledir:
+    DROP TABLE Komutu: Bu komut tabloyu silmek için kullanılır. Komutun genel biçimi şöyledir:
 
     DROP TABLE <isim>;
 
@@ -72604,7 +72597,7 @@ int main(void)
 
     DROP TABLE person;
 
-    INSERT INTO Komutu: Bu komut bir tabloya bir satır eklemek için kullanılır. Komutun temel genel biçimi şöyledir:
+    INSERT INTO Komutu: Bu komut bir tabloya bir satır eklemek için kullanılır. Komutun genel biçimi şöyledir:
 
     INSERT INTO <tablo ismi> (sütun1, sütun2, sütun3,...) VALUES (değer1, değer2, değer3,...);
 
@@ -72634,7 +72627,7 @@ int main(void)
 
     WHERE cümleciğinin bazı detayları vardır. Bu detaylar ilgili dokümanlardan öğrenilebilir.
 
-    DELETE FROM Komutu: Bu komut bir tablodan satır silmek için kullanılır. Komutun Genel biçimi şöyledir:
+    DELETE FROM Komutu: Bu komut bir tablodan satır silmek için kullanılır. Komutun genel biçimi şöyledir:
 
     DELETE FROM <tablo ismi> <WHERE cümleciği>;
 
@@ -72666,7 +72659,7 @@ int main(void)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     SELECT Komutu: Koşulu sağlayan kayıtların elde edilmesi SELECT komutuyla yapılmaktadır. SELECT komutunun genel biçimi 
-    oldukça ayrıntılıdır. Çünkü komuta çeşitli cümlecikler monte edilebilmektedir. Komutun temel biçimi şöyledir:
+    oldukça ayrıntılıdır. Çünkü komuta çeşitli cümlecikler monte edilebilmektedir. Komutun genel biçimi şöyledir:
 
     SELECT <sütun_listesi> FROM <tablo_ismi> [WHERE <koşul];
 
@@ -72683,7 +72676,7 @@ int main(void)
 
     SELECT * FROM student WHERE student_id > 600 ORDER BY stdent_name;
 
-     Burada öğrenci numarası 600'den büyük olan öğrencilerin tüm sütun bilgileri elde edilmiştir.
+    Burada öğrenci numarası 600'den büyük olan öğrencilerin tüm sütun bilgileri elde edilmiştir.
 
     Eğer SELECT edilen kayıtlar belli bir sütuna göre sıralı biçimde elde edilmek istenirse ORDER BY cümleciği komuta eklenir. 
     Örneğin:
@@ -72724,7 +72717,7 @@ int main(void)
     Hasan Bulur 734     Tarsus Amerikan Lisesi      Mersin                  Devlet Lisesi
     ...                 ...                         ...                     ...
 
-    Burada Okul bilgileri gereksiz bir biçimde tekrarlanmaktadır. Bu tekrarı engellemek için iki tablo oluşturabiliriz.
+    Burada Okul Adı bilgileri gereksiz bir biçimde tekrarlanmaktadır. Bu tekrarı engellemek için iki tablo oluşturabiliriz.
 
     Öğrenci Tablosu
 
@@ -72744,9 +72737,9 @@ int main(void)
     150              Eskişehir Atatürk Lisesi   Eskişehir                   Devlet Lisesi
     ...              ...                        ...                         ...
 
-    Burada veri tekrarı oratadan kaldırılmıştır. Tabii bu tablolarda da Okul ID'si ortak bir sütundur. Bu ortak sütun tablolar 
+    Burada veri tekrarı ortadan kaldırılmıştır. Tabii bu tablolarda da Okul ID'si ortak bir sütundur. Bu ortak sütun tablolar 
     arasında ilişki kurmak için gerekmektedir. Bu tür sütunlara "foreign key" de denilmektedir. Ancak yukarıdaki gibi tekrarlar 
-    engellendiğinde gerekli bilgiler artık tek bir tablodan değil çeşitli tabolardan çekilip alınacaktır. İşe çeşitli tabolardan 
+    engellendiğinde gerekli bilgiler artık tek bir tablodan değil, çeşitli tablolardan çekilip alınacaktır. İşe çeşitli tablolardan 
     bilgilerin çekilip alınması işlemine "JOIN" işlemi denilmektedir. JOIN işleminin birkaç biçimi vardır (INNER JOIN, OUTER JOIN, 
     LEFT JOIN, RIGHT JOIN gibi). Ancak en fazla kullanılan JOIN işlemi "INNER JOIN" denilen işlemdir. JOIN denildiğinde zaten 
     default olarak INNER JOIN anlaşılır. INNER JOIN işleminde eğer iki tablo söz konusu ise önce iki tablonun kartezyen çarpımları 
@@ -72817,7 +72810,7 @@ int main(void)
     başlık dosyası niteliğindedir.
 
     Mac OS X için kurulum Windows’takine benzemektedir. Yine ilgili “.zip” dosyaları indirilip kurulum yapılabilir. Bu 
-    sistemlerde derleme yaparken link aşamasında "-lsqlite3" lie kütüphane dosyasını belirtmeyi unutmayınız.
+    sistemlerde derleme yaparken link aşamasında "-lsqlite3" ile kütüphane dosyasını belirtmeyi unutmayınız.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -72841,7 +72834,7 @@ int main(void)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     C’de SQLite veritabanı ile işlem yapmak için önce o veritabanının sqlite3_open fonksiyonuyla açılması gerekir. Bu işlemden 
-    sqlite3 türünden bir handle elde edilir. sqlite3_open fonksiyonun prototipi şöyledir:
+    sqlite3 türünden bir handle elde edilir. sqlite3_open fonksiyonunun prototipi şöyledir:
 
     int sqlite3_open(
         const char *filename,   /* Database filename (UTF-8) */
@@ -72867,7 +72860,7 @@ int main(void)
 
     const char *sqlite3_errmsg(sqlite3 *db);
 
-    sqlite3_close fonksiyonun prototipi ise şöyledir:
+    sqlite3_close fonksiyonunun prototipi ise şöyledir:
 
     int sqlite3_close(sqlite3*);
 
@@ -72901,7 +72894,7 @@ int main(void)
 	if (sqlite3_open("student.db", &db) != SQLITE_OK)
 		sqlite3_exit("sqlite3_open", db);
 
-	printf("succes...\n");
+	printf("success...\n");
 
 	sqlite3_close(db);
 
@@ -72917,7 +72910,7 @@ void sqlite3_exit(const char *msg, sqlite3 *db)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-   SQLite'a bir SQL cümlesi göndermek için sqlite3_exec fonksiyonu kullanılmaktadır. Fonksiyonun prototipi şöyledir:
+    SQLite'a bir SQL cümlesi göndermek için sqlite3_exec fonksiyonu kullanılmaktadır. Fonksiyonun prototipi şöyledir:
 
     int sqlite3_exec(
         sqlite3 *db,                               /* An open database */
@@ -73038,7 +73031,7 @@ void sqlite3_exit(const char *msg, sqlite3 *db)
     Örnekteki "student.db" veritabanı yoksa yaratılmaktadır varsa olan veritabanı açılmaktadır. Eğer veritabanı yoksa aşağıdaki
     SQL komutuyla tablo yaratılmıştır:
 
-     "CREATE TABLE IF NOT EXISTS student_info(student_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    "CREATE TABLE IF NOT EXISTS student_info(student_id INTEGER PRIMARY KEY AUTOINCREMENT, 
         student_name VARCHAR(64), 
         student_no INTEGER
     );"
@@ -73338,7 +73331,7 @@ int main(void)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Eskiden MySQL server programı default olarak uzak bağlantıları kabul ediyordu. Sonra default durumda uzak bağlantılara
-    izin verilmemeye başlandı. Yani siz yerel ağınızda bile olsa başka bir makinedeki MySQL Server programa IP adresi ve 
+    izin verilmemeye başlandı. Yani siz yerel ağınızda bile olsa başka bir makinedeki MySQL Server programına IP adresi ve 
     port numarası belirterek bağlanamayabilirsiniz. Uzak bağlantılara izin vermek için konfügrasyonda bazı ayarlamaların 
     yapılması gerekmektedir.
 
