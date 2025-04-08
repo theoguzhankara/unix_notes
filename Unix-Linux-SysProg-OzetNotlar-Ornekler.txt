@@ -73724,7 +73724,7 @@ int main(void)
     Ali Serçe      123     100
     Kaan Aslan     745     235
     Hasan Bulur    734     100
-    ...             ...     ...
+    ...            ...     ...
 
     Okul Tablosu
 
@@ -73737,7 +73737,7 @@ int main(void)
 
     Burada veri tekrarı ortadan kaldırılmıştır. Tabii bu tablolarda da Okul ID'si ortak bir sütundur. Bu ortak sütun tablolar 
     arasında ilişki kurmak için gerekmektedir. Bu tür sütunlara "foreign key" de denilmektedir. Ancak yukarıdaki gibi tekrarlar 
-    engellendiğinde gerekli bilgiler artık tek bir tablodan değil, çeşitli tablolardan çekilip alınacaktır. İşe çeşitli tablolardan 
+    engellendiğinde gerekli bilgiler artık tek bir tablodan değil, çeşitli tablolardan çekilip alınacaktır. İşte çeşitli tablolardan 
     bilgilerin çekilip alınması işlemine "JOIN" işlemi denilmektedir. JOIN işleminin birkaç biçimi vardır (INNER JOIN, OUTER JOIN, 
     LEFT JOIN, RIGHT JOIN gibi). Ancak en fazla kullanılan JOIN işlemi "INNER JOIN" denilen işlemdir. JOIN denildiğinde zaten 
     default olarak INNER JOIN anlaşılır. INNER JOIN işleminde eğer iki tablo söz konusu ise önce iki tablonun kartezyen çarpımları 
@@ -73773,7 +73773,7 @@ int main(void)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    İşlemlere başlamadan önce SQLite’ın programalama kurulumunu yapmamız gerekir. SQLite yukarıda da belirtitğimiz gibi 
+    İşlemlere başlamadan önce SQLite’ın programlama kurulumunu yapmamız gerekir. SQLite yukarıda da belirtitğimiz gibi 
     çok küçük (tek bir dinamik kütüphaneden oluşan) bir VTYS’dir. Dolayısıyla onun kurulması Windows’ta bildiğimiz anlamda 
     bir setup işlemi ile yapılmaz. Tabii bizim C’den SQLite kütüphanesini kullanabilmemiz için ona ilişkin başlık ve kütüphane 
     dosyalarını elde etmemiz gerekir. Windows'ta SQLite'ın resmi indirme sitesi şöyledir:
@@ -73799,13 +73799,17 @@ int main(void)
 
     LIB /DEF:sqlite3.def /machine:x86
 
-    Buradaki machine argümanı hedef sistemi belirtmektedir. Burada 32 bit Windows sistemleri için x86, 64 bit Windows 
+    Buradaki "machine" argümanı hedef sistemi belirtmektedir. Burada 32 bit Windows sistemleri için x86, 64 bit Windows 
     sistemleri için "x64" kullanılmalıdır. Örneğin:
 
     LIB /DEF:sqlite3.def /machine:x64
 
     İkinci indirmeden biz SQLite’ın kaynak dosyalarını elde ederiz. Buradaki “sqlite3.h” dosyası SQLite fonksiyonları için 
     başlık dosyası niteliğindedir.
+
+    Debian kökenli (Debian, Ubuntu, Mint vs.) apt-get kullanan sistemlerde bu işlem şöyle yapılabilir:
+
+    $ sudo apt-get install sqlite3 libsqlite3-dev
 
     Mac OS X için kurulum Windows’takine benzemektedir. Yine ilgili “.zip” dosyaları indirilip kurulum yapılabilir. Bu 
     sistemlerde derleme yaparken link aşamasında "-lsqlite3" ile kütüphane dosyasını belirtmeyi unutmayınız.
@@ -73921,7 +73925,7 @@ void sqlite3_exit(const char *msg, sqlite3 *db)
     Fonskiyonun birinci parametresi sqlite3_open fonksiyonundan elde edilen handle değeridir. İkinci parametre sql cümlesinin 
     yazısını alır. Üçüncü parametre işlemden sonra çağrılacak “callback” fonksiyonun adresini almaktadır. Bu parametre NULL 
     geçilebilir. Dördüncü parametre bu “callback” fonksiyona geçirilecek argümanı belirtir. Bu parametre de NULL geçilebilir. 
-    Son parametre ise char * türünden bir göstericinin adresini almaktadır. Hata drumunda hata mesajının adresi bu göstericiye 
+    Son parametre ise char * türünden bir göstericinin adresini almaktadır. Hata durumunda hata mesajının adresi bu göstericiye 
     yerleştirilir. Bu parametre NULL olarak da geçilebilir. Fonksiyonun geri dönüş değeri işlemin başarısını belirtir. Fonksiyon 
     başarılıysa SQLITE_OK değerine geri dönmektedir. Bu durumda biz hata mesajını yazdırdıktan sonra sqlite3_free fonksiyonu 
     ile tahsis edilen alanı serbest bırakabiliriz. Örneğin:
