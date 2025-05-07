@@ -75191,7 +75191,7 @@ void exit_err(const char *msg, MYSQL *db)
     2. İşletim sistemi ya da GUI alt sistem gerçekleşen girdi olaylarını “mesaj (message)” adı altında bir yapı formatına dönüştürmekte 
     ve bunu pencerenin ilişkin olduğu programın (ya da thread’in) mesaj kuyruğuna eklemektedir.
 
-    3. Mesajlar ilgili olayı betimleyen ve ona ilişkin bazı bilgileri barındıran yapı (structure) nesleridir. Örneğin Windows’ta 
+    3. Mesajlar ilgili olayı betimleyen ve ona ilişkin bazı bilgileri barındıran yapı (structure) nesneleridir. Örneğin Windows’ta 
     mesajlar MSG isimli bir yapıyla temsil edilmişleridir. Bu yapının elemanlarında mesajın ne mesajı olduğu (yani neden gönderildiği) 
     ve mesajın gönderilmesine neden olan olaya ilişkin bazı parametrik bilgiler bulunur.
 
