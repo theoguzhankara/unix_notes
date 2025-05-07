@@ -75179,7 +75179,7 @@ void exit_err(const char *msg, MYSQL *db)
     burada biz her sistemde geçerli olan bazı temel bilgileri vermekle yetineceğiz.
 
     Mesaj tabanlı programlama modelinde klavye ve fare gibi aygıtlarda oluşan girdileri programcı kendisi almaya çalışmaz. 
-    klavye gibi, fare gibi girdi aygıtlarını işletim sisteminin (ya da GUI alt sistemin) kendisi izler. Oluşan girdi olayı 
+    klavye gibi, fare gibi girdi aygıtlarını işletim sisteminin (ya da GUI alt sisteminin) kendisi izler. Oluşan girdi olayı 
     hangi pencereye ilişkinse işletim sistemi ya da GUI alt sistem, bu girdi olayını “mesaj” adı altında bir yapıya dönüştürerek 
     o pencerenin ilişkin olduğu (yani o pencereyi yaratan) programın “mesaj kuyruğu (message queue)” denilen bir kuyruk sistemine 
     yerleştirir. Mesaj kuyruğu içerisinde mesajların bulunduğu FIFO prensibiyle çalışan bir kuyruk veri yapısıdır. Sistemin daha 
@@ -75198,14 +75198,14 @@ void exit_err(const char *msg, MYSQL *db)
     Görüldüğü gibi GUI programlama modelinde girdileri programcı elde etmeye çalışmamaktadır. Girdileri bizzat işletim sisteminin 
     kendisi ya da GUI alt sistemi elde edip programcıya mesaj adı altında iletmektedir.
 
-    GUI programlama modelinde işletim sisteminin (ya da GUI alt sistemin) oluşan mesajı ilgili programın (ya da thread’in) 
+    GUI programlama modelinde işletim sisteminin (ya da GUI alt sisteminin) oluşan mesajı ilgili programın (ya da thread’in) 
     mesaj kuyruğuna eklemenin dışında başka bir sorumluluğu yoktur. Mesajların kuyruktan alınarak işlenmesi ilgili programın 
     sorumluluğundadır. Böylece GUI programcısının mesaj kuyruğuna bakarak sıradaki mesajı alması ve ne olmuşsa ona uygun 
     işlemleri yapması gerekir. Bu modelde programcı kodunu şöyle düzenler: "Bir döngü içerisinde sıradaki mesajı kuyruktan al, 
     onun neden gönderildiğini belirle, uygun işlemleri yap, kuyrukta mesaj yoksa da blokede bekle”. İşte GUI programlarındaki 
     mesaj kuyruğundan mesajı alıp işleyen döngüye mesaj döngüsü (message loop) denilmektedir.
 
-    Bir GUI programının işleyişini tipik akışı aşağıdaki gibi bir kodla temsil edebiliriz:
+    Bir GUI programının işleyişinin tipik akışı aşağıdaki gibi bir kodla temsil edebiliriz:
 
     int main(void)
     {
@@ -75230,30 +75230,30 @@ void exit_err(const char *msg, MYSQL *db)
     thread’in) mesaj kuyruğuna bırakır. Programcı da kuyruktan bu mesajı alarak mesaj döngüsünden çıkar ve program sonlanır.
 
     GUI ortamımız (framework) ister .NET, ister Java, ister MFC olsun, isterse Qt olsun, işletim sisteminin ya da GUI alt 
-    sistemin çalışması hep burada ele açıklandığı gibidir. Yani örneğin biz .NET'te ya da Java'da işlemlerin sanki başka 
+    sisteminin çalışması hep burada ele açıklandığı gibidir. Yani örneğin biz .NET'te ya da Java'da işlemlerin sanki başka 
     biçimlerde yapıldığını sanabiliriz. Aslında işlemler bu ortamlar tarafından aşağı seviyede yine burada anlatıldığı gibi 
     yapılmaktadır. Bu ortamlar (frameworks) ya da kütüphaneler çeşitli yükleri üzerimizden alarak bize daha rahat bir çalışma 
     modeli sunarlar. Ayrıca şunu da belirtmek istiyoruz: GUI programlama modeli özellikle nesne yönelimli programlama modeline 
     çok uygun düşmektedir. Bu nedenle bu konuda kullanılan kütüphanelerin büyük bölümü sınıflar biçiminde nesne yönelimli 
     diller için oluşturulmuş durumdadır. Örneğin Qt Framework C++ ile, .NET Forms ve WPF Framework'leri C# ile (ya da diğer 
-    nesne yönelimli :NET dilleri ile) kullanılmaktadır.
+    nesne yönelimli .NET dilleri ile) kullanılmaktadır.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Şimdi GUI programlama modelindeki mesaj kavramını biraz daha açalım. Yukarıda da belirttiğimiz gibi bu modelde programcıyı 
     ilgilendiren çeşitli olaylara “mesaj” denilmektedir. Örneğin klavyeden bir tuşa basılması, pencere üzerinde fare ile 
     tıklanması, pencere içerisinde farenin hareket ettirilmesi gibi olaylar hep birer mesaj oluşturmaktadır. İşletim sistemleri 
-    ya da GUI alt sistemler mesajları birbirinden ayırmak için onlara birer numara karşılık getirirler. Örneğin Windows’ta 
+    ya da GUI alt sistemleri mesajları birbirinden ayırmak için onlara birer numara karşılık getirirler. Örneğin Windows’ta 
     mesaj numaraları WM_XXX biçiminde sembolik sabitlerle kodlanmıştır. Programcılar da konuşurken ya da kod yazarken mesaj 
     numaralarını değil, bu sembolik sabitleri kullanırlar. (Örneğin WM_LBUTTONDOWN, WM_MOUSEMOVE, WM_KEYDOWN gibi) Mesajların 
     numaraları yalnızca gerçekleşen olayın türünü belirtmektedir. Oysa bazı olaylarda gerçekleşen olaya ilişkin bazı bilgiler 
-    de söz konusudur. İşte bir mesaja ilişkin o mesaja özgü bazı parametrik bilgiler de işletim sistemi ya da GUI alt sistem 
+    de söz konusudur. İşte bir mesaja ilişkin o mesaja özgü bazı parametrik bilgiler de işletim sistemi ya da GUI alt sistemi 
     tarafından mesajın bir parçası olarak mesajın içerisine kodlanmaktadır. Örneğin Windows’ta biz klavyeden bir tuşa bastığımızda 
     Windows WM_KEYDOWN isimli mesajı programın mesaj kuyruğuna bırakır. Bu mesajı kuyruktan alan programcı mesaj numarasına 
     bakarak klavyenin bir tuşuna basılmış olduğunu anlar. Fakat hangi tuşa basılmıştır? İşte Windows basılan tuşun bilgisini 
     de ayrıca bu mesajın içerisine kodlamaktadır. Örneğin WM_LBUTTONDOWN mesajını Windows farenin sol tuşuna tıklandığında 
     kuyruğa bırakır. Ancak ayrıca basım koordinatını da mesaja ekler. Yani bir mesaj oluştuğunda yalnızca o mesajın hangi tür 
-    bir olay yüzünden oluştuğu bilgisini değil aynı zamanda o olayla ilgili bazı bilgileri de kuyruktaki mesajın içerisinden 
+    bir olay yüzünden oluştuğu bilgisini değil, aynı zamanda o olayla ilgili bazı bilgileri de kuyruktaki mesajın içerisinden 
     alabilmekteyiz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
@@ -75317,7 +75317,7 @@ void exit_err(const char *msg, MYSQL *db)
     Windows sistemlerinde iskelet GUI programında şunların sırasıyla yapılması gerekmektedir:
 
     1) Önce WNDCLASS türünden bir yapı nesnesi tanımlanıp bunun içi doldurulur ve bu yapı RegisterClass APIO fonksiyonu ile
-    sisteme register ettirilir. Bu WNDCKASS belirlemelerine "pencere sınıfı " denilmektedir. Örneğin:
+    sisteme register ettirilir. Bu WNDCKASS belirlemelerine "pencere sınıfı" denilmektedir. Örneğin:
 
     WNDCLASS wndClass;
 
@@ -75359,7 +75359,7 @@ void exit_err(const char *msg, MYSQL *db)
     Burada GetMessage API fonksiyonu mesaj kuyruğundan mesajı alır. TranslateMessage klavye mesajları için bazı dönüştürmeleri 
     yapmaktadır. Mesajın işlenmesine yol açan fonksiyon DispatchMessage isimli API fonksiyonudur. Ancak DispatchMessage aslında
     pencere sınıfında belirtilen fonksiyonun çağrılmasına yol açmaktadır. Örneğimizde bu fonksiyon WndProc ismindedir. Yani
-    DisptachMessage yapıldığında aslında WndProc fonksiyonu çağrılmaktadır. Buna "pencere fonksiyonu" denir. Programcı mesajı
+    DispatchMessage yapıldığında aslında WndProc fonksiyonu çağrılmaktadır. Buna "pencere fonksiyonu" denir. Programcı mesajı
     bu fonksiyon içerisinde işler. WndProc fonksiyonu şöyle yazılmıştır:
 
     LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -75437,59 +75437,77 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 /*--------------------------------------------------------------------------------------------------------------------------
     Daha önceden de belirttiğimiz gibi UNIX/Linux sistemlerinde XWindow ya da X11 denilen bir katman kullanılmaktadır. Bu 
-    katmanın API fonksiyonlarına XLIB ya da bunun modern biçimine XCB denilmektedir. XLib ya da XCB çok aşağı seviyeli bir 
+    katmanın API fonksiyonlarına Xlib ya da bunun modern biçimine XCB denilmektedir. Xlib ya da XCB çok aşağı seviyeli bir 
     kütüphanedir. Bu kütüphane kullanılarak GUI elemanlarını oluşturan X-Toolkit ya da kısaca Xt isimli ayrı bir kütüphane 
     vardır. Bu Xt üzerine kurulan Motif gibi başka kütüphaneler de vardır. Ayrıca CLibb ya XCB üzerine kurulmuş olan iki önemli 
     kütüphane de Qt ve GTK (GTK+ da denilmektedir) kütüphanelerdir. Qt kütüphanesi C++ ile yazılmıştır, dolayısıyla Qt için 
     kodlar da C++ ile yazılmaktadır. GTK ise C'de yazılmıştır.
 
                           +----------------------------+
-                          |     GUI Uygulamaları      |
+                          |      GUI Uygulamaları      |
                           +----------------------------+
-                           /            |            \
-                          /             |             \
-                         /              |              \
-                +--------+        +-----------+     +----------+
-                |   GTK  |        |   Qt      |     |  Motif   |
-                +--------+        +-----------+     +----------+
-                     |                |                  |
-          +----------+----+       +--+--+--+        +---+--+
-          | Xlib / Wayland|       |Xlib/XCB|        |  Xt  |
-          +----------+----+       +--+--+--+        +---+--+
-                     |                |                 |
-                     |                |             +--+--+--+
-                     |                |             |Xlib/XCB|
-                     |                |             +--+--+--+
-                     |                |                 |
-         +-----------+----------------+-----------------+-----------------+
+                           /            |          \
+                          /             |           \
+                         /              |            \
+                   +-------+        +--------+     +---------+
+                   |  GTK  |        |   Qt   |     |  Motif  |
+                   +-------+        +--------+     +---------+
+                       |                |               |
+            +----------+-----+      +--+--+--+      +---+--+
+            | Xlib / Wayland |      |Xlib/XCB|      |  Xt  |
+            +----------+-----+      +--+--+--+      +---+--+
+                       |                |               |
+                       |                |           +--+--+--+
+                       |                |           |Xlib/XCB|
+                       |                |           +--+--+--+
+                       |                |               |
+         +-------------+----------------+---+-----------+-----------------+
          |      X Window System (X11)       |     Wayland (alternatif)    |
          +----------------------------------+-----------------------------+
-         |               Donanım / OS (Çekirdek, GPU)                     |
+         |                  Donanım / OS (Çekirdek, GPU)                  |
          +----------------------------------------------------------------+
 
     Şimdi de bu kütüphanelerin hiyerarşisini tek tek gösterelim. GTK kütüphanesini şöyle gösterebiliriz:
 
-    GTK
-    XlIb / Wayland
-    X Window / Wayland
+    +--------------------+
+    |        GTK         |
+    +--------------------+
+    |   Xlib / Wayland   |
+    +--------------------+
+    | X Window / Wayland |
+    +--------------------+
 
     Xt kütüphanesini şöyle gösterebiliriz:
 
-    Xt
-    XlIb
-    X Window
+    +--------------------+
+    |         Xt         |
+    +--------------------+
+    |        Xlib        |
+    +--------------------+
+    |      X Window      |
+    +--------------------+
 
     Motif kütüphanesini şöyle gösterebiliriz:
 
-    Xt
-    XlIb
-    X Window
+    +--------------------+
+    |       Motif        |
+    +--------------------+
+    |         Xt         |
+    +--------------------+
+    |        Xlib        |
+    +--------------------+
+    |      X Window      |
+    +--------------------+
 
     Qt kütüphanesini de şöyle gösterebiliriz:
 
-    Qt
-    XlIb / Wayland
-    X Window / Wayland
+    +--------------------+
+    |         Qt         |
+    +--------------------+
+    |   Xlib / Wayland   |
+    +--------------------+
+    | X Window / Wayland |
+    +--------------------+
 
     Bugün artık Xt ve Motif yeni uygulamalar tarafından pek kullanılmamaktadır. Bu nedenle yüksek seviyeli kütüphaneler için
     önemli iki alternatif GTK ve Qt kütüphaneleridir. GTK kütüphanesi C ile kullanılabilir. Ancak Qt için C++ bilmek gerekir.
@@ -75499,12 +75517,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     Xlib ya da XCB kütüphaneleri oldukça düşük seviyeli kütüphanelerdir. Bunlar aslında X Window sistemlerinin aşağı seviyeli
     API kütüphanesi gibi düşünülebilir. Xlib ile GUI uygulamaları yazmak çok zordur. Çünkü Xlib içerisinde pencere yaratan 
     öğeler olsa da GUI uygulamalarında kullanılan düğmeler (push buttons), listeleme kutuları (listbox), checkbox gibi 
-    grafik elemanlar bulunmamaktadır. Eğer C kullanılarak bu GUI elemanlar ile gelişmiş GUI programla roluşturmak istiyorsanız
+    grafik elemanlar bulunmamaktadır. Eğer C kullanılarak bu GUI elemanlar ile gelişmiş GUI programlar oluşturmak istiyorsanız
     GTK kütüphanesini kullanabilirsiniz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Şimdi de UNIX/Linux sistemlerinde en düşük seviyede Xlib kullana iskelet bir GUI programını yazmaya çalışalım. Bu program 
+    Şimdi de UNIX/Linux sistemlerinde en düşük seviyede Xlib kullanan iskelet bir GUI programını yazmaya çalışalım. Bu program 
     ekrana boş bir pencere çıkartacaktır. Bunun öncelikle Xlib kütüphanesinin kurulması gerekmektedir. Bu işlem Debian tabanlı
     sistemlerde şöyle yapılabilir:
 
@@ -75576,13 +75594,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    GTK pek çok ayrıntıya sahip olan C tabanlı bir GUI kütüphanesidir. GTK kütüphanesinin son versiyonu GTK 4'tür. Bu version 
+    GTK pek çok ayrıntıya sahip olan C tabanlı bir GUI kütüphanesidir. GTK kütüphanesinin son versiyonu GTK 4'tür. Bu versiyon 
     2020'de oluşturulmuştur. Ancak önceki versiyon olan GTK 3 halen daha yoğun olarak kullanılmaktadır. GTK 3 Debian tabanlı 
     sistemlerde şöyle kurulabilir:
 
     $ sudo apt-get install libgtk-3-dev
 
-    GTK 4 ise şöyle kurulbailir:
+    GTK 4 ise şöyle kurulabilir:
 
     $ sudo apt-get install libgtk-4-dev
 
@@ -75613,7 +75631,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         GtkApplication *app;
         int status;
 
-        // Uygulamayı nesnesini oluştur
+        // Uygulama nesnesini oluştur
         app = gtk_application_new("com.generic.application", G_APPLICATION_FLAGS_NONE);
         g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
 
@@ -75674,7 +75692,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     status = g_application_run(G_APPLICATION(app), argc, argv);
 
-    Program hayatını bu fonksiyon içerisinde oluşturulan mesaj döngüsünden geçirmektedir.
+    Program hayatını bu fonksiyon içerisinde oluşturulan mesaj döngüsünde geçirmektedir.
 
     5) Mesaj döngüsünden yine pencerenin X tuşuna basıldığında çıkılır. İskelet programımızda mesaj döngüsünden çıkıldığında 
     heap'te tahsis edilen çeşitli nesnelerin yok edilmesi için g_object_unref fonksiyonu çağrılmıştır.
@@ -75693,7 +75711,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     gtk_window_set_child(GTK_WINDOW(window), button_ok);
     g_signal_connect(button_ok, "clicked", G_CALLBACK(on_button_clicked), window);
 
-    Burada bir düğme yaratılmıştı. Bu düğmeye tıklandığında on_button_clicked isimli fonksiyon çağrılacaktır. Aşağıdaki örnekte
+    Burada bir düğme yaratılmıştır. Bu düğmeye tıklandığında on_button_clicked isimli fonksiyon çağrılacaktır. Aşağıdaki örnekte
     biz fonksiyon çağrıldığında bir diyalog penceresinin çıkmasını sağladık:
 
     void on_button_clicked(GtkButton *button, gpointer user_data)
@@ -75771,16 +75789,16 @@ int main(int argc, char **argv)
     1) GUI elemanları için otomatik yerleştirme yapan nesnelerin kullanılması.
     2) GUI arayüzünü mümkün olduğunca koddan ayırma girişimleri.
 
-    Eskiden kullanıcı arayüzlerindeki düğme gibi, edit alanları gibi, listeleme kutuları gibi GUI elemanları tek tek pixel 
-    temelinde programcı tarafından konumlandırılıyordu. Bu da ekran çözünürlüğü değiştiğinde görünümün bozulmasına yol 
-    açıyordu. Ancak son yıllarda artık GUI ortamlarında otomatik yerleştirme yapan nesneler bulundurulmaya başlanmıştır. 
-    Bu otomatik "yerleştirme nesneleri (layout objects)" çözünürlük değişse bile yerleştirmeyi makul olarak kendisi yapmaktadır.
+    Eskiden kullanıcı arayüzlerindeki düğme, edit alanları, listeleme kutuları gibi GUI elemanları tek tek pixel temelinde 
+    programcı tarafından konumlandırılıyordu. Bu da ekran çözünürlüğü değiştiğinde görünümün bozulmasına yol açıyordu. Ancak 
+    son yıllarda artık GUI ortamlarında otomatik yerleştirme yapan nesneler bulundurulmaya başlanmıştır. Bu otomatik "yerleştirme 
+    nesneleri (layout objects)" çözünürlük değişse bile yerleştirmeyi makul olarak kendisi yapmaktadır.
 
     Bir uygulamada GUI arayüzünün diğer kodlardan ayrılması uygulamanın "önyüz (front-end)" ve "arkayüz (back-end)" kodlamasının 
     farklı ekipler tarafından yapılabilmesine olanak sağlamaktadır. Son yıllarda artık GUI ortamları görsel arayüzle diğer 
     kodları birbirinden ayırabilmek için mekanizmalar sunmaktadır. Böylece görsel arayüz XML ya da ona benzer bir dille 
     bir text editörle oluşturulabilmekte ve uygulamaya kolayca dahil edilebilmektedir. Örneğin GTK 3'te bu olanak daha sınırlıydı. 
-    GTK 4'te bu olanak güçlendirişmiştir.
+    GTK 4'te bu olanak güçlendirilmiştir.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
@@ -75859,5 +75877,3 @@ int main(int argc, char **argv) {
 
 	return status;
 }
-
-
