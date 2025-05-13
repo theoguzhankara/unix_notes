@@ -1830,7 +1830,7 @@
     Kimlik bilgilerinin 6'ıncı offset'indeki byte'ı ELF dosyasının majör versiyon numarasını belirtmektedir. Şu anda ELF dosyasının 
     majör olarak 1'li versiyonları kullanıldığı için burada 1 değeri bulunacaktır.
 
-    Kimlik bilgilerinin 7'inci offset'teki byte'ı kullanılan ABI türünü belirtmektedir. Buradaki 0 değeri klasik "System 5 ABI"
+    Kimlik bilgilerinin 7'nci offset'teki byte'ı kullanılan ABI türünü belirtmektedir. Buradaki 0 değeri klasik "System 5 ABI"
     anlamına gelmektedir. Burada genellikle 0 değeri bulunmaktadır.
 
     Kimlik bilgilerinin 8'inci offset'teki byte'ı ABI versiyon numarasını belirtmektedir. Genel olarak burada 0 değeri bulunur.
@@ -1863,7 +1863,7 @@
 
     https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
 
-    ELF Başlığı'nın 20'inci offset'teki 4 byte'lık işaretsiz tamsayı yine ELF dosyasının versiyon numarasını belirtmektedir. Burada 
+    ELF Başlığı'nın 20'nci offset'teki 4 byte'lık işaretsiz tamsayı yine ELF dosyasının versiyon numarasını belirtmektedir. Burada 
     tipik olarak 1 değeri bulunacaktır.
 
     ELF Başlığı'nın 24'üncü offset'inde "çalıştırılabilir dosyalar için" programın çalışmaya başlayacağı sanal adresi (virtual address) 
@@ -3550,8 +3550,8 @@
     8) Şimdi de kütüphanemizin "libmyutil.so.2.0.0" biçiminde yeni bir majör versiyonunun oluşturulduğunu varsayalım. 1 numaralı 
     majör versiyonla 2 numaralı majör versiyon birbirleriyle uyumlu değildir. Biz bu "libmyutil.so.2.0.0" yeni versiyonu derlerken 
     ona "so ismi" olarak artık "libmyutil.so.2" ismini vermeliyiz. Tabii bu durumda biz yine "libmyutil.so.2" sembolik bağlantı 
-    dosyasının "libmyutil.so.2.0.0" dosyasını göstermesini sağlamalıyız. Artık kütüphanenin 2'inci versiyonunu kullanan programlar
-    için yüklenecek kütüphane "libmyutil.so.2" kütüphanesi olacaktır. Bu kütüphanede 2'inci versiyonunun gerçek kütüphane ismine 
+    dosyasının "libmyutil.so.2.0.0" dosyasını göstermesini sağlamalıyız. Artık kütüphanenin 2'nci versiyonunu kullanan programlar
+    için yüklenecek kütüphane "libmyutil.so.2" kütüphanesi olacaktır. Bu kütüphanede 2'nci versiyonunun gerçek kütüphane ismine 
     sembolik bağlantı yapılmış durumdadır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -3697,7 +3697,7 @@
 
     https://ftp.gnu.org/old-gnu/Manuals/ld-2.9.1/html_chapter/ld_toc.html#TOC6
 
-    Bağlayıcı script'indeki "local: *" satırı "geri kana bütün fonkisyonlar dışarıdan kullanılmasın" anlamına gelmektedir. 
+    Bağlayıcı script'indeki "local: *" satırı "geri kalan bütün fonksiyonlar dışarıdan kullanılmasın" anlamına gelmektedir. 
     Eğer scriptimizi böyle bırakırsak "tar fonksiyonunu dışarıdan kullanamyız. Tabii aynı işlem anımsanacağı gibi "static"
     belirleyicisi ile ya da __attribute__ belirleyicisi ile de yapılabiliyordu. Biz tar fonksiyonun da dışarıdan kullanılmasını
     sağlamak için bu local satırını kaldıralım:
@@ -4547,7 +4547,7 @@ int main(void)
     $ sudo fallocate -l 1073741824 swapfile_ext
 
     2) Oluşturulan swap dosyasının başkaları tarafından okunabilmesinin engellenmesi için yalnızca owner'a read/write hakkı 
-    verebiliriz. Yarattığımız dosyanın owner'ının "root" olduğuna dikkat ediniz. Bu işlemi şöyel yapabiliriz:
+    verebiliriz. Yarattığımız dosyanın owner'ının "root" olduğuna dikkat ediniz. Bu işlemi şöyle yapabiliriz:
 
     $ sudo chmod 600 swapfile_ext
     $ ls -l swapfile_ext
@@ -4659,7 +4659,7 @@ int main(void)
     358                             489
     ...                             ...
 
-    Görüldüğü gibi birinci prosesin 988'inci sanal sayfa numarası ikinci prosesin 357'inci sanal sayfa numarasıyla aynı fiziksel 
+    Görüldüğü gibi birinci prosesin 988'inci sanal sayfa numarası ikinci prosesin 357'nci sanal sayfa numarasıyla aynı fiziksel 
     adrese yönlendirilmiştir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -5299,7 +5299,7 @@ int main(int argc, char *argv[])
 
     Eğer loop aygıt sürücüsünün bir dosyayı onun belli bir offset'inden itibaren kullanmasını istiyorsak losetup programında
     "-o (ya da "--offset") seçeneğini kullanmalıyız. Örneğin bir disk imajının içerisindeki Linux dosya sisteminin disk imajının 
-    8192'inci sektöründen başladığını varsayalım. "dev/loop0" aygıt sürücüsünün bu imaj dosyasını bu offset'ten itibaren kullanmasını
+    8192'nci sektöründen başladığını varsayalım. "dev/loop0" aygıt sürücüsünün bu imaj dosyasını bu offset'ten itibaren kullanmasını
     şöyle sağlayabiliriz:
 
     $ sudo losetup -o 4194304 /dev/loop0 am335x-debian-11.7-iot-armhf-2023-09-02-4gb.img
@@ -5325,7 +5325,7 @@ int main(int argc, char *argv[])
     am335x-debian-11.7-iot-armhf-2023-09-02-4gb.img1 *     8192 7372799 7364608  3,5G 83 Linux
     ******************************************************
 
-    Buradan Linux dosya sisteminin imaj dosyasının 8192'inci sektöründen (yani 8192 * 512 offset'inden) başladığını anlıyoruz.
+    Buradan Linux dosya sisteminin imaj dosyasının 8192'nci sektöründen (yani 8192 * 512 offset'inden) başladığını anlıyoruz.
     O halde loop aygıtını şöyle kullanıma hazırlayabiliriz:
 
     $ sudo losetup -o 4194304 /dev/loop0 am335x-debian-11.7-iot-armhf-2023-09-02-4gb.img
@@ -5547,7 +5547,7 @@ int main(int argc, char *argv[])
     "primary" bölüm mü "extended" bölüm mü olduğu sorulmaktadır. Primary disk bölümü ana 4'lük girişteki bölümlerdir. Dolayısıyla
     burada genellikle "p" komutu ile "primary" disk bölümü oluşturulur. Sonra bize 4 girişten hangisinin disk bölümü olarak 
     oluşturulacağı sorulmaktadır. Bu durumda sıradaki numarayı vermek (disk tamamen ilk kez bölümlendiriliyorsa 1) uygun olur. 
-    Sonra da bize ilgili disk bölümünün hangi sektörden başlatılacağı ve ne uzunlukta olacağı sorumaktadır. Aşağıda bir örnek 
+    Sonra da bize ilgili disk bölümünün hangi sektörden başlatılacağı ve ne uzunlukta olacağı sorulmaktadır. Aşağıda bir örnek 
     görüyorsunuz:
 
     **************************************************************************************
@@ -5569,7 +5569,7 @@ int main(int argc, char *argv[])
     Komut (yardım için m): p
     Disk /dev/loop0: 300 MiB, 314572800 bayt, 614400 sektör
     Birimler: sektör'i 1 * 512 = 512 baytın
-    Sektör boyutu (montıksal/fiziksel): 512 bayt / 512 bayt
+    Sektör boyutu (mantıksal/fiziksel): 512 bayt / 512 bayt
     G/Ç boyutu (en düşük/en uygun): 512 bayt / 512 bayt
     Disketikeri tipi: dos
     Disk belirleyicisi: 0x267a62e0
@@ -5579,7 +5579,7 @@ int main(int argc, char *argv[])
     **************************************************************************************
 
     - fdisk yaratılan disk bölümlerinin ID'sini default olarak 0x83 (Linux) yapmaktadır. Eğer disk bölümüne FAT dosya sistemi 
-    yerleştirilecekse "t" (type) komutu ile bölüm ID'si değitirilmelidir. Örneğin:
+    yerleştirilecekse "t" (type) komutu ile bölüm ID'si değiştirilmelidir. Örneğin:
 
     **************************************************************************************
     Komut (yardım için m): t
@@ -5590,7 +5590,7 @@ int main(int argc, char *argv[])
     Komut (yardım için m): p
     Disk /dev/loop0: 300 MiB, 314572800 bayt, 614400 sektör
     Birimler: sektör'i 1 * 512 = 512 baytın
-    Sektör boyutu (montıksal/fiziksel): 512 bayt / 512 bayt
+    Sektör boyutu (mantıksal/fiziksel): 512 bayt / 512 bayt
     G/Ç boyutu (en düşük/en uygun): 512 bayt / 512 bayt
     Disketikeri tipi: dos
     Disk belirleyicisi: 0x267a62e0
@@ -5616,7 +5616,7 @@ int main(int argc, char *argv[])
     Komut (yardım için m): p
     Disk /dev/loop0: 300 MiB, 314572800 bayt, 614400 sektör
     Birimler: sektör'i 1 * 512 = 512 baytın
-    Sektör boyutu (montıksal/fiziksel): 512 bayt / 512 bayt
+    Sektör boyutu (mantıksal/fiziksel): 512 bayt / 512 bayt
     G/Ç boyutu (en düşük/en uygun): 512 bayt / 512 bayt
     Disketikeri tipi: dos
     Disk belirleyicisi: 0x267a62e0
@@ -5640,7 +5640,7 @@ int main(int argc, char *argv[])
     Komut (yardım için m): p
     Disk /dev/loop0: 300 MiB, 314572800 bayt, 614400 sektör
     Birimler: sektör'i 1 * 512 = 512 baytın
-    Sektör boyutu (montıksal/fiziksel): 512 bayt / 512 bayt
+    Sektör boyutu (mantıksal/fiziksel): 512 bayt / 512 bayt
     G/Ç boyutu (en düşük/en uygun): 512 bayt / 512 bayt
     Disketikeri tipi: dos
     Disk belirleyicisi: 0x267a62e0
@@ -5650,7 +5650,7 @@ int main(int argc, char *argv[])
     /dev/loop0p2           104448 614399 509952  249M 83 Linux
     **************************************************************************************
 
-    - fdisk önce yazılacakları kendi içerisinde biriktirmekte sonra bunları diske yazmaktadır. Biriktilenlerin diske yazılması 
+    - fdisk önce yazılacakları kendi içerisinde biriktirmekte sonra bunları diske yazmaktadır. Biriktirilenlerin diske yazılması 
     için "w" (write) komutu kullanılmaktadır. Örneğin:
 
     **************************************************************************************
@@ -5692,7 +5692,7 @@ int main(int argc, char *argv[])
 /*-----------------------------------------------------------------------------------------------------------------------------
     Disk bölümlendirmesi GUI araçlarıyla da görsel bir biçimde yapılabilmektedir. Örneğin "gparted" bunun için en çok tercih
     edilen programdır. Ancak "gparted" pek çok dağıtımda default olarak bulunmamaktadır. Onu Debian tabanlı dağıtımlarda aşağıdaki 
-    gibi kuarabiliriz:
+    gibi kurabiliriz:
 
     $ sudo apt-get install gparted
 
@@ -5726,7 +5726,7 @@ int main(int argc, char *argv[])
     birbirinden farklıdır. Çünkü dosya sisteminin parametrik yapıları diğerinden farklıdır.
 
     Disk bölümünü FAT32 olarak formatlamak için "mkfs.fat" programında disk bölümüne ilişkin aygıt dosyası belirtilmeli ve FAT32 
-    için -F32 seçeneği bulundurulmalıdır. FAT16 için -F16 ve FAT12 için -F12 seöenekleri de bulunmaktadır.
+    için -F32 seçeneği bulundurulmalıdır. FAT16 için -F16 ve FAT12 için -F12 seçenekleri de bulunmaktadır.
 
     $ sudo mkfs.fat -F32 /dev/loop0p1
     mkfs.fat 4.1 (2017-01-24)
@@ -5764,7 +5764,7 @@ int main(int argc, char *argv[])
 
     Bazen sistem yöneticileri mount işleminin boot süreci sırasında otomatik yapılmasını da isteyebilmektedir. Bunun için 
     "/etc/fstab" dosyasında mount edilecek aygıt dosyası ve mount dizini bir satır içerisinde belirtilmektedir. Bu dosya 
-    boot işlemi sırasında init prosesi tarafından okunup işletilmektedir. Tabii loop aygıtları üzerinde otomatik maount işlemi
+    boot işlemi sırasında init prosesi tarafından okunup işletilmektedir. Tabii loop aygıtları üzerinde otomatik mount işlemi
     yapmak istiyorsanız "losetup" işlemini de bu boot işlemi sırasında yapmanız gerekir. Bunun da birkaç yolu vardır. Ancak bu 
     işlemler "systemd" paketinin anlatıldığı bölümde ele alınacaktır.
 -----------------------------------------------------------------------------------------------------------------------------*/
@@ -5773,12 +5773,12 @@ int main(int argc, char *argv[])
     Biz daha önce kök dosya sistemini henüz oluşturamadığımız için BBB'nin sitesinden indirdiğimiz imajın içerisindeki kök 
     dosya sistemini kullanmıştık. Ancak bu imajın içerisindeki Linux disk bölümü 3.5GB kadardır. Dosya sisteminin büyüklüğü
     yalnızca onun yer aldığı disk bölümünün büyüklüğü ile ilgili değildir. Dosya sisteminin kendi büyüklüğü o dosya sisteminin 
-    kendi meta data alanlarında da belirtilmektedir. Dolayısıyla biz 3.5GB civarındaki disk bölümünü dd programıyla daha büyük
-    bir micro SD kartttaki daha büyük bir disk bölümüne kopyaladığımızda o dosya sisteminin uzunluğunu değiştirmiş olmayız. 
-    Dosya sisteminin uzunluğunu değiştirebilmek için o dosya sistemine özgü bir biçimde o dosya sisteminin meta data alanlarında
-    değişikilk yapmak gerekir. Ext dosya sistemleri için bu işlemi yapan "resize2fs" isimli hazır bir program bulunmaktadır. Bu 
+    kendi metadata alanlarında da belirtilmektedir. Dolayısıyla biz 3.5GB civarındaki disk bölümünü dd programıyla daha büyük
+    bir micro SD karttaki daha büyük bir disk bölümüne kopyaladığımızda o dosya sisteminin uzunluğunu değiştirmiş olmayız. 
+    Dosya sisteminin uzunluğunu değiştirebilmek için o dosya sistemine özgü bir biçimde o dosya sisteminin metadata alanlarında
+    değişiklik yapmak gerekir. Ext dosya sistemleri için bu işlemi yapan "resize2fs" isimli hazır bir program bulunmaktadır. Bu 
     programın kullanımı oldukça basittir. Tek yapılacak şey programa komut satırı argümanı olarak disk bölümünün aygıt dosyasını 
-    vermmektedir. Örneğin:
+    vermektedir. Örneğin:
 
     $ sudo resize2fs /dev/sdc2
 
@@ -5793,7 +5793,7 @@ int main(int argc, char *argv[])
 
     $ sudo resize2fs -M /dev/sdc2
 
-    Tabii aslında dosya sistemini ve disk bölümlerini büyütmek başka uitility programlarla da yapılabilmektedir.
+    Tabii aslında dosya sistemini ve disk bölümlerini büyütmek başka utility programlarla da yapılabilmektedir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -5811,7 +5811,7 @@ int main(int argc, char *argv[])
     U-Boot Kaynak Kodları İndirilir ---> Kaynak Kodlar Hedef Araç Zinciri Kullanarak Derlenir ---> Oluşturulan Birinci ve İkinci 
     Düzey Boot Loader Dosyaları Hedef Sistemde Uygun Yerlere Yerleştirilir
 
-    U-Boot'un dokümanlarına aşağıdaki bağlantıdan erişebilirisiniz:
+    U-Boot'un dokümanlarına aşağıdaki bağlantıdan erişebilirsiniz:
 
     https://docs.u-boot.org/en/latest/
 -----------------------------------------------------------------------------------------------------------------------------*/
@@ -5830,7 +5830,7 @@ int main(int argc, char *argv[])
     isteyelim. (BBB'de zaten default durumda U-Boot'un kullanıldığını anımsayınız). Bu durumda 32 bit ARM işlemcileri için 
     uygun araç zincirinin yüklenmesi gerekir. Eğer Raspberry Pi için aynı işlemi yapacak olsaydık 64 bitlik ARM araç zincirini 
     hazır bulundurmamız gerekecekti. Anımsanacağı gibi bu araç zincirleri zaten birkaç kaynakta hazır bir biçimde ("pre-built"
-    biçimde) bulunmaktadır. Ancak istersiniz daha önce görmüş olduğumuz corosstool-NG ile de araç zincirini sıfırdan da 
+    biçimde) bulunmaktadır. Ancak istersiniz daha önce görmüş olduğumuz crosstool-NG ile de araç zincirini sıfırdan da 
     oluşturabilirsiniz. Biz burada ARM'ın kendisinin sunduğu araç zincirlerini indirip kullanalım. Bu araç zincirlerinin aşağıdaki 
     bağlantıdan elde edilebileceğini görmüştük:
 
@@ -5838,7 +5838,7 @@ int main(int argc, char *argv[])
 
     Bu sayfa açıldığında "x86_64 Linux hosted cross toolchains" başlığı altındaki "AArch32 GNU/Linux target with hard float 
     (arm-none-linux-gnueabihf)" alt başlığında belirtilen "arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi.tar.xz" dosyasını
-    indirip aşağdaki gibi açabiliriz:
+    indirip aşağıdaki gibi açabiliriz:
 
     $ tar -xf arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz
 
@@ -5883,7 +5883,7 @@ int main(int argc, char *argv[])
     $ make am335x_evm_defconfig
 
     Bu komutu uygularken "u-boot" ana dizinin kökünde olmanız gerekir. Bu duruma dikkat ediniz. Bu işlem sonrasında artık söz 
-    konusu configürasyon dosyası "u-boot" dizinin kökünde ".config" dosyası olarak kopyalanacaktır.
+    konusu konfigürasyon dosyası "u-boot" dizinin kökünde ".config" dosyası olarak kopyalanacaktır.
 
     6) Eğer istenirse seçilen konfigürasyon dosyası temel alınarak bazı boot parametreleri değiştirilebilir. Bu işlem şöyle yapılır:
 
@@ -5921,7 +5921,7 @@ int main(int argc, char *argv[])
 /*-----------------------------------------------------------------------------------------------------------------------------
     Pekiyi U-Boot hedef aygıt için derlendikten sonra elde edilen dosyaların konuşlandırılması nasıl yapılacaktır? Burada iki
     yöntem izlenebilir. Birincisi micro SD kartımızda bir FAT bölümü oluşturup "MLO" ve "u-boot.img" dosyalarını bu FAT 
-    dosya sisteminin kök dizinine kopyalamktır. Bu gömülü Linux sistemlerinde izlenen klasik yoldur. Anımsayacağınız gibi bu 
+    dosya sisteminin kök dizinine kopyalamaktır. Bu gömülü Linux sistemlerinde izlenen klasik yoldur. Anımsayacağınız gibi bu 
     yöntem Raspberry Pi'da aynı biçimde kullanılmaktadır. İkincisi elde edilen dosyaları micro SD kartın ilk sektörlerine
     yazmaktır. ROM'daki kod eğer FAT disk bölümünü bulamazsa boot işlemini bu biçimde yapmaktadır. Anımsanacağı gibi BBB'nin 
     kendi sitesindeki yeni imajlar bu yöntemi kullanmaktadır. Biz burada önce FAT dosya sistemi yöntemini kullanacağız. Ancak 
@@ -6087,7 +6087,7 @@ int main(int argc, char *argv[])
     Command (m for help):
     ***********************************************************
 
-    Buradan disk bölümünün 8192'inci sektörden (512 * 8192 = 4194304 numaralı offset'ten) başladığı görülmektedir. O halde loop 
+    Buradan disk bölümünün 8192'nci sektörden (512 * 8192 = 4194304 numaralı offset'ten) başladığı görülmektedir. O halde loop 
     aygıtını bu offset'ten başlayacak biçimde ayarlayalım:
 
     $ sudo losetup -o 4194304 /dev/loop0 am335x-debian-11.7-iot-armhf-2023-09-02-4gb.img
@@ -6129,7 +6129,7 @@ int main(int argc, char *argv[])
         - Aygıt ağacı dosyası (device tree file)
         - Geçici kök dosya sistemini bulunduran ramdisk dosyası
 
-    Pekiyi bu dosyalar nasıl elde edilecektir? Biz yukarıda zaten hazır disk imajını kullandığımız için bu dsoyaları biz 
+    Pekiyi bu dosyalar nasıl elde edilecektir? Biz yukarıda zaten hazır disk imajını kullandığımız için bu dosyaları biz 
     oluşturmadık. Linux çekirdek imaj dosyası Linux çekirdeğinin kaynak kodları derlenerek oluşturulmaktadır. Aygıt ağacı 
     dosyası çeşitli yardımcı programlarla oluşturulabilmektedir. Yine geçici kök dosya sistemine ilişkin ramdisk dosyası 
     da çeşitli yardımcı programlarla oluşturulabilmektedir.
@@ -6143,13 +6143,13 @@ int main(int argc, char *argv[])
     gerçekleştirilemeyecektir. Boot işleminin otomatik bir biçimde yapılabilmesi için U-Boot'a ilişkin bazı düzenlemelere 
     gereksinim duyulmaktadır.
 
-    Bu konular kursumuzmda izleyen konularda tek tek ele alınacaktır.
+    Bu konular kursumuzda izleyen konularda tek tek ele alınacaktır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Anımsanacağı gibi artık BeagleBoard sitesinde BBB için indirilen imajda bir FAT dosya sistemi bulunmamaktadır. Pekiyi bu 
     durumda bu imaj ile boot işlemi nasıl yapılmaktadır? İşte BBB reset edildiğinde BBB içerisindeki ROM kodu önce SD karttaki 
-    FAT disk bölümünü aramakta eğer onu bulursa MLO prgramını oradan yüklemektedir. Ancak SD kartta bir FAT bölümünü bulamazsa 
+    FAT disk bölümünü aramakta eğer onu bulursa MLO programını oradan yüklemektedir. Ancak SD kartta bir FAT bölümünü bulamazsa 
     bu durumda SD kartın 0x20000 offsetindeki disk bloklarını SRAM'e yükleyip oradaki kodu çalıştırmaktadır. Yani eğer biz MLO
     programını FAT disk bölümüne yerleştirmeyeceksek SD kartın 0x20000 offsetine (256'ıncı sektörüne) kopyalamalıyız. MLO programı 
     default durumda "u-boot.img" dosyasını eğer FAT disk bölümü yoksa SD kartın 0x60000 offsetinden (768'inci) sektörden yüklemektedir. 
@@ -6160,7 +6160,7 @@ int main(int argc, char *argv[])
     $ sudo dd if=u-boot.img of=/dev/sdc bs=512 seek=768
 
     Burada "dev/sdc" aygıt dosyası SD kartı belirtmektedir. Tabii bizim yine kök dosya sisteminin bulunduğu içi dolu bir Linux
-    disk bölümümüzün olması gerekir. Tipik olarak bu Linux disk bölümünü SD kartımızın 8192'inci sektöründen oluşturabiliriz.
+    disk bölümümüzün olması gerekir. Tipik olarak bu Linux disk bölümünü SD kartımızın 8192'nci sektöründen oluşturabiliriz.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -6201,15 +6201,15 @@ int main(int argc, char *argv[])
     TxD (2) ------> RxD (3)
     GND (4) ------- GND (4)
 
-    Seri port haberleşmesi aslında oldukça basittir. Gönderici taraf bir byte'ı bitlerine ayrıştrır ve TxD ucundan bu bitleri 
+    Seri port haberleşmesi aslında oldukça basittir. Gönderici taraf bir byte'ı bitlerine ayrıştırır ve TxD ucundan bu bitleri 
     belli bir periyotta gönderir. Karşı taraf da RxD ucunu aynı periyotta örnekler ve bitleri alır. Bu haberleşmede byte'lar 
     arasındaki süre değişebilir, ancak byte'ların bitleri aynı hızda gönderilip alınmaktadır. Başka bir deyişle bir grup byte
     biçimde gönderilip alınacaksa byte'lar arasındaki süreler değişebilir. Ancak bir byte'ın bitleri belirlenen hızda gönderilip
     alınmaktadır. İki tarafın belirlediği bu hız için genellikle "baud rate" terimi kullanılmaktadır. Bu tarz seri haberleşmelere
     "asenkron seri haberleşmeler (asynchronous serial communication)" denilmektedir. (Eğer byte'ların da aynı hızda gönderilmesi 
     söz konusu ise buna da genellikle "senkron seri haberleşme (synchronous serial communication)" denilmektedir.) Asenkron seri 
-    haberlerşmede byte'ların bitlere ayrıştırılması ve gönderilip alınması için özel devreler tasarlanmıştır. Bu devrelere genel 
-    olarak UART (Universial Aysnchronous Transmitter ans Receiver) denilmektedir. Eski kişisel bilgisayarlarda UART devresi olarak 
+    haberleşmede byte'ların bitlere ayrıştırılması ve gönderilip alınması için özel devreler tasarlanmıştır. Bu devrelere genel 
+    olarak UART (Universal Asynchronous Transmitter and Receiver) denilmektedir. Eski kişisel bilgisayarlarda UART devresi olarak 
     Intel'in 8250 işlemcisi kullanılıyordu. Sonra NS firmasının 16550 işlemcileri yaygın kullanılmaya başlandı. Bugün artık USB 
     haberleşmesinin yaygınlaşmasıyla UART haberleşmesi çok az kullanılır hale gelmiştir. UART işlemcilerinin çıktıları TTL 
     düzeyindedir (ani kabaca +5V, 0V). Ancak eski PC'lerde uzun kablolar ile haberleşme yapılabilmesi için UART çıkış seviyeleri 
@@ -6228,7 +6228,7 @@ int main(int argc, char *argv[])
     kadar data biti belirlenen baud rate ile kodlanır. Data bitleri gönderildikten sonra isteğe bağlı bir parity biti de 
     gönderilebilmektedir. Parity "gönderilen bitlerdeki 1'lerin sayısını çifte ya da teke tamamlamak için gereken" bite 
     denilmektedir. Çift parity (even parity) çifte tamamlama, tek parity ise teke tamamlama anlamına gelmektedir. Bu bitler
-    gönderildikten sonra hattın yeniden lojik 1 seviyesine çekilmesi gerekmektedir. Buna da "stop bit" denilmektedir. Norrmal 
+    gönderildikten sonra hattın yeniden lojik 1 seviyesine çekilmesi gerekmektedir. Buna da "stop bit" denilmektedir. Normal 
     durumda 1 stop bir kullanılmaktadır. Eskiden haberleşmeyi yavaşlatmak için 2 stop bit de kullanılabiliyordu.
 
     Asenkron seri haberleşme aslında 3 uçtan daha fazla uçla da yapılabilmektedir. Diğer uçlar genellikle "akış kontrolü 
@@ -6238,13 +6238,13 @@ int main(int argc, char *argv[])
 /*-----------------------------------------------------------------------------------------------------------------------------
     Seri port üzerinde işlem yapmak için kullanılan çeşitli yardımcı programlar vardır. En çok tercih edilenlerden biri 
     PuTTY isimli programdır. Bu program hem Windows sistemleri hem de Linux sistemleri için bulunmaktadır. Siz de Linux sisteminize
-    programı aşağıdaki gibi kuarabilirsiniz:
+    programı aşağıdaki gibi kurabilirsiniz:
 
     $ sudo apt-get install putty
 
     Linux'ta seri port-USB dönüştürücüsü için aygıt dosyası genellikle "/dev/ttyUSB0" biçimindedir. Yani biz bu aygıt sürücüyü 
     open fonksiyonuyla açarsak read fonksiyonuyla karşı tarafın gönderdiği byte'ları okuyabiliriz. write fonksiyonuyla da 
-    karşı atarafa byte'lar gönderebiliriz. IOCTL işlemleri ile seri port konfügüre edilebilmektedir.
+    karşı tarafa byte'lar gönderebiliriz. IOCTL işlemleri ile seri port konfigüre edilebilmektedir.
 
     Linux sistemlerinde seri port haberleşmesi için yaygın biçimde kullanılan diğer bir program da "picocom" isimli programdır. 
     Programı şöyle indirip kurabilirsiniz:
@@ -6266,7 +6266,7 @@ int main(int argc, char *argv[])
 
     $ minicom -D /dev/ttySUB0 -b 115200
 
-    Diğer bir alternatif de "screen" isimli programdır. Programı şöyle indirip kuarabilirsiniz:
+    Diğer bir alternatif de "screen" isimli programdır. Programı şöyle indirip kurabilirsiniz:
 
     $ sudo apt-get install screen
 
@@ -6278,7 +6278,7 @@ int main(int argc, char *argv[])
 /*-----------------------------------------------------------------------------------------------------------------------------
     BBB cihazımızla bilgisayarımızı CP2102 modülü ile bağladıktan sonra artık U-Boot boot sürecinde olan biteni gözlemleyebiliriz
     ve boot süreci üzerinde etkili olabiliriz. U-Boot boot loader'ı bir komut satırı eşliğinde kullanıcıdan komutlar alabilmektedir. 
-    Tabii bunun için önce U-Boot'ub komut satırına düşmek gerekir. Bunun için yapılması gereken şeyler şunlardır:
+    Tabii bunun için önce U-Boot'un komut satırına düşmek gerekir. Bunun için yapılması gereken şeyler şunlardır:
 
     1) PC tarafındaki seri port'u hızı 115200 baud, 8 bit veri ve 1 stop bit ve No Parity olacak biçimde ayarlamalısınız. Seri 
     porta ilişkin aygıt dosyası yukarıda da belirttiğimiz gibi genellikle "/dev/ttyUSB0" biçimindedir. putty programını sudo 
@@ -6296,12 +6296,12 @@ int main(int argc, char *argv[])
     isimli dokümandan ya da kendi sitesindeki dokümanlardan faydalanabilirsiniz. Bunun için doğrudan U-Boot komut satırındaki 
     "help" komutunu da kullanabilirsiniz. Aşağıda önemli U-Boot kabuk komutları hakkında kısa açıklamalar yapıyoruz:
 
-    - Komut satırına düştükten sonra boot işlemini sanki komut satırına düşmemişsiniz gibi devam ettirkemk için "boot" komutu 
+    - Komut satırına düştükten sonra boot işlemini sanki komut satırına düşmemişsiniz gibi devam ettirmek için "boot" komutu 
     kullanılmaktadır.
 
     - "bdinfo (board info)" komutu genel olarak kullandığımız kart hakkında donanımsal bilgileri bize vermektedir.
 
-    - U-Boot'ta önemli bir kavram "çevre değişkeni (envirionmet variable)" kavramıdır. Tabii buradaki çevre dğeişkeni kavramının
+    - U-Boot'ta önemli bir kavram "çevre değişkeni (environment variable)" kavramıdır. Tabii buradaki çevre değişkeni kavramının
     Linux sistemlerindeki çevre değişkenei kavramıyla bir ilgisiyi yoktur. Buradaki çevre değişkeni birtakım ayarlamalarda 
     kullanılan değişkenlerdir. Ancak uygulamacı da çevre değişkeni yaratabilmektedir. Bir çevre değişkeni bir sisim ve ona karşı
     gelen bir yazıdan oluşmaktadır.
@@ -6346,7 +6346,7 @@ int main(int argc, char *argv[])
     => printenv baudrate
     baudrate=115200
 
-    Bu buil-in çevre değişkenlerinin değerleri değiştirilebilir. Örneğin iyi bir fikir olmasa da biz U-Boot'un kullandığı seri port 
+    Bu built-in çevre değişkenlerinin değerleri değiştirilebilir. Örneğin iyi bir fikir olmasa da biz U-Boot'un kullandığı seri port 
     hızını "setenv" komutu ile değiştirebiliriz:
 
     => setenv baudrate 9600
@@ -6386,7 +6386,7 @@ int main(int argc, char *argv[])
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     U-Boot komut satırında aygıtlara birer isim verilmektedir. Bu isimler flash bellekler için mm0, mmc1, ... biçiminde, USB 
-    aygıtı için "usb" biçimimdedir. O anda hangi disk aygıtlarına erişilebileceği bilgisi lsblk komutuyla elde edilebilir. (Bu 
+    aygıtı için "usb" biçimindedir. O anda hangi disk aygıtlarına erişilebileceği bilgisi lsblk komutuyla elde edilebilir. (Bu 
     "lsblk" komutu Linux'un "lsblk" komutu değildir. U-Boot isim benzerliği oluşturmuştur.) Örneğin:
 
     => lsblk
@@ -6442,7 +6442,7 @@ int main(int argc, char *argv[])
 
     2 file(s), 0 dir(s)
 
-    - Belli bir disk bölümündeki dosya sistemininin ne olduğunu anlamak için "fstype" komutu kullanılabilir. Örneğin:
+    - Belli bir disk bölümündeki dosya sisteminin ne olduğunu anlamak için "fstype" komutu kullanılabilir. Örneğin:
 
     => fstype mmc 0:2
     ext4
@@ -6458,7 +6458,7 @@ int main(int argc, char *argv[])
     OMAP SD/MMC: 1 (eMMC)
 
     Bu komut sayesinde biz hangi mmc numarasının hangi medya olduğunu anlayabiliriz. Örneğin yukarıdaki çıktıdan 0 numaralı diskin 
-    SD kart olduğu, 1 numaralı diskin imternal SD (eMMC) olduğu anlaşılmaktadır.
+    SD kart olduğu, 1 numaralı diskin internal SD (eMMC) olduğu anlaşılmaktadır.
 
     - mmc komutunun bazı argümanlı biçimleri default disk üzerinde işlem yapmaktadır. Default diskin değiştirilmesi "mmc dev <numara>" 
     komutuyla yapılmaktadır. Örneğin:
@@ -6490,7 +6490,7 @@ int main(int argc, char *argv[])
     mmc write <adres> <sektör_numarası> <sektör_sayısı>
 
     Bu komutların dosya sisteminden dosya okuyup yazmadığına sektör temelinde işlem yaptığına dikkat ediniz. Komutlar default
-    disk üzerinde işlem yapmaktadır. Diskin bir dik bölümü üzerinde işlem yapmamaktadır.
+    disk üzerinde işlem yapmaktadır. Diskin bir disk bölümü üzerinde işlem yapmamaktadır.
 
     - "mmc rescan" komutu ile hang disklerin ve disklerdeki hangi disk bölümlerinin mevcut olduğu bilgisi güncellenmektedir.
 -----------------------------------------------------------------------------------------------------------------------------*/
@@ -6509,7 +6509,7 @@ int main(int argc, char *argv[])
     00000000
         Aygıtlar İçin Memory Mapped IO
     80000000
-        DRAM Bllek
+        DRAM Bellek
     FFFFFFFF
 
     U-Boot çalışırken işlemcinin sayfalama mekanizması (paging) aktive edilmemiştir. Dolayısıyla U-Boot'taki tüm adresler 
@@ -6531,11 +6531,11 @@ int main(int argc, char *argv[])
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Örneğin biz ext4 dosya sistemi içerisindeki "/boot" dizininde bulunan "vmlinuz-5.10.168-ti-r71" isimli çekirdek imajını 
-    bellekte 0x82000000 fiziksel adresine şöye yükleyebiliriz:
+    bellekte 0x82000000 fiziksel adresine şöyle yükleyebiliriz:
 
     => ext4load mmc 0:2 0x82000000 /boot/vmlinuz-5.10.168-ti-r71
 
-    Bu komut uygulandığıdan U-Boot bize kaç byte'lık bir bilginin transfer edildiğini rapor edecektir:
+    Bu komut uygulandığında U-Boot bize kaç byte'lık bir bilginin transfer edildiğini rapor edecektir:
 
     => ext4load mmc 0:2 0x82000000 /boot/vmlinuz-5.10.168-ti-r71
     11342336 bytes read in 731 ms (14.8 MiB/s)
@@ -6550,13 +6550,13 @@ int main(int argc, char *argv[])
 
     Tabii biz aslında U-Boot'u BBB için derlediğimizde elde ettiğimiz "u-boot.dtb" aygıt ağacı dosyasını da kullanabilirdik.
 
-    Bundan sonra çerkirek komut satırı parametrelerinin oluşturulması gerekmektedir. U-Boot çekirdek komut satırı parametreleri 
+    Bundan sonra çekirdek komut satırı parametrelerinin oluşturulması gerekmektedir. U-Boot çekirdek komut satırı parametreleri 
     için "bootargs" çevre değişkenine başvurmaktadır. O halde bizim "bootargs" çevre değişkenini oluşturmamız gerekir. Minimal 
     çekirdek komut satırı parametreleri şöyle oluşturulabilir:
 
     => setenv bootargs 'console=ttyS0,115200 root=/dev/mmcblk0p2 rw'
 
-    Burada "root=/dev/mmcblk0p2" parametresi kök dosya sisteminin mmcblk0 aygıtındaki (SD kart) 2 numaralı disk bölününde olduğunu
+    Burada "root=/dev/mmcblk0p2" parametresi kök dosya sisteminin mmcblk0 aygıtındaki (SD kart) 2 numaralı disk bölümünde olduğunu
     belirtmektedir. (1 numaralı disk bölümünün FAT disk bölümü olduğuna dikkat ediniz.) Artık her şey hazırlanmıştır. boot işlemi 
     yapılabilir. u-Boot'ta bir grup boot komutu vardır. Sıkıştırılmış çekirdek ile (Buna "zimage" de denilmektedir) boot işlemi 
     yapmak için "bootz" komutu kullanılmaktadır. bootz komutunun genel biçimi şöyledir:
@@ -6599,7 +6599,7 @@ int main(int argc, char *argv[])
     $ sudo apt-get install u-boot-tools
 
     "mkimage" programının çeşitli komut satırı argümanları vardır. Örneğin "-A (architecture)" seçeneği derlemenin hangi işlemci
-    ailesine göre yapılacağını belirtmektedir. Biz ARM işlemcileriyla çalıştığımıza göre "-A arm" seçeneğini kullanmalıyız. 
+    ailesine göre yapılacağını belirtmektedir. Biz ARM işlemcileriyle çalıştığımıza göre "-A arm" seçeneğini kullanmalıyız. 
     "-d" seçeneği kaynak dosyanın yol ifadesini belirtmektedir. "-T (type)" seçeneği kaynak dosyanın ne dosyası olduğunu 
     belirtmektedir. Biz bu bağlamda script dosyasını derleyeceğimize göre bu seçeneği "-T script" biçiminde kullanmalıyız. 
     "-n (name)" seçeneği derlenmiş dosyaya içsel isim vermek için kullanılmaktadır. "-C (compression)" seçeneği üretilen binary 
@@ -6629,7 +6629,7 @@ int main(int argc, char *argv[])
     Pekiyi bizim bir script dosyasını derleyip yukarıdaki gibi çalıştırabilmemizin ne faydası olabilir? İşte buradan amaç 
     aslında kullanıcının oluşturduğu bir dosyadakilerin boot zamanı sırasında devreye sokulabilmesidir. Yani amaç U-Boot'un
     komut satırına düşmeden tamamen Linux'ta bir dosyanın içerisine komutları yazarak U-Boot'un bunları otomatik olarak 
-    çalıştırmasını sağlamaktır. İzleyen paragraflarda bunun başka bir yolununuın da olduğunu göreceksiniz.
+    çalıştırmasını sağlamaktır. İzleyen paragraflarda bunun başka bir yolunun da olduğunu göreceksiniz.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -6639,7 +6639,7 @@ int main(int argc, char *argv[])
     gerekmez. U-Boot çevre değişkenlerini kalıcı hale getirmek için birkaç yol söz konusu olabilir. Çevre değişkenleri komut 
     satırında değiştirilip "saveenv" komutu uygulanırsa disk üzerinde çevre değişkenleri saklanacağı için bir sonraki boot 
     işleminde değişiklikler devreye girebilmektedir. Diğer bir yol default durumda (bu konfigürasyon sırasında değiştirilebilir) 
-    U-Boot'un çevre değişkenlerini bir dosyadan okumasıdır. Böylece bu dosya üzerinde dğişikli yapılarak uygulamacı boot süreci 
+    U-Boot'un çevre değişkenlerini bir dosyadan okumasıdır. Böylece bu dosya üzerinde değişiklik yapılarak uygulamacı boot süreci 
     üzerinde etkili olabilmektedir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -6681,7 +6681,7 @@ int main(int argc, char *argv[])
     değişkenindeki script ile yapılmaktadır. Pekiyi bu default "bootcmd" script'i nasıl belirlenmektedir? İşte aslında U-Boot 
     derlenirken bu script ilgili hedef platforma göre default değerini almaktadır. Ancak U-Boot'un belli bir versiyonundan sonra
     hiç kaynak kodlarda değişiklik yapmadan bu "bootcmd" script'i konfigürasyon parametreleriyle değiştirilebilir. hale getirilmiştir. 
-    "make menuconfig" yaptığımızda "Boot options ---> Enable a default value for bootcmd" girişinden bu defaut "bootcmd" 
+    "make menuconfig" yaptığımızda "Boot options ---> Enable a default value for bootcmd" girişinden bu default "bootcmd" 
     scirpt'i elle değiştirilebilmektedir. BBB için default "bootcmd" script'i şöyledir:
 
     "run findfdt; run init_console; run finduuid; run distro_bootcmd"
@@ -6768,7 +6768,7 @@ int main(int argc, char *argv[])
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    U-Boot'ta diskteki bir text script dosyasını load komutlaıyla belleğe yükleyip doğrudan çalıştırma mümkün değildir. Ancak 
+    U-Boot'ta diskteki bir text script dosyasını load komutlarıyla belleğe yükleyip doğrudan çalıştırma mümkün değildir. Ancak 
     script dosyasını önce ".scr" ya da ".fit" formatına dönüştürüp dönüştürülmüş dosyayı yükleyerek "source" komutu ile çalıştırma 
     olanağımız vardır. Fakat U-Boot'ta ayrıca "değişken=değer" biçiminde satırların bulunduğu bir text dosya yüklenerel "import env"
     komutu ile onun içerisindeki çevre değişkenleri U-Boot çevre değişkenlerine eklenebilir. Örneğin diskimizin FAT disk bölümünde
@@ -6822,7 +6822,7 @@ int main(int argc, char *argv[])
     => saveenv
     Saving Environment to FAT... OK
 
-    Burada yazmış olduğumuz "bootcmd" scrtipt'inde "boot.scr" dosyasının FAT disk bölümünün kök dizininde olduğu varsayılmıştır. 
+    Burada yazmış olduğumuz "bootcmd" script'inde "boot.scr" dosyasının FAT disk bölümünün kök dizininde olduğu varsayılmıştır. 
     Bu durumda bizim birinci adımda elde ettiğimiz "boot.scr" dosyasını FAT disk bölümünün kök dizinine çekmeliyiz.
 
     Ancak burada dikkat edilmesi gereken bir nokta vardır. Default durumda "am335x_evm_defconfig" dosyasında "source" komutunun
@@ -6855,7 +6855,7 @@ int main(int argc, char *argv[])
     => saveenv
     Saving Environment to FAT... OK
 
-    Burada "bootcmd" script'i önce "uEnv.txt" dosyasındaki çevre dğeişkenlerini çevre değişken listesine eklemiş sonra da 
+    Burada "bootcmd" script'i önce "uEnv.txt" dosyasındaki çevre değişkenlerini çevre değişken listesine eklemiş sonra da 
     "uenvcmd" çevre değişkeninde belirtilen script'i çalıştırmıştır.
 
     Bu biçimdeki otomatik boot yaklaşımı kullanıcılar için biraz daha kolaydır. Çünkü önceki yaklaşımda olduğu gibi bir derleme 
@@ -6891,7 +6891,7 @@ int main(int argc, char *argv[])
 /*-----------------------------------------------------------------------------------------------------------------------------
     Pekiyi U-Boot'u derlemeden önce "make menuconfig" yaptığımızda karşımıza çıkan menülerdeki seçenekler ne anlama gelmektedir?
     Anımsanacağı gibi biz "make menuconfig" yapıp seçenekleri değiştirdiğimizde aslında ".config" isimli dosya üzerinde değişiklikler
-    yapılmaktadır. Yani aslında "make menuconfig" yapmak yerine doğrudan bu ".config" dosyası üzerinde de değişilikler yapabiliriz.
+    yapılmaktadır. Yani aslında "make menuconfig" yapmak yerine doğrudan bu ".config" dosyası üzerinde de değişiklikler yapabiliriz.
     Konfigürasyon dosyaları genel olarak "anahtar=değer" biçimindeki satırlardan oluşmaktadır. Buradaki anahtarlar büyük harflerle
     oluşturulmuştur. Aynı zamanda kaynak kodlardaki sembolik sabitlerle aynı isimdedirler. ".config" dosyasının bir bölümünü 
     aşağıda veriyoruz:
@@ -6928,14 +6928,14 @@ int main(int argc, char *argv[])
         - "Shell prompt" U-Boot'un default "=>" prompt'unu değiştirmek için kullanılmaktadır.
         - "Hush shell secondary prompt" ise ikincil prompt'u değiştirmek için kullanılır.
         - Bu ana girişteki "Xxxx commands" girişleri komut satırında uygulanabilecek komutları seçmemizi sağlamaktadır.
-    - "Envirionment " ana girişinde çevre değişkenlerinin kullanımına ilişkin çeşitli seçenekler bulunmaktadır.
+    - "Environment " ana girişinde çevre değişkenlerinin kullanımına ilişkin çeşitli seçenekler bulunmaktadır.
         - "Environment is in FAT file system" seçeneği "uboot.cmd" çevre değişken dosyasının FAT dosya sisteminde bulundurulacağını
         ve buradan yükleneceğini belirtmektedir.
-        - "Device and partition for where to store the environemt in FAT" seçeneği çevre değişkenlerinin hangi FAT disk bölümünde
+        - "Device and partition for where to store the environment in FAT" seçeneği çevre değişkenlerinin hangi FAT disk bölümünde
         saklanıp geri alınacağını belirtmektedir.
-        - "Name of the FAT file to use for the environment" çevre değişkenlerinin "saveenv" komutu uygulnadığında hangi dosya 
+        - "Name of the FAT file to use for the environment" çevre değişkenlerinin "saveenv" komutu uygulandığında hangi dosya 
         ismiyle saklanacağını belirtmektedir. Buradaki default dosya ismi "uboot.env" biçimindedir.
-    - "Device drivers" ana girişinde U-Boot komut satırında birtakım komutları kullanabilmek için hangi aygıtları tanıyabilen 
+    - "Device drivers" ana girişinde U-Boot komut satırında bir takım komutları kullanabilmek için hangi aygıtları tanıyabilen 
     bir U-Boot imajının oluşturulacağına ilişkin seçenekler bulunmaktadır.
         - Örneğin U-Boot tarafından kullanılan seri port'un baud rate'i burada set edilebilir. Bunun default değeri 115200'dür.
         - Örneğin eğer U-Boot'ta USB kullanılacaksa buradan USB sürücüsü seçilmelidir. Aksi takdirde U-Boot komut satırına 
@@ -6975,12 +6975,12 @@ int main(int argc, char *argv[])
 /*-----------------------------------------------------------------------------------------------------------------------------
     Maalesef yukarıda açıkladığımız GPIO seri port'ları Raspberry Pi 4 ve önceki modellerde U-Boot'ta sorun oluşturmazken 
     Rapsberry Pi 5 modelinde sorun oluşturmaktadır. Muhtemelen U-Boot ekibi Raspberry Pi 5'teki GPIO seri port uçlarını kullanırken
-    birtakım böcekler (bugs) oluşmuştur. Bunun için birkaç patch yayınlanmışsa da kursun yapıldığı zamand bu patch'ler de 
+    birtakım böcekler (bugs) oluşmuştur. Bunun için birkaç patch yayınlanmışsa da kursun yapıldığı zamanda bu patch'ler de 
     problemi çözememiştir. Ancak Raspberry Pi 5'lerdeki iki HDMI portunun arasındaki küçük seri portun kullanımı U-Boot'ta 
     bir sorun çıkarmamaktadır. Bu seri port soketi sık karşılaşılan bir soket değildir. Bu soket için kablo bulmak da biraz 
     zahmetlidir. Ancak orijinali Raspberry Pi Pico'lar için üretilmiş olan "Raspberry Pi Debug Probe" denilen ürünün içerisinde 
-    bu porta ilişkin soketler bulunmaktadır. Bu ürün hr zaman Türkiye'deki şirketlerde hazır bulunmayabilmektedir. Ancak 
-    yabancı bazı şirketlerde (örneğin "aliexpress") bir ucu bu soket olan diğer ucu standart USB soker olan kablolar satılmaktadır. 
+    bu porta ilişkin soketler bulunmaktadır. Bu ürün her zaman Türkiye'deki şirketlerde hazır bulunmayabilmektedir. Ancak 
+    yabancı bazı şirketlerde (örneğin "aliexpress") bir ucu bu soket olan diğer ucu standart USB soket olan kablolar satılmaktadır. 
     Biz kurusumuzda "Raspberry Pi Debug Probe" ürününden çıkan kabloları kullanacağız. Buradaki soket yine 3 uçludur. Bu 3 uç 
     aşağıdaki gibidir:
 
@@ -7008,7 +7008,7 @@ int main(int argc, char *argv[])
     Buradaki U-Boot dosyasının neden "u-boot.img" değil de "u-boot.bin" olduğunu merak edebilirsiniz. BBB'de biz U-Boot'un
     MLO programını da SD karta yüklemiştik. Bu MLO programı U-Boot'un ".img" formatını tanımaktadır. Ancak Raspberry Pi'daki 
     "start.elf" programı bu formatı tanımamaktadır. Buradaki "u-boot.bin" dosyası "pure binary" U-Boot dosyasıdır. Burada dosya
-    isminde bir yol ifadsi olmadığına dikkat ediniz. "start.elf" programı zaten FAT dosya sisteminin kök dizinini default olarak 
+    isminde bir yol ifadesi olmadığına dikkat ediniz. "start.elf" programı zaten FAT dosya sisteminin kök dizinini default olarak 
     kullanmaktadır. Aslında bu "config.txt" içerisindeki bu "kernel" satırı bulundurulmazsa bazı modeller için "kernel.img", 
     bazı modeller için "kernel7.img" bazı modeller için ise "kernel8.img" girilmiş gibi işlem yapılmaktadır. Raspberry 5'te 
     default olarak önce "kernel_2712.img" imajı eğer bu imaj bulunamazsa "kernel8.img" imajı aranmaktadır. Bu işlemin yanı sıra 
@@ -7018,8 +7018,8 @@ int main(int argc, char *argv[])
 
     Aksi taktirde default durumda GPIO seri uçları kullanılamayacaktır. (Tabii aslında Raspberry Pi OS'de "Preferences/Raspberry 
     Pi configuration" diyalog penceresinden "Interfaces" sekmesine geçilerek "Serial Port" enable edilirse zaten "config.txt"
-    dosyasına bu satır eklenmektedir. Bu menüdeki "Serial Console" iki HDMI protunun arasındaki debug seri port'unu enable etmek
-    kullnılmaktadır.)
+    dosyasına bu satır eklenmektedir. Bu menüdeki "Serial Console" iki HDMI portunun arasındaki debug seri port'unu enable etmek
+    kullanılmaktadır.)
 
     Raspberry Pi'daki "start.elf" dosyasının ele aldığı "config.txt" dosyasına ilişkin içerik aşağıdaki bağlantıda dokümante 
     edilmiştir:
@@ -7032,8 +7032,8 @@ int main(int argc, char *argv[])
 
     1) Raspberry Pi'ya uygun bir araç zincirinin elde edilmesi gerekir. Raspberry Pi 4 ve 5'te biz genellikle 64 bit Linux 
     kullanmaktayız. (Halbuki BBB'de 32 bit Linux kullanılmaktadır). O halde derlemeyi biz 64 bit ARM araç zinciri ile yapmalıyız. 
-    Tabii bu araç zinciri sıfırdan crosstool-NG ile oluşturulabilir ya da hazır araç zincirlerini kullanılabiliriz. Örneğin söz konusu 
-    araç zincirisini yine aşağıdaki bağlantıdan indirebiliriz:
+    Tabii bu araç zinciri sıfırdan crosstool-NG ile oluşturulabilir ya da hazır araç zincirlerini kullanabiliriz. Örneğin söz konusu 
+    araç zincirini yine aşağıdaki bağlantıdan indirebiliriz:
 
     https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads
 
@@ -7064,7 +7064,7 @@ int main(int argc, char *argv[])
 
     $ make rpi_arm64_defconfig
 
-    4) Konfigürasyonda değişilikler için yine "make menuconfig" yapılabilir. Buradaki default konfigürasyon BBB'deki default 
+    4) Konfigürasyonda değişiklikler için yine "make menuconfig" yapılabilir. Buradaki default konfigürasyon BBB'deki default 
     konfigürasyondan farklıdır.
 
     5) Artık make işlemi yapılabilir:
@@ -7080,7 +7080,7 @@ int main(int argc, char *argv[])
     0x88000000 adresini kullanmıştık. Çünkü BBB'de fiziksel DRAM bellek 0x80000000 adresinden başlamaktadır. Oysa Raspberry Pi'da
     fiziksel DRAM bellek 0x00000000 adresinden başlamaktadır. Dolayısıyla bizim bu dosyaları bu orijini temel alarak belleğe 
     yüklememiz gerekir. Tıpkı BBB'de olduğu gibi Raspberry Pi'da da çekirdek yükleme adresi, aygıt ağacı yükleme adresi, geçici 
-    kök dosya sistemi için ramdisk yükleme adresi aşağıdaki eçre değişkenlerinde default biçimde oluşturulmuş durumdadır:
+    kök dosya sistemi için ramdisk yükleme adresi aşağıdaki çevre değişkenlerinde default biçimde oluşturulmuş durumdadır:
 
     kernel_addr_r
     fdt_addr_r
@@ -7103,7 +7103,7 @@ int main(int argc, char *argv[])
     U-Boot> load mmc 0:1 ${fdt_addr_r} bcm2712-rpi-5-b.dtb
     76676 bytes read in 5 ms (14.6 MiB/s)
 
-    Buradaki "kernel_addr_r" çevre değişkeni çekirdeğin tavisye edilen yükleme adresini, "fdt_addr_r" çevre değişkeni ise aygıt
+    Buradaki "kernel_addr_r" çevre değişkeni çekirdeğin tavsiye edilen yükleme adresini, "fdt_addr_r" çevre değişkeni ise aygıt
     ağacının tavsiye edilen yükleme adresini belirtmektedir. Tabii yine bootargs çevre değişkeninin çekirdek boot parametrelerini 
     içerecek biçimde oluşturulması gerekmektedir:
 
@@ -7134,7 +7134,7 @@ int main(int argc, char *argv[])
     Sıkıştırılmış imajın uzunluğu zaten load komutunda desimal olarak verilmektedir. Ancak buradaki uzunluğu fazla almanın 
     bir sakıncası yoktur.
 
-    Ancak Raspbbery Pi boot edilirken aygıt ağacı konusunda dikkat etmek gerekir. Aygıt ağacını uygulamacının yüklemesi yerine
+    Ancak Raspberry Pi boot edilirken aygıt ağacı konusunda dikkat etmek gerekir. Aygıt ağacını uygulamacının yüklemesi yerine
     zaten "start.elf" tarafından yüklenmiş olan aygıt ağacının kullanılması daha pratik bir yöntemdir. "start.elf" tarafından 
     yüklenmiş olan aygıt ağacı fdt_addr adresinde bulunmaktadır. Bu nedenle "booti" komutu aşağıdaki gibi kullanılabilir:
 
@@ -7158,7 +7158,7 @@ int main(int argc, char *argv[])
     Saving Environment to FAT... OK
 
     Artık Raspberry Pi'ımızı reset ettiğimizde otomatik boot işlemi gerçekleşecektir. Tabii buradaki otomatik boot işlemi 
-    dışarıdan müdahaleye açk değildir. Bunu sağlayabilmek için BBB'de yaptığımız işlemlerin benzerlerini yapabiliriz. Örneğin 
+    dışarıdan müdahaleye açık değildir. Bunu sağlayabilmek için BBB'de yaptığımız işlemlerin benzerlerini yapabiliriz. Örneğin 
     burada yine FAT dizininde bir çevre değişkeni script'i yazıp bu script'i "bootcmd" içerisinde yükleyip çalıştırabiliriz.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -7184,7 +7184,7 @@ int main(int argc, char *argv[])
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Biz şimdiye kadar zaten kurulu olan bir Linux dosya sistemini kullanarak boot işlemini gerçekleştirdik. Örneğin BBB'de biz 
-    zaten BBB'nin kök dosya sistemini hiç değiştirmeden kullandık. Bzenzer biçimde Raspberry Pi'da da onun oluturulmuş kök dosya
+    zaten BBB'nin kök dosya sistemini hiç değiştirmeden kullandık. Benzer biçimde Raspberry Pi'da da onun oluşturulmuş kök dosya
     sistemini doğrudan kullandık. Şimdi sıfır bir disk üzerinde Linux üzerinde çalışma için gerekebilecek dosyaları içeren kök 
     dosya sistemini kendimiz oluşturacağız.
 
@@ -7192,11 +7192,11 @@ int main(int argc, char *argv[])
     (initial ramdisk) yeterli değildir. Çünkü sistem boot edilirken doğrudan ya da dolaylı olarak diskte hazır bulunması gereken 
     birtakım dosyalar da işleme sokulmaktadır. İşte en azından gerekli lan bu dosyaların sıfır bir diskte uygun yerlere 
     konuşlandırılması gerekmektedir. Örneğin eğer diskimizde bir kabuk programı bulunmazsa biz komut satırına düşemeyiz. Standart
-    UNIX komutları olan "ls", "cat", "cp", "mv" gibi komutların çok büyük çüunluğu aslında çalıştırılabilen dosyalardır. Bu 
+    UNIX komutları olan "ls", "cat", "cp", "mv" gibi komutların çok büyük çoğunluğu aslında çalıştırılabilen dosyalardır. Bu 
     programların da uygun yerlerde bulunuyor olması gerekir. Yine birtakım konfigürasyon dosyalarının da bulundurulması gerekebilmektedir. 
     Örneğin bazı programlar bazı dinamik kütüphaneleri kullanıyor olabilir. Bu durumda bu dinamik kütüphane dosyalarının da 
     uygun yerlere konuşlandırılması gerekmektedir. İşte biz "kök dosya sisteminin (root file system)" oluşturulması demekle 
-    tüm bu hazırlıkların yapılmasını kastetmekteyiz. Şüphesiz hedef diske kurulacak olan tüm programların hedef makine için 
+    tüm bu hazırlıkların yapılmasını kast etmekteyiz. Şüphesiz hedef diske kurulacak olan tüm programların hedef makine için 
     "çapraz derleyicilerle" derlenmiş olması gerekir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -7206,7 +7206,7 @@ int main(int argc, char *argv[])
     için derler ve onları konuşlandırır. Sonra yine gerekli birtakım konfigürasyon dosyalarını elle oluşturur. Ancak bu manuel 
     yöntem zahmetlidir. Bunun yerine bu işlemi pratik bir biçimde yapan araçlar geliştirilmiştir. Örneğin "BusyBox" bu amaçla
     sıkça kullanılmaktadır. Kullanımı da oldukça kolaydır. Buildroot ve Yocto projeleri daha genel amaçlar için gerçekleştirilmiştir
-    ancak bunlarla kök dosya sistemi de oluşturulabilmektedir. Bazı dağırımların bu işi yapan özel utility programaları da 
+    ancak bunlarla kök dosya sistemi de oluşturulabilmektedir. Bazı dağırımların bu işi yapan özel utility programları da 
     vardır. Örneğin "debootstrap" programı Debian tabanlı kök dosya sistemini Internet'ten indirerek oluşturabilmektedir. Ancak 
     bu araçların bazıları esnek değildir. Özellikle gömülü sistemlerde düşük bir sistem kaynağı olduğu dikkate alındığında bu 
     araçların bazıları minimalist bir kurulum sağlayamamaktadır. Biz kursumuzda bu işi yapan temel araçları çeşitli konularda 
@@ -7223,7 +7223,7 @@ int main(int argc, char *argv[])
 
     https://elixir.bootlin.com/busybox/1.36.1/source
 
-    BusyBox kullanımının tipik adımları U-Boot'takine çok benemektedir. BusyBox ile çalışmak için tipik olarak şu adımlardan 
+    BusyBox kullanımının tipik adımları U-Boot'takine çok benzemektedir. BusyBox ile çalışmak için tipik olarak şu adımlardan 
     geçilmelidir:
 
     1) BusyBox sitesinden kaynak kod olarak indirilir.
@@ -7247,9 +7247,9 @@ int main(int argc, char *argv[])
     -rw-r--r-- 1 kaan kaan 28599 Oca  1  2021 TEST_noprintf_defconfig
     -rw-r--r-- 1 kaan kaan 22005 Oca  1  2021 TEST_rh9_defconfig
 
-    3) "make menuconfig" komutu ile görsel bir biçimde default konfigürasyon üzerinde değişilikler yapılarak dosya save edilebilir. 
+    3) "make menuconfig" komutu ile görsel bir biçimde default konfigürasyon üzerinde değişiklikler yapılarak dosya save edilebilir. 
     Buradaki menüde kök dosya sisteminin customize edilmesine ilişkin pek çok seçenek bulunmaktadır. Tabii uygulamacı isterse 
-    doğrudan ".config" dosyasının içerisindeki satırlar üzerinde de değişilikler yapabilir.
+    doğrudan ".config" dosyasının içerisindeki satırlar üzerinde de değişiklikler yapabilir.
 
     4) Derleme işlemine başlamadan önce yine CROSS_COMPILE çevre değişkeni U-Boot'ta yaptığımız gibi oluşturulmalıdır (yani 
     export edilmelidir). Yine çapraz derleyicinin araçlarının bulunduğu "bin" dizini PATH çevre değişkenine eklenmelidir. 
@@ -7270,12 +7270,12 @@ int main(int argc, char *argv[])
     $ make install
 
     Aslında yukarıda dördüncü maddede "make" yerine tek hamlede "make install" işlemi de yapabilirdik. Biz "make install" 
-    yaptığımızda tüm ürün default olarak "_install" isimli bir dizine kopyalanmaktadır. Eğer bu diziin ismini değiştirmek 
+    yaptığımızda tüm ürün default olarak "_install" isimli bir dizine kopyalanmaktadır. Eğer bu dizinin ismini değiştirmek 
     istiyorsanız (genellikle istenir) bunun için menuconfig'te "Settings/Destination path for 'make install'" seçeneği üzerinde
-    değişiklik yapılabilir ya da doğrudan konfigürasyon dosyaasındaki "CONFIG_PREFIX" satırı değiştirilebilir.
+    değişiklik yapılabilir ya da doğrudan konfigürasyon dosyasındaki "CONFIG_PREFIX" satırı değiştirilebilir.
 
     Kurulum yapıldıktan sonra aslında kök dosya sisteminin önemli bazı dizinlerindeki programlar oluşturulmuş olmaktadır. Artık 
-    bu programları uygun yerlere kopyalamamaız gerekir.
+    bu programları uygun yerlere kopyalamamız gerekir.
 
     Kurulumdan sonra bazı dizinlere baktığımızda (örneğin "bin" dizinine) aşağıdaki gibi ilginç bir durumla karşılaşırız:
 
@@ -7294,7 +7294,7 @@ int main(int argc, char *argv[])
 
     Burada ilginç olan nokta aslında tüm komutların "busybox" isimli asıl programa sembolik link yapıldığıdır. O halde burada 
     aslında tek bir program vardır, o da "busybox" isimli programdır. Buradaki diğer programlar çalıştırıldığında aslında hep 
-    "busybox" programı çalıştırılacaktır. Ancak "busybox" kendisinin hangi sembolik link ismiyle çalıştrıldığını argv[0] 
+    "busybox" programı çalıştırılacaktır. Ancak "busybox" kendisinin hangi sembolik link ismiyle çalıştırıldığını argv[0] 
     parametresiyle anlayıp o komut için gereğini yapmaktadır. Yani örneğin bu sistemde aşağıdaki gibi bir çalıştırma yapılmış olsun:
 
     $ chmod 666 x.txt
@@ -7329,7 +7329,7 @@ int main(int argc, char *argv[])
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Anımsayacağınız gibi BusyBox'ı "make install" yaptığımızda default kurulum "_install" isimli dizine yapılıyordu. Kurulum 
-    sonrasındai "_install" diziniin görünümü şöyledir:
+    sonrasındai "_install" dizininin görünümü şöyledir:
 
     $ tree -d _install
 
@@ -7346,7 +7346,7 @@ int main(int argc, char *argv[])
     çalıştırılabilir dosyalarının yerleştirildiği dizinlerdir.
 
     Kök dosya sisteminin iş görür biçimde oluşturulması için bu "_install" dizinindeki dosyaların hedef kök dizine (örneğin micro 
-    SD karta) kopyalnması yeterli değildir. BusyBox kendi içerisinde minimalist bir "init" sistemi kullanmaktadır. Bu "init" sistemi 
+    SD karta) kopyalanması yeterli değildir. BusyBox kendi içerisinde minimalist bir "init" sistemi kullanmaktadır. Bu "init" sistemi 
     klasik System-5 "init" sistemine benzemektedir. BusyBox'ın init sistemi boot işleminden sonra bazı dizinlerdeki bazı dosyalara 
     başvurmaktadır. Dolayısıyla sistemin düzgün bir biçimde açılabilmesi için yukarıdaki dizin içeriğini kopyalamanın yanı sıra 
     hedef kök sistemde başka bazı hazırlık işlemlerinin de yapılması gerekir. Yapılması gereken diğer işlemler maddeler halinde 
@@ -7354,7 +7354,7 @@ int main(int argc, char *argv[])
 
     1) Kök dosya sisteminin hazırlanması hedef aygıt üzerinde (yani micro SD kart üzerinde) yapılabileceği gibi bir dizin üzerinde 
     yapılıp en sonunda bu dizin hedef aygıta kopyalanabilir. Biz burada işlemleri "rootfs" isimli bir dizinde yapıp sonra bu dizin'in 
-    içeriğini hedef aygıta (yani mşcro SD karta) kopyalayacağız. Önce bu dizinimizi oluşturalım:
+    içeriğini hedef aygıta (yani micro SD karta) kopyalayacağız. Önce bu dizinimizi oluşturalım:
 
     $ mkdir rootfs
 
@@ -7454,7 +7454,7 @@ int main(int argc, char *argv[])
     $ find . -name "ld-linux-armhf.so.3"
     ./arm-none-linux-gnueabihf/libc/lib/ld-linux-armhf.so.3
 
-    Bu dinamki linker'ı da hedef kök dizinin "/lib" dizinine kopyalamamız gerekir:
+    Bu dinamik linker'ı da hedef kök dizinin "/lib" dizinine kopyalamamız gerekir:
 
     sudo cp ld-linux-armhf.so.3 ~/Study/EmbeddedLinux/BusyBox/rootfs/lib
 
@@ -7499,7 +7499,7 @@ int main(int argc, char *argv[])
     proc    /proc    proc   defaults  0 0
     sysfs   /sys     sysfs  defaults  0 0
 
-    Böylece "init" prgramı çalıştırıldığında "proc" ve "sys" dosya sistemleri de mount edilmiş olacaktır.
+    Böylece "init" programı çalıştırıldığında "proc" ve "sys" dosya sistemleri de mount edilmiş olacaktır.
 
     BusyBox'ta "ash" isimli kabuk programı (shell programı) kullanılmaktadır. ash (Almquist shell) bourne shell benzeri kompakt
     bir kabuk programıdır. Özellikle gömülü sistemlerde az yer kaplaması nedeniyle tercih edilmektedir. BusyBox'ta bu "ash" isimli
@@ -8387,7 +8387,7 @@ void exit_sys(const char *msg)
     çekirdeğin "root" parametresinden alıp mount işlemini ona göre yapmamız daha esnek bir kullanım sunacaktır. Pekiyi biz 
     "/init" script'i içerisinde çekirdeğin "root" parametresini nasıl elde edebiliriz? Bunu elde etmenin tek yolu "proc" dosya 
     sistemi içerisindeki "cmdline" dosyasını parse etmektir. Çekirdeğin bütün komut satırı "/proc/cmdline" dosyasının içerisinde
-    bulunmaktadır. Biz bu dosyayı okuyup "root=...." çekersek elde edersek bu parametreyi elde edebiliriz. Bu dosyanın parse
+    bulunmaktadır. Biz bu dosyayı okuyup "root=..." çekersek elde edersek bu parametreyi elde edebiliriz. Bu dosyanın parse
     edilmesi bir C programıyla yapılabilir ya da doğrudan kabuk komutlarıyla da yapılabilir. Bu işlemin yapıldığı bir "/init" 
     programı şöyle yazılabilir:
 
@@ -8470,7 +8470,7 @@ void exit_sys(const char *msg)
     respawn: Eğer ilgili proses bir biçimde sonlanırsa init bunu izleyerek yeniden çalıştırmaktadır. Bu da belli çalışma 
     düzeyleri için belirtilmektedir.
 
-    wait: Belli çalışma düzeylerinde çalıştırılacak prgramları belirtir. Ancak programın çalışması bitene kadar init başka 
+    wait: Belli çalışma düzeylerinde çalıştırılacak programları belirtir. Ancak programın çalışması bitene kadar init başka 
     program çalıştırmdan bekler.
 
     boot: Sistem reboot edilirken çalışrırılacak programları belirtmektedir. Çalışma düzeyleri etkilidir.
@@ -9963,7 +9963,7 @@ void exit_sys(const char *msg)
         compatible = "ti,beaglebone", "ti,beaglebone-black";
 
         fragment@0 {
-           /* .... */
+           /* ... */
         };
     };
 
@@ -11425,7 +11425,7 @@ void exit_sys(const char *msg)
     "arch/<platform>/syscall/xxx.tbl" dosyasında belirtilmektedir. 64 bit Linux sistemleri için bu dosya 
     "arch/x86/entry/syscalls/syscall_64.tbl" biçimindedir. Ekleme bu dosyanın sonuna aşağıdaki gibi yapılabilir:
 
-    ......
+    ...
     544	x32	io_submit		compat_sys_io_submit
     545	x32	execveat		compat_sys_execveat
     546	x32	preadv2			compat_sys_preadv64v2
@@ -12369,7 +12369,7 @@ void exit_sys(const char *msg)
     -----> programın akışı çekirdek modundan yeniden kullanıcı moduna geçiyor.
 
     Kullanıcı modunda çalışan sıradan programlar sistem fonksiyonlarını genellikle doğrudan değil POSIX kütüphanesindeki POSIX
-    fonskiyonları yoluyla dolaylı bir biçimde çağırmaktadır. Yani programcı bir POSIX fonksiyonunu çağırdığında o POSIX fonksiyonu 
+    fonksiyonları yoluyla dolaylı bir biçimde çağırmaktadır. Yani programcı bir POSIX fonksiyonunu çağırdığında o POSIX fonksiyonu 
     da bir sistem fonksiyonunu çağırabilmektedir. Tabii her POSIX fonksiyonun bir sistem fonksiyonunu çağırdığını söylemiyoruz. 
     Önceki konularda çekirdeğe yeni sistem fonksiyonu eklerken de gördüğümüz gibi programcı isterse syscall isimli "libc" kütüphane
     fonksiyonu ile numarasını belirterek de sistem fonksiyonlarını doğrudan çağırabilir. Tabii Linux'ta sistem fonksiyonlarının 
@@ -14344,7 +14344,7 @@ void exit_sys(const char *msg)
 /*-----------------------------------------------------------------------------------------------------------------------------
     Biz şimdiye kadar aygıt dosyası open ile açıldığında ve close ile kapatıldığında aygıt sürücümüz içerisindeki fopen ve release 
     fonksiyonlarımızın çağrılmasını sağladık. Şimdi de aygıt dosyası üzerinde read ve write fonksiyonları uygulandığında aygıt 
-    sürücümüzdeki read ve write fonkisyonlarının çağrılması üzerinde duracağız.
+    sürücümüzdeki read ve write fonksiyonlarının çağrılması üzerinde duracağız.
 
     Aygıt dosyası open POSIX ile açılıp read POSIX fonksiyonu ile okunduğında aygıt sürücümüz içerisinde belirlediğimiz "read" 
     fonksiyonumuz, write POSIX fonksiyonu çağrıldığında da aygıt sürücümüz içerisinde belirlediğimiz write fonksiyonumuz çağrılmaktadır. 
@@ -16182,12 +16182,12 @@ void exit_sys(const char *msg)
     Programcılar bu kodun CPU verilip sürekli olarak CPU'nun bu for döngüsünü çalıştırdığını sanabilmektedir. Aslında bu kod
     sürekli çalıştırılmamakta durudurulup kalınan yerden devam ettirilip kesikli kesikli çalıştırılmaktadır.
 
-    İşletim sistemleri terminolojisinde bir therad'in parçalı çalışma süresine "quanta süresi (time quantum)" denilmektedir. 
+    İşletim sistemleri terminolojisinde bir thread'in parçalı çalışma süresine "quanta süresi (time quantum)" denilmektedir. 
     Bir thread'in çalışmasına ara verilip durumunun kaydedilmesi ve diğer thread'in kaldığı yerden CPU'ya atanmasına "bağlamsal
     geçiş" ya da İngilizcesiyle "context switch" denilmektedir. Eğer ilgili sistemde quanta süresi çok yüksek tutulursa bu 
     durumda interaktivite azalır. Eğer quanta süresi çok düşük tutulursa bu durumda bağlamsal geçiş (context switch) için harcanan 
     zaman thread'lerin harcadığı zaman oranla büyür, birim zamanda yapılan iş miktarı (throughput) düşer. Linux sistemlerinde 
-    therad'e ayrılan quanta süresi thread önceliğine göre, "nice değerine" göre değişebilmektedir. Günümüz bilgisayarlarında 
+    thread'e ayrılan quanta süresi thread önceliğine göre, "nice değerine" göre değişebilmektedir. Günümüz bilgisayarlarında 
     ortalama 60 ms gibi bir quanta süresi pek çok genel amaçlı sistem için uygun bir süredir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -17549,7 +17549,7 @@ void exit_sys(const char *msg)
     da arama yaparsa bir çökme oluşturabilir. Burada bağlı listeye eleman eklemek bir yazma (write) işlemi olarak düşünğlebilir. 
     O halde bizim öyle bir kritik kod oluşturmamız gerekir ki birden fazla okuma yapan thread bu kritik koda girebilsin ancak 
     bir thread okuma yaparken yazma yapan bir thread kritik koda girmeden okuma yapan thread çıkana kadar beklesin. Benzer biçimde
-    eğer yazma yapan bir therad kritik koda girmişse bu işlem bitene kadar okuma yapan bir threda de yazma yazma yapan bir thread 
+    eğer yazma yapan bir thread kritik koda girmişse bu işlem bitene kadar okuma yapan bir threda de yazma yazma yapan bir thread 
     de kritik koda giremesiz. Aşağıda Thread-1 kritik koda girmişse Thread-2'nin durumu aöıklanmaktadır:
 
     Thread-1            Thread-2        Bloke Oluşmalı Mı?
@@ -17997,7 +17997,7 @@ void exit_sys(const char *msg)
     g_count > 0 olmalıdır. Boruya yazan thread g_count değerini güncelledikten sonra eğer g_count önceden sıfırsa wake_up 
     makrolarıyla bekleyen thread'leri uyandırır. Thread'ler uyandıktan sonra yularıdaki while döngüsünde bunlardan yalnızca 
     biri mutex kildini alır. Nutex kilidini alan thread'de borudan okuma yapar. Eğer okuma sonucunda g_count hala > 0 durumunda
-    ise başka bir therad daha okuma yapacaktır. Taki g_count değeri 0 olana kadar. Bu durumda diğer thread'ler boruya yeni 
+    ise başka bir thread daha okuma yapacaktır. Taki g_count değeri 0 olana kadar. Bu durumda diğer thread'ler boruya yeni 
     bir yazma yapılana kadar blokede bekleyeceklerdir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -20153,7 +20153,7 @@ void exit_sys(const char *msg)
     kullanıcı modundaki programlar tarafından kullanılacak biçimde prosesin bellek alanında tahsisat yapmak için tasarlanmışlardır. 
     Oysa çekirdeğin ayrı bir heap sistemi vardır. Bu nedenle çekirdek modülleri ve aygıt sürücüler çekirdeğin sunduğu fonksiyonlarla 
     çekirdeğin heap alanında tahsisat yapabilirler. Biz de bu bölümde çekirdeğin heap sistemi üzerinde tahsisatların nasıl yapıldığı 
-    üzerinde duaracğız.
+    üzerinde duracağız.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -20168,18 +20168,18 @@ void exit_sys(const char *msg)
     bellek alanı şöyle gösterilebilir:
 
     00000000
-    .....            USER ALANI (3 GB)
+    ...            USER ALANI (3 GB)
     C0000000
-    .....            KERNEL ALANI (1 GB)
+    ...            KERNEL ALANI (1 GB)
 
     64 bit Linux sistemlerindeki sanal bellek alanı ise kabaca şöyledir:
 
     0000000000000000
-    .....                        USER ALANI (128 TB)
+    ...                        USER ALANI (128 TB)
     0000800000000000
-    .....                        BOŞ BÖLGE (yaklaşık 16M TB)
+    ...                        BOŞ BÖLGE (yaklaşık 16M TB)
     FFFF800000000000
-    ....                         KERNEL ALANI (128 TB)
+    ...                        KERNEL ALANI (128 TB)
     FFFFFFFFFFFFFFFF
 -----------------------------------------------------------------------------------------------------------------------------*/
 
