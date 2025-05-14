@@ -60792,28 +60792,29 @@ void exit_sys(const char *msg)
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Çekirdek kodlamasında çekirdek alanında dinamik tahsisat yapmak için kullanılan en genel fonksiyon kmalloc isimli fonksiyondur. 
+   Çekirdek modunda çekirdek alanında dinamik tahsisat yapmak için kullanılan en genel fonksiyon kmalloc isimli fonksiyondur. 
     Bu fonksiyon aslında parametresiyle belirtilen uzunluğa en yakın önceden yaratılmış olan dilimli tahsisat sisteminden dilim 
-    vermektedir (yani blok tahsis etmektedir). Örneğin biz kmalloc fonksiyonu ile 100 byte tahsis etmek istesek 100 byte'lık blokların 
-    bulunduğu önceden yaratılmış bir dilimli tahsisat sistemi olmadığı için kmalloc 128 byte'lık bloklara sahip dilimli tahsisat 
-    sisteminden bir dilim tahsis ederek bize vermektedir. Tabii bu örnekte 28 byte boşuna tahsis edilmiş olacaktır. Ancak çekirdek 
-    tahsisat sisteminin amacı en uygun miktarda belleği tahsis etmek değil, talep edilen miktarda belleği hızlı tahsis etmektir.
-    kmalloc fonksiyonu ile tahsis edilen dilimler kfree fonksiyonu ile serbest bırakılmaktadır. Fonksiyonların prototipleri şöyledir:
+    vermektedir (yani blok tahsis etmektedir). Örneğin biz kmalloc fonksiyonu ile 100 byte tahsis etmek istesek 100 byte'lık 
+    blokların bulunduğu önceden yaratılmış bir dilimli tahsisat sistemi olmadığı için kmalloc 128 byte'lık bloklara sahip dilimli 
+    tahsisat sisteminden bir dilim tahsis ederek bize verecektir. Tabii bu örnekte 28 byte boşuna tahsis edilmiş olacaktır. Ancak 
+    çekirdek tahsisat sisteminin amacı en uygun miktarda belleği tahsis etmek değil, talep edilen miktarda belleği daha hızlı 
+    tahsis etmektir. kmalloc fonksiyonu ile tahsis edilen dilimler kfree fonksiyonu ile serbest bırakılmaktadır. Fonksiyonların 
+    prototipleri şöyledir:
 
     #include <linux/slab.h>
 
     void *kmalloc (size_t size, int flags);
     void kfree (const void *objp);
 
-    kmalloc fonksiyonunun birinci parametresi tahsis edilecek byte sayısını belirtir. İkincisi parametresi ise tahsis edilecek alan 
-    ve biçim hakkında çeşitli bayrakları içermektedir. Bu ikinci parametre çeşitli sembolik sabitlerden oluşturulmaktadır. Burada 
-    önemli birkaç bayrak şunlardır:
+    kmalloc fonksiyonunun birinci parametresi tahsis edilecek byte sayısını belirtir. İkincisi parametresi ise tahsis edilecek 
+    zone ve tahsisat biçimi hakkında çeşitli bayrakları içermektedir. Bu ikinci parametre çeşitli sembolik sabitlerden oluşturulmaktadır. 
+    Burada önemli birkaç bayrak şunlardır:
 
-    GFP_KERNEL: Kernel alanı içerisinde normal tahsisat yapmak için kullanılır. Bu bayrak en sık bu kullanılan bayraktır. Burada 
-    eğer RAM doluysa işletim sistemi prosesi bloke ederek swap işlemi ile yer açabilmektedir. Bu işlem sırasında akış kernel mode'da 
-    bekleme kuyruklarında bekletilebilir. Tahsisat işlemi ZONE_NORMAL alanından yapılmaktadır.
+    GFP_KERNEL: Çekirdek alanı içerisinde normal tahsisat yapmak için kullanılır. Bu bayrak en sık bu kullanılan bayraktır. Burada 
+    eğer RAM doluysa işletim sistemi prosesi bloke ederek swap işlemi ile yer açabilmektedir. Yani bu işlem sırasında akış çekirdek 
+    bloke olarak thread bekleme kuyruklarında bekletilebilir. Tahsisat işlemi ZONE_NORMAL alanından yapılmaktadır.
 
-    GFP_NOWAIT: GFP_KERNEL gibidir. Ancak hazırda bellek yoksa proses uykuya dalmaz. Fonksiyon başarısız olur.
+    GFP_NOWAIT: GFP_KERNEL gibidir. Ancak hazırda bellek yoksa thread uykuya dalmaz. Fonksiyon başarısız olur.
 
     GFP_HIGHUSER: 32 bit sistemlerde ZONE_HIGHMEM alanından tahsisat yapar.
 
@@ -60835,215 +60836,278 @@ void exit_sys(const char *msg)
 #include <linux/kernel.h>
 #include <linux/fs.h>
 #include <linux/cdev.h>
-#include <linux/uaccess.h>
-#include <linux/spinlock.h>
+#include <linux/semaphore.h>
 #include <linux/wait.h>
 #include <linux/slab.h>
 
-#define MIN(a, b)		((a) < (b) ? (a) : (b))
-
-#define PIPE_BUFSIZE		10
+#define PIPE_BUFFER_SIZE		10
+#define MIN(a, b)	((a) < (b) ? (a) : (b))
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Kaan Aslan");
-MODULE_DESCRIPTION("Pipe Driver");
+MODULE_DESCRIPTION("Pipe Device Driver");
 
-static int generic_open(struct inode *inodep, struct file *filp);
-static int generic_release(struct inode *inodep, struct file *filp);
-static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off);
-static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off);
+static int pipe_driver_open(struct inode *inodep, struct file *filp);
+static int pipe_driver_release(struct inode *inodep, struct file *filp);
+static ssize_t pipe_driver_read(struct file *filp, char *buf, size_t size, loff_t *off);
+static ssize_t pipe_driver_write(struct file *filp, const char *buf, size_t size, loff_t *off);
 
 static dev_t g_dev;
-static struct cdev *g_cdev;
+static struct cdev g_cdev;
 static struct file_operations g_fops = {
 	.owner = THIS_MODULE,
-	.open = generic_open,
-	.read = generic_read,
-	.write = generic_write,
-	.release = generic_release
+	.open = pipe_driver_open,
+	.read = pipe_driver_read,
+	.write = pipe_driver_write,
+	.release = pipe_driver_release
 };
 
-static wait_queue_head_t g_wqread;
-static wait_queue_head_t g_wqwrite;
-static DEFINE_SEMAPHORE(g_sem);
-
-struct QUEUE {
-	unsigned char pipebuf[PIPE_BUFSIZE];
+struct PIPE {
+	unsigned char buf[PIPE_BUFFER_SIZE];
 	size_t head;
 	size_t tail;
 	size_t count;
 };
 
-static struct QUEUE *g_queue;
+static wait_queue_head_t g_wqwriteopen;
+static wait_queue_head_t g_wqreadopen;
+static wait_queue_head_t g_wqread;
+static wait_queue_head_t g_wqwrite;
+static int g_nreaders;
+static int g_nwriters;
+static DEFINE_SEMAPHORE(g_sem);
+static struct PIPE *g_pipe;
 
-static int __init generic_init(void)
+static int __init pipe_driver_init(void)
 {
 	int result;
 
-	printk(KERN_INFO "pipe-driver module initialization...\n");
+	printk(KERN_INFO "pipe-driver init...\n");
 
 	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "pipe-driver")) < 0) {
-		printk(KERN_INFO "cannot alloc char driver!...\n");
-		return result;
+		printk(KERN_ERR "cannot register device!...\n");
+		goto EXIT1;
 	}
 
-	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "cannot allocate cdev!...\n");
-		return -ENOMEM;
-	}
-
-	g_cdev->owner = THIS_MODULE;
-	g_cdev->ops = &g_fops;
-
-	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
-		unregister_chrdev_region(g_dev, 1);
+	cdev_init(&g_cdev, &g_fops);
+	if ((result = cdev_add(&g_cdev, g_dev, 1)) < 0) {
 		printk(KERN_ERR "cannot add device!...\n");
-		return result;
+		goto EXIT2;
 	}
 
-	if ((g_queue = (struct QUEUE *)kmalloc(sizeof(struct QUEUE), GFP_KERNEL)) == NULL) {
-		cdev_del(g_cdev);
-		unregister_chrdev_region(g_dev, 1);
-		return -ENOMEM;
+	if ((g_pipe = kmalloc(sizeof(struct PIPE), GFP_KERNEL)) == NULL) {
+		printk(KERN_ERR "cannot allocate memory!...\n");
+		result = -ENOMEM;
+		goto EXIT3;
 	}
 
+	init_waitqueue_head(&g_wqreadopen);
+	init_waitqueue_head(&g_wqwriteopen);
 	init_waitqueue_head(&g_wqread);
 	init_waitqueue_head(&g_wqwrite);
 
 	return 0;
+
+EXIT3:
+	cdev_del(&g_cdev);
+EXIT2:
+	unregister_chrdev_region(g_dev, 1);
+EXIT1:
+	return result;
 }
 
-static void __exit generic_exit(void)
+static void __exit pipe_driver_exit(void)
 {
-	kfree(g_queue);
-	cdev_del(g_cdev);
+	kfree(g_pipe);
+	cdev_del(&g_cdev);
 	unregister_chrdev_region(g_dev, 1);
 
-	printk(KERN_INFO "pipe-driver module exit...\n");
+	printk(KERN_INFO "pipe-driver exit...\n");
 }
 
-static int generic_open(struct inode *inodep, struct file *filp)
+static int pipe_driver_open(struct inode *inodep, struct file *filp)
 {
-	printk(KERN_INFO "pipe-driver opened...\n");
+	int accmode = filp->f_flags & O_ACCMODE;
 
-	return 0;
-}
-
-static int generic_release(struct inode *inodep, struct file *filp)
-{
-	printk(KERN_INFO "pipe-driver closed...\n");
-
-	return 0;
-}
-
-static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
-{
-	size_t esize, size1, size2;
-
-	if (size == 0)
-		return 0;
-
-	if (down_interruptible(&g_sem))
+	if (down_interruptible(&g_sem) != 0)
 		return -ERESTARTSYS;
 
-	while (g_queue->count == 0) {
+	if (accmode == O_RDONLY) {
+		++g_nreaders;
+		wake_up_interruptible(&g_wqwriteopen);
+		while (g_nwriters == 0) {
+			up(&g_sem);
+			if (filp->f_flags & O_NONBLOCK)
+				return 0;
+			if (wait_event_interruptible(g_wqreadopen, g_nwriters > 0))
+				return -ERESTARTSYS;
+			if (down_interruptible(&g_sem))
+				return -ERESTARTSYS;
+		}
+	}
+	else if (accmode == O_WRONLY) {
+		++g_nwriters;
+		wake_up_interruptible(&g_wqreadopen);
+		while (g_nreaders == 0) {
+			if (filp->f_flags & O_NONBLOCK) {
+				--g_nwriters;
+				up(&g_sem);
+				return -ENXIO;
+			}
+			up(&g_sem);
+			if (wait_event_interruptible(g_wqwriteopen, g_nreaders > 0))
+				return -ERESTARTSYS;
+			if (down_interruptible(&g_sem))
+				return -ERESTARTSYS;
+		}
+	}
+	else if (accmode == O_RDWR) {
+		++g_nreaders;
+		++g_nwriters;
+		wake_up_interruptible(&g_wqreadopen);
+		wake_up_interruptible(&g_wqwriteopen);
+	}
+	up(&g_sem);
+
+	return 0;
+}
+
+static int pipe_driver_release(struct inode *inodep, struct file *filp)
+{
+	int accmode = filp->f_flags & O_ACCMODE;
+
+	if (down_interruptible(&g_sem) != 0)
+		return -ERESTARTSYS;
+
+	if (accmode == O_RDONLY)
+		--g_nreaders;
+	else if (accmode == O_WRONLY)
+		--g_nwriters;
+	else if (accmode == O_RDWR) {
+		--g_nreaders;
+		--g_nwriters;
+	}
+	if (g_nreaders == 0)
+		wake_up_interruptible(&g_wqwrite);
+	if (g_nwriters == 0)
+		wake_up_interruptible(&g_wqread);
+
+	up(&g_sem);
+
+	return 0;
+}
+
+static ssize_t pipe_driver_read(struct file *filp, char *buf, size_t size, loff_t *off)
+{
+	size_t esize, size1, size2;
+	ssize_t result = -EFAULT;
+
+	if (down_interruptible(&g_sem) != 0)
+		return -ERESTARTSYS;
+
+	while (g_pipe->count == 0) {
+		if (g_nwriters == 0) {
+			result = 0;
+			goto EXIT;
+		}
 		up(&g_sem);
 
 		if (filp->f_flags & O_NONBLOCK)
 			return -EAGAIN;
-
-		if (wait_event_interruptible(g_wqread, g_queue->count > 0))
+		if (wait_event_interruptible(g_wqread, g_pipe->count > 0 || g_nwriters == 0) != 0)
 			return -ERESTARTSYS;
-
-		if (down_interruptible(&g_sem))
+		if (down_interruptible(&g_sem) != 0)
 			return -ERESTARTSYS;
 	}
 
-	esize = MIN(g_queue->count, size);
-
-	if (g_queue->tail <= g_queue->head)
-		size1 = MIN(PIPE_BUFSIZE - g_queue->head, esize);
+	esize = MIN(size, g_pipe->count);
+	if (g_pipe->head >= g_pipe->tail)
+		size1 = MIN(esize, PIPE_BUFFER_SIZE - g_pipe->head);
 	else
 		size1 = esize;
 
 	size2 = esize - size1;
 
-	if (copy_to_user(buf, g_queue->pipebuf + g_queue->head, size1) != 0) {
-		up(&g_sem);
-		return -EFAULT;
-	}
+	if (copy_to_user(buf, g_pipe->buf + g_pipe->head, size1) != 0)
+		goto EXIT;
 
 	if (size2 != 0)
-		if (copy_to_user(buf + size1, g_queue->pipebuf, size2) != 0) {
-			up(&g_sem);
-			return -EFAULT;
-		}
+		if (copy_to_user(buf + size1, g_pipe->buf, size2) != 0)
+			goto EXIT;
 
-	g_queue->head = (g_queue->head + esize) % PIPE_BUFSIZE;
-	g_queue->count -= esize;
+	g_pipe->head = (g_pipe->head + esize) % PIPE_BUFFER_SIZE;
+	g_pipe->count -= esize;
 
+	result = esize;
+
+	wake_up_interruptible(&g_wqwrite);
+EXIT:
 	up(&g_sem);
 
-	wake_up_interruptible_all(&g_wqwrite);
-
-	return esize;
+	return result;
 }
 
-static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
+static ssize_t pipe_driver_write(struct file *filp, const char *buf, size_t size, loff_t *off)
 {
 	size_t esize, size1, size2;
+	ssize_t result = -EFAULT;
 
-	if (size > PIPE_BUFSIZE)
-		size = PIPE_BUFSIZE;
+	if (size > PIPE_BUFFER_SIZE)
+		size = PIPE_BUFFER_SIZE;
 
-	if (down_interruptible(&g_sem))
+	if (down_interruptible(&g_sem) != 0)
 		return -ERESTARTSYS;
 
-	while (PIPE_BUFSIZE - g_queue->count < size) {
+	if (g_nreaders == 0) {
 		up(&g_sem);
-
+		send_sig(SIGPIPE, current, 0);
+		return -EPIPE;
+	}
+	while (PIPE_BUFFER_SIZE - g_pipe->count < size) {
+		up(&g_sem);
 		if (filp->f_flags & O_NONBLOCK)
 			return -EAGAIN;
-
-		if (wait_event_interruptible(g_wqwrite, PIPE_BUFSIZE - g_queue->count >= size))
+		if (wait_event_interruptible(g_wqwrite, PIPE_BUFFER_SIZE - g_pipe->count >= size || g_nreaders == 0) != 0)
 			return -ERESTARTSYS;
-
-		if (down_interruptible(&g_sem))
+		if (down_interruptible(&g_sem) != 0)
 			return -ERESTARTSYS;
+		if (g_nreaders == 0) {
+			up(&g_sem);
+			send_sig(SIGPIPE, current, 0);
+			return -EPIPE;
+		}
 	}
 
-	esize = MIN(PIPE_BUFSIZE - g_queue->count, size);
+	esize = MIN(size, PIPE_BUFFER_SIZE - g_pipe->count);
 
-	if (g_queue->tail >= g_queue->head)
-		size1 = MIN(PIPE_BUFSIZE - g_queue->tail, esize);
+	if (g_pipe->tail >= g_pipe->head)
+		size1 = MIN(esize, PIPE_BUFFER_SIZE - g_pipe->tail);
 	else
 		size1 = esize;
 
 	size2 = esize - size1;
 
-	if (copy_from_user(g_queue->pipebuf + g_queue->tail, buf, size1) != 0) {
-		up(&g_sem);
-		return -EFAULT;
-	}
+	if (copy_from_user(g_pipe->buf + g_pipe->tail, buf, size1) != 0)
+		goto EXIT;
 
 	if (size2 != 0)
-		if (copy_from_user(g_queue->pipebuf, buf + size1, size2) != 0) {
-			up(&g_sem);
-			return -EFAULT;
-		}
+		if (copy_from_user(g_pipe->buf, buf + size1, size2) != 0)
+			goto EXIT;
 
-	g_queue->tail = (g_queue->tail + esize) % PIPE_BUFSIZE;
-	g_queue->count += esize;
+	g_pipe->tail = (g_pipe->tail + esize ) % PIPE_BUFFER_SIZE;
+	g_pipe->count += esize;
 
+	result = esize;
+
+EXIT:
+	wake_up_interruptible(&g_wqread);
 	up(&g_sem);
-
-	wake_up_interruptible_all(&g_wqread);
 
 	return esize;
 }
 
-module_init(generic_init);
-module_exit(generic_exit);
+module_init(pipe_driver_init);
+module_exit(pipe_driver_exit);
 
 # Makefile
 
@@ -61075,41 +61139,42 @@ module=$1
 /sbin/rmmod ./$module.ko || exit 1
 rm -f $module
 
-/* prog1.c */
+/* pwriter.c */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 #include <fcntl.h>
 #include <unistd.h>
 
-#define PIPE_SIZE		4096
+#define BUFFER_SIZE		8192
 
 void exit_sys(const char *msg);
 
 int main(void)
 {
 	int fd;
-	char buf[PIPE_SIZE];
+	char buf[BUFFER_SIZE];
 	char *str;
-	size_t len;
+	ssize_t result;
 
-	if ((fd = open("pipe-driver", O_WRONLY)) == -1)
+	if ((fd = open("pipe-driver", O_WRONLY|O_NONBLOCK)) == -1)
 		exit_sys("open");
 
 	for (;;) {
 		printf("Enter text:");
 		fflush(stdout);
-		fgets(buf, PIPE_SIZE, stdin);
+		if (fgets(buf, BUFFER_SIZE, stdin) == NULL)
+			continue;
 		if ((str = strchr(buf, '\n')) != NULL)
 			*str = '\0';
 		if (!strcmp(buf, "quit"))
 			break;
-		len = strlen(buf);
-		if (write(fd, buf, len) == -1)
+		if ((result = write(fd, buf, strlen(buf))) == -1)
 			exit_sys("write");
 
-		printf("%lu bytes written...\n", (unsigned long)len);
+		printf("%jd bytes written...\n", (intmax_t)result);
 	}
 
 	close(fd);
@@ -61124,45 +61189,50 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
-/* prog2.c */
+/* preader.c */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
 
-#define BUFFER_SIZE 4096
+#define BUFFER_SIZE		8192
 
 void exit_sys(const char *msg);
 
 int main(void)
 {
-	int pdriver;
-	char buf[BUFFER_SIZE + 1];
-	int size;
+	int fd;
+	char buf[BUFFER_SIZE];
+	int n;
 	ssize_t result;
 
-	if ((pdriver = open("pipe-driver", O_RDONLY)) == -1)
+	if ((fd = open("pipe-driver", O_RDONLY|O_NONBLOCK)) == -1)
 		exit_sys("open");
 
 	for (;;) {
-		printf("Size:");
-		scanf("%d", &size);
-		if (size > BUFFER_SIZE) {
-			printf("size is very long!...\n");
+		printf("Number of bytes to read? ");
+		scanf("%d", &n);
+		if (n == 0)
+			break;
+		if ((result = read(fd, buf, n)) == -1) {
+			if (errno != EAGAIN)
+				exit_sys("read");
+			printf("pipe is empty, let's do something else...\n");
 			continue;
 		}
-		if (size == 0)
+		if (result == 0) {
+			putchar('\n');
 			break;
-		if ((result = read(pdriver, buf, size)) == -1)
-			exit_sys("read");
+		}
 		buf[result] = '\0';
 		printf("%jd bytes read: %s\n", (intmax_t)result, buf);
 	}
 
-	close(pdriver);
+	close(fd);
 
 	return 0;
 }
@@ -61188,46 +61258,51 @@ void exit_sys(const char *msg)
     struct kmem_cache *kmem_cache_create(const char *name, unsigned int size, 
             unsigned int align, slab_flags_t flags, void (*ctor)(void *));
 
-    Fonksiyonun birinci parametresi yeni yaratılacak dilim sisteminin ismini belirtmektedir. Herhangi bir isim verilebilir. 
-    İkinci parametre dilimlerin büyüklüğünü belirtmektedir. Üçüncü parametre hizalama değerini belirtir. Bu parametreye 0 geçilirse
-    default hizalama kullanılır. Fonksiyonun dördüncü parametresi yaratılacak dilim sistemine ilişkin bazı özelliklerin belirlenmesi 
+    Fonksiyonun birinci parametresi yeni yaratılacak dilimli tahsisat sisteminin ismini belirtmektedir. Burada dilimli tahsisat 
+    sistemine herhangi bir isim verilebilir. Linux çekirdeğinde dilimli tahsisat sistemlerine genellikle "xxx_cachep" biçiminde 
+    isimler verilmektedir. İkinci parametre dilimlerin büyüklüğünü belirtmektedir. Üçüncü parametre ise hizalama değerini belirtir. 
+    Bu hizalama değerine 0 geçilirse default hizalama kullanılır. Varsayılan hizalama 32 bit sistemlerde 4 byte, 64 bit sistemlerde 
+    8 byte'tır. Fonksiyonun dördüncü parametresi yaratılacak dilimli tahsisat sistemine ilişkin bazı özelliklerin belirlenmesi 
     için kullanılmaktadır. Buradaki bayrakların önemli birkaç tanesi şöyledir:
 
     SLAB_NO_REAP: Fiziksel RAM'in dolması nedeniyle kullanılmayan dilimlerin otomatik olarak sisteme iade edileceği anlamına gelir. 
     Uç durumlarda bu bayrak kullanılabilir.
 
-    SLAB_HWCACHE_ALIGN: Bu bayrak özellikle SMP sistemlerinde işlemci ya da çekirdeklerin cache alanları için hizalama yapılmasının
+    SLAB_HWCACHE_ALIGN: Bu bayrak özellikle SMP sistemlerinde işlemci ya da çekirdeklerin cache alanları için hizalama yapılmasını
     sağlamaktadır. Yaratım sırasında bu parametreyi kullanabilirsiniz.
 
-    SLAB_CACHE_DMA: Bu parametre DMA alanında (DMA zone) tahsisat için kullanılmaktadır.
+    SLAB_CACHE_DMA: Bu parametre DMA alanında (DMA zone) tahsisat için kullanılmaktadır. Daha önceden de belirttiğimiz gibi bazı 
+    sistemlerde fiziksel RAM'ın ancak bazı bölglerine DMA tarafından erişilebilmektedir.
 
-    Fonksiyonun son parametresi dilim sistemi yaratıldığında çağrılacak callback fonksiyonu belirtmektedir. Bu parametre NULL 
-    geçilebilir. Fonksiyon başarı durumunda kmem_cache_create fonksiyonu kmem_cache türünden bir yapı nesnesinin adresiyle, 
-    başarısızlık durumunda NULL adrese geri dönmektedir. Başarısızlık durumunda aygıt sürücü fonksiyonunun -ENOMEM değeri ile 
-    geri döndürülmesi uygundur.
+    Fonksiyonun son parametresi dilim sistemi yaratıldığında çağrılacak callback fonksiyonu belirtmektedir. Bu parametre için 
+    girilecek fonksiyon her yeni dilim tahsis edildiğinde çağrılmaktadır. Böylece yeni bir dilim tahsis edileceği zaman bu fonksiyon
+    içerisinde o dilime ilkdeğer verilebilir. Bu fonksiyona tahsis edilen dilimin başlangıç adresi geçirilmektedir. Bu parametre 
+    NULL da geçilebilir. Bu durumda dilim tahsis edilirken herhangi bir fonksiyon çağrılmaz. kmem_cache_create fonksiyonu başarı 
+    durumunda struct kmem_cache türünden bir yapı nesnesinin adresiyle, başarısızlık durumunda NULL adrese geri dönmektedir. Başarısızlık 
+    durumunda aygıt sürücü fonksiyonunun -ENOMEM değeri ile geri döndürülmesi uygundur.
 
-    Örneğin:
+    Fonksiyon şöyle kullanılabilir:
 
     struct kmem_cache *g_pipe_cachep;
 
-    if ((g_pipe_cachep = kmem_cache_create("pipe-driver-cachep", sizeof(struct PIPE_INFO), 0, SLAB_HWCACHE_ALIGN, NULL)) == NULL) {
+    if ((g_pipe_cachep = kmem_cache_create("pipe_driver_cachep", sizeof(struct PIPE), 0, SLAB_HWCACHE_ALIGN, NULL)) == NULL) {
         ...
         return -ENOMEM;
     }
 
-    Yaratılmış olan bir dilim sisteminden tahsisatlar kmem_cache_alloc fonksiyonu ile yapılmaktadır. Fonksiyonun parametresi 
+    Yaratılmış olan bir dilim sisteminden tahsisatlar kmem_cache_alloc fonksiyonu ile yapılmaktadır. Fonksiyonun prototipi 
     şöyledir:
 
     #include <linux/slab.h>
 
-    void *kmem_cache_alloc(kmem_cache_t *cache, int flags);
+    void *kmem_cache_alloc(struct kmem_cache *cache, int flags);
 
-    Fonksiyonun birinci parametresi yaratılmış olan dilim sisteminin handle değerini, ikinci parametresi yaratım bayraklarını 
+    Fonksiyonun birinci parametresi yaratılmış olan dilim sisteminin handle değerini, ikinci parametresi ise yaratım bayraklarını 
     almaktadır. Bu bayraklar kmalloc fonksiyonundaki bayraklarla aynıdır. Yani örneğin bu parametreye GFP_KERNEL geçilebilir. 
-    Fonksiyon başarı durumunda tahsis edilen sanal adrese, başarısızlık durumunda NULL adrese geri dönmektedir. Bu durumda
+    Fonksiyon başarı durumunda tahsis edilen sanal adrese, başarısızlık durumunda NULL adrese geri dönmektedir. Başarısızlık durumunda
     aygıt sürücüdeki fonksiyonun -ENOMEM değeri ile geri döndürülmesi uygundur. Örneğin:
 
-    if ((g_pinfo = (struct QUEUE *)kmem_cache_alloc(g_pipe_cachep, GFP_KERNEL)) == NULL) {
+    if ((g_pipe = (struct PIPE *)kmem_cache_alloc(g_pipe_cachep, GFP_KERNEL)) == NULL) {
         ...
         return -ENOMEM;
     }
@@ -61237,258 +61312,88 @@ void exit_sys(const char *msg)
 
     #include <linux/slab.h>
 
-    void kmem_cache_free(kmem_cache_t *cache, const void *obj);
+    void kmem_cache_free(struct kmem_cache *cache, const void *obj);
 
     Fonksiyonun birinci parametresi dilim sisteminin handle değerini, ikincisi parametresi ise serbest bırakılacak dilimin 
     adresini belirtmektedir. Örneğin:
 
-    kmem_cache_free(g_pipe_cachep, g_queue);
+    kmem_cache_free(g_pipe_cachep, g_pipe);
 
     kmem_cache_create fonksiyonu ile yaratılmış olan dilim sistemi kmem_cache_destroy fonksiyonu ile serbest bırakılabilir. 
     Fonksiyonun prototipi şöyledir.
 
     #include <linux/slab.h>
 
-    int kmem_cache_destroy(kmem_cache_t *cache);
+    int kmem_cache_destroy(struct kmem_cache *cache);
 
     Fonksiyon dilim sisteminin handle değerini parametre olarak alır. Başarı durumunda 0 değerine, başarısızlık durumunda negatif
     errno değerine geri döner. Örneğin:
 
-    kmem_cache_destroy(g_pipe_cachep);
+    kmem_cache_destroy(g_pipe);
 
     Pekiyi kmalloc yerine yeni bir dilimli tahsisat sisteminin yaratılması tercih edilmeli midir? Yukarıda da belirttiğimiz
-    gibi kmalloc fonksiyonu da aslında önceden yaratılmış belli uzunluktaki dilim sistemlerinden tahsisat yapmaktadır. 
-    Ancak "çok sayıda aynı büyüklükte alanların" tahsis edildiği durumlarda programcının talep ettiği uzunlukta kendi dilim
-    sistemini yaratması tavsiye edilebilir. Bunun dışında genel amaçlı kmalloc fonksiyonu tercih edilebilir. Örneğin boru 
-    aygıt sürücümüzde yeni bir dilim sisteminin yaratılmasına hiç gerek yoktur. Ancak bir aşağıda örnek vermek amacıyla 
-    boru aygıt sürücüsünde yeni bir dilim sistemi yarattık. Örneği inceleyiniz.
+    gibi kmalloc fonksiyonu da aslında önceden yaratılmış belli uzunluktaki dilim sistemlerinden tahsisat yapmaktadır. Ancak 
+    "çok sayıda aynı büyüklükte alanların" tahsis edildiği durumlarda programcının belli uzunlukta olan kendi dilim sistemini 
+    yaratması, bunun dışındaki durumlarda genel amaçlı kmalloc fonksiyonu tavsiye edilmektedir.
+
+    Tabii kmalloc yerine yeni bir dilimli tahsisat sistemi yaratmanın anlamlı olması için çok sayıda aynı büyüklükte tahsisatın
+    yapılıyor olması gerekir. Tek bir tahsisat için ya da birkaç tahsisat için yeni bir dilimli tahsisat sistemi yaratmaya hiç 
+    gerek yoktur. Doğrudan kmalloc fonksiyonu kullanılabilir.
+
+    Örneğin boru aygıt sürücümüzde yeni bir dilim sisteminin yaratılmasına hiç gerek yoktur. Çünkü zaten boru aygıt sürücüsünde 
+    tek bir struct PIPE yapı nesnesi yaratılmaktadır. Ancak biz aşağıdaki bu dilimli tahsisat sistemlerinin nasıl kullanıldığına 
+    bir örnek vermek için bu struct PIPE nesnesini kendi yarattığımız dilimli tahsisat sisteminden tahsis ediyoruz.
 ---------------------------------------------------------------------------------------------------------------------------*/
 
-/* pipe-driver.c */
+/* pwriter.c */
 
-#include <linux/module.h>
-#include <linux/kernel.h>
-#include <linux/fs.h>
-#include <linux/cdev.h>
-#include <linux/uaccess.h>
-#include <linux/spinlock.h>
-#include <linux/wait.h>
-#include <linux/slab.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <fcntl.h>
+#include <unistd.h>
 
-#define MIN(a, b)		((a) < (b) ? (a) : (b))
+#define BUFFER_SIZE		8192
 
-#define PIPE_BUFSIZE		10
+void exit_sys(const char *msg);
 
-MODULE_LICENSE("GPL");
-MODULE_AUTHOR("Kaan Aslan");
-MODULE_DESCRIPTION("Pipe Driver");
-
-static int generic_open(struct inode *inodep, struct file *filp);
-static int generic_release(struct inode *inodep, struct file *filp);
-static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off);
-static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off);
-
-static dev_t g_dev;
-static struct cdev *g_cdev;
-static struct file_operations g_fops = {
-	.owner = THIS_MODULE,
-	.open = generic_open,
-	.read = generic_read,
-	.write = generic_write,
-	.release = generic_release
-};
-
-static wait_queue_head_t g_wqread;
-static wait_queue_head_t g_wqwrite;
-static DEFINE_SEMAPHORE(g_sem);
-
-struct PIPE_INFO {
-	unsigned char pipebuf[PIPE_BUFSIZE];
-	size_t head;
-	size_t tail;
-	size_t count;
-};
-
-static struct PIPE_INFO *g_pinfo;
-struct kmem_cache *g_pipe_cachep;
-
-static int __init generic_init(void)
+int main(void)
 {
-	int result;
+	int fd;
+	char buf[BUFFER_SIZE];
+	char *str;
+	ssize_t result;
 
-	printk(KERN_INFO "pipe-driver module initialization...\n");
+	if ((fd = open("pipe-driver", O_WRONLY)) == -1)
+		exit_sys("open");
 
-	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "pipe-driver")) < 0) {
-		printk(KERN_INFO "cannot alloc char driver!...\n");
-		return result;
+	for (;;) {
+		printf("Enter text:");
+		fflush(stdout);
+		if (fgets(buf, BUFFER_SIZE, stdin) == NULL)
+			continue;
+		if ((str = strchr(buf, '\n')) != NULL)
+			*str = '\0';
+		if (!strcmp(buf, "quit"))
+			break;
+		if ((result = write(fd, buf, strlen(buf))) == -1)
+			exit_sys("write");
+
+		printf("%jd bytes written...\n", (intmax_t)result);
 	}
 
-	if ((g_cdev = cdev_alloc()) == NULL) {
-		printk(KERN_INFO "cannot allocate cdev!...\n");
-		return -ENOMEM;
-	}
-
-	g_cdev->owner = THIS_MODULE;
-	g_cdev->ops = &g_fops;
-
-	if ((result = cdev_add(g_cdev, g_dev, 1)) < 0) {
-		unregister_chrdev_region(g_dev, 1);
-		printk(KERN_ERR "cannot add device!...\n");
-		return result;
-	}
-
-	if ((g_pipe_cachep = kmem_cache_create("pipe-driver-cachep", sizeof(struct PIPE_INFO), 0, SLAB_HWCACHE_ALIGN,  NULL)) == NULL) {
-		cdev_del(g_cdev);
-		unregister_chrdev_region(g_dev, 1);
-		return -ENOMEM;
-	}
-
-	if ((g_pinfo = (struct PIPE_INFO *)kmem_cache_alloc(g_pipe_cachep, GFP_KERNEL)) == NULL) {
-		kmem_cache_destroy(g_pipe_cachep);
-		cdev_del(g_cdev);
-		unregister_chrdev_region(g_dev, 1);
-		return -ENOMEM;
-	}
-
-	init_waitqueue_head(&g_wqread);
-	init_waitqueue_head(&g_wqwrite);
+	close(fd);
 
 	return 0;
 }
 
-static void __exit generic_exit(void)
+void exit_sys(const char *msg)
 {
-	kmem_cache_free(g_pipe_cachep, g_pinfo);
-	kmem_cache_destroy(g_pipe_cachep);
+	perror(msg);
 
-	cdev_del(g_cdev);
-	unregister_chrdev_region(g_dev, 1);
-
-	printk(KERN_INFO "pipe-driver module exit...\n");
+	exit(EXIT_FAILURE);
 }
-
-static int generic_open(struct inode *inodep, struct file *filp)
-{
-	printk(KERN_INFO "pipe-driver opened...\n");
-
-	return 0;
-}
-
-static int generic_release(struct inode *inodep, struct file *filp)
-{
-	printk(KERN_INFO "pipe-driver closed...\n");
-
-	return 0;
-}
-
-static ssize_t generic_read(struct file *filp, char *buf, size_t size, loff_t *off)
-{
-	size_t esize, size1, size2;
-
-	if (size == 0)
-		return 0;
-
-	if (down_interruptible(&g_sem))
-		return -ERESTARTSYS;
-
-	while (g_pinfo->count == 0) {
-		up(&g_sem);
-
-		if (filp->f_flags & O_NONBLOCK)
-			return -EAGAIN;
-
-		if (wait_event_interruptible(g_wqread, g_pinfo->count > 0))
-			return -ERESTARTSYS;
-
-		if (down_interruptible(&g_sem))
-			return -ERESTARTSYS;
-	}
-
-	esize = MIN(g_pinfo->count, size);
-
-	if (g_pinfo->tail <= g_pinfo->head)
-		size1 = MIN(PIPE_BUFSIZE - g_pinfo->head, esize);
-	else
-		size1 = esize;
-
-	size2 = esize - size1;
-
-	if (copy_to_user(buf, g_pinfo->pipebuf + g_pinfo->head, size1) != 0) {
-		up(&g_sem);
-		return -EFAULT;
-	}
-
-	if (size2 != 0)
-		if (copy_to_user(buf + size1, g_pinfo->pipebuf, size2) != 0) {
-			up(&g_sem);
-			return -EFAULT;
-		}
-
-	g_pinfo->head = (g_pinfo->head + esize) % PIPE_BUFSIZE;
-	g_pinfo->count -= esize;
-
-	up(&g_sem);
-
-	wake_up_interruptible_all(&g_wqwrite);
-
-	return esize;
-}
-
-static ssize_t generic_write(struct file *filp, const char *buf, size_t size, loff_t *off)
-{
-	size_t esize, size1, size2;
-
-	if (size > PIPE_BUFSIZE)
-		size = PIPE_BUFSIZE;
-
-	if (down_interruptible(&g_sem))
-		return -ERESTARTSYS;
-
-	while (PIPE_BUFSIZE - g_pinfo->count < size) {
-		up(&g_sem);
-
-		if (filp->f_flags & O_NONBLOCK)
-			return -EAGAIN;
-
-		if (wait_event_interruptible(g_wqwrite, PIPE_BUFSIZE - g_pinfo->count >= size))
-			return -ERESTARTSYS;
-
-		if (down_interruptible(&g_sem))
-			return -ERESTARTSYS;
-	}
-
-	esize = MIN(PIPE_BUFSIZE - g_pinfo->count, size);
-
-	if (g_pinfo->tail >= g_pinfo->head)
-		size1 = MIN(PIPE_BUFSIZE - g_pinfo->tail, esize);
-	else
-		size1 = esize;
-
-	size2 = esize - size1;
-
-	if (copy_from_user(g_pinfo->pipebuf + g_pinfo->tail, buf, size1) != 0) {
-		up(&g_sem);
-		return -EFAULT;
-	}
-
-	if (size2 != 0)
-		if (copy_from_user(g_pinfo->pipebuf, buf + size1, size2) != 0) {
-			up(&g_sem);
-			return -EFAULT;
-		}
-
-	g_pinfo->tail = (g_pinfo->tail + esize) % PIPE_BUFSIZE;
-	g_pinfo->count += esize;
-
-	up(&g_sem);
-
-	wake_up_interruptible_all(&g_wqread);
-
-	return esize;
-}
-
-module_init(generic_init);
-module_exit(generic_exit);
 
 # Makefile
 
@@ -61520,24 +61425,25 @@ module=$1
 /sbin/rmmod ./$module.ko || exit 1
 rm -f $module
 
-/* prog1.c */
+/* pwriter.c */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 #include <fcntl.h>
 #include <unistd.h>
 
-#define PIPE_SIZE		4096
+#define BUFFER_SIZE		8192
 
 void exit_sys(const char *msg);
 
 int main(void)
 {
 	int fd;
-	char buf[PIPE_SIZE];
+	char buf[BUFFER_SIZE];
 	char *str;
-	size_t len;
+	ssize_t result;
 
 	if ((fd = open("pipe-driver", O_WRONLY)) == -1)
 		exit_sys("open");
@@ -61545,16 +61451,16 @@ int main(void)
 	for (;;) {
 		printf("Enter text:");
 		fflush(stdout);
-		fgets(buf, PIPE_SIZE, stdin);
+		if (fgets(buf, BUFFER_SIZE, stdin) == NULL)
+			continue;
 		if ((str = strchr(buf, '\n')) != NULL)
 			*str = '\0';
 		if (!strcmp(buf, "quit"))
 			break;
-		len = strlen(buf);
-		if (write(fd, buf, len) == -1)
+		if ((result = write(fd, buf, strlen(buf))) == -1)
 			exit_sys("write");
 
-		printf("%lu bytes written...\n", (unsigned long)len);
+		printf("%jd bytes written...\n", (intmax_t)result);
 	}
 
 	close(fd);
@@ -61569,45 +61475,50 @@ void exit_sys(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
-/* prog2.c */
+/* preader.c */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
 
-#define BUFFER_SIZE 4096
+#define BUFFER_SIZE		8192
 
 void exit_sys(const char *msg);
 
 int main(void)
 {
-	int pdriver;
-	char buf[BUFFER_SIZE + 1];
-	int size;
+	int fd;
+	char buf[BUFFER_SIZE];
+	int n;
 	ssize_t result;
 
-	if ((pdriver = open("pipe-driver", O_RDONLY)) == -1)
+	if ((fd = open("pipe-driver", O_RDONLY)) == -1)
 		exit_sys("open");
 
 	for (;;) {
-		printf("Size:");
-		scanf("%d", &size);
-		if (size > BUFFER_SIZE) {
-			printf("size is very long!...\n");
+		printf("Number of bytes to read? ");
+		scanf("%d", &n);
+		if (n == 0)
+			break;
+		if ((result = read(fd, buf, n)) == -1) {
+			if (errno != EAGAIN)
+				exit_sys("read");
+			printf("pipe is empty, let's do something else...\n");
 			continue;
 		}
-		if (size == 0)
+		if (result == 0) {
+			putchar('\n');
 			break;
-		if ((result = read(pdriver, buf, size)) == -1)
-			exit_sys("read");
+		}
 		buf[result] = '\0';
 		printf("%jd bytes read: %s\n", (intmax_t)result, buf);
 	}
 
-	close(pdriver);
+	close(fd);
 
 	return 0;
 }
@@ -61620,10 +61531,12 @@ void exit_sys(const char *msg)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------
-    Linux'un dosya sistemi için önemli üç yapı vardır. Bunlar file, inode ve dentry yapılarıdır. file isimli yapıya biz "dosya 
+    Linux'un dosya sistemi için önemli üç yapı vardır. Bunlar file, dentry ve inode yapılarıdır. file isimli yapıya biz "dosya 
     nesnesi" demiştik. Anımsanacağı gibi ne zaman bir dosya açılsa dosya betimleyici tablosunda dosya betimleyicisi denilen bir 
-    indeks bu dosya nesnesini göstermektedir. Biz user mode'daki dosya işlemlerinde bu konuyu zaten açıklamıştık. Ancak kısaca 
-    bir anımsatma yapalım:
+    indeks bu dosya nesnesini göstermektedir. Dosya betimleyici tablosuna (file descriptor table) prosesi temsil eden task_struct 
+    yapısından erişilmektedir.
+
+    task_struct ------> dosya betimleyici tablosu
 
     Dosya Betimleyici Tablosu
     --------------------------
@@ -61634,7 +61547,11 @@ void exit_sys(const char *msg)
     3 ----> dosya nesnesi (struct file)
     ...
 
-    Dosya nesnesi "açık dosyaların bilgilerini" tutmaktadır. Aşağıda file yapısının mevcut çekirdeklerdeki içeriğini görüyorsunuz:
+    Dosya nesnesi "açık dosyaların bilgilerini" tutmaktadır. Ne zaman sys_open sistem fonksiyonu çağrılsa sys_open sistem 
+    fonksiyonu yeni bir dosya nesnesini (struct file) yaratır, onun adresini dosya betimleyici tablosunda boş bir slota yazar. 
+    Bu slotun indeks numarasını dosya betimleyicisi olarak geri döndürür. Aynı dosya ikinci kez açılsa bile yeni bir dosya nesnesi 
+    (struct file nesnesi) yaratılmaktadır. Daha önce biz bu struct file yapısının içeriğini görmüştük. Bunu yeniden anımsatmak 
+    istiyoruz:
 
     struct file {
         union {
@@ -61678,29 +61595,44 @@ void exit_sys(const char *msg)
     } __randomize_layout
     __attribute__((aligned(4)));	/* lest something weird decides that 2 is OK */
 
-    inode yapısı dosyanın diskteki bilgilerini tutmaktadır. Yani aynı dosya üç kez açılsa çekirdek üç farklı file nesnesi 
+    Eskiden dosya nesnesi dentry nesnesini, dentry nesnesi de inode nesnesini gösteriyordu. Yani durum şöyleydir:
+
+    File  ──▶ dentry ──▶ inode
+
+    Daha sonraları dosya nesnesinin içerisinden inode nesnesine daha hızlı erişebilmek için dosya nesnesinin içerisine (yani
+    file yapısının içerisine) doğrudan bir inode göstericisi daha eklenmiştir. Mevcut durum şöyledir:
+
+    File  ──▶ dentry ──▶ inode
+    ╰──────────────────────▶
+
+    inode yapısı dosyanın diskteki bilgilerini tutmaktadır. Yani örneğin aynı dosya üç kez açılsa çekirdek üç farklı file nesnesi 
     oluşturmaktadır. Ancak bu dosya diskte bir tane olduğuna göre çekirdek bunun için toplamda bir tane inode yapısı oluşturacaktır.
-    file yapısının içerisinde dosyanın diskteki bilgilerine ilişkin bu inode yapısına f_inode elemanı yoluyla erişilebilmektedir. 
-    Daha önceden de gördüğümüz gibi dosya isimleri diskte dizin girişlerinde tutulmaktadır. Örneğin "/home/kaan/Study/test.c"
-    isimli dosyanın i-node elemanına erişmek için işletim sistemi sırasıyla "/home", "/home/kaan", "/home/kaan/Study" ve 
-    "/home/kaan/Study/test.txt" dizin girişlerini taramak zorundadır. Bu işleme işletim sistemlerinde "yol ifadelerinin 
-    çözümlenmesi (pathname resolution)" denilmektedir. Aynı dosyaların tekrar tekrar açılması durumunda bu işlemlerin yeniden 
-    yapılması oldukça zahmetlidir. Dolayısıyla bulunan dizin girişlerinin bir yapı ile temsil edilerek bir cache sisteminde 
-    saklanması uygundur. İşte Linux çekirdeğinde dizin girişleri "dentry" isimli bir yapıyla temsil edilmektedir.
+    Mevcut çekirdeklerde file yapısının içerisinde dosyanın diskteki bilgilerine ilişkin bu inode yapısına f_inode elemanı yoluyla 
+    erişilebilmektedir. Linux işletim sistemi aynı zamanda diskte son erişilen dosyalara ilişkin i-node elemanlarını inode yapısı 
+    biçiminde bir cache sisteminde de tutmaktadır. Buna "inode cache" denilmektedir. Örneğin biz "test.txt" isimli bir dosyayı 
+    sys_open sistem fonksiyonuyla açmış olalım. İşletim sistemi bunun için bir dosya nesnesi oluşturacak ve bu dosyay ilişkin 
+    inode nesnesi zaten inode cache içerisinde varsa onu cache'ten alıp kullanacaktır. Eğer bu dosyaya ilişkin inode elemanı 
+    "inode cache" içerisinde yoksa diskten bulunup inode nesnesi çekirdek alanında oluşturulacaktır. İşte bu dosya kapatıldığında 
+    işletim sistemi inode yapısını çekirdek alanından atmaz "inode cache" içerisine yazar. Tabii bu "inode cache" içerisinde 
+    belli sayıda inode elemanı tutulmaktadır. Bu cache sistemi dolduğuna LRU (Least Recently Used) algoritmasına göre son zamanlarda 
+    en az kullanılan inode elemanı cache'ten atılmaktadır.
 
-    Linux sistemleri yukarıda açıkladığımız "inode" ve "dentry" nesnelerini bir cache sisteminde tutmaktadır. Böylece bir dosya
-    yeniden açıldığında onun bilgilerine diske hiç başvurmadan hızlı bir biçimde erişilmektedir. Linux dünyasında bu cache 
-    sistemlerine "inode cache" ve "dentry cache" denilmektedir. file, inode ve denrty nesneleri için bu yapıların büyüklüğünde 
-    ayrı dilimli tahsisat sistemleri oluşturulmuştur.
+    Linux çekirdeğinde diskte dosyanın i-node elemanına erişmekte kullanılan dizin girişleri dentry isimli bir yapıyla temsil 
+    edilmiştir. inode yapısı dosyanın diskteki bilgilerini tutarken dentry yapısı dosyanın dizin girişi bilgilerini tutmaktadır. 
+    Yukarıda da belirttiğimiz gibi dentry nesnesinin içerisinde inode nesnesinin adresi tutulmaktadır. Örneğin farklı dentry 
+    nesneleri aynı inode nesnesini gösteriyor olabilir. Bu tür durumlar "hard link" yoluyla oluşturulmaktadır. Açılmış dosyanın 
+    hangi dizinlerin içerisinde bulunduğu bilgisi dentry nesnelerinde tutulmaktadır. Linux işletim sistemi nasıl inode elemanlarını
+    bir cache sisteminde tutuyorsa dentry elemanlarını da ismine "dentry cache" denilen bir cache sistemi içerisinde tutmaktadır. 
+    Bir dosya sys_open sistem fonksiyonu ile açıldığını varsayalım. Dosyaya ilişkin dizin giriş bilgilerinin elde edilmesi için 
+    ismine "pathname lookup" denilen bir işlem yapılmaktadır. Örneğin biz "/home/kaan/Study/test.txt" dosyasını açmak isteyelim. 
+    İşletim sistemi bunun için önce "/home" dizin girişini sonra "kaan" dizin girişini, sonra "Study" dizin girişini sonra da 
+    "test.txt" dizin girişini bulacaktır. İşte tüm bu dizin girişleri aynı zamanda "dentry cache" içerisinde saklanmaktadır. 
+    Böylece bu dosyaya bir daha erişilmek istendiğinde doğrudan bu dizin girişi bilgileri "dentry cache" içerisinden elde 
+    edilebilmektedir. Linux işletim sistemi her zaman eğer bir dosyanın dentry nesnesi çekirdek içerisindeyse onun tüm yol ifadesine
+    ilişkin dentry nesnelerini de çekirdek içerisinde tutmaktadır. "dentry cache" sistemi de LRU prensibiyle çalışan bir cache 
+    sistemidir.
 
-    Pekiyi yukarıdaki nesneler arasındaki ilişki nasıldır? Dosya sistemine dosya betimleyicisi yoluyla erişildiğini anımsayınız. 
-    Dosya betimleyicisinden dosya nesnesi (file nesnesi) elde edilmektedir. Dosya nesnesinin içerisinde o dosyanın dizin 
-    girişi bilgilerini tutan dentry nesnesinin adresi tutulur. Bu nesnenin içerisinde de inode nesnesinin adresi tutulmaktadır:
-
-    file ---> dentry ---> inode
-
-    Ancak 2.6 çekirdekleriyle birlikte file yapısından inode bilgilerine kolay erişebilmek için ayrıca file yapısı içerisinde
-    doğrudan inode nesnesinin adresi de tutulmaya başlanmıştır.
+    <BURADA KALDIK>
 
     Bir aygıt sürücü üzerinde dosya işlemi yapıldığında çekirdek aygıt sürücü fonksiyonlarına dosya nesnesinin adresini 
     (filp göstericisi) geçirmektedir. Yalnızca aygıt sürücü open fonksiyonuyla açılırken ve close fonksiyonu ile kapatılırken
