@@ -29,7 +29,7 @@
 
     - Raspberry Pi 5 alınacaksa soğutucu ya da soğutuculu kılıf da alınmalı. Raspberry Pi 3 ve 4 için soğutucu alınmayabilir.
 
-    - Raspberry Pi için Micso SD Kart: 64 GB yüksek hızlı micro SD kart tavsiye ediyoruz. 32 GB de olabilir. Ancak 32 GB'den 
+    - Raspberry Pi için Micro SD Kart: 64 GB yüksek hızlı micro SD kart tavsiye ediyoruz. 32 GB de olabilir. Ancak 32 GB'den 
     düşüğü tavsiye etmiyoruz.
 
     - Raspberry Pi 4 ve Raspberry Pi 5 için "Micro HDMI -> HDMI Kablosu", Raspberry Pi 3 için "HDMI -> HDMI" Kablosu.
@@ -271,7 +271,7 @@
     gerçekleştirilmektedir:
 
     MOV EAX, <a'nın adresi>
-    ADD EAX, <b'nin adrei>
+    ADD EAX, <b'nin adresi>
     MOV <c'bin adresi>, EAX
 
     Burada EAX işlemcinin bir yazmacıdır. ADD makine komutu bu yazmaçtaki değer ile bellekteki b'yi toplamakta ve sonucu yine
@@ -2325,7 +2325,7 @@
 
     Burada C kurallarına göre bu dizinin ilk elemanı 1 diğer tüm elemanları 0 olmalıdır. Eğer derleyici bu sembolü ".bss" 
     bölümüne yerleştirirse bu bölüm yükleyici tarafından sıfırlanacağı için 1 değeri kaybolacaktır. Eğer derleyici bu sembolü 
-    ".data" bölümüne yerleştirse amaç dosyada 999999 tane 0 olan byte bulunacaktır. Aslında burada ne olacağını dosyaysı derleyip 
+    ".data" bölümüne yerleştirse amaç dosyada 999999 tane 0 olan byte bulunacaktır. Aslında burada ne olacağını dosyayı derleyip 
     amaç dosyanın uzunluğuna bakarak hemen anlayabilirsiniz. UNIX/Linux sistemlerinde derleyiciler tipik olarak böylesi bir 
     durumda ellerinden bir şey gelmediği için sembolü ".data" bölümüne yerleştirip amaç dosyayı mecburen büyütmektedir.
 -----------------------------------------------------------------------------------------------------------------------------*/
@@ -3088,7 +3088,7 @@
     isminin (yol ifadesinin değil) string tablosundaki (".strtab") indeks numarası belirtilmektedir.
 
     DT_SONAME: Bu tag'ı d_val elemanı izlemektedir. Bu tag dinamik kütüphanelerde bulunmaktadır. Burada dinamik kütüphanenin "so 
-    ismininin" bulunduğu string tablosundaki (".strtab" bölümündeki) indeks belirtilmektedir.
+    isminin" bulunduğu string tablosundaki (".strtab" bölümündeki) indeks belirtilmektedir.
 
     Buradaki pek çok tag önemli bilgiler içermektedir. Bu tag'lar hakkında bilgileri ELF formatına başvurarak edinebilirsiniz.
     İzleyen paragraflarda bazı bilgiler için bu tag'lara referans edeceğiz.
@@ -3215,7 +3215,7 @@
     hangi dizinlerde olduğunu belirtmektedir. Bu konu izleyen paragraflarda ele alınacaktır.
 
     5) Nihayet dinamik bağlayıcı dinamik kütüphaneleri sırasıyla "/lib", /usr/lib" dizinlerinde de aramaktadır. 64 bit Linux 
-    sistemlerininin bir bölümünde 64 bit dinamik kütüphaneler için "/lib64" ve "/usr/lib64" dizinlerine de bakılabilmektedir.
+    sistemlerinin bir bölümünde 64 bit dinamik kütüphaneler için "/lib64" ve "/usr/lib64" dizinlerine de bakılabilmektedir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -3602,9 +3602,9 @@
     Örneğin dinamik kütüphanede "bar" isimli bir fonksiyon vardır. Bu fonksiyon bu dinamik kütüphanenin kendi içerisinden başka 
     fonksiyonlar tarafından kullanılıyor olabilir. Ancak bu fonksiyonun dinamik kütüphanenin dışından kullanılması istenmeyebilir.
     (Bunun çeşitli nedenleri olabilir. Örneğin kapsülleme sağlamak için, dışarıdaki sembol çakışmalarını ortadan kaldırmak için vs.) 
-    İşte bunu sağlamak için dışarıdan kuıllanılmasını istemediğiniz kütüphane fonksiyonlarını static olarak tanımlamalısınız. Böylece
+    İşte bunu sağlamak için dışarıdan kullanılmasını istemediğiniz kütüphane fonksiyonlarını static olarak tanımlamalısınız. Böylece
     bu fonksiyonlar dışarıdan kullanılmak istendiğinde bağlama aşamasında error oluşacaktır. Aynı işlem gcc ve clang derleyicilerine 
-    özgü "__attribute__((...))" eklentisiyle de yaılabilmektedir. "__attribute__((...))" eklentisi pek çok seçeneğe sahip platform 
+    özgü "__attribute__((...))" eklentisiyle de yapılabilmektedir. "__attribute__((...))" eklentisi pek çok seçeneğe sahip platform 
     spesifik bazı işlemlere yol açmaktadır. Bu eklentinin seçeneklerini gcc dokümanlarından elde edebilirsiniz. Bizim bu amaçla 
     kullanacağımız "__attribute__((...))" seçeneği "visibility" isimli seçenektir.
 
@@ -3967,7 +3967,7 @@
     engellenmezse bir program başka bir programın bellek alanını bozabilir. Bu bozulma da o programın hatalı çalışmasına ya da 
     çökmesine yol açabilir. Program başka bir programın bellek alanını bozmasa bile oradaki programlar üzerinde casusluk 
     faaliyetleri yürütebilir. Buna ek olarak bazı makine komutları tamamen sistemin çökmesine de yol açabilmektedir. Bu makine 
-    komutlarını kullanan proramlar tüm sistemi çökertebileceği için bu durumun da önüne geçilmesi gerekir. İşte işlemcilerin
+    komutlarını kullanan programlar tüm sistemi çökertebileceği için bu durumun da önüne geçilmesi gerekir. İşte işlemcilerin
     koruma mekanizması bu tür ihlallerin birinci elden işlemci tarafından tespit edilip engellenmesini sağlamaktadır.
 
     İşlemcilerin koruma mekanizmasının iki yönü vardır:
@@ -4412,7 +4412,7 @@
     Görüldüğü gibi aslında teorik sanal bellek 16 exabyte olduğu halde 64 bit Linux sistemleri yalnızca 256 TB sanal belleğe
     izin vermektedir.
 
-    Proseslerin sayfa tablolarında kernel alanınının içeriği hep aynıdır. Yani context switch yapılsa bile kernel kodları hep aynı 
+    Proseslerin sayfa tablolarında kernel alanının içeriği hep aynıdır. Yani context switch yapılsa bile kernel kodları hep aynı 
     sanal adreslerde bulunmaktadır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -4466,7 +4466,7 @@ int main(void)
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Linux sistemlerinde free komutu (bu sistemlerde komutların çok büyük çoğunluğu aslında birer programdır) çalıştığımız sistemdeki
-    fiziksel RAM ve swap alanaı hakkında bilgi vermektedir. Örneğin çalıştığımız sanal makinede bu komutu uygulayalım:
+    fiziksel RAM ve swap alanı hakkında bilgi vermektedir. Örneğin çalıştığımız sanal makinede bu komutu uygulayalım:
 
     $ free
                 total        used        free      shared  buff/cache   available
@@ -4596,8 +4596,8 @@ int main(void)
     $ sudo swapoff swapfile_ext
 
     Tabii eğer sisteminiz zaten bir swap dosyası kullanıyorsa bu swap dosyasını da büyütebilirsiniz. Ancak swap dosyalarının 
-    başlık kısımlarında onların büyüklüğü yazdığı için onu büyütme işlemindne sonra yeninden mkswap işlemini yapmalısınız. Örneğin
-    elimizde zaten "/swapfile" isimli 2GB'lik bir swap dosyası bulunuyor olsun. Biz de onu 3GB'ye çıkartmak isteleim. Önce onu silip 
+    başlık kısımlarında onların büyüklüğü yazdığı için onu büyütme işleminden sonra yeninden mkswap işlemini yapmalısınız. Örneğin
+    elimizde zaten "/swapfile" isimli 2GB'lik bir swap dosyası bulunuyor olsun. Biz de onu 3GB'ye çıkartmak isteyelim. Önce onu silip 
     aynı isimli 3GB'lik yeni bir dosya oluşturabiliriz. Ya da aşağıdaki gibi doğrudan ekleme de yapabiliriz:
 
     $ sudo swapoff /swapfile
@@ -4939,7 +4939,7 @@ int main(void)
 /*-----------------------------------------------------------------------------------------------------------------------------
     Linux çekirdeğinin kodlarına dokunmadan onunla ilgili bazı davranış değişikliklerinin yapılması üç biçimde sağlanabilmektedir:
 
-    1) Çekirdek derlenirken bazı konfigürasyon parametrelerine bakılmaktadır. O halde biz çekirdei derlemeden önce çekirdek konfigürasyon
+    1) Çekirdek derlenirken bazı konfigürasyon parametrelerine bakılmaktadır. O halde biz çekirdeği derlemeden önce çekirdek konfigürasyon
     parametreleri üzerinde değişiklik yapıp çekirdeği derlersek bir davranış değişikliği oluşturabiliriz.
 
     2) Çekirdek derlendikten sonra kendini kullanıma hazır hale getirirken (initialize ederken) ismine "çekirdek komut satırı 
@@ -4961,7 +4961,7 @@ int main(void)
     console=serial0,115200 console=tty1 root=PARTUUID=382d6f16-02 rootfstype=ext4 fsck.repair=yes rootwait quiet splash 
     plymouth.ignore-serial-consoles cfg80211.ieee80211_regdom=TR
 
-    Linux çekirdeğinin onlarca farklı komut satırı parametresi vardır. Bunların çoğu spesifik konulara ilşkindir ve ancak çekirdeğin 
+    Linux çekirdeğinin onlarca farklı komut satırı parametresi vardır. Bunların çoğu spesifik konulara ilişkindir ve ancak çekirdeğin 
     yapısını iyi bilen kişler tarafından anlamlandırılabilir. Tabii bazı parametrelerin anlamları herkes tarafından anlaşılacak kadar 
     açıktır. Çekirdek parametrelerinin dokümantasyonuna aşağıdaki bağlantıdan erişebilirsiniz:
 
@@ -6302,7 +6302,7 @@ int main(int argc, char *argv[])
     - "bdinfo (board info)" komutu genel olarak kullandığımız kart hakkında donanımsal bilgileri bize vermektedir.
 
     - U-Boot'ta önemli bir kavram "çevre değişkeni (environment variable)" kavramıdır. Tabii buradaki çevre değişkeni kavramının
-    Linux sistemlerindeki çevre değişkenei kavramıyla bir ilgisiyi yoktur. Buradaki çevre değişkeni birtakım ayarlamalarda 
+    Linux sistemlerindeki çevre değişkeni kavramıyla bir ilgisiyi yoktur. Buradaki çevre değişkeni birtakım ayarlamalarda 
     kullanılan değişkenlerdir. Ancak uygulamacı da çevre değişkeni yaratabilmektedir. Bir çevre değişkeni bir sisim ve ona karşı
     gelen bir yazıdan oluşmaktadır.
 
@@ -7196,7 +7196,7 @@ int main(int argc, char *argv[])
     programların da uygun yerlerde bulunuyor olması gerekir. Yine birtakım konfigürasyon dosyalarının da bulundurulması gerekebilmektedir. 
     Örneğin bazı programlar bazı dinamik kütüphaneleri kullanıyor olabilir. Bu durumda bu dinamik kütüphane dosyalarının da 
     uygun yerlere konuşlandırılması gerekmektedir. İşte biz "kök dosya sisteminin (root file system)" oluşturulması demekle 
-    tüm bu hazırlıkların yapılmasını kast etmekteyiz. Şüphesiz hedef diske kurulacak olan tüm programların hedef makine için 
+    tüm bu hazırlıkların yapılmasını kastetmekteyiz. Şüphesiz hedef diske kurulacak olan tüm programların hedef makine için 
     "çapraz derleyicilerle" derlenmiş olması gerekir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -7594,7 +7594,7 @@ int main(int argc, char *argv[])
 /*-----------------------------------------------------------------------------------------------------------------------------
     Biz yukarıdaki örnekte BusyBox ile minimalist bir kök dosya sistemi oluşturduk. Oluşturduğumuz kök dosya sisteminde bir masaüstü
     Linux sisteminde hazır kurulu olarak bulunan pek araç yoktur. Örneğin sistemimizde bir "paket yönetici (package manager)" 
-    proram da yoktur. Aygıtımız henüz Internet'e de girememektedir. Çünkü henüz Linux'ta bir ağ yapılandırması da yapmadık. 
+    program da yoktur. Aygıtımız henüz Internet'e de girememektedir. Çünkü henüz Linux'ta bir ağ yapılandırması da yapmadık. 
     Dolayısıyla örneğin aygıtımıza "ssh" ile de henüz bağlanamayız. Çünkü ne kök dosya sistemimizde ağ konfigürasyonu yapılmıştır 
     ne de "ssh sunucu" programı kök dosya sisteminde yüklü durumdadır. Bu araçların kurulması ve işletilmesi aslında başka bir 
     konudur. Biz bu konu üzerinde de izleyen bölümlerde duracağız.
@@ -7647,7 +7647,7 @@ int main(int argc, char *argv[])
     komutu da eklendi. Bu komut uygulandığında default olarak "install" dizini oluşturulup tıpkı BusyBox'ta olduğu gibi 
     sembolik bağlantı dosyaları ilgili dizinlerin içerisine yerleştirilmektedir.
 
-    Toybox'taki init sistemi de BusyBox'takine çok benzemektedir. Yani yukarıda BusyBox için açıkladığımız diğer adımşar tamamen
+    Toybox'taki init sistemi de BusyBox'takine çok benzemektedir. Yani yukarıda BusyBox için açıkladığımız diğer adımlar tamamen
     toybox için de geçerlidir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -7661,7 +7661,7 @@ int main(int argc, char *argv[])
 
     debootstrap programının pek çok komut satırı argümanı vardır. Biz burada en önemli birkaç argüman üzerinde duracağız. 
     --arch komut satırı seçeneği hedef CPU mimarisini belirtmektedir. BBB gibi 32 bit ARM işlemcileri için burada "armhf", 
-    64 bit ARM işlemcileri için "arm64", Intel tabanlı işlemciler için bu seçeneğe "amd64" girilmeildir. Programın ilk seçeneksiz 
+    64 bit ARM işlemcileri için "arm64", Intel tabanlı işlemciler için bu seçeneğe "amd64" girilmelidir. Programın ilk seçeneksiz 
     argümanı Debian sisteminin varyantını belirtmektedir. Bu argüman için "buster" girebilirsiniz. İkinci komut satırı argümanı
     hedef kök dosya sisteminin oluşturulacağı dizini belirtmektedir. Üçüncü komut satırı argümanı ise paketlerin indirileceği 
     depoyu (repository) belirtmektedir. Örneğin BBB için "debootstrap" programını aşağıdaki gibi çalıştırabiliriz:
@@ -7669,7 +7669,7 @@ int main(int argc, char *argv[])
     $ sudo debootstrap --include=systemd --arch armhf buster bbb-debian-rootfs http://deb.debian.org/debian/
 
     Eğer --arch armhf seçeneği girilmemişse programın çalıştırıldığı makine için kök dosya sistemi indirilip kurulmaktadır. 
-    Örneğinm biz Intel tabanlı bir makinede çalışıyorsak ve Intel tabanlı bir Debian kök dosya sistemi oluşturmak istiyorsak 
+    Örneğin biz Intel tabanlı bir makinede çalışıyorsak ve Intel tabanlı bir Debian kök dosya sistemi oluşturmak istiyorsak 
     programı şöyle çalıştırabiliriz:
 
     $ sudo debootstrap --include=systemd buster intel-debian-rootfs http://deb.debian.org/debian/
@@ -7699,7 +7699,7 @@ int main(int argc, char *argv[])
     $ sudo chroot bbb-debian-rootfs
 
     Artık bu ARM tabanlı kök dosya sistemindeki her komutu çalıştırırken "qemu" devreye girecek ve ARM kodlarını emüle ederek 
-    çalıştıracaktır. Kurulumu yapıp "chroot" uyguladıktan sonra artık "apt-get" ile istediğiniz paketleri de kuruluma ekleyebilirisiniz.
+    çalıştıracaktır. Kurulumu yapıp "chroot" uyguladıktan sonra artık "apt-get" ile istediğiniz paketleri de kuruluma ekleyebilirsiniz.
 
     Bu biçimde kök dosya sistemini oluşturduğunuzda "/boot" dizininde çekirdek ile ilgili dosyaların bulunuyor olduğundan ve
     "/lib/modules" dizininde de çekirdek modüllerinin bulunduğundan emin olmalısınız. Biz burada gerekli olan dosyaların bulundurulduğunu
@@ -7727,7 +7727,7 @@ int main(int argc, char *argv[])
     Bir prosesin user id'si, grup id'si, çalışma dizini (current working directory), açtığı dosyalara ilişkin bilgiler ve daha 
     pek çok bilgiler proses ilişkin proses kontrol bloğunda tutulmaktadır. UNIX/Linux sistemlerinde bir proses fork fonksiyonuyla 
     yaratıldığında yeni bir proses kontrol blok oluşturulur. Yeni yaratılan prosese ilişkin proses kontrol blok bilgileri büyük 
-    ölçüde onu yaratan üst prosesten kopyalamarak aktarılmaktadır. Bu nedenle bir program başka bir programı çalıştırdığında çalıştırılan 
+    ölçüde onu yaratan üst prosesten kopyalayarak aktarılmaktadır. Bu nedenle bir program başka bir programı çalıştırdığında çalıştırılan 
     programın tüm yetkisel (credential) bilgileri ve diğer bilgileri büyük ölçüde üst prosesteki gibi olmaktadır. Örneğin biz kabuk 
     üzerinde program çalıştırdığımızda çalıştırdığımız programın kullanıcı id'leri, grup id'leri, çalışma dizini, çevre değişkenleri 
     vs. kabuk ile aynı olmaktadır.
@@ -7827,7 +7827,7 @@ void exit_sys(const char *msg)
 
     $ sudo chroot . /sample
 
-    Burada "/sample" programı çalıştırılacak ancak bu çalıştırmadan önce prosesin kök dizini o andaki dizin olarak değiştirilcektir.
+    Burada "/sample" programı çalıştırılacak ancak bu çalıştırmadan önce prosesin kök dizini o andaki dizin olarak değiştirilecektir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -7874,7 +7874,7 @@ void exit_sys(const char *msg)
     istiyoruz. Biz "sample" programını dinamik kütüphane kullanacak biçimde derlersek "dinamik linker" ve diğer dinamik kütüphaneler
     artık bulunamayacaktır. Çünkü bu kütüphaneler "/lib" ve "/usr/lib" dizinlerinde aranmaktadır. Biz kök dizini değiştirdiğimize
     göre artık bu yol ifadeleri bizim dizinimizin altında yer belirtecektir. O halde bu örneğimizde "sample" programını aşağıdaki
-    gibi static kütüphane kullanılacak biçimde derlememeiz gerekir:
+    gibi static kütüphane kullanılacak biçimde derlememiz gerekir:
 
     $ gcc -static -o sample sample.c
 
@@ -8036,7 +8036,7 @@ void exit_sys(const char *msg)
     fonksiyon çağrılmaktadır. rest_init fonksiyonu içerisinde bir proses oluşturulmaktadır. Bu proses sistemdeki resmi olan ilk 
     prosestir ve bu prosesin proses id'si 1'dir. Bu proses akışı kernel_init isimli bir fonksiyondan başlamaktadır. Bu fonksiyon 
     içerisinde önce geçici kök dosya sisteminin olup olmadığında bakılmaktadır, eğer geçici kök dosya sistemi yoksa çekirdeğin 
-    "root" parametresinde ile belirtilen aygıtttaki dosya sistemi kök dosya sistemi biçiminde mount edilmektedir. Yani başka 
+    "root" parametresinde ile belirtilen aygıttaki dosya sistemi kök dosya sistemi biçiminde mount edilmektedir. Yani başka 
     bir deyişle bu proses önce geçici kök dosya sistemi varsa onu mount etmekte, yoksa "root" çekirdek parametresi ile belirtilen 
     kök dosya sistemini mount etmektedir.
 
@@ -8063,7 +8063,7 @@ void exit_sys(const char *msg)
     Bu programların çekirdekle bir ilgisi yoktur. Çekirdek bu programı çalıştırdıktan sonra artık kendi işlevine devam etmektedir. 
     Buradaki "init" programları Linux'un tarihsel gelişimi içerisinde çeşitli evrimler geçirmiştir. Eskiden ilk zamanlarda 
     "klasik System 5 init" paketi kullanılıyordu. Sonra "upstart" denilen bir init paketi kullanılmaya başlandı. Ancak günümüzde 
-    artık "systemd" isimli init paketi yoğun biçimde kullanılmaktadır. Kursun yapıldığı masaüstü Linux dağııtmındaki "/sbin/init" 
+    artık "systemd" isimli init paketi yoğun biçimde kullanılmaktadır. Kursun yapıldığı masaüstü Linux dağıtmındaki "/sbin/init" 
     dosyası şöyledir:
 
     $ ls -l /sbin/init
@@ -8082,7 +8082,7 @@ void exit_sys(const char *msg)
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Pekiyi biz kök dosya sistemindeki "/sbin/init" dosyasını bir mesaj çıkartan basit bir program dosyası ile değiştiriesek ne 
+    Pekiyi biz kök dosya sistemindeki "/sbin/init" dosyasını bir mesaj çıkartan basit bir program dosyası ile değiştirirsek ne 
     olur? Bunu bir deney olarka yapabiliriz. Tabii böyle bir deneyde orijinal "/sbin/init" dosyasının ismini değiştirmemiz uygun 
     olacaktır. Böylece eski duruma daha kolay dönebiliriz:
 
@@ -8093,7 +8093,7 @@ void exit_sys(const char *msg)
     yapacaksınız bu programı da çapraz derleyiciyle derlemelisiniz.) İşte Linux'un kaynak kodlarına göre "init" programının başarılı 
     çalıştırılması sonucunda bu program bittiğinde çekirdek çalışmaya devam edecektir. Ancak kullanıcıların devreye girmesi tamamen 
     "init" programının çalışmasıyla gerçekleşen bir dizi olay sonucunda sağlanmaktadır. Başka bir deyişle Linux sistemini çalışan 
-    bir sistem haline getiren "init" programı ve sonrasında bu programın çalıştırdığı programlardır. Ancak yukarıda da belirtitğimiz 
+    bir sistem haline getiren "init" programı ve sonrasında bu programın çalıştırdığı programlardır. Ancak yukarıda da belirttiğimiz 
     gibi bu programların çekirdek kodlarıyla bir ilgisi yoktur.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -8161,14 +8161,14 @@ void exit_sys(const char *msg)
     yöntemiyle oluşturulmuş geçici dosya sistemiyle başlatılıyorsa sistem yüklendikten sonra "/init" programını çalıştırmaktadır. 
     Genellikle "initrd" yöntemi kullanılan geçici dosya sistemi ile başlatma durumunda "/linuxrc" programı çalıştırışmaktadır.
     Yani sistem başlatıldıktan sonra çekirdek tarafından ilk çalıştırılacak program başlatmanın nasıl yapıldığına göre değişmektedir.
-    Eğer başlatma "initramfs" yöntemiyle yapılmışsa ilk çalıştırılan prrogram "/init" programıdır. Eğer sistem "initrd" yöntemiyle
+    Eğer başlatma "initramfs" yöntemiyle yapılmışsa ilk çalıştırılan program "/init" programıdır. Eğer sistem "initrd" yöntemiyle
     başlatılmışsa ilk çalıştırılan program "/linuxrc" programıdır. Eğer sistem geçici kök dosya sistemi kullanılmadan çekirdeğin
     "root" parametresi yoluyla başlatılmışsa bu durumda daha önceden de belirttiğimiz gibi ilk çalıştırılan program "/sbin/init"
     programıdır. (Anımsanacağı gibi bu program yoksa "/etc/init", "/bin/init", "/bin/sh" programları da çalıştırılmaya çalışmaktadır.)
     Eğer çekirdeğe hem "initramfs" hem de "initrd" yöntemleriyle geçici kök dosya sistemi iletilmişse çekirdek önce "initramfs" 
-    yöntemiyle belirtilen geçici kök dosya sistemine sonra "initrd" yöntemiyle belirtiken geçici kök dosya sistemine bakmaktadır. 
+    yöntemiyle belirtilen geçici kök dosya sistemine sonra "initrd" yöntemiyle belirtilen geçici kök dosya sistemine bakmaktadır. 
     Ayrıca eğer geçici kök dosya sistemi kullanılacaksa artık çekirdeğin "root" parametresi çekirdek tarafından kullanılmamaktadır. 
-    Geçici kök dosya sisteminin kök dizinideki "/init" programının oluşturulması ve işlevi maddeler bittiğinde ayrı bir paragrafta 
+    Geçici kök dosya sisteminin kök dizinindeki "/init" programının oluşturulması ve işlevi maddeler bittiğinde ayrı bir paragrafta 
     ele alınacaktır. Biz bu noktada böyle bir "init" programının kabuk komutunu çalıştıracak biçimde aşağıdaki gibi oluşturulduğunu 
     varsayalım:
 
@@ -8203,11 +8203,11 @@ void exit_sys(const char *msg)
     dosyasında alıp arşiv çıktısını stdout dosyasına yazmaktadır. Dolayısıyla IO yönlendirmesi yapılarak kullanılmaktadır. 
     "cpio" programının pek çok komut satırı argümanı vardır. Biz burada bu komut satırı argümanlarını açıklamayacağız. Ancak 
     bu bağlamda programı tipik olarak aşağıdaki gibi kullanabilirsiniz (geçici kök dosya sistemine ilişkin dizinde ve ""root"" 
-    kullanıcı ile kabuk üzerinde bulunduğunuzu bulunduğunuzu varsayıyoruz. Bunun için "sudo bash" yaapabilirsiniz):
+    kullanıcı ile kabuk üzerinde bulunduğunuzu bulunduğunuzu varsayıyoruz. Bunun için "sudo bash" yapabilirsiniz):
 
     $ find . | cpio -H newc -o > ../initrd.cpio
 
-    Burada "-H newc" komut satırı argümanı arşiv formatınının türünü belirtmektedir. "-o" argümanı ise stdout dosyasına çıktı 
+    Burada "-H newc" komut satırı argümanı arşiv formatının türünü belirtmektedir. "-o" argümanı ise stdout dosyasına çıktı 
     vermek için kullanılmaktadır. Buradaki dosya isminin "initrd" ile başlatılması gelenekseldir. Her ne kadar bu "initrd" ismi
     eski geçici kök dosya sistemi yöntemini çağrıştırıyorsa da yeni yöntemde de dosya ismi genellikle böyle başlatılmaktadır.
 
@@ -8266,7 +8266,7 @@ void exit_sys(const char *msg)
 
     => setenv bootcmd "load mmc 0:1 0x8A000000 /uEnv.txt;env import -t 0x8A000000;run uenvcmd"
 
-    Artık işlem otomzatize edilmiştir.
+    Artık işlem otomatize edilmiştir.
 
     Boot işlemi sırasında "init" sistemlerinin ilk çalıştıracağı program aslında "rdinit" ve "init" isimli çekirdek komut satırı
     argümanlarıyla belirlenebilmektedir. Anımsanacağı gibi biz geçici kök dosya sistemini kullanıyorsak ilk çalıştırılacak 
@@ -8289,12 +8289,12 @@ void exit_sys(const char *msg)
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    6) Pekiyi biz geçici kök dosya sistemine düşüp birtakıp işlemleri yaptıktan sonra gerçek kök dosya sistemine nasıl geçeceğiz?
+    6) Pekiyi biz geçici kök dosya sistemine düşüp birtakım işlemleri yaptıktan sonra gerçek kök dosya sistemine nasıl geçeceğiz?
     Geçici kök dosya sisteminde kök dizin ramdisk biçiminde RAM'de bulunmaktadır. Bizim bir biçimde diskteki gerçek dosya sistemine
     geçmemiz gerekir. Biz daha önce bir prosesin kök dizinini chroot fonksiyonuyla ya da "chroot" komutuyla değiştirmiştik. Ancak
     geçici kök dosya sisteminden gerçek kök dosya sistemine geçilirken "chroot" komutu uygun değildir. Çünkü "chroot" komutu 
-    (anımsanacağı gibi bu komut chroot isimli sistem fonksiyonunu çağırmaktadır) tek bir prosesin kök dizinini değiştiri. Halbuki
-    bu noktaya gelinene kadar başka programlar ve deamon'lar çalıştırılmış olabilir. Bu nedenle bu geçişin "pivot_root" ya da
+    (anımsanacağı gibi bu komut chroot isimli sistem fonksiyonunu çağırmaktadır) tek bir prosesin kök dizinini değiştirir. Halbuki
+    bu noktaya gelinene kadar başka programlar ve daemon'lar çalıştırılmış olabilir. Bu nedenle bu geçişin "pivot_root" ya da
     "switch_root" komutlarıyla yapılması uygun olur.
 
     pivot_root komutu aslında sys_pivot_root isimli sistem fonksiyonu çağrılarak yazılmıştır. sys_pivot_root sistem fonksiyonunun 
@@ -8315,7 +8315,7 @@ void exit_sys(const char *msg)
     pivot_root <yeni_kök_dizin> <eski_kök_dizin>
 
     Burada yeni_kök_dizin mount edilmiş gerçek kök dosya sisteminin yol ifadesini belirtmektedir. eski_kök_dizin ise geçici kök 
-    dosya sisteminin kök dizininin (/ dezininin) yeni kök dosya sistemindeki yerini belirtir. Örneğin:
+    dosya sisteminin kök dizininin (/ dizininin) yeni kök dosya sistemindeki yerini belirtir. Örneğin:
 
     $ sudo pivot_root /mnt/new_root /mnt/old_root
 
@@ -8359,11 +8359,11 @@ void exit_sys(const char *msg)
     dikkatinizi çekmek istiyoruz. /dev dizinini mount ettiğinizde çekirdeğin çalıştığı makinenin hızına bağlı olarak henüz 
     bazı aygıt dosyaları oluşturulmamış olabilir. Böylesi bir durumda da "/dev/mmcblk0p2" dosyası henüz oluşturulmadığı 
     için gerçek kök dosya sisteminin mount edilme işlemi başarısızlıkla sonuçlanabilir. Bu nedenle bizim mount işleminden önce
-    ilgili aygıt dosyası yaratılna kadar beklememiz gerekir. İlgili aygıt dosyası yaratılana kadar beklemek için iki yöntem önerebiliriz. 
+    ilgili aygıt dosyası yaratılan kadar beklememiz gerekir. İlgili aygıt dosyası yaratılana kadar beklemek için iki yöntem önerebiliriz. 
     Birincisi "mdev -s" komutunu uygulamaktır. (Aslında mount işlemi "devtmpfs" dosya sistemi ile yapıldığında aygıt dosyaları 
     zaten bu dosya sistemi tarafından oluşturulmaktadır. Dolayısıyla "mdev -s" komutuna gerek kalmaz. Ancak bizim örneğimizde
     bu komutun aygıt dosyalarının yaratılmasına kadar bekleme yapmasından faydalanıyoruz.) İlgili aygıt dosyası yaratılana kadar 
-    bekleme yapman ın diğer bir yolu da bir döngü içerisinde üsrekli kontrol etmek olabilir. Bu işlemi de şöyle yapabiliriz:
+    bekleme yapmanın diğer bir yolu da bir döngü içerisinde sürekli kontrol etmek olabilir. Bu işlemi de şöyle yapabiliriz:
 
     while [! z-e /dev/mmcblk0p2 ]; do
         echo "Device files are being created, waiting..."
@@ -8462,7 +8462,7 @@ void exit_sys(const char *msg)
     Buradaki "tty1" satırı temsil eden id değeridir. Bu ismin işleyişte bir önemi yoktur. run level için 2, 3, 4, 5 değerleri 
     girilmiştir. Run level tek bir sayıdan oluşmaktadır. Dolayısıyla burada dört farklı run level belirtilmiştir. Çalıştırma 
     biçimi (action) "respawn" olarak belirtilmiştir. Nihayet çalıştırılacak program "/sbin/getty" isimli terminal programıdır. 
-    "-L tty" bu programın komut satırı argümanlarıdır. Satırdkai "action" belirten belirteçler şunlardan biri olabilir:
+    "-L tty" bu programın komut satırı argümanlarıdır. Satırdaki "action" belirten belirteçler şunlardan biri olabilir:
 
     sysinit: init çalıştığında toplamda bir kez çalıştırılacak programları belirtir. Çalışma düzeyi (run level) bu eylemde 
     etkili olmamaktadır.
@@ -8471,9 +8471,9 @@ void exit_sys(const char *msg)
     düzeyleri için belirtilmektedir.
 
     wait: Belli çalışma düzeylerinde çalıştırılacak programları belirtir. Ancak programın çalışması bitene kadar init başka 
-    program çalıştırmdan bekler.
+    program çalıştırmadan bekler.
 
-    boot: Sistem reboot edilirken çalışrırılacak programları belirtmektedir. Çalışma düzeyleri etkilidir.
+    boot: Sistem reboot edilirken çalıştırılacak programları belirtmektedir. Çalışma düzeyleri etkilidir.
 
     Pekiyi çalışma düzeyi (run level) ne anlama gelmektedir? Aslında çalışma düzeyi "init" başlatıldığında çalıştırılacak 
     script grubunu belirtmektedir. Tabii bu script'ler belli senaryoları sağlamak için oluşturulmuştur. "init" programı aslında 
@@ -8561,7 +8561,7 @@ void exit_sys(const char *msg)
     Görüldüğü gibi script isimlerinin ilk karakteri 'S' ya da 'K' biçimindedir. 'S' scriptleri çalışma düzeyine girilirken 'K' 
     script'leri ise çalışma düzeyinden çıkılırken çalıştırılmaktadır. XX burada iki basamaklı sayı belirtmektedir. Buradaki 
     'S' script'leri düşük sayıdan yüksek sayıya doğru 'K' scriptleri ise yüksek sayıdan düşük sayıya doğru çalıştırılırlar. Nihayet 
-    XX sayılarından sonra çalıştırılacak programın ismini belirtilir. Tabii aslında bu script'ler bazen doğurdan bazı servislere 
+    XX sayılarından sonra çalıştırılacak programın ismini belirtilir. Tabii aslında bu script'ler bazen doğrudan bazı servislere 
     sembolik link de yapılmış olabilirler. Örnek bir dizin içeriği şöyle verilebilir:
 
     /etc/rc.d/rc3.d/S10network
@@ -8579,8 +8579,8 @@ void exit_sys(const char *msg)
 
     Klasik System 5 init sisteminde sistem açıldığında bazı aygıtların otomatik mount edilmesini sağlamak için "/etc/fstab" 
     dosyası kullanılmaktadır. Biz bu dosyanın formatını daha önce belirtmiştik. "mount" komutu "-a" ile çalıştırıldığında 
-    bu komut "/etc/fstab" dosaysına bakarak oradaki bilgilerden hareketle mount işlemini yapmaktadır. SysVinit sisteminde
-    genellikle bu "mount -a" komutu "/etc/initab" içerisindeki bir script tarafından çalıştırılmaktadır.
+    bu komut "/etc/fstab" dosyasına bakarak oradaki bilgilerden hareketle mount işlemini yapmaktadır. SysVinit sisteminde
+    genellikle bu "mount -a" komutu "/etc/inittab" içerisindeki bir script tarafından çalıştırılmaktadır.
 
     Aslında Sysvinit init programı komut satırı argümanı da alabilmektedir. Komut satırı argümanı ile başlangıç çalışma düzeyi 
     belirtilebilmektedir.
@@ -8617,7 +8617,7 @@ void exit_sys(const char *msg)
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Pekiyi BusyBox init sistemi nasıldır? Yukarıda da belirttiğimiz gibi BusyBox init programı SysVinit'teki init programına 
-    benzemektedir. Ancak önemli bazı farklılıkalr şunlardır:
+    benzemektedir. Ancak önemli bazı farklılıklar şunlardır:
 
     - BusyBox'ta "çalışma düzeyi (runlevel)" kavramı yoktur. Dolayısıyla BusyBox'ta "/etc/inittab" dosyasındaki satırlarda 
     çalışma düzeyi alanına bir şey girilmemektedir.
@@ -8626,7 +8626,7 @@ void exit_sys(const char *msg)
     Ancak BusyBox init programı yine "/etc/inittab" dosyasını okumaktadır. Bu dosyanın satırları SysVinit sistemiyle aynı 
     formattadır. (Çalışma düzeyi alanının kullanılmadığını anımsayınız.) Burada dikkat edilmesi gereken bir nokta şudur: 
     BusyBox ve toybox gibi araçlar bize minimal bir kök dosya sistemi sunmaktadır. Dolayısıyla bu araçlarla oluşturduğumuz 
-    kök dosya sistemlerinde hazır bir "/etc/inittab" dosyası da yoktur. Yani uygulamacının bu dosyaı da kendisinin hazırlaması 
+    kök dosya sistemlerinde hazır bir "/etc/inittab" dosyası da yoktur. Yani uygulamacının bu dosyayı da kendisinin hazırlaması 
     gerekir.
 
     Pekiyi BusyBox için gerçek kök dosya sistemindeki "/etc/inittab" dosyasını nasıl hazırlamalıyız? Genellikle uygulamacılar 
@@ -8684,8 +8684,8 @@ void exit_sys(const char *msg)
 
     Burada doğrudan kabuk programını çalıştırdığımıza dikkat ediniz. Bize herhangi bir kullanıcı ismi ve parola sorulmamaktadır. 
     Pekiyi biz nasıl kullanıcı ismi ve parola ile girişi sağlayabiliriz? İşte bunun için geleneksel olarak UNIX/Linux sistemlerinde 
-    şu yöntem izlenmektedir: Sistem yöneticisi "/etc/inittab" (ya da diğer init sistemlerinde başka configürasyon dosyalarında) 
-    dosyasına "getty" isimli bir programın çalıştırılamsına ilişkin yönerge yuerleştirir. "init" programı da bu "getty" programını
+    şu yöntem izlenmektedir: Sistem yöneticisi "/etc/inittab" (ya da diğer init sistemlerinde başka konfigürasyon dosyalarında) 
+    dosyasına "getty" isimli bir programın çalıştırılmasına ilişkin yönerge yerleştirir. "init" programı da bu "getty" programını
     çalıştırır. "getty" programının "agetty", "mingetty" gibi farklı sistemlerde farklı versiyonları bulunabilmektedir. Bu "getty"
     programı bir oturum yaratır. Sonra terminal aygıtını açar. Böylece oturumun "kontrol eden terminalini (controlling terminal)"
     oluşturur. Sonra ekrana "user name:" yazısını çıkartır. Klavyeden (stdin dosyasından) kullanıcı adını ister. Kullanıcı kullanıcı
@@ -8704,29 +8704,29 @@ void exit_sys(const char *msg)
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Bilindiği gibi UNIX/Linux sistemlerinde her prosesin (yani çalışmakta olan programın) Proses Kontrol Bloğunda saklanan 
-    "gerçek kullanıcı id'si (real user id)", "etkin kullanıcı id'si (effective user id)", "gerçekçek grup id'si (real group id)"
+    "gerçek kullanıcı id'si (real user id)", "etkin kullanıcı id'si (effective user id)", "gerçek grup id'si (real group id)"
     ve "etkin grup id'si (effective group id)" vardır. Genellikle "gerçek id'lerle etkin id'ler aynı değerdedir. Dosya erişim 
     işleminde teste etkin id'ler sokulmaktadır. Okunabilirliği artırmak için kullanıcı id'leri kullanıcı isimleriyle, grup id'leri 
     grup isimleriyle eşleştirilmiştir. 0 numaralı kullanıcı id'si "root" ya da "super user" anlamına gelmektedir. Bu id'ye sahip 
     prosesler her türlü erişimleri yapabilirler. "sudo" ile program çalıştırırken aslında "sudo" ilgili programı 0 numaralı etkin
     kullanıcı id'si ile çalıştırmaktadır.
 
-    "login" programı "getty" tarafından, "getty" ise "init" tarafından çaıştırıldığı için "login" programının etkin kullanıcı 
+    "login" programı "getty" tarafından, "getty" ise "init" tarafından çalıştırıldığı için "login" programının etkin kullanıcı 
     id'si 0'dır. İşte login programı parola doğrulamasını yaparsa kabuk programını 0 numaralı etkin kullanıcı id'si ile değil
     "/etc/paswd" dosyasında belirtilen kullanıcı ve grup id'leriyle çalıştırmaktadır.
 
     "/etc/passwd" dosyası satırlardan oluşmaktadır. Her satır bir kullanıcının bilgilerini belirtmektedir. Kullanıcı bilgileri 
-    ':' karakterleriyle ayrılmış 7 alandan oluşmaktadır. "/etc/passwd" dosyasının satıırları aşağıdaki formattadır:
+    ':' karakterleriyle ayrılmış 7 alandan oluşmaktadır. "/etc/passwd" dosyasının satırları aşağıdaki formattadır:
 
     <kullanıcı_adı>:<parola>:<UID>:<GID>:<GECOS>:<ev_dizini>:<çalıştırılacak_program>
 
     Birinci alanda kullanıcının ismi, ikinci alanda şifrelenmiş parolası, üçüncü ve dördüncü alanda gerçek ve etkin kullanıcı 
-    ve grup id'leri, beşinci alanda kullacıya ilişkin şahsi bilgiler, yedinci alanda (con alanda) çalıştırılacak program, 
+    ve grup id'leri, beşinci alanda kullanıcıya ilişkin şahsi bilgiler, yedinci alanda (con alanda) çalıştırılacak program, 
     altıncı alanda ise o programın çalışma dizini (current working directory) bulunmaktadır. Örnek bir satır şöyle olabilir:
 
     student::1001:1000::/home/student:/bin/bash
 
-    Burada kullanıcının ismi "student" biçimidedir. Parola alanı boş olduğu için parola sorıulmayacaktır. Kullancı id'si 1001, 
+    Burada kullanıcının ismi "student" biçimindedir. Parola alanı boş olduğu için parola sorulmayacaktır. Kullanıcı id'si 1001, 
     grup id'si 1000'dir. Şahsi bilgiler bulundurulmamıştır. Parola doğrulanırsa "/bin/bash" programı çalıştırılacaktır. Bu 
     programın çalışma dizini de "/home/student" biçimindedir.
 
@@ -8736,12 +8736,12 @@ void exit_sys(const char *msg)
     <grup_adı>:<parola>:<GID>:<kullanıcı_listesi>
 
     Birinci alanda grubun ismi bulunur. İkinci alanda grup parolası bulunabilir. Üçüncü alanda grubun sayısal id'si tutulmaktadır. 
-    Son alanda da virgüllerle ayrılmış gruba ek grup (supplemantary groups) olarak kayırlı olan kullanıcıların listesi tutulmaktadır.
+    Son alanda da virgüllerle ayrılmış gruba ek grup (supplementary groups) olarak kayıtlı olan kullanıcıların listesi tutulmaktadır.
     Örnek bir satır şöyle olabilir:
 
     study::1000:
 
-    Burada grup ismi "study" biçimindedir. Grup parolası kullanılmamıştır. Grup id'si 1000'dir. Bu gruba ek grup olarka üye olan 
+    Burada grup ismi "study" biçimindedir. Grup parolası kullanılmamıştır. Grup id'si 1000'dir. Bu gruba ek grup olarak üye olan 
     kullanıcı yoktur.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -8752,13 +8752,13 @@ void exit_sys(const char *msg)
     "/etc/group" dosyalarına satır eklemektedir.
 
     İşte "login" programı önce kullanıcıdan parola ister. Eğer parolu doğru ise prosesin gerçek ve etkin kullanıcı ve group 
-    id'lerini setuid ve setgid fonksiyonlarıyla "/etc/passwd" dosyasında belirtilidiği gibi değiştirir. Sonra yine 
+    id'lerini setuid ve setgid fonksiyonlarıyla "/etc/passwd" dosyasında belirtildiği gibi değiştirir. Sonra yine 
     "/etc/passwd" dosyasında belirtilen programı exec fonksiyonlarıyla çalıştırır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Şimdi de BusyBox init sistemi için "getty" programının nasıl devreye sokulacağını açıklayalım. (burada kabukta BusyBox için 
-    hazırladığımız kök dosya sisteminin kök dizininde bulunduğmu varsayıyoruz) Bunun için tek yapılacak şey aslında "etc/inittab" 
+    hazırladığımız kök dosya sisteminin kök dizininde bulunduğunu varsayıyoruz) Bunun için tek yapılacak şey aslında "etc/inittab" 
     dosyasında "getty" çalıştırılmasına yönelik bir satır eklemektir. Tabii biz böyle bir satırı ekleyeceksek artık getty bizi 
     sisteme sokacağına göre dosyadan kabuk programının çalıştırılmasına ilişkin satırı da kaldırmalıyız. "etc/inittab" "getty" 
     için dosyasına aşağıdaki satırı ekleyebiliriz:
@@ -8796,11 +8796,11 @@ void exit_sys(const char *msg)
 
     $ sudo chown 1000:1000 home/kaan
 
-    Artık gerçek kök dosya sistemine geçildiğinde bizden kullancı ismi istenecektir. Biz "etc/passwd" dosyası içerisinde 
+    Artık gerçek kök dosya sistemine geçildiğinde bizden kullanıcı ismi istenecektir. Biz "etc/passwd" dosyası içerisinde 
     parola alanını boş geçmiştik. Bu nedenle "login" programı bizden parola istemeyecektir. Tabii biz "passwd" komutuyla daha 
     sonra da parolamızı değiştirebiliriz.
 
-    Artık bu kök dosya sistemini mikrı SD karta kopyalayıp sistemi boot ettikten sonra gerçek kök dosya sistemine geçinde Linux sistemlerinde 
+    Artık bu kök dosya sistemini mikro SD karta kopyalayıp sistemi boot ettikten sonra gerçek kök dosya sistemine geçince Linux sistemlerinde 
     gördüğümüz klasik "user name/password"ekranıyla karşılaşacağız.
 
     Burada BusyBoox için dikkat edilmesi gereken bir nokta daha vardır. BusyBox'ta bütün komutlar aslında "/bin/busybox" programını
@@ -8826,7 +8826,7 @@ void exit_sys(const char *msg)
     - Linux Service Management Made Easy with systemd (Donald A. Tevault)
     - Raspberry Pi OS System Administration with systemd (Özellikle 2. Bölüm) (Robert M. Koretsky)
 
-    Konu ile ilgili Web'teki temel kaynaklar da şunşardır:
+    Konu ile ilgili Web'teki temel kaynaklar da şunlardır:
 
     - https://systemd.io/
     - https://0pointer.de/blog/projects/systemd-docs.html
@@ -8846,13 +8846,13 @@ void exit_sys(const char *msg)
 
     Çekirdek akışı klasik SystemVinit programına devrettiğinde bu program "/etc/inittab" dosyasından hareketle script'lerle 
     belirtilen servisleri sırasıyla çalıştırmaktadır. Az sayıda servisin çalıştırıldığı sistemlerde bu durum probleme yol 
-    açmasa da çok sayıda servisin çalıştırıldığı server sistemlerinde bu durum açılışın yavaşlamasına yopl açmaktadır. İşte 
+    açmasa da çok sayıda servisin çalıştırıldığı server sistemlerinde bu durum açılışın yavaşlamasına yol açmaktadır. İşte 
     systemd init sisteminde servisler mümkün olduğunca paralel biçimde (yani birisi başlatıldıktan sonra diğeri değil, beraber
     başlatılma durumu kastedilmektedir) başlatılmaktadır. Bu durum da servislerin daha hızlı bir biçimde hizmet edecek duruma 
     gelmelerine yol açmaktadır. systemd init sisteminde servislerin birbirlerine göre bağımlılıkları yönetilebilmektedir. Örneğin
     bir servisin çalışabilmesi için başka bir servisin yüklü olması gerekebilir. Klasik SystemVinit sisteminde otomatik bir 
-    bağımlılık yönetimi yoktur. Sistem yöneticisi bu konuda script'lerle manuel kontrol sağlamktadır. Soket temelli aktivasyon 
-    belli bir etkinlikte belli bir soketin otomatik yaraılmasını sağlamaktadır. systemd init sisteminde servis yönetimi sistem 
+    bağımlılık yönetimi yoktur. Sistem yöneticisi bu konuda script'lerle manuel kontrol sağlamaktadır. Soket temelli aktivasyon 
+    belli bir etkinlikte belli bir soketin otomatik yaratılmasını sağlamaktadır. systemd init sisteminde servis yönetimi sistem 
     yöneticisi açısından daha kolaydır. Çünkü sistem yöneticisi script yazmak zorunda kalmaz. systemd yalnızca Linux sistemlerinde 
     değil BSD ve diğer UNIX türevi sistemlerde de aynı biçimde kullanılabilmektedir. systemd init sistemi yerine getirdiği ya da 
     getiremedi faaliyetler için log kayıtlarını kendisi tutmaktadır.
@@ -8898,17 +8898,17 @@ void exit_sys(const char *msg)
     /usr/lib/systemd/system
     /usr/local/lib/systemd/system
 
-    systemd programı "--system" ya da "--user"" komut satırı seçeneği ile başlatılabilir. Buradaa belirttiğimiz arama sırası 
+    systemd programı "--system" ya da "--user"" komut satırı seçeneği ile başlatılabilir. Burada belirttiğimiz arama sırası 
     default olan "--system" seçeneği ile uygulanan sıradır.
 
     Bu amaçla en fazla kullanılan dizin "/lib/systemd/system" dizinidir. Bu dizin genellikle sistemin kurulumu sırasında oluşturulan 
-    temel birim dosyaalarını barındırır. Kullanıcılar genellikle birim dosyalaarını "/etc/systemd/system" dizini içerisine 
+    temel birim dosyalarını barındırır. Kullanıcılar genellikle birim dosyalarını "/etc/systemd/system" dizini içerisine 
     yerleştirirler.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Bir birim dosyası (unit file) bölümlerden (sections) bölümler de "direktif=değer" satırlarından oluşmaktadır. ('=' karakterinin 
-    iki tarafında boşluk bırakılmamaktadır.) Bölümler köşeli parantezle riçerisinde belirtilmektedir. Formatın Windows sistemlerinde 
+    iki tarafında boşluk bırakılmamaktadır.) Bölümler köşeli parantezler içerisinde belirtilmektedir. Formatın Windows sistemlerinde 
     eskiden kullanılan ".ini" dosya formatına benzediğine dikkat ediniz. Örneğin bir birim dosyası şöyle olabilir:
 
     [Unit]
@@ -8977,7 +8977,7 @@ void exit_sys(const char *msg)
     systemd init sistemi yalnızca "systemd" init programından oluşmamaktadır. Bu sistemde sistem yöneticileri için bazı yardımcı
     (utility) programlar da bulundurulmuştur. Bu programların en önemlisi "systemctl" isimli programdır. Biz bu yardımcı programlar 
     için "komut" terimini de kullanacağız. Sistem yöneticisi pek çok işlemi manuel olarak değil bu "systemctl" komutunu kullanarak 
-    yapar. "systemctl" dışındaki diğer önemli komutlar şunalardır:
+    yapar. "systemctl" dışındaki diğer önemli komutlar şunlardır:
 
     journalctl
     timedatectl
@@ -9026,7 +9026,7 @@ void exit_sys(const char *msg)
     $ sudo systemctl set-default multi-user.target
 
     multi-user.target SysemVinit sistemindeki "runlevel 4"e karşılık geşmektedir. Bu hedef ile sistemi başlattığımızda sistem 
-    tamamen text modda açılacakltır. Dolayısıyla bu hedef tipik olarak server sistemlerinin kullandığı hedefdir. (Server sistemleri
+    tamamen text modda açılacaktır. Dolayısıyla bu hedef tipik olarak server sistemlerinin kullandığı hedeftir. (Server sistemleri
     genellikle grafik arayüze sahip olmazlar. Grafik arayüz onların çalışmasını yavaşlatabilmekte ve gereksiz bir kaynak harcamasına 
     yol açabilmektedir.)
 
@@ -9035,7 +9035,7 @@ void exit_sys(const char *msg)
 
     $ sudo systemctl isolate multi-user.target
 
-    Aşağıda klasik SystemVinit komutlarınının systemctl karşılıkları verilmiştir:
+    Aşağıda klasik SystemVinit komutlarının systemctl karşılıkları verilmiştir:
 
     halt                    systemctl halt
     poweroff                systemctl poweroff
@@ -9054,7 +9054,7 @@ void exit_sys(const char *msg)
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Girişte de belittiğimiz gibi "systemd"" init sisteminde "bağımlılık yönetimi" olgusu vardır. Bağımlılık yönetimi "bu servis 
+    Girişte de belirttiğimiz gibi "systemd"" init sisteminde "bağımlılık yönetimi" olgusu vardır. Bağımlılık yönetimi "bu servis 
     çalıştırılırsa şu servis de çalıştırılsın", "bu servis şu servis çalıştırılıyorsa çalıştırılsın" demenin bir yöntemidir. 
     Bunu uygulamak için tipik olarak aşağıdaki direktifler kullanılmaktadır. (Direktifler ve bölümlerdeki isimlerin büyük harf 
     küçük harf duyarlılığı yoktur):
@@ -9068,10 +9068,10 @@ void exit_sys(const char *msg)
     direktifler ("Wants", "Requires") "bu birimi çalıştıracaksan direktifte belirtilen birimi de çalıştırmalısın" anlamına 
     gelmektedir. "By" soneki olan direktifler ("WantedBy", "RequiredBy") ise "eğer direktifte belirtilen birimi çalıştırıyorsan 
     bu birimi de çalıştırmalısın" anlamına gelmektedir. Yani By'sız direktiflerle By'lı direktifler ters yönlüdür. Pekiyi "want" 
-    ile "require" arasında ne fark verdır? İşte "require" katı bir istek, "want" ise "zayif bir istek belirtmektedir. İstek
+    ile "require" arasında ne fark vardır? İşte "require" katı bir istek, "want" ise "zayif bir istek belirtmektedir. İstek
     "require" ile belirtilmişse eğer bu istek karşılanmazsa ilgili birimin çalıştırılması gerçekleştirilmez. Ancak istek "want"
-    ile belirtilmişse istek karşılanmasa bile ilgili birim çalışırılır. Örneğin A birim dosyasında "Wants" ile B birimi belirtilmiş 
-    olsun. Bu durumda A çalıştırılırken eğer B bir nedenden dolayı çalıştırılamazsa A yine çalıştırılır. A birim dosyasında Rrequired" 
+    ile belirtilmişse istek karşılanmasa bile ilgili birim çalıştırılır. Örneğin A birim dosyasında "Wants" ile B birimi belirtilmiş 
+    olsun. Bu durumda A çalıştırılırken eğer B bir nedenden dolayı çalıştırılamazsa A yine çalıştırılır. A birim dosyasında "Required" 
     ile B belirtilmişse bu durumda B çalıştırılamazsa A servisi de çalıştırılmaz. Aynı durum ters yönde "WantedBy" ve "RequiredBy" 
     için de geçerlidir.
 -----------------------------------------------------------------------------------------------------------------------------*/
@@ -9101,7 +9101,7 @@ void exit_sys(const char *msg)
     WantedBy=multi-user.target
 
     Burada bir "servis birim (service unit)" dosyası örneği verilmiştir. Buna göre önce "network.target" isimli birim çalıştırılacak
-    sonra bu servis çelıştırılacaktır.
+    sonra bu servis çalıştırılacaktır.
 
     Pekiyi bizim After ya da Before ile "bizden önce çalıştırılsın ya da sonra çalıştırılsın" biçiminde bir belirleme yaptığımızı 
     ancak buradaki birimler için "require" ya da "want" ile bir bellirleme yapmadığımızı varsayalım, bu durumda ne olacaktır? 
@@ -9139,7 +9139,7 @@ void exit_sys(const char *msg)
     sembolik bağlantı oluşturmamız gerekir.
 
     Aslında ilgili birim dosyasını "/etc/systemd/system" dizini içerisine yerleştirip sembolik bağlantıyı manuel oluşturmak yerine
-    bu işlemi "systemctl" komutuna da yaptırabiliriz. "systemctl" komutunun iki arümanı vardır:
+    bu işlemi "systemctl" komutuna da yaptırabiliriz. "systemctl" komutunun iki argümanı vardır:
 
     systemctl enable <birim_dosyasının_ismi>
     systemctl disable <birim_dosyasının_ismi>
@@ -9151,7 +9151,7 @@ void exit_sys(const char *msg)
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Aslında hedef birimler (target units) biribirinden bağımsız değil, birbirini gerektirecek biçimde oluşturulmuştur. Örneğin 
+    Aslında hedef birimler (target units) birbirinden bağımsız değil, birbirini gerektirecek biçimde oluşturulmuştur. Örneğin 
     aslında sistemimiz "graphical.target" ile açıldığında bu durum "mult-user.target" hedefinin de çalıştırılmasını gerektirmektedir. 
     Buradaki temel "Requires" ilişkisi şöyledir:
 
@@ -9228,7 +9228,7 @@ void exit_sys(const char *msg)
 
     $ sudo cp myserviced /usr/local/bin
 
-    Artık temel işlemleri yaptık. Ancak servisimizin nasıl devereye gireceğini de belirlememiz gerekir. Bir servisi komut satırından
+    Artık temel işlemleri yaptık. Ancak servisimizin nasıl devreye gireceğini de belirlememiz gerekir. Bir servisi komut satırından
     "systemctl start <servis_birim_dosyası_ismi>" komutuyla başlatıp, "systemctl stop <servis_ismi.service>" komutuyla sonlandırabiliriz. 
     Örneğin:
 
@@ -9236,7 +9236,7 @@ void exit_sys(const char *msg)
 
     Pekiyi bizim program içerisinde printf ile stdout dosyasına yazdırdığımız şeylere ne olacaktır? Servis programlarının bir
     terminal bağlantısının olmadığını belirtmiştik. İşte "systemd" programı bizim servisimizi çalıştırırken default olarak stdout
-    dosyasını kendi "jornaling log" dosyasına yönlendirmektedir. Yani bizim servis programında ekrana yazdığımız şeyler default 
+    dosyasını kendi "journaling log" dosyasına yönlendirmektedir. Yani bizim servis programında ekrana yazdığımız şeyler default 
     durumda log mekanizmasına dahil edilmektedir. Biz de bunları "journalctl -u <servis_birim_dosyası_ismi>" komutu ile görüntüleyebiliriz. 
     "journalctl" komutunun komut satırı argümanları da vardır. Örneğin "-n <sayı>" seçeneği log dosyasındaki son n satırı görüntülemek 
     için, "-f" seçeneği gerçek zamanlı görüntüleme yapmak için kullanılmaktadır. Örneğin:
@@ -9276,7 +9276,7 @@ void exit_sys(const char *msg)
 
     $ sudo systemctl enable myservice.service
 
-    Bu komut uygulandığında önce systemctl bir servis birim dosyası üzerinde bir sentaks kontorlü uygulayacak sonra da 
+    Bu komut uygulandığında önce systemctl bir servis birim dosyası üzerinde bir sentaks kontrolü uygulayacak sonra da 
     "multi-user.target.wants" dizininde bir sembolik bağlantı dosyası oluşturacaktır. Artık makinemiz reboot edildiğinde bu 
     servis eğer default hedef "graphical.target" ya da "multi-user.target" ise otomatik devreye girecektir. Servisimizi boot 
     sırasında devreden çıkartmak için "systemctl disable <servis_birim_dosyası_ismi>" komutu kullanılmaktadır:
@@ -9300,13 +9300,13 @@ void exit_sys(const char *msg)
     [Install]
     WantedBy=multi-user.target
 
-    Buradaki [Service] bölümü içerisindeki "ExecStart" direktifi servis progarmının yol ifadesini belirtmektedir. Yani başka bir 
+    Buradaki [Service] bölümü içerisindeki "ExecStart" direktifi servis programının yol ifadesini belirtmektedir. Yani başka bir 
     deyişle bu servis birim dosyası çalıştırıldığında çalıştırılacak programı belirtmektedir. Bazen servis durdurulurken de bazı 
     programların çalıştırılması istenebilir. Bunun için de "ExecStop" direktifi kullanılmaktadır. Benzer biçimde servis restart 
     edildiğinde de ayrıca bir programın çalıştırılması "ExecRestart" direktifiyle sağlanabilmektedir. Yine aynı bölümde 
-    "WorkingDirectory" direktifi ile servis programının çalıma dizini (current working directory) belirlenebilir "StandardInput", 
-    "StandardOutput" ve "StandardError" direktifleri ile de servis orıgramının stdin, stdout ve stderr dosyalarının nereye 
-    yönlendirileceği belirtilebilmektedir. (Default olarak bu direktifler kulanılmazsa yönlendirme "journaling log" sistemine 
+    "WorkingDirectory" direktifi ile servis programının çalışma dizini (current working directory) belirlenebilir "StandardInput", 
+    "StandardOutput" ve "StandardError" direktifleri ile de servis programının stdin, stdout ve stderr dosyalarının nereye 
+    yönlendirileceği belirtilebilmektedir. (Default olarak bu direktifler kullanılmazsa yönlendirme "journaling log" sistemine 
     yapılmaktadır.)
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -9315,7 +9315,7 @@ void exit_sys(const char *msg)
     değil birbirine bağlı biçimde oluşturulduğunu anımsayınız. İşte biz de istersek kendi hedeflerimizi oluşturturabiliriz. 
     Örneğin biz "mytarget.target" isimli bir hedef birim oluşturup bu hedefte "myservice.service" biriminin çalıştırılmasını 
     sağlayalım. "mytarget.target" birimi de "multi-user.target" birimi çalıştırıldığı zaman çalıştırılacak olsun. Bu işlemi 
-    şu adımlardan geçerek gerçekleştirebiiriz:
+    şu adımlardan geçerek gerçekleştirebiliriz:
 
     1) "mytarget.target" birim dosyasını minimal olarak aşağıdaki gibi oluşturabiliriz:
 
@@ -9326,7 +9326,7 @@ void exit_sys(const char *msg)
 
     Burada [install] bölümünde bu hedef birim dosyasının "multi-user.target" hedefi ile ilişkilendirildiğini görüyorsunuz.
 
-    2) "myservice.service" birim dosyanının "mytarget.target" ile ilişkilendirilmesi gerekir. Dosya şöyle oluşturulabilir:
+    2) "myservice.service" birim dosyasının "mytarget.target" ile ilişkilendirilmesi gerekir. Dosya şöyle oluşturulabilir:
 
     [Unit]
     Description=MyService
@@ -9395,7 +9395,7 @@ void exit_sys(const char *msg)
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Pekiyi biz loop aygıtını kullanarak mount işlemininin mount birimi tarafından yapılmasını nasıl sağlayabiliriz? Buradaki 
+    Pekiyi biz loop aygıtını kullanarak mount işleminin mount birimi tarafından yapılmasını nasıl sağlayabiliriz? Buradaki 
     sorun mount biriminin çalıştırılması öncesinde "losetup" gibi bir işlemin de yapılması zorunluluğudur. İşte bunu sağlayabilmek 
     için mount birimine ek olarak bir de servis birim dosyasının oluşturulması ve mount birimi çalıştırıldığında servis biriminin 
     de mount biriminden önce çalıştırılması gerekir. Bu sırada servis birimi "losetup" programı ile loop aygıtını kullanıma hazır 
@@ -9433,14 +9433,14 @@ void exit_sys(const char *msg)
 
     Burada kritik iki direktif vardır. "RemainAfterExit" ve "BindsTo" direktifleridir. Buradaki "BindsTo" direktifi mount birimi 
     ile servis biriminin birbirine bağlı olduğunu belirtmektedir. Yani bunlardan biri çalıştırılır ya da durdurulursa diğeri de 
-    çalıştırılıp durdurulacaktır. "RemainAfterExit" eğer "yes" yapılmazsa bu servis çalıştırıldıktan sonra hemen bitimde "ExecStop" 
+    çalıştırılıp durdurulacaktır. "RemainAfterExit" eğer "yes" yapılmazsa bu servis çalıştırıldıktan sonra hemen bitiminde "ExecStop" 
     çalıştırılır ve istediğimiz şey gerçekleşmez. Buradaki "RemainAfterExit=yes" direktifi servis çalıştırıldıktan sonra "stop" 
     yapılana kadar ExecStop direktifinde belirtilen programın çalıştırılmamasını sağlamaktadır.
 
     Pekiyi servis birim dosyasında "Requires" ile mount birim dosyası belirtildiği halde (diğerinde de diğeri belirtildiği 
     halde) neden hala "BindsTo" direktifine gereksinim duyulmaktadır? İşte require ve want direktifleri "çalıştırma için" için 
     bağımlılık belirtmektedir. Durdurma için bağımlılık belirtmemektedir. "BindsTo" direktifi "durdurma için de bağımlılık" 
-    belirtir. Eğer biz yukrıdaki örnekte servis birim dosyasındaki "BindsTo" direktifini kaldırırsak bu birimlerin çalıştırılmasında
+    belirtir. Eğer biz yukarıdaki örnekte servis birim dosyasındaki "BindsTo" direktifini kaldırırsak bu birimlerin çalıştırılmasında
     bir sorun oluşmaz. Ancak bu birimlerden biri durudurulmak istendiğinde yalnızca durdurulmak istenen birim durdurulur, diğeri 
     durdurulmaz. "BindsTo" direktifi diğerinin de durdurulmasını sağlamaktadır. "BindsTo" direktifi genellikle servis birim dosyalarına 
     yerleştirilmektedir. Ancak mount birim dosyalarına da yerleştirilebilir. Ancak "BindsTo" direktifinin bağlanma ilişkisi kurulan 
@@ -9454,7 +9454,7 @@ void exit_sys(const char *msg)
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Diğer çok kullanılanm bir birim de "zamanlayıcı" birimidir. Zamanlayıcı birimi UNIX/Linux sistemlerinde kullanılan klasik 
+    Diğer çok kullanılan bir birim de "zamanlayıcı" birimidir. Zamanlayıcı birimi UNIX/Linux sistemlerinde kullanılan klasik 
     "cron" mekanizmasına benzer amaçlarla kullanılıyor olsa da daha fazla özellikleri ve kullanım yeri vardır.
 
     Bir zamanlayıcı birim dosyasının tipik görünümü aşağıdaki gibidir:
@@ -9473,11 +9473,11 @@ void exit_sys(const char *msg)
 
     Buraki [Unit] bölümü diğer birimlerdeki gibi bağımlılıklarla ve öncelik sonralık ilişkisi ile ilgili direktifleri bulundurmaktadır.
     Birimin en önemli bölümü [Timer] isimli bölümdür. Bu bölümdeki "Unit" direktifi çalıştırılacak olan servisi belirtir. Buradaki 
-    servis bir kez çaıştırılabileceği gibi periyodik olarak da çalıştırılabilmektedir. Burada "OnUnitActiveSec" direktifi ilgili 
+    servis bir kez çalıştırılabileceği gibi periyodik olarak da çalıştırılabilmektedir. Burada "OnUnitActiveSec" direktifi ilgili 
     servisin (örneğimizdeki "mytask.service") hangi periyotta çalıştırılacağını belirtmektedir. OnActiveSec" ya da "OnBootSec" 
-    servisin ilk kez ne zaman çalıştırılacağını belirlemekte kullanılmaktadır. (Eğer bu ilk çalışma belirleemesi yapılmazsa zamanlatıcı 
+    servisin ilk kez ne zaman çalıştırılacağını belirlemekte kullanılmaktadır. (Eğer bu ilk çalışma belirlemesi yapılmazsa zamanlayıcı 
     birimi çalıştırılır fakat bir etki göstermez.) Burada belirtilen zamanlar konusunda şaşmalar olabilmektedir. Eğer zamanlamaya 
-    daha katı bir biçimde uyulması gerekiyorsa bu durumda "OnAccuracySec" direktifi ile duyralılık belirtilmelidir. Örneğin:
+    daha katı bir biçimde uyulması gerekiyorsa bu durumda "OnAccuracySec" direktifi ile duyarlılık belirtilmelidir. Örneğin:
 
     # mytimer.timer
 
@@ -9491,7 +9491,7 @@ void exit_sys(const char *msg)
     [Install]
     WantedBy=multi-user.target
 
-    Tıpkı "cron" mekaznizmasında olduğu gibi bir işin belli bir tarihte ve zamanda yapılmasını da sağlayabiliriz. Bunun için [Timer]
+    Tıpkı "cron" mekanizmasında olduğu gibi bir işin belli bir tarihte ve zamanda yapılmasını da sağlayabiliriz. Bunun için [Timer]
     bölümündeki "OnCalender" direktifi kullanılmaktadır. Aşağıda çeşitli giriş örnekleri verilmiştir:
 
     OnCalendar=15:00
@@ -9530,8 +9530,8 @@ void exit_sys(const char *msg)
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     İşletim sistemlerinin o anda çalışılan donanımda hangi donanım birimlerinin bulunduğunu ve bunların kullandığı kaynakların 
-    neler olduğunu bilmesi gerekir. Örneğin Linux işletim sisteminin söz konusu bilgisayar donanımında kaç tabe CPU ya da çekirdek
-    olduğunu, kullanılan RAM'in miktarını, netword arayüzünün (network biriminin) donanımda olup olmadığını vs. bilmesi gerekir. 
+    neler olduğunu bilmesi gerekir. Örneğin Linux işletim sisteminin söz konusu bilgisayar donanımında kaç tane CPU ya da çekirdek
+    olduğunu, kullanılan RAM'in miktarını, network arayüzünün (network biriminin) donanımda olup olmadığını vs. bilmesi gerekir. 
     Eğer işletim sistemi bazı donanım birimlerini otomatik tespit edebilirse onları yöneten "aygıt sürücü (device driver)" denilen
     programları da otomatik yükleyebilir. Böylece hem kendisi hem de user mod programlar bunları kullanabilirler. Pekiyi işletim 
     sistemi donanımdaki donanım birimlerini ve bunların gereksinim duydukları kaynakları nasıl bilecektir? İşte kişisel bilgisayarların
@@ -9540,14 +9540,14 @@ void exit_sys(const char *msg)
     Eskiden PC'ler ilk çıktığında (Aralık-1980) onlar Microsoft'un DOS işletim sistemiyle çalışıyordu. Bu bilgisayarlara en fazla
     640K RAM bağlanıyordu. Ancak kullanıcıların çoğu RAM pahalı olduğu için daha düşük RAM ile çalışıyordu. İşte bu ilk PC'lerde
     sistem reset edildiğinde çalışma BIOS denilen EPROM bellekteki programdan başlatılıyordu. Bu program da donanım birimlerini
-    kendisi kontrol ediyor ve bu birimlerin neler olduğunu ve bunların kullandığı kaynakları RAM'in "BIOS Haberlerşme Alanı (BIOS 
+    kendisi kontrol ediyor ve bu birimlerin neler olduğunu ve bunların kullandığı kaynakları RAM'in "BIOS Haberleşme Alanı (BIOS 
     Communication Area) özel bir yerine yazıyordu. DOS da bu değerleri oradan okuyarak kendini başlatıyordu. Bu sistem DOS süresince
-    bu biçimde devam ettirlmiştir. Zaten o zamanlarda Linux işletim sistemi yoktu ve gömülü sistemlerde genelllikle Intel 8080, 
-    Zilof Z80, Motorola 6800 gibi işlemciler ve mikrodenetleyiciler kullanılıyordu. Zaten o zamnalar aygıtlaar mobil değildi.
+    bu biçimde devam ettirilmiştir. Zaten o zamanlarda Linux işletim sistemi yoktu ve gömülü sistemlerde genellikle Intel 8080, 
+    Zilog Z80, Motorola 6800 gibi işlemciler ve mikrodenetleyiciler kullanılıyordu. Zaten o zamanlar aygıtlar mobil değildi.
 
     1990'lı yılların ilk yarısında Linux işletim geliştirildi. Ancak yaygın kullanıma sahip değildi. O zamanların Linux sistemlerinde
     donanımın tespit edilmesi BIOS Haberleşme Alanındaki bilgilerle ve bizzat Linux çekirdeğinin kendisinin birtakım çabalarıyla 
-    yapılıyordu. Zaten Linux ilk zamanalarda geniş bir işlemci ailesine port edilmemiştir.
+    yapılıyordu. Zaten Linux ilk zamanlarda geniş bir işlemci ailesine port edilmemiştir.
 
     90'lı yıllarla kişisel bilgisayarlarda Windows İşletim Sisteminin kullanılmaya başlanmasıyla donanım birimlerinin tespit 
     edilmesi ağırlıklı olarak Windows tarafından yapılmaya başlandı. O zamanlardaki en önemli sorunlardan biri genişleme yuvalarına 
@@ -9563,12 +9563,12 @@ void exit_sys(const char *msg)
     sistemi de bu bilgilere erişip bunlardan faydalanabiliyordu. Kaynak çatışması da bu yıllarda yazılımsal olarak çözüldü.
     BIOS bir kartın kullandığı kaynak başka bir kartla çakışıyorsa o karta kaynakları değiştirmesi gerektiğini donanımsal olarak 
     iletebiliyordu. Böylece artık kullanıcının işi oldukça kolaylaşmıştı. Kullanıcı kartını genişleme yuvasına takıp bilgisayarı 
-    açtığında BIOS kartı tanıyıp bu bilgileri bir yere yazıyor ve Windows da bu bilgilerden hareketle kartın kullandıı aygıt 
+    açtığında BIOS kartı tanıyıp bu bilgileri bir yere yazıyor ve Windows da bu bilgilerden hareketle kartın kullandığı aygıt 
     sürücüyü otomatik yükleyebiliyordu. Tabii o yıllarda Windows'un karta ilişkin aygıt sürücüyü yükleyebilmesi için o aygıt 
     sürücünün kendi listesi içerisinde olması gerekiyordu. Eğer aygıt sürücü Windows içerisinde yoksa ekrana bir yazı çıkartılıyor
     aygıt sürücünün manuel olarak yüklenmesi isteniyordu. Sonraları özellikle laptop ve notebook bilgisayarların yaygınlaşmasıyla
     bilgisayarın güç tüketimi de önemli bir konu haline gelmeye başladı. İşte bunların sonucu olarak ACPI (Advanced Configuration
-    Power Interface) denilen strandart geliştirildi. BIOS'lar güncellendi ve bu ACPI standardardına uygun hale geitirildi. 
+    Power Interface) denilen standart geliştirildi. BIOS'lar güncellendi ve bu ACPI standardına uygun hale getirildi. 
     ACPI arayüzünde yine BIOS donanım birimlerini belirleyip isimine "ACPI Tablosu (ACPI Table)" denilen RAM'de belli bir bölgedeki 
     bir tabloya yazmaktadır. İşletim sistemleri de bu tablodan PC'lerin ve taşınabilir bilgisayarların donanım birimlerini ve 
     onların kullandığı kaynakları öğrenebilmektedir. Bugün halen masaüstü bilgisayarlarda ve taşınabilir bilgisayarlarda bu ACPI
@@ -9576,9 +9576,9 @@ void exit_sys(const char *msg)
     yöntemdir.
 
     Pekiyi gömülü Linux sistemlerinde işletim sistemi kart üzerindeki donanım birimlerini nasıl öğrenmektedir? Gömülü sistemlerde
-    donanımım birimlerinin otomatik tespit edilmesine yönelik bir mekanizma yoktur. Bu sistemlerde PC'ler ve taşınabilir bilgisyarlarda
+    donanım birimlerinin otomatik tespit edilmesine yönelik bir mekanizma yoktur. Bu sistemlerde PC'ler ve taşınabilir bilgisayarlarda
     olduğu gibi donanımda sabit birimler de bulunmak zorunda değildir. (Örneğin masaüstü ve taşınabilir bilgisayarlardaki donanım 
-    mimarisi olduk bellidir. Bu mimari büyük ölçüde 702lerin sonlarında IBM tarafından tasarlanmıştır. Sonra çeşitli geliştirmeler 
+    mimarisi olduk bellidir. Bu mimari büyük ölçüde 70'lerin sonlarında IBM tarafından tasarlanmıştır. Sonra çeşitli geliştirmeler 
     yapılmıştır.) Örneğin bir gömülü sistem kartında bulunan bir donanım birimi diğerinde bulunmayabilir. SoC üretici firmalar 
     SoC içerisinde değişik birimler yerleştirebilmektedir. Gömülü sistemler standart bir donanım içermediği için ve kapasiteleri 
     düşük olduğu için donanım aygıtların otomatik tespit edilmesi de genellikle mümkün olamamaktadır. İşte gömülü aygıtlar için 
@@ -9603,11 +9603,11 @@ void exit_sys(const char *msg)
     - PC'lerdeki genişleme yuvasına (PCI yuvasına) takılan her türlü kartlar. Örneğin ses kartları, görüntü kartları disk 
     denetleyicileri gibi.
     - USB portuna takılarak kullanılan aygıtlar. Örneğin klavye, fare, yazıcı, flash bellekler, kameralar gibi.
-    - Bluetooth Arayüzünü kullanan aygıtlar: Bluetooth kulaklıklar, bluetooth ile haberleşen ayfıtlar (saatler vs.).
+    - Bluetooth Arayüzünü kullanan aygıtlar: Bluetooth kulaklıklar, bluetooth ile haberleşen aygıtlar (saatler vs.).
 
     Kendini tanıtamayan aygıtların bazıları da şunlardır:
 
-    - SoC içerisisndeki birimler. Örneğin kesme denetleyicileri, zamanlayıcılar vs.
+    - SoC içerisindeki birimler. Örneğin kesme denetleyicileri, zamanlayıcılar vs.
     - I2C, SPI ve 1-wire protokollerini kullanan aygıtlar
     - GPIO pinlerine bağlanarak kullanılan aygıtlar
 -----------------------------------------------------------------------------------------------------------------------------*/
@@ -9629,7 +9629,7 @@ void exit_sys(const char *msg)
     CPU frekansının ne olduğunu, sisteme bağlı UART işlemcilerine hangi adreslerle erişeceğini vs. bilmesi gerekmektedir.
 
     2) Aygıt ağaçlarından donanıma donanım tasarımcıları tarafından eklenmiş olan birimlerin çekirdeğe bildirilmesi için de 
-    faydalanılmaktadır. Örneğin bir kart üzerinde 2 UART varken doannım tasarımcısı ona 2 UART daha eklemil olsun. Bu durumda 
+    faydalanılmaktadır. Örneğin bir kart üzerinde 2 UART varken donanım tasarımcısı ona 2 UART daha eklemiş olsun. Bu durumda 
     çekirdeğin onları iç işleyişinde kullanabilmesi için onları tanıması gerekir. İşte sistem programcısı bu bilgileri aygıt 
     ağacına ekleyerek Linux çekirdeğine iletebilir.
 
@@ -9638,7 +9638,7 @@ void exit_sys(const char *msg)
 
     4) Aygıt ağaçları birbirine benzeyen ama farklı olan donanımlar söz konusu olduğunda taşınabilirliği artırmaktadır. 
     Örneğin bir Linux kartının çeşitli versiyonları olsun. Bunların bazılarında 2 UART bazılarında 4 UART bulunuyor olsun. 
-    Bu iki versiyon için aygır ağaçlarını değiştirerek onlar hakkındaki bilgileri çekirdeğe iletebiliriz.
+    Bu iki versiyon için aygıt ağaçlarını değiştirerek onlar hakkındaki bilgileri çekirdeğe iletebiliriz.
 
     Pekiyi aygıt ağaçlarıyla ilgili olmayan durumlar nelerdir? İşte erken yüklenmesi gerekmeyen, donanım birimleriyle bir ilgisi 
     olmayan aygıt sürücülerin aygıt ağaçlarıyla bir ilgisi yoktur. Aygıt bir donanım biriminin çekirdeğe tanıtılıp erken aşamada
@@ -9647,11 +9647,11 @@ void exit_sys(const char *msg)
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Pekiyi aygıt ağaçları kimler tarafından oluşturulmaktadır? Gömülü sistemler birbirinden farklı donanım birimleri içerebildiğine 
-    göre her sgömülü sistem için o sistemi oluşturan ekibin aygıt ağacını oluşturması gerekir. Tabii gömülü sistem tasarımında
+    göre her gömülü sistem için o sistemi oluşturan ekibin aygıt ağacını oluşturması gerekir. Tabii gömülü sistem tasarımında
     donanımı tasarlayanlar zaten bilinen ve kullanılan donanım birimlerini kartlarına yerleştirebilmektedir. Bu birimler için 
     zaten hazırlanmış olan aygıt ağaçlarından faydalanılabilir. Örneğin biz bir gömülü Linux kartımızda belli bir firmanın SoC'unu 
     kullanıyor olabiliriz. Zaten bu firma ya da başka topluluklar bu SoC için aygıt ağacını oluşturmuş olabilirler. Biz de o 
-    aygıt ağacını temel alarak ona eklemeler yapabiliriz. Pek çok gömülü Linux projesinde gümülü yazılım mühendisleri zaten var 
+    aygıt ağacını temel alarak ona eklemeler yapabiliriz. Pek çok gömülü Linux projesinde gömülü yazılım mühendisleri zaten var 
     olan aygıt ağaçları üzerinde özelleştirmeler yapmaktadır.
 
     Çeşitli üretici firmaların çeşitli SoC modellerine ilişkin pek çok hazır aygıt ağacı bulunmaktadır. Aslında bu aygıt 
@@ -9673,11 +9673,11 @@ void exit_sys(const char *msg)
 
     .dts (device tree source file) ----> dtc (device tree compiler) ---> .dtb (device tree blob / flattened device tree)
 
-    Biz kurusumuzda "device tree blob" ya da "flattened device tree" terimleri yerine "binary aygıt ağacı dosyası" ya da ".dtb"
+    Biz kursumuzda "device tree blob" ya da "flattened device tree" terimleri yerine "binary aygıt ağacı dosyası" ya da ".dtb"
     dosyası terimlerini kullanacağız.
 
     Neden aygıt ağacı kaynak dosyasının binary biçime dönüştürüldüğünü merak edebilirsiniz. Bunun nedeni binary bilgilerin 
-    daha etkin bir biçimde parse edilemsi ve daha az yer kaplamasıdır.
+    daha etkin bir biçimde parse edilmesi ve daha az yer kaplamasıdır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -9711,7 +9711,7 @@ void exit_sys(const char *msg)
         test = "this is a test";
     };
 
-    Bu dosyaı biz "dtc" ile şöyle binary aygır ağacı dosyasına dönüştürebiliriz:
+    Bu dosyayı biz "dtc" ile şöyle binary aygıt ağacı dosyasına dönüştürebiliriz:
 
     $ dtc -I dts -O dtb -o mydt.dtb mydt.dts
 
@@ -9733,7 +9733,7 @@ void exit_sys(const char *msg)
     https://github.com/devicetree-org/devicetree-specification/releases/tag/v0.4
 
     Bu dokümanda önce aygıt ağacı mantıksal olarak açıklanmış sonra da kaynak ve binary dosya formatları verilmiştir. Internet'te
-    çeşitli kişi ve kurumlar tarafından oluşturulmuş olan açıklayıcı başka dokümanlar da bulunmaktadır. Aşağıdaki dokümandanlardan 
+    çeşitli kişi ve kurumlar tarafından oluşturulmuş olan açıklayıcı başka dokümanlar da bulunmaktadır. Aşağıdaki dokümanlardan 
     da faydalanabilirsiniz:
 
     https://docs.zephyrproject.org/latest/build/dts/index.html
@@ -9742,15 +9742,15 @@ void exit_sys(const char *msg)
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Aygıt ağacı dosyalarının başında bir versiyon alanı bulundurulmaktadır. Bu alan şimdilikl aşağıdaki gibi olmalıdır:
+    Aygıt ağacı dosyalarının başında bir versiyon alanı bulundurulmaktadır. Bu alan şimdilik aşağıdaki gibi olmalıdır:
 
     /dts-v1/;
 
-    Aygıt ağaçları isminden anlaşılacağı gibi ağaö yapısına sahiptir. Ağaç bir kök düğümdne oluşmaktadır. Kök düğümün içerisinde 
+    Aygıt ağaçları isminden anlaşılacağı gibi ağaç yapısına sahiptir. Ağaç bir kök düğümden oluşmaktadır. Kök düğümün içerisinde 
     alt düğümler, alt düğümlerin içerisinde de başka alt düğümler olabilir. Bir düğüm düğüm ismi ve küme parantezleriyle bildirilmektedir. 
-    Düğüm ismi olarak / karakteri kök düğümü belirtmektedir. Küme parantezlerinin sonunda ';' atomu bulunmalıdır. Yanızca aygıt 
+    Düğüm ismi olarak / karakteri kök düğümü belirtmektedir. Küme parantezlerinin sonunda ';' atomu bulunmalıdır. Yalnızca aygıt 
     ağaçlarında değil bu tür diğer bazı ağaç yapılarında da (örneğin Web dünyasında kullanılan CSS dosyalarında olduğu gibi) 
-    alt düğümdeki öğeler üst düğümdeli öğelerden bazı özellikleri alabilmektedir.
+    alt düğümdeki öğeler üst düğümdeki öğelerden bazı özellikleri alabilmektedir.
 
     Düğüm isimlerinde aşağıdaki karakterlerin hepsi kullanılabilmektedir:
 
@@ -9764,7 +9764,7 @@ void exit_sys(const char *msg)
     -       dash
 
     Aygıt ağaçlarında bazı düğümler önceden tanımlanmış isimlere ve işlevlere sahiptir. Bu düğümler "Devicetree Specification" 
-    dokümanında ayrı bölümde ele alınmıştır. Bir düğüm isminin sonında @ işaretli ile belirtilmiş bir "birim adresi (unit address)
+    dokümanında ayrı bölümde ele alınmıştır. Bir düğüm isminin sonunda @ işaretli ile belirtilmiş bir "birim adresi (unit address)
     de bulunabilir. Örneğin:
 
     uart@fe001000
@@ -9787,9 +9787,9 @@ void exit_sys(const char *msg)
             ...
     };
 
-    Burada iki düğümün de ismi "ethernet" olamazdı. Bu nedenle bu isimler "birim isimleri" ile ayrıştırılmak isteniştir. 
+    Burada iki düğümün de ismi "ethernet" olamazdı. Bu nedenle bu isimler "birim isimleri" ile ayrıştırılmak istenmiştir. 
     Tabii ayrıştırmanın @ ile birim ismi verilerek yapılması yerine doğrudan ismi değiştirme yoluna da gidilebilirdi. Ancak 
-    birim isimleri ismi değiştirmeden onların kullandığı bellek ya da port adreslerinin belirtilmesi ile okunabilirli sağlamaktadır.
+    birim isimleri ismi değiştirmeden onların kullandığı bellek ya da port adreslerinin belirtilmesi ile okunabilirliği sağlamaktadır.
 
     Bir düğüm isminin soluna isteğe bağlı olarak bir "etiket (label)" ismi de getirilebilir. Bu etiket ismi bu düğümü "tek olarak 
     (unique)" betimlemek amacıyla kullanılmaktadır. Bir düğüme referans edileceği zaman (tipik olarak "phandle" özelliği ile)
@@ -9847,7 +9847,7 @@ void exit_sys(const char *msg)
 
     Bu tür durumlarda genellikle uygulamacılar önce kaynak aygıt ağacı dosyasını C'nin önişlemcisinden geçirirler. Böylece 
     C'nin önişlemcisi include direktiflerinin bulundurulduğu yere dosyanın içeriğini yerleştirir. Bilindiği gibi C'nin önişlemcisi 
-    "cpp (C Preprcessor)" isimli programdır. Yani "gcc" ve ""clang" derleycileri aslında önişlem işlemlerini bu "cpp" programını 
+    "cpp (C Preprocessor)" isimli programdır. Yani "gcc" ve ""clang" derleycileri aslında önişlem işlemlerini bu "cpp" programını 
     çalıştırarak yapmaktadır. (Tabii "gcc", "g++" ve "clang" derleyicilerinde -E seçeneği ile bu derleyicilerin önişlemi yapıp 
     sonlanmasını da sağlayabilmekteyiz.)
 
@@ -9861,7 +9861,7 @@ void exit_sys(const char *msg)
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Bir aygıt ağacı kaynak dosyasındaki düğümün en önemli özelliği "compatible" özelliğidir. Bu "comptabible" özelliği ilgili 
+    Bir aygıt ağacı kaynak dosyasındaki düğümün en önemli özelliği "compatible" özelliğidir. Bu "compatible" özelliği ilgili 
     düğüm için yüklenecek aygıt sürücüyü belirtmektedir. Bu tür aygıt sürücülerin "platform aygıt sürücüleri" biçiminde yazılmış 
     olması gerekir. "compatible" özelliğinin değeri genellikle tek bir string olarak karşımıza çıkar. Ancak bunu değeri virgüllerle
     ayrılmış olan bir string listesi biçiminde de olabilir. Değer olarak bulundurulan string tipik olarak "vendor,device" biçiminde 
@@ -9873,7 +9873,7 @@ void exit_sys(const char *msg)
     ayrıca işletim sistemi çalışır duruma geldikten sonra "init" programları tarafından ya da sistem yöneticileri tarafından 
     da yüklenebilmektedir. Aygıt sürücü kodlarının çekirdek imajının içine gömülüp gömülmeyeceği çekirdeğin derleme öncesinde 
     konfigüre edilmesi sırasında belirlenmektedir. Özellikle temel donanımlara ilişkin aygıt sürücü kodlarının çekirdeğin 
-    içerisine gömülmesi uygun olabilir. Böylece kırılganlık azaltılabilir, güvenlik artırırılabilir ve daha hızlı bir yükleme 
+    içerisine gömülmesi uygun olabilir. Böylece kırılganlık azaltılabilir, güvenlik artırılabilir ve daha hızlı bir yükleme 
     sağlanabilir. Örneğin:
 
     my_uart@0x1000 {
@@ -9887,12 +9887,12 @@ void exit_sys(const char *msg)
     isimlere göre yapılmaktadır.
 
     Düğümlerde en çok karşılaşılan özelliklerden bir de "reg" özelliğidir. Bu "reg" özelliğinin değeri genellikle açısal parantezler 
-    içerisinde ve genellike 16'lık sistemde (zorunlu değil) sayıllardan oluşturulmaktadır. "reg" özelliği ilgili aygıta erişmek 
+    içerisinde ve genellikle 16'lık sistemde (zorunlu değil) sayılardan oluşturulmaktadır. "reg" özelliği ilgili aygıta erişmek 
     için gereken donanım adreslerini belirlemek için kullanılmaktadır. ARM gibi "bellek tabanlı IO (memory mapped IO)" kullanan 
     işlemcilerde burada bellek adresleri bulunur. Ancak port IO kullanabilen Intel gibi işlemcilerde burada aygıtın port numarası 
     da belirtilebilmektedir. Tabii "reg" özelliği daha geneldir. Yani buradaki adresler CPU söz konusu olduğunda CPU'nun numarasını 
-    belirtir, IRQ'lar söz konusu olduğunda ise IRQ numaaralarını belirtir. "reg" özelliğinin değerinde virgül ayrılmış çiftler 
-    de görebilirsiniz. Bu durumda virgülün solunda aygıtın adresi sağında ise adres uzunluğu bulunaacaktır.
+    belirtir, IRQ'lar söz konusu olduğunda ise IRQ numaralarını belirtir. "reg" özelliğinin değerinde virgül ayrılmış çiftler 
+    de görebilirsiniz. Bu durumda virgülün solunda aygıtın adresi sağında ise adres uzunluğu bulunacaktır.
 
     Aygıt ağacı düğümlerindeki bilgiler aynı zamanda doğrudan platform aygıt sürücülerine aktarılmaktadır. Yani işletim sisteminin 
     çekirdeği ilgili aygıt sürücüyü yüklerken onun kullanacağı adresleri ve diğer bilgileri de aygıt sürücüye geçirmektedir. 
@@ -9901,7 +9901,7 @@ void exit_sys(const char *msg)
     UART'ı kontrol eden aygıt sürücü genel yazıldığına göre ve değişik sistemlerde donanım tasarımcısının isteğine bağlı olarak
     bu haberleşme adresleri değişebildiğine göre bu adreslerin aygıt sürücüye aktarılması zorunludur.
 
-    Düğümlerde standart olarak karşılaşılan diğer bir özellik de "status" özelliğidir. Bu özeellik ilgili donanım biriminin 
+    Düğümlerde standart olarak karşılaşılan diğer bir özellik de "status" özelliğidir. Bu özellik ilgili donanım biriminin 
     durumunu ayarlamak için kullanılmaktadır. Bu özelliğin değeri bir string olur. Bu string'in nasıl oluşturulacağı düğüme 
     göre farklılık gösterebilmektedir. Ancak örneğin "disabled" özelliği ilgili birimin devre dışı bırakılacağı anlamına gelmektedir.
     Eğer biz bir donanım birimini devre dışı bırakmak istersek (yani işletim sisteminin onu yokmuş gibi varsaymasını istersek)
@@ -9923,7 +9923,7 @@ void exit_sys(const char *msg)
     biz bu dosyayı decompile da edebiliriz.) İşte orijinal ".dts" dosyasını değiştirmek yerine bir kaplama (overlay) dosyası 
     oluşturup değişiklikleri o dosya üzerinde yapabiliriz. Böylece orijinal dosyayı bozmamış oluruz. Örneğin BBB'nin GPIO soketlerine 
     isteğe bağlı olarak takılan çeşitli kartlar vardır. İşte bu kartların her biri için ayrı kaplama dosyaları oluşturulabilir 
-    ve bu kartlardan hangisi kullanılacaksa o kaplama dosyası ana aygıt dosyaysı ile birlikte yüklenebilir.
+    ve bu kartlardan hangisi kullanılacaksa o kaplama dosyası ana aygıt dosyası ile birlikte yüklenebilir.
 
     Kaplama kaynak dosyalarının uzantıları genellikle yine ".dts" biçimindedir. Ancak bunlara derleme işlemi sonucunda ".dtbo" 
     uzantısı verilmektedir. Kaplama dosyaları derlenirken ayrıca -@ seçeneği de belirtilmelidir. Örneğin:
@@ -9931,19 +9931,19 @@ void exit_sys(const char *msg)
     $ dtc -I dts -O dtb -@ -o myoverlay.dtbo myoverlay.dts
 
     Kaplama dosyası oluşturulduktan sonra bunun boot loader'a verilmesi gerekir. Bootloader'da bu kaplama dosyasını ana aygıt
-    dosyası ile birleştirerek çekirdeğe iletecektir. U-Boot'ta bu işlemin nasıl yapıldığın izleyen paragraflarda göreceğiz.
+    dosyası ile birleştirerek çekirdeğe iletecektir. U-Boot'ta bu işlemin nasıl yapıldığını izleyen paragraflarda göreceğiz.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Kaplama dosyaları aslında "Devicetreee Specification" dokümanında açıklanmamıştır. Bir çeşit uzantı gibidir. Bu nedenle 
-    kağlama (overlay) sentaksını resmi (formal) biçimde açıklayan bir doküman yoktur. Kaplama dosyası oluştururken versiyon 
+    Kaplama dosyaları aslında "Devicetree Specification" dokümanında açıklanmamıştır. Bir çeşit uzantı gibidir. Bu nedenle 
+    kaplama (overlay) sentaksını resmi (formal) biçimde açıklayan bir doküman yoktur. Kaplama dosyası oluştururken versiyon 
     direktifinin yanı sıra "plugin" direktifinin de yerleştirilmesi gerekir. Yani tipik olarak kaplama dosyasının başı şu 
     biçimde olmalıdır:
 
     /dts-v1/;
     /plugin/;
 
-    "plugin" direktifinin /plugin/ biçiminde belirtildiğine dikkat edniz. Kaplama dosyası oluştururken yine bir kök düğüm alınır. 
+    "plugin" direktifinin /plugin/ biçiminde belirtildiğine dikkat ediniz. Kaplama dosyası oluştururken yine bir kök düğüm alınır. 
     Kaplama bilgileri bu kök düğümün içerisinde belirtilir. Örneğin:
 
     / {
@@ -9969,7 +9969,7 @@ void exit_sys(const char *msg)
 
     Aslında buradaki compatible özelliği hiç kullanılmayabilir. Bu özellik ilgili kaplamanın hangi satıcı (vendor) ve modeli 
     için geçerli olduğunu belirtmektedir. BBB için yukarıdaki compatible satırını kullanabilirsiniz. "fragment" bölümlerinin 
-    içerisinde yapılacak değişikliker ve eeklemeler yerleştirilir. "fragment" bölümleri bir "target" ya da "target-path" özelliği 
+    içerisinde yapılacak değişiklikler ve eklemeler yerleştirilir. "fragment" bölümleri bir "target" ya da "target-path" özelliği 
     ile başlatılır. Bu özelliklerden amaç aygıt ağacı üzerindeki hangi düğümün hedeflendiğinin belirlenmesidir. ""target" 
     özelliğinin değeri tipik olarak açısal parantezler içerisinde &'lı düğüm ya da etiket ismidir. Örneğin:
 
@@ -9978,7 +9978,7 @@ void exit_sys(const char *msg)
     Buradaki & semboli ilgili düğüme referans edileceği anlamına gelmektedir.
 
     target-path özelliğinin değeri ise hedeflenen düğümün kök itibaren yol ifadesini belirtir. Örneğin "leds" düğüm eğer 
-    kök dizinin altındaysa biz "targe-path" özelliğini şöyle kullanabiliriz:
+    kök dizinin altındaysa biz "target-path" özelliğini şöyle kullanabiliriz:
 
     target-path = "/leds";
 
@@ -10048,9 +10048,9 @@ void exit_sys(const char *msg)
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Şimdi basit bir uygulama yapalım. Amacımız BBB üzerindeki LED'lerin yanıp sönmesini engellemek yazni o led'leri işlev olarak 
+    Şimdi basit bir uygulama yapalım. Amacımız BBB üzerindeki LED'lerin yanıp sönmesini engellemek yani o led'leri işlev olarak 
     devre dışı bırakmak olsun. Anımsanacağı gibi BBB'de bir tane güç kaynağı led'i d tane de "aktivasyon led'i" bulunmaktadır. 
-    Kenara en yakın led 0 numaralı led'tir. Biz bu işlemi led'lere ilişkin düğümlerin "status" özeelliklerini "disabled" biçime
+    Kenara en yakın led 0 numaralı led'tir. Biz bu işlemi led'lere ilişkin düğümlerin "status" özelliklerini "disabled" biçime
     getirerek sağlayabiliriz. Bu işlem yukarıda da belirttiğimiz gibi iki biçimde yapılabilir. Birincisi ana aygıt ağacı dosyası
     üzerinde değişiklerin yapılmasıdır. İkincisi ana aygıt ağacı dosyasına hiç dokunmadan bir kaplama dosyası yoluyla değişikliğin 
     yapılmasıdır. Biz burada her iki yönteme de örnek vereceğiz.
@@ -10111,9 +10111,9 @@ void exit_sys(const char *msg)
 
     $ dtc -I dts -O dtb -o am335x-boneblack.dtb am335x-boneblack.dts
 
-    4) Elde ettiğimiz ".dtb" dosyasını orijinal ".dtb" dosyasını ezerek oaraya kopyalarız.
+    4) Elde ettiğimiz ".dtb" dosyasını orijinal ".dtb" dosyasını ezerek oraya kopyalarız.
 
-    Artık sistemi boot ettiğimizde BBB'nin aktivasyon led'lerinin yaznmadığını göreceksiniz.
+    Artık sistemi boot ettiğimizde BBB'nin aktivasyon led'lerinin yanmadığını göreceksiniz.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -10141,13 +10141,13 @@ void exit_sys(const char *msg)
         };
     };
 
-    Bu dosya derlenerek ".dtbo" dosyası haline dönüştütülür:
+    Bu dosya derlenerek ".dtbo" dosyası haline dönüştürülür:
 
     $ dtc -I dts -O dtb -@ -o userled-disable.dtbo userled-disable.dts
 
     2) Şimdi elde ettiğimiz ".dtbo" dosyasını hedef sisteme kopyalamamız gerekir. Kaplama dosyaları orijinal ".dtb" dosyalarının
     bulunduğu dizine çekilebilir. Ya da o dizinin altında "overlays" gibi bir dizin yaratılıp onun içerisine çekilebilir. 
-    (Orijinal BBB imajında tüm kaplama dosyaları "overlays" dizinine yerleeştirilmiştir.). Biz "overlays" dizinin içerisine 
+    (Orijinal BBB imajında tüm kaplama dosyaları "overlays" dizinine yerleştirilmiştir.). Biz "overlays" dizinin içerisine 
     yerleştirmeyi yapmış olalım.
 
     3) Şimdi artık işin U-Boot'u ilgilendiren kısmına geldik. Önce işlemleri manuel yapıp sonra otomatize edeceğiz. 
@@ -10180,7 +10180,7 @@ void exit_sys(const char *msg)
 
     => fdt apply 0x89000000
 
-    Artık bootz komutunu yuyguladığımızda kaplama işlemi etkisini gösterecektir:
+    Artık bootz komutunu uyguladığımızda kaplama işlemi etkisini gösterecektir:
 
     => bootz 0x82000000 - 0x88000000
 
@@ -10215,7 +10215,7 @@ void exit_sys(const char *msg)
     xz > bz2 > gzip == zip
 
     Yani en iyi sıkıştırma xz formatında, daha sonra bz2 formatında daha sonra da gzip formatındadır. gzip formatı ile zip formatı 
-    aynı algoritmaları kullanmaktadır. Dolayısıyla bunların poerformansları birbirine benzerdir. Ancak yukarıda da belirttiğimiz 
+    aynı algoritmaları kullanmaktadır. Dolayısıyla bunların performansları birbirine benzerdir. Ancak yukarıda da belirttiğimiz 
     gibi sıkıştırma performansı yükselirken (yani daha iyi hale gelirken) sıkıştırma ve açma için gereken zaman da uzamaktadır.
 
     Yukarıdaki formatalara göre sıkıştıran ve açan programlar hazır biçimde bulunmaktadır. Bu programların isimleri şunlardır:
@@ -10234,7 +10234,7 @@ void exit_sys(const char *msg)
     şeyleri söylemiştik. Bu programlar tek dosya üzerinde çalıştığı için genellikle önce tar'lanıp sıkıştırılmaktadır. O halde
     önce "tar" programının kullanımı hakkında bazı bilgiler verelim.
 
-    tar programının pek çok komut satırı seçeneği olsa da en çok kullanıları seçenekler "-c" "-x" "-f" "-v" seçenekleridir. 
+    tar programının pek çok komut satırı seçeneği olsa da en çok kullanıcıları seçenekler "-c" "-x" "-f" "-v" seçenekleridir. 
     "-c" tar'lamak için "-x" ise açmak için kullanılır. "-v" seçeneği programın daha fazla bilgi vermesini sağlamaktadır. 
     "-f" seçeneği bir argümanla kullanılır. Argüman ".tar" dosyasını belirtir. tar programı birden fazla dosyayı komut satırı 
     argümanıyla alabilir. Tabii kabuğun joker karakterlerinden faydalanabilirsiniz. Argüman olarak dosya yerine dizinler de 
@@ -10275,7 +10275,7 @@ void exit_sys(const char *msg)
 
     $ bunzip2 test.tar.bz2
 
-    Önzer ta'layıp sonra bzip2 ile sıkıştırma işlemi tek hamlede tar programı tarafından "-j" seçeneği ile yapılabilmektedir. 
+    Önzer tar'layıp sonra bzip2 ile sıkıştırma işlemi tek hamlede tar programı tarafından "-j" seçeneği ile yapılabilmektedir. 
     ("-z" seçeneğinin gzip için "-j" seçeneğinin bz2 için kullanıldığına dikkat ediniz.) Örneğin:
 
     $ tar -cvjf test.tar.bz2 x.txt y.txt
@@ -10306,7 +10306,7 @@ void exit_sys(const char *msg)
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Bazı durumlarda çekirdeğin sıfırdan derlenmesi gerekebilmektedir. Çekirdeğin yeniden derlenmesinin gerektiği tpik durumlar 
+    Bazı durumlarda çekirdeğin sıfırdan derlenmesi gerekebilmektedir. Çekirdeğin yeniden derlenmesinin gerektiği tipik durumlar 
     şunlardır:
 
     - Bazı çekirdek modüllerinin ve aygıt sürücülerin çekirdek imajından çıkartılması ve dolayısıyla çekirdeğin küçültülmesi için.
@@ -10346,7 +10346,7 @@ void exit_sys(const char *msg)
 
     $ tar -xvJf linux-5.15.12.tar.xz
 
-    Debian tabanlı sistemlerde o anda makşnede yüklü olan mevcut çekirdeğin kaynak kodlarını indirmek için aşağıdaki komutu 
+    Debian tabanlı sistemlerde o anda makinede yüklü olan mevcut çekirdeğin kaynak kodlarını indirmek için aşağıdaki komutu 
     kullanabilirisiniz:
 
     $ sudo apt-get install linux-source
@@ -10354,7 +10354,7 @@ void exit_sys(const char *msg)
     Burada yükleme "/usr/src" dizinine yapılacaktır.
 
     BBB için derleme yapmak istiyorsanız yine "kernel.org" deki kaynak kodları indirebilirsiniz. Ancak BBB için bazı özelleştirmelerin
-    de yapılmış olduğu kaynak kodların indirilip derlenemsi birtakım kolaylıklar sağlamaktadır. Bu aşağıdaki komutla yapabilirsiniz:
+    de yapılmış olduğu kaynak kodların indirilip derlenmesi birtakım kolaylıklar sağlamaktadır. Bu aşağıdaki komutla yapabilirsiniz:
 
     $ git clone https://github.com/beagleboard/linux.git
 
@@ -10374,7 +10374,7 @@ void exit_sys(const char *msg)
     Majör.Minör.Patch-Extra (-rcX, -stable, -custom, -generic)
 
     Buradaki "majör numara" büyük ilerlemeleri "minör numara" ise küçük ilerlemeleri belirtmektedir. Eskiden (2.6 ve öncesinde) 
-    tek sayı olan minör numaralar "geliştirme versiyonlarını (ya da beta versiyonlarını)", çift olanlar ise stabil hale ggetirilmiş 
+    tek sayı olan minör numaralar "geliştirme versiyonlarını (ya da beta versiyonlarını)", çift olanlar ise stabil hale getirilmiş 
     dağıtılan versiyonları belirtiyordu. Ancak 2.6 sonrasında artık tek ve çift minör numaralar arasında böyle bir farklılık kalmamıştır. 
     Patch numarası birtakım böceklerin ya da çok küçük yeniliklerin çekirdeğe dahil edildiği versiyonları belirtmektedir. Bu bağlamda 
     minör numaralardan daha küçük bir ilerlemenin söz konusu olduğunu anlatmaktadır. Burada Extra ile temsil edilen alanda "rcX 
@@ -10390,7 +10390,7 @@ void exit_sys(const char *msg)
     Çalışmakta olan Linux sistemi hakkında bilgiler "uname -a" komutu ile elde edilebilir. Örneğin:
 
     $ uname -a
-    inux kaan-virtual-machine 5.15.0-91-generic #101-Ubuntu SMP Tue Nov 14 13:30:08 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+    Linux kaan-virtual-machine 5.15.0-91-generic #101-Ubuntu SMP Tue Nov 14 13:30:08 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
 
     Bu bilgi içerisindeki çekirdek versiyonu "uname -r" ile elde edilebilir:
 
@@ -10448,7 +10448,7 @@ void exit_sys(const char *msg)
     $ sudo apt install build-essential libncurses-dev bison flex libssl-dev wget gcc-arm-linux-gnueabihf \
     binutils-arm-linux-gnueabihf libelf-dev dwarves
 
-    2) Çekirdek kodları indirilerek açılır. Biz bu konuyu yukarıda ele almıştık. İndirmeyi şöyle yapanbiliriz:
+    2) Çekirdek kodları indirilerek açılır. Biz bu konuyu yukarıda ele almıştık. İndirmeyi şöyle yapabiliriz:
 
     $ wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.9.2.tar.xz
 
@@ -10458,7 +10458,7 @@ void exit_sys(const char *msg)
 
     Bu işlemden sonra "linux-6.9.2" isminde bir dizin oluşturulacaktır.
 
-    Ayıca ek bir bilgi olarak eğer Ubuntu türevi bir dağıtımda çalışıyorsanız istediğniz bir çekirdeği aşağıdaki gibi indirip 
+    Ayrıca ek bir bilgi olarak eğer Ubuntu türevi bir dağıtımda çalışıyorsanız istediğiniz bir çekirdeği aşağıdaki gibi indirip 
     kurabilirsiniz:
 
     sudo apt install linux-image-<çekirdek_sürümü>
@@ -10467,7 +10467,7 @@ void exit_sys(const char *msg)
 
     $ sudo apt install linux-image-5.15.0-91-generic
 
-    3) Çekirdek derlenmdene önce konfigüre edilmelidir. Çekirdeğin konfigüre edilmesi birtakım çekirdek özelliklerin belirlenmesi 
+    3) Çekirdek derlenmeden önce konfigüre edilmelidir. Çekirdeğin konfigüre edilmesi birtakım çekirdek özelliklerin belirlenmesi 
     anlamına gelmektedir. Konfigürasyon bilgileri çekirdek kaynak kod ağacının kök dizininde (örneğimizde "linux-6.9.2" dizini) 
     ".config" ismiyle bulunmalıdır. (Biz U-Boot ve BusyBox'ta da derleme öncesinde bir konfigürasyon işlemi yapmıştık. Orada da 
     konfigürasyon dosyası ".config" ismindeydi.) Bu ".config" dosyası default durumda kaynak dosyaların kök dizininde bulunmamaktadır. 
@@ -10492,7 +10492,7 @@ void exit_sys(const char *msg)
     çekebilirsiniz. Linux sistemlerinde genel olarak "/boot" dizini içerisinde "configs-<çekirdek_sürümü>" ismi altında mevcut
     çekirdeğe ilişkin konfigürasyon dosyası bulundurulmaktadır.
 
-    Burada bir noktaya dikkatinizi çekmek istiyoruz. Çekirdek kaynak kodlarındaki "arch/<paltform>/configs/x86_64_defconfig" 
+    Burada bir noktaya dikkatinizi çekmek istiyoruz. Çekirdek kaynak kodlarındaki "arch/<platform>/configs/x86_64_defconfig" 
     dizinindeki konfigürasyon dosyası ".config" ismiyle kopyalandıktan sonra ayrıca "make menuconfig" gibi bir işlemle onun 
     satırlarına bazı default değerlerin de eklenmesi gerekir. Bu default değerler "arch/<platform>" dizinindeki "Kconfig" dosyasından 
     gelmektedir. Bu nedenle bu default konfigürasyon dosyalarını kaynak kök dizine ".config" ismiyle kopyaladıktan sonra 
@@ -10532,12 +10532,12 @@ void exit_sys(const char *msg)
     make allmodconfig: Tüm aygıt sürücülerin çekirdeğin dışında modül (module) biçiminde derleneceğini belirtir.
     make localmodconfig: Sistemde o anda yüklü modüllere dayalı bir yapılandırma dosyası (".config" dosyası) oluşturur.
     make silentoldconfig: Yeni seçenekler için onları görmezden gelir ve o yeni özellikler ".config" dosyasına yansıtılmaz.
-    make dtbs: Kaynak kod ağacında "/arch/platform/boot/dts" dizininideki aygıt ağacı kaynak dosyalarını derler ve "dtb" 
+    make dtbs: Kaynak kod ağacında "/arch/platform/boot/dts" dizinindeki aygıt ağacı kaynak dosyalarını derler ve "dtb" 
     dosyalarını elde eder. Gömülü sistemlerde bu işlemin yapılması ve her çekirdek versiyonuyla o versiyonun "dtb" dosyasının 
     kullanılması tavsiye edilir.
 
     Yukarıda da belirttiğimiz gibi aslında pek çok dağıtım o anda yüklü olan çekirdeğe ilişkin konfigürasyon dosyasını "/boot" 
-    dizini içerisinde "config-$(uname -r)" ismiyle bulundurmaktadır. Örneğin kursun yapılmakta olduğu Mint datıtımında "/boot" 
+    dizini içerisinde "config-$(uname -r)" ismiyle bulundurmaktadır. Örneğin kursun yapılmakta olduğu Mint dağıtımında "/boot" 
     dizinin içeriği şöyledir:
 
     $ ls /boot
@@ -10558,7 +10558,7 @@ void exit_sys(const char *msg)
 
     $ cp /boot/config-$(uname -r) .config
 
-    Fakat eski bir konfigürasyon dosyasını yemni bir öçekirdekle kullanmak için ayrıca "make oldconfig" işleminin de yapılması 
+    Fakat eski bir konfigürasyon dosyasını yeni bir çekirdekle kullanmak için ayrıca "make oldconfig" işleminin de yapılması 
     gerekmektedir.
 
     4) Şimdi elimizde pek çok değerin set edilmiş olduğu ".config" isimli bir konfigürasyon dosyası vardır. Artık bu konfigürasyon 
@@ -10574,7 +10574,7 @@ void exit_sys(const char *msg)
     gibi bir sonek girmenizi böylece yeni çekirdeğe "-custom" soneki iliştirmenizi tavsiye ederiz.
 
     ".config" dosyası elde edildiğinde çekirdek imzalamasını ortadan kaldırmak için dosyayı açıp aşağıdaki özellikleri belirtildiği 
-    gibi değiştirebilirsiniz (bunların bazıları zaten default durumda aşağıdaki gibi dde olabilir):
+    gibi değiştirebilirsiniz (bunların bazıları zaten default durumda aşağıdaki gibi de olabilir):
 
     CONFIG_SYSTEM_TRUSTED_KEYS=""
     CONFIG_SYSTEM_REVOCATION_KEYS=""
@@ -10611,7 +10611,7 @@ void exit_sys(const char *msg)
     - Sıkıştırılmış Çekirdek Imajı: "arch/<platform>/boot" dizininde "bzImage" ismiyle oluşturulmaktadır. Denemeyi yaptığımız Intel makinede 
     dosyanın yol ifadesi "arch/x86_64/boot/bzImage" biçimindedir.
 
-    - Çekirdeğin Sıkıştırılmamış ELF İmajı: Kaynak kök dizininde "vmlinux" isminde dosya biçiminde ooluşturulur.
+    - Çekirdeğin Sıkıştırılmamış ELF İmajı: Kaynak kök dizininde "vmlinux" isminde dosya biçiminde oluşturulur.
 
     - Çekirdek Modülleri (Aygıt Sürücü Dosyaları): "drivers" dizininin altındaki dizinlerde ve "fs" dizininin altındaki dizinlerde 
     ve "net" dizininin altındaki dizinlerde. Ancak "make modules_install" ile bunların hepsi belirli bir dizine çekilebilir.
@@ -10622,7 +10622,7 @@ void exit_sys(const char *msg)
     uzamasına yol açan en önemli etken çekirdek konfigüre edilirken çok fazla modülün seçilmesidir. Pek çok dağıtım "belki lazım olur"
     gerekçesiyle konfigürasyon dosyalarında pek çok modülü dahil etmektedir. Bir dağıtımın konfigürasyon dosyasını kullandığınız zaman
     çekirdek derlemesi uzayacaktır. Ayrıca çekirdek konfigüre edilirken çok fazla modülün dahil edilmesi modüllerin çok fazla yer 
-    kaplamasına da yol açabilmektedir. Çekirdek kodlarındaki platforma özgü default konf,gürasyon dosyaları daha minimalist bir 
+    kaplamasına da yol açabilmektedir. Çekirdek kodlarındaki platforma özgü default konfigürasyon dosyaları daha minimalist bir 
     biçimde oluşturulmuş durumdadır.
 
     6) Derleme sonrasında farklı dizinlerde oluşturulmuş olan aygıt sürücü dosyalarını (modülleri) belli bir dizine kopyalamak 
@@ -10713,13 +10713,13 @@ void exit_sys(const char *msg)
     değil bu dosyayı da oluşturmaktadır.)
 
     "modules.order" dosyası aygıt sürücü dosyalarının yüklenme sırasını barındıran bir text dosyadır. Bu dosyanın her satırında 
-    bir çekirdek aygıt ssürücüsünün dosya yol ifadesi bulunur. Daha önce yazılmış aygıt sürücüler daha sonra yazılanlardan 
+    bir çekirdek aygıt sürücüsünün dosya yol ifadesi bulunur. Daha önce yazılmış aygıt sürücüler daha sonra yazılanlardan 
     daha önce yüklenir. Bu dosyanın olmaması genellikle bir soruna yol açmaz. Ancak modüllerin belli sırada yüklenmemesi 
     bozukluklara da neden olabilmektedir. Bu dosyanın da silinmesi durumunda yine bu dosya da "depmod" komutuyla oluşturulabilmektedir.
 
     7) Eğer gömülü sistemler için derleme yapıyorsanız kaynak kod ağacındaki "arch/<platform>/boot/dts" dizini içerisindeki aygıt
     ağacı kaynak dosyalarını da derlemelisiniz. Tabii elinizde zaten o versiyona özgü aygıt dosyası bulunuyor olabilir. Bu durumda 
-    bu işlemi hiç yapmayabilirsiniz. Aygıt ağacı kaynak dpsyalarını derlemek için "make dtbs" komutunu kullanabilirsiniz:
+    bu işlemi hiç yapmayabilirsiniz. Aygıt ağacı kaynak dosyalarını derlemek için "make dtbs" komutunu kullanabilirsiniz:
 
     $ make dtbs
 
@@ -10748,7 +10748,7 @@ void exit_sys(const char *msg)
     başka yerlerde de bulundurulabilir. Boot loader'a bu yerler belirtilebilir. Ancak yukarıdaki dosyaların hedef sistemde bulundurulduğu 
     default yerler şöyledir:
 
-    - Çekirdek Imajı ---> "/boot" dizinine
+    - Çekirdek İmajı ---> "/boot" dizinine
     - Çekirdek Sembol Tablosu ---> "/boot" dizinine
     - Modül Dosyaları ---> "/lib/modules/<çekirdek_sürümü>/kernel" dizinin altında
 
@@ -10787,7 +10787,7 @@ void exit_sys(const char *msg)
     Bunun için "uname -r" komutunu kullanamayız. Çünkü bu komut bize o anda çalışmakta olan çekirdeğin sürüm yazısını verir. 
     Biz yukarıdaki denemede Linux'un "6.9.2" sürümünü derledik. Bunun sonuna da "-custom" getirirsek sürüm yazısının 
     "6.9.2-custom" olmasını bekleriz. Ancak bu sürüm yazısı aslında manuel olarak isim değiştirmekle oluşturulamamaktadır. 
-    Bu sürüm yazısı çekirdek imajının içerisine yazılmaktadır ve bizim bazı dosyayalara verdiğimiz isimlerin çekirdek içerisindeki 
+    Bu sürüm yazısı çekirdek imajının içerisine yazılmaktadır ve bizim bazı dosyalara verdiğimiz isimlerin çekirdek içerisindeki 
     bu yazıyla uyumlu olması gerekir. Default olarak "kernel.org" sitesinden indirilen kaynak kodlar derlendiğinde çekirdek sürümü 
     "6.9.2" gibi üç haneli bir sayı olmaktadır. Yani yazının sonunda "-generic" gibi "-custom" gibi bir sonek yoktur. İşte çekirdeği 
     derlemeden önce daha önceden de belirttiğimiz gibi ".config" dosyasında "CONFIG_LOCALVERSION" özelliğine bu sürüm numarasından 
@@ -10841,7 +10841,7 @@ void exit_sys(const char *msg)
     $ sudo update-grub
 
     Bu tür denemeler yapılırken "grub" menüleri bozulabilmektedir. Düzeltme işlemleri bazı konfigürasyon dosyalarının edit 
-    edilmesiyle manuel biçimde yapılabilir. Konfigürasyon dosyaları güncelleendikten sonra "update-grub" programı mutlaka 
+    edilmesiyle manuel biçimde yapılabilir. Konfigürasyon dosyaları güncellendikten sonra "update-grub" programı mutlaka 
     çalıştırılmalıdır. Ancak eğer "grub" konfigürasyon dosyaları konusunda yeterli bilgiye sahip değilseniz "grub" işlemlerini 
     görsel bir biçimde "grub-customizer" isimli programla da yapabilirsiniz. Bu program "debian depolarında" olmadığı için 
     önce aşağıdaki gibi programın bulunduğu yerin "apt" kayıtlarına eklenmesi gerekmektedir:
@@ -10868,11 +10868,11 @@ void exit_sys(const char *msg)
 
     3) Zaten hazır olan konfigürasyon dosyası ".config" biçiminde kaynak kök dizine save edilir.
 
-    4) Konfigrasyon dosyası üzerinde "make menuconfig" komutu ile değişiklikler yapılır.
+    4) Konfigürasyon dosyası üzerinde "make menuconfig" komutu ile değişiklikler yapılır.
 
-    5) Çekirdek derlemesi "make -j$(nproc)" komutu ile gereçekleştirilir.
+    5) Çekirdek derlemesi "make -j$(nproc)" komutu ile gerçekleştirilir.
 
-    6) Modüller ve ilgili dosyalar hedefe "sudo make modules_install" komututu ile konuşlandırılır.
+    6) Modüller ve ilgili dosyalar hedefe "sudo make modules_install" komutu ile konuşlandırılır.
 
     7) Çekirdek imajı ve ilgili dosyalar "sudo make install" komutu ile hedefe konuşlandırılır.
 -----------------------------------------------------------------------------------------------------------------------------*/
@@ -10884,24 +10884,24 @@ void exit_sys(const char *msg)
     - "/lib/modules/<çekirdek_sürümü>" dizini tamamen silinebilir.
     - "/boot" dizinindeki çekirdek sürümüne ilişkin dosyalar silinmelidir.
     - "/boot" dizininden çekirdek sürümüne ilişkin dosyalar silindikten sonra "update-grub" programı sudo ile çalıştırılmalıdır.
-    Bu program "/boot" dininini inceleyip otomatik olarak ilgili girişleri "grub" menüsünden siler. Yani aslında "grub" 
+    Bu program "/boot" dizinini inceleyip otomatik olarak ilgili girişleri "grub" menüsünden siler. Yani aslında "grub" 
     konfigürasyon dosyaları üzerinde manuel değişiklik yapmaya gerek yoktur. "grub" işlemleri için diğer bir alternatif ise 
     "grub-customizer" programı ile görsel silme yapmaktır. Ancak bu program "/boot" dizini içerisindeki dosyaları ve modül 
-    dosyalarını silmez. Yalnızca ilgili girişleri "grub" menüsündne çıkartmaktadır.
+    dosyalarını silmez. Yalnızca ilgili girişleri "grub" menüsünden çıkartmaktadır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Linux sistemleri ve diğer UNIX türevi sistemler belli bir zamandan sonra spesifik programların "root" önceliğinde çalışabilmesi
-    için "sudo" komutunu ekledilir. (Böyşe bir komut POSIX standartlarında bulunmamaktadır.). Ancak bu sistemlerde her kullanıcı
+    için "sudo" komutunu ekledilir. (Böyle bir komut POSIX standartlarında bulunmamaktadır.). Ancak bu sistemlerde her kullanıcı
     "sudo" yapamamaktadır. "sudo" yapabilen kullanıcılara "sudoer"denilmektedir. Kurulum sırasında sistem yöneticisinin belirlediği 
-    default kullanıcı otomatik olarak "sudoer" yapımaktadır. Zaten yaratılmış olan bir kullanıcının ya da yeni yaratılan kullanıcının 
+    default kullanıcı otomatik olarak "sudoer" yapılmaktadır. Zaten yaratılmış olan bir kullanıcının ya da yeni yaratılan kullanıcının 
     "sudoer" yapılması için kullanıcının "/etc/group" dosyasında "sudo" grubuna dahil edilmesi gerekmektedir. Örneğin:
 
     sudo:x:27:kaan,ali
 
     Buradan "kaan" ve "ali" kullanıcılarının "sudo" yapabileceği anlaşılmaktadır.
 
-    Aslında "/etc/group" dosyasını doğrudan edit etmekl yerine buı işlemi yapan" "usermod" komutu da kullanılabilir. Örneğin:
+    Aslında "/etc/group" dosyasını doğrudan düzenlemek yerine bu işlemi yapan" "usermod" komutu da kullanılabilir. Örneğin:
 
     $ sudo usermod -aG sudo student
 
@@ -10910,7 +10910,7 @@ void exit_sys(const char *msg)
 
     $ sudo -E ./app
 
-    Burada "app" programı çalıştırılıken artık kabuğun çevre değişkenlerini de barındırmış olacaktır. Ancak PATH çevre değişkeni
+    Burada "app" programı çalıştırılırken artık kabuğun çevre değişkenlerini de barındırmış olacaktır. Ancak PATH çevre değişkeni
     bir güvenlik zafiyetine yol açabileceği için "-E" seçeneği kullanılsa bile yaratılan prosese aktarılmamaktadır.
 
     Sudoers olan kullanılacak için bazı default özellikler "/etc/sudoers" dosyasında bulundurulmaktadır. Bu dosyanın baş tarafı 
@@ -10924,13 +10924,13 @@ void exit_sys(const char *msg)
 
     Eğer "-E" seçeneğinde PATH çevre değişkeninin de yaratılan prosese aktarılmasını istiyorsanız bu dosyadaki "secure_path"
     satırını # ile yorumlama satırı haline getirebilirsiniz. Birinci satır aşağıdaki gibi düzenlenirse bu durumda "-E" seçeneği 
-    kullanmılmadan da çevre değişkenleri otomatik olarak yaratılan prosese aktarılacaktır:
+    kullanılmadan da çevre değişkenleri otomatik olarak yaratılan prosese aktarılacaktır:
 
     Defaults	env_keep="*"
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Pekiyi Raspberry Pi ve BBB için nasıl çekirdek derleyebiliriz? Raspberry Pi'ın ileri versiyonları zaten kişisel bilgiayarlar
+    Pekiyi Raspberry Pi ve BBB için nasıl çekirdek derleyebiliriz? Raspberry Pi'ın ileri versiyonları zaten kişisel bilgisayarlar
     kadar hızlıdır. Dolayısıyla çekirdek derlemesi doğrudan bunların üzerinde yapılabilir. Ancak BBB gibi kısıtlı sistem kaynaklarına
     sahip donanımlar için çekirdek derlemesinin başka bir sistemde (muhtemelen Intel tabanlı bir masaüstü bilgisayarda) yapılması 
     gerekecektir.
@@ -10982,7 +10982,7 @@ void exit_sys(const char *msg)
     "arm" biçiminde set etmeliyiz.)
 
     Burada bir noktaya daha dikkatinizi çekmek istiyoruz. Derleme işlemini yaptığınız araç zincirinin de çekirdek kodlarıyla uyumlu 
-    olması gerekir. Örneğin BBB için indiridiğiniz "5.10.168-ti-r71" çekirdek sürümünün derlenmesi için en uygun çapraz derleyici 
+    olması gerekir. Örneğin BBB için indirdiğiniz "5.10.168-ti-r71" çekirdek sürümünün derlenmesi için en uygun çapraz derleyici 
     "gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf" sürümüdür. Bu sürümü aşağıdaki bağlantıdan indirebilirsiniz:
 
     https://developer.arm.com/downloads/-/gnu-a/9-2-2019-12
@@ -10991,7 +10991,7 @@ void exit_sys(const char *msg)
 
     $ make menuconfig
 
-    Biz bu aşamada çekirdeğimize "-custom" son eki vermiş olduğunuzu varsayacağız.
+    Biz bu aşamada çekirdeğimize "-custom" soneki vermiş olduğunuzu varsayacağız.
 
     Artık derlemeyi yapabiliriz:
 
@@ -11004,7 +11004,7 @@ void exit_sys(const char *msg)
 
     Çekirdeği derledikten sonra kurulumu nasıl yapacağız? Burada kurulum masaüstü sistemlerdeki gibi "make install" ile yapılamaz. 
     Çünkü kurulum çalışan bilgisayara değil hedef donanıma yapılacaktır. Bu durumda dosyaların manuel bir biçimde konuşlandırılması 
-    daha uygundur. Ancak modül dosyalarının belli bir dizinde oluşturulması konuşlandırmayı kolaylaşırır. Örneğin:
+    daha uygundur. Ancak modül dosyalarının belli bir dizinde oluşturulması konuşlandırmayı kolaylaştırır. Örneğin:
 
     $ INSTALL_MOD_PATH=modules make modules_install
 
@@ -11020,7 +11020,7 @@ void exit_sys(const char *msg)
 
     Derlenmiş aygıt ağacı dosyaları "arch/<platform>/boot/dts" dizininde ya da bu dizinin altındaki dizinlerde oluşturulacaktır. 
 
-    Aygıt ağacı dosyaları derlendikten sonra yukarıda da belirttiğimiz gibi "arch/<platfom>/boot/dts" dizinine ya da bu dizinin 
+    Aygıt ağacı dosyaları derlendikten sonra yukarıda da belirttiğimiz gibi "arch/<platform>/boot/dts" dizinine ya da bu dizinin 
     altındaki "vendor" dizinlerine çekilmektedir. Onları oradan almak zahmetli olabilir. Bunun için make "dtbs_install" komutu da 
     kullanılabilmektedir. Dosyaların hangi dizine çekileceği INSTALL_DTBS_PATH çevre değişkeni ile belirlenebilmektedir. Örneğin:
 
@@ -11036,7 +11036,7 @@ void exit_sys(const char *msg)
     "/boot" dizinine kopyalanır.
 
     2) Kaynak kod kök dizininde oluşturulan "System.map" dosyası ismin sonuna "-<çekirdek_sürümü>" eklenerek hedef sisteme ilişkin 
-    mikro SD kartın "/boot" dizinine kopyalanır. Çekirdek sürümününün tam ismini kaynak kod kök dizinindeki "vmlinux" dosyasına 
+    mikro SD kartın "/boot" dizinine kopyalanır. Çekirdek sürümünün tam ismini kaynak kod kök dizinindeki "vmlinux" dosyasına 
     "strings" komutunu kullanarak öğrenebilirsiniz. Örneğin:
 
     $ strings vmlinux | grep -i "linux version"
@@ -11048,9 +11048,9 @@ void exit_sys(const char *msg)
     Buradan çekirdek sürümünün "5.10.168-custom" olduğunu görüyoruz. Bu durumda "System.map" dosyası hedef sisteme ilişkin mikro 
     SD kartın "/boot" dizinine "System.map-5.10.168-custom" ismiyle kopyalanır.
 
-    3) Çekirdek modüllerine ilşkin dizin hedef sisteme ilişkin mikro SD kartın "/lib/modules" dizinine çekirdek sürümü adıyla 
+    3) Çekirdek modüllerine ilişkin dizin hedef sisteme ilişkin mikro SD kartın "/lib/modules" dizinine çekirdek sürümü adıyla 
     kopyalanır. Örneğin çekirdek sürümü "5.10.168-custom" ise modüllerin bulunduğu dizini bu isimle kopyalamalısınız. Burada 
-    dikkat edilmesi gereken nokta modüllerin dizine install dilmesinden sonra onun asıl başlangıç dizininin birkaç dizin içeride 
+    dikkat edilmesi gereken nokta modüllerin dizine install edilmesinden sonra onun asıl başlangıç dizininin birkaç dizin içeride 
     olmasıdır. Örneğin kurulum yaptığınız yer "modules" dizini olsun. Bu durumda modül dizini "modules/lib/modules" içerisinde 
     çekirdek sürümüne ilişkin isme sahip dizinde bulunacaktır. Bu dizinde çekirdek kodlarının kök dizinine referans eden "source" 
     ve "build" isimli biriki sembolik bağlantı dosyası da bulunabilmektedir. Kopyalamadan önce bu sembolik bağlantı dosyalarını 
@@ -11066,7 +11066,7 @@ void exit_sys(const char *msg)
     "config-5.10.168-custom" ismiyle yapılabilir.
 
     6) Çekirdeğe yeni modüller eklemişseniz ve sisteminiz geçici kök dosya sistemine gereksinim duyuyorsa (BBB için Linux'un ileri 
-    sürümlari gereksinim duymaktadır) sizin geçici kök dosya sistemini yukarıdaki öğeleri içerecek biçimde yeniden oluşturmanız
+    sürümleri gereksinim duymaktadır) sizin geçici kök dosya sistemini yukarıdaki öğeleri içerecek biçimde yeniden oluşturmanız
     gerekebilir. Geçici kök dosya sistemini daha önce yapmış olduğumuz oluşturduktan sonra onu mikro SD kartın "/boot" dizininin
     içerisine çekebilirsiniz. Geçici kök dosya sisteminin isminin de "initrd.img.<çekirdek_sürümü>" biçiminde verilmesi uygundur.
 -----------------------------------------------------------------------------------------------------------------------------*/
@@ -11137,7 +11137,7 @@ void exit_sys(const char *msg)
 
     Ayrıca kaynak kod ağacındaki dizinler içerisinde Makefile dosyasının yanı sıra "Kconfig" isimli dosyalar da bulunabilmektedir. 
     Bu dosyaların içerisinde ilgili dosyaların ya da dizinlerin "konfigürasyon dosyasına" yansıtılması için gerekli bilgiler 
-    bulundurulmaktadır. Örneğin biz bu "mydriver" dizinindeki dosyaların çerkidek kodlarına dahil edilip edilmeyeceğini çekirdeği 
+    bulundurulmaktadır. Örneğin biz bu "mydriver" dizinindeki dosyaların çekirdek kodlarına dahil edilip edilmeyeceğini çekirdeği 
     derleyenin konfigürasyon aşamasında belirlemesini sağlayabiliriz. Bunun için bu Kconfig dosyasına bir giriş eklememiz gerekir. 
     Böylece bu giriş de "menuconfig" yapıldığında bir seçenek olarak karşımıza gelecektir. Tabii ekleyeceğimiz dosya ve dizinleri 
     "Kconfig" dosyasında belirtmek zorunda değiliz.
@@ -11167,7 +11167,7 @@ void exit_sys(const char *msg)
     dosyası içerisinde buna ilişkin sembolik sabit 1 olarak görünür. Eğer konfigürasyon dosyasında ilgili seçenek gerçekten 
     bir değer belirtiyora "autoconf.h" dosyası içerisinde bu sembolik sabit o değerde olur. Eğer konfigürasyon dosyasında ilgili 
     seçenek "n" biçiminde seçilmişse bu durumda ilgili sembolik sabit hiç define edilmemiş hale gelir. Özetle aslında ".conf" dosyası 
-    içerisindeki satırlardan C'ce anlamlı #define önişlemci komuları oluşturulmaktadır. Aşağıda üretilmiş olan "autoconf.h" dosyasının
+    içerisindeki satırlardan C'ce anlamlı #define önişlemci komutları oluşturulmaktadır. Aşağıda üretilmiş olan "autoconf.h" dosyasının
     birkaç satırını görüyorsunuz:
 
     ...
@@ -11227,7 +11227,7 @@ void exit_sys(const char *msg)
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Bir C dosyasını ya da dizini çekirdek kodlarına ekledikten sonra onun konfigürasyon sırasında (örneğin "make menuconfig")
-    işlemi sırasında görünebilirliğini sağlamak için "Kconfig" dosyalarının kullanıldığnı belirtmiştik. "Kconfig" dosyalarının 
+    işlemi sırasında görünebilirliğini sağlamak için "Kconfig" dosyalarının kullanıldığını belirtmiştik. "Kconfig" dosyalarının 
     genel formatı için aşağıdaki bağlantılara başvurabilirsiniz:
 
     https://docs.kernel.org/kbuild/kconfig-language.html
@@ -11250,7 +11250,7 @@ void exit_sys(const char *msg)
     2) Dış dizinin "Kconfig" dosyasında iç dizindeki "Kconfig" dosyasının dikkate alınması aşağıdaki gibi bir satırın eklenmesiyle
     sağlanmaktadır:
 
-    source "kaynak_kod_ağacınının_köküne_göreli_yol_ifadesi"
+    source "kaynak_kod_ağacının_köküne_göreli_yol_ifadesi"
 
     Örneğin:
 
@@ -11490,7 +11490,7 @@ void exit_sys(const char *msg)
     }
     #endif
 
-    5) Artık çekirdek aaşağıdaki gibi derlenebilir:
+    5) Artık çekirdek aşağıdaki gibi derlenebilir:
 
     $ sudo make -j$(nproc)
 
@@ -11505,7 +11505,7 @@ void exit_sys(const char *msg)
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Pekiyi çekirdek kodlarında küçük değişikler yapıldığında yeniden "make modules_install" ve "make install" yapılmasına gerek 
-    var mıdır? Küçük değişiklikler için bu işlemler yapılmazsa genelllikle sorun ortaya çıkmaz. Yeni oluşturulan çekirdek imajı 
+    var mıdır? Küçük değişiklikler için bu işlemler yapılmazsa genellikle sorun ortaya çıkmaz. Yeni oluşturulan çekirdek imajı 
     doğrudan eskisinin üzerine kopyalanabilir. Ancak değişikliğin yerine ve kapsamına göre çekirdeğin sembol tabloları değişebileceği 
     için genel olarak her derlemeden sonra "make install" yapabilirsiniz. Modüller üzerinde bir işlem uygulamadıktan sonra 
     "make modules_install" genellikle gerekmez. Ancak modüllerde bir değişiklik yapılmışsa yine "make modules_install" yapılmalıdır.
@@ -11783,7 +11783,7 @@ void exit_sys(const char *msg)
     Eğer söz konusu donanım RAM bakımından kısıtlı değilse çekirdke öğelerinin çıkartılması için özel bir dikkat harcamaya 
     gerek yoktur.
 
-    Her çekirdek öğesinin çekir imajındaki kod miktarı birbirindne farklıdır. Örneğin dosya sistemleri çekirdekte geniş bir 
+    Her çekirdek öğesinin çekir imajındaki kod miktarı birbirinden farklıdır. Örneğin dosya sistemleri çekirdekte geniş bir 
     yer kaplamaktadır. Halbuki örneğin gerçek zaman saatiyle ilgili kodlar çekirdekte küçük yer kaplamaktadır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -11959,7 +11959,7 @@ void exit_sys(const char *msg)
     [Network]
     DHCP=ipv4
 
-    Default durumda Debian dağıtımındaki bu ağ daemon programı pasif durumdadır. Bunun açılışta otomatik çaıştırılması için 
+    Default durumda Debian dağıtımındaki bu ağ daemon programı pasif durumdadır. Bunun açılışta otomatik çalıştırılması için 
     "systermctl enable" yapılması gerekir:
 
     $ sudo systemctl enable systemd-networkd
@@ -12119,11 +12119,11 @@ void exit_sys(const char *msg)
 
     $ echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward
 
-    3) NAT (Network Address Translation) ayarının yapılması için aşağıdaki komutlar kullanılaabilir:
+    3) NAT (Network Address Translation) ayarının yapılması için aşağıdaki komutlar kullanılabilir:
 
     $ sudo iptables -t nat -A POSTROUTING -o wlp0s20f3 -j MASQUERADE
 
-    Buradaki "wlp0s20f3" host makinedeki wireless arayüzününün ismidir. Eğer host makinede Internet'e ethernet arayüzü ile çıkıyorsanız
+    Buradaki "wlp0s20f3" host makinedeki wireless arayüzünün ismidir. Eğer host makinede Internet'e ethernet arayüzü ile çıkıyorsanız
     buradaki ismi "eth0" yapabilirsiniz.
 
     4) Yönlendirmede sorun çıkmaması için firewall ayarlarının yapılması gerekir:
@@ -12348,7 +12348,7 @@ void exit_sys(const char *msg)
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Bu bölümde geçici olarak Gömülü Linux sistemlerinin organize edilmesine yönelik konulardan uzaklaşıp kernel mod aygıt 
-    sürücülerin yazılması ve kullanılmaıs üzerinde duracağız. Sonra yeniden Linux sistemlerinin organize edilmesine ilişkin 
+    sürücülerin yazılması ve kullanılması üzerinde duracağız. Sonra yeniden Linux sistemlerinin organize edilmesine ilişkin 
     "buildroot" ve "yocto" gibi araçları inceleyeceğiz.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -12490,7 +12490,7 @@ void exit_sys(const char *msg)
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Masaüstü bir sistem için çekirdek modül derlemeinde kullanılabilecek minimal bir "Makefile" dosyası aşağıdaki gibi olabilir:
+    Masaüstü bir sistem için çekirdek modül derlemesinde kullanılabilecek minimal bir "Makefile" dosyası aşağıdaki gibi olabilir:
 
     obj-m += generic.o
 
@@ -12524,7 +12524,7 @@ void exit_sys(const char *msg)
     obj-m += c.o
     ...
 
-    Eğer derlenecek dosyayı komut satırındna girmek istiyorsanız Makefile dosyasınuı aşağıdaki gibi de düzenleyebilirsiniz:
+    Eğer derlenecek dosyayı komut satırındna girmek istiyorsanız Makefile dosyasını aşağıdaki gibi de düzenleyebilirsiniz:
 
     obj-m += ${file}.o
 
@@ -12539,7 +12539,7 @@ void exit_sys(const char *msg)
 
     make programının -C seçeneği Makefile dosyasını aramadan önce bu seçeneğin argümanında belirtilen dizine geçiş yapmaktadır.
     Dolayısıyla aslında yukarıdaki satırla "/lib/modules/$(shell uname -r)/build" dizinindeki Makefile dosyası çalıştırılacaktır.
-    Buradaki M=${PWD} derlenecek kaynak dosyaların o anda çalışılan dizinde aranacağını belirtmektedir. Böyşece çekirdeğin KBuild
+    Buradaki M=${PWD} derlenecek kaynak dosyaların o anda çalışılan dizinde aranacağını belirtmektedir. Böylece çekirdeğin KBuild
     sistemi yalnızca bizim dosyalarımızı derleyecektir.
 
     Makefile oluştururken bir noktaya dikkat ediniz. Make dilinde hedeflerin aşağısındaki yapılacak işlemler bir tab içerden 
@@ -12993,7 +12993,7 @@ clean:
     __init makrosu ilgili fonksiyonu ELF dosyasının özel bir bölümüne (section) yerleştirir. Modül yüklendikten sonra bu bölüm 
     çekirdek alanından atılmaktadır. __exit makrosu ise çekirdeğin içine gömülmüş modüllerde fonksiyonun dikkate alınmayacağını 
     (dolayısıyla da fonksiyonun yerleştirildiği bölümün çekirdekle birlikte belleğe hiç yüklenmeyeceğini) belirtir. Ancak 
-    sonradan yüklemelerde bu makronun bir etkisi yoktur. Bir çekirdek modülü çekirdeğin içeisine gömülürse modülün cleanup 
+    sonradan yüklemelerde bu makronun bir etkisi yoktur. Bir çekirdek modülü çekirdeğin içerisine gömülürse modülün cleanup 
     fonksiyonu zaten çağrılmamaktadır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -13287,7 +13287,7 @@ module_exit(helloworld_exit);
     if (some_control_failed)		/* burada kontrol yapılıyor */
         return -EXXX;				/* fonksiyon başarısız ise negatif errno değeriyle geri döndürülüyor */
 
-    Özetle biz çerkidek içerisindeki geri dönüş değeri int olan bir fonksiyonu çağırdığımızda onun başarılı olup olmadığını geri dönüş 
+    Özetle biz çekirdek içerisindeki geri dönüş değeri int olan bir fonksiyonu çağırdığımızda onun başarılı olup olmadığını geri dönüş 
     değerinin negatif olup olmadığı ile kontrol ederiz. Eğer çağırdığımız fonksiyonun geri dönüş değeri negatif ise onun pozitif hali
     başarısızlığa ilişkin errno numarasını vermektedir.
 
@@ -13683,7 +13683,7 @@ void exit_sys(const char *msg)
     Sistemde zaten yüklü olan aynı mjör numaraya ilişkin bir aygıt sürücü varsa ya da fonksiyona girilen aygıt numarası geçersiz
     ise fonksiyon başarısız olabilir.
 
-    register_chrdev_region fonksiyonu ile register ettirlmiş olan majör ve minör numaralar unregister_chrdev_region fonksiyonuyla 
+    register_chrdev_region fonksiyonu ile register ettirilmiş olan majör ve minör numaralar unregister_chrdev_region fonksiyonuyla 
     geri bırakılmalıdır. Aksi halde modül çekirdek alanından "rmmod" komutuyla atılsa bile bu aygıt numaraları tahsis edilmiş bir 
     biçimde kalmaya devam edecektir. Bu da önemli sorunlar doğurabilir. unregister_chrdev_region fonksiyonunun prototipi şöyledir:
 
@@ -14237,7 +14237,7 @@ void exit_sys(const char *msg)
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Çekirdek kodlarının ve aygıt sürücü kodlarının çekirdek modunda (kernel mode) çalıştığını belirtmiştik. Çekirdeğin bulunduğu
-    bellek alanı ile kullancı proseslerinin bulunduğu bellek alanı birbirlerinden izole edilmiştir. Daha önceden de belirttiğimiz 
+    bellek alanı ile kullanıcı proseslerinin bulunduğu bellek alanı birbirlerinden izole edilmiştir. Daha önceden de belirttiğimiz 
     gibi kullanıcı modunda çalışan prosesler çekirdek alanına erişemezler. Çünkü çekirdek kendisini sayfa tabanlı koruma mekanizması 
     yoluyla sıradan proseslerden korumaktadır. Fakat bazı durumlarda çekirdek alanı alanı kullanıcı proseslerinin bulunduğu kullanıcı 
     alanı arasında veri transferlerinin yapılması gerekebilmektedir. Örneğin sys_read sistem fonksiyonu çekirdek tarafından okunan 
@@ -15012,7 +15012,7 @@ void exit_sys(const char *msg)
 /*-----------------------------------------------------------------------------------------------------------------------------
     Kullanıcı modundan aygıt dosyası betimleyicisi ile lseek POSIX fonksiyonu çağrıldığında (bu fonksiyon da sys_lseek sistem 
     fonksiyonu çağırmaktadır) karakter aygıt sürücüsünün file_operations yapısı içerisine yerleştirilen llseek fonksiyonu 
-    çağrılmaktadır. lllseek fonksiyonun parametrik yapısı şöyledir:
+    çağrılmaktadır. llseek fonksiyonun parametrik yapısı şöyledir:
 
     static loff_t generic_llseek(struct file *filp, loff_t off, int whence);
 
@@ -15622,7 +15622,7 @@ void exit_sys(const char *msg)
     }
 
     Burada kullanıcı modundaki proses write işlemi yaptığında bizim yazılmak istenen byte'ları copy_from_user fonksiyonu ile 
-    alarak g_pipebuf içerisine g_tail indeksinden itibaren yazmamaız gerekir. Ancak burada iki durum söz konusudur. Eğer g_tail 
+    alarak g_pipebuf içerisine g_tail indeksinden itibaren yazmamız gerekir. Ancak burada iki durum söz konusudur. Eğer g_tail 
     indeksi g_head indeksinden büyük ya da ona eşitse iki parçalı bir yazım gerekebilir. Ancak eğer g_tail indeksi g_head indeksinden 
     küçükse yazım tek seferde yapılabilir. Biz kodumuzda önce boru tamponunun dolu olup olmadığına baktık:
 
@@ -16214,7 +16214,7 @@ void exit_sys(const char *msg)
 
     Bir thread kendisine verilen quanta süresini büyük ölçüde kullanıyorsa bu tür thread'lere "CPU yoğun (CPU bound)" thread'ler 
     denilmektedir. Örneğin bir döngü içerisinde hiç IO işlemi yapmadan yalnızca matematiksel hesap yapan bir thread kendisine 
-    veilen quanta süresini sonuna kadar kullanacaktır. CPU yoğun thread'ler sistemi yavaşlatma potansiyeline sahiptir. Ancak bir 
+    verilen quanta süresini sonuna kadar kullanacaktır. CPU yoğun thread'ler sistemi yavaşlatma potansiyeline sahiptir. Ancak bir 
     thread kendisine verilen quanta süresinin çok azını kullanıp hemen bloke oluyorsa bu tür thread'lere de "IO yoğun (IO bound)"
     thread'ler denilmektedir. Örneğin:
 
@@ -16227,7 +16227,7 @@ void exit_sys(const char *msg)
     olması bile sistemi yormayacaktır. Aslında programların büyük çoğunluğu IO yoğun biçimdedir. Bu nedenle sistemi yormamaktadır.
 
     Pekiyi işletim sisteminde toplamda bir tane mi bekleme kuyruğu vardır? İşte aslında işletim sistemleri her olay için 
-    o olaya özgü ayrı bir bekleme kuyruğu oluşturmaktadır. Dolayısıyla sistemde pek çok farklı bekleeme kuyrukları vardır. 
+    o olaya özgü ayrı bir bekleme kuyruğu oluşturmaktadır. Dolayısıyla sistemde pek çok farklı bekleme kuyrukları vardır. 
     Her kuyruk belli bir olayı bekleyen thread'leri barındırır.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -16237,7 +16237,7 @@ void exit_sys(const char *msg)
     kuyruğu vardır. Bizim thread'imiz de bu çalışma kuyruklarının herhangi birinde bulunabilir. Ancak yine o kuyrukta sırası 
     geldiğinde çalışacaktır. Bu durumu bir süper markette tek kasa yerine 4 kasanın olduğu duruma benzetebiliriz. Yine müşteri
     bekler ancak kuyruklar tek kasa durumuna göre daha kısa olduğundan daha az beklemiş olur. Tabii süper marketlerde de şöylesi 
-    durumlarla hepimiz karşılaşmışızdır: Biz en az müştereinin olduğu kuyruğa girdiğimiz halde süreç umduğumuz gibi ilerlememiş 
+    durumlarla hepimiz karşılaşmışızdır: Biz en az müşterinin olduğu kuyruğa girdiğimiz halde süreç umduğumuz gibi ilerlememiş 
     ve diğer kuyruklar bizimkinden daha hızla işlem görerek kısalmış olabilir. Bu tür durumlarda biz kendi kuruğumuzu birakıp 
     diğer kısalmıl olan diğer kuyruğa geçmeyi tercih ederiz. İşte aynı durum çok işlemcili ya da çok çekirdekli sistemlerde de 
     benzer biçimdedir. İşletim sistemi bir thread'i bir kuyruğa atadığında diğer kuruklar azalmışsa onu oradan kopartıp diğer 
@@ -16704,7 +16704,7 @@ void exit_sys(const char *msg)
 
     Semaphore'lar bir kritik koda en fazla n tane akışın girmesine olanak sağlamaktadır. Örneğin buradaki n değerinin 3 olduğunu
     düşünelim. Bu durumda birinci thread semaphore'dan geçer ve kritk koda girer. İkinci thread da semaphore'dan geçip geçip 
-    kritik koda girer. Şimdi kritk kodda iki thread bulunmaktadır. Üçüncü thread de semaphore'dan geçerek krieik koda girebilir. 
+    kritik koda girer. Şimdi kritk kodda iki thread bulunmaktadır. Üçüncü thread de semaphore'dan geçerek kritik koda girebilir. 
     Şimdi kritik kodda üç threda bulunmaktadır. Artık dördünvü bir thread kritik koda girmek isterse bloke oluşur ve bu thread
     bekleme kuyruklarına alınarak bekletilir. Beşinci thread de benzer biçimde semahore'dan geçemeyecek ve bloke olacaktır. 
     Şimdi kritik koda girmiş olan thread'lerden birinin kritik koddan çıktığını düşünelim. Şimdi kritik iki thread bulunmaktadır. 
@@ -16718,7 +16718,7 @@ void exit_sys(const char *msg)
 
     Yukarıda da belirttiğimiz gibi bir kritik koda iki akışın bile girmesi paylaşılan kaynağı bozabilir. O halde kritik koda
     N tane akışın girmesinin ne anlamı olabilir? İşte semaphore'lar tipik olarak N tane kaynağı thread'lere paylaştırmak 
-    için kullanılmaktadır. Örneğn elimizde 3 tane makşne olsun. Bir thread makine istediğinde biz ona bu üç makineden birini 
+    için kullanılmaktadır. Örneğin elimizde 3 tane makine olsun. Bir thread makine istediğinde biz ona bu üç makineden birini 
     veririz. Başka bir thread de makine istediğinde biz ona geri kalan iki makineden birini veririz. Başka bir thread de makine 
     istediğinde biz ona boşta olan tek makineyi veriririz. Artık elimizde hiç makine kalmamıştır. Şimdi başka bir thread bizden 
     makine istediğinde biz artık o thread'e elimizde makine kalmadığı için makine veremeyiz. Ancak o thread'in işlemine devam 
@@ -16758,7 +16758,7 @@ void exit_sys(const char *msg)
     semapore sayacı 0'dan büyük olduğu için bloke oluşturmaz ancak semaphore sayacını 1 eksiltir. ŞŞimdi semaphore sayacı 2'dir. 
     Bir threda daha kritik koda girmek istediğinde semaphore sayacı 1'e düşecektir. Şimdi kritik kodda iki thread bulunacaktır.
     Bir thread daha jkritik koda girmek istediğinde semaphore sayacı 0 olur ve artık kritik kodda üç thread bulunmaktadır. 
-    Artık yeni bir thread down fonksiyonuna geldiğinde semaphore sayacaı 0 olduğu için blokede bekleyecektir. Kritik koddaki 
+    Artık yeni bir thread down fonksiyonuna geldiğinde semaphore sayacı 0 olduğu için blokede bekleyecektir. Kritik koddaki 
     bir thread kritik koddan çıkarken up fonksiyonunu çağırır. Bu fonksiyon da semaphore 1 artırır. Şimdi semaphore sayacı 
     yeniden 1 olmuştur. Artık blokede bekleyen bir thread kritik koda girebilir. Tabii bu thread kritik koda girdiğinde semaphore
     sayacı yeniden 0 olacaktır.
@@ -17123,7 +17123,7 @@ void exit_sys(const char *msg)
 
 /*-----------------------------------------------------------------------------------------------------------------------------
     Çekirdek kodlarında ve aygıt sürücülerde çok kullanılan diğer bir senkronizasyon nesnesi de "spinlock" denilen nesnelerdir. 
-    Buradaki "spin" sözcüğü "meşgul bir döngü oluştururak kontrol etmek" anlamına gelmektedir. Spinlock mekanizasmaıs oldukça 
+    Buradaki "spin" sözcüğü "meşgul bir döngü oluştururak kontrol etmek" anlamına gelmektedir. Spinlock mekanizması oldukça 
     basittir. Kritik koda girerken eğer spinlock açık ise giriş gerçekleşir. Ancak spinlock kilitli ise bloke oluşmaz bir döngü
     içerisinde kilit açılana kadar sürekli kilit kontrol edilir. Biz kritik kritk kod kilidinin bu biçimde kontrol edilmesinin 
     sürekli CPU'yu meşgul ettiğinden dolayı uygun olmadığını belirtmiştik. Ancak bazı durumlarda aslında bloke olmadan sürekli 
@@ -17666,7 +17666,7 @@ void exit_sys(const char *msg)
     Intel işlemcileri özellikle hizalanmamış adreslerden bilgi çekerken ya da hizalanmamış adreslere bilgi yazarken bus'ı tüm 
     işlem boyunca tutmamaktadır. Hizalanmamış verileri bellekten okurken işlemci (ya da işlemcideki bir çekirdek) verinin bir 
     kısmını okuyup bus'ı bırakıp sonra diğer kısmını okuyabilmektedir. Aynı durum yazma sırasında da yapılmaktadır. İşte tam 
-    bu sırada büyük bir tesadüfle diğer işlemci ya da çekirdek de aynı bellek bölgesindne okuma yaz ma yapıyorsa oradaki bilgi 
+    bu sırada büyük bir tesadüfle diğer işlemci ya da çekirdek de aynı bellek bölgesinden okuma yaz ma yapıyorsa oradaki bilgi 
     yanlış okunabilmekte ya da oraya yanlış bilgi yazılabilmektedir. Bunu engellemek için Intel LOCK isimli bir önek makine 
     komutu oluşturmuştur. Belleğe erişirken bu LOCK öneki kullanıldığında tüm işlem bitene kadar bus turulmaktadır. Örneğin 
     iki farklı işlemci ya da çekirdekteki kod aynı global değişkene tesadüfen aynı anda atama yapıyor olsun:
@@ -18907,7 +18907,7 @@ void exit_sys(const char *msg)
     amaçlı açmaya çalışan thread boru okuma amaçlı açılana kadar open fonksiyonunda bloke olmaktadır. Bizim aygıt sürücümüzde 
     böyle bir özellik yoktur.
 
-    - İsimli borularda boru boşken okuma yapılmak istedniğinde eğer boruya yazma yapma potansiyelinde hiçbir thread kalmamışsa
+    - İsimli borularda boru boşken okuma yapılmak istendiğinde eğer boruya yazma yapma potansiyelinde hiçbir thread kalmamışsa
     read fonksiyonu blokeye yol açmamakta 0 ile geri dönmektedir. Zaten boru haberleşmesi bu biçimde sonlandırılır. Yani boruya 
     yazan taraf önce boruyu kapatır. Borudan okuyan taraf borudakileri okur. Eğer boruda hiçbir şey kalmazsa read fonksiyonu 
     0 ile geri döner. Okuyan taraf da döngüden çıkarak işlemini sonlnadırır. Bizim yukarıdaki boru aygıt sürücümüzde bu özellik 
@@ -19481,7 +19481,7 @@ void exit_sys(const char *msg)
     void schedule(void);
 
     Tabii koşullara bağlı olarak biz schedule fonksiyonunu çağırmış olsak bile işletim sistemi başka bir thread olmadığı için 
-    ya da thread önceliklerindne dolayı yine bizim thread'imizi çizelgeleyebilir.
+    ya da thread önceliklerinden dolayı yine bizim thread'imizi çizelgeleyebilir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
@@ -20316,15 +20316,797 @@ void exit_sys(const char *msg)
     fonksiyonu ile serbest bırakılmasına örnek verilmiştir.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------
+/* pipe-driver.c */
 
+#include <linux/module.h>
+#include <linux/kernel.h>
+#include <linux/fs.h>
+#include <linux/cdev.h>
+#include <linux/semaphore.h>
+#include <linux/wait.h>
+#include <linux/slab.h>
+
+#define PIPE_BUFFER_SIZE		10
+#define MIN(a, b)	((a) < (b) ? (a) : (b))
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Kaan Aslan");
+MODULE_DESCRIPTION("Pipe Device Driver");
+
+static int pipe_driver_open(struct inode *inodep, struct file *filp);
+static int pipe_driver_release(struct inode *inodep, struct file *filp);
+static ssize_t pipe_driver_read(struct file *filp, char *buf, size_t size, loff_t *off);
+static ssize_t pipe_driver_write(struct file *filp, const char *buf, size_t size, loff_t *off);
+
+static dev_t g_dev;
+static struct cdev g_cdev;
+static struct file_operations g_fops = {
+	.owner = THIS_MODULE,
+	.open = pipe_driver_open,
+	.read = pipe_driver_read,
+	.write = pipe_driver_write,
+	.release = pipe_driver_release
+};
+
+struct PIPE {
+	unsigned char buf[PIPE_BUFFER_SIZE];
+	size_t head;
+	size_t tail;
+	size_t count;
+};
+
+static wait_queue_head_t g_wqwriteopen;
+static wait_queue_head_t g_wqreadopen;
+static wait_queue_head_t g_wqread;
+static wait_queue_head_t g_wqwrite;
+static int g_nreaders;
+static int g_nwriters;
+static DEFINE_SEMAPHORE(g_sem);
+static struct PIPE *g_pipe;
+
+static int __init pipe_driver_init(void)
+{
+	int result;
+
+	printk(KERN_INFO "pipe-driver init...\n");
+
+	if ((result = alloc_chrdev_region(&g_dev, 0, 1, "pipe-driver")) < 0) {
+		printk(KERN_ERR "cannot register device!...\n");
+		goto EXIT1;
+	}
+
+	cdev_init(&g_cdev, &g_fops);
+	if ((result = cdev_add(&g_cdev, g_dev, 1)) < 0) {
+		printk(KERN_ERR "cannot add device!...\n");
+		goto EXIT2;
+	}
+
+	if ((g_pipe = kmalloc(sizeof(struct PIPE), GFP_KERNEL)) == NULL) {
+		printk(KERN_ERR "cannot allocate memory!...\n");
+		result = -ENOMEM;
+		goto EXIT3;
+	}
+
+	init_waitqueue_head(&g_wqreadopen);
+	init_waitqueue_head(&g_wqwriteopen);
+	init_waitqueue_head(&g_wqread);
+	init_waitqueue_head(&g_wqwrite);
+
+	return 0;
+
+EXIT3:
+	cdev_del(&g_cdev);
+EXIT2:
+	unregister_chrdev_region(g_dev, 1);
+EXIT1:
+	return result;
+}
+
+static void __exit pipe_driver_exit(void)
+{
+	kfree(g_pipe);
+	cdev_del(&g_cdev);
+	unregister_chrdev_region(g_dev, 1);
+
+	printk(KERN_INFO "pipe-driver exit...\n");
+}
+
+static int pipe_driver_open(struct inode *inodep, struct file *filp)
+{
+	int accmode = filp->f_flags & O_ACCMODE;
+
+	if (down_interruptible(&g_sem) != 0)
+		return -ERESTARTSYS;
+
+	if (accmode == O_RDONLY) {
+		++g_nreaders;
+		wake_up_interruptible(&g_wqwriteopen);
+		while (g_nwriters == 0) {
+			up(&g_sem);
+			if (filp->f_flags & O_NONBLOCK)
+				return 0;
+			if (wait_event_interruptible(g_wqreadopen, g_nwriters > 0))
+				return -ERESTARTSYS;
+			if (down_interruptible(&g_sem))
+				return -ERESTARTSYS;
+		}
+	}
+	else if (accmode == O_WRONLY) {
+		++g_nwriters;
+		wake_up_interruptible(&g_wqreadopen);
+		while (g_nreaders == 0) {
+			if (filp->f_flags & O_NONBLOCK) {
+				--g_nwriters;
+				up(&g_sem);
+				return -ENXIO;
+			}
+			up(&g_sem);
+			if (wait_event_interruptible(g_wqwriteopen, g_nreaders > 0))
+				return -ERESTARTSYS;
+			if (down_interruptible(&g_sem))
+				return -ERESTARTSYS;
+		}
+	}
+	else if (accmode == O_RDWR) {
+		++g_nreaders;
+		++g_nwriters;
+		wake_up_interruptible(&g_wqreadopen);
+		wake_up_interruptible(&g_wqwriteopen);
+	}
+	up(&g_sem);
+
+	return 0;
+}
+
+static int pipe_driver_release(struct inode *inodep, struct file *filp)
+{
+	int accmode = filp->f_flags & O_ACCMODE;
+
+	if (down_interruptible(&g_sem) != 0)
+		return -ERESTARTSYS;
+
+	if (accmode == O_RDONLY)
+		--g_nreaders;
+	else if (accmode == O_WRONLY)
+		--g_nwriters;
+	else if (accmode == O_RDWR) {
+		--g_nreaders;
+		--g_nwriters;
+	}
+	if (g_nreaders == 0)
+		wake_up_interruptible(&g_wqwrite);
+	if (g_nwriters == 0)
+		wake_up_interruptible(&g_wqread);
+
+	up(&g_sem);
+
+	return 0;
+}
+
+static ssize_t pipe_driver_read(struct file *filp, char *buf, size_t size, loff_t *off)
+{
+	size_t esize, size1, size2;
+	ssize_t result = -EFAULT;
+
+	if (down_interruptible(&g_sem) != 0)
+		return -ERESTARTSYS;
+
+	while (g_pipe->count == 0) {
+		if (g_nwriters == 0) {
+			result = 0;
+			goto EXIT;
+		}
+		up(&g_sem);
+		if (filp->f_flags & O_NONBLOCK)
+			return -EAGAIN;
+		if (wait_event_interruptible(g_wqread, g_pipe->count > 0 || g_nwriters == 0) != 0)
+			return -ERESTARTSYS;
+		if (down_interruptible(&g_sem) != 0)
+			return -ERESTARTSYS;
+	}
+
+	esize = MIN(size, g_pipe->count);
+	if (g_pipe->head >= g_pipe->tail)
+		size1 = MIN(esize, PIPE_BUFFER_SIZE - g_pipe->head);
+	else
+		size1 = esize;
+	size2 = esize - size1;
+
+	if (copy_to_user(buf, g_pipe->buf + g_pipe->head, size1) != 0)
+		goto EXIT;
+
+	if (size2 != 0)
+		if (copy_to_user(buf + size1, g_pipe->buf, size2) != 0)
+			goto EXIT;
+
+	g_pipe->head = (g_pipe->head + esize) % PIPE_BUFFER_SIZE;
+	g_pipe->count -= esize;
+
+	result = esize;
+
+	wake_up_interruptible(&g_wqwrite);
+EXIT:
+	up(&g_sem);
+
+	return result;
+}
+
+static ssize_t pipe_driver_write(struct file *filp, const char *buf, size_t size, loff_t *off)
+{
+	size_t esize, size1, size2;
+	ssize_t result = -EFAULT;
+
+	if (size > PIPE_BUFFER_SIZE)
+		size = PIPE_BUFFER_SIZE;
+
+	if (down_interruptible(&g_sem) != 0)
+		return -ERESTARTSYS;
+
+	if (g_nreaders == 0) {
+		up(&g_sem);
+		send_sig(SIGPIPE, current, 0);
+		return -EPIPE;
+	}
+	while (PIPE_BUFFER_SIZE - g_pipe->count < size) {
+		up(&g_sem);
+		if (filp->f_flags & O_NONBLOCK)
+			return -EAGAIN;
+		if (wait_event_interruptible(g_wqwrite, PIPE_BUFFER_SIZE - g_pipe->count >= size || g_nreaders == 0) != 0)
+			return -ERESTARTSYS;
+		if (down_interruptible(&g_sem) != 0)
+			return -ERESTARTSYS;
+		if (g_nreaders == 0) {
+			up(&g_sem);
+			send_sig(SIGPIPE, current, 0);
+			return -EPIPE;
+		}
+	}
+
+	esize = MIN(size, PIPE_BUFFER_SIZE - g_pipe->count);
+
+	if (g_pipe->tail >= g_pipe->head)
+		size1 = MIN(esize, PIPE_BUFFER_SIZE - g_pipe->tail);
+	else
+		size1 = esize;
+	size2 = esize - size1;
+
+	if (copy_from_user(g_pipe->buf + g_pipe->tail, buf, size1) != 0)
+		goto EXIT;
+	if (size2 != 0)
+		if (copy_from_user(g_pipe->buf, buf + size1, size2) != 0)
+			goto EXIT;
+
+	g_pipe->tail = (g_pipe->tail + esize ) % PIPE_BUFFER_SIZE;
+	g_pipe->count += esize;
+
+	result = esize;
+
+EXIT:
+	wake_up_interruptible(&g_wqread);
+	up(&g_sem);
+
+	return esize;
+}
+
+module_init(pipe_driver_init);
+module_exit(pipe_driver_exit);
+
+# Makefile
+
+obj-m += $(file).o
+
+all:
+	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
+clean:
+	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
+
+/* load (bu satırı dosyaya kopyalamayınız) */
+
+#!/bin/bash
+
+module=$1
+mode=666
+
+/sbin/insmod ./$module.ko ${@:2} || exit 1
+major=$(awk "\$2 == \"$module\" {print \$1}" /proc/devices)
+rm -f $module
+mknod -m $mode $module c $major 0
+
+/* unload (bu satırı dosyaya kopyalamayınız) */
+
+#!/bin/bash
+
+module=$1
+
+/sbin/rmmod ./$module.ko || exit 1
+rm -f $module
+
+/* pwriter.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#define BUFFER_SIZE		8192
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int fd;
+	char buf[BUFFER_SIZE];
+	char *str;
+	ssize_t result;
+
+	if ((fd = open("pipe-driver", O_WRONLY|O_NONBLOCK)) == -1)
+		exit_sys("open");
+
+	for (;;) {
+		printf("Enter text:");
+		fflush(stdout);
+		if (fgets(buf, BUFFER_SIZE, stdin) == NULL)
+			continue;
+		if ((str = strchr(buf, '\n')) != NULL)
+			*str = '\0';
+		if (!strcmp(buf, "quit"))
+			break;
+		if ((result = write(fd, buf, strlen(buf))) == -1)
+			exit_sys("write");
+
+		printf("%jd bytes written...\n", (intmax_t)result);
+	}
+
+	close(fd);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/* preader.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#define BUFFER_SIZE		8192
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int fd;
+	char buf[BUFFER_SIZE];
+	int n;
+	ssize_t result;
+
+	if ((fd = open("pipe-driver", O_RDONLY|O_NONBLOCK)) == -1)
+		exit_sys("open");
+
+	for (;;) {
+		printf("Number of bytes to read? ");
+		scanf("%d", &n);
+		if (n == 0)
+			break;
+		if ((result = read(fd, buf, n)) == -1) {
+			if (errno != EAGAIN)
+				exit_sys("read");
+			printf("pipe is empty, let's do something else...\n");
+			continue;
+		}
+		if (result == 0) {
+			putchar('\n');
+			break;
+		}
+		buf[result] = '\0';
+		printf("%jd bytes read: %s\n", (intmax_t)result, buf);
+	}
+
+	close(fd);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+												101. Ders 13/05/2025 - Salı
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Yukarıda da belirttiğimiz gibi istersek genel amaçlı kmalloc fonksiyonunu kullanmak yerine kendimiz tam istediğimiz büyüklükte
+    dilimlere sahip olan yeni bir dilimli tahsisat sistemi yaratıp onu kullanabiliriz. Yeni bir dilimli tahsisat sisteminin 
+    yaratılması kmem_cache_create fonksiyonu ile yapılmaktadır. Fonksiyonun prototipi şöyledir:
+
+    #include <linux/slab.h>
+
+    struct kmem_cache *kmem_cache_create(const char *name, unsigned int size, 
+            unsigned int align, slab_flags_t flags, void (*ctor)(void *));
+
+    Fonksiyonun birinci parametresi yeni yaratılacak dilimli tahsisat sisteminin ismini belirtmektedir. Burada dilimli tahsisat 
+    sistemine herhangi bir isim verilebilir. Linux çekirdeğinde dilimli tahsisat sistemlerine genellikle "xxx_cachep" biçiminde 
+    isimler verilmektedir. İkinci parametre dilimlerin büyüklüğünü belirtmektedir. Üçüncü parametre ise hizalama değerini belirtir. 
+    Bu hizalama değerine 0 geçilirse default hizalama kullanılır. arsayılan hizalama 32 bit sistemlerde 4 byte, 64 bit sistemlerde 
+    8 byte'tır. Fonksiyonun dördüncü parametresi yaratılacak dilimli tahsisat sistemine ilişkin bazı özelliklerin belirlenmesi 
+    için kullanılmaktadır. Buradaki bayrakların önemli birkaç tanesi şöyledir:
+
+    SLAB_NO_REAP: Fiziksel RAM'in dolması nedeniyle kullanılmayan dilimlerin otomatik olarak sisteme iade edileceği anlamına gelir. 
+    Uç durumlarda bu bayrak kullanılabilir.
+
+    SLAB_HWCACHE_ALIGN: Bu bayrak özellikle SMP sistemlerinde işlemci ya da çekirdeklerin cache alanları için hizalama yapılmasını
+    sağlamaktadır. Yaratım sırasında bu parametreyi kullanabilirsiniz.
+
+    SLAB_CACHE_DMA: Bu parametre DMA alanında (DMA zone) tahsisat için kullanılmaktadır. Daha önceden de belirttiğimiz gibi bazı 
+    sistemlerde fiziksel RAM'ın ancak bazı bölgelerine DMA tarafından erişilebilmektedir.
+
+    Fonksiyonun son parametresi dilim sistemi yaratıldığında çağrılacak callback fonksiyonu belirtmektedir. Bu parametre için 
+    girilecek fonksiyon her yeni dilim tahsis edildiğinde çağrılmaktadır. Böylece yeni bir dilim tahsis edileceği zaman bu fonksiyon
+    içerisinde o dilime ilkdeğer verilebilir. Bu fonksiyona tahsis edilen dilimin başlangıç adresi geçirilmektedir. Bu parametre 
+    NULL da geçilebilir. Bu durumda dilim tahsis edilirken herhangi bir fonksiyon çağrılmaz. kmem_cache_create fonksiyonu başarı 
+    durumunda struct kmem_cache türünden bir yapı nesnesinin adresiyle, başarısızlık durumunda NULL adrese geri dönmektedir. Başarısızlık 
+    durumunda aygıt sürücü fonksiyonunun -ENOMEM değeri ile geri döndürülmesi uygundur.
+
+    Fonksiyon şöyle kullanılabilir:
+
+    struct kmem_cache *g_pipe_cachep;
+
+    if ((g_pipe_cachep = kmem_cache_create("pipe_driver_cachep", sizeof(struct PIPE), 0, SLAB_HWCACHE_ALIGN, NULL)) == NULL) {
+        ...
+        return -ENOMEM;
+    }
+
+    Yaratılmış olan bir dilim sisteminden tahsisatlar kmem_cache_alloc fonksiyonu ile yapılmaktadır. Fonksiyonun prototipi 
+    şöyledir:
+
+    #include <linux/slab.h>
+
+    void *kmem_cache_alloc(struct kmem_cache *cache, int flags);
+
+    Fonksiyonun birinci parametresi yaratılmış olan dilim sisteminin handle değerini, ikinci parametresi ise yaratım bayraklarını 
+    almaktadır. Bu bayraklar kmalloc fonksiyonundaki bayraklarla aynıdır. Yani örneğin bu parametreye GFP_KERNEL geçilebilir. 
+    Fonksiyon başarı durumunda tahsis edilen sanal adrese, başarısızlık durumunda NULL adrese geri dönmektedir. Başarısızlık durumunda
+    aygıt sürücüdeki fonksiyonun -ENOMEM değeri ile geri döndürülmesi uygundur. Örneğin:
+
+    if ((g_pipe = (struct PIPE *)kmem_cache_alloc(g_pipe_cachep, GFP_KERNEL)) == NULL) {
+        ...
+        return -ENOMEM;
+    }
+
+    kmem_cache_alloc fonksiyonu ile tahsis edilen dinamik alan kmem_cache_free fonksiyonu ile serbest bırakılabilir. Fonksiyonun
+    prototipi şöyledir:
+
+    #include <linux/slab.h>
+
+    void kmem_cache_free(struct kmem_cache *cache, const void *obj);
+
+    Fonksiyonun birinci parametresi dilim sisteminin handle değerini, ikincisi parametresi ise serbest bırakılacak dilimin 
+    adresini belirtmektedir. Örneğin:
+
+    kmem_cache_free(g_pipe_cachep, g_pipe);
+
+    kmem_cache_create fonksiyonu ile yaratılmış olan dilim sistemi kmem_cache_destroy fonksiyonu ile serbest bırakılabilir. 
+    Fonksiyonun prototipi şöyledir.
+
+    #include <linux/slab.h>
+
+    int kmem_cache_destroy(struct kmem_cache *cache);
+
+    Fonksiyon dilim sisteminin handle değerini parametre olarak alır. Başarı durumunda 0 değerine, başarısızlık durumunda negatif
+    errno değerine geri döner. Örneğin:
+
+    kmem_cache_destroy(g_pipe);
+
+    Pekiyi kmalloc yerine yeni bir dilimli tahsisat sisteminin yaratılması tercih edilmeli midir? Yukarıda da belirttiğimiz
+    gibi kmalloc fonksiyonu da aslında önceden yaratılmış belli uzunluktaki dilim sistemlerinden tahsisat yapmaktadır. Ancak 
+    "çok sayıda aynı büyüklükte alanların" tahsis edildiği durumlarda programcının belli uzunlukta olan kendi dilim sistemini 
+    yaratması, bunun dışındaki durumlarda genel amaçlı kmalloc fonksiyonunu tavsiye edilmektedir.
+
+    Tabii kmalloc yerine yeni bir dilimli tahsisat sistemi yaratmanın anlamlı olması için çok sayıda aynı büyüklükte tahsisatın
+    yapılıyor olması gerekir. Tek bir tahisat için ya da birkaç tahsisat için yeni bir dilimli tahsisat sistemi yaratmaya hiç 
+    gerek yoktur. Doğrudan kmalloc fonksiyonu kullanılabilir.
+
+    Örneğin boru aygıt sürücümüzde yeni bir dilim sisteminin yaratılmasına hiç gerek yoktur. Çünkü zaten boru aygıt sürücüsünde 
+    tek bir struct PIPE yapı nesnesi yaratılmaktadır. Ancak biz aşağıdaki bu dilimli tahsisat sistemlerinin nasıl kullanıldığına 
+    bir örnek vermek için bu struct PIPE nesnesini kendi yarattığımız dilimli tahsisat sisteminden tahsis ediyoruz.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/* pwriter.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#define BUFFER_SIZE		8192
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int fd;
+	char buf[BUFFER_SIZE];
+	char *str;
+	ssize_t result;
+
+	if ((fd = open("pipe-driver", O_WRONLY)) == -1)
+		exit_sys("open");
+
+	for (;;) {
+		printf("Enter text:");
+		fflush(stdout);
+		if (fgets(buf, BUFFER_SIZE, stdin) == NULL)
+			continue;
+		if ((str = strchr(buf, '\n')) != NULL)
+			*str = '\0';
+		if (!strcmp(buf, "quit"))
+			break;
+		if ((result = write(fd, buf, strlen(buf))) == -1)
+			exit_sys("write");
+
+		printf("%jd bytes written...\n", (intmax_t)result);
+	}
+
+	close(fd);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+# Makefile
+
+obj-m += $(file).o
+
+all:
+	make -C /lib/modules/$(shell uname -r)/build M=${PWD} modules
+clean:
+	make -C /lib/modules/$(shell uname -r)/build M=${PWD} clean
+
+/* load (bu satırı dosyaya kopyalamayınız) */
+
+#!/bin/bash
+
+module=$1
+mode=666
+
+/sbin/insmod ./$module.ko ${@:2} || exit 1
+major=$(awk "\$2 == \"$module\" {print \$1}" /proc/devices)
+rm -f $module
+mknod -m $mode $module c $major 0
+
+/* unload (bu satırı dosyaya kopyalamayınız) */
+
+#!/bin/bash
+
+module=$1
+
+/sbin/rmmod ./$module.ko || exit 1
+rm -f $module
+
+/* pwriter.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#define BUFFER_SIZE		8192
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int fd;
+	char buf[BUFFER_SIZE];
+	char *str;
+	ssize_t result;
+
+	if ((fd = open("pipe-driver", O_WRONLY)) == -1)
+		exit_sys("open");
+
+	for (;;) {
+		printf("Enter text:");
+		fflush(stdout);
+		if (fgets(buf, BUFFER_SIZE, stdin) == NULL)
+			continue;
+		if ((str = strchr(buf, '\n')) != NULL)
+			*str = '\0';
+		if (!strcmp(buf, "quit"))
+			break;
+		if ((result = write(fd, buf, strlen(buf))) == -1)
+			exit_sys("write");
+
+		printf("%jd bytes written...\n", (intmax_t)result);
+	}
+
+	close(fd);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/* preader.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#define BUFFER_SIZE		8192
+
+void exit_sys(const char *msg);
+
+int main(void)
+{
+	int fd;
+	char buf[BUFFER_SIZE];
+	int n;
+	ssize_t result;
+
+	if ((fd = open("pipe-driver", O_RDONLY)) == -1)
+		exit_sys("open");
+
+	for (;;) {
+		printf("Number of bytes to read? ");
+		scanf("%d", &n);
+		if (n == 0)
+			break;
+		if ((result = read(fd, buf, n)) == -1) {
+			if (errno != EAGAIN)
+				exit_sys("read");
+			printf("pipe is empty, let's do something else...\n");
+			continue;
+		}
+		if (result == 0) {
+			putchar('\n');
+			break;
+		}
+		buf[result] = '\0';
+		printf("%jd bytes read: %s\n", (intmax_t)result, buf);
+	}
+
+	close(fd);
+
+	return 0;
+}
+
+void exit_sys(const char *msg)
+{
+	perror(msg);
+
+	exit(EXIT_FAILURE);
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+     Linux'un dosya sistemi için önemli üç yapı vardır. Bunlar file, inode ve dentry yapılarıdır. file isimli yapıya biz "dosya 
+    nesnesi" demiştik. Anımsanacağı gibi ne zaman bir dosya açılsa dosya betimleyici tablosunda dosya betimleyicisi denilen bir 
+    indeks bu dosya nesnesini göstermektedir. Biz user mode'daki dosya işlemlerinde bu konuyu zaten açıklamıştık. Ancak kısaca 
+    bir anımsatma yapalım:
+
+    Dosya Betimleyici Tablosu
+    --------------------------
+
+    0 ----> dosya nesnesi (struct file)
+    1 ----> dosya nesnesi (struct file)
+    2 ----> dosya nesnesi (struct file)
+    3 ----> dosya nesnesi (struct file)
+    ...
+
+    Dosya nesnesi "açık dosyaların bilgilerini" tutmaktadır. Aşağıda file yapısının mevcut çekirdeklerdeki içeriğini görüyorsunuz:
+
+    struct file {
+        union {
+            /* fput() uses task work when closing and freeing file (default). */
+            struct callback_head 	f_task_work;
+            /* fput() must use workqueue (most kernel threads). */
+            struct llist_node	f_llist;
+            unsigned int 		f_iocb_flags;
+        };
+
+        /*
+        * Protects f_ep, f_flags.
+        * Must not be taken from IRQ context.
+        */
+        spinlock_t				f_lock;
+        fmode_t					f_mode;
+        atomic_long_t			f_count;
+        struct mutex			f_pos_lock;
+        loff_t					f_pos;
+        unsigned int			f_flags;
+        struct fown_struct		f_owner;
+        const struct cred		*f_cred;
+        struct file_ra_state	f_ra;
+        struct path				f_path;
+        struct inode			*f_inode;	/* cached value */
+        const struct file_operations	*f_op;
+        u64			f_version;
+    #ifdef CONFIG_SECURITY
+        void			*f_security;
+    #endif
+        /* needed for tty driver, and maybe others */
+        void			*private_data;
+
+    #ifdef CONFIG_EPOLL
+        /* Used by fs/eventpoll.c to link all the hooks to this file */
+        struct hlist_head	*f_ep;
+    #endif /* #ifdef CONFIG_EPOLL */
+        struct address_space	*f_mapping;
+        errseq_t		f_wb_err;
+        errseq_t		f_sb_err; /* for syncfs */
+    } __randomize_layout
+    __attribute__((aligned(4)));	/* lest something weird decides that 2 is OK */
+
+    inode yapısı dosyanın diskteki bilgilerini tutmaktadır. Yani aynı dosya üç kez açılsa çekirdek üç farklı file nesnesi 
+    oluşturmaktadır. Ancak bu dosya diskte bir tane olduğuna göre çekirdek bunun için toplamda bir tane inode yapısı oluşturacaktır.
+    file yapısının içerisinde dosyanın diskteki bilgilerine ilişkin bu inode yapısına f_inode elemanı yoluyla erişilebilmektedir. 
+    Daha önceden de gördüğümüz gibi dosya isimleri diskte dizin girişlerinde tutulmaktadır. Örneğin "/home/kaan/Study/test.c"
+    isimli dosyanın i-node elemanına erişmek için işletim sistemi sırasıyla "/home", "/home/kaan", "/home/kaan/Study" ve 
+    "/home/kaan/Study/test.txt" dizin girişlerini taramak zorundadır. Bu işleme işletim sistemlerinde "yol ifadelerinin 
+    çözümlenmesi (pathname resolution)" denilmektedir. Aynı dosyaların tekrar tekrar açılması durumunda bu işlemlerin yeniden 
+    yapılması oldukça zahmetlidir. Dolayısıyla bulunan dizin girişlerinin bir yapı ile temsil edilerek bir cache sisteminde 
+    saklanması uygundur. İşte Linux çekirdeğinde dizin girişleri "dentry" isimli bir yapıyla temsil edilmektedir.
+
+    Linux sistemleri yukarıda açıkladığımız "inode" ve "dentry" nesnelerini bir cache sisteminde tutmaktadır. Böylece bir dosya
+    yeniden açıldığında onun bilgilerine diske hiç başvurmadan hızlı bir biçimde erişilmektedir. Linux dünyasında bu cache 
+    sistemlerine "inode cache" ve "dentry cache" denilmektedir. file, inode ve denrty nesneleri için bu yapıların büyüklüğünde 
+    ayrı dilimli tahsisat sistemleri oluşturulmuştur.
+
+    Pekiyi yukarıdaki nesneler arasındaki ilişki nasıldır? Dosya sistemine dosya betimleyicisi yoluyla erişildiğini anımsayınız. 
+    Dosya betimleyicisinden dosya nesnesi (file nesnesi) elde edilmektedir. Dosya nesnesinin içerisinde o dosyanın dizin 
+    girişi bilgilerini tutan dentry nesnesinin adresi tutulur. Bu nesnenin içerisinde de inode nesnesinin adresi tutulmaktadır:
+
+    file ---> dentry ---> inode
+
+    Ancak 2.6 çekirdekleriyle birlikte file yapısından inode bilgilerine kolay erişebilmek için ayrıca file yapısı içerisinde
+    doğrudan inode nesnesinin adresi de tutulmaya başlanmıştır.
+
+    Bir aygıt sürücü üzerinde dosya işlemi yapıldığında çekirdek aygıt sürücü fonksiyonlarına dosya nesnesinin adresini 
+    (filp göstericisi) geçirmektedir. Yalnızca aygıt sürücü open fonksiyonuyla açılırken ve close fonksiyonu ile kapatılırken
+    inode nesnesinin adresi de bu fonksiyonlara geçirilmektedir. Aygıt sürücünün fonksiyonlarının parametrik yapılarını 
+    aşağıda yeniden veriyoruz:
+
+    int open(struct inode *inodep, struct file *filp);
+    int release(struct inode *inodep, struct file *filp);
+    ssize_t read(struct file *filp, char *buf, size_t size, loff_t *off);
+    ssize_t write(struct file *filp, const char *buf, size_t size, loff_t *off);
+    loff_t llseek(struct file *filp, loff_t off, int whence);
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------------------------------------------------------*/
-
-/*-----------------------------------------------------------------------------------------------------------------------------
-
------------------------------------------------------------------------------------------------------------------------------*/
-
