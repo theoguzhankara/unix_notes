@@ -20227,20 +20227,20 @@ void exit_sys(const char *msg)
 
     ZONE_DMA ilgili sistemde disk ile RAM arasında transfer yapan DMA'nın erişebildiği RAM alanıdır. Bazı sistemlerde DMA tüm 
     fiziksel RAM'in her yerine transfer yapamamaktadır. ZONE_NORMAL doğrudan çekirdeğin sayfa tablosu yoluyla haritalandırdığı 
-    fiziksel bellek bölgesidir. 32 bit Linux sistemlerinde bu bölge ilk 896 MB'dir. Ancak 64 bit Linux sistemlerinde bu bölge 
-    tüm fiziksel RAM'i içermektedir. ZONE_HIGHMEM ise 32 bit sistemlerde çekirdeğin doğrudan haritalandıramadığı sayfa tablosunda 
-    değişiklik yapılarak erişilebilen fiziksel RAM alanıdır. 32 bit Linux sistemlerinde 896 MB'nin yukarısındaki fiziksel 
-    RAM bölgesi ZONE_HIGHMEM alanıdır. Yukarıda da belirttiğimiz gibi 64 bit Intel işlemcilerinde ZONE_HIGHMEM biçiminde bir 
-    alan zaten yoktur.
+    fiziksel bellek bölgesidir. 32 bit Linux sistemlerinde bu bölge RAM'in ilk 896 MB'sidir. Ancak 64 bit Linux sistemlerinde bu 
+    bölge tüm fiziksel RAM'i içermektedir. ZONE_HIGHMEM ise 32 bit sistemlerde çekirdeğin doğrudan haritalandıramadığı sayfa 
+    tablosunda değişiklik yapılarak erişilebilen fiziksel RAM alanıdır. 32 bit Linux sistemlerinde 896 MB'nin yukarısındaki 
+    fiziksel RAM bölgesi ZONE_HIGHMEM alanıdır. Yukarıda da belirttiğimiz gibi 64 bit Intel işlemcilerinde ZONE_HIGHMEM biçiminde 
+    bir alan zaten yoktur.
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Kullanıcı modundaki programlarda kullandığımız malloc fonksiyonunun uyguladığı klasik tahsisat yöntemi "boş bağlı liste" 
+    Kullanıcı modundaki programlarda kullandığımız malloc fonksiyonununda en fazla uygulanan tahsisat yöntemi "boş bağlı liste" 
     denilen yöntemdir. Bu yöntemde yalnızca boş alanlar bir bağlı listede tutulmaktadır. Dolayısıyla malloc gibi bir fonksiyon 
     bu bağlı listede uygun bir elemanı bağlı listeyi dolaşarak bulmaktadır. free fonksiyonu da tahsis edilmiş olan alanı bu boş 
     bağlı listeye eklemektedir. Tabii free fonksiyonu aynı zamanda bağlı listedeki komşu alanları da daha büyük bir boş alan 
-    oluşturacak biçimde birleştirmektedir. Ancak bu klasik yöntem çekirdek heap sistemi için çok yavaş kalmaktadır. Bu nedenle 
-    çekirdek heap sistemleri için daha hızlı çalışan tahsisat algoritmaları kullanılmaktadır.
+    oluşturacak biçimde birleştirmektedir. Ancak bu klasik yöntem çekirdek heap sistemi için çok yavaş bir yöntemdir. Bu nedenle 
+    çekirdek heap sistemlerinde için daha hızlı çalışan tahsisat algoritmaları kullanılmaktadır.
 
     Eğer tahsis edilecek bloklar eşit uzunlukta olursa bu durumda tahsisat işlemi ve geri bırakma işlemi O(1) karmaşıklıkta 
     yapılabilir. Örneğin heap içerisindeki tüm blokların 16 byte uzunlukta olduğunu düşünelim. Bu durumda 16 byte'lık tahsisat 
@@ -20292,13 +20292,13 @@ void exit_sys(const char *msg)
     void *kmalloc (size_t size, int flags);
     void kfree (const void *objp);
 
-    kmalloc fonksiyonunun birinci parametresi tahsis edilecek byte sayısını belirtir. İkincisi parametresi ise tahsis edilecek 
+    kmalloc fonksiyonunun birinci parametresi tahsis edilecek byte miktarını belirtir. İkincisi parametresi ise tahsis edilecek 
     zone ve tahsisat biçimi hakkında çeşitli bayrakları içermektedir. Bu ikinci parametre çeşitli sembolik sabitlerden oluşturulmaktadır. 
     Burada önemli birkaç bayrak şunlardır:
 
     GFP_KERNEL: Çekirdek alanı içerisinde normal tahsisat yapmak için kullanılır. Bu bayrak en sık bu kullanılan bayraktır. Burada 
     eğer RAM doluysa işletim sistemi prosesi bloke ederek swap işlemi ile yer açabilmektedir. Yani bu işlem sırasında akış çekirdek 
-    bloke olarak thread bekleme kuyruklarında bekletilebilir. Tahsisat işlemi ZONE_NORMAL alanından yapılmaktadır.
+    modunda bloke olarak thread bekleme kuyruklarında bekletilebilir. Tahsisat işlemi ZONE_NORMAL alanından yapılmaktadır.
 
     GFP_NOWAIT: GFP_KERNEL gibidir. Ancak hazırda bellek yoksa thread uykuya dalmaz. Fonksiyon başarısız olur.
 
@@ -20731,7 +20731,7 @@ void exit_sys(const char *msg)
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-    Yukarıda da belirttiğimiz gibi istersek genel amaçlı kmalloc fonksiyonunu kullanmak yerine kendimiz tam istediğimiz büyüklükte
+    Yukarıda da belirttiğimiz gibi istersek genel amaçlı kmalloc fonksiyonunu kullanmak yerine kendimiz de tam istediğimiz büyüklükte
     dilimlere sahip olan yeni bir dilimli tahsisat sistemi yaratıp onu kullanabiliriz. Yeni bir dilimli tahsisat sisteminin 
     yaratılması kmem_cache_create fonksiyonu ile yapılmaktadır. Fonksiyonun prototipi şöyledir:
 
@@ -20740,12 +20740,12 @@ void exit_sys(const char *msg)
     struct kmem_cache *kmem_cache_create(const char *name, unsigned int size, 
             unsigned int align, slab_flags_t flags, void (*ctor)(void *));
 
-    Fonksiyonun birinci parametresi yeni yaratılacak dilimli tahsisat sisteminin ismini belirtmektedir. Burada dilimli tahsisat 
-    sistemine herhangi bir isim verilebilir. Linux çekirdeğinde dilimli tahsisat sistemlerine genellikle "xxx_cachep" biçiminde 
-    isimler verilmektedir. İkinci parametre dilimlerin büyüklüğünü belirtmektedir. Üçüncü parametre ise hizalama değerini belirtir. 
-    Bu hizalama değerine 0 geçilirse default hizalama kullanılır. Varsayılan hizalama 32 bit sistemlerde 4 byte, 64 bit sistemlerde 
-    8 byte'tır. Fonksiyonun dördüncü parametresi yaratılacak dilimli tahsisat sistemine ilişkin bazı özelliklerin belirlenmesi 
-    için kullanılmaktadır. Buradaki bayrakların önemli birkaç tanesi şöyledir:
+    Fonksiyonun birinci parametresi yeni yaratılacak dilimli tahsisat sisteminin ismini belirtmektedir. (Bu isim sys dosya sisteminde 
+    bir dizin biçiminde görüntülenebilmektedir.) Burada dilimli tahsisat sistemine herhangi bir isim verilebilir. Linux çekirdeğinde 
+    dilimli tahsisat sistemlerine genellikle "xxx_cachep" biçiminde isimlendirilmektedir. İkinci parametre dilimlerin büyüklüğünü 
+    belirtmektedir. Üçüncü parametre ise hizalama değerini belirtir. Bu hizalama değerine 0 geçilirse default hizalama kullanılır. 
+    Varsayılan hizalama 32 bit sistemlerde 4 byte, 64 bit sistemlerde 8 byte'tır. Fonksiyonun dördüncü parametresi yaratılacak dilimli 
+    tahsisat sistemine ilişkin bazı özelliklerin belirlenmesi için kullanılmaktadır. Buradaki bayrakların önemli birkaç tanesi şöyledir:
 
     SLAB_NO_REAP: Fiziksel RAM'in dolması nedeniyle kullanılmayan dilimlerin otomatik olarak sisteme iade edileceği anlamına gelir. 
     Uç durumlarda bu bayrak kullanılabilir.
@@ -20760,10 +20760,8 @@ void exit_sys(const char *msg)
     girilecek fonksiyon her yeni dilim tahsis edildiğinde çağrılmaktadır. Böylece yeni bir dilim tahsis edileceği zaman bu fonksiyon
     içerisinde o dilime ilkdeğer verilebilir. Bu fonksiyona tahsis edilen dilimin başlangıç adresi geçirilmektedir. Bu parametre 
     NULL da geçilebilir. Bu durumda dilim tahsis edilirken herhangi bir fonksiyon çağrılmaz. kmem_cache_create fonksiyonu başarı 
-    durumunda struct kmem_cache türünden bir yapı nesnesinin adresiyle, başarısızlık durumunda NULL adrese geri dönmektedir. Başarısızlık 
-    durumunda aygıt sürücü fonksiyonunun -ENOMEM değeri ile geri döndürülmesi uygundur.
-
-    Fonksiyon şöyle kullanılabilir:
+    durumunda struct kmem_cache türünden bir yapı nesnesinin adresiyle, başarısızlık durumunda NULL adrese geri dönmektedir. 
+    Başarısızlık durumunda aygıt sürücü fonksiyonunun -ENOMEM değeri ile geri döndürülmesi uygundur. Fonksiyon şöyle kullanılabilir:
 
     struct kmem_cache *g_pipe_cachep;
 
@@ -20781,8 +20779,8 @@ void exit_sys(const char *msg)
 
     Fonksiyonun birinci parametresi yaratılmış olan dilim sisteminin handle değerini, ikinci parametresi ise yaratım bayraklarını 
     almaktadır. Bu bayraklar kmalloc fonksiyonundaki bayraklarla aynıdır. Yani örneğin bu parametreye GFP_KERNEL geçilebilir. 
-    Fonksiyon başarı durumunda tahsis edilen sanal adrese, başarısızlık durumunda NULL adrese geri dönmektedir. Başarısızlık durumunda
-    aygıt sürücüdeki fonksiyonun -ENOMEM değeri ile geri döndürülmesi uygundur. Örneğin:
+    Fonksiyon başarı durumunda tahsis edilen dilimin sanal adresine, başarısızlık durumunda NULL adrese geri dönmektedir. Başarısızlık 
+    durumunda aygıt sürücüdeki fonksiyonun -ENOMEM değeri ile geri döndürülmesi uygundur. Örneğin:
 
     if ((g_pipe = (struct PIPE *)kmem_cache_alloc(g_pipe_cachep, GFP_KERNEL)) == NULL) {
         ...
@@ -20808,8 +20806,8 @@ void exit_sys(const char *msg)
 
     int kmem_cache_destroy(struct kmem_cache *cache);
 
-    Fonksiyon dilim sisteminin handle değerini parametre olarak alır. Başarı durumunda 0 değerine, başarısızlık durumunda negatif
-    errno değerine geri döner. Örneğin:
+    Fonksiyon dilim sisteminin handle değerini parametre olarak alır. Başarı durumunda 0 değerine, başarısızlık durumunda 
+    negatif errno değerine geri döner. Örneğin:
 
     kmem_cache_destroy(g_pipe);
 
@@ -21013,10 +21011,22 @@ void exit_sys(const char *msg)
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------
-     Linux'un dosya sistemi için önemli üç yapı vardır. Bunlar file, inode ve dentry yapılarıdır. file isimli yapıya biz "dosya 
+    Biz kmem_cache_create fonksiyonlarıyla yaratılmış olan dilimli tahsisat sistemlerini proc dosya sistemi ile görüntüleyebiliriz. 
+    "/proc/slabinfo" dosyası çekirdek tarafından kullanılan yaratılmış dilimli tahsisat sistemleri hakkında bilgi vermektedir. 
+    Ancak bu dosya bizim kmem_cache_create fonksiyonuyla yarattığımız dilimli tahsisat sistemlerini listelememektedir. sys 
+    dosya sistemindeki "/sys/kernel/slab" dizini aygıt sürücülerin yaratmış oldukları da dahil olmak üzere bütün dilimli tahsisat 
+    sistemleri hakkında bilgiler vermektedir. Burada her kmem_cache_create fonksiyonu ile yaratılmış olan dilimli tahsisat sistemi
+    için ayrı bir dizin bulunmaktadır. Ayrıca çekirdeğin kullandığı dilimli tahsisat sistemlerini canlı olarak görüntülemek için
+    "slabtop" isimli bir utility program da vardır.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Linux'un dosya sistemi için önemli üç yapı vardır. Bunlar file, dentry ve inode yapılarıdır. file isimli yapıya biz "dosya 
     nesnesi" demiştik. Anımsanacağı gibi ne zaman bir dosya açılsa dosya betimleyici tablosunda dosya betimleyicisi denilen bir 
-    indeks bu dosya nesnesini göstermektedir. Biz user mode'daki dosya işlemlerinde bu konuyu zaten açıklamıştık. Ancak kısaca 
-    bir anımsatma yapalım:
+    indeks bu dosya nesnesini gösterir duruma getirilmektedir. Dosya betimleyici tablosuna (file descriptor table) prosesi temsil 
+    eden task_struct yapısından erişilmektedir.
+
+    task_struct ------> dosya betimleyici tablosu
 
     Dosya Betimleyici Tablosu
     --------------------------
@@ -21027,7 +21037,11 @@ void exit_sys(const char *msg)
     3 ----> dosya nesnesi (struct file)
     ...
 
-    Dosya nesnesi "açık dosyaların bilgilerini" tutmaktadır. Aşağıda file yapısının mevcut çekirdeklerdeki içeriğini görüyorsunuz:
+    Dosya nesnesi "açık dosyaların bilgilerini" tutmaktadır. Ne zaman sys_open sistem fonksiyonu çağrılsa sys_open sistem 
+    fonksiyonu yeni bir dosya nesnesini (struct file) yaratır, onun adresini dosya betimleyici tablosunda boş bir slota yazar. 
+    Bu slotun indeks numarasını dosya betimleyicisi olarak geri döndürür. Aynı dosya ikinci kez açılsa bile yeni bir dosya nesnesi 
+    (struct file nesnesi) yaratılmaktadır. Daha önce biz bu struct file yapısının içeriğini görmüştük. Bunu yeniden anımsatmak 
+    istiyoruz:
 
     struct file {
         union {
@@ -21071,34 +21085,48 @@ void exit_sys(const char *msg)
     } __randomize_layout
     __attribute__((aligned(4)));	/* lest something weird decides that 2 is OK */
 
-    inode yapısı dosyanın diskteki bilgilerini tutmaktadır. Yani aynı dosya üç kez açılsa çekirdek üç farklı file nesnesi 
+    Eskiden dosya nesnesi dentry nesnesini, dentry nesnesi de inode nesnesini gösteriyordu. Yani durum şöyleydir:
+
+    File ──▶ dentry ──▶ inode
+
+    Daha sonraları dosya nesnesinin içerisinden inode nesnesine daha hızlı erişebilmek için dosya nesnesinin içerisine (yani
+    file yapısının içerisine) doğrudan bir inode göstericisi daha eklenmiştir. Mevcut durum şöyledir:
+
+    File ──▶ dentry ──▶ inode
+    ╰──────────────────────▶
+
+    inode yapısı dosyanın diskteki bilgilerini tutmaktadır. Yani örneğin aynı dosya üç kez açılsa çekirdek üç farklı file nesnesi 
     oluşturmaktadır. Ancak bu dosya diskte bir tane olduğuna göre çekirdek bunun için toplamda bir tane inode yapısı oluşturacaktır.
-    file yapısının içerisinde dosyanın diskteki bilgilerine ilişkin bu inode yapısına f_inode elemanı yoluyla erişilebilmektedir. 
-    Daha önceden de gördüğümüz gibi dosya isimleri diskte dizin girişlerinde tutulmaktadır. Örneğin "/home/kaan/Study/test.c"
-    isimli dosyanın i-node elemanına erişmek için işletim sistemi sırasıyla "/home", "/home/kaan", "/home/kaan/Study" ve 
-    "/home/kaan/Study/test.txt" dizin girişlerini taramak zorundadır. Bu işleme işletim sistemlerinde "yol ifadelerinin 
-    çözümlenmesi (pathname resolution)" denilmektedir. Aynı dosyaların tekrar tekrar açılması durumunda bu işlemlerin yeniden 
-    yapılması oldukça zahmetlidir. Dolayısıyla bulunan dizin girişlerinin bir yapı ile temsil edilerek bir cache sisteminde 
-    saklanması uygundur. İşte Linux çekirdeğinde dizin girişleri "dentry" isimli bir yapıyla temsil edilmektedir.
+    Mevcut çekirdeklerde file yapısının içerisinde dosyanın diskteki bilgilerine ilişkin bu inode yapısına f_inode elemanı yoluyla 
+    erişilebilmektedir. Linux işletim sistemi aynı zamanda diskte son erişilen dosyalara ilişkin i-node elemanlarını inode yapısı 
+    biçiminde bir cache sisteminde de tutmaktadır. Buna "inode cache" denilmektedir. Örneğin biz "test.txt" isimli bir dosyayı 
+    sys_open sistem fonksiyonuyla açmış olalım. İşletim sistemi bunun için bir dosya nesnesi oluşturacak ve bu dosyaya ilişkin 
+    inode nesnesi zaten inode cache içerisinde varsa onu cache'ten alıp kullanacaktır. Eğer bu dosyaya ilişkin inode nesnesi 
+    "inode cache" içerisinde yoksa işletim sistemi dosyaya ilişkin inode bilgilerini diskten bulup inode nesnesini oluşturacak
+    ve "inode cache" içerisine yerleştirecektir. Bu dosya kapatıldığında da işletim sistemi inode yapısını çekirdek alanından 
+    atmaz bu inode nesnesi "inode cache" içerisinde kalmaya devam eder. Tabii bu "inode cache" içerisinde belli sayıda inode 
+    elemanı tutulmaktadır. Bu cache sistemi dolduğunda LRU (Least Recently Used) algoritmasına göre son zamanlarda en az kullanılan 
+    inode elemanı cache'ten atılmaktadır.
 
-    Linux sistemleri yukarıda açıkladığımız "inode" ve "dentry" nesnelerini bir cache sisteminde tutmaktadır. Böylece bir dosya
-    yeniden açıldığında onun bilgilerine diske hiç başvurmadan hızlı bir biçimde erişilmektedir. Linux dünyasında bu cache 
-    sistemlerine "inode cache" ve "dentry cache" denilmektedir. file, inode ve denrty nesneleri için bu yapıların büyüklüğünde 
-    ayrı dilimli tahsisat sistemleri oluşturulmuştur.
+    Linux çekirdeğinde dosyanın i-node elemanına erişmekte kullanılan dizin girişleri dentry isimli bir yapıyla temsil edilmiştir. 
+    inode yapısı dosyanın diskteki bilgilerini tutarken dentry yapısı dosyanın dizin girişi bilgilerini tutmaktadır. Yukarıda da 
+    belirttiğimiz gibi dentry nesnesinin içerisinde inode nesnesinin adresi tutulmaktadır. Örneğin farklı dentry nesneleri aynı 
+    inode nesnesini gösteriyor olabilir. Bu tür durumlar "hard link" yoluyla oluşturulmaktadır. Açılmış dosyanın hangi dizinlerin 
+    içerisinde bulunduğu bilgisi dentry nesnelerinde tutulmaktadır. Linux işletim sistemi nasıl inode nesnelerini bir cache sisteminde 
+    tutuyorsa dentry nesnelerini de ismine "dentry cache" denilen bir cache sistemi içerisinde tutmaktadır. Bir dosyanın open 
+    fonksiyonuyla (bu POSIX fonksiyonu doğrudan sys_open sistem fonksiyonunu çağırmaktadır) açıldığını varsayalım. Dosyaya ilişkin 
+    dizin girişi bilgilerinin elde edilmesi için ismine "pathname resolution" denilen bir işlem yapılmaktadır. Örneğin biz 
+    "/home/kaan/Study/test.txt" dosyasını açmak isteyelim. İşletim sistemi bunun için önce "/home" dizin girişini sonra home 
+    dizininde "kaan" dizin girişini, sonra "kaan" dizininde "Study" dizin girişini sonra da "Study" dizininde "test.txt" dizin 
+    girişini bulacaktır. İşte tüm bu dizin girişleri aynı zamanda "dentry cache" içerisinde de saklanmaktadır. Böylece bu dosyaya 
+    bir daha erişilmek istendiğinde doğrudan bu dizin girişi bilgileri "dentry cache" içerisinden elde edilebilmektedir. Linux 
+    işletim sistemi her zaman eğer bir dosyanın dentry nesnesi çekirdek içerisindeyse onun tüm yol ifadesine ilişkin dentry nesnelerini 
+    de çekirdek içerisinde tutmaktadır. "dentry cache" sistemi de LRU prensibiyle çalışan bir cache sistemidir.
 
-    Pekiyi yukarıdaki nesneler arasındaki ilişki nasıldır? Dosya sistemine dosya betimleyicisi yoluyla erişildiğini anımsayınız. 
-    Dosya betimleyicisinden dosya nesnesi (file nesnesi) elde edilmektedir. Dosya nesnesinin içerisinde o dosyanın dizin 
-    girişi bilgilerini tutan dentry nesnesinin adresi tutulur. Bu nesnenin içerisinde de inode nesnesinin adresi tutulmaktadır:
-
-    file ---> dentry ---> inode
-
-    Ancak 2.6 çekirdekleriyle birlikte file yapısından inode bilgilerine kolay erişebilmek için ayrıca file yapısı içerisinde
-    doğrudan inode nesnesinin adresi de tutulmaya başlanmıştır.
-
-    Bir aygıt sürücü üzerinde dosya işlemi yapıldığında çekirdek aygıt sürücü fonksiyonlarına dosya nesnesinin adresini 
-    (filp göstericisi) geçirmektedir. Yalnızca aygıt sürücü open fonksiyonuyla açılırken ve close fonksiyonu ile kapatılırken
-    inode nesnesinin adresi de bu fonksiyonlara geçirilmektedir. Aygıt sürücünün fonksiyonlarının parametrik yapılarını 
-    aşağıda yeniden veriyoruz:
+    Daha önceden de gördüğümüz gibi Bir aygıt sürücü üzerinde dosya işlemi yapıldığında çekirdek aygıt sürücü fonksiyonlarına 
+    dosya nesnesinin adresini (filp parametre değişkeni) geçirmektedir. Yalnızca aygıt sürücü open fonksiyonuyla açılırken ve 
+    close fonksiyonu ile kapatılırken inode nesnesinin adresi de bu fonksiyonlara geçirilmektedir. Aygıt sürücünün fonksiyonlarının 
+    parametrik yapılarını aşağıda yeniden veriyoruz:
 
     int open(struct inode *inodep, struct file *filp);
     int release(struct inode *inodep, struct file *filp);
@@ -21108,5 +21136,261 @@ void exit_sys(const char *msg)
 -----------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------
+												102. Ders 15/05/2025 - Perşembe
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Aygıt sürücünün majör ve minör numaraları ne anlam ifade etmektedir? Majör numara aygıt sürücünün türünü, minör numara ise 
+    aynı türden aygıt sürücülerin farklı örneklerini (instance'larını) belirtmektedir. Başka bir deyişle minör numara aygıt sürücünün 
+    yönettiği aygıtların numaralarını belirtmektedir. Örneğin biz yukarıdaki "pipe-driver" aygıt sürücümüzün tek bir boruyu değil 
+    on farklı boruyu idare etmesini isteyebiliriz. Bu durumda aygıt sürücümüzün bir tane majör numarası ancak 10 tane minör numarası 
+    olacaktır. Aygıt sürücülerin majör numaraları aynı ise bunların kodları da aynıdır. O aynı kod birden fazla aygıt için işlev 
+    görmektedir. Örneğin seri portu kontrol eden bir aygıt sürücü söz konusu olsun. Ancak bilgisayarımızda dört seri port olsun. 
+    İşte bu durumda bu seri porta ilişkin aygıt dosyalarının hepsinin majör numaraları aynıdır. Ancak minör numaraları farklıdır. 
+    Ya da örneğin terminal aygıt sürücüsü bir tanedir. Ancak bu aygıt sürücü birden fazla terminali yönetebilmektedir. O halde her 
+    terminale ilişkin aygıt dosyasının majör numaraları aynı minör numaraları farklı olacaktır. Örneğin:
+
+    $ ls -l tty1 tty2 tty3 tty4 tty5
+    crw--w---- 1 root tty 4, 1 Haz  2 15:05 tty1
+    crw--w---- 1 root tty 4, 2 Haz  2 15:05 tty2
+    crw--w---- 1 root tty 4, 3 Haz  2 15:05 tty3
+    crw--w---- 1 root tty 4, 4 Haz  2 15:05 tty4
+    crw--w---- 1 root tty 4, 5 Haz  2 15:05 tty5
+
+    Örneğin diskleri yöneten bir aygıt sürücüsü olsun. Ancak bilgisayarımızda üç farklı fiziksel disk olsun. Bu disklerin 
+    yönetimleri aynı biçimde aynı kodlarla yapılmaktadır. Bunları yöneten tek bir aygıt sürücü kodu dolayısıyla majör numarası 
+    vardır. Ancak her disk ayrı bir minör numarayla temsil edilir.
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+    Şimdi de bir aygıt sürücünün aynı türden birden fazla aygıtı nasıl yönetebileceğini ele alacağız. Birden fazla aygıtı yönetecek 
+    (yani birden fazla minör numaraya sahip olan) bir aygıt sürücü nasıl yazılabilir? Her şeyden önce birden fazla minör numara 
+    kullanan aygıt sürücüleri yazarken dikkatli olmak gerekir. Çünkü tek bir kod birden fazla aynı türden bağımsız aygıtı idare 
+    edecektir. Dolayısıyla bu tür durumlarda bazı nesnelerin senkronize edilmesi gerekebilir.
+
+    Birden fazla minör numara üzerinde çalışacak (yani birden fazla aynı türden aygıt üzerinde çalışacak) aygıt sürücüler tipik 
+    olarak şöyle yazılmaktadır:
+
+    1) Aygıt sürücüyü yazan programcı baştan onun kaç minör numaraya ilişkin aygıtı yöneteceğini belirlemelidir. Bunun için default
+    bir değer kullanılabilir. Ancak genellikle aygıt sürücünün kaç minör numaraya ilişkin aygıtı yöneteceği aygıt sürücüye komut 
+    satırı argümanlarıyla geçirilmektedir. Biz de örneğimizde bu yöntemi kullanacağız. Minör numara sayısının aşağıdaki gibi 
+    ndevices isimli parametre yoluyla komut satırından aygıt sürücüye aktarıldığını varsayacağız:
+
+    #define DEF_NDEVICES		10
+    ...
+    static int ndevices = DEF_NDEVICES;
+    module_param(ndevices, int, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+
+    Bu durumda bu aygıt sürücü yüklenirken ndevices parametresi argüman girilmezse DEF_NDEVICES değeri dikkate alınmaktadır. 
+    Örneğin bu aygıt sürücüyü 5 aygıtı yönetecek biçimde aşağıdaki gibi yükleyebiliriz:
+
+    ./insmod pipe-driver.ko ndevices=5
+
+    2) Programcının aygıt sürücü için majör ve minör numaraları tahsis etmesi gerekir. Daha önce yaptığımız gibi majör numara 
+    alloc_chrdev_region fonksiyonuyla dinamik olarak belirlenebilmektedir. Bu fonksiyon aynı zamanda belli bir minör numaradan 
+    başlayarak n tane minör numarayı da tahsis edebilmektedir. Örneğin:
+
+    if ((result = alloc_chrdev_region(&g_dev, 0, ndevices, "pipe-driver")) < 0) {
+        printk(KERN_ERR "cannot register device!...\n");
+        goto EXIT1;
+    }
+
+    Burada 0'ıncı minör numaradan ndevices tane minör numara için aygıt tahsisatı yapılmıştır. Tabii g_dev nesnesi yalnızca ilk 
+    minör numaraya ilişkin (örneğimizde 0) aygıt numarasını tutmaktadır.
+
+    3) Her aygıt bir yapıyla temsil edilmelidir. Bunun için N elemanlı bir yapı dizisi yaratabilirsiniz. Bu dizi global düzeyde 
+    tanımlanabileceği gibi kmalloc fonksiyonuyla dinamik biçimde de tahsis edilebilir. Oluşturulan bu yapının içerisine struct cdev 
+    nesnesi de eklenmelidir. Örneğin:
+
+    struct PIPE_DEVICE {
+        unsigned char pipebuf[PIPE_BUFFER_SIZE];
+        size_t head;
+        size_t tail;
+        size_t count;
+        struct semaphore sem;
+        wait_queue_head_t wqwriteopen;
+        wait_queue_head_t wqreadopen;
+        wait_queue_head_t wqread;
+        wait_queue_head_t wqwrite;
+        int nreaders;
+        int nwriters;
+        struct cdev cdev;
+    };
+
+    Burada görüldüğü gibi her farklı borunun farklı bekleme kuyrukları ve semaphore nesnesi vardır. cdev yapı nesnesinin yapının 
+    içerisine yerleştirilmesinin amacı ileride görüleceği gibi bu adresten hareketle yapı nesnesinin adresinin elde edilmesini 
+    sağlamaktır. Bunun nasıl yapıldığı izleyen paragraflarda görülecektir.
+
+    Biz tüm minör aygıtları yaratacağımız bir dilimli tahsisat sisteminden tahsis edeceğiz. Bu minör aygıt nesnelerinin adreslerini 
+    de kmalloc ile tahsis ettiğimiz bir göstericisi dizisinde saklayacağız:
+
+    if ((g_pipe_cachep = kmem_cache_create("pipe_cachep", sizeof (struct PIPE_DEVICE), 0, SLAB_HWCACHE_ALIGN, NULL)) == NULL) {
+        printk(KERN_ERR "cannot create pipe cache!...\n");
+        result = -ENOMEM;
+        goto EXIT3;
+    }
+    for (i = 0; i < ndevices; ++i) {
+        if ((g_devices[i] = kmem_cache_alloc(g_pipe_cachep, GFP_KERNEL)) == NULL) {
+            printk(KERN_ERR "cannot allocate slab from pipe cache!...\n");
+            result = -ENOMEM;
+            for (k = 0; k < i; ++k)
+                kmem_cache_free(g_pipe_cachep, g_devices[k]);
+            goto EXIT4;
+        }
+    }
+
+    3) N tane minör numaralı aygıt için cdev_add fonksiyonuyla aygıtlar çekirdeğe eklenmelidir. Örneğin:
+
+    for (i = 0; i < ndevices; ++i) {
+        g_devices[i]->head = g_devices[i]->tail = g_devices[i]->count = 0;
+        sema_init(&g_devices[i]->sem, 1);
+        init_waitqueue_head(&g_devices[i]->wqwriteopen);
+        init_waitqueue_head(&g_devices[i]->wqreadopen);
+        init_waitqueue_head(&g_devices[i]->wqread);
+        init_waitqueue_head(&g_devices[i]->wqwrite);
+        g_devices[i]->nreaders = g_devices[i]->nwriters = 0;
+        cdev_init(&g_devices[i]->cdev, &g_fops);
+        dev = MKDEV(MAJOR(g_dev), i);
+        if ((result = cdev_add(&g_devices[i]->cdev, dev, 1)) < 0) {
+            for (k = 0; k < i; ++k)
+                cdev_del(&g_devices[k]->cdev);
+            printk(KERN_ERR "cannot add device!...\n");
+            goto EXIT5;
+        }
+    }
+
+    Burada yapı dizisinin her elemanındaki elemanlara ilkdeğerleri verilmiştir. Sonra her boru için ayrı bir cdev nesnesi cdev_add 
+    fonksiyonu ile eklenmiştir. Eklemelerden biri başarısız olursa daha önce eklenenlerin de cdev_del fonksiyonu ile silindiğine 
+    dikkat ediniz.
+
+    4) Aygıt sürücünün exit fonksiyonunda tahsis edilen tüm kaynaklar ters sırada geri bırakılmalıdır. Örneğin:
+
+    static void __exit pipe_driver_exit(void)
+    {
+        int i;
+
+        for (i = 0; i < ndevices; ++i)
+            kmem_cache_free(g_pipe_cachep, g_devices[i]);
+        kmem_cache_destroy(g_pipe_cachep);
+        kfree(g_devices);
+        for (i = 0; i < ndevices; ++i)
+            cdev_del(&g_devices[i]->cdev);
+        printk(KERN_INFO "pipe-driver module exit...\n");
+    }
+
+    5) Bizim read, write gibi aygıt sürücü fonksiyonlarında file yapısı türünden adres belirten filp parametre değişkeni yoluyla 
+    PIPE_DEVICE yapısına erişmemiz gerekir. Bu işlem dolaylı bir biçimde şöyle yapılmaktadır:
+
+    <BURADA KALDIK>
+
+    - Önce aygıt sürücünün open fonksiyonunda programcı inode yapısının i_cdev elemanından hareketle cdev nesnesinin içinde 
+    bulunduğu yapı nesnesinin başlangıç adresini container_of makrosuyla elde eder. Çünkü inode yapısının i_cdev elemanı cdev_add
+    fonksiyonuyla eklenen cdev yapı nesnesinin adresini tutmaktadır.
+
+    - Programcı device nesnesinin adresini elde ettikten sonra onu file yapısının private_data elemanına yerleştirir. file yapısının
+    private_data elemanı programcının kendisinin isteğe bağlı olarak yerleştirebileceği bilgiler için bulundurulmuştur.
+
+    Bu işlemler aşağıdaki gibi yapılabilir:
+
+    static int generic_open(struct inode *inodep, struct file *filp)
+    {
+        struct PIPE_DEVICE *pdevice;
+
+        pdevice = container_of(inodep->i_cdev, struct PIPE_DEVICE, cdev);
+        filp->private_data = pdevice;
+
+        printk(KERN_INFO "pipe-driver opened...\n");
+
+        return 0;
+    }
+
+    5) Aygıt sürücünün read ve write fonksiyonları yazılır.
+
+    6) release (close) işleminde yapılacak birtakım son işlemler varsa yapılır.
+
+    7) Birden fazla minör numara için çalışacak aygıt sürücülerin birden fazla aygıt dosyası yaratması gerekir. Yani aygıt sürücüsü 
+    kaç minör numarayı destekliyorsa o sayıda aygıt dosyalarının yaratılması gerekmektedir. Bu da onları yüklemek için kullandığımız 
+    load scriptinde değişiklik yapmayı gerektirmektedir. N tane minör numaraya ilişkin aygıt dosyası yaratacak biçimde yeni bir 
+    "loadmulti" isimli script aşağıdaki gibi yazılabilir:
+
+    #!/bin/bash
+
+    module=$2
+    mode=666
+
+    /sbin/insmod ./${module}.ko ${@:3} || exit 1
+    major=$(awk "\$2 == \"$module\" {print \$1}" /proc/devices)
+
+    for ((i = 0; i < $1; ++i))
+    do
+        rm -f ${module}$i
+        mknod -m $mode ${module}$i c $major $i
+    done
+
+    Buradaki "loadmulti" script'i iki komut satırı argümanıyla aşağıdaki örnekteki gibi çalıştırılmalıdır:
+
+    $ sudo ./loadmulti 10 pipe-driver ndevices=10
+
+    Burada "loadmulti" script'i hem aygıt sürücüyü yükleyecek hem de pipe-driver0, pipe-driver1, ..., pipedriver9 biçiminde 
+    aygıt dosyalarını yaratacaktır. Aşağıda yaratılmış olan örnek aygıt dosyalarına dikkat ediniz:
+
+    crw-rw-rw- 1 root root  236, 0 Haz  7 22:09 pipe-driver0
+    crw-rw-rw- 1 root root  236, 1 Haz  7 22:09 pipe-driver1
+    crw-rw-rw- 1 root root  236, 2 Haz  7 22:09 pipe-driver2
+    crw-rw-rw- 1 root root  236, 3 Haz  7 22:09 pipe-driver3
+    crw-rw-rw- 1 root root  236, 4 Haz  7 22:09 pipe-driver4
+    crw-rw-rw- 1 root root  236, 5 Haz  7 22:09 pipe-driver5
+    crw-rw-rw- 1 root root  236, 6 Haz  7 22:09 pipe-driver6
+    crw-rw-rw- 1 root root  236, 7 Haz  7 22:09 pipe-driver7
+    crw-rw-rw- 1 root root  236, 8 Haz  7 22:09 pipe-driver8
+    crw-rw-rw- 1 root root  236, 9 Haz  7 22:09 pipe-driver9
+
+    Aygıt dosyalarının majör numaralarının hepsi aynıdır ancak minör numaraları farklıdır. Burada adeta birbirinden bağımsız 
+    10 ayrı boru aygıtı var gibidir. Ancak aslında tek bir aygıt sürücü kodu bulunmaktadır. Tabii bizim benzer biçimde "unload"
+    script'ini de tüm aygıt dosyalarını silecek biçimde düzeltmemiz gerekir. Bunun için "unloadmulti" script'ini aşağıdaki gibi
+    yazabiliriz:
+
+    #!/bin/bash
+
+    module=$2
+
+    /sbin/rmmod ./$module.ko || exit 1
+    for ((i = 0; i < $1; ++i))
+    do
+        rm -f ${module}$i
+    done
+
+    Bu script'te biz modülü önce çekirdekten sonra da "loadmulti" ile yarattığımız aygıt dosyalarını dosya sisteminden sildik. 
+    Script aşağıdaki örnekteki gibi kullanılmalıdır:
+
+    $ sudo ./unloadmulti 10 pipe-driver
+
+    Daha önce yapmış olduğumuz boru aygıt sürücüsünün 10 farklı minör numarayı destekleyen biçimini aşağıda veriyoruz.
 
 -----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------*/
+
+
